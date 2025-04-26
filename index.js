@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "ONE MILLON MILLION DE PACO RABANNE",
             price: 16.000,
             rating: 4,
-            image: "GOOD_GIRL.jpg",
+            image: "ONE_MILLON.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
