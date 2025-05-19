@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const products = [
         {
             id: 1,
-            name: "YARA LATAFFA",
+            name: "YARA LATTAFA",
             price: 18.000,
             rating: 5,
-            image: "YARA_LATAFFA.jpg",
+            image: "img/YARA_LATTAFA2.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "MAYAR  LATTAFA",
             price: 18.000,
             rating: 5,
-            image: "MAYAR_LATTAFA.jpg",
+            image: "img/MAYAR_LATTAFA.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -25,10 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
             id: 3,
-            name: "BADE AL OUD HONOR & GLORY LATAFFA BLANCA",
+            name: "BADE AL OUD HONOR & GLORY LATTAFA BLANCA",
             price: 18.000,
             rating: 5,
-            image: "BADE_AL_OUD_HONOR.png",
+            image: "img/BADE_AL_OUD_HONOR.png",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "GOOD GIRL CAROLINA HERRERA",
             price: 16.000,
             rating: 4,
-            image: "GOOD_GIRL.jpg",
+            image: "img/GOOD_GIRL.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: " LIGHT BLUE DOLCE & GABBANA",
             price: 16.000,
             rating: 4,
-            image: "ligth_blue.jpg",
+            image: "img/ligth_blue.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "AHLI KARPOS",
             price: 18.000,
             rating: 4,
-            image: "AHLI_KARPOS.jpeg",
+            image: "img/AHLI_KARPOS.jpeg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: " COCO MADEMOISELLE CHANNEL",
             price: 16.000,
             rating: 4,
-            image: "COCO.jpg",
+            image: "img/COCO.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "MANDARIN SKY ODYSSEY",
             price: 18.000,
             rating: 4,
-            image: "ODYSSEY_MANDARIN.png",
+            image: "img/ODYSSEY_MANDARIN.png",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "212 VIP Rose",
             price: 16.000,
             rating: 5,
-            image: "212-vip-rose.jpg",
+            image: "img/212-vip-rose.jpg",
             category: "Inspiradas en Marcas",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "212 VIP Black",
             price: 16.000,
             rating: 4,
-            image: "VIP_212_BLACK.jpg",
+            image: "img/VIP_212_BLACK.jpg",
             category: "Inspiradas en marcas",
             sizes: ["30ml", "60ml","100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
 
 
-    ];8
+    ];
     // Elementos del DOM
     const productGrid = document.getElementById('productGrid');
     
@@ -132,7 +132,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
-                    <div class="product-size">${product.sizes}</div>
+                    <div class="product-rating">${product.rating}</div>
+                    
+                    </div>
                 </div>
             `;
             

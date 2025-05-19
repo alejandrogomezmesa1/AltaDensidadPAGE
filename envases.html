@@ -3,51 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="logoo.jpg" type="image/x-icon">
-    <title >Perfumeria de Alta Densidad</title>
+    <link rel="icon" href="img/logoo.jpg" type="image/x-icon">
+    <title >Perfumería de Alta Densidad</title>
     <link rel="stylesheet" href="envases.css">
 </head>
 <body>
     <header class="header">
         <div class="logo-container">
-            <a href="index.htm">  <img src="logoo.jpg" alt="Perfumeria de Alta Densidad" class="logo"></a>
-            <a href="index.htm"> <h1>Perfumeria de Alta Densidad</h1></a>
-            
+            <a href="index.html">  <img src="img/logoo.jpg" alt="Perfumeria de Alta Densidad" class="logo"></a>
+            <a href="index.html"> <h2>Perfumería de Alta Densidad</h2></a>
         </div>
         <nav class="main-nav">
             <ul>
-                <li><a href="index.htm">Inicio</a></li>
+                <li><a href="index.html">Inicio</a></li>
                 <li class="dropdown">
                     <a href="#">Selecciones<i class="fas fa-chevron-down"></i></a>
                     <ul class="dropdown-menu">
-                        <li><a href="index.htm">Fragancias Inspiradas</a></li>
-                        <li><a href="top10.htm">Top 10 mas vendidas</a></li>
+                        <li><a href="index.html">Fragancias</a></li>
+                        <li><a href="top10.html">Top 10 mas vendidas</a></li>
                     </ul>
                 </li>
-                <li><a href="nosotros.htm">Sobre Nosotros</a></li>
+                <li><a href="nosotros.html">Sobre Nosotros</a></li>
                 <li><a  href="#footer">Contacto</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="catalog-container">
-
-        <section class="products">
-            <div class="collection-banner">
-                <h2>Perfumeria inspirada en tus fragancias favoritas</h2>
-                <p>---Escoge la presentacion que mas te gusta para tu Fragancia de Alta Densidad---</p>
-                <p>Con una concentracion superior al 60%</p>
+        
+        <section class="collection-banner">
+            <div class="catalog-container">
+            <h1 style="font-size: 1.8rem;">Tu envase favorito para tu fragancia favorita</h1 >
+            <p>Aquí puedes elegir el envase para tu fragancia de Alta Densidad</p>
             </div>
-
-            <div class="product-grid" id="productGrid">
-                <!-- Los productos se cargarán aquí con JavaScript -->
+        </section>
+                           <!-- Sección de productos -->
+                            <!-- Sección de productos -->
+        <section  class="products">
+            <div class="card-container">
+                <div class="products-grid" id="productGrid">
+                    <!-- Los productos se cargarán aquí con JavaScript -->
+                </div>
             </div>
-
-            <div class="special-offer">
-                <i class="fas fa-gift"></i>
-                <p>Combina 3 lociones de 30ml y obtén un 11.11% de descuento <strong>3x40.000 $COP</strong> </p>
-            </div>
-
+            
+            
+                <div class="special-offer">
+                    <i class="fas fa-gift"></i>
+                    <p>Combina 3 lociones de 30 ml y obtén un 11.11% de descuento → <strong>3x $40.000 COP</strong> </p>
+                </div>
+                <div class="special-offer">
+                    <i class="fas fa-gift"></i>
+                    <p>Combina 3 lociones árabes de 30 ml y obtén un 15% de descuento → <strong>3x $46,000 COP</strong> </p>
+                </div>   
+            
+               
         </section>
 
     </main>
@@ -56,50 +65,53 @@
 
         <div class="feature-card">
             <i class="fas fa-star"></i>
-            <h3>Inspiradas en Fragancias Originales</h3>
-            <p>Fragancias inspiradas en las Originales de diseñador con la mejor relación calidad-precio</p>
-        </div>
-
-        <div class="feature-card">
-            <i class="fas fa-heart"></i>
-            <h3>Feromonas</h3>
-            <p>Nuestras fragancias elaboradas con feromonas, están diseñadas para intensificar la atracción y garantizar una absorción óptima en la piel, ofreciendo una experiencia única y envolvente. </p>
+            <h3>Inspiradas en Fragancias Originales✨</h3>
+            <p>Fragancias inspiradas en las originales de diseñador con la mejor relación calidad-precio.</p>
         </div>
 
         <div class="feature-card">
             <i class="fas fa-box-open"></i>
-            <h3>Variedad de Envases</h3>
-            <p>Cilindro Tradicional, Cartier, Media Luna, Swarosky en distintos tamaños y colores</p>
+            <h3>¿Cual fue tu envase favorito?</h3>
+            <p>Pidelo ahora mismo, comunicate con nuestro equipo.</p>
+            <a target="_blank" class="masinfo" href="https://wa.me/3046450389"><button>WhatsApp <img src="img/wplogo.png" alt="boton de wpp"></button></a>
+        </div>
+ 
+        <div class="feature-card">
+            <i class="fas fa-heart"></i>
+            <h3>Feromona💗s</h3>
+            <p>Nuestras fragancias elaboradas con feromonas están diseñadas para intensificar la atracción y garantizar una absorción óptima en la piel, ofreciendo una experiencia única y envolvente. </p>
+            
         </div>
 
     </section>
 
-    <footer id="footer"  class="footer">
+    <footer  class="footer">
 
-        <div class="footer-content">
+        <div id="footer" class="footer-content">
 
             <div class="footer-section">
-                <h3>Contacto</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Estamos ubicados en la ciudad de Medellin</p>
-                <p><i class="fas fa-phone"></i> +57 3046450389</p>
+                <h3>Contacto📍</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Ubicados en la ciudad de Medellín. </p>
+                <p><i class="fas fa-phone"></i>📞 +57 3046450389 ✉️</p>
                 <p><i class="fas fa-envelope"></i> perfumesaltadensidad@gmail.com</p>
             </div>
 
             <div class="footer-section">
-                <h3>Enlaces rápidos</h3>
+                <h3>Enlaces rápidos🔗</h3>
                 <ul>
-                    <li><a href="nosotros.htm">Preguntas frecuentes</a></li>
-                    <li><a href="nosotros.htm">Envíos y devoluciones</a></li>
-                    <li><a href="nosotros.htm">Política de privacidad</a></li>
+                    <li><a href="nosotros.html">Preguntas frecuentes</a></li>
+                    <li><a href="nosotros.html">Envíos y devoluciones</a></li>
+                    <li><a href="nosotros.html">Política de privacidad</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
-                <h3>Redes sociales</h3>
+                <h3>Redes sociales📲</h3>
+                <h3>⬇️ ⬇️ ⬇ ⬇️ ⬇️</h3>
                 <div class="social-icons">
-                    <a href="https://www.tiktok.com/@fragancias_altadensidad" target="_blank"><img src="tklogo.png" alt=""></a>
-                    <a target="_blank" href="https://www.instagram.com/fragancias_alta_densidad/?hl=es"><img src="iglogo.png" alt=""></i></a>
-                    <a href="https://wa.me/3046450389" target="_blank"><img src="wplogo.png" alt=""></a>
+                    <a target="_blank" href="https://www.tiktok.com/@fragancias_altadensidad"><img src="img/tklogo.png" alt=""></a>
+                    <a target="_blank" href="https://www.instagram.com/fragancias_alta_densidad/?hl=es"><img src="img/iglogo.png" alt=""></a>
+                    <a href="https://wa.me/3046450389" target="_blank"><img src="img/wplogo.png" alt=""></a>
                 </div>
             </div>
 
