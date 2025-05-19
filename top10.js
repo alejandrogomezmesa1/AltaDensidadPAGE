@@ -127,16 +127,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             productCard.innerHTML = `
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.name}">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-rating">${product.rating}</div>
-                    
-                    </div>
-                </div>
-            `;
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.name}">
+            </div>
+            <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-rating">${stars}</div>
+                <div class="product-price">$${product.price}</div>
+                <div class="product-category">${product.category}</div>
+
+            </div>
+        `;
             
             productGrid.appendChild(productCard);
         });
