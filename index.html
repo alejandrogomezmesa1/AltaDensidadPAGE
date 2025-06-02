@@ -36,7 +36,34 @@
             <h1 style="font-size: 1.8rem;">Perfumería inspirada en tus fragancias favoritas</h1 >
             <p>La esencia del lujo a una fracción del precio</p>
             </div>
+
         </section>
+
+
+        <button id="openFilters">Filtrar por</button>
+
+        <div id="filterModal" class="modal">
+            <div class="modal-content">
+                <button class="close">&times;</button>
+                <input type="text" id="filterName" placeholder="Buscar por nombre">
+                <select id="filterCategory">
+                    <option value="">Todas las categorías</option>
+                    <option value="Diseñador">Diseñador</option>
+                    <option value="Arabe">Arabes</option>
+                </select>
+                <select id="filterGender">
+                    <option value="">Todos los géneros</option>
+                    <option value="Mujer">Dama</option>
+                    <option value="Hombre">Caballero</option>
+                    <option value="Unisex">Unisex</option>
+                </select>
+                <button id="applyFilters">Aplicar filtros</button>
+                <button id="resetFilters" type="button">Quitar filtros</button>
+            </div>
+        </div>
+
+        
+
                            <!-- Sección de productos -->
                             <!-- Sección de productos -->
         <section  class="products">
@@ -47,14 +74,9 @@
             </div>
             
             
-                <div class="special-offer">
-                    <i class="fas fa-gift"></i>
-                    <p>Combina 3 lociones de 30 ml y obtén un 11.11% de descuento → <strong>3x $40.000 COP</strong> </p>
-                </div>
-                <div class="special-offer">
-                    <i class="fas fa-gift"></i>
-                    <p>Combina 3 lociones árabes de 30 ml y obtén un 15% de descuento → <strong>3x $46,000 COP</strong> </p>
-                </div>   
+            <div class="special-offer">
+                <p>Combina 3 lociones de 30 ml y obtén un descuento → <strong>3x $50.000 COP</strong> </p>
+            </div> 
             
                
         </section>
@@ -78,7 +100,7 @@
 
         <div class="feature-card">
             <i class="fas fa-heart"></i>
-            <h3>Feromonas💗</h3>
+            <h3>Feromonas 💗</h3>
             <p>Nuestras fragancias elaboradas con feromonas, están diseñadas para intensificar la atracción y garantizar una absorción óptima en la piel, ofreciendo una experiencia única y envolvente. </p>
             
         </div>

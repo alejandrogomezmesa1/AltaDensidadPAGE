@@ -38,13 +38,13 @@ body {
 /* Header - Versión sofisticada */
 .header {
     width: 100%;
-    min-width: 320px;
+    min-width: 340px;
     background: linear-gradient(90deg, var(--azul-uno) 60%, var(--azul-dos) 100%);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    padding: 20px 5%;
+    padding: 20px 4%;
     box-shadow: 0 10px 40px 0 rgba(44, 62, 80, 0.22), 0 2px 0 0 var(--naranja-calido);
     position: sticky;
     top: 0;
@@ -71,7 +71,7 @@ body {
 @media (min-width: 600px) {
     .header {
         padding: 25px 6%;
-        min-height: 100px;
+        min-height: 80px;
         border-bottom-left-radius: 70px 35px;
         border-bottom-right-radius: 70px 35px;
         justify-content: space-around;
@@ -91,7 +91,7 @@ body {
 @media (min-width: 1200px) {
     .header {
         padding: 30px 8%;
-        min-height: 120px;
+        min-height: 100px;
         border-bottom-left-radius: 80px 40px;
         border-bottom-right-radius: 80px 40px;
     }
@@ -105,9 +105,10 @@ body {
     margin-bottom: 10px;
     background: rgba(255, 255, 255, 0.13);
     border-radius: 16px;
-    padding: 6px 15px;
+    padding: 6px 5px;
     box-shadow: 4px 4px 8px 0 rgba(0,0,0, 0.2);
     transition: all 0.3s ease;
+    width: 100%;
 }
 
 @media (min-width: 600px) {
@@ -125,8 +126,8 @@ body {
 }
 
 .logo-container a img {
-    width: 80px;
-    height: 100px;
+    width: 60px;
+    height: 80px;
     filter: drop-shadow(2px 2px 8px rgba(99, 34, 99, 0.25));
     transition: all 0.3s ease;
     border: 3px solid var(--azul-dos);
@@ -157,16 +158,14 @@ body {
 
 /* Texto del logo */
 .header a h2 {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     color: var(--texto);
     text-decoration: none;
-    letter-spacing: 1px;
     text-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
     transition: all 0.3s ease;
     border-bottom: none;
     padding: 2px 0;
     margin: 0;
-    line-height: 1.2;
     white-space: nowrap;
 }
 
@@ -531,6 +530,7 @@ body {
     min-height: auto; /* Permitir crecimiento dinámico */
     overflow: visible; /* Mostrar texto completo */
     display: block; /* Evitar el recorte */
+    text-align: center;
 }
 
 
@@ -603,6 +603,50 @@ body {
 .special-offer p {
     font-weight: 500;
     margin: 0;
+}
+
+/* Nuevos estilos para los atributos de las cards de envases */
+.product-sizes {
+    font-size: clamp(0.85rem, 1.8vw, 1rem);
+    color: var(--azul-dos);
+    margin-bottom: 6px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.product-material {
+    font-size: clamp(0.85rem, 1.7vw, 0.98rem);
+    color: var(--verde);
+    margin-bottom: 6px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.product-description {
+    font-size: clamp(0.85rem, 1.7vw, 0.98rem);
+    color: var(--texto);
+    margin-bottom: 8px;
+    font-weight: 400;
+    line-height: 1.4;
+    min-height: 48px;
+    display: block;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Mejorar responsividad y separación visual */
+.product-info > div {
+    margin-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+    .product-card {
+        min-height: 320px;
+    }
+    .product-description {
+        min-height: 36px;
+    }
 }
 
 /* Media Queries optimizadas */

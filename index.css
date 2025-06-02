@@ -17,7 +17,7 @@
     --coral: #FF6F61; /* Coral vibrante para dinamismo */
     --verde: #008080; /* Verde azulado para profundidad */
     --rosa-suave: #FADBD8; /* Rosa suave para equilibrio */
-    }
+}
 
 /* Reset */
 * {
@@ -38,13 +38,13 @@ body {
 /* Header - Versión sofisticada */
 .header {
     width: 100%;
-    min-width: 320px;
+    min-width: 340px;
     background: linear-gradient(90deg, var(--azul-uno) 60%, var(--azul-dos) 100%);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    padding: 20px 5%;
+    padding: 20px 4%;
     box-shadow: 0 10px 40px 0 rgba(44, 62, 80, 0.22), 0 2px 0 0 var(--naranja-calido);
     position: sticky;
     top: 0;
@@ -71,7 +71,7 @@ body {
 @media (min-width: 600px) {
     .header {
         padding: 25px 6%;
-        min-height: 100px;
+        min-height: 80px;
         border-bottom-left-radius: 70px 35px;
         border-bottom-right-radius: 70px 35px;
         justify-content: space-around;
@@ -91,7 +91,7 @@ body {
 @media (min-width: 1200px) {
     .header {
         padding: 30px 8%;
-        min-height: 120px;
+        min-height: 100px;
         border-bottom-left-radius: 80px 40px;
         border-bottom-right-radius: 80px 40px;
     }
@@ -105,9 +105,10 @@ body {
     margin-bottom: 10px;
     background: rgba(255, 255, 255, 0.13);
     border-radius: 16px;
-    padding: 6px 15px;
+    padding: 6px 5px;
     box-shadow: 4px 4px 8px 0 rgba(0,0,0, 0.2);
     transition: all 0.3s ease;
+    width: 100%;
 }
 
 @media (min-width: 600px) {
@@ -125,8 +126,8 @@ body {
 }
 
 .logo-container a img {
-    width: 80px;
-    height: 100px;
+    width: 60px;
+    height: 80px;
     filter: drop-shadow(2px 2px 8px rgba(99, 34, 99, 0.25));
     transition: all 0.3s ease;
     border: 3px solid var(--azul-dos);
@@ -157,10 +158,9 @@ body {
 
 /* Texto del logo */
 .header a h2 {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     color: var(--texto);
     text-decoration: none;
-    letter-spacing: 1px;
     text-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
     transition: all 0.3s ease;
     border-bottom: none;
@@ -917,5 +917,336 @@ body {
         font-size: 0.9rem;
     padding-top: 25px;
         margin-top: 25px;
+    }
+}
+
+/* Filtros de catálogo */
+/* Filtros de catálogo */
+/* Filtros de catálogo */
+/* Filtros de catálogo */
+.filter {
+    background: var(--azul-uno);
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 1.5rem 2rem 1rem 2rem;
+    margin: 2rem auto 1.5rem auto;
+    max-width: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+#filters input[type="text"],
+#filters select {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: #fafafa;
+    color: #222;
+    transition: border 0.2s;
+    outline: none;
+    border: 1px var(--azul-cuatro) solid;
+}
+#filters input[type="text"]:focus,
+#filters select:focus {
+    border: 1.5px solid #bfa16c;
+    background: #fff;
+    border: 1px var(--azul-cuatro) solid;
+}
+
+#filters option {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: var(--azul-uno);
+    color: #222;
+    transition: border 0.2s;
+    outline: none;
+    border: 1px var(--azul-cuatro) solid;
+}
+
+#filters option:hover {
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: var(--gris-elegante);
+    color: #222;
+    transition: border 0.2s;
+    outline: none;
+    border: 1px var(--azul-cuatro) solid;
+}
+
+
+
+#resetFilters {
+    background: linear-gradient(90deg, var(--azul-dos) 60%, var(--blanco-neutro) 100%);
+    color: #1e0d0d;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(191,161,108,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#resetFilters:hover {
+    background: linear-gradient(90deg, var(--blanco-neutro)  10%,var(--azul-dos) 60% );
+    box-shadow: 0 2px 8px rgba(191,161,108,0.13);
+    color: #1e0d0d;
+}
+
+
+#productCount{
+    background: linear-gradient(90deg, var(--blanco-neutro) 1% , var(--azul-dos) 80%);
+    color: rgb(30, 14, 14);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+@media (max-width: 600px) {
+    .filter {
+        padding: 1rem 0.5rem;
+    }
+    #filters {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+}
+
+/* Estilos para el botón de abrir filtros */
+#openFilters {
+    background: linear-gradient(1deg, var(--azul-cuatro) 1%, var(--azul-uno) 100%);
+    color: #222;
+    border: none;
+    border-radius: 25px;
+    padding: 0.7em 2em;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.5em auto 2em auto;
+    display: block;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(140, 140, 140, 0.08);
+    transition: background 0.3s, transform 0.2s;
+}
+#openFilters:hover {
+    background: linear-gradient(-1deg, var(--azul-uno) 1%, var(--azul-cuatro) 100%);
+    transform: rotate(-2deg) scale(1.09);
+}
+
+/* Modal de filtros */
+#filterModal.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(27, 79, 114, 0.80); /* var(--azul-tres) con opacidad */
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s;
+}
+#filterModal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: var(--blanco-neutro);
+    border-radius: 18px;
+    padding: 2.5em 2em 2em 2em;
+    box-shadow: 0 8px 32px rgba(41, 128, 185, 0.18); /* var(--azul-dos) con opacidad */
+    width: 400px;
+    max-width: 95vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    animation: modalIn 0.3s;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: stretch;
+}
+.modal-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5em;
+    color: var(--azul-cuatro);
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.modal-content input[type="text"],
+.modal-content select {
+    width: 100%;
+    padding: 0.7em 1em;
+    border: 1.5px solid var(--azul-cuatro);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--gris-elegante);
+    color: var(--texto);
+    margin-bottom: 0.5em;
+    margin-top: 0.1em;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+    box-sizing: border-box;
+}
+.modal-content input[type="text"]:focus,
+.modal-content select:focus {
+    border: 1.5px solid var(--azul-dos);
+    box-shadow: 0 0 0 2px var(--azul-uno);
+}
+.modal-content select option {
+    background: var(--gris-elegante);
+    color: var(--azul-tres);
+    padding: 0.7em 1.2em;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+}
+.modal-content select option:checked,
+.modal-content select option:focus {
+    background: var(--azul-uno);
+    color: var(--purpura);
+}
+.modal-content select option:hover {
+    background: var(--azul-cuatro);
+    color: var(--blanco-neutro);
+}
+.modal-content button {
+    background: linear-gradient(90deg, var(--azul-dos) 0%, var(--azul-uno) 100%);
+    color: var(--blanco-neutro);
+    border: none;
+    border-radius: 20px;
+    padding: 0.6em 1.5em;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(41, 128, 185, 0.08);
+    transition: background 0.3s, transform 0.2s;
+}
+.modal-content button:hover {
+    background: linear-gradient(90deg, var(--azul-uno) 0%, var(--azul-dos) 100%);
+    color: var(--texto);
+    transform: translateY(-2px) scale(1.04);
+}
+.modal-content .close {
+    position: static;
+    margin: 0 auto 1em auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: unset;
+    right: unset;
+    top: unset;
+    transform: none;
+    font-size: 1.7em;
+    color: var(--azul-dos);
+    background: var(--blanco-neutro);
+    border: 2px solid var(--azul-dos);
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    z-index: 10;
+    padding: 0.1em 0.5em;
+    border-radius: 50%;
+}
+
+@media (max-width: 600px) {
+    .modal-content .close {
+        font-size: 1.3em;
+        padding: 0.1em 0.4em;
+        margin-bottom: 1em;
+    }
+}
+
+@media (max-width: 500px) {
+    .modal-content {
+        min-width: 90vw;
+        padding: 1.2em 0.5em 1.5em 0.5em;
+        width: 95vw;
+        margin: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .modal-content h2 {
+        font-size: 1.1rem;
+    }
+    .modal-content button {
+        width: 10%;
+        margin-right: 0;
+        margin-bottom: 0.5em;
+    }
+}
+
+@media (max-width: 600px) {
+    #filterModal.modal {
+        align-items: flex-start;
+        padding-top: 0;
+    }
+    .modal-content {
+        min-width: 98vw;
+        width: 98vw;
+        max-width: 100vw;
+        padding: 1.1em 0.3em 1.2em 0.3em;
+        border-radius: 12px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 4px 18px rgba(41,128,185,0.13);
+        gap: 0.7em;
+    }
+    .modal-content h2 {
+        font-size: 1rem;
+        margin-bottom: 0.3em;
+    }
+    .modal-content input[type="text"],
+    .modal-content select {
+        font-size: 0.95rem;
+        padding: 0.6em 0.7em;
+        margin-bottom: 0.3em;
+    }
+    .modal-content button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 0.5em;
+        font-size: 0.98rem;
+        padding: 0.6em 0.8em;
+    }
+    .modal-content .close {
+        width: 10%;
+        margin: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .modal-content {
+        min-width: 100vw;
+        width: 100vw;
+        padding: 0.7em 0.1em 1em 0.1em;
+        border-radius: 7px;
+    }
+    .modal-content h2 {
+        font-size: 0.92rem;
+    }
+    .modal-content button {
+        font-size: 0.93rem;
+        padding: 0.5em 0.5em;
     }
 }
