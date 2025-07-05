@@ -26,6 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "La dualidad entre la dulzura y la intensidad. Good Girl combina la frescura del jazmín y la almendra con la profundidad del cacao y el café, creando un aroma seductor y poderoso. Su icónico frasco en forma de tacón refleja la esencia de una mujer fuerte y sofisticada."
         },
         {
+            id: 58,
+            name: "212 SEXY CAROLINA HERRERA",
+            price: 18000,
+            rating: 4,
+            image: "img/212_SEXY.webp",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
             id: 3,
             name: "212 VIP BLACK CAROLINA HERRERA",
             price: 16000,
@@ -84,6 +96,18 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Es una fragancia floral frutal con un toque divertido y juvenil. Su apertura está marcada por frutas confitadas, naranja amarga y limón, que aportan un dulzor chispeante. En el corazón, la rosa, moras y melocotón crean una sensación femenina y juguetona, mientras que el fondo de almizcle y cedro le da profundidad y duración. Es perfecta para quienes buscan un aroma alegre y moderno."
+        },
+        {
+            id: 55,
+            name: "TOY 2 PEARL MOSCHINO",
+            price: 18000,
+            rating: 4,
+            image: "img/TOY_PEARL.jpg",
+            category : "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
             id: 8,
@@ -146,6 +170,18 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Es una fragancia amaderada aromática, con una apertura fresca de limón, menta y pimienta rosa, seguida por un corazón de jengibre, nuez moscada y jazmín que aporta profundidad y carácter. Su fondo de sándalo, incienso y cedro le da una estela elegante y masculina. Es perfecta para quienes buscan un aroma sofisticado y atemporal, ideal para cualquier ocasión."
         },
         {
+            id: 54,
+            name: "HOMBRE NOMADA L0UIS VUITTON",
+            price: 18000,
+            rating: 4,
+            image: "img/HOMBRENOMADA.webp",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
             id: 13,
             name: "IL ROSO DE ILMIN",
             price: 16000,
@@ -206,6 +242,18 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Es una fragancia frutal gourmand, con una salida vibrante de frambuesa y pera, seguida por un corazón de rosa y coco que aporta un aire femenino y juguetón. Su fondo de macarrón y almizcle le da un toque cremoso y seductor. Es ideal para quienes buscan un perfume divertido y atrevido, con una esencia dulce y empoderadora"
         },
         {
+            id: 57,
+            name: "BURBERRY HER",
+            price: 18000,
+            rating: 4,
+            image: "img/B_HER.jpeg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
             id: 18,
             name: "HEIRESS PARIS HILTON",
             price: 16000,
@@ -263,6 +311,18 @@ document.addEventListener('DOMContentLoaded', function() {
             gender: "Unisex",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 56,
+            name: "YUM YUM LATTAFA",
+            price: 18000,
+            rating: 4,
+            image: "img/YUMYUM.webp",
+            category: "Arabe",
+            gender: "MUjer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
@@ -372,7 +432,19 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Intensidad y pasión en cada rocío. Inspirado en Baccarat Rouge 540, combina jazmín, azafrán y ámbar gris, creando un aroma profundo y sofisticado, con una estela envolvente y duradera."
-        },         
+        }, 
+        {
+            id: 63,
+            name: "VELVET GOLF ORIENTICA",
+            price: 18000,
+            rating: 4,
+            image: "img/VELVET_GOLD.webp",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },        
         {
             id: 32,
             name: " ARABIANS TONKA MONTALE",
@@ -541,6 +613,31 @@ document.addEventListener('DOMContentLoaded', function() {
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Un perfume masculino y sofisticado que combina notas de bergamota, lavanda y madera. Un aroma fresco y atractivo que seguro hará una declaración. La combinación de notas cítricas y florales crea un perfume intenso y duradero que es perfecto para aquellos que buscan un aroma que refleje su personalidad segura y ambiciosa."
         },
+        ,
+        {
+            id: 61,
+            name: "HUGO NIGHT HUGO BOSS",
+            price: 18000,
+            rating: 4,
+            image: "img/HUGO_NIGHT.webp",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 62,
+            name: "BOSS SILVER HUGO BOSS",
+            price: 18000,
+            rating: 4,
+            image: "img/HUGO_SILVER.jpg",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
         {
             id: 46,
             name: "ISLAND BLISS ARMAF",
@@ -638,17 +735,32 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
-            id: 54,
-            name: "HOMBRE NOMADA L0UIS VUITTON",
+            id: 59,
+            name: "OMNIA CORAL BVLGARI",
             price: 18000,
             rating: 4,
-            image: "img/HOMBRENOMADA.webp",
+            image: "img/OMNIA_CORAL.webp",
             category: "Diseñador",
-            gender: "Hombre",
+            gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
+        {
+            id: 60,
+            name: "OMNIA CRISTAL BVLGARI",
+            price: 18000,
+            rating: 4,
+            image: "img/OMNIA_CRISTAL.jpeg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        }
+        
+        
+        
     ];
 
 

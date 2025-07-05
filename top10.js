@@ -133,8 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
                 <div class="product-rating">${stars}</div>
-                <div class="product-price">$${product.price}</div>
-                <div class="product-category">${product.category}</div>
+                <div class="product-price">$${product.price}000</div>
+                
+                <div class="product-category">${product.description}</div>
 
             </div>
         `;

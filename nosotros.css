@@ -125,13 +125,12 @@ body {
     transform: translateY(-2px);
 }
 
-.logo-container a img {
-    width: 60px;
-    height: 80px;
+.logo-container img {
+    min-width: 120px;
+    min-height: 60px;
     filter: drop-shadow(2px 2px 8px rgba(99, 34, 99, 0.25));
     transition: all 0.3s ease;
-    border: 3px solid var(--azul-dos);
-    border-radius: 15px;
+    border-radius: 8px;
     margin: 4px;
     padding: 0;
     object-fit: cover;
