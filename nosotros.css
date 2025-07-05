@@ -98,17 +98,21 @@ body {
 }
 
 /* Contenedor del logo */
+/* Contenedor del logo */
 .logo-container {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
+    justify-content: center;
+    gap: 4px; /* Reducido para acercar logo y título */
+    margin-bottom: 0;
     background: rgba(255, 255, 255, 0.13);
     border-radius: 16px;
     padding: 6px 5px;
     box-shadow: 4px 4px 8px 0 rgba(0,0,0, 0.2);
     transition: all 0.3s ease;
     width: 100%;
+    justify-items: center;
+    text-align: center;
 }
 
 @media (min-width: 600px) {
@@ -119,40 +123,47 @@ body {
     }
 }
 
-.logo-container:hover {
-    box-shadow: -4px -4px 8px 0 rgba(0,0,0, 0.2);
-    background: rgba(255, 255, 255, 0.22);
-    transform: translateY(-2px);
+.logo-container img, .logo-container h2, .logo-container > * {
+    margin-left: 0;
+    margin-right: 0;
+    display: block;
 }
 
 .logo-container img {
-    min-width: 120px;
-    min-height: 60px;
-    filter: drop-shadow(2px 2px 8px rgba(99, 34, 99, 0.25));
-    transition: all 0.3s ease;
-    border-radius: 8px;
-    margin: 4px;
-    padding: 0;
-    object-fit: cover;
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(2px 2px 8px rgba(99, 34, 99, 0.25));
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 3px;
 }
 
-@media (min-width: 600px) {
-    .logo-container a img {
-        width: 80px;
-        height: 90px;
-    }
+/* 🔽 Ajuste específico para móviles */
+@media (max-width: 600px) {
+  .logo-container img {
+    max-width: 70px;
+  }
 }
 
-@media (min-width: 900px) {
-    .logo-container a img {
-        width: 90px;
-        height: 100px;
-    }
+@media (max-width: 400px) {
+  .logo-container img {
+    max-width: 50px;
+  }
+}
+
+.logo-container:hover {
+  box-shadow: -4px -4px 8px 0 rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
 }
 
 .logo-container img:hover {
-    filter: drop-shadow(4px 4px 12px rgba(95, 12, 155, 0.35));
-    transform: scale(1.08) rotate(-2deg);
+  filter: drop-shadow(4px 4px 12px rgba(95, 12, 155, 0.35));
+  transform: scale(1.08) rotate(-2deg);
 }
 
 /* Texto del logo */
