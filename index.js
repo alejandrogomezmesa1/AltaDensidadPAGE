@@ -26,6 +26,30 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "La dualidad entre la dulzura y la intensidad. Good Girl combina la frescura del jazmín y la almendra con la profundidad del cacao y el café, creando un aroma seductor y poderoso. Su icónico frasco en forma de tacón refleja la esencia de una mujer fuerte y sofisticada."
         },
         {
+            id: 61,
+            name: "GOOD GIRL BLUSH CAROLINA HERRERA",
+            price: 18000,
+            rating: 4,
+            image: "img/GOOD_GIRL_BLUSH.png",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 62,
+            name: "VERY GOOD GIRL CAROLINA HERRERA",
+            price: 18000,
+            rating: 4,
+            image: "img/VERY_GOOD_GIRL.jpg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
             id: 58,
             name: "212 SEXY CAROLINA HERRERA",
             price: 18000,
@@ -72,6 +96,18 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Cilindro", "Cartier","Swarosky"],
             description: "Inspirado en la frescura y sensualidad del Mediterráneo, este perfume está dirigido a personas que buscan una fragancia vibrante y juvenil. Su publicidad ha estado marcada por imágenes de verano, mar y romance, apelando a quienes disfrutan de un estilo de vida activo y sofisticado."
+        },
+        {
+            id: 67,
+            name: "LIGHT BLUE DOLCE & GABBANA MEN",
+            price: 18000,
+            rating: 4,
+            image: "img/LIGHT_BLUE_MEN.jpg",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
             id: 6,
@@ -171,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
             id: 54,
-            name: "HOMBRE NOMADA L0UIS VUITTON",
+            name: "OMBRE NOMADE L0UIS VUITTON",
             price: 18000,
             rating: 4,
             image: "img/HOMBRENOMADA.webp",
@@ -200,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
             rating: 4,
             image: "img/IL_ORGASME_ILMIN.webp",
             category: "Diseñador",
-            gender: "Mujer",
+            gender: "Hombre",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Sensualidad y magnetismo absoluto. Un perfume oriental especiado, con una apertura de frutas exóticas y especias, seguida por un corazón de flores blancas y maderas. Su fondo de vainilla y almizcle lo convierte en una fragancia seductora y envolvente."
@@ -265,29 +301,126 @@ document.addEventListener('DOMContentLoaded', function() {
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante, con un fondo cálido y seductor de sándalo y almizcle. Radiante, juvenil, inolvidable."
         },
+        
         {
-            id: 19,
-            name: "YARA CANDY LATTAFA",
+            id: 56,
+            name: "YUM YUM ARMAF",
             price: 18000,
             rating: 4,
-            image: "img/CANDY.jpg",
+            image: "img/YUMYUM.webp",
+            category: "Arabe",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 46,
+            name: "ISLAND BLISS ARMAF",
+            price: 18000,
+            rating: 4,
+            image: "img/ISLANDBLISS2.webp",
+            category: "Arabe",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Inspirada en la frescura tropical, esta fragancia está diseñada para quienes buscan un aroma vibrante y exótico. Con notas de coco, bayas silvestres y vainilla, es perfecta para personas que disfrutan de perfumes alegres y relajantes, evocando la sensación de unas vacaciones en una isla paradisíaca"
+        },
+        {
+            id: 47,
+            name: "CLUB DE NUIT INTENSE (BESTIA NEGRA) ARMAF",
+            price: 18000,
+            rating: 4,
+            image: "img/NUIT2.jpg",
+            category: "Arabe",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Club de Nuit Intense es una fragancia cítrica y amaderada con una salida de limón, piña y grosella negra, seguida por un corazón de rosa y jazmín que aporta sofisticación. Su fondo de almizcle, ámbar gris y pachulí le da una estela intensa y duradera, perfecta para quienes buscan un aroma elegante y dominante."
+        },
+        {
+            id: 64,
+            name: "CLUB DE NUIT WOMAN ARMAF",
+            price: 18000,
+            rating: 4,
+            image: "img/NUIT_WOMAN.webp",
+            category: "Arabe",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 48,
+            name: "9PM AFNAN",
+            price: 18000,
+            rating: 4,
+            image: "img/9PM2.png",
+            category: "Arabe",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Seducción nocturna en su máxima expresión. Un perfume dulce y especiado, con una salida de manzana y canela, seguida por un corazón de flores blancas y vainilla. Su fondo de haba tonka y ámbar crea una estela intensa y adictiva, ideal para noches inolvidables."
+        },
+        {
+            id: 49,
+            name: "ODYSSEY MANDARIN SKY ARMAF",
+            price: 18000,
+            rating: 5,
+            image: "img/ODYSSEY_MANDARIN.png",
             category: "Arabe",
             gender: "Unisex",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Dirigida a quienes aman los perfumes dulces y refrescantes, esta fragancia es perfecta para personas con un espíritu alegre y juvenil. "
+            description: "Sumérgete en la esencia vibrante y seductora de Odyssey Mandarin Sky, una fragancia masculina que equilibra la frescura cítrica con la calidez envolvente. Su apertura chispeante de mandarina, naranja, azafrán y salvia despierta los sentidos con energía y sofisticación."
         },
         {
-            id: 20,
-            name: "YARA LATTAFA",
+            id: 50,
+            name: "ODYSSEY CHOCOLATE DUBAI ARMAF",
             price: 18000,
-            rating: 5,
-            image: "img/YARA_LATTAFA2.jpg",
+            rating: 4,
+            image: "img/ODYSEYCHOCOLATE.jpg",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Un perfume dulce y sensual que combina notas de chocolate, vainilla y caramelos. Un aroma cálido y atractivo que seguro despertará los sentidos. La combinación de notas de chocolate y vainilla crea un perfume rico y decadente que es perfecto para aquellos que buscan un aroma dulce y sensual."
+        },
+        {
+            id: 51,
+            name: "ODYSSEY CANDEE ARMAF",
+            price: 18000,
+            rating: 4,
+            image: "img/ODYSEYCANDEE2.jpeg",
             category: "Arabe",
             gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia oriental dulce y sofisticada, diseñada principalmente para mujeres que buscan un aroma envolvente y elegante. Su perfil olfativo la hace ideal para quienes disfrutan de fragancias con un toque gourmand y cálido."
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 52,
+            name: "ODYSSEY MEGA ARMAF",
+            price: 18000,
+            rating: 4,
+            image: "img/ODYSEYMEGA.jpeg",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 53,
+            name: "ODYSSEY SPECTRA ARMAF",
+            price: 18000,
+            rating: 4,
+            image: "img/ODYSEYSPECTRA.webp",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
             id: 21,
@@ -308,19 +441,43 @@ document.addEventListener('DOMContentLoaded', function() {
             rating: 4,
             image: "img/BHARARAKING.webp",
             category: "Arabe",
-            gender: "Unisex",
+            gender: "Hombre",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
-            id: 56,
-            name: "YUM YUM LATTAFA",
+            id: 19,
+            name: "YARA CANDY LATTAFA",
             price: 18000,
             rating: 4,
-            image: "img/YUMYUM.webp",
+            image: "img/CANDY.jpg",
             category: "Arabe",
-            gender: "MUjer",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Dirigida a quienes aman los perfumes dulces y refrescantes, esta fragancia es perfecta para personas con un espíritu alegre y juvenil. "
+        },
+        {
+            id: 20,
+            name: "YARA LATTAFA",
+            price: 18000,
+            rating: 5,
+            image: "img/YARA_LATTAFA2.jpg",
+            category: "Arabe",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
+            description: "Es una fragancia oriental dulce y sofisticada, diseñada principalmente para mujeres que buscan un aroma envolvente y elegante. Su perfil olfativo la hace ideal para quienes disfrutan de fragancias con un toque gourmand y cálido."
+        },
+        {
+            id: 65,
+            name: "ASAD LATTAFA",
+            price: 18000,
+            rating: 4,
+            image: "img/ASAD_NEGRA.webp",
+            category: "Arabe",
+            gender: "Hombre",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
@@ -332,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
             rating: 4,
             image: "img/MAYARINTENSE.jpg",
             category: "Arabe",
-            gender: "Unisex",
+            gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Un perfume fresco y cítrico que evoca la esencia de la naturaleza. Notas de bergamota y limón se mezclan con flores verdes para crear un aroma ligero y revitalizante. Ideal para aquellos que buscan un perfume para uso diario."
@@ -387,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },         
         {
             id: 28,
-            name: "BADE´E AL OUD FOR GLORY LATTAFA",
+            name: "BADE´E AL OUD FOR GLORY LATTAFA BLANCA",
             price: 18000,
             rating: 4,
             image: "img/LATTAFANEGRA.png",
@@ -404,11 +561,23 @@ document.addEventListener('DOMContentLoaded', function() {
             rating: 4,
             image: "img/NOBLEBLUSH.jpeg",
             category: "Arabe",
-            gender: "Unisex",
+            gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Dirigida a quienes buscan una fragancia dulce y sofisticada, con un toque gourmand. Su combinación de leche de rosa, merengue y almendra la hace ideal para personas que prefieren aromas delicados y femeninos, con una elegancia sutil"
-        },       
+        },
+        {
+            id: 66,
+            name: "KHAMRAH LATTAFA",
+            price: 18000,
+            rating: 4,
+            image: "img/KHAMRAH.jpg",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
         {
             id: 30,
             name: "AMBER OUD GOLD EDITION AL HARAMAIN",
@@ -444,7 +613,55 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },        
+        },,
+        {
+            id: 68,
+            name: "AMBER NOIR ORIENTICA",
+            price: 18000,
+            rating: 4,
+            image: "img/AMBER_NOIR.jpg",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 69,
+            name: "AZURE ORIENTICA",
+            price: 18000,
+            rating: 4,
+            image: "img/AMBER_AZURE.jpeg",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 70,
+            name: "ROYAL BLEU ORIENTICA",
+            price: 18000,
+            rating: 4,
+            image: "img/AMBER_BLEU.webp",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 71,
+            name: "ROYAL AMBER ORIENTICA",
+            price: 18000,
+            rating: 4,
+            image: "img/AMBER_ROYAL.webp",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },       
         {
             id: 32,
             name: " ARABIANS TONKA MONTALE",
@@ -464,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function() {
             rating: 4,
             image: "img/ETERNITY_AQUA.jpg",
             category: "Diseñador",
-            gender: "Unisex",
+            gender: "Hombre",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Frescura y elegancia atemporal. Una fragancia acuática amaderada, con notas de pepino, cítricos y lavanda, que se combinan con un fondo de sándalo y almizcle, perfecta para quienes buscan un aroma limpio y sofisticado."
@@ -504,13 +721,25 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "La frescura del mar en cada rocío. Una fragancia acuática cítrica, con notas de bergamota, neroli y romero, seguida por un corazón de jazmín y notas marinas. Su fondo de cedro y almizcle le da una sensación refrescante y elegante."
-        },         
+        },
+        {
+            id: 72,
+            name: "AQUA DI GIO PROFONDO ARMANI",
+            price: 18000,
+            rating: 4,
+            image: "img/DI_GIO_PROFONDO.webp",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
         {
             id: 37,
-            name: "BORN IN ROMO VALENTINO",
+            name: "BORN IN ROMA VALENTINO",
             price: 16000,
             rating: 4,
-            image: "img/VALENTINO_BON_IN.jpg",
+            image: "img/BORN_IN_ROMA.jpg",
             category: "Diseñador",
             gender: "Hombre",
             sizes: ["30ml", "60ml", "100ml"],
@@ -528,7 +757,19 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Inspirada en la elegancia de Roma, esta fragancia está dirigida a mujeres que buscan un perfume sofisticado y moderno. Con notas de jazmín sambac, vainilla Bourbon y cashmeran, es ideal para quienes desean un aroma que combine feminidad y un toque vanguardista."
-        },        
+        },
+        {
+            id: 63,
+            name: "BORN IN ROMA INTENSE VALENTINO",
+            price: 18000,
+            rating: 4,
+            image: "img/VALENTINO_INTENSE.jpg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },    
         {
             id: 39,
             name: "LACOSTE BLANCA",
@@ -590,6 +831,30 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Inspirado en la mitología griega, es una fragancia amaderada aromática, que exuda poder y seducción. Su apertura vibrante con menta, manzana verde y limón aporta frescura y energía, mientras que el corazón de haba tonka y ambroxan intensifica su carácter masculino. Su fondo de vainilla, cedro y vetiverle da profundidad y una estela duradera, ideal para quienes buscan un aroma magnético y audaz"
         },
         {
+            id: 73,
+            name: "VERSACE EROS ENERGY",
+            price: 18000,
+            rating: 4,
+            image: "img/EROS_ENERGY.jpg",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 74,
+            name: "VERSACE EROS FLAME",
+            price: 18000,
+            rating: 4,
+            image: "img/EROS_FLAME.webp",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
             id: 44,
             name: "BOSS BOTTLED ABSOLUTE HUGO BOSS",
             price: 16000,
@@ -639,102 +904,6 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
-            id: 46,
-            name: "ISLAND BLISS ARMAF",
-            price: 18000,
-            rating: 4,
-            image: "img/ISLANDBLISS2.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Inspirada en la frescura tropical, esta fragancia está diseñada para quienes buscan un aroma vibrante y exótico. Con notas de coco, bayas silvestres y vainilla, es perfecta para personas que disfrutan de perfumes alegres y relajantes, evocando la sensación de unas vacaciones en una isla paradisíaca"
-        },
-        {
-            id: 47,
-            name: "CLUB DE NUIT INTENSE (BESTIA NEGRA) ARMAF",
-            price: 18000,
-            rating: 4,
-            image: "img/NUIT2.jpg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Club de Nuit Intense es una fragancia cítrica y amaderada con una salida de limón, piña y grosella negra, seguida por un corazón de rosa y jazmín que aporta sofisticación. Su fondo de almizcle, ámbar gris y pachulí le da una estela intensa y duradera, perfecta para quienes buscan un aroma elegante y dominante."
-        },
-        {
-            id: 48,
-            name: "9PM AFNAN",
-            price: 18000,
-            rating: 4,
-            image: "img/9PM2.png",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Seducción nocturna en su máxima expresión. Un perfume dulce y especiado, con una salida de manzana y canela, seguida por un corazón de flores blancas y vainilla. Su fondo de haba tonka y ámbar crea una estela intensa y adictiva, ideal para noches inolvidables."
-        },
-        {
-            id: 49,
-            name: "ODYSSEY MANDARIN SKY ARMAF",
-            price: 18000,
-            rating: 5,
-            image: "img/ODYSSEY_MANDARIN.png",
-            category: "Diseñador",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Sumérgete en la esencia vibrante y seductora de Odyssey Mandarin Sky, una fragancia masculina que equilibra la frescura cítrica con la calidez envolvente. Su apertura chispeante de mandarina, naranja, azafrán y salvia despierta los sentidos con energía y sofisticación."
-        },
-        {
-            id: 50,
-            name: "ODYSSEY CHOCOLATE DUBAI ARMAF",
-            price: 18000,
-            rating: 4,
-            image: "img/ODYSEYCHOCOLATE.jpg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y sensual que combina notas de chocolate, vainilla y caramelos. Un aroma cálido y atractivo que seguro despertará los sentidos. La combinación de notas de chocolate y vainilla crea un perfume rico y decadente que es perfecto para aquellos que buscan un aroma dulce y sensual."
-        },
-        {
-            id: 51,
-            name: "ODYSSEY CANDEE ARMAF",
-            price: 18000,
-            rating: 4,
-            image: "img/ODYSEYCANDEE2.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 52,
-            name: "ODYSSEY MEGA ARMAF",
-            price: 18000,
-            rating: 4,
-            image: "img/ODYSEYMEGA.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 53,
-            name: "ODYSSEY SPECTRA ARMAF",
-            price: 18000,
-            rating: 4,
-            image: "img/ODYSEYSPECTRA.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
             id: 59,
             name: "OMNIA CORAL BVLGARI",
             price: 18000,
@@ -746,6 +915,7 @@ document.addEventListener('DOMContentLoaded', function() {
             bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
+        
         {
             id: 60,
             name: "OMNIA CRISTAL BVLGARI",
@@ -757,10 +927,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        }
-        
-        
-        
+        },
     ];
 
 
