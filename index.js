@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: "ASAD LATTAFA",
             price: 18000,
             rating: 4,
-            image: "img/ASAD_NEGRA.webp",
+            image: "img/ASAD_BLACK.jpg",
             category: "Arabe",
             gender: "Hombre",
             sizes: ["30ml", "60ml", "100ml"],
@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },         
         {
             id: 28,
-            name: "BADE´E AL OUD FOR GLORY LATTAFA BLANCA",
+            name: "BADE´E AL OUD FOR GLORY LATTAFA NEGRA",
             price: 18000,
             rating: 4,
             image: "img/LATTAFANEGRA.png",
