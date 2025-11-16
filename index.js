@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 1,
             name: "212 VIP ROSE CAROLINA HERRERA",
-            price: 16000,
             rating: 5,
             image: "img/212-vip-rose.jpg",
             category: "Diseñador",
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 2,
             name: "GOOD GIRL CAROLINA HERRERA",
-            price: 16000,
             rating: 5,
             image: "img/GOOD_GIRL.jpg",
             category: "Diseñador",
@@ -28,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 61,
             name: "GOOD GIRL BLUSH CAROLINA HERRERA",
-            price: 18000,
             rating: 4,
             image: "img/GOOD_GIRL_BLUSH.png",
             category: "Diseñador",
@@ -40,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 62,
             name: "VERY GOOD GIRL CAROLINA HERRERA",
-            price: 18000,
             rating: 4,
             image: "img/VERY_GOOD_GIRL.jpg",
             category: "Diseñador",
@@ -52,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 58,
             name: "212 SEXY CAROLINA HERRERA",
-            price: 18000,
             rating: 4,
             image: "img/212_SEXY.webp",
             category: "Diseñador",
@@ -64,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 3,
             name: "212 VIP BLACK CAROLINA HERRERA",
-            price: 16000,
             rating: 5,
             image: "img/VIP_212_BLACK.jpg",
             category: "Diseñador",
@@ -76,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 4,
             name: "BOND NO. 9 BLEECKER STREET",
-            price: 16000,
             rating: 4,
             image: "img/BOND_NO.9_BLEECKER.jpg",
             category: "Diseñador",
@@ -88,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 5,
             name: "LIGHT BLUE DOLCE & GABBANA",
-            price: 16000,
             rating: 5,
             image: "img/ligth_blue.jpg",
             category: "Diseñador",
@@ -100,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 67,
             name: "LIGHT BLUE DOLCE & GABBANA MEN",
-            price: 18000,
             rating: 4,
             image: "img/LIGHT_BLUE_MEN.jpg",
             category: "Diseñador",
@@ -112,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 6,
             name: "SANTAL 33",
-            price: 16000,
             rating: 4,
             image: "img/SANTAL_33.jpg",
             category: "Diseñador",
@@ -124,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 7,
             name: "TOY 2 BUBBLE GUM MOSCHINO",
-            price: 16000,
             rating: 4,
             image: "img/TOY_2_BUBBLE_GUM.jpg",
             category: "Diseñador",
@@ -136,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 55,
             name: "TOY 2 PEARL MOSCHINO",
-            price: 18000,
             rating: 4,
             image: "img/TOY_PEARL.jpg",
             category : "Diseñador",
@@ -148,7 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 8,
             name: "AHLI KARPOS",
-            price: 18000,
             rating: 5,
             image: "img/AHLI_KARPOS.jpeg",
             category: "Arabe",
@@ -160,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 9,
             name: "AHLI CORVUS",
-            price: 18000,
             rating: 4,
             image: "img/CORVUS.webp",
             category: "Arabe",
@@ -172,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 10,
             name: "AHLI VEGA",
-            price: 18000,
             rating: 4,
             image: "img/VEGA.webp",
             category: "Arabe",
@@ -184,7 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 11,
             name: " COCO MADEMOISELLE CHANEL",
-            price: 16000,
             rating: 5,
             image: "img/COCO.jpg",
             category: "Diseñador",
@@ -196,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 12,
             name: "BLEU CHANEL",
-            price: 16000,
             rating: 4,
             image: "img/BLEU.jpg",
             category: "Diseñador",
@@ -208,7 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 54,
             name: "OMBRE NOMADE L0UIS VUITTON",
-            price: 18000,
             rating: 4,
             image: "img/HOMBRENOMADA.webp",
             category: "Diseñador",
@@ -220,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 13,
             name: "IL ROSO DE ILMIN",
-            price: 16000,
             rating: 4,
             image: "img/IL_ROSO3.jpg",
             category: "Diseñador",
@@ -232,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 14,
             name: "IL ORGASME ILMIN",
-            price: 16000,
             rating: 4,
             image: "img/IL_ORGASME_ILMIN.webp",
             category: "Diseñador",
@@ -244,7 +224,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 15,
             name: "FEMME ILMIN",
-            price: 16000,
             rating: 4,
             image: "img/FEMME.webp",
             category: "Diseñador",
@@ -256,7 +235,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 16,
             name: "CLOUD ARIANA GRANDE",
-            price: 16000,
             rating: 4,
             image: "img/CLOUD_ARIANA.webp",
             category: "Diseñador",
@@ -268,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 17,
             name: "THANK U, NEXT ARIANA GRANDE",
-            price: 16000,
             rating: 4,
             image: "img/THANKU2.jpg",
             category: "Diseñador",
@@ -280,7 +257,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 57,
             name: "BURBERRY HER",
-            price: 18000,
             rating: 4,
             image: "img/B_HER.jpeg",
             category: "Diseñador",
@@ -290,9 +266,8 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
         },
         {
-            id: 18,
+            id: 75,
             name: "HEIRESS PARIS HILTON",
-            price: 16000,
             rating: 4,
             image: "img/HEIRESS2.webp",
             category: "Diseñador",
@@ -301,11 +276,9 @@ document.addEventListener('DOMContentLoaded', function() {
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante, con un fondo cálido y seductor de sándalo y almizcle. Radiante, juvenil, inolvidable."
         },
-        
         {
             id: 56,
             name: "YUM YUM ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/YUMYUM.webp",
             category: "Arabe",
@@ -317,7 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 46,
             name: "ISLAND BLISS ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/ISLANDBLISS2.webp",
             category: "Arabe",
@@ -329,7 +301,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 47,
             name: "CLUB DE NUIT INTENSE (BESTIA NEGRA) ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/NUIT2.jpg",
             category: "Arabe",
@@ -341,7 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 64,
             name: "CLUB DE NUIT WOMAN ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/NUIT_WOMAN.webp",
             category: "Arabe",
@@ -353,7 +323,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 48,
             name: "9PM AFNAN",
-            price: 18000,
             rating: 4,
             image: "img/9PM2.png",
             category: "Arabe",
@@ -365,7 +334,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 49,
             name: "ODYSSEY MANDARIN SKY ARMAF",
-            price: 18000,
             rating: 5,
             image: "img/ODYSSEY_MANDARIN.png",
             category: "Arabe",
@@ -377,7 +345,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 50,
             name: "ODYSSEY CHOCOLATE DUBAI ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/ODYSEYCHOCOLATE.jpg",
             category: "Arabe",
@@ -389,7 +356,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 51,
             name: "ODYSSEY CANDEE ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/ODYSEYCANDEE2.jpeg",
             category: "Arabe",
@@ -401,7 +367,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 52,
             name: "ODYSSEY MEGA ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/ODYSEYMEGA.jpeg",
             category: "Arabe",
@@ -413,7 +378,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 53,
             name: "ODYSSEY SPECTRA ARMAF",
-            price: 18000,
             rating: 4,
             image: "img/ODYSEYSPECTRA.webp",
             category: "Arabe",
@@ -425,7 +389,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 21,
             name: "BHARARA ROSE",
-            price: 18000,
             rating: 4,
             image: "img/BHARARAROSE.jpg",
             category: "Arabe",
@@ -437,7 +400,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 22,
             name: "BHARARA KING",
-            price: 18000,
             rating: 4,
             image: "img/BHARARAKING.webp",
             category: "Arabe",
@@ -449,7 +411,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 19,
             name: "YARA CANDY LATTAFA",
-            price: 18000,
             rating: 4,
             image: "img/CANDY.jpg",
             category: "Arabe",
@@ -461,7 +422,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 20,
             name: "YARA LATTAFA",
-            price: 18000,
             rating: 5,
             image: "img/YARA_LATTAFA2.jpg",
             category: "Arabe",
@@ -473,7 +433,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 65,
             name: "ASAD LATTAFA",
-            price: 18000,
             rating: 4,
             image: "img/ASAD_BLACK.jpg",
             category: "Arabe",
@@ -485,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 23,
             name: "MAYAR INTENSE LATTAFA",
-            price: 18000,
             rating: 4,
             image: "img/MAYARINTENSE.jpg",
             category: "Arabe",
@@ -497,7 +455,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 24,
             name: "MAYAR LATTAFA",
-            price: 18000,
             rating: 5,
             image: "img/MAYAR_LATTAFA.jpg",
             category: "Arabe",
@@ -509,7 +466,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 25,
             name: " BADE´E AL OUD HONOR & GLORY LATTAFA BLANCA",
-            price: 18000,
             rating: 5,
             image: "img/BADE_AL_OUD_HONOR.png",
             category: "Arabe",
@@ -521,7 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 26,
             name: " BADEE AL OUD SUBLIME LATTAFA ROJA",
-            price: 18000,
             rating: 4,
             image: "img/ADEE_AL_OUD_SUBLIME.webp",
             category: "Arabe",
@@ -533,7 +488,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 27,
             name: "BADE´E AL OUD AMETHYST LATTAFA MORADA",
-            price: 18000,
             rating: 5,
             image: "img/BADE’E_AL_OUD.png",
             category: "Arabe",
@@ -545,7 +499,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 28,
             name: "BADE´E AL OUD FOR GLORY LATTAFA NEGRA",
-            price: 18000,
             rating: 4,
             image: "img/LATTAFANEGRA.png",
             category: "Arabe",
@@ -557,7 +510,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 29,
             name: "BADE´E AL OUD NOBLE BLUSH LATTAFA",
-            price: 18000,
             rating: 4,
             image: "img/NOBLEBLUSH.jpeg",
             category: "Arabe",
@@ -569,7 +521,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 66,
             name: "KHAMRAH LATTAFA",
-            price: 18000,
             rating: 4,
             image: "img/KHAMRAH.jpg",
             category: "Arabe",
@@ -581,7 +532,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 30,
             name: "AMBER OUD GOLD EDITION AL HARAMAIN",
-            price: 18000,
             rating: 5,
             image: "img/AMBER_OUD_GOLD.jpeg",
             category: "Arabe",
@@ -593,7 +543,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 31,
             name: "AMBER ROUGE ORIENTICA",
-            price: 18000,
             rating: 4,
             image: "img/AMBER_ROUGE.jpg",
             category: "Arabe",
@@ -605,7 +554,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 63,
             name: "VELVET GOLF ORIENTICA",
-            price: 18000,
             rating: 4,
             image: "img/VELVET_GOLD.webp",
             category: "Arabe",
@@ -613,11 +561,10 @@ document.addEventListener('DOMContentLoaded', function() {
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier", "Swarosky"],
             description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },,
+        },
         {
             id: 68,
             name: "AMBER NOIR ORIENTICA",
-            price: 18000,
             rating: 4,
             image: "img/AMBER_NOIR.jpg",
             category: "Arabe",
@@ -629,7 +576,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 69,
             name: "AZURE ORIENTICA",
-            price: 18000,
             rating: 4,
             image: "img/AMBER_AZURE.jpeg",
             category: "Arabe",
@@ -641,7 +587,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 70,
             name: "ROYAL BLEU ORIENTICA",
-            price: 18000,
             rating: 4,
             image: "img/AMBER_BLEU.webp",
             category: "Arabe",
@@ -653,7 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 71,
             name: "ROYAL AMBER ORIENTICA",
-            price: 18000,
             rating: 4,
             image: "img/AMBER_ROYAL.webp",
             category: "Arabe",
@@ -665,7 +609,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 32,
             name: " ARABIANS TONKA MONTALE",
-            price: 18000,
             rating: 4,
             image: "img/ARABIANS_TONKA.jpg",
             category: "Arabe",
@@ -677,7 +620,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 33,
             name: "ETERNITY AQUA CALVIN KLEIN",
-            price: 16000,
             rating: 4,
             image: "img/ETERNITY_AQUA.jpg",
             category: "Diseñador",
@@ -689,7 +631,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 34,
             name:"IN 2U HER CALVIN KLEIN",
-            price: 16000,
             rating: 4,
             image: "img/IN2UHER.jpg",
             category: "Diseñador",
@@ -701,7 +642,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 35,
             name: "DIOR SAUVAGE",
-            price: 16000,
             rating: 4,
             image: "img/DIORSAUVAGE.PNG",
             category: "Diseñador",
@@ -713,7 +653,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 36,
             name: "ACQUA DI GIO GIORGIO ARMANI",
-            price: 16000,
             rating: 4,
             image: "img/ACQUA_DI_GIO.jpg",
             category: "Diseñador",
@@ -725,7 +664,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 72,
             name: "AQUA DI GIO PROFONDO ARMANI",
-            price: 18000,
             rating: 4,
             image: "img/DI_GIO_PROFONDO.webp",
             category: "Diseñador",
@@ -737,7 +675,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 37,
             name: "BORN IN ROMA VALENTINO",
-            price: 16000,
             rating: 4,
             image: "img/BORN_IN_ROMA.jpg",
             category: "Diseñador",
@@ -749,7 +686,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 38,
             name: "DONNA BORN IN ROMA VALENTINO",
-            price: 16000,
             rating: 4,
             image: "img/DONNA_BORN_IN_ROMA.jpeg",
             category: "Diseñador",
@@ -761,7 +697,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 63,
             name: "BORN IN ROMA INTENSE VALENTINO",
-            price: 18000,
             rating: 4,
             image: "img/VALENTINO_INTENSE.jpg",
             category: "Diseñador",
@@ -773,7 +708,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 39,
             name: "LACOSTE BLANCA",
-            price: 16000,
             rating: 4,
             image: "img/LACOSTE_BLANCA.png",
             category: "Diseñador",
@@ -785,7 +719,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 40,
             name: "LACOSTE RED STYLE IN PLAY",
-            price: 16000,
             rating: 4,
             image: "img/LCRED.jpg",
             category: "Diseñador",
@@ -797,7 +730,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 41,
             name: "ONE MILLON MILLION PACO RABANNE",
-            price: 16000,
             rating: 4,
             image: "img/ONE_MILLON.jpg",
             category: "Diseñador",
@@ -809,7 +741,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 42,
             name: "BLACK XS L´APHRODISIAQUE PACO RABANNE",
-            price: 16000,
             rating: 4,
             image: "img/LAPHRODISIAQUE2.jpg",
             category: "Diseñador",
@@ -821,7 +752,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 43,
             name: "EROS EAU DE TOILETTE VERSACE",
-            price: 16000,
             rating: 4,
             image: "img/EROS.webp",
             category: "Diseñador",
@@ -833,7 +763,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 73,
             name: "VERSACE EROS ENERGY",
-            price: 18000,
             rating: 4,
             image: "img/EROS_ENERGY.jpg",
             category: "Diseñador",
@@ -845,7 +774,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 74,
             name: "VERSACE EROS FLAME",
-            price: 18000,
             rating: 4,
             image: "img/EROS_FLAME.webp",
             category: "Diseñador",
@@ -857,7 +785,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 44,
             name: "BOSS BOTTLED ABSOLUTE HUGO BOSS",
-            price: 16000,
             rating: 4,
             image: "img/BOTTLED3.jpg",
             category: "Diseñador",
@@ -869,7 +796,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 45,
             name: "UNLIMITED HUGO BOSS",
-            price: 16000,
             rating: 4,
             image: "img/UNLIMITED2.JPG",
             category: "Diseñador",
@@ -878,11 +804,9 @@ document.addEventListener('DOMContentLoaded', function() {
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Un perfume masculino y sofisticado que combina notas de bergamota, lavanda y madera. Un aroma fresco y atractivo que seguro hará una declaración. La combinación de notas cítricas y florales crea un perfume intenso y duradero que es perfecto para aquellos que buscan un aroma que refleje su personalidad segura y ambiciosa."
         },
-        ,
         {
             id: 61,
             name: "HUGO NIGHT HUGO BOSS",
-            price: 18000,
             rating: 4,
             image: "img/HUGO_NIGHT.webp",
             category: "Diseñador",
@@ -894,7 +818,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 62,
             name: "BOSS SILVER HUGO BOSS",
-            price: 18000,
             rating: 4,
             image: "img/HUGO_SILVER.jpg",
             category: "Diseñador",
@@ -906,7 +829,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 59,
             name: "OMNIA CORAL BVLGARI",
-            price: 18000,
             rating: 4,
             image: "img/OMNIA_CORAL.webp",
             category: "Diseñador",
@@ -919,7 +841,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 60,
             name: "OMNIA CRISTAL BVLGARI",
-            price: 18000,
             rating: 4,
             image: "img/OMNIA_CRISTAL.jpeg",
             category: "Diseñador",
@@ -946,7 +867,6 @@ function displayProducts(productsToShow) {
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
                 <div class="product-rating">${stars}</div>
-                <div class="product-price">$${product.price}</div>
                 <div class="product-category">${product.category}</div>
             </div>
         `;

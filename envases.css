@@ -123,7 +123,7 @@ body {
     }
 }
 
-.logo-container img, .logo-container h2, .logo-container > * {
+.logo-container img, .header-title, .header-tittle, .logo-container > * {
     margin-left: 0;
     margin-right: 0;
     display: block;
@@ -149,6 +149,43 @@ body {
   }
 }
 
+/* Botón de compra en header (WhatsApp) */
+.header-buy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(90deg, var(--azul-cuatro) 10%, var(--azul-dos) 100%);
+    color: var(--blanco-neutro);
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px var(--azul-dos);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    margin-left: 12px;
+}
+.header-buy-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 28px var(--azul-dos);
+    background: linear-gradient(90deg, var(--azul-dos) 10%, var(--purpura) 100%);
+}
+
+@media (max-width: 900px) {
+    .header-buy-btn {
+        padding: 8px 12px;
+        font-size: 0.95rem;
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-buy-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        margin-left: 6px;
+    }
+}
+
 @media (max-width: 400px) {
   .logo-container img {
     max-width: 50px;
@@ -167,8 +204,8 @@ body {
 }
 
 /* Texto del logo */
-.header a h2 {
-    font-size: 0.8rem;
+.header-title, .header-tittle {
+    font-size: 1.5rem;
     color: var(--texto);
     text-decoration: none;
     text-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
@@ -193,7 +230,7 @@ body {
     }
 }
 
-.header a h2:hover {
+.header-title:hover, .header-tittle:hover {
     color: var(--blanco-neutro);
     transform: scale(1.05) skewX(-2deg);
 }

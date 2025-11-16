@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 1,
             name: "YARA LATTAFA",
-            price: 18.000,
             rating: 5,
             image: "img/YARA_LATTAFA2.jpg",
             category: "Inspiradas en Marcas",
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 2,
             name: "MAYAR  LATTAFA",
-            price: 18.000,
             rating: 5,
             image: "img/MAYAR_LATTAFA.jpg",
             category: "Inspiradas en Marcas",
@@ -26,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 3,
             name: "BADE AL OUD HONOR & GLORY LATTAFA BLANCA",
-            price: 18.000,
             rating: 5,
             image: "img/BADE_AL_OUD_HONOR.png",
             category: "Inspiradas en Marcas",
@@ -37,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 4,
             name: "GOOD GIRL CAROLINA HERRERA",
-            price: 16.000,
             rating: 4,
             image: "img/GOOD_GIRL.jpg",
             category: "Inspiradas en Marcas",
@@ -48,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 5,
             name: " LIGHT BLUE DOLCE & GABBANA",
-            price: 16.000,
             rating: 4,
             image: "img/ligth_blue.jpg",
             category: "Inspiradas en Marcas",
@@ -59,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 6,
             name: "AHLI KARPOS",
-            price: 18.000,
             rating: 4,
             image: "img/AHLI_KARPOS.jpeg",
             category: "Inspiradas en Marcas",
@@ -70,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 7,
             name: " COCO MADEMOISELLE CHANNEL",
-            price: 16.000,
             rating: 4,
             image: "img/COCO.jpg",
             category: "Inspiradas en Marcas",
@@ -81,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 8,
             name: "MANDARIN SKY ODYSSEY",
-            price: 18.000,
             rating: 4,
             image: "img/ODYSSEY_MANDARIN.png",
             category: "Inspiradas en Marcas",
@@ -92,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 9,
             name: "212 VIP Rose",
-            price: 16.000,
+
             rating: 5,
             image: "img/212-vip-rose.jpg",
             category: "Inspiradas en Marcas",
@@ -103,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 10,
             name: "212 VIP Black",
-            price: 16.000,
             rating: 4,
             image: "img/VIP_212_BLACK.jpg",
             category: "Inspiradas en marcas",
@@ -133,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="product-info">
                 <div class="product-name">${product.name}</div>
                 <div class="product-rating">${stars}</div>
-                <div class="product-price">$${product.price}000</div>
+                
                 
                 <div class="product-category">${product.description}</div>
 

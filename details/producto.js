@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         message += `Por favor, necesito más información sobre disponibilidad y formas de pago.`;
         
         const encodedMessage = encodeURIComponent(message);
-        const whatsappUrl = `https://wa.me/573046450389?text=${encodedMessage}`;
+        const whatsappUrl = `https://wa.me/3046477694?text=${encodedMessage}`;
         
         window.open(whatsappUrl, '_blank');
     });
