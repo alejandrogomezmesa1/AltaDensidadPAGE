@@ -205,7 +205,8 @@ body {
 
 /* Texto del logo */
 .header-title, .header-tittle {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--texto);
     text-decoration: none;
     text-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
