@@ -2,107 +2,115 @@ document.addEventListener('DOMContentLoaded', function() {
     // Datos de productos
     const products = [
         {
-            id: 1,
+            id: 20,
             name: "YARA LATTAFA",
             rating: 5,
             image: "img/YARA_LATTAFA2.jpg",
-            category: "Inspiradas en Marcas",
+            category: "Arabe",
+            gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa ambar-vainilla. Confeccionado en paño de alta calidad, este saco ofrece una combinación perfecta de sofisticación está diseñado principalmente para mujeres que buscan una fragancia dulce, sofisticada y con un toque moderno y comodidad."
-        },
-        {
-            id: 2,
-            name: "MAYAR  LATTAFA",
-            rating: 5,
-            image: "img/MAYAR_LATTAFA.jpg",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Nuestra interpretación de la fragancia floral con notas de tuberosa y jazmín."
-        },
-        {
-            id: 3,
-            name: "BADE AL OUD HONOR & GLORY LATTAFA BLANCA",
-            rating: 5,
-            image: "img/BADE_AL_OUD_HONOR.png",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa oriental amaderada. Es una fragancia unisex, diseñada para quienes buscan un aroma sofisticado, cálido y con un toque especiado. Es ideal para ocasiones especiales o para quienes desean destacar con un perfume único y elegante."
-        },
-        {
-            id: 4,
-            name: "GOOD GIRL CAROLINA HERRERA",
-            rating: 4,
-            image: "img/GOOD_GIRL.jpg",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa oriental floral. Es una fragancia icónica que celebra la dualidad de la mujer moderna: audaz y sensual, pero también elegante y enigmática."
+            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
+            description: "Yara es una fragancia femenina que envuelve con su encanto oriental y gourmand. Diseñada para mujeres que buscan un aroma elegante y envolvente, combina notas dulces y cálidas que transmiten sofisticación y ternura."
         },
         {
             id: 5,
-            name: " LIGHT BLUE DOLCE & GABBANA",
-            rating: 4,
-            image: "img/ligth_blue.jpg",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa floral- frutal. Está pensado principalmente para aquellos que buscan una fragancia fresca, vibrante y ligera."
-        },
-        {
-            id: 6,
-            name: "AHLI KARPOS",
-            rating: 4,
-            image: "img/AHLI_KARPOS.jpeg",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa floral-frutal. Es perfecto para ocasiones informales durante el día, como reuniones con amigos, y también para eventos más formales en la noche, como cenas o salidas culturales."
-        },
-        {
-            id: 7,
-            name: " COCO MADEMOISELLE CHANNEL",
-            rating: 4,
-            image: "img/COCO.jpg",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa oriental floral. Está dirigido principalmente a mujeres jóvenes y adultas que buscan un perfume que refleje confianza, independencia y feminidad. Es ideal para quienes desean un aroma versátil, adecuado tanto para el día como para la noche, y que proyecte una imagen de sofisticación con un toque de rebeldía."
-        },
-        {
-            id: 8,
-            name: "MANDARIN SKY ODYSSEY",
-            rating: 4,
-            image: "img/ODYSSEY_MANDARIN.png",
-            category: "Inspiradas en Marcas",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa floriental. Es conocida por su carácter fresco, dulce y sofisticado, ideal para hombres modernos que buscan un aroma distintivo y versátil, gracias a su equilibrio entre frescura y sofisticación."
-        },
-        {
-            id: 9,
-            name: "212 VIP Rose",
-
+            name: "LIGHT BLUE DOLCE & GABBANA",
             rating: 5,
-            image: "img/212-vip-rose.jpg",
-            category: "Inspiradas en Marcas",
+            image: "img/ligth_blue.jpg",
+            category: "Diseñador",
+            gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa floral- frutal. Es un aroma juvenil y es ideal si buscas un perfume fresco pero dulce."
+            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
+            description: "Light Blue es una fragancia femenina icónica que captura la esencia del verano mediterráneo. Su carácter vibrante y sensual la convierte en una elección ideal para mujeres que buscan un perfume fresco, juvenil y sofisticado."
         },
         {
-            id: 10,
-            name: "212 VIP Black",
-            rating: 4,
+            id: 31,
+            name: "AMBER ROUGE ORIENTICA",
+            rating: 5,
+            image: "img/AMBER_ROUGE.jpg",
+            category: "Arabe",
+            gender: "Unisex",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Amber Rouge es una fragancia unisex que transmite sofisticación y misterio. Inspirada en el icónico Baccarat Rouge 540, combina notas intensas y envolventes que conquistan desde el primer instante."
+        }, 
+        {
+            id: 3,
+            name: "212 VIP BLACK CAROLINA HERRERA",
+            rating: 5,
             image: "img/VIP_212_BLACK.jpg",
-            category: "Inspiradas en marcas",
+            category: "Diseñador",
+            gender: "Hombre",
             sizes: ["30ml", "60ml","100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Familia olfativa oriental amaderada. Fragancia masculina, conocida por su carácter audaz, seductor y moderno, ideal para hombres que buscan destacar en eventos nocturnos o en ocasiones especiales."
+            description: "212 VIP Black es una fragancia masculina intensa y sofisticada que refleja el espíritu de la fiesta neoyorquina y la exclusividad de quienes saben destacar. Su carácter oriental especiado lo convierte en un perfume magnético y seductor."
         },
-
+        {
+            id: 82,
+            name: "INVICTUS PACO RABANNE",
+            rating: 5,
+            image: "img/INVICTUS.webp",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
+            description: "Invictus es una fragancia masculina que simboliza la victoria, la energía y el poder. Su carácter fresco y especiado lo convierte en un perfume dinámico y seductor, pensado para hombres que disfrutan de la adrenalina y la conquista."
+        },
+        {
+            id: 35,
+            name: "DIOR SAUVAGE",
+            rating: 5,
+            image: "img/DIORSAUVAGE.PNG",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Dior Sauvage es una fragancia masculina que transmite poder, frescura y magnetismo. Inspirada en paisajes abiertos y salvajes, combina notas aromáticas y amaderadas que reflejan libertad y carácter indomable."
+        },
+        {
+            id: 22,
+            name: "BHARARA KING",
+            rating: 5,
+            image: "img/BHARARAKING.webp",
+            category: "Arabe",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Bharara King es una fragancia masculina que combina frescura, dulzura y un toque juguetón. Diseñada para quienes buscan un perfume alegre y versátil, transmite energía positiva y modernidad."
+        },
+        {
+            id: 64,
+            name: "CLUB DE NUIT WOMAN ARMAF",
+            rating: 5,
+            image: "img/NUIT_WOMAN.webp",
+            category: "Arabe",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Club de Nuit Woman es una fragancia femenina que combina dulzura, frescura y un toque romántico. Diseñada para mujeres modernas que buscan un perfume versátil y encantador, transmite alegría y sofisticación en cada aplicación."
+        },
+        {
+            id: 60,
+            name: "OMNIA CRYSTALLINE BVLGARI",
+            rating: 5,
+            image: "img/OMNIA_CRISTAL.jpeg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Omnia Crystalline es una fragancia femenina que refleja delicadeza, frescura y sofisticación. Inspirada en la transparencia y luminosidad del cristal, transmite un aura de pureza y feminidad moderna."
+        },
+        {
+            id: 54,
+            name: "OMBRE NOMADE LOUIS VUITTON",
+            rating: 5,
+            image: "img/HOMBRENOMADA.webp",
+            category: "Diseñador",
+            gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Ombre Nomade es una fragancia unisex de lujo que captura la esencia de los viajes y la libertad. Diseñada por Louis Vuitton, es un perfume intenso y envolvente que transmite misterio, sofisticación y exclusividad."
+        },
 
     ];
     // Elementos del DOM

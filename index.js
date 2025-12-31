@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 1,
             name: "212 VIP ROSE CAROLINA HERRERA",
-            rating: 5,
+            rating: 4,
             image: "img/212-vip-rose.jpg",
             category: "Diseñador",
             gender: "Mujer",
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 2,
             name: "GOOD GIRL CAROLINA HERRERA",
-            rating: 5,
+            rating: 4,
             image: "img/GOOD_GIRL.jpg",
             category: "Diseñador",
             gender: "Mujer",
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 85,
             name: "LEGEND MONTBLANC",
-            rating: 5,
+            rating: 4,
             image: "img/LEGEND.jpg",
             category: "Diseñador",
             gender: "Hombre",
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 8,
             name: "AHLI KARPOS",
-            rating: 5,
+            rating: 4,
             image: "img/AHLI_KARPOS.jpeg",
             category: "Arabe",
             gender: "Unisex",
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 11,
             name: " COCO MADEMOISELLE CHANEL",
-            rating: 5,
+            rating: 4,
             image: "img/COCO.jpg",
             category: "Diseñador",
             gender: "Mujer",
@@ -234,8 +234,8 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
             id: 54,
-            name: "OMBRE NOMADE L0UIS VUITTON",
-            rating: 4,
+            name: "OMBRE NOMADE LOUIS VUITTON",
+            rating: 5,
             image: "img/HOMBRENOMADA.webp",
             category: "Diseñador",
             gender: "Hombre",
@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 64,
             name: "CLUB DE NUIT WOMAN ARMAF",
-            rating: 4,
+            rating: 5,
             image: "img/NUIT_WOMAN.webp",
             category: "Arabe",
             gender: "Mujer",
@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 22,
             name: "BHARARA KING",
-            rating: 4,
+            rating: 5,
             image: "img/BHARARAKING.webp",
             category: "Arabe",
             gender: "Hombre",
@@ -576,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 75,
             name: "MAYAR CHERRY LATTAFA",
-            rating: 5,
+            rating: 4,
             image: "img/MAYAR_LATTAFA_CHERRY.webp",
             category: "Arabe",
             gender: "Mujer",
@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 25,
             name: " BADE´E AL OUD HONOR & GLORY LATTAFA BLANCA",
-            rating: 5,
+            rating: 4,
             image: "img/BADE_AL_OUD_HONOR.png",
             category: "Arabe",
             gender: "Unisex",
@@ -609,7 +609,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 27,
             name: "BADE´E AL OUD AMETHYST LATTAFA MORADA",
-            rating: 5,
+            rating: 4,
             image: "img/BADE’E_AL_OUD.png",
             category: "Arabe",
             gender: "Unisex",
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 30,
             name: "AMBER OUD GOLD EDITION AL HARAMAIN",
-            rating: 5,
+            rating: 4,
             image: "img/AMBER_OUD_GOLD.jpeg",
             category: "Arabe",
             gender: "Unisex",
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 31,
             name: "AMBER ROUGE ORIENTICA",
-            rating: 4,
+            rating: 5,
             image: "img/AMBER_ROUGE.jpg",
             category: "Arabe",
             gender: "Unisex",
@@ -751,7 +751,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },        
         {
             id: 32,
-            name: " ARABIANS TONKA MONTALE",
+            name: "ARABIANS TONKA MONTALE",
             rating: 4,
             image: "img/ARABIANS_TONKA.jpg",
             category: "Arabe",
@@ -785,10 +785,21 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 35,
             name: "DIOR SAUVAGE",
-            rating: 4,
+            rating: 5,
             image: "img/DIORSAUVAGE.PNG",
             category: "Diseñador",
             gender: "Hombre",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Dior La fuerza de la naturaleza en un frasco. Un perfume amaderado aromático, con una salida de bergamota y pimienta, seguida por un corazón de lavanda y geranio. Su fondo de ambroxan y cedro lo convierte en una fragancia potente y masculina."
+        }, 
+        {
+            id: 90,
+            name: "MISS DIOR",
+            rating: 4,
+            image: "img/MISSDIOR.jpg",
+            category: "Diseñador",
+            gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
             bottleTypes: ["Singler", "Cartier","Swarosky"],
             description: "Dior La fuerza de la naturaleza en un frasco. Un perfume amaderado aromático, con una salida de bergamota y pimienta, seguida por un corazón de lavanda y geranio. Su fondo de ambroxan y cedro lo convierte en una fragancia potente y masculina."
@@ -871,6 +882,17 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "Lacoste Red es una fragancia fresca y afrutada con una salida de manzana verde y maclura, seguida por un corazón de cedro y jazmínque aporta equilibrio. Su fondo de maderas y almizcle le da una sensación cálida y deportiva, perfecta para quienes buscan un aroma dinámico y juvenil."
         },
         {
+            id: 91,
+            name: "LACOSTE SENSUELLE",
+            rating: 4,
+            image: "img/LACOSTESENSUAL.jpg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier","Swarosky"],
+            description: "Lacoste Red es una fragancia fresca y afrutada con una salida de manzana verde y maclura, seguida por un corazón de cedro y jazmínque aporta equilibrio. Su fondo de maderas y almizcle le da una sensación cálida y deportiva, perfecta para quienes buscan un aroma dinámico y juvenil."
+        },
+        {
             id: 41,
             name: "ONE MILLON MILLION PACO RABANNE",
             rating: 4,
@@ -928,7 +950,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             id: 86,
             name: "SANTAL BOISE VERSACE",
-            rating: 5,
+            rating: 4,
             image: "img/SANTALBOISE.webp",
             category: "Diseñador",
             gender: "Hombre",
@@ -993,9 +1015,20 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
             id: 60,
-            name: "OMNIA CRISTAL BVLGARI",
-            rating: 4,
+            name: "OMNIA CRYSTALLINE BVLGARI",
+            rating: 5,
             image: "img/OMNIA_CRISTAL.jpeg",
+            category: "Diseñador",
+            gender: "Mujer",
+            sizes: ["30ml", "60ml", "100ml"],
+            bottleTypes: ["Singler", "Cartier", "Swarosky"],
+            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
+        },
+        {
+            id: 89,
+            name: "OMNIA AMETHYSTE BVLGARI",
+            rating: 4,
+            image: "img/CORAL_AMETHYSTE.jpeg",
             category: "Diseñador",
             gender: "Mujer",
             sizes: ["30ml", "60ml", "100ml"],
@@ -1015,7 +1048,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         
     ];
-                        // CANTIDAD DE PRODUCTOS EN CATALOGO 88
+                        // CANTIDAD DE PRODUCTOS EN CATALOGO 91
 
 function displayProducts(productsToShow) {
     const productGrid = document.getElementById('productGrid');

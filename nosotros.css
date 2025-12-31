@@ -12,6 +12,7 @@
     --gris-elegante: #BDC3C7; /* Gris elegante */
     --blanco-neutro: #F8F9F9; /* Blanco neutro */
     --texto: black; /* Texto */
+    --dorado: #D4AF37; /* Dorado elegante para párrafos */
 
     --purpura: #5B2C6F; /* Púrpura oscuro, sofisticado */
     --coral: #FF6F61; /* Coral vibrante para dinamismo */
@@ -24,7 +25,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 body {
@@ -198,6 +199,39 @@ body {
     transform: scale(1.05) skewX(-2deg);
 }
 
+/* Texto del logo con clase header-tittle */
+.header-title, .header-tittle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--texto);
+    text-decoration: none;
+    text-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    transition: all 0.3s ease;
+    border-bottom: none;
+    padding: 2px 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+@media (min-width: 600px) {
+    .header-title, .header-tittle {
+        font-size: 1.25rem;
+        letter-spacing: 1.3px;
+    }
+}
+
+@media (min-width: 900px) {
+    .header-title, .header-tittle {
+        font-size: 1.4rem;
+        letter-spacing: 1.5px;
+    }
+}
+
+.header-title:hover, .header-tittle:hover {
+    color: var(--blanco-neutro);
+    transform: scale(1.05) skewX(-2deg);
+}
+
 /* Navegación principal */
 .main-nav ul {
     display: flex;
@@ -346,6 +380,44 @@ body {
     transform: rotate(180deg);
 }
 
+/* Botón de compra en header (WhatsApp) */
+.header-buy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: linear-gradient(90deg, var(--azul-cuatro) 10%, var(--azul-dos) 100%);
+    color: var(--blanco-neutro);
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px var(--azul-dos);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    margin-left: 12px;
+}
+
+.header-buy-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 28px var(--azul-dos);
+    background: linear-gradient(90deg, var(--azul-dos) 10%, var(--purpura) 100%);
+}
+
+@media (max-width: 900px) {
+    .header-buy-btn {
+        padding: 8px 12px;
+        font-size: 0.95rem;
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-buy-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        margin-left: 6px;
+    }
+}
+
 /* Contenedor principal del catálogo */
 .catalog-container {
     padding: clamp(10px, 3vw, 25px);
@@ -379,12 +451,13 @@ body {
 .nosotros,
 .info {
     background-color: var(--gris-elegante);
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 50px;
+    gap: 25px;
+    margin-bottom: 60px;
+    margin-top: 30px;
 }
 
 /* 📌 Títulos */
@@ -392,6 +465,8 @@ h4 {
     font-size: 1.7rem;
     color: var(--azul-cuatro);
     text-align: center;
+    padding: 15px 0;
+    margin-bottom: 10px;
 }
 
 /* 📌 Párrafos */
@@ -399,6 +474,8 @@ p {
     font-size: 1.1rem;
     text-align: justify;
     color: var(--texto);
+    margin: 10px 0;
+    line-height: 1.8;
 }
 
 /* 📌 Preguntas frecuentes y envíos en grid */
@@ -407,11 +484,11 @@ p {
 .preguntas, .envios, .devoluciones, .politicas {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
-    padding: 20px;
+    gap: 25px;
+    padding: 35px;
     border-radius: 10px;
-    width: 80%;
-    margin: auto;
+    width: 85%;
+    margin: 25px auto;
 }
 
 /* 📌 Listas */
@@ -425,8 +502,8 @@ ul {
 .info div {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 15px;
+    gap: 15px;
+    padding: 30px;
     border-radius: 8px;
     background: var(--azul-uno);
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
@@ -435,6 +512,7 @@ ul {
     border-bottom: none;
     border-radius: 5px 10px 10px 10px;
     transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
 .nosotros div:hover,
@@ -450,23 +528,218 @@ ul {
 }
 
 /* 📌 Responsive */
-@media (max-width: 768px) {
+
+/* Para tablets (768px - 991px) */
+@media (max-width: 991px) {
+    .nosotros,
+    .info {
+        padding: 30px;
+        gap: 20px;
+        margin-bottom: 50px;
+        margin-top: 25px;
+    }
+
+    .nosotros div,
+    .info div {
+        padding: 25px;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .preguntas, .envios, .devoluciones, .politicas {
+        padding: 30px;
+        gap: 20px;
+        width: 88%;
+        margin: 20px auto;
+    }
+
+    h4 {
+        padding: 12px 0;
+        margin-bottom: 8px;
+    }
+
+    p {
+        margin: 8px 0;
+        line-height: 1.7;
+    }
+}
+
+/* Para móviles grandes (481px - 767px) */
+@media (max-width: 767px) {
     .catalog-container {
         grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .nosotros,
+    .info {
+        padding: 20px;
+        gap: 15px;
+        margin-bottom: 35px;
+        margin-top: 20px;
+    }
+
+    .nosotros div,
+    .info div {
+        padding: 20px;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .preguntas, .envios, .devoluciones, .politicas {
+        padding: 20px;
+        gap: 15px;
+        width: 90%;
+        margin: 15px auto;
+    }
+
+    h4 {
+        font-size: 1.4rem;
+        padding: 10px 0;
+        margin-bottom: 8px;
+    }
+
+    p {
+        font-size: 1rem;
+        margin: 6px 0;
+        line-height: 1.6;
+    }
+}
+
+/* Para móviles pequeños (max 480px) */
+@media (max-width: 480px) {
+    .catalog-container {
+        padding: 10px;
+        gap: 10px;
     }
 
     .nosotros,
     .info {
         padding: 15px;
+        gap: 12px;
+        margin-bottom: 25px;
+        margin-top: 15px;
+    }
+
+    .nosotros div,
+    .info div {
+        padding: 15px;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .preguntas, .envios, .devoluciones, .politicas {
+        padding: 15px;
+        gap: 12px;
+        width: 95%;
+        margin: 12px auto;
     }
 
     h4 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        padding: 8px 0;
+        margin-bottom: 6px;
     }
 
     p {
         font-size: 0.95rem;
+        margin: 5px 0;
+        line-height: 1.5;
     }
+}
+
+/* Features Section */
+.features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 30px 5%;
+    background-color: var(--bg-light);
+}
+
+@media (min-width: 768px) {
+    .features {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 50px 5%;
+    }
+}
+
+.feature-card {
+    background-color: var(--azul-uno);
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--texto);
+    font-weight: 500;
+}
+
+.feature-card i {
+    font-size: 2.2rem;
+    color: var(--texto);
+    margin-bottom: 15px;
+}
+
+@media (min-width: 768px) {
+    .feature-card i {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+}
+
+.feature-card h3 {
+    margin-bottom: 12px;
+    color: var(--texto);
+    font-size: 1.1rem;
+}
+
+@media (min-width: 768px) {
+    .feature-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+}
+
+/* Botón de más información */
+.masinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--azul-uno);
+    padding: 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.masinfo button {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, var(--azul-dos) 60%, var(--azul-cuatro) 100%);
+    color: var(--blanco-neutro);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.masinfo button:hover {
+    background: linear-gradient(90deg, var(--azul-cuatro) 60%, var(--purpura) 100%);
+    transform: scale(1.05);
 }
 
 
