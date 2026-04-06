@@ -1,6 +1,7 @@
-const API_URL = 'http://localhost:3000/api/productos';
-const API_ENVASES_URL = 'http://localhost:3000/api/envases';
-const API_UPLOAD_URL = 'http://localhost:3000/api/upload';
+const _BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : '/api';
+const API_URL = `${_BASE}/productos`;
+const API_ENVASES_URL = `${_BASE}/envases`;
+const API_UPLOAD_URL = `${_BASE}/upload`;
 
 // ============================
 // UPLOAD DE IMAGEN

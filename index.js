@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     let paginaActual = 1;
 
     try {
-        const res = await fetch('http://localhost:3000/api/productos');
+        const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : '/api';
+        const res = await fetch(`${base}/productos`);
         const data = await res.json();
         if (data.success) {
             products = data.data;
