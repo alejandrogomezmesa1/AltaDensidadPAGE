@@ -1,0 +1,14 @@
+# Variables de entorno (credenciales)
+backend/.env
+.env
+
+# Dependencias
+node_modules/
+
+# Imágenes subidas localmente (van a Cloudinary en producción)
+img/[0-9]*_*.jpg
+img/[0-9]*_*.jpeg
+img/[0-9]*_*.png
+img/[0-9]*_*.webp
+img/[0-9]*_*.avif
+img/[0-9]*_*.gif

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Catálogo de Productos | Alta Densidad</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <span class="admin-logo">AD</span>
+            <span class="admin-title">Panel de Administración</span>
+        </div>
+        <a href="index.html" class="btn-volver">
+            <i class="fas fa-arrow-left"></i> Volver al sitio
+        </a>
+    </header>
+
+    <main class="admin-main">
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+            <button class="admin-tab active" id="tabProductos" onclick="cambiarSeccion('productos')">
+                <i class="fas fa-spray-can"></i> Productos
+            </button>
+            <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')">
+                <i class="fas fa-box"></i> Envases
+            </button>
+        </div>
+
+        <!-- Mensaje de estado -->
+        <div id="alerta" class="alerta hidden"></div>
+
+        <!-- ===== SECCIÓN PRODUCTOS ===== -->
+        <div id="seccionProductos">
+            <div class="admin-toolbar">
+                <h2 class="section-title">Catálogo de Productos</h2>
+                <button class="btn-primary" id="btnNuevoProducto">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+            </div>
+            <div class="tabla-wrapper">
+                <table class="tabla-productos" id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Género</th>
+                            <th>Precio</th>
+                            <th>Rating</th>
+                            <th>Tallas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyProductos">
+                        <tr>
+                            <td colspan="9" class="loading-row">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando productos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="paginacionProductos" class="admin-paginacion"></div>
+        </div>
+
+        <!-- ===== SECCIÓN ENVASES ===== -->
+        <div id="seccionEnvases" class="hidden">
+            <div class="admin-toolbar">
+                <h2 class="section-title">Catálogo de Envases</h2>
+                <button class="btn-primary" id="btnNuevoEnvase">
+                    <i class="fas fa-plus"></i> Nuevo Envase
+                </button>
+            </div>
+            <div class="tabla-wrapper">
+                <table class="tabla-productos" id="tablaEnvases">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Material</th>
+                            <th>Precio</th>
+                            <th>Tallas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyEnvases">
+                        <tr>
+                            <td colspan="7" class="loading-row">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando envases...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="paginacionEnvases" class="admin-paginacion"></div>
+        </div>
+
+    </main>
+
+    <!-- Modal Crear / Editar -->
+    <div id="modalProducto" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTitulo">Nuevo Producto</h3>
+                <button class="modal-cerrar" id="btnCerrarModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="formProducto" class="modal-form" novalidate>
+                <input type="hidden" id="productoId">
+
+                <div class="form-grid">
+                    <!-- Nombre -->
+                    <div class="form-group full">
+                        <label for="inputNombre">Nombre *</label>
+                        <input type="text" id="inputNombre" placeholder="Ej: One Million – Paco Rabanne" required>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="form-group full">
+                        <label for="inputDescripcion">Descripción</label>
+                        <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción de la fragancia..."></textarea>
+                    </div>
+
+                    <!-- Categoría -->
+                    <div class="form-group">
+                        <label for="inputCategoria">Categoría *</label>
+                        <select id="inputCategoria" required>
+                            <option value="">-- Seleccionar --</option>
+                            <option value="Floral">Floral</option>
+                            <option value="Oriental">Oriental</option>
+                            <option value="Maderas">Maderas</option>
+                            <option value="Fresco">Fresco</option>
+                            <option value="Cítrico">Cítrico</option>
+                            <option value="Amaderado">Amaderado</option>
+                            <option value="Acuático">Acuático</option>
+                            <option value="Gourmand">Gourmand</option>
+                        </select>
+                    </div>
+
+                    <!-- Género -->
+                    <div class="form-group">
+                        <label for="inputGenero">Género *</label>
+                        <select id="inputGenero" required>
+                            <option value="">-- Seleccionar --</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Unisex">Unisex</option>
+                        </select>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="form-group">
+                        <label for="inputPrecio">Precio (COP) *</label>
+                        <input type="number" id="inputPrecio" min="0" step="1000" placeholder="0" required>
+                    </div>
+
+                    <!-- Rating -->
+                    <div class="form-group">
+                        <label for="inputRating">Rating (1–5)</label>
+                        <select id="inputRating">
+                            <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                            <option value="4" selected>⭐⭐⭐⭐ (4)</option>
+                            <option value="3">⭐⭐⭐ (3)</option>
+                            <option value="2">⭐⭐ (2)</option>
+                            <option value="1">⭐ (1)</option>
+                        </select>
+                    </div>
+
+                    <!-- Imagen upload -->
+                    <div class="form-group full">
+                        <label>Imagen del producto</label>
+                        <div class="img-upload-zone" id="zonaImagenProducto">
+                            <img id="previewImagen" class="img-preview" src="" alt="Vista previa">
+                            <div class="img-upload-actions">
+                                <label for="inputImagenFile" class="btn-upload-img">
+                                    <i class="fas fa-upload"></i> Seleccionar imagen
+                                </label>
+                                <span id="imgFileName" class="img-filename">Sin imagen seleccionada</span>
+                            </div>
+                            <input type="file" id="inputImagenFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none">
+                            <input type="hidden" id="inputImagen">
+                        </div>
+                    </div>
+
+                    <!-- Tallas -->
+                    <div class="form-group full">
+                        <label>Tallas disponibles</label>
+                        <div class="checkboxes-grid">
+                            <label class="check-item"><input type="checkbox" name="talla" value="30ml"> 30ml</label>
+                            <label class="check-item"><input type="checkbox" name="talla" value="50ml"> 50ml</label>
+                            <label class="check-item"><input type="checkbox" name="talla" value="60ml"> 60ml</label>
+                            <label class="check-item"><input type="checkbox" name="talla" value="100ml"> 100ml</label>
+                            <label class="check-item"><input type="checkbox" name="talla" value="120ml"> 120ml</label>
+                            <label class="check-item"><input type="checkbox" name="talla" value="200ml"> 200ml</label>
+                        </div>
+                    </div>
+
+                    <!-- Tipos de envase -->
+                    <div class="form-group full">
+                        <label>Tipos de envase</label>
+                        <div class="checkboxes-grid">
+                            <label class="check-item"><input type="checkbox" name="envase" value="Vidrio"> Vidrio</label>
+                            <label class="check-item"><input type="checkbox" name="envase" value="Plástico"> Plástico</label>
+                            <label class="check-item"><input type="checkbox" name="envase" value="Aluminio"> Aluminio</label>
+                            <label class="check-item"><input type="checkbox" name="envase" value="Recargable"> Recargable</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelarForm">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnGuardar">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminar -->
+    <div id="modalEliminar" class="modal-overlay hidden">
+        <div class="modal-box modal-confirm">
+            <div class="modal-header">
+                <h3>Eliminar Producto</h3>
+                <button class="modal-cerrar" id="btnCerrarEliminar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p class="confirm-msg">¿Estás seguro de que deseas eliminar <strong id="nombreEliminar"></strong>? Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="btnCancelarEliminar">Cancelar</button>
+                <button class="btn-danger" id="btnConfirmarEliminar">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Crear / Editar Envase -->
+    <div id="modalEnvase" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTituloEnvase">Nuevo Envase</h3>
+                <button class="modal-cerrar" id="btnCerrarModalEnvase">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="formEnvase" class="modal-form" novalidate>
+                <input type="hidden" id="envaseId">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label for="envaseNombre">Nombre *</label>
+                        <input type="text" id="envaseNombre" placeholder="Ej: Frasco Elegance 50ml" required>
+                    </div>
+                    <div class="form-group full">
+                        <label for="envaseDescripcion">Descripción</label>
+                        <textarea id="envaseDescripcion" rows="3" placeholder="Descripción del envase..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="envaseMaterial">Material *</label>
+                        <select id="envaseMaterial" required>
+                            <option value="">-- Seleccionar --</option>
+                            <option value="Vidrio">Vidrio</option>
+                            <option value="Plástico">Plástico</option>
+                            <option value="Aluminio">Aluminio</option>
+                            <option value="Recargable">Recargable</option>
+                            <option value="Cristal">Cristal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="envasePrecio">Precio (COP) *</label>
+                        <input type="number" id="envasePrecio" min="0" step="1000" placeholder="0" required>
+                    </div>
+                    <!-- Imagen upload -->
+                    <div class="form-group full">
+                        <label>Imagen del envase</label>
+                        <div class="img-upload-zone" id="zonaImagenEnvase">
+                            <img id="previewEnvaseImagen" class="img-preview" src="" alt="Vista previa">
+                            <div class="img-upload-actions">
+                                <label for="envaseImagenFile" class="btn-upload-img">
+                                    <i class="fas fa-upload"></i> Seleccionar imagen
+                                </label>
+                                <span id="envaseImgFileName" class="img-filename">Sin imagen seleccionada</span>
+                            </div>
+                            <input type="file" id="envaseImagenFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none">
+                            <input type="hidden" id="envaseImagen">
+                        </div>
+                    </div>
+                    <div class="form-group full">
+                        <label>Tallas disponibles</label>
+                        <div class="checkboxes-grid">
+                            <label class="check-item"><input type="checkbox" name="envaseTalla" value="30ml"> 30ml</label>
+                            <label class="check-item"><input type="checkbox" name="envaseTalla" value="50ml"> 50ml</label>
+                            <label class="check-item"><input type="checkbox" name="envaseTalla" value="60ml"> 60ml</label>
+                            <label class="check-item"><input type="checkbox" name="envaseTalla" value="100ml"> 100ml</label>
+                            <label class="check-item"><input type="checkbox" name="envaseTalla" value="120ml"> 120ml</label>
+                            <label class="check-item"><input type="checkbox" name="envaseTalla" value="200ml"> 200ml</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelarEnvase">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnGuardarEnvase">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminar Envase -->
+    <div id="modalEliminarEnvase" class="modal-overlay hidden">
+        <div class="modal-box modal-confirm">
+            <div class="modal-header">
+                <h3>Eliminar Envase</h3>
+                <button class="modal-cerrar" id="btnCerrarEliminarEnvase">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p class="confirm-msg">¿Estás seguro de que deseas eliminar <strong id="nombreEliminarEnvase"></strong>? Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="btnCancelarEliminarEnvase">Cancelar</button>
+                <button class="btn-danger" id="btnConfirmarEliminarEnvase">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

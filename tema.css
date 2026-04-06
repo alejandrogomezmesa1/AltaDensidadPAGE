@@ -1,0 +1,422 @@
+/* ==============================================
+   tema.css — Modo Claro / Modo Oscuro
+   Incluir en todas las páginas del sitio.
+   El modo oscuro es el predeterminado.
+   La clase html.modo-claro activa el tema claro.
+   ============================================== */
+
+/* ================================================
+   BOTÓN TEMA — Estilos base (aplica en ambos modos)
+   ================================================ */
+.btn-tema {
+    background: transparent;
+    border: 1px solid #D4AF37;
+    color: #D4AF37;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    transition: background 0.22s, color 0.22s, transform 0.22s, border-color 0.22s;
+    padding: 0;
+    flex-shrink: 0;
+}
+.btn-tema:hover {
+    background: #D4AF37;
+    color: #0a0a0a;
+    transform: rotate(22deg) scale(1.1);
+}
+
+/* ================================================
+   MODO CLARO — Reasignación de variables CSS
+   ================================================ */
+html.modo-claro {
+    /* Paleta principal redistribuida para fondo claro */
+    --azul-uno:       #ede9e3;     /* Superficies cálidas claras */
+    --azul-dos:       #B8960C;     /* Oro más oscuro (mejor contraste en claro) */
+    --azul-tres:      #ffffff;
+    --azul-cuatro:    #7a5c00;
+    --gris-elegante:  #f5f2ee;     /* Fondo principal cálido */
+    --blanco-neutro:  #ffffff;     /* Tarjetas blancas */
+    --texto:          #1a1a1a;     /* Texto oscuro */
+    --naranja-calido: #9a7800;
+    --purpura:        #7a5c00;
+    --coral:          #9a7800;
+    --verde:          #B8960C;
+    --rosa-suave:     #f0ede8;
+    --dorado:         #B8960C;
+}
+
+
+/* ================================================
+   BODY
+   ================================================ */
+html.modo-claro body {
+    background-color: #f5f2ee;
+    color: #1a1a1a;
+}
+
+/* ================================================
+   HEADER / NAVBAR
+   ================================================ */
+html.modo-claro .header {
+    background: rgba(255, 255, 255, 0.93) !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.10), 0 1px 0 rgba(184, 150, 12, 0.3);
+}
+
+html.modo-claro .logo-container {
+    background: rgba(0, 0, 0, 0.03);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+html.modo-claro .header-title,
+html.modo-claro .header-tittle {
+    color: #1a1a1a;
+}
+
+/* Nav links */
+html.modo-claro .main-nav a {
+    color: #2a2a2a;
+}
+html.modo-claro .main-nav a:hover,
+html.modo-claro .main-nav a:focus {
+    color: #B8960C;
+    background: rgba(184, 150, 12, 0.10);
+}
+
+/* Botón tema en modo claro */
+html.modo-claro .btn-tema {
+    border-color: #B8960C;
+    color: #B8960C;
+}
+html.modo-claro .btn-tema:hover {
+    background: #B8960C;
+    color: #fff;
+}
+
+/* Dropdown menú */
+html.modo-claro .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+    border: 1px solid rgba(184, 150, 12, 0.2);
+}
+html.modo-claro .dropdown:hover .dropdown-menu,
+html.modo-claro .dropdown:focus-within .dropdown-menu {
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(184, 150, 12, 0.35);
+}
+html.modo-claro .dropdown-menu a {
+    color: #2a2a2a;
+}
+html.modo-claro .dropdown-menu a:hover {
+    background: rgba(184, 150, 12, 0.12);
+    color: #B8960C;
+}
+
+/* Menú de sesión (nav-sesion.js) */
+html.modo-claro .nav-user-name {
+    color: #2a2a2a;
+}
+html.modo-claro .nav-user-menu .nav-user-dropdown {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(184, 150, 12, 0.2);
+}
+html.modo-claro .nav-user-menu .nav-user-dropdown a {
+    color: #2a2a2a;
+}
+html.modo-claro .nav-user-menu .nav-user-dropdown a:hover {
+    background: rgba(184, 150, 12, 0.12);
+    color: #B8960C;
+}
+
+/* ================================================
+   BANNER DE COLECCIÓN
+   ================================================ */
+html.modo-claro .collection-banner {
+    background: linear-gradient(145deg, #f5f0e8 0%, #ede7d8 100%) !important;
+    border: 1px solid rgba(184, 150, 12, 0.25);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+}
+html.modo-claro .collection-banner p {
+    color: #2a2a2a;
+}
+
+/* ================================================
+   CARDS DE PRODUCTOS
+   ================================================ */
+html.modo-claro .product-card {
+    background-color: #ffffff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(184, 150, 12, 0.12);
+}
+html.modo-claro .product-card:hover {
+    box-shadow: 0 8px 20px rgba(184, 150, 12, 0.18);
+    border: 1px solid rgba(184, 150, 12, 0.35);
+}
+html.modo-claro .product-name,
+html.modo-claro .product-price {
+    color: #1a1a1a;
+}
+
+/* ================================================
+   FEATURE CARDS (sección inferior todas las páginas)
+   ================================================ */
+html.modo-claro .feature-card {
+    background-color: #ede9e3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+html.modo-claro .feature-card p,
+html.modo-claro .feature-card h3,
+html.modo-claro .feature-card i {
+    color: #1a1a1a;
+}
+
+/* ================================================
+   OFERTA ESPECIAL
+   ================================================ */
+html.modo-claro .special-offer {
+    background: linear-gradient(90deg, #ede9e3 60%, #ddd3b8 100%) !important;
+    color: #1a1a1a;
+    text-shadow: none;
+}
+
+/* ================================================
+   SECCIÓN FILTROS (index.html)
+   ================================================ */
+html.modo-claro #filterPanel,
+html.modo-claro .filter-section {
+    background: #ede9e3;
+    color: #1a1a1a;
+}
+html.modo-claro #filterPanel label,
+html.modo-claro #filterPanel h3,
+html.modo-claro #filterPanel span,
+html.modo-claro .filter-section label,
+html.modo-claro .filter-section h3 {
+    color: #1a1a1a;
+}
+html.modo-claro #filterPanel input[type="range"] {
+    accent-color: #B8960C;
+}
+
+/* ================================================
+   INPUTS, SELECT, TEXTAREA
+   ================================================ */
+html.modo-claro input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html.modo-claro select,
+html.modo-claro textarea {
+    background: #f8f7f4;
+    color: #1a1a1a;
+    border-color: #ccc;
+}
+html.modo-claro input::placeholder,
+html.modo-claro textarea::placeholder {
+    color: #888;
+}
+html.modo-claro input:focus,
+html.modo-claro select:focus,
+html.modo-claro textarea:focus {
+    border-color: #B8960C;
+    outline-color: #B8960C;
+}
+
+/* ================================================
+   CARRITO DRAWER (index.html)
+   ================================================ */
+html.modo-claro .carrito-panel {
+    background: #faf8f5 !important;
+    border-left: 1px solid rgba(184, 150, 12, 0.4);
+}
+html.modo-claro .carrito-header {
+    border-bottom: 1px solid rgba(184, 150, 12, 0.25);
+    color: #B8960C;
+}
+html.modo-claro .carrito-cerrar {
+    color: #555;
+}
+html.modo-claro .carrito-cerrar:hover {
+    color: #1a1a1a;
+}
+html.modo-claro .carrito-item {
+    background: #ede9e3;
+    border: 1px solid rgba(184, 150, 12, 0.15);
+}
+html.modo-claro .carrito-item-nombre {
+    color: #1a1a1a;
+}
+html.modo-claro .carrito-item-controles span {
+    color: #1a1a1a;
+}
+html.modo-claro .carrito-footer {
+    border-top: 1px solid rgba(184, 150, 12, 0.25);
+}
+html.modo-claro .carrito-subtotal {
+    color: #333;
+}
+html.modo-claro .carrito-btn-vaciar {
+    color: #555;
+    border-color: #999;
+}
+html.modo-claro .carrito-btn-vaciar:hover {
+    color: #cc2222;
+    border-color: #cc2222;
+}
+html.modo-claro .carrito-vacio {
+    color: #888;
+}
+html.modo-claro .carrito-vacio i {
+    color: #bbb;
+}
+
+/* ================================================
+   PAGINACIÓN
+   ================================================ */
+html.modo-claro .pag-btn {
+    border-color: #B8960C;
+    color: #B8960C;
+    background: transparent;
+}
+html.modo-claro .pag-btn:hover:not(:disabled) {
+    background: #B8960C;
+    color: #fff;
+}
+html.modo-claro .pag-btn.pag-active {
+    background: #B8960C;
+    color: #fff;
+    border-color: #B8960C;
+}
+html.modo-claro .pag-ellipsis {
+    color: #666;
+}
+
+/* ================================================
+   FOOTER
+   ================================================ */
+html.modo-claro .footer {
+    background: #e8e4db !important;
+    color: #2a2a2a;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgba(184, 150, 12, 0.25);
+}
+html.modo-claro .footer a {
+    color: #B8960C;
+}
+html.modo-claro .footer a:hover {
+    color: #7a5c00;
+}
+html.modo-claro .footer-section p,
+html.modo-claro .footer-section li,
+html.modo-claro .footer-section h3 {
+    color: #2a2a2a;
+}
+
+/* ================================================
+   KITS SECTION (index.html)
+   ================================================ */
+html.modo-claro .kits-section {
+    border-top: 1px solid rgba(184, 150, 12, 0.2);
+    border-bottom: 1px solid rgba(184, 150, 12, 0.2);
+}
+
+html.modo-claro .kits-title {
+    color: #B8960C;
+    text-shadow: none;
+}
+
+html.modo-claro .kits-subtitle {
+    color: #555;
+}
+
+html.modo-claro .kit-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(184, 150, 12, 0.2) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease !important;
+}
+
+html.modo-claro .kit-card:hover {
+    box-shadow: 0 12px 32px rgba(184, 150, 12, 0.18) !important;
+    border-color: rgba(184, 150, 12, 0.4) !important;
+}
+
+html.modo-claro .kit-card.featured {
+    background: linear-gradient(135deg, #faf8f0 0%, #f5f0e0 100%) !important;
+    border: 2px solid #B8960C !important;
+    box-shadow: 0 0 20px rgba(184, 150, 12, 0.15) !important;
+}
+
+html.modo-claro .kit-name {
+    color: #1a1a1a;
+}
+
+html.modo-claro .kit-description {
+    color: #555;
+}
+
+html.modo-claro .kit-benefits li {
+    color: #333;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+html.modo-claro .kit-price {
+    background: rgba(184, 150, 12, 0.06);
+    border: 1px solid rgba(184, 150, 12, 0.15);
+}
+
+html.modo-claro .price-amount {
+    color: #1a1a1a;
+}
+
+html.modo-claro .kit-image-placeholder {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+html.modo-claro .kits-promo {
+    background: linear-gradient(90deg, #f0ece0 0%, #ebe5d5 100%) !important;
+    border: 1px solid #B8960C;
+    box-shadow: 0 0 16px rgba(184, 150, 12, 0.12);
+}
+
+html.modo-claro .kits-promo p {
+    color: #1a1a1a;
+    text-shadow: none;
+}
+
+/* ================================================
+   NOSOTROS — secciones específicas
+   ================================================ */
+html.modo-claro .about-section,
+html.modo-claro .mission-section,
+html.modo-claro .values-section,
+html.modo-claro .team-section,
+html.modo-claro .team-card,
+html.modo-claro .value-card,
+html.modo-claro .nosotros-card {
+    background: #ede9e3 !important;
+    color: #1a1a1a;
+}
+
+/* ================================================
+   TOP10 / RANKING — secciones específicas
+   ================================================ */
+html.modo-claro .top-item,
+html.modo-claro .ranking-item,
+html.modo-claro .ranking-card,
+html.modo-claro .top10-card {
+    background: #ffffff !important;
+    color: #1a1a1a;
+    border-color: rgba(184, 150, 12, 0.2);
+}
+
+/* ================================================
+   SECCIONES CON FONDO OSCURO HARDCODEADO
+   (colección de banners oscuros en nosotros/top10/envases)
+   ================================================ */
+html.modo-claro section:not(.collection-banner):not(.features) {
+    background-color: var(--gris-elegante);
+    color: var(--texto);
+}

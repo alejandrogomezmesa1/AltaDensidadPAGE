@@ -1,1141 +1,180 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Datos de productos
-    const products = [
-        {
-            id: 1,
-            name: "212 VIP ROSE CAROLINA HERRERA",
-            rating: 4,
-            image: "img/212-vip-rose.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia femenina con un aire fresco y dinámico. Representa el glamour juvenil y la autenticidad intrépida, ideal para quienes viven la vida al máximo y destacan con seguridad"
-        },
-        {
-            id: 2,
-            name: "GOOD GIRL CAROLINA HERRERA",
-            rating: 4,
-            image: "img/GOOD_GIRL.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "La dualidad entre la dulzura y la intensidad. Good Girl combina la frescura del jazmín y la almendra con la profundidad del cacao y el café, creando un aroma seductor y poderoso. Su icónico frasco en forma de tacón refleja la esencia de una mujer fuerte y sofisticada."
-        },
-        {
-            id: 61,
-            name: "GOOD GIRL BLUSH CAROLINA HERRERA",
-            rating: 4,
-            image: "img/GOOD_GIRL_BLUSH.png",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 62,
-            name: "VERY GOOD GIRL CAROLINA HERRERA",
-            rating: 4,
-            image: "img/VERY_GOOD_GIRL.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 58,
-            name: "212 SEXY CAROLINA HERRERA",
-            rating: 4,
-            image: "img/212_SEXY.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 3,
-            name: "212 VIP BLACK CAROLINA HERRERA",
-            rating: 5,
-            image: "img/VIP_212_BLACK.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml","100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "La esencia de la exclusividad. Un perfume oriental especiado, con una salida de absenta y anís, seguida por un corazón de lavanda y cuero. Su fondo de vainilla y almizcle le da una estela intensa y sofisticada. "
-        },
-        {
-            id: 4,
-            name: "BOND NO. 9 BLEECKER STREET",
-            rating: 4,
-            image: "img/BOND_NO.9_BLEECKER.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume intenso y seductor que combina notas de cuero, tabaco y especias. Un aroma complejo y sofisticado que seguro hará una declaración. Ideal para aquellos que buscan un perfume que refleje su personalidad audaz."
-        },
-        {
-            id: 5,
-            name: "LIGHT BLUE DOLCE & GABBANA",
-            rating: 5,
-            image: "img/ligth_blue.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Inspirado en la frescura y sensualidad del Mediterráneo, este perfume está dirigido a personas que buscan una fragancia vibrante y juvenil. Su publicidad ha estado marcada por imágenes de verano, mar y romance, apelando a quienes disfrutan de un estilo de vida activo y sofisticado."
-        },
-        {
-            id: 67,
-            name: "LIGHT BLUE DOLCE & GABBANA MEN",
-            rating: 4,
-            image: "img/LIGHT_BLUE_MEN.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 6,
-            name: "SANTAL 33",
-            rating: 4,
-            image: "img/SANTAL_33.jpg",
-            category: "Diseñador",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "La esencia de la sofisticación moderna. Una fragancia amanerada especiada, con notas de sándalo, cardamomo y cuero, que crean un aroma único y envolvente, ideal para quienes buscan un perfume minimalista pero impactante."
-        },
-        {
-            id: 7,
-            name: "TOY 2 BUBBLE GUM MOSCHINO",
-            rating: 4,
-            image: "img/TOY_2_BUBBLE_GUM.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una fragancia floral frutal con un toque divertido y juvenil. Su apertura está marcada por frutas confitadas, naranja amarga y limón, que aportan un dulzor chispeante. En el corazón, la rosa, moras y melocotón crean una sensación femenina y juguetona, mientras que el fondo de almizcle y cedro le da profundidad y duración. Es perfecta para quienes buscan un aroma alegre y moderno."
-        },
-        {
-            id: 55,
-            name: "TOY 2 PEARL MOSCHINO",
-            rating: 4,
-            image: "img/TOY_PEARL.jpg",
-            category : "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 83,
-            name: "TOY 2 EDP MOSCHINO",
-            rating: 4,
-            image: "img/TOY2EDP.webp",
-            category : "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 84,
-            name: "OLYMPEA PACO RABANNE",
-            rating: 4,
-            image: "img/OLYMPEA.webp",
-            category : "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 82,
-            name: "INVICTUS PACO RABANNE",
-            rating: 5,
-            image: "img/INVICTUS.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas que transportan a un paraíso aromático"
-        },
-        {
-            id: 85,
-            name: "LEGEND MONTBLANC",
-            rating: 4,
-            image: "img/LEGEND.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas que transportan a un paraíso aromático"
-        },
-        {
-            id: 8,
-            name: "AHLI KARPOS",
-            rating: 4,
-            image: "img/AHLI_KARPOS.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas que transportan a un paraíso aromático"
-        },
-        {
-            id: 9,
-            name: "AHLI CORVUS",
-            rating: 4,
-            image: "img/CORVUS.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una fragancia que combina notas frutales, florales y amaderadas, creando una experiencia olfativa sofisticada y envolvente. Su composición equilibra la dulzura de las frutas con la elegancia de las flores y la profundidad de las maderas, resultando en una fragancia versátil y duradera. Es ideal para quienes buscan un aroma adecuado para diversas ocasiones y estaciones del año."
-        },
-        {
-            id: 10,
-            name: "AHLI VEGA",
-            rating: 4,
-            image: "img/VEGA.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume sensual y seductor que combina notas de flores, frutas y especias. Un aroma intenso y atractivo que seguro despertará los sentidos. Ideal para aquellos que buscan un perfume que los haga sentir seguros y atractivos."
-        },
-        {
-            id: 11,
-            name: " COCO MADEMOISELLE CHANEL",
-            rating: 4,
-            image: "img/COCO.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Un clásico moderno que encapsula la esencia de la sofisticación. Coco Mademoiselle es una fragancia oriental floral con una apertura vibrante de naranja y bergamota, seguida por un corazón de rosa y jazmín que exuda feminidad y elegancia. Su fondo de pachulí y vainilla le da profundidad y sensualidad, dejando una estela inolvidable."
-        },
-        {
-            id: 12,
-            name: "BLEU CHANEL",
-            rating: 4,
-            image: "img/BLEU.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una fragancia amaderada aromática, con una apertura fresca de limón, menta y pimienta rosa, seguida por un corazón de jengibre, nuez moscada y jazmín que aporta profundidad y carácter. Su fondo de sándalo, incienso y cedro le da una estela elegante y masculina. Es perfecta para quienes buscan un aroma sofisticado y atemporal, ideal para cualquier ocasión."
-        },
-        {
-            id: 54,
-            name: "OMBRE NOMADE LOUIS VUITTON",
-            rating: 5,
-            image: "img/HOMBRENOMADA.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 13,
-            name: "IL ROSO DE ILMIN",
-            rating: 4,
-            image: "img/IL_ROSO3.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia floral, frutal y oriental, diseñada para quienes buscan una esencia sofisticada y envolvente. Inspirada en la naturaleza intrépida, esta fragancia combina notas vibrantes y profundas que crean una experiencia olfativa única"
-        },
-        {
-            id: 14,
-            name: "IL ORGASME ILMIN",
-            rating: 4,
-            image: "img/IL_ORGASME_ILMIN.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Sensualidad y magnetismo absoluto. Un perfume oriental especiado, con una apertura de frutas exóticas y especias, seguida por un corazón de flores blancas y maderas. Su fondo de vainilla y almizcle lo convierte en una fragancia seductora y envolvente."
-        },
-        {
-            id: 15,
-            name: "IL FEMME ILMIN",
-            rating: 4,
-            image: "img/FEMME.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Una fragancia que evoca la frescura del verano con su mezcla de vainilla, rosa y toques polvorientos. Ilmin Femme es una experiencia embriagadora y exótica, perfecta para quienes buscan un perfume con un aire romántico y envolvente."
-        },
-        {
-            id: 79,
-            name: "IL KAKUNO ILMIN",
-            rating: 4,
-            image: "img/KAKUNO.jpg",
-            category: "Diseñador",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Una fragancia que evoca la frescura del verano con su mezcla de vainilla, rosa y toques polvorientos. Ilmin Femme es una experiencia embriagadora y exótica, perfecta para quienes buscan un perfume con un aire romántico y envolvente."
-        },
-        {
-            id: 16,
-            name: "CLOUD ARIANA GRANDE",
-            rating: 4,
-            image: "img/CLOUD_ARIANA.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Cloud es una fragancia dulce y etérea, con una apertura de lavanda, pera y bergamota que aporta frescura y suavidad. Su corazón de crema batida, praliné y coco crea una sensación envolvente y reconfortante, mientras que el fondo de almizcle y maderas le da profundidad y sofisticación. Es perfecta para quienes buscan un aroma soñador y adictivo, con un toque moderno y juvenil."
-        },
-        {
-            id: 81,
-            name: "MOD VANILLA ARIANA GRANDE",
-            rating: 4,
-            image: "img/MODVANILLA.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una fragancia frutal gourmand, con una salida vibrante de frambuesa y pera, seguida por un corazón de rosa y coco que aporta un aire femenino y juguetón. Su fondo de macarrón y almizcle le da un toque cremoso y seductor. Es ideal para quienes buscan un perfume divertido y atrevido, con una esencia dulce y empoderadora"
-        },
-        {
-            id: 17,
-            name: "THANK U, NEXT ARIANA GRANDE",
-            rating: 4,
-            image: "img/THANKU2.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una fragancia frutal gourmand, con una salida vibrante de frambuesa y pera, seguida por un corazón de rosa y coco que aporta un aire femenino y juguetón. Su fondo de macarrón y almizcle le da un toque cremoso y seductor. Es ideal para quienes buscan un perfume divertido y atrevido, con una esencia dulce y empoderadora"
-        },
-        {
-            id: 57,
-            name: "BURBERRY HER",
-            rating: 4,
-            image: "img/B_HER.jpeg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 80,
-            name: "AMOUAGE INTERLUDE",
-            rating: 4,
-            image: "img/AMOUAGE.webp",
-            category: "Arabe",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 78,
-            name: "MEOW KATTY PERY",
-            rating: 4,
-            image: "img/MEOW.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante, con un fondo cálido y seductor de sándalo y almizcle. Radiante, juvenil, inolvidable."
-        },
-        {
-            id: 75,
-            name: "HEIRESS PARIS HILTON",
-            rating: 4,
-            image: "img/HEIRESS2.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante, con un fondo cálido y seductor de sándalo y almizcle. Radiante, juvenil, inolvidable."
-        },
-         {
-            id: 88,
-            name: "360 PERRY ELLIS",
-            rating: 4,
-            image: "img/360.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante, con un fondo cálido y seductor de sándalo y almizcle. Radiante, juvenil, inolvidable."
-        },
-        {
-            id: 56,
-            name: "YUM YUM ARMAF",
-            rating: 4,
-            image: "img/YUMYUM.webp",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 46,
-            name: "ISLAND BLISS ARMAF",
-            rating: 4,
-            image: "img/ISLANDBLISS2.webp",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Inspirada en la frescura tropical, esta fragancia está diseñada para quienes buscan un aroma vibrante y exótico. Con notas de coco, bayas silvestres y vainilla, es perfecta para personas que disfrutan de perfumes alegres y relajantes, evocando la sensación de unas vacaciones en una isla paradisíaca"
-        },
-        {
-            id: 47,
-            name: "CLUB DE NUIT INTENSE (BESTIA NEGRA) ARMAF",
-            rating: 4,
-            image: "img/NUIT2.jpg",
-            category: "Arabe",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Club de Nuit Intense es una fragancia cítrica y amaderada con una salida de limón, piña y grosella negra, seguida por un corazón de rosa y jazmín que aporta sofisticación. Su fondo de almizcle, ámbar gris y pachulí le da una estela intensa y duradera, perfecta para quienes buscan un aroma elegante y dominante."
-        },
-        {
-            id: 64,
-            name: "CLUB DE NUIT WOMAN ARMAF",
-            rating: 5,
-            image: "img/NUIT_WOMAN.webp",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 48,
-            name: "9PM AFNAN",
-            rating: 4,
-            image: "img/9PM2.png",
-            category: "Arabe",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Seducción nocturna en su máxima expresión. Un perfume dulce y especiado, con una salida de manzana y canela, seguida por un corazón de flores blancas y vainilla. Su fondo de haba tonka y ámbar crea una estela intensa y adictiva, ideal para noches inolvidables."
-        },
-        {
-            id: 49,
-            name: "ODYSSEY MANDARIN SKY ARMAF",
-            rating: 5,
-            image: "img/ODYSSEY_MANDARIN.png",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Sumérgete en la esencia vibrante y seductora de Odyssey Mandarin Sky, una fragancia masculina que equilibra la frescura cítrica con la calidez envolvente. Su apertura chispeante de mandarina, naranja, azafrán y salvia despierta los sentidos con energía y sofisticación."
-        },
-        {
-            id: 50,
-            name: "ODYSSEY CHOCOLATE DUBAI ARMAF",
-            rating: 4,
-            image: "img/ODYSEYCHOCOLATE.jpg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y sensual que combina notas de chocolate, vainilla y caramelos. Un aroma cálido y atractivo que seguro despertará los sentidos. La combinación de notas de chocolate y vainilla crea un perfume rico y decadente que es perfecto para aquellos que buscan un aroma dulce y sensual."
-        },
-        {
-            id: 51,
-            name: "ODYSSEY CANDEE ARMAF",
-            rating: 4,
-            image: "img/ODYSEYCANDEE2.jpeg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 52,
-            name: "ODYSSEY MEGA ARMAF",
-            rating: 4,
-            image: "img/ODYSEYMEGA.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 53,
-            name: "ODYSSEY SPECTRA ARMAF",
-            rating: 4,
-            image: "img/ODYSEYSPECTRA.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 21,
-            name: "BHARARA ROSE",
-            rating: 4,
-            image: "img/BHARARAROSE.jpg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: ""
-        },
-        {
-            id: 22,
-            name: "BHARARA KING",
-            rating: 5,
-            image: "img/BHARARAKING.webp",
-            category: "Arabe",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 22,
-            name: "BHARARA NICHE",
-            rating: 4,
-            image: "img/BHARARANICHE.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: ""
-        },
-        {
-            id: 19,
-            name: "YARA CANDY LATTAFA",
-            rating: 4,
-            image: "img/CANDY.jpg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Dirigida a quienes aman los perfumes dulces y refrescantes, esta fragancia es perfecta para personas con un espíritu alegre y juvenil. "
-        },
-        {
-            id: 20,
-            name: "YARA LATTAFA",
-            rating: 5,
-            image: "img/YARA_LATTAFA2.jpg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia oriental dulce y sofisticada, diseñada principalmente para mujeres que buscan un aroma envolvente y elegante. Su perfil olfativo la hace ideal para quienes disfrutan de fragancias con un toque gourmand y cálido."
-        },
-        {
-            id: 65,
-            name: "ASAD LATTAFA",
-            rating: 4,
-            image: "img/ASAD_BLACK.jpg",
-            category: "Arabe",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 23,
-            name: "MAYAR INTENSE LATTAFA",
-            rating: 4,
-            image: "img/MAYARINTENSE.jpg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume fresco y cítrico que evoca la esencia de la naturaleza. Notas de bergamota y limón se mezclan con flores verdes para crear un aroma ligero y revitalizante. Ideal para aquellos que buscan un perfume para uso diario."
-        },
-        {
-            id: 24,
-            name: "MAYAR LATTAFA",
-            rating: 5,
-            image: "img/MAYAR_LATTAFA.jpg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una declaración de elegancia y sensualidad, una fragancia que envuelve los sentidos desde el primer instante. Su apertura vibrante con lichi y frambuesa despierta una feminidad radiante, mientras que las hojas de violeta aportan un matiz sofisticado y aterciopelado. En su corazón, la delicadeza de la rosa blanca, la peonía y el jazmín florece en una armonía irresistible, creando una aura de belleza etérea. Finalmente, la calidez del almizcle y la vainilla se funde en la piel, dejando una estela envolvente y adictiva."
-        },       
-        {
-            id: 75,
-            name: "MAYAR CHERRY LATTAFA",
-            rating: 4,
-            image: "img/MAYAR_LATTAFA_CHERRY.webp",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Es una declaración de elegancia y sensualidad, una fragancia que envuelve los sentidos desde el primer instante. Su apertura vibrante con lichi y frambuesa despierta una feminidad radiante, mientras que las hojas de violeta aportan un matiz sofisticado y aterciopelado. En su corazón, la delicadeza de la rosa blanca, la peonía y el jazmín florece en una armonía irresistible, creando una aura de belleza etérea. Finalmente, la calidez del almizcle y la vainilla se funde en la piel, dejando una estela envolvente y adictiva."
-        },
-        {
-            id: 25,
-            name: " BADE´E AL OUD HONOR & GLORY LATTAFA BLANCA",
-            rating: 4,
-            image: "img/BADE_AL_OUD_HONOR.png",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Poder y presencia en cada gota. Una fragancia amaderada y especiada, con notas de bergamota, pimienta negra y lavanda, que se combinan con un fondo de maderas y almizcle. Diseñada para quienes buscan un aroma **fuerte y dominante, con una presencia imponente."
-        },         
-        {
-            id: 26,
-            name: " BADEE AL OUD SUBLIME LATTAFA ROJA",
-            rating: 4,
-            image: "img/ADEE_AL_OUD_SUBLIME.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un lujo afrutado y envolvente. Una fragancia amaderada aromática, con notas de frutas tropicales, rosa y vainilla, que se combinan con un fondo cálido de maderas y almizcle."
-        },         
-        {
-            id: 27,
-            name: "BADE´E AL OUD AMETHYST LATTAFA MORADA",
-            rating: 4,
-            image: "img/BADE’E_AL_OUD.png",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Misterio y elegancia en cada gota.  Un perfume oriental floral, con una apertura de bergamota y pimienta rosa, seguida por un corazón de rosa y jazmín. Su fondo de oud y vainilla le da una estela intensa y seductora."
-        },         
-        {
-            id: 28,
-            name: "BADE´E AL OUD FOR GLORY LATTAFA NEGRA",
-            rating: 4,
-            image: "img/LATTAFANEGRA.png",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume misterioso y sensual que combina notas de flores oscuras, cuero y especias. Un aroma intenso y seductor que seguro hará girar cabezas. Ideal para aquellos que buscan un perfume que refleje su lado más oscuro y seductor."
-        },
-        {
-            id: 29,
-            name: "BADE´E AL OUD NOBLE BLUSH LATTAFA",
-            rating: 4,
-            image: "img/NOBLEBLUSH.jpeg",
-            category: "Arabe",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Dirigida a quienes buscan una fragancia dulce y sofisticada, con un toque gourmand. Su combinación de leche de rosa, merengue y almendra la hace ideal para personas que prefieren aromas delicados y femeninos, con una elegancia sutil"
-        },
-        {
-            id: 66,
-            name: "KHAMRAH LATTAFA",
-            rating: 4,
-            image: "img/KHAMRAH.jpg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 30,
-            name: "AMBER OUD GOLD EDITION AL HARAMAIN",
-            rating: 4,
-            image: "img/AMBER_OUD_GOLD.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Oro líquido en un frasco. Un perfume oriental amaderado, con una salida de bergamota y notas verdes, seguida por un corazón de maderas y ámbar. Su fondo de vainilla y almizcle lo convierte en una fragancia lujosa y adictiva."
-        },         
-        {
-            id: 31,
-            name: "AMBER ROUGE ORIENTICA",
-            rating: 5,
-            image: "img/AMBER_ROUGE.jpg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Intensidad y pasión en cada rocío. Inspirado en Baccarat Rouge 540, combina jazmín, azafrán y ámbar gris, creando un aroma profundo y sofisticado, con una estela envolvente y duradera."
-        }, 
-        {
-            id: 63,
-            name: "VELVET GOLF ORIENTICA",
-            rating: 4,
-            image: "img/VELVET_GOLD.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 68,
-            name: "AMBER NOIR ORIENTICA",
-            rating: 4,
-            image: "img/AMBER_NOIR.jpg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 69,
-            name: "AZURE ORIENTICA",
-            rating: 4,
-            image: "img/AMBER_AZURE.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 70,
-            name: "ROYAL BLEU ORIENTICA",
-            rating: 4,
-            image: "img/AMBER_BLEU.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 71,
-            name: "ROYAL AMBER ORIENTICA",
-            rating: 4,
-            image: "img/AMBER_ROYAL.webp",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },     
-        {
-            id: 76,
-            name: "ERBA PURA XERJOFF",
-            rating: 4,
-            image: "img/ERBA_PURA.avif",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },  
-        {
-            id: 77,
-            name: "NAXOS XERJOFF",
-            rating: 4,
-            image: "img/NAXOS.jpeg",
-            category: "Arabe",
-            gender: "Unisex",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },        
-        {
-            id: 32,
-            name: "ARABIANS TONKA MONTALE",
-            rating: 4,
-            image: "img/ARABIANS_TONKA.jpg",
-            category: "Arabe",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Montale Poder y misterio en una fragancia. Un perfume oriental especiado, con una apertura de azafrán y bergamota, seguida por un corazón de rosa y oud. Su fondo de haba tonka y almizcle le da una presencia intensa y magnética."
-        },         
-        {
-            id: 33,
-            name: "ETERNITY AQUA CALVIN KLEIN",
-            rating: 4,
-            image: "img/ETERNITY_AQUA.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Frescura y elegancia atemporal. Una fragancia acuática amaderada, con notas de pepino, cítricos y lavanda, que se combinan con un fondo de sándalo y almizcle, perfecta para quienes buscan un aroma limpio y sofisticado."
-        },
-        {
-            id: 34,
-            name:"IN 2U HER CALVIN KLEIN",
-            rating: 4,
-            image: "img/IN2UHER.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume sensual y femenino que combina notas de bergamota, flor de azahar y ámbar. Un aroma intenso y atractivo que seguro hará una declaración. La combinación de notas cítricas y florales crea un perfume fresco y sensual que es perfecto para aquellos que buscan un aroma que refleje su personalidad segura y atractiva."
-        },         
-        {
-            id: 35,
-            name: "DIOR SAUVAGE",
-            rating: 5,
-            image: "img/DIORSAUVAGE.PNG",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Dior La fuerza de la naturaleza en un frasco. Un perfume amaderado aromático, con una salida de bergamota y pimienta, seguida por un corazón de lavanda y geranio. Su fondo de ambroxan y cedro lo convierte en una fragancia potente y masculina."
-        }, 
-        {
-            id: 90,
-            name: "MISS DIOR",
-            rating: 4,
-            image: "img/MISSDIOR.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Dior La fuerza de la naturaleza en un frasco. Un perfume amaderado aromático, con una salida de bergamota y pimienta, seguida por un corazón de lavanda y geranio. Su fondo de ambroxan y cedro lo convierte en una fragancia potente y masculina."
-        },         
-        {
-            id: 36,
-            name: "ACQUA DI GIO GIORGIO ARMANI",
-            rating: 4,
-            image: "img/ACQUA_DI_GIO.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "La frescura del mar en cada rocío. Una fragancia acuática cítrica, con notas de bergamota, neroli y romero, seguida por un corazón de jazmín y notas marinas. Su fondo de cedro y almizcle le da una sensación refrescante y elegante."
-        },
-        {
-            id: 72,
-            name: "AQUA DI GIO PROFONDO ARMANI",
-            rating: 4,
-            image: "img/DI_GIO_PROFONDO.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 37,
-            name: "BORN IN ROMA VALENTINO",
-            rating: 4,
-            image: "img/BORN_IN_ROMA.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "La sofisticación italiana en un frasco. Una fragancia amaderada especiada, con una apertura vibrante de salvia y jengibre, seguida por un corazón de vetiver ahumado que aporta profundidad y carácter. Su fondo de maderas y minerales lo convierte en un perfume moderno y magnético"
-        },
-        {
-            id: 38,
-            name: "DONNA BORN IN ROMA VALENTINO",
-            rating: 4,
-            image: "img/DONNA_BORN_IN_ROMA.jpeg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Inspirada en la elegancia de Roma, esta fragancia está dirigida a mujeres que buscan un perfume sofisticado y moderno. Con notas de jazmín sambac, vainilla Bourbon y cashmeran, es ideal para quienes desean un aroma que combine feminidad y un toque vanguardista."
-        },
-        {
-            id: 63,
-            name: "BORN IN ROMA INTENSE VALENTINO",
-            rating: 4,
-            image: "img/VALENTINO_INTENSE.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },    
-        {
-            id: 39,
-            name: "LACOSTE BLANCA",
-            rating: 4,
-            image: "img/LACOSTE_BLANCA.png",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "La esencia de la elegancia deportiva. Un aroma fresco y limpio, with notas de pomelo, cardamomo y ylang-ylang, que se fusionan con un fondo de cedro y cuero, Perfecto para el hombre que busca sofisticación y versatilidad, ideal para cualquier ocasión."
-        },
-        {
-            id: 40,
-            name: "LACOSTE RED STYLE IN PLAY",
-            rating: 4,
-            image: "img/LCRED.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Lacoste Red es una fragancia fresca y afrutada con una salida de manzana verde y maclura, seguida por un corazón de cedro y jazmínque aporta equilibrio. Su fondo de maderas y almizcle le da una sensación cálida y deportiva, perfecta para quienes buscan un aroma dinámico y juvenil."
-        },
-        {
-            id: 91,
-            name: "LACOSTE SENSUELLE",
-            rating: 4,
-            image: "img/LACOSTESENSUAL.jpg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Lacoste Red es una fragancia fresca y afrutada con una salida de manzana verde y maclura, seguida por un corazón de cedro y jazmínque aporta equilibrio. Su fondo de maderas y almizcle le da una sensación cálida y deportiva, perfecta para quienes buscan un aroma dinámico y juvenil."
-        },
-        {
-            id: 41,
-            name: "ONE MILLON MILLION PACO RABANNE",
-            rating: 4,
-            image: "img/ONE_MILLON.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Lujo y audacia en cada gota. Una fragancia amaderada especiada, con una apertura de toronja y menta, seguida por un corazón de rosa y canela. Su fondo de cuero y ámbar lo convierte en un perfume poderoso y magnético."
-        },
-        {
-            id: 42,
-            name: "BLACK XS L´APHRODISIAQUE PACO RABANNE",
-            rating: 4,
-            image: "img/LAPHRODISIAQUE2.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Lujo y audacia en cada gota. Una fragancia amaderada especiada, con una apertura de toronja y menta, seguida por un corazón de rosa y canela. Su fondo de cuero y ámbar lo convierte en un perfume poderoso y magnético."
-        },      
-        {
-            id: 43,
-            name: "EROS EAU DE TOILETTE VERSACE",
-            rating: 4,
-            image: "img/EROS.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Inspirado en la mitología griega, es una fragancia amaderada aromática, que exuda poder y seducción. Su apertura vibrante con menta, manzana verde y limón aporta frescura y energía, mientras que el corazón de haba tonka y ambroxan intensifica su carácter masculino. Su fondo de vainilla, cedro y vetiverle da profundidad y una estela duradera, ideal para quienes buscan un aroma magnético y audaz"
-        },
-        {
-            id: 73,
-            name: "EROS ENERGY VERSACE",
-            rating: 4,
-            image: "img/EROS_ENERGY.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 74,
-            name: "EROS FLAME VERSACE",
-            rating: 4,
-            image: "img/EROS_FLAME.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 86,
-            name: "SANTAL BOISE VERSACE",
-            rating: 4,
-            image: "img/SANTALBOISE.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Cilindro", "Cartier","Swarosky"],
-            description: "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas que transportan a un paraíso aromático"
-        },
-        {
-            id: 44,
-            name: "BOSS BOTTLED ABSOLUTE HUGO BOSS",
-            rating: 4,
-            image: "img/BOTTLED3.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: ""
-        },
-        {
-            id: 45,
-            name: "UNLIMITED HUGO BOSS",
-            rating: 4,
-            image: "img/UNLIMITED2.JPG",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier","Swarosky"],
-            description: "Un perfume masculino y sofisticado que combina notas de bergamota, lavanda y madera. Un aroma fresco y atractivo que seguro hará una declaración. La combinación de notas cítricas y florales crea un perfume intenso y duradero que es perfecto para aquellos que buscan un aroma que refleje su personalidad segura y ambiciosa."
-        },
-        {
-            id: 61,
-            name: "HUGO NIGHT HUGO BOSS",
-            rating: 4,
-            image: "img/HUGO_NIGHT.webp",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 62,
-            name: "BOSS SILVER HUGO BOSS",
-            rating: 4,
-            image: "img/HUGO_SILVER.jpg",
-            category: "Diseñador",
-            gender: "Hombre",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 59,
-            name: "OMNIA CORAL BVLGARI",
-            rating: 4,
-            image: "img/OMNIA_CORAL.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 60,
-            name: "OMNIA CRYSTALLINE BVLGARI",
-            rating: 5,
-            image: "img/OMNIA_CRISTAL.jpeg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 89,
-            name: "OMNIA AMETHYSTE BVLGARI",
-            rating: 4,
-            image: "img/CORAL_AMETHYSTE.jpeg",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        {
-            id: 87,
-            name: "YOU ESIKA",
-            rating: 4,
-            image: "img/YOU.webp",
-            category: "Diseñador",
-            gender: "Mujer",
-            sizes: ["30ml", "60ml", "100ml"],
-            bottleTypes: ["Singler", "Cartier", "Swarosky"],
-            description: "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír. Ideal para aquellos que buscan un perfume ligero y divertido para uso diario."
-        },
-        
-    ];
-                        // CANTIDAD DE PRODUCTOS EN CATALOGO 91
+document.addEventListener('DOMContentLoaded', async function() {
+    // Datos de productos cargados desde la API
+    let products = [];
+    let productosFiltrados = [];
 
-function displayProducts(productsToShow) {
-    const productGrid = document.getElementById('productGrid');
-    productGrid.innerHTML = '';
-    productsToShow.forEach(product => {
-        const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
-        const productCard = document.createElement('div');
-        productCard.classList.add('product-card');
-        productCard.innerHTML = `
-            <div class="product-image">
-                <img src="${product.image}" alt="${product.name}">
-            </div>
-            <div class="product-info">
-                <div class="product-name">${product.name}</div>
-                <div class="product-rating">${stars}</div>
-                <div class="product-category">${product.category}</div>
-            </div>
-        `;
-        productGrid.appendChild(productCard);
-    });
-    // Actualizar contador de productos
-    document.getElementById('productCount').textContent = `Resultados encontrados: ${productsToShow.length}`;
-}
+    const ITEMS_POR_PAGINA = 12;
+    let paginaActual = 1;
 
-function filterProducts() {
-    const name = document.getElementById('filterName').value.toLowerCase();
-    const category = document.getElementById('filterCategory').value;
-    const gender = document.getElementById('filterGender').value;
-    const filtered = products.filter(product => {
-        const matchesName = product.name.toLowerCase().includes(name);
-        const matchesCategory = !category || product.category === category;
-        const matchesGender = !gender || product.gender === gender;
-        return matchesName && matchesCategory && matchesGender;
-    });
-    displayProducts(filtered);
-}
-
-function resetFilters() {
-    document.getElementById('filterName').value = '';
-    document.getElementById('filterCategory').value = '';
-    document.getElementById('filterGender').value = '';
-    // Cerrar el modal de filtros automáticamente si está abierto
-    if (modal) {
-        modal.style.display = "none";
-        // Esperar a que el modal termine de cerrarse antes de mostrar todos los productos
-        setTimeout(() => {
-            displayProducts(products);
-        }, 200); // 200ms para asegurar el cierre visual del modal
-    } else {
-        displayProducts(products);
+    try {
+        const res = await fetch('http://localhost:3000/api/productos');
+        const data = await res.json();
+        if (data.success) {
+            products = data.data;
+            productosFiltrados = products;
+        }
+    } catch (e) {
+        console.error('Error al cargar productos desde la API:', e);
     }
-    document.getElementById('productCount').textContent = `Resultados encontrados: ${products.length}`;
-}
 
-document.getElementById('resetFilters').addEventListener('click', resetFilters);
-document.getElementById('filterName').addEventListener('input', filterProducts);
-document.getElementById('filterCategory').addEventListener('change', filterProducts);
-document.getElementById('filterGender').addEventListener('change', filterProducts);
+    // ============================
+    // DISPLAY
+    // ============================
+    function displayProducts(productsToShow) {
+        const productGrid = document.getElementById('productGrid');
+        const totalPaginas = Math.ceil(productsToShow.length / ITEMS_POR_PAGINA);
+        if (paginaActual > totalPaginas) paginaActual = 1;
 
+        const inicio = (paginaActual - 1) * ITEMS_POR_PAGINA;
+        const fin    = inicio + ITEMS_POR_PAGINA;
+        const pagina = productsToShow.slice(inicio, fin);
 
-const modal = document.getElementById("filterModal");
-const openBtn = document.getElementById("openFilters");
-const closeBtn = document.querySelector(".close");
+        productGrid.innerHTML = '';
+        pagina.forEach(product => {
+            const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-rating">${stars}</div>
+                    <div class="product-category">${product.category}</div>
+                </div>
+                <button class="btn-agregar-carrito"
+                    onclick='agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
+                    <i class="fas fa-cart-plus"></i> Agregar
+                </button>
+            `;
+            productGrid.appendChild(productCard);
+        });
 
-openBtn.addEventListener("click", () => {
-    modal.style.display = "block";
-});
+        const countEl = document.getElementById('productCount');
+        if (countEl) countEl.textContent = `Resultados encontrados: ${productsToShow.length}`;
 
-closeBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-});
+        renderPaginacion(productsToShow.length);
 
-window.addEventListener("click", (event) => {
-    if (event.target === modal) {
-        modal.style.display = "none";
+        // Scroll suave al inicio del grid al cambiar página
+        productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    // ============================
+    // PAGINACIÓN
+    // ============================
+    function renderPaginacion(total) {
+        const contenedor   = document.getElementById('paginacion');
+        const totalPaginas = Math.ceil(total / ITEMS_POR_PAGINA);
+
+        if (totalPaginas <= 1) { contenedor.innerHTML = ''; return; }
+
+        let html = '';
+
+        // Botón anterior
+        html += `<button class="pag-btn ${paginaActual === 1 ? 'pag-disabled' : ''}" 
+                    onclick="cambiarPagina(${paginaActual - 1})" 
+                    ${paginaActual === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                 </button>`;
+
+        // Números de página con elipsis
+        const rango = paginasVisibles(paginaActual, totalPaginas);
+        rango.forEach(p => {
+            if (p === '...') {
+                html += `<span class="pag-ellipsis">…</span>`;
+            } else {
+                html += `<button class="pag-btn ${p === paginaActual ? 'pag-active' : ''}" 
+                            onclick="cambiarPagina(${p})">${p}</button>`;
+            }
+        });
+
+        // Botón siguiente
+        html += `<button class="pag-btn ${paginaActual === totalPaginas ? 'pag-disabled' : ''}" 
+                    onclick="cambiarPagina(${paginaActual + 1})"
+                    ${paginaActual === totalPaginas ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                 </button>`;
+
+        contenedor.innerHTML = html;
+    }
+
+    function paginasVisibles(actual, total) {
+        if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+        if (actual <= 4) return [1, 2, 3, 4, 5, '...', total];
+        if (actual >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+        return [1, '...', actual - 1, actual, actual + 1, '...', total];
+    }
+
+    // Exponer para los onclick del HTML
+    window.cambiarPagina = function(pagina) {
+        const totalPaginas = Math.ceil(productosFiltrados.length / ITEMS_POR_PAGINA);
+        if (pagina < 1 || pagina > totalPaginas) return;
+        paginaActual = pagina;
+        displayProducts(productosFiltrados);
+    };
+
+    // ============================
+    // FILTROS
+    // ============================
+    function filterProducts() {
+        const name     = document.getElementById('filterName').value.toLowerCase();
+        const category = document.getElementById('filterCategory').value;
+        const gender   = document.getElementById('filterGender').value;
+        productosFiltrados = products.filter(product => {
+            return product.name.toLowerCase().includes(name)
+                && (!category || product.category === category)
+                && (!gender   || product.gender   === gender);
+        });
+        paginaActual = 1;
+        displayProducts(productosFiltrados);
+    }
+
+    function resetFilters() {
+        document.getElementById('filterName').value = '';
+        document.getElementById('filterCategory').value = '';
+        document.getElementById('filterGender').value = '';
+        productosFiltrados = products;
+        paginaActual = 1;
+        if (modal) { modal.style.display = 'none'; }
+        displayProducts(productosFiltrados);
+    }
+
+    document.getElementById('resetFilters').addEventListener('click', resetFilters);
+    document.getElementById('filterName').addEventListener('input', filterProducts);
+    document.getElementById('filterCategory').addEventListener('change', filterProducts);
+    document.getElementById('filterGender').addEventListener('change', filterProducts);
+
+    // ============================
+    // MODAL FILTROS
+    // ============================
+    const modal    = document.getElementById('filterModal');
+    const openBtn  = document.getElementById('openFilters');
+    const closeBtn = document.querySelector('.close');
+    const applyBtn = document.getElementById('applyFilters');
+
+    openBtn.addEventListener('click', () => { modal.style.display = 'block'; });
+    applyBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+    closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+    window.addEventListener('click', (event) => { if (event.target === modal) modal.style.display = 'none'; });
+
+    // ============================
+    // SCROLL HEADER
+    // ============================
+    let lastScrollTop = 0;
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 80) {
+            header.classList.add('header--hidden');
+        } else {
+            header.classList.remove('header--hidden');
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+
+    // ============================
+    // INICIALIZAR
+    // ============================
+    displayProducts(productosFiltrados);
 });
-
-// Inicializar
-setTimeout(() => {
-    document.getElementById('productGrid').style.display = "grid";
-}, 100);
-displayProducts(products);
-});
-
-
-
-
-
-

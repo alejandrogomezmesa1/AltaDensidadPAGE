@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso | Perfumería Alta Densidad</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="auth-wrapper">
+
+        <div class="auth-brand">
+            <a href="index.html" class="brand-logo">AD</a>
+            <p class="brand-name">Perfumería de Alta Densidad</p>
+        </div>
+
+        <div class="auth-card">
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tabLogin" onclick="mostrarTab('login')">Iniciar sesión</button>
+                <button class="tab-btn" id="tabRegister" onclick="mostrarTab('register')">Registrarse</button>
+            </div>
+
+            <!-- Alerta -->
+            <div id="alerta" class="alerta hidden"></div>
+
+            <!-- FORM LOGIN -->
+            <form id="formLogin" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label for="loginEmail"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="loginEmail" placeholder="tu@correo.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword"><i class="fas fa-lock"></i> Contraseña</label>
+                    <div class="input-icon">
+                        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required>
+                        <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-auth" id="btnLogin">
+                    <i class="fas fa-sign-in-alt"></i> Ingresar
+                </button>
+                <p class="auth-switch">¿No tienes cuenta? <a href="#" onclick="mostrarTab('register')">Regístrate</a></p>
+            </form>
+
+            <!-- FORM REGISTER -->
+            <form id="formRegister" class="auth-form hidden" novalidate>
+                <div class="form-group">
+                    <label for="regNombre"><i class="fas fa-user"></i> Nombre completo</label>
+                    <input type="text" id="regNombre" placeholder="Tu nombre" autocomplete="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="regEmail" placeholder="tu@correo.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword"><i class="fas fa-lock"></i> Contraseña</label>
+                    <div class="input-icon">
+                        <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
+                        <button type="button" class="toggle-pass" onclick="togglePassword('regPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword2"><i class="fas fa-lock"></i> Confirmar contraseña</label>
+                    <div class="input-icon">
+                        <input type="password" id="regPassword2" placeholder="Repite tu contraseña" autocomplete="new-password" required>
+                        <button type="button" class="toggle-pass" onclick="togglePassword('regPassword2', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-auth" id="btnRegister">
+                    <i class="fas fa-user-plus"></i> Crear cuenta
+                </button>
+                <p class="auth-switch">¿Ya tienes cuenta? <a href="#" onclick="mostrarTab('login')">Inicia sesión</a></p>
+            </form>
+
+        </div>
+
+        <a href="index.html" class="volver-link">
+            <i class="fas fa-arrow-left"></i> Volver al catálogo
+        </a>
+
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>
