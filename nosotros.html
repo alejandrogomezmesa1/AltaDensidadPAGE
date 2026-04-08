@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/logo2025.png" type="image/x-icon">
+    <link rel="icon" href="img/Logo2026.png" type="image/x-icon">
     <title >Perfumería de Alta Densidad</title>
     <link rel="stylesheet" href="nosotros.css">
     <link rel="stylesheet" href="tema.css">
@@ -13,7 +13,7 @@
 <body>
     <header class="header">
         <div class="logo-container">
-            <a href="index.html">  <img src="img/logo2025.png" alt="Perfumeria de Alta Densidad" class="logo"></a>
+            <a href="index.html">  <img src="img/Logo2026.png" alt="Perfumeria de Alta Densidad" class="logo"></a>
             <a class="header-tittle" href="index.html"> Perfumería de Alta Densidad</a>
         </div>
         <nav class="main-nav">
@@ -28,101 +28,147 @@
                 </li>
                 <li><a href="nosotros.html">Sobre Nosotros</a></li>
                 <li><a  href="#footer">Contacto</a></li>
-                <li class="nav-buy"><a class="header-buy-btn" href="https://wa.me/3046477694?text=Hola, estoy interesado en los perfumes" target="_blank" rel="noopener noreferrer" aria-label="Comprar vía WhatsApp">🛒 Comprar</a></li>
+                <li class="nav-buy"><a class="header-buy-btn" href="https://wa.me/3046477694?text=Hola, estoy interesado en los perfumes" target="_blank" rel="noopener noreferrer" aria-label="Comprar vía WhatsApp">Comprar</a></li>
                 <li id="navSesion"><a href="login.html" class="nav-login-btn"><i class="fas fa-user"></i> Ingresar</a></li>
             </ul>
         </nav>
+        <div class="header-actions">
+            <button id="hamburgerBtn" aria-label="Abrir menú" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
-    <main class="catalog-container">
-
-       <section id="nosotros" class="nosotros">
-
-            <div id="introduccion" class="introduccion">
-                <h4>Fragancias de alta densidad</h4>
-                <p>Somos un emprendimiento joven que crea experiencias a través del aroma. En Fragancias de Alta Densidad ofrecemos perfumes de larga duración, pensados para adaptarse a cada gusto olfativo y acompañarte en cada momento.
-                Buscamos que cada fragancia genere una conexión positiva con nuestra marca y se convierta en parte de tu identidad.</p>
+    <!-- Hero / Intro -->
+    <section class="nos-hero fade-in">
+        <div class="nos-hero-content">
+            <span class="nos-eyebrow">Sobre Nosotros</span>
+            <h1 class="nos-title">Fragancias de <span class="nos-gold">Alta Densidad</span></h1>
+            <p class="nos-intro">Somos un emprendimiento joven que crea experiencias a través del aroma. Ofrecemos perfumes de larga duración, pensados para adaptarse a cada gusto olfativo y acompañarte en cada momento.</p>
+            <div class="nos-stats">
+                <div class="nos-stat">
+                    <div class="nos-stat-value">
+                        <span class="stat-num" data-target="99">0</span><span class="stat-suffix">%</span>
+                    </div>
+                    <p>semejanza al original</p>
+                </div>
+                <div class="nos-stat">
+                    <div class="nos-stat-value">
+                        <span class="stat-num" data-target="1">0</span><span class="stat-suffix"> día</span>
+                    </div>
+                    <p>entrega máxima</p>
+                </div>
+                <div class="nos-stat">
+                    <div class="nos-stat-value">
+                        <span class="stat-num" data-target="2028">0</span>
+                    </div>
+                    <p>meta de expansión</p>
+                </div>
             </div>
-            
-            <div class="mision" id="mision">
-                <h4>Misión</h4>
-                <p>Ofrecer fragancias de alta calidad a precios competitivos, brindando una experiencia de compra agradable y cercana. Buscamos que cada aroma te haga sentir cómodo, seguro y confiado, acompañándote en tu día a día.
-
-                En 2028 fragancias de Alta densidad busca convertirse en una marca referente de fragancias de alta densidad en Colombia, con presencia estratégica en el mercado y una propuesta reconocida por su calidad, accesibilidad y experiencia personalizada. Buscamos expandirnos de manera sólida, conectando con cada cliente a través de aromas duraderos que fortalecen la confianza y construyen lealtad, posicionándonos como una marca que entiende, acompaña y marca estilo. Nunca dejando nuestro propósito de precio, calidad y asesoría personalizada.</p>
-            </div>
-
-            <div class="vision" id="vision">
-                <h4>Visión</h4>
-                <p>Fragancias de alta densidad trabaja día a día para ser confiable y accesible, proporcionando perfumes de alta calidad, nuestro fin es brindar fragancias únicas y exclusivas, incluyendo creaciones propias, con precios justos para que todos puedan disfrutar del arte de los perfumes, asegurando que no se necesita mucho presupuesto para obtener los mejores aromas.</p>
-            </div>
-
-            <div class="compromiso" id="compromiso">
-                <h4>Compromiso</h4>
-                <p>Nuestro compromiso como marca, será mantener intactos nuestros valores, los cuales son calidad, servicio y accesibilidad en perfumes, siendo auténticos, escuchando siempre las sugerencias y comentarios de cada uno de nuestros usuarios, pues el compromiso más grande siempre será con cada uno de nuestros clientes. La confianza que generemos en cada uno.</p>
-            </div>
-
-       </section>
-
-    </main> 
-
-    <section class="info" id="info">
-        <div class="preguntas" id="preguntas">
-            <h4>Preguntas Frecuentes</h4>                                                                                                       
-            <ul>
-                <li>
-                    <h5>¿Las feromonas verdaderamente sirven?</h5>
-                    <p>La feromonas son sustancias químicas que producen humanos y animales e influyen en el comportamiento, sin embargo, estas se crean de manera sintética con el fin de provocar estos comportamientos de manera seductora y atractiva. No contienen ningún olor y se agregan al perfume para generar este plus seductor.</p>
-                </li>
-                <li>
-                    <h5>¿Qué tan seguro es la durabilidad del perfume?</h5>
-                    <p>Nuestros perfumes son a base de esencia, por lo que al hidratar la piel se asegura que se impregne bien en ella y además de hidratar genere una durabilidad perfecta del perfume, sin embargo esto también depende del PH de cada piel, pues las horas de durabilidad influirán y dependerán de esto.</p>
-                </li>
-                <li>
-                    <h5>¿Es mejor original o imitación?</h5>
-                    <p>Nuestras fragancias las recreamos con esencias de alta calidad, con lo que aseguramos un 99% de semejanza al producto original.</p>
-                </li>
-            </ul>
         </div>
+    </section>
 
-        <div class="envios" id="envios">
-            <h4>Envios</h4>                                                                                                    
-            <ul>
-                <li>
-                    <h5>Tiempo estimado de entregas.</h5>
-                    <p>Nuestras entregas son inmediatas o con un máximo de un día hábil de entrega, después de la confirmación del pedido y se haya enviado la facturación electrónica.</p>  
-                </li>
-                <li>
-                    <h5>Horario de recepción.</h5>
-                    <p>Recepción de pedidos, todos aquellos que ingrese antes de las 9 am serán entregados en el día solicitado, después de la hora indicada quedarán programados para el siguiente día hábil.</p>
-                </li>
-                <li>
-                    <h5>Costos de envío. </h5>
-                    <p>El valor del envío se considera según la zona de entrega, nos basamos en políticas de transporte vigentes para que el valor sea acorde al lugar donde se solicite.</p>
-                </li>
-            </ul>
+    <!-- Tabs Misión / Visión / Compromiso -->
+    <section class="nos-mvv fade-in">
+        <div class="nos-tabs-header">
+            <button class="nos-tab active" data-tab="mision"><i class="fas fa-bullseye"></i> Misión</button>
+            <button class="nos-tab" data-tab="vision"><i class="fas fa-eye"></i> Visión</button>
+            <button class="nos-tab" data-tab="compromiso"><i class="fas fa-handshake"></i> Compromiso</button>
         </div>
-
-        <div class="devoluciones" id="devoluciones" >
-            <h4>Devoluciones</h4>
-            <ul>
-                <li>
-                    <p>Esta política solo será asequible por productos defectuosos o dañados, productos que no correspondan al solicitado en el pedido. La devolución debe realizarse en el momento de entrega del producto si corresponde a la política de daños o producto que no corresponda; por lo que se hace la claridad a cada uno de nuestros clientes de revisar y asegurarse bien del artículo entregado en el momento de la entrega.</p>
-                </li>
-                <li>
-                    <p>Política de producto defectuoso, esta política tiene máximo  2  días hábiles para ser solicitado, solo aplicará en casos donde el perfume tenga una contextura diferente a la habitual, en ese momento pasará a ser revisado por nuestro equipo, validando que no haya sido manipulado o sometido a cambios extremos de temperatura. En caso de pertinencia se realizará el reembolso o cambio de producto según la corresponda, en cualquiera de estas situaciones de devolución, Fragancias de alta densidad es quien se encargará del costo del mismo.</p>
-                </li>
-                <ul>
-                    <h5>Consideraciones.</h5>
-                    <li>Los perfumes son productos higiénicos, no procede la devolución bajo ningún otro motivo al anteriormente indicado, ya que son productos de uso personal.</li>
-                    <li>Asegúrate que por ninguna de las políticas anteriormente indicadas, los productos hayan sido alterados, modificados o no se asegure la autenticidad del mismo.</li>
-                </ul>
-            </ul>
-
+        <div class="nos-tab-panels">
+            <div class="nos-panel active" id="tab-mision">
+                <i class="fas fa-bullseye nos-panel-icon"></i>
+                <div>
+                    <h3>Misión</h3>
+                    <p>Ofrecer fragancias de alta calidad a precios competitivos, brindando una experiencia de compra agradable y cercana. Buscamos que cada aroma te haga sentir cómodo, seguro y confiado, acompañándote en tu día a día.</p>
+                    <p>En 2028, Fragancias de Alta Densidad busca convertirse en una marca referente en Colombia, con presencia estratégica reconocida por su calidad, accesibilidad y experiencia personalizada.</p>
+                </div>
+            </div>
+            <div class="nos-panel" id="tab-vision">
+                <i class="fas fa-eye nos-panel-icon"></i>
+                <div>
+                    <h3>Visión</h3>
+                    <p>Trabajamos día a día para ser confiables y accesibles, proporcionando perfumes de alta calidad. Nuestro fin es brindar fragancias únicas y exclusivas, incluyendo creaciones propias, con precios justos para que todos puedan disfrutar del arte de los perfumes.</p>
+                </div>
+            </div>
+            <div class="nos-panel" id="tab-compromiso">
+                <i class="fas fa-handshake nos-panel-icon"></i>
+                <div>
+                    <h3>Compromiso</h3>
+                    <p>Mantener intactos nuestros valores: calidad, servicio y accesibilidad. Siendo auténticos y escuchando siempre las sugerencias de nuestros usuarios, pues el compromiso más grande siempre será con cada uno de nuestros clientes.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="politicas" id="politicas">
-            <h4>Politicas de privacidad<h4>                                                                                                    
-            <p>Basados en la Ley 1581 de 2012, aseguramos que sus datos serán tratados según la política de ley y no para fines externos, evitando así la divulgación de datos suministrados, con esta aceptas a fragancias de alta densidad el consentimiento expreso de los titulares de estos para el tratamiento de sus datos personales, sin afectar la confidencialidad o integridad de estos. </p>
+    <!-- Info: FAQ + Envíos + Devoluciones + Privacidad -->
+    <section class="nos-info-section">
+        <div class="nos-info-grid">
+
+            <div class="nos-info-block fade-in">
+                <h2 class="nos-section-title"><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h2>
+                <div class="accordion">
+                    <div class="acc-item">
+                        <button class="acc-btn">¿Las feromonas verdaderamente sirven? <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Las feromonas son sustancias químicas que influyen en el comportamiento. Se crean sintéticamente para provocar reacciones seductoras y atractivas. No contienen olor y se agregan al perfume como un plus especial.</p></div>
+                    </div>
+                    <div class="acc-item">
+                        <button class="acc-btn">¿Qué tan segura es la durabilidad? <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Nuestros perfumes son a base de esencia. Al hidratar la piel se asegura una durabilidad óptima, aunque también depende del PH de cada piel.</p></div>
+                    </div>
+                    <div class="acc-item">
+                        <button class="acc-btn">¿Original o inspirado, cuál es mejor? <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Recreamos nuestras fragancias con esencias de alta calidad, garantizando un 99% de semejanza al producto original.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nos-info-block fade-in">
+                <h2 class="nos-section-title"><i class="fas fa-shipping-fast"></i> Envíos</h2>
+                <div class="accordion">
+                    <div class="acc-item">
+                        <button class="acc-btn">Tiempo estimado de entrega <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Entregas inmediatas o con un máximo de un día hábil, después de confirmar el pedido y emitir la facturación electrónica.</p></div>
+                    </div>
+                    <div class="acc-item">
+                        <button class="acc-btn">Horario de recepción de pedidos <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Pedidos antes de las 9 a.m. se entregan el mismo día. Después de esa hora quedan programados para el siguiente día hábil.</p></div>
+                    </div>
+                    <div class="acc-item">
+                        <button class="acc-btn">Costos de envío <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>El valor varía según la zona de entrega, basado en las políticas de transporte vigentes.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nos-info-block fade-in">
+                <h2 class="nos-section-title"><i class="fas fa-undo-alt"></i> Devoluciones</h2>
+                <div class="accordion">
+                    <div class="acc-item">
+                        <button class="acc-btn">¿Cuándo aplica una devolución? <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Solo para productos defectuosos, dañados o que no correspondan al pedido. Debe solicitarse al momento de la entrega o dentro de 2 días hábiles en caso de defecto.</p></div>
+                    </div>
+                    <div class="acc-item">
+                        <button class="acc-btn">Consideraciones importantes <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body">
+                            <p>Los perfumes son productos higiénicos de uso personal: no se acepta devolución por otros motivos.</p>
+                            <p>Los productos no deben haber sido alterados, modificados ni sometidos a cambios extremos de temperatura.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nos-info-block fade-in">
+                <h2 class="nos-section-title"><i class="fas fa-shield-alt"></i> Política de Privacidad</h2>
+                <div class="accordion">
+                    <div class="acc-item">
+                        <button class="acc-btn">Tratamiento de datos personales <i class="fas fa-chevron-down"></i></button>
+                        <div class="acc-body"><p>Basados en la Ley 1581 de 2012, aseguramos que sus datos serán tratados conforme a la ley y no para fines externos. Al usar nuestros servicios, aceptas el tratamiento de tus datos personales sin afectar su confidencialidad e integridad.</p></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -130,20 +176,20 @@
 
         <div class="feature-card">
             <i class="fas fa-star"></i>
-            <h3>Inspiradas en Fragancias Originales✨</h3>
+            <h3>Inspiradas en Fragancias Originales</h3>
             <p>Fragancias inspiradas en las originales de diseñador con la mejor relación calidad-precio.</p>
         </div>
 
         <div class="feature-card">
             <i class="fas fa-box-open"></i>
-            <h3>Variedad de Envases📦</h3>
+            <h3>Variedad de Envases</h3>
             <p>Cilindro Tradicional, Cartier, Media Luna, Swarovski en distintos tamaños y colores</p>
             <a class="masinfo" href="envases.html"><button>Ver presentaciones disponibles</button></a>
         </div>
  
         <div class="feature-card">
             <i class="fas fa-heart"></i>
-            <h3>Feromonas 💗</h3>
+            <h3>Feromonas</h3>
             <p>Nuestras fragancias elaboradas con feromonas están diseñadas para intensificar la atracción y garantizar una absorción óptima en la piel, ofreciendo una experiencia única y envolvente.</p>
         </div>
 
@@ -154,14 +200,14 @@
         <div id="footer" class="footer-content">
 
             <div class="footer-section">
-                <h3>Contacto📍</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Ubicados en la ciudad de Medellín. </p>
-                <p><i class="fas fa-phone"></i>📞 +57 3046477694 ✉️</p>
-                <p><i class="fas fa-envelope"></i> perfumesaltadensidad@gmail.com</p>
+                <h3>Contacto</h3>
+                <p>Ubicados en la ciudad de Medellín. </p>
+                <p>+57 3046477694</p>
+                <p>perfumesaltadensidad@gmail.com</p>
             </div>
 
             <div class="footer-section">
-                <h3>Enlaces rápidos🔗</h3>
+                <h3>Enlaces rápidos</h3>
                 <ul>
                     <li><a href="nosotros.html">Preguntas frecuentes</a></li>
                     <li><a href="nosotros.html">Envíos y devoluciones</a></li>
@@ -170,26 +216,25 @@
             </div>
 
             <div class="footer-section">
-                <h3>Redes sociales📲</h3>
-                <h3>⬇️ ⬇️ ⬇ ⬇️ ⬇️</h3>
+                <h3>Redes sociales</h3>
                 <div class="social-icons">
-                    <a href="https://www.tiktok.com/@fragancias_altadensidad" target="_blank"><img src="img/tklogo.png" alt=""></a>
-                    <a target="_blank" href="https://www.instagram.com/fragancias_alta_densidad/?hl=es"><img src="img/iglogo.png" alt=""></i></a>
-                    <a href="https://wa.me/3046477694?text=Hola, estoy interesado en los perfumes" target="_blank"><img src="img/wplogo.png" alt=""></a>
+                    <a class="social-tiktok" target="_blank" href="https://www.tiktok.com/@fragancias_altadensidad" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a class="social-instagram" target="_blank" href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a class="social-whatsapp" href="https://wa.me/3046477694?text=Hola, estoy interesado en los perfumes" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
 
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2025 Fragancias de Alta Densidad. Todos los derechos reservados.</p>
+            <p>&copy; 2026 Fragancias de Alta Densidad. Todos los derechos reservados.</p>
         </div>
 
     </footer>
 <script>
+    // Header hide on scroll
     let lastScrollTop = 0;
     const header = document.querySelector('.header');
-    
     window.addEventListener('scroll', () => {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         if (scrollTop > lastScrollTop && scrollTop > 80) {
@@ -199,6 +244,71 @@
         }
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     });
+
+    // Tabs Misión / Visión / Compromiso
+    document.querySelectorAll('.nos-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.nos-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nos-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    // Acordeón
+    document.querySelectorAll('.acc-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const body = btn.nextElementSibling;
+            const isOpen = btn.classList.contains('open');
+            // Cierra todos en el mismo bloque
+            const parent = btn.closest('.accordion');
+            parent.querySelectorAll('.acc-btn').forEach(b => b.classList.remove('open'));
+            parent.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
+            if (!isOpen) {
+                btn.classList.add('open');
+                body.classList.add('open');
+            }
+        });
+    });
+
+    // Contador animado
+    function animateCounter(el) {
+        const target = parseInt(el.dataset.target);
+        const duration = 1400;
+        const start = performance.now();
+        const update = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(eased * target);
+            if (progress < 1) requestAnimationFrame(update);
+            else el.textContent = target;
+        };
+        requestAnimationFrame(update);
+    }
+
+    // Fade-in + contadores con IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.querySelectorAll('.stat-num').forEach(animateCounter);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const nosHero = document.querySelector('.nos-hero');
+    if (nosHero) counterObserver.observe(nosHero);
 </script>
 <script src="nav-sesion.js"></script>
 </body>

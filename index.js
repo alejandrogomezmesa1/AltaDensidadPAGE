@@ -43,14 +43,31 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <div class="product-name">${product.name}</div>
                     <div class="product-rating">${stars}</div>
                     <div class="product-category">${product.category}</div>
+                    <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
                 </div>
                 <button class="btn-agregar-carrito"
                     onclick='agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
                     <i class="fas fa-cart-plus"></i> Agregar
                 </button>
             `;
+            // Abrir modal al hacer click en la card (no en el botón)
+            productCard.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-agregar-carrito')) return;
+                abrirModalProducto(product);
+            });
             productGrid.appendChild(productCard);
         });
+
+        // Rellenar última fila con placeholders para evitar espacios en blanco
+        const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
+        const resto = pagina.length % cols;
+        if (resto !== 0) {
+            for (let i = 0; i < cols - resto; i++) {
+                const ph = document.createElement('div');
+                ph.classList.add('product-card-placeholder');
+                productGrid.appendChild(ph);
+            }
+        }
 
         const countEl = document.getElementById('productCount');
         if (countEl) countEl.textContent = `Resultados encontrados: ${productsToShow.length}`;
@@ -158,6 +175,60 @@ document.addEventListener('DOMContentLoaded', async function() {
     applyBtn.addEventListener('click', () => { modal.style.display = 'none'; });
     closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
     window.addEventListener('click', (event) => { if (event.target === modal) modal.style.display = 'none'; });
+
+    // ============================
+    // MODAL DETALLE PRODUCTO
+    // ============================
+    const productoModal  = document.getElementById('productoModal');
+    const cerrarProdModal = document.getElementById('cerrarProdModal');
+
+    function abrirModalProducto(product) {
+        const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
+
+        document.getElementById('prodModalImg').src = product.image;
+        document.getElementById('prodModalImg').alt = product.name;
+        document.getElementById('prodModalNombre').textContent = product.name;
+        document.getElementById('prodModalCategoria').textContent = product.category;
+        document.getElementById('prodModalRating').textContent = stars;
+        document.getElementById('prodModalGenero').textContent = product.gender ? `Género: ${product.gender}` : '';
+        document.getElementById('prodModalDesc').textContent = product.description || 'Sin descripción disponible.';
+        document.getElementById('prodModalPrecio').textContent = `$${Number(product.price).toLocaleString('es-CO')} COP`;
+
+        const tallasEl = document.getElementById('prodModalTallas');
+        if (product.sizes && product.sizes.length) {
+            tallasEl.innerHTML = `<span class="prod-tag-label">Tallas:</span>` +
+                product.sizes.map(s => `<span class="prod-tag">${s}</span>`).join('');
+        } else {
+            tallasEl.innerHTML = '';
+        }
+
+        const envasesEl = document.getElementById('prodModalEnvases');
+        if (product.bottleTypes && product.bottleTypes.length) {
+            envasesEl.innerHTML = `<span class="prod-tag-label">Envases:</span>` +
+                product.bottleTypes.map(t => `<span class="prod-tag">${t}</span>`).join('');
+        } else {
+            envasesEl.innerHTML = '';
+        }
+
+        document.getElementById('prodModalCarrito').onclick = () => {
+            agregarAlCarrito({ id: product.id, name: product.name, image: product.image, price: product.price });
+            cerrarModal();
+        };
+
+        productoModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarModal() {
+        productoModal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    window.abrirModalProducto = abrirModalProducto;
+
+    cerrarProdModal.addEventListener('click', cerrarModal);
+    productoModal.addEventListener('click', (e) => { if (e.target === productoModal) cerrarModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
 
     // ============================
     // SCROLL HEADER

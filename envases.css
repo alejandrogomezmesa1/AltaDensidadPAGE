@@ -43,19 +43,20 @@ h1, h2, h3, .header-title, .header-tittle {
 /* Header - Versión Dark Luxury */
 .header {
     width: 100%;
-    background: rgba(10, 10, 10, 0.85); /* Glass oscuro */
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
-    justify-content: center;
-    padding: 10px 4%;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 5%;
     box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.5), 0 1px 0 0 rgba(212, 175, 55, 0.2);
     position: sticky;
     top: 0;
     z-index: 1001;
-    min-height: 60px;
+    min-height: 68px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     overflow: visible;
@@ -76,31 +77,19 @@ h1, h2, h3, .header-title, .header-tittle {
     }
 }
 
-/* Diseño para tablets */
-@media (min-width: 600px) {
+@media (min-width: 768px) {
     .header {
-        padding: 10px 6%;
-        min-height: 60px;
+        padding: 10px 5%;
+        min-height: 68px;
         border-bottom-left-radius: 25px;
         border-bottom-right-radius: 25px;
-        justify-content: space-around;
     }
 }
 
-/* Diseño para desktop pequeño */
-@media (min-width: 900px) {
-    .header {
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        padding: 12px 7%;
-    }
-}
-
-/* Diseño para desktop grande */
 @media (min-width: 1200px) {
     .header {
-        padding: 12px 8%;
-        min-height: 70px;
+        padding: 12px 6%;
+        min-height: 74px;
         border-bottom-left-radius: 30px;
         border-bottom-right-radius: 30px;
     }
@@ -110,52 +99,35 @@ h1, h2, h3, .header-title, .header-tittle {
 .logo-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin-bottom: 0;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-shrink: 0;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(212, 175, 55, 0.1);
-    border-radius: 16px;
-    padding: 6px 5px;
+    border-radius: 14px;
+    padding: 6px 14px 6px 8px;
     box-shadow: 0 4px 15px 0 rgba(0,0,0, 0.4);
     transition: all 0.3s ease;
-    width: 100%;
-    justify-items: center;
-    text-align: center;
-}
-
-@media (min-width: 600px) {
-    .logo-container {
-        gap: 15px;
-        margin-bottom: 0;
-        padding: 8px 18px;
-    }
+    width: auto;
+    text-align: left;
 }
 
 .logo-container img,.logo-container > * {
     margin-left: 0;
     margin-right: 0;
-    display: block;
+    display: inline-flex;
 }
 
 .logo-container img {
-  width: 100%;
-  max-width: 90px;
-  height: auto;
+  width: auto;
+  max-width: 46px;
+  height: 46px;
   object-fit: contain;
   display: block;
-  margin: 0 auto;
+  flex-shrink: 0;
   filter: drop-shadow(2px 2px 8px rgba(99, 34, 99, 0.25));
   transition: all 0.3s ease;
-  border-radius: 8px;
-  margin: 3px;
-}
-
-/* 🔽 Ajuste específico para móviles */
-@media (max-width: 600px) {
-  .logo-container img {
-    max-width: 70px;
-  }
+  border-radius: 50%;
 }
 
 /* Botón de compra en header (WhatsApp) */
@@ -249,29 +221,15 @@ h1, h2, h3, .header-title, .header-tittle {
 .main-nav ul {
     display: flex;
     list-style: none;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 4px;
+    flex-wrap: nowrap;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.09);
-    border-radius: 8px;
-    padding: 4px 8px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 30px;
+    padding: 5px 10px;
     box-shadow: 0 1px 8px 0 rgba(44, 62, 80, 0.06);
-    margin: 10px 0 0;
-}
-
-@media (min-width: 600px) {
-    .main-nav ul {
-        gap: 12px;
-        margin: 0;
-        padding: 6px 12px;
-    }
-}
-
-@media (min-width: 900px) {
-    .main-nav ul {
-        gap: 20px;
-        padding: 8px 16px;
-    }
+    margin: 0;
 }
 
 .main-nav a {
@@ -507,12 +465,17 @@ h1, h2, h3, .header-title, .header-tittle {
 /* Grid de productos - Versión optimizada */
 #productGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    justify-content: center;
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     width: 100%;
     padding: 0 10px;
     box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+    #productGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* Card de producto - Versión Dark Luxury */
@@ -548,12 +511,10 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 
 /* Contenedor de imagen - Proporciones responsivas */
 .product-image {
-    width: auto;
-    height: 220px;
-    padding-bottom: 10px; /* Relación de aspecto 10:7 */
+    width: 100%;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
     position: relative;
-    object-fit: cover;
 }
 
 .product-image img {
@@ -563,6 +524,7 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
     transition: transform 0.5s ease;
 }
 
@@ -683,15 +645,12 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 }
 
 .product-description {
-    font-size: clamp(0.85rem, 1.7vw, 0.98rem);
-    color: var(--texto);
-    margin-bottom: 8px;
-    font-weight: 400;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    color: var(--azul-cuatro);
+    margin-bottom: 10px;
+    font-weight: 500;
     line-height: 1.4;
-    min-height: 48px;
     display: block;
-    text-align: center;
-    font-weight: 700;
 }
 
 /* Mejorar responsividad y separación visual */
@@ -703,45 +662,19 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
     .product-card {
         min-height: 320px;
     }
-    .product-description {
-        min-height: 36px;
-    }
+}
+
+/* Placeholder invisible para completar filas del grid */
+.product-card-placeholder {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* Media Queries optimizadas */
 @media (max-width: 768px) {
     #productGrid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-    }
-    
-    .product-image {
-        padding-bottom: 75%;
-    }
-}
-
-@media (max-width: 480px) {
-    #productGrid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        justify-content: center;
-        gap: 10px;
-    }
-    
-    .product-info {
-        padding: 8px;
-    }
-    
-    .special-offer {
-        flex-direction: row;
-        padding: 8px 12px;
-        margin: 15px 5px 0;
-    }
-}
-
-@media (max-width: 320px) {
-    #productGrid {
-        grid-template-columns: 1fr;
     }
 }
 
@@ -830,45 +763,44 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
     background-color: var(--azul-uno);
     padding: 20px;
     border-radius: 10px;
-    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
 }
 
 .masinfo img {
     width: 25px;
     height: 25px;
-    border-radius: 10px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
+    border-radius: 0;
+    object-fit: contain;
 }
 
-.masinfo button{
+.masinfo button {
     display: flex;
     align-items: center;
-    font-size: 0.8rem;
-    color: var(--texto);
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #000;
     margin-top: 10px;
-    padding: 10px;
-    background-color: var(--azul-dos) ;
+    padding: 10px 20px;
+    background-color: var(--azul-dos);
     border: 2px solid var(--azul-dos);
     border-radius: 10px;
     font-weight: bolder;
-
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.masinfo button:hover{
-    font-size: 0.9rem;
-    color: var(--blanco-neutro);
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 10px;
+.masinfo button:hover {
     transform: scale(1.05);
-    background-color: var(--azul-uno);
-
+    background-color: #25D366;
+    border-color: #25D366;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
 }
 
-.masinfo a{
-    text-decoration: none !important;
-    border-bottom: none;
+.masinfo:hover {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Footer - Dark Luxury */
@@ -979,60 +911,50 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 
 .social-icons {
     display: flex;
-    gap: 12px;
-    margin-top: 15px;
+    gap: 14px;
+    margin-top: 16px;
     flex-wrap: wrap;
-}
-
-@media (min-width: 480px) {
-    .social-icons {
-        gap: 15px;
-    }
 }
 
 .social-icons a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    background-color: var(--naranja-calido);
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 1.25rem;
+    text-decoration: none;
     transition: all 0.3s ease;
-}
-
-@media (min-width: 480px) {
-    .social-icons a {
-        width: 35px;
-        height: 35px;
-    }
-}
-
-.social-icons img {
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--naranja-calido);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    object-fit: cover;
-}
-
-@media (min-width: 480px) {
-    .social-icons img {
-        border-width: 3px;
-    }
-}
-
-.social-icons a:hover img {
-    transform: scale(1.1);
-    border-color: var(--naranja-calido);
 }
 
 .social-icons a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.social-icons a.social-tiktok:hover {
+    background-color: #010101;
+    border-color: #010101;
+}
+
+.social-icons a.social-instagram:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    border-color: transparent;
+}
+
+.social-icons a.social-whatsapp:hover {
+    background-color: #25d366;
+    border-color: #25d366;
 }
 
 .footer-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     padding-top: 20px;
     margin-top: 20px;

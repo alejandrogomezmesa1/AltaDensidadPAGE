@@ -12,6 +12,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     _inyectarBotonTema();
     _actualizarIconoTema();
+    _iniciarMenuMobile();
 });
 
 function _inyectarBotonTema() {
@@ -42,4 +43,90 @@ function _toggleTema() {
     const esModoClaro = document.documentElement.classList.toggle('modo-claro');
     localStorage.setItem('altadensidad_tema', esModoClaro ? 'claro' : 'oscuro');
     _actualizarIconoTema();
+}
+
+/* ====================================================
+   MENÚ HAMBURGER — MÓVIL
+   ==================================================== */
+function _iniciarMenuMobile() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const nav = document.querySelector('.main-nav');
+    const overlay = document.getElementById('navOverlay');
+    if (!hamburger || !nav) return;
+
+    function _abrirNav() {
+        nav.classList.add('nav-open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        hamburger.innerHTML = '<i class="fas fa-times"></i>';
+        if (overlay) overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function _cerrarNav() {
+        nav.classList.remove('nav-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+        if (overlay) overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        // Cerrar todos los dropdowns abiertos
+        nav.querySelectorAll('.dropdown.dropdown-open')
+            .forEach(d => d.classList.remove('dropdown-open'));
+    }
+
+    hamburger.addEventListener('click', () => {
+        nav.classList.contains('nav-open') ? _cerrarNav() : _abrirNav();
+    });
+
+    if (overlay) overlay.addEventListener('click', _cerrarNav);
+
+    // Cerrar nav al presionar Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') _cerrarNav();
+    });
+
+    // Cerrar nav al hacer clic en un link directo (no dropdown trigger)
+    nav.querySelectorAll('a').forEach(link => {
+        if (link.parentElement.classList.contains('dropdown')) return; // skip dropdown triggers
+        link.addEventListener('click', _cerrarNav);
+    });
+    nav.querySelectorAll('.dropdown-menu a').forEach(link => {
+        link.addEventListener('click', _cerrarNav);
+    });
+
+    // Dropdown toggle — todos los dispositivos (reemplaza hover/focus-within CSS)
+    nav.querySelectorAll('.dropdown > a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const dropdown = this.parentElement;
+            const isOpen = dropdown.classList.contains('dropdown-open');
+            // Cerrar todos los dropdowns abiertos
+            nav.querySelectorAll('.dropdown.dropdown-open')
+                .forEach(d => d.classList.remove('dropdown-open'));
+            // Abrir éste solo si estaba cerrado
+            if (!isOpen) dropdown.classList.add('dropdown-open');
+        });
+    });
+
+    // Cerrar dropdown al hacer clic fuera (desktop y táctil)
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.dropdown')) {
+            nav.querySelectorAll('.dropdown.dropdown-open')
+                .forEach(d => d.classList.remove('dropdown-open'));
+        }
+    });
+
+    // Cerrar dropdown al perder el foco (navegación con teclado)
+    nav.querySelectorAll('.dropdown').forEach(dropdown => {
+        dropdown.addEventListener('focusout', function (e) {
+            // relatedTarget es el elemento que recibe el foco a continuación
+            if (!dropdown.contains(e.relatedTarget)) {
+                dropdown.classList.remove('dropdown-open');
+            }
+        });
+    });
+
+    // Cerrar nav si la ventana se agranda por encima del breakpoint
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768) _cerrarNav();
+    });
 }

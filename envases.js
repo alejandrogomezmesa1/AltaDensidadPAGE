@@ -28,6 +28,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             `;
             productGrid.appendChild(productCard);
         });
+
+        // Rellenar última fila con placeholders para evitar espacios en blanco
+        const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
+        const resto = envases.length % cols;
+        if (resto !== 0) {
+            for (let i = 0; i < cols - resto; i++) {
+                const ph = document.createElement('div');
+                ph.classList.add('product-card-placeholder');
+                productGrid.appendChild(ph);
+            }
+        }
     }
 
     // Cargar desde API
