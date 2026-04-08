@@ -1,90 +1,20 @@
+
 {
   "version": 2,
   "builds": [
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.{css,js}",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "img/**",
-      "use": "@vercel/static"
-    }
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.{css,js}", "use": "@vercel/static" },
+    { "src": "img/**", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/img/(.*)",
-      "dest": "/img/$1"
-    },
-    {
-      "src": "/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/admin",
-      "dest": "/admin.html"
-    },
-    {
-      "src": "/login",
-      "dest": "/login.html"
-    },
-    {
-      "src": "/nosotros",
-      "dest": "/nosotros.html"
-    },
-    {
-      "src": "/top10",
-      "dest": "/top10.html"
-    },
-    {
-      "src": "/envases",
-      "dest": "/envases.html"
-    },
-    {
-      "src": "/(.*)\\.html",
-      "dest": "/$1.html"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    }
-  ]
-}
-
-    {
-      "src": "/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/admin",
-      "dest": "/admin.html"
-    },
-    {
-      "src": "/login",
-      "dest": "/login.html"
-    },
-    {
-      "src": "/nosotros",
-      "dest": "/nosotros.html"
-    },
-    {
-      "src": "/top10",
-      "dest": "/top10.html"
-    },
-    {
-      "src": "/envases",
-      "dest": "/envases.html"
-    },
-    {
-      "src": "/(.*)\\.html",
-      "dest": "/$1.html"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    }
+    { "src": "/img/(.*)", "dest": "/img/$1" },
+    { "src": "/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))", "dest": "/$1" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/login", "dest": "/login.html" },
+    { "src": "/nosotros", "dest": "/nosotros.html" },
+    { "src": "/top10", "dest": "/top10.html" },
+    { "src": "/envases", "dest": "/envases.html" },
+    { "src": "/(.*)\\.html", "dest": "/$1.html" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }
