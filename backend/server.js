@@ -21,7 +21,7 @@ app.use(cors({
             'http://localhost:3000',
             process.env.FRONTEND_URL // dominio de Vercel: https://tu-proyecto.vercel.app
         ].filter(Boolean);
-        if (!origin || allowed.includes(origin) || (process.env.VERCEL_URL && origin.endsWith('.vercel.app'))) {
+        if (!origin || allowed.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('CORS no permitido para: ' + origin));
