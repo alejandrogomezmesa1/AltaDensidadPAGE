@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     let paginaActual = 1;
 
     try {
-        const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : '/api';
+        const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
         const res = await fetch(`${base}/productos`);
         const data = await res.json();
         if (data.success) {

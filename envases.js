@@ -1,4 +1,4 @@
-const API_ENVASES = ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : '/api') + '/envases';
+const API_ENVASES = ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api') + '/envases';
 
 document.addEventListener('DOMContentLoaded', async function() {
     const productGrid = document.getElementById('productGrid');

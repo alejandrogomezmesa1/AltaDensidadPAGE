@@ -597,13 +597,13 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_DATABASE=altadensidad
 DB_USER=root
-DB_PASSWORD=(encrytptada)
+DB_PASSWORD=(encriptada)
 
 # Servidor
 PORT=3000
 
 # Autenticación
-JWT_SECRET=AltaDensidad_SecretKey_2025_!@#
+JWT_SECRET=tu_jwt_secret_seguro
 NODE_ENV=development
 ```
 
