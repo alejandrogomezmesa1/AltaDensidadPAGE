@@ -504,10 +504,7 @@ Frontend guarda en localStorage:
 
 ### Credenciales admin por defecto
 
-```
-Email:    admin@altadensidad.com
-Password: Admin2025$
-```
+Definidas en `backend/seed-admin.js` antes de ejecutarlo por primera vez. Usar una contraseña segura.
 
 ---
 

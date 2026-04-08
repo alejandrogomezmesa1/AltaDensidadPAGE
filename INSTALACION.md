@@ -66,7 +66,7 @@ DB_DATABASE=altadensidad
 DB_USER=root
 DB_PASSWORD=TU_CONTRASEÑA_DE_MYSQL
 PORT=3000
-JWT_SECRET=AltaDensidad_SecretKey_2025_!@#
+JWT_SECRET=cambia_esto_por_un_secreto_seguro
 NODE_ENV=development
 ```
 
@@ -163,7 +163,7 @@ Abre el navegador y prueba estos pasos:
 
 - [ ] `http://localhost:3000/api/health` → debe responder `{ "success": true }`
 - [ ] `http://127.0.0.1:5500/index.html` → debe cargar el catálogo con productos
-- [ ] `http://127.0.0.1:5500/login.html` → login con `admin@altadensidad.com` / `Admin2025$` → redirige a `admin.html`
+- [ ] `http://127.0.0.1:5500/login.html` → login con el email y contraseña definidos en `seed-admin.js` → redirige a `admin.html`
 
 ---
 
@@ -171,7 +171,7 @@ Abre el navegador y prueba estos pasos:
 
 | Rol | Email | Contraseña |
 |---|---|---|
-| Administrador | `admin@altadensidad.com` | `Admin2025$` |
+| Administrador | `admin@altadensidad.com` | (la definida en `seed-admin.js`) |
 
 ---
 

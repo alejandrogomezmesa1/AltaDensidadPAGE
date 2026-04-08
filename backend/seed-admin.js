@@ -8,8 +8,8 @@ const { getConnection, closeConnection } = require('./config/db');
 
 const ADMIN = {
     nombre: 'Administrador',
-    email:  'admin@altadensidad.com',
-    password: 'Admin2025$'
+    email:  process.env.ADMIN_EMAIL  || 'admin@altadensidad.com',
+    password: process.env.ADMIN_PASSWORD || 'CambiaMeAntesDeEjecutar'
 };
 
 async function crearAdmin() {
