@@ -104,7 +104,9 @@ BEGIN
         password_hash   NVARCHAR(300)   NOT NULL,
         rol             NVARCHAR(20)    NOT NULL DEFAULT 'cliente' CHECK (rol IN ('admin', 'cliente')),
         activo          BIT             NOT NULL DEFAULT 1,
-        creado_en       DATETIME        NOT NULL DEFAULT GETDATE()
+        creado_en       DATETIME        NOT NULL DEFAULT GETDATE(),
+        reset_token     NVARCHAR(255)   NULL,
+        reset_token_expires DATETIME    NULL
     );
 END
 GO
@@ -164,4 +166,4 @@ GO
 
 PRINT 'Base de datos AltaDensidadDB configurada correctamente.';
 GO
-mysql -h mysql://root:Railway2024Secure@mainline.proxy.rlwy.net -u root -p -P 54310 railway
+mysql -h mainline.proxy.rlwy.net -u root -pRailway2024Secure -P 54310 railway

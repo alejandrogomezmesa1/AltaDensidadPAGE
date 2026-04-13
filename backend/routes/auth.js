@@ -122,7 +122,7 @@ router.post('/forgot-password', async (req, res) => {
 
         const resetUrl = `https://alta-densidad-page.vercel.app/reset?token=${token}&email=${encodeURIComponent(email)}`;
         await transporter.sendMail({
-            from: 'Alta Densidad <no-reply@altadensidad.com>', // Puedes cambiarlo por el correo verificado en SendGrid
+            from: 'Alejandro <alejandrogomezmesa1@gmail.com>',
             to: email,
             subject: 'Recupera tu contraseña',
             html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>

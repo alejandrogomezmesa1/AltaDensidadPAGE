@@ -149,6 +149,8 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     rol VARCHAR(20) NOT NULL DEFAULT 'cliente',
     activo BOOLEAN NOT NULL DEFAULT 1,
     creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reset_token VARCHAR(255) NULL,
+    reset_token_expires DATETIME NULL,
     CHECK (rol IN ('admin', 'cliente'))
 );
 
