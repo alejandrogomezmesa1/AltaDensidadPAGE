@@ -12,6 +12,7 @@ async function getConnection() {
         database: process.env.DB_DATABASE,
         user:     process.env.DB_USER     || 'root',
         password: process.env.DB_PASSWORD || '',
+        charset:  'utf8mb4',
         waitForConnections: true,
         connectionLimit:    10,
         queueLimit:         0
