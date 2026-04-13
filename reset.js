@@ -27,6 +27,7 @@ if (forgotForm) {
     forgotMsg.textContent = '';
     if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       forgotMsg.textContent = 'Ingresa un email válido.';
+      forgotMsg.style.color = 'red';
       return;
     }
     try {
@@ -38,22 +39,20 @@ if (forgotForm) {
       const data = await res.json();
       if (data.success) {
         forgotMsg.style.color = '#00b894';
-        forgotMsg.textContent = 'Revisa tu correo para continuar.';
-        // Mostrar formulario de código
+        forgotMsg.textContent = 'Te hemos enviado un código de recuperación a tu correo.';
         forgotForm.style.display = 'none';
         confirmForm.style.display = 'flex';
         document.getElementById('email-confirm').value = email;
-        mensaje.textContent = 'Si el correo existe, se ha enviado el enlace de recuperación.';
-        mensaje.style.color = 'green';
+        mensaje.textContent = '';
       } else {
-        forgotMsg.textContent = data.message || 'Error al enviar email.';
-        mensaje.textContent = data.message || 'Ocurrió un error.';
-        mensaje.style.color = 'red';
+        forgotMsg.textContent = data.message || 'Error al enviar el código.';
+        forgotMsg.style.color = 'red';
+        mensaje.textContent = '';
       }
     } catch (err) {
       forgotMsg.textContent = 'Error de red.';
-      mensaje.textContent = 'Error de red.';
-      mensaje.style.color = 'red';
+      forgotMsg.style.color = 'red';
+      mensaje.textContent = '';
     }
   });
 }
@@ -67,9 +66,9 @@ if (confirmForm) {
     confirmMsg.textContent = '';
     if (!code) {
       confirmMsg.textContent = 'Ingresa el código.';
+      confirmMsg.style.color = 'red';
       return;
     }
-    // Aquí podrías validar el token en el backend, pero si el enlace ya lleva el token, puedes saltar este paso
     // Simulación: mostrar formulario de reset
     confirmForm.style.display = 'none';
     resetForm.style.display = 'flex';
@@ -89,10 +88,12 @@ if (resetForm) {
     resetMsg.textContent = '';
     if (password.length < 6) {
       resetMsg.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+      resetMsg.style.color = 'red';
       return;
     }
     if (password !== confirm) {
       resetMsg.textContent = 'Las contraseñas no coinciden.';
+      resetMsg.style.color = 'red';
       return;
     }
     try {
@@ -104,19 +105,18 @@ if (resetForm) {
       const data = await res.json();
       if (data.success) {
         resetMsg.style.color = '#00b894';
-        resetMsg.textContent = 'Contraseña restablecida. Ahora puedes iniciar sesión.';
+        resetMsg.textContent = '¡Contraseña restablecida! Ahora puedes iniciar sesión.';
         resetForm.reset();
-        mensaje.textContent = 'Contraseña restablecida. Ahora puedes iniciar sesión.';
-        mensaje.style.color = 'green';
+        mensaje.textContent = '';
       } else {
         resetMsg.textContent = data.message || 'Error al restablecer.';
-        mensaje.textContent = data.message || 'Ocurrió un error.';
-        mensaje.style.color = 'red';
+        resetMsg.style.color = 'red';
+        mensaje.textContent = '';
       }
     } catch (err) {
       resetMsg.textContent = 'Error de red.';
-      mensaje.textContent = 'Error de red.';
-      mensaje.style.color = 'red';
+      resetMsg.style.color = 'red';
+      mensaje.textContent = '';
     }
   });
 }

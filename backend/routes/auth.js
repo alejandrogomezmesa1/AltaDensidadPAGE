@@ -92,7 +92,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// POST /api/auth/forgot-password
+// POST /api/auth/forgot-password (ahora envía un código numérico)
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ success: false, message: 'Email requerido' });
@@ -102,29 +102,29 @@ router.post('/forgot-password', async (req, res) => {
         const [users] = await pool.query('SELECT id, nombre FROM Usuarios WHERE email = ?', [email]);
         if (users.length === 0) {
             // Por seguridad, responde igual aunque no exista
-            return res.json({ success: true, message: 'Si el email existe, se enviará un enlace de recuperación.' });
+            return res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación.' });
         }
 
-        const token = crypto.randomBytes(32).toString('hex');
-        const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hora
+        // Generar código de 6 dígitos
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const expires = new Date(Date.now() + 1000 * 60 * 10); // 10 minutos
 
         await pool.query(
             'UPDATE Usuarios SET reset_token = ?, reset_token_expires = ? WHERE email = ?',
-            [token, expires, email]
+            [code, expires, email]
         );
 
-        const resetUrl = `https://alta-densidad-page.vercel.app/reset?token=${token}&email=${encodeURIComponent(email)}`;
         const msg = {
             to: email,
             from: 'Alejandro <alejandrogomezmesa1@gmail.com>', // remitente verificado en SendGrid
-            subject: 'Recupera tu contraseña',
-            html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
-                   <a href="${resetUrl}">${resetUrl}</a>
-                   <p>Este enlace expirará en 1 hora.</p>`
+            subject: 'Código de recuperación de contraseña',
+            html: `<p>Tu código de recuperación es:</p>
+                   <h2 style="color:#bfa23a;letter-spacing:2px;">${code}</h2>
+                   <p>Este código expirará en 10 minutos.</p>`
         };
         await sgMail.send(msg);
 
-        res.json({ success: true, message: 'Si el email existe, se enviará un enlace de recuperación.' });
+        res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación.' });
     } catch (error) {
         console.error('Error en forgot-password:', error);
         res.status(500).json({ success: false, message: 'Error al procesar la solicitud', error: error.message });
