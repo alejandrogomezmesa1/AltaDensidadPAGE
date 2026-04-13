@@ -8,6 +8,7 @@ const productosRouter = require('./routes/productos');
 const envasesRouter = require('./routes/envases');
 const authRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
+const seedsRouter = require('./routes/seeds');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +39,8 @@ app.use('/api/productos', productosRouter);
 app.use('/api/envases', envasesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
+// Admin-only: ejecutar seeds de base de datos desde la API
+app.use('/api/seeds', seedsRouter);
 
 // Ruta de health check
 app.get('/api/health', (req, res) => {
