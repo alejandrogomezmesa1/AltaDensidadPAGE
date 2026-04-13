@@ -19,6 +19,27 @@ document.querySelector('.reset-form').appendChild(mensaje);
 // Cambia esta variable por la URL de tu backend en Railway
 const BACKEND_URL = 'https://altadensidadpage-production.up.railway.app'; // <-- pon aquí tu URL real
 
+// Detectar parámetros en la URL para flujo directo desde el correo
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const token = getQueryParam('token');
+  const email = getQueryParam('email');
+  if (token && email) {
+    // Oculta el formulario de email y código, muestra el de reset
+    if (forgotForm) forgotForm.style.display = 'none';
+    if (confirmForm) confirmForm.style.display = 'none';
+    if (resetForm) {
+      resetForm.style.display = 'flex';
+      document.getElementById('reset-token').value = token;
+      document.getElementById('reset-email').value = decodeURIComponent(email);
+    }
+  }
+});
+
 // 1. Solicitar email para recuperación
 if (forgotForm) {
   forgotForm.addEventListener('submit', async (e) => {
