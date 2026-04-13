@@ -211,6 +211,23 @@ body {
 }
 .volver-link:hover { color: var(--gold); }
 
+/* ---- OLVIDASTE TU CONTRASEÑA ---- */
+.forgot-link {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+.forgot-link a {
+    color: var(--gold);
+    font-size: 0.87rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.forgot-link a:hover {
+    color: var(--gold-dark);
+    text-decoration: underline;
+}
+
 @media (max-width: 480px) {
     .auth-card { padding: 20px 16px; }
 }

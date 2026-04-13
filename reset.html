@@ -73,39 +73,83 @@ button:hover {
 }
 </style>
 
-<!-- Formulario 1: Solicitar email para recuperar contraseña -->
-<form id="forgot-password-form">
-  <h2>¿Olvidaste tu contraseña?</h2>
-  <label for="email">Correo electrónico:</label>
-  <input type="email" id="email" name="email" required>
-  <button type="submit">Enviar código</button>
-  <div id="forgot-password-msg"></div>
-</form>
+<!-- Estructura mejorada e interactiva -->
+<div class="reset-wrapper">
+  <div class="reset-card">
+    <!-- Formulario 1: Solicitar email para recuperar contraseña -->
+    <form id="forgot-password-form" class="reset-form">
+      <h2>¿Olvidaste tu contraseña?</h2>
+      <label for="email">Correo electrónico:</label>
+      <div class="input-group">
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+      <button type="submit">Enviar código</button>
+      <div id="forgot-password-msg" class="reset-msg"></div>
+    </form>
 
-<!-- Formulario 2: Confirmar código enviado al correo -->
-<form id="confirm-code-form" style="display:none;">
-  <h2>Confirma tu código</h2>
-  <label for="code">Código recibido:</label>
-  <input type="text" id="code" name="code" required>
-  <input type="hidden" id="email-confirm" name="email">
-  <button type="submit">Verificar código</button>
-  <div id="confirm-code-msg"></div>
-</form>
+    <!-- Formulario 2: Confirmar código enviado al correo -->
+    <form id="confirm-code-form" class="reset-form hidden">
+      <h2>Confirma tu código</h2>
+      <label for="code">Código recibido:</label>
+      <div class="input-group">
+        <input type="text" id="code" name="code" required autocomplete="one-time-code">
+      </div>
+      <input type="hidden" id="email-confirm" name="email">
+      <button type="submit">Verificar código</button>
+      <div id="confirm-code-msg" class="reset-msg"></div>
+    </form>
 
-<!-- Formulario 3: Resetear contraseña -->
-<form id="reset-password-form" style="display:none;">
-  <h2>Restablecer contraseña</h2>
-  <label for="new-password">Nueva contraseña:</label>
-  <input type="password" id="new-password" name="new-password" required minlength="6">
-  <label for="confirm-password">Confirmar contraseña:</label>
-  <input type="password" id="confirm-password" name="confirm-password" required minlength="6">
-  <input type="hidden" id="reset-token" name="token">
-  <input type="hidden" id="reset-email" name="email">
-  <button type="submit">Cambiar contraseña</button>
-  <div id="reset-password-msg"></div>
-</form>
+    <!-- Formulario 3: Resetear contraseña -->
+    <form id="reset-password-form" class="reset-form hidden">
+      <h2>Restablecer contraseña</h2>
+      <label for="new-password">Nueva contraseña:</label>
+      <div class="input-group">
+        <input type="password" id="new-password" name="new-password" required minlength="6" autocomplete="new-password">
+        <button type="button" class="toggle-pass" tabindex="-1" aria-label="Mostrar/Ocultar contraseña" onclick="togglePassword('new-password', this)"><i class="fas fa-eye"></i></button>
+      </div>
+      <label for="confirm-password">Confirmar contraseña:</label>
+      <div class="input-group">
+        <input type="password" id="confirm-password" name="confirm-password" required minlength="6" autocomplete="new-password">
+        <button type="button" class="toggle-pass" tabindex="-1" aria-label="Mostrar/Ocultar contraseña" onclick="togglePassword('confirm-password', this)"><i class="fas fa-eye"></i></button>
+      </div>
+      <input type="hidden" id="reset-token" name="token">
+      <input type="hidden" id="reset-email" name="email">
+      <button type="submit">Cambiar contraseña</button>
+      <div id="reset-password-msg" class="reset-msg"></div>
+    </form>
+  </div>
+  <a href="login.html" class="volver-link"><i class="fas fa-arrow-left"></i> Volver al login</a>
+</div>
 
-<!-- Puedes agregar estos formularios en una página como reset.html o en tu login.html -->
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous">
 <link rel="stylesheet" href="reset.css">
 <script src="reset.js" defer></script>
+<script>
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.querySelector('i').classList.remove('fa-eye');
+    btn.querySelector('i').classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    btn.querySelector('i').classList.remove('fa-eye-slash');
+    btn.querySelector('i').classList.add('fa-eye');
+  }
+}
+// Feedback visual interactivo para mensajes
+['forgot-password-msg','confirm-code-msg','reset-password-msg'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    const observer = new MutationObserver(() => {
+      if (el.textContent.includes('éxito') || el.textContent.includes('restablecida') || el.textContent.includes('Revisa tu correo')) {
+        el.classList.add('success');
+      } else {
+        el.classList.remove('success');
+      }
+    });
+    observer.observe(el, { childList: true });
+  }
+});
+</script>
