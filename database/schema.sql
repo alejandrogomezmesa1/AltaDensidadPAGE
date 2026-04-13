@@ -164,3 +164,4 @@ GO
 
 PRINT 'Base de datos AltaDensidadDB configurada correctamente.';
 GO
+mysql -h mysql://root:Railway2024Secure@mainline.proxy.rlwy.net -u root -p -P 54310 railway

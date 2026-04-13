@@ -111,18 +111,18 @@ router.post('/forgot-password', async (req, res) => {
             [token, expires, email]
         );
 
-        // Configura tu transport (Gmail App Password o SendGrid)
+        // Configura tu transport con SendGrid
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            service: 'SendGrid',
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
+                user: 'apikey', // literal, no tu email
+                pass: process.env.SENDGRID_API_KEY
             }
         });
 
         const resetUrl = `https://alta-densidad-page.vercel.app/reset?token=${token}&email=${encodeURIComponent(email)}`;
         await transporter.sendMail({
-            from: `"Alta Densidad" <${process.env.EMAIL_USER}>`,
+            from: 'Alta Densidad <no-reply@altadensidad.com>', // Puedes cambiarlo por el correo verificado en SendGrid
             to: email,
             subject: 'Recupera tu contraseña',
             html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
