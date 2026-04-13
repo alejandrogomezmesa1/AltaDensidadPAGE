@@ -80,7 +80,9 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     password_hash   VARCHAR(300)    NOT NULL,
     rol             ENUM('admin','cliente') NOT NULL DEFAULT 'cliente',
     activo          TINYINT(1)      NOT NULL DEFAULT 1,
-    creado_en       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP
+    creado_en       DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reset_token     VARCHAR(255),
+    reset_token_expires DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- ============================================================
 -- BASE DE DATOS: railway (MySQL)

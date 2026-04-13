@@ -4,6 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getConnection } = require('../config/db');
 
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+
 const JWT_SECRET = process.env.JWT_SECRET || 'altadensidad_secret';
 
 // POST /api/auth/register
@@ -84,6 +87,90 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error en login:', error);
         res.status(500).json({ success: false, message: 'Error al iniciar sesiÃ³n', error: error.message });
+    }
+});
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ success: false, message: 'Email requerido' });
+
+    try {
+        const pool = await getConnection();
+        const [users] = await pool.query('SELECT id, nombre FROM Usuarios WHERE email = ?', [email]);
+        if (users.length === 0) {
+            // Por seguridad, responde igual aunque no exista
+            return res.json({ success: true, message: 'Si el email existe, se enviará un enlace de recuperación.' });
+        }
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hora
+
+        await pool.query(
+            'UPDATE Usuarios SET reset_token = ?, reset_token_expires = ? WHERE email = ?',
+            [token, expires, email]
+        );
+
+        // Configura tu transport (Gmail App Password o SendGrid)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        const resetUrl = `https://alta-densidad-page.vercel.app/reset?token=${token}&email=${encodeURIComponent(email)}`;
+        await transporter.sendMail({
+            from: `"Alta Densidad" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: 'Recupera tu contraseña',
+            html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+                   <a href="${resetUrl}">${resetUrl}</a>
+                   <p>Este enlace expirará en 1 hora.</p>`
+        });
+
+        res.json({ success: true, message: 'Si el email existe, se enviará un enlace de recuperación.' });
+    } catch (error) {
+        console.error('Error en forgot-password:', error);
+        res.status(500).json({ success: false, message: 'Error al procesar la solicitud', error: error.message });
+    }
+});
+
+// POST /api/auth/reset-password
+router.post('/reset-password', async (req, res) => {
+    const { email, token, password } = req.body;
+    if (!email || !token || !password) {
+        return res.status(400).json({ success: false, message: 'Faltan datos requeridos.' });
+    }
+    if (password.length < 6) {
+        return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 6 caracteres.' });
+    }
+    try {
+        const pool = await getConnection();
+        const [users] = await pool.query(
+            'SELECT id, reset_token, reset_token_expires FROM Usuarios WHERE email = ?',
+            [email]
+        );
+        if (users.length === 0) {
+            return res.status(400).json({ success: false, message: 'Usuario no encontrado.' });
+        }
+        const user = users[0];
+        if (!user.reset_token || user.reset_token !== token) {
+            return res.status(400).json({ success: false, message: 'Token inválido.' });
+        }
+        if (!user.reset_token_expires || new Date(user.reset_token_expires) < new Date()) {
+            return res.status(400).json({ success: false, message: 'El token ha expirado.' });
+        }
+        const password_hash = await bcrypt.hash(password, 10);
+        await pool.query(
+            'UPDATE Usuarios SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?',
+            [password_hash, user.id]
+        );
+        res.json({ success: true, message: 'Contraseña restablecida correctamente.' });
+    } catch (error) {
+        console.error('Error en reset-password:', error);
+        res.status(500).json({ success: false, message: 'Error al restablecer contraseña.', error: error.message });
     }
 });
 
