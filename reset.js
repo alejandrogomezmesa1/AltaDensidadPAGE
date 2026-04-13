@@ -10,6 +10,12 @@ const forgotMsg = document.getElementById('forgot-password-msg');
 const confirmMsg = document.getElementById('confirm-code-msg');
 const resetMsg = document.getElementById('reset-password-msg');
 
+const mensaje = document.createElement('div');
+mensaje.id = 'mensaje-reset';
+mensaje.style.marginTop = '10px';
+mensaje.style.textAlign = 'center';
+document.querySelector('.reset-form').appendChild(mensaje);
+
 // Cambia esta variable por la URL de tu backend en Railway
 const BACKEND_URL = 'https://altadensidadpage-production.up.railway.app'; // <-- pon aquí tu URL real
 
@@ -37,11 +43,17 @@ if (forgotForm) {
         forgotForm.style.display = 'none';
         confirmForm.style.display = 'flex';
         document.getElementById('email-confirm').value = email;
+        mensaje.textContent = 'Si el correo existe, se ha enviado el enlace de recuperación.';
+        mensaje.style.color = 'green';
       } else {
         forgotMsg.textContent = data.message || 'Error al enviar email.';
+        mensaje.textContent = data.message || 'Ocurrió un error.';
+        mensaje.style.color = 'red';
       }
     } catch (err) {
       forgotMsg.textContent = 'Error de red.';
+      mensaje.textContent = 'Error de red.';
+      mensaje.style.color = 'red';
     }
   });
 }
@@ -94,11 +106,17 @@ if (resetForm) {
         resetMsg.style.color = '#00b894';
         resetMsg.textContent = 'Contraseña restablecida. Ahora puedes iniciar sesión.';
         resetForm.reset();
+        mensaje.textContent = 'Contraseña restablecida. Ahora puedes iniciar sesión.';
+        mensaje.style.color = 'green';
       } else {
         resetMsg.textContent = data.message || 'Error al restablecer.';
+        mensaje.textContent = data.message || 'Ocurrió un error.';
+        mensaje.style.color = 'red';
       }
     } catch (err) {
       resetMsg.textContent = 'Error de red.';
+      mensaje.textContent = 'Error de red.';
+      mensaje.style.color = 'red';
     }
   });
 }

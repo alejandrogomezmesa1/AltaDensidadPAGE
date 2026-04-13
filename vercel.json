@@ -1,4 +1,3 @@
-
 {
   "version": 2,
   "builds": [
@@ -16,5 +15,8 @@
     { "src": "/envases", "dest": "/envases.html" },
     { "src": "/(.*)\\.html", "dest": "/$1.html" },
     { "src": "/", "dest": "/index.html" }
+  ],
+  "rewrites": [
+    { "source": "/reset", "destination": "/reset.html" }
   ]
 }
