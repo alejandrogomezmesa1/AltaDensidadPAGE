@@ -6,6 +6,8 @@ const { getConnection } = require('../config/db');
 
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'altadensidad_secret';
 
@@ -111,24 +113,16 @@ router.post('/forgot-password', async (req, res) => {
             [token, expires, email]
         );
 
-        // Configura tu transport con SendGrid
-        const transporter = nodemailer.createTransport({
-            service: 'SendGrid',
-            auth: {
-                user: 'apikey', // literal, no tu email
-                pass: process.env.SENDGRID_API_KEY
-            }
-        });
-
         const resetUrl = `https://alta-densidad-page.vercel.app/reset?token=${token}&email=${encodeURIComponent(email)}`;
-        await transporter.sendMail({
-            from: 'Alejandro <alejandrogomezmesa1@gmail.com>',
+        const msg = {
             to: email,
+            from: 'Alejandro <alejandrogomezmesa1@gmail.com>', // remitente verificado en SendGrid
             subject: 'Recupera tu contraseña',
             html: `<p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p>
                    <a href="${resetUrl}">${resetUrl}</a>
                    <p>Este enlace expirará en 1 hora.</p>`
-        });
+        };
+        await sgMail.send(msg);
 
         res.json({ success: true, message: 'Si el email existe, se enviará un enlace de recuperación.' });
     } catch (error) {
