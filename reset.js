@@ -10,6 +10,9 @@ const forgotMsg = document.getElementById('forgot-password-msg');
 const confirmMsg = document.getElementById('confirm-code-msg');
 const resetMsg = document.getElementById('reset-password-msg');
 
+// Cambia esta variable por la URL de tu backend en Railway
+const BACKEND_URL = 'https://altadensidadpage-production.up.railway.app'; // <-- pon aquí tu URL real
+
 // 1. Solicitar email para recuperación
 if (forgotForm) {
   forgotForm.addEventListener('submit', async (e) => {
@@ -21,7 +24,7 @@ if (forgotForm) {
       return;
     }
     try {
-      const res = await fetch(API_BASE + '/forgot-password', {
+      const res = await fetch(`${BACKEND_URL}/api/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -81,7 +84,7 @@ if (resetForm) {
       return;
     }
     try {
-      const res = await fetch(API_BASE + '/reset-password', {
+      const res = await fetch(`${BACKEND_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token, password })
