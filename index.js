@@ -44,14 +44,25 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const card = document.createElement('div');
                 card.className = 'product-card kit-card';
                 card.innerHTML = `
-                    <div class="kit-image-placeholder"><img src="${kit.imagen}" alt="${kit.nombre}"></div>
-                    <div class="kit-name">${kit.nombre}</div>
-                    <div class="kit-description">${(kit.descripcion||'').slice(0,120)}</div>
-                    <ul class="kit-benefits">${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}</ul>
-                    <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
-                    <button class="kit-btn" type="button">Ver detalles</button>
+                    <div class="kit-media">
+                        <div class="kit-image-placeholder">
+                            <img src="${kit.imagen}" alt="${kit.nombre}">
+                            <div class="kit-shine" aria-hidden="true"></div>
+                            <div class="kit-badge">Kit</div>
+                        </div>
+                    </div>
+                    <div class="kit-body">
+                        <h3 class="kit-name">${kit.nombre}</h3>
+                        <p class="kit-description">${(kit.descripcion||'').slice(0,140)}</p>
+                        <ul class="kit-benefits">${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}</ul>
+                        <div class="kit-footer">
+                            <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
+                            <button class="kit-btn" type="button">Ver detalles</button>
+                        </div>
+                    </div>
                 `;
-                card.querySelector('.kit-btn').addEventListener('click', (e) => { e.stopPropagation(); abrirModalKitPublico(kit); });
+                const btn = card.querySelector('.kit-btn');
+                if (btn) btn.addEventListener('click', (e) => { e.stopPropagation(); abrirModalKitPublico(kit); });
                 card.addEventListener('click', (e) => { if (!e.target.classList.contains('kit-btn')) abrirModalKitPublico(kit); });
                 grid.appendChild(card);
             });
