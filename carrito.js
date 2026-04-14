@@ -119,10 +119,15 @@ function renderCarrito() {
         <button class="carrito-btn-pedir" onclick="pedirPorWhatsApp('${waUrl}')">
             <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
         </button>
+        <button id="btnCarritoMP" class="carrito-btn-mp"><i class="fab fa-cc-visa"></i> Pagar con Mercado Pago</button>
         <button class="carrito-btn-vaciar" onclick="vaciarCarrito()">
             <i class="fas fa-trash"></i> Vaciar carrito
         </button>
     `;
+
+    // Vincular botón Mercado Pago
+    const btnMP = document.getElementById('btnCarritoMP');
+    if (btnMP) btnMP.addEventListener('click', pagarMercadoPago);
 }
 
 // ---- WhatsApp con verificación de sesión ----
@@ -135,6 +140,49 @@ function pedirPorWhatsApp(url) {
         return;
     }
     window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// ---- Pago con Mercado Pago ----
+async function pagarMercadoPago() {
+    const carrito = obtenerCarrito();
+    if (!carrito || carrito.length === 0) {
+        alert('El carrito está vacío');
+        return;
+    }
+    // Mapear items para el backend
+    const items = carrito.map(i => ({
+        id: i.id,
+        name: i.name,
+        price: Number(i.price || i.precio || 0),
+        quantity: Number(i.cantidad || i.quantity || 1),
+        image: i.image || i.img || ''
+    }));
+
+    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:3000/api'
+        : 'https://altadensidadpage-production.up.railway.app/api';
+
+    try {
+        const resp = await fetch(`${base}/mercadopago/create_preference`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items })
+        });
+        const data = await resp.json();
+        if (!data.success) return alert('Error procesando pago: ' + (data.message || '')); 
+        const pref = data.preference || {};
+        const initPoint = pref.init_point || pref.sandbox_init_point || (pref && pref.init_point);
+        if (initPoint) {
+            // Redirigir a Mercado Pago
+            window.location.href = initPoint;
+        } else {
+            console.error('Preferencia MP inesperada', pref);
+            alert('No se pudo iniciar el checkout de Mercado Pago');
+        }
+    } catch (err) {
+        console.error('Error al crear preferencia MP', err);
+        alert('Error de red al intentar pagar con Mercado Pago');
+    }
 }
 
 // ---- Abrir / cerrar panel ----

@@ -10,6 +10,7 @@ const kitsRouter = require('./routes/kits');
 const top10Router = require('./routes/top10');
 const authRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
+const mercadopagoRouter = require('./routes/mercadopago');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,6 +43,7 @@ app.use('/api/kits', kitsRouter);
 app.use('/api/top10', top10Router);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/mercadopago', mercadopagoRouter);
 
 // Ruta de health check
 app.get('/api/health', (req, res) => {
