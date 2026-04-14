@@ -1,38 +1,3 @@
-        <!-- ===== SECCIÓN TOP 10 ===== -->
-        <div id="seccionTop10" class="hidden">
-            <div class="admin-toolbar">
-                <h2 class="section-title">Top 10 Más Vendidos</h2>
-                <button class="btn-primary" id="btnGuardarTop10">
-                    <i class="fas fa-save"></i> Guardar Top 10
-                </button>
-            </div>
-            <div class="tabla-wrapper">
-                <table class="tabla-productos" id="tablaTop10">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Género</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyTop10">
-                        <tr>
-                            <td colspan="6" class="loading-row">
-                                <i class="fas fa-spinner fa-spin"></i> Cargando Top 10...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top:2rem;">
-                <label for="selectProductoTop10">Agregar producto al Top 10:</label>
-                <select id="selectProductoTop10" style="min-width:220px;"></select>
-                <button class="btn-primary" id="btnAgregarProductoTop10"><i class="fas fa-plus"></i> Agregar</button>
-            </div>
-        </div>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -43,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
 </head>
 <body>
-
+    <!-- HEADER -->
     <header class="admin-header">
         <div class="admin-header-left">
             <span class="admin-logo">AD</span>
@@ -54,28 +19,21 @@
         </a>
     </header>
 
-    <main class="admin-main">
-
-        <!-- Tabs -->
+    <!-- NAV TABS -->
+    <div class="admin-tabs-wrapper">
         <div class="admin-tabs">
-            <button class="admin-tab active" id="tabProductos" onclick="cambiarSeccion('productos')">
-                <i class="fas fa-spray-can"></i> Productos
-            </button>
-            <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')">
-                <i class="fas fa-box"></i> Envases
-            </button>
-            <button class="admin-tab" id="tabKits" onclick="cambiarSeccion('kits')">
-                <i class="fas fa-gift"></i> Kits
-            </button>
-            <button class="admin-tab" id="tabTop10" onclick="cambiarSeccion('top10')">
-                <i class="fas fa-crown"></i> Top 10
-            </button>
+            <button class="admin-tab active" id="tabProductos" onclick="cambiarSeccion('productos')"><i class="fas fa-spray-can"></i> Productos</button>
+            <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')"><i class="fas fa-box"></i> Envases</button>
+            <button class="admin-tab" id="tabKits" onclick="cambiarSeccion('kits')"><i class="fas fa-gift"></i> Kits</button>
+            <button class="admin-tab" id="tabTop10" onclick="cambiarSeccion('top10')"><i class="fas fa-crown"></i> Top 10</button>
         </div>
+    </div>
 
-        <!-- Mensaje de estado -->
-        <div id="alerta" class="alerta hidden"></div>
+    <!-- ALERTA GLOBAL -->
+    <div id="alerta" class="alerta hidden"></div>
 
-        <!-- ===== SECCIÓN PRODUCTOS ===== -->
+    <main class="admin-main">
+        <!-- SECCIÓN PRODUCTOS -->
         <div id="seccionProductos">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Productos</h2>
@@ -110,120 +68,11 @@
             <div id="paginacionProductos" class="admin-paginacion"></div>
         </div>
 
-        <!-- ===== SECCIÓN ENVASES ===== -->
-                <!-- ===== SECCIÓN KITS ===== -->
-                <div id="seccionKits" class="hidden">
-                    <div class="admin-toolbar">
-                        <h2 class="section-title">Catálogo de Kits</h2>
-                        <button class="btn-primary" id="btnNuevoKit">
-                            <i class="fas fa-plus"></i> Nuevo Kit
-                        </button>
-                    </div>
-                    <div class="tabla-wrapper">
-                        <table class="tabla-productos" id="tablaKits">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Imagen</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Precio</th>
-                                    <th>Beneficios</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodyKits">
-                                <tr>
-                                    <td colspan="7" class="loading-row">
-                                        <i class="fas fa-spinner fa-spin"></i> Cargando kits...
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="paginacionKits" class="admin-paginacion"></div>
-                </div>
-            <!-- Modal Crear / Editar Kit -->
-            <div id="modalKit" class="modal-overlay hidden">
-                <div class="modal-box">
-                    <div class="modal-header">
-                        <h3 id="modalTituloKit">Nuevo Kit</h3>
-                        <button class="modal-cerrar" id="btnCerrarModalKit">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <form id="formKit" class="modal-form" novalidate>
-                        <input type="hidden" id="kitId">
-                        <div class="form-grid">
-                            <div class="form-group full">
-                                <label for="kitNombre">Nombre *</label>
-                                <input type="text" id="kitNombre" placeholder="Ej: Kit Haya" required>
-                            </div>
-                            <div class="form-group full">
-                                <label for="kitDescripcion">Descripción</label>
-                                <textarea id="kitDescripcion" rows="3" placeholder="Descripción del kit..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="kitPrecio">Precio (COP) *</label>
-                                <input type="number" id="kitPrecio" min="0" step="1000" placeholder="0" required>
-                            </div>
-                            <div class="form-group full">
-                                <label>Imagen del kit</label>
-                                <div class="img-upload-zone" id="zonaImagenKit">
-                                    <img id="previewKitImagen" class="img-preview" src="" alt="Vista previa">
-                                    <div class="img-upload-actions">
-                                        <label for="kitImagenFile" class="btn-upload-img">
-                                            <i class="fas fa-upload"></i> Seleccionar imagen
-                                        </label>
-                                        <span id="kitImgFileName" class="img-filename">Sin imagen seleccionada</span>
-                                    </div>
-                                    <input type="file" id="kitImagenFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none">
-                                    <input type="hidden" id="kitImagen">
-                                </div>
-                            </div>
-                            <div class="form-group full">
-                                <label>Beneficios</label>
-                                <div id="kitBeneficiosList" class="checkboxes-grid" style="flex-direction:column;gap:8px;"></div>
-                                <div style="display:flex;gap:8px;margin-top:8px;">
-                                    <input type="text" id="nuevoBeneficio" placeholder="Agregar beneficio..." style="flex:1;">
-                                    <button type="button" class="btn-primary" id="btnAgregarBeneficio"><i class="fas fa-plus"></i> Agregar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-actions">
-                            <button type="button" class="btn-secondary" id="btnCancelarKit">Cancelar</button>
-                            <button type="submit" class="btn-primary" id="btnGuardarKit">
-                                <i class="fas fa-save"></i> Guardar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Modal Confirmar Eliminar Kit -->
-            <div id="modalEliminarKit" class="modal-overlay hidden">
-                <div class="modal-box modal-confirm">
-                    <div class="modal-header">
-                        <h3>Eliminar Kit</h3>
-                        <button class="modal-cerrar" id="btnCerrarEliminarKit">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <p class="confirm-msg">¿Estás seguro de que deseas eliminar <strong id="nombreEliminarKit"></strong>? Esta acción no se puede deshacer.</p>
-                    <div class="modal-actions">
-                        <button class="btn-secondary" id="btnCancelarEliminarKit">Cancelar</button>
-                        <button class="btn-danger" id="btnConfirmarEliminarKit">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <!-- SECCIÓN ENVASES -->
         <div id="seccionEnvases" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Envases</h2>
-                <button class="btn-primary" id="btnNuevoEnvase">
-                    <i class="fas fa-plus"></i> Nuevo Envase
-                </button>
+                <button class="btn-primary" id="btnNuevoEnvase"><i class="fas fa-plus"></i> Nuevo Envase</button>
             </div>
             <div class="tabla-wrapper">
                 <table class="tabla-productos" id="tablaEnvases">
@@ -240,9 +89,7 @@
                     </thead>
                     <tbody id="tbodyEnvases">
                         <tr>
-                            <td colspan="7" class="loading-row">
-                                <i class="fas fa-spinner fa-spin"></i> Cargando envases...
-                            </td>
+                            <td colspan="7" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -250,9 +97,74 @@
             <div id="paginacionEnvases" class="admin-paginacion"></div>
         </div>
 
+        <!-- SECCIÓN KITS -->
+        <div id="seccionKits" class="hidden">
+            <div class="admin-toolbar">
+                <h2 class="section-title">Catálogo de Kits</h2>
+                <button class="btn-primary" id="btnNuevoKit"><i class="fas fa-plus"></i> Nuevo Kit</button>
+            </div>
+            <div class="tabla-wrapper">
+                <table class="tabla-productos" id="tablaKits">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Beneficios</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyKits">
+                        <tr>
+                            <td colspan="7" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando kits...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="paginacionKits" class="admin-paginacion"></div>
+        </div>
+
+        <!-- SECCIÓN TOP 10 -->
+        <div id="seccionTop10" class="hidden">
+            <div class="admin-toolbar">
+                <h2 class="section-title">Top 10 Más Vendidos</h2>
+                <button class="btn-primary" id="btnGuardarTop10"><i class="fas fa-save"></i> Guardar Top 10</button>
+            </div>
+            <div class="tabla-wrapper">
+                <table class="tabla-productos" id="tablaTop10">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Género</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTop10">
+                        <tr>
+                            <td colspan="6" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="top10-agregar-box">
+                <form class="top10-agregar-form" onsubmit="event.preventDefault(); agregarProductoATop10();">
+                    <label for="selectProductoTop10" class="top10-agregar-label">Agregar producto al Top 10</label>
+                    <div class="top10-agregar-row">
+                        <select id="selectProductoTop10" class="top10-agregar-select"></select>
+                        <button class="btn-primary" id="btnAgregarProductoTop10" type="submit"><i class="fas fa-plus"></i> Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
 
-    <!-- Modal Crear / Editar -->
+    <!-- ===== MODALES ===== -->
+    <!-- Modal Producto -->
     <div id="modalProducto" class="modal-overlay hidden">
         <div class="modal-box">
             <div class="modal-header">
@@ -261,24 +173,17 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-
             <form id="formProducto" class="modal-form" novalidate>
                 <input type="hidden" id="productoId">
-
                 <div class="form-grid">
-                    <!-- Nombre -->
                     <div class="form-group full">
                         <label for="inputNombre">Nombre *</label>
                         <input type="text" id="inputNombre" placeholder="Ej: One Million – Paco Rabanne" required>
                     </div>
-
-                    <!-- Descripción -->
                     <div class="form-group full">
                         <label for="inputDescripcion">Descripción</label>
                         <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción de la fragancia..."></textarea>
                     </div>
-
-                    <!-- Categoría -->
                     <div class="form-group">
                         <label for="inputCategoria">Categoría *</label>
                         <select id="inputCategoria" required>
@@ -287,8 +192,6 @@
                             <option value="Arabe">Arabe</option>
                         </select>
                     </div>
-
-                    <!-- Género -->
                     <div class="form-group">
                         <label for="inputGenero">Género *</label>
                         <select id="inputGenero" required>
@@ -298,14 +201,10 @@
                             <option value="Unisex">Unisex</option>
                         </select>
                     </div>
-
-                    <!-- Precio -->
                     <div class="form-group">
                         <label for="inputPrecio">Precio (COP) *</label>
                         <input type="number" id="inputPrecio" min="0" step="1000" placeholder="0" required>
                     </div>
-
-                    <!-- Rating -->
                     <div class="form-group">
                         <label for="inputRating">Rating (1–5)</label>
                         <select id="inputRating">
@@ -316,8 +215,6 @@
                             <option value="1">1 estrella</option>
                         </select>
                     </div>
-
-                    <!-- Imagen upload -->
                     <div class="form-group full">
                         <label>Imagen del producto</label>
                         <div class="img-upload-zone" id="zonaImagenProducto">
@@ -332,8 +229,6 @@
                             <input type="hidden" id="inputImagen">
                         </div>
                     </div>
-
-                    <!-- Tallas -->
                     <div class="form-group full">
                         <label>Tallas disponibles</label>
                         <div class="checkboxes-grid">
@@ -345,8 +240,6 @@
                             <label class="check-item"><input type="checkbox" name="talla" value="200ml"> 200ml</label>
                         </div>
                     </div>
-
-                    <!-- Tipos de envase -->
                     <div class="form-group full">
                         <label>Tipos de envase</label>
                         <div class="checkboxes-grid">
@@ -357,7 +250,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-actions">
                     <button type="button" class="btn-secondary" id="btnCancelarForm">Cancelar</button>
                     <button type="submit" class="btn-primary" id="btnGuardar">
@@ -368,7 +260,7 @@
         </div>
     </div>
 
-    <!-- Modal Confirmar Eliminar -->
+    <!-- Modal Confirmar Eliminar Producto -->
     <div id="modalEliminar" class="modal-overlay hidden">
         <div class="modal-box modal-confirm">
             <div class="modal-header">
@@ -387,7 +279,7 @@
         </div>
     </div>
 
-    <!-- Modal Crear / Editar Envase -->
+    <!-- Modal Envase -->
     <div id="modalEnvase" class="modal-overlay hidden">
         <div class="modal-box">
             <div class="modal-header">
@@ -422,7 +314,6 @@
                         <label for="envasePrecio">Precio (COP) *</label>
                         <input type="number" id="envasePrecio" min="0" step="1000" placeholder="0" required>
                     </div>
-                    <!-- Imagen upload -->
                     <div class="form-group full">
                         <label>Imagen del envase</label>
                         <div class="img-upload-zone" id="zonaImagenEnvase">
@@ -472,6 +363,82 @@
             <div class="modal-actions">
                 <button class="btn-secondary" id="btnCancelarEliminarEnvase">Cancelar</button>
                 <button class="btn-danger" id="btnConfirmarEliminarEnvase">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Kit -->
+    <div id="modalKit" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTituloKit">Nuevo Kit</h3>
+                <button class="modal-cerrar" id="btnCerrarModalKit">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="formKit" class="modal-form" novalidate>
+                <input type="hidden" id="kitId">
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label for="kitNombre">Nombre *</label>
+                        <input type="text" id="kitNombre" placeholder="Ej: Kit Haya" required>
+                    </div>
+                    <div class="form-group full">
+                        <label for="kitDescripcion">Descripción</label>
+                        <textarea id="kitDescripcion" rows="3" placeholder="Descripción del kit..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="kitPrecio">Precio (COP) *</label>
+                        <input type="number" id="kitPrecio" min="0" step="1000" placeholder="0" required>
+                    </div>
+                    <div class="form-group full">
+                        <label>Imagen del kit</label>
+                        <div class="img-upload-zone" id="zonaImagenKit">
+                            <img id="previewKitImagen" class="img-preview" src="" alt="Vista previa">
+                            <div class="img-upload-actions">
+                                <label for="kitImagenFile" class="btn-upload-img">
+                                    <i class="fas fa-upload"></i> Seleccionar imagen
+                                </label>
+                                <span id="kitImgFileName" class="img-filename">Sin imagen seleccionada</span>
+                            </div>
+                            <input type="file" id="kitImagenFile" accept="image/jpeg,image/png,image/webp,image/avif" style="display:none">
+                            <input type="hidden" id="kitImagen">
+                        </div>
+                    </div>
+                    <div class="form-group full">
+                        <label>Beneficios</label>
+                        <div id="kitBeneficiosList" class="checkboxes-grid" style="flex-direction:column;gap:8px;"></div>
+                        <div style="display:flex;gap:8px;margin-top:8px;">
+                            <input type="text" id="nuevoBeneficio" placeholder="Agregar beneficio..." style="flex:1;">
+                            <button type="button" class="btn-primary" id="btnAgregarBeneficio"><i class="fas fa-plus"></i> Agregar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="btnCancelarKit">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnGuardarKit">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminar Kit -->
+    <div id="modalEliminarKit" class="modal-overlay hidden">
+        <div class="modal-box modal-confirm">
+            <div class="modal-header">
+                <h3>Eliminar Kit</h3>
+                <button class="modal-cerrar" id="btnCerrarEliminarKit">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p class="confirm-msg">¿Estás seguro de que deseas eliminar <strong id="nombreEliminarKit"></strong>? Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="btnCancelarEliminarKit">Cancelar</button>
+                <button class="btn-danger" id="btnConfirmarEliminarKit">
                     <i class="fas fa-trash"></i> Eliminar
                 </button>
             </div>
