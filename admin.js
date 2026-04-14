@@ -1,3 +1,8 @@
+const _BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
+const API_URL = `${_BASE}/productos`;
+const API_ENVASES_URL = `${_BASE}/envases`;
+const API_KITS_URL = `${_BASE}/kits`;
+const API_UPLOAD_URL = `${_BASE}/upload`;
 const API_TOP10_URL = `${_BASE}/top10`;
 // Estado Top 10
 let top10 = [];
@@ -127,11 +132,7 @@ function registrarEventosTop10() {
     document.getElementById('btnAgregarProductoTop10').addEventListener('click', agregarProductoATop10);
     document.getElementById('btnGuardarTop10').addEventListener('click', guardarTop10);
 }
-const _BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
-const API_URL = `${_BASE}/productos`;
-const API_ENVASES_URL = `${_BASE}/envases`;
-const API_KITS_URL = `${_BASE}/kits`;
-const API_UPLOAD_URL = `${_BASE}/upload`;
+// ...existing code...
 // Estado Kits
 let kits = [];
 let paginaKits = 1;
