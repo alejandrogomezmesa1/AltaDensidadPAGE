@@ -1,4 +1,47 @@
 document.addEventListener('DOMContentLoaded', async function() {
+        // ============================
+        // KITS DINÁMICOS
+        // ============================
+        async function cargarKitsPublico() {
+            const kitsGrid = document.getElementById('kitsGrid');
+            if (!kitsGrid) return;
+            kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">Cargando kits...</div>';
+            try {
+                const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
+                const res = await fetch(`${base}/kits`);
+                const data = await res.json();
+                if (!data.success) throw new Error(data.message);
+                const kits = data.data;
+                if (!kits.length) {
+                    kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">No hay kits disponibles.</div>';
+                    return;
+                }
+                kitsGrid.innerHTML = '';
+                kits.forEach(kit => {
+                    const card = document.createElement('div');
+                    card.className = 'kit-card';
+                    card.innerHTML = `
+                        <div class="kit-image-placeholder">
+                            <img src="${kit.imagen}" alt="${kit.nombre}">
+                        </div>
+                        <h3 class="kit-name">${kit.nombre}</h3>
+                        <p class="kit-description">${kit.descripcion || ''}</p>
+                        <ul class="kit-benefits">
+                            ${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}
+                        </ul>
+                        <div class="kit-price">
+                            <span class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</span>
+                        </div>
+                        <a href="https://wa.me/3046477694?text=Hola, estoy interesado en el Kit ${encodeURIComponent(kit.nombre)}" target="_blank" class="kit-btn">
+                            Comprar Kit
+                        </a>
+                    `;
+                    kitsGrid.appendChild(card);
+                });
+            } catch (err) {
+                kitsGrid.innerHTML = '<div style="color:#c0392b;padding:2rem;">Error al cargar los kits.</div>';
+            }
+        }
     // Datos de productos cargados desde la API
     let products = [];
     let productosFiltrados = [];
@@ -249,4 +292,5 @@ document.addEventListener('DOMContentLoaded', async function() {
     // INICIALIZAR
     // ============================
     displayProducts(productosFiltrados);
+    cargarKitsPublico();
 });

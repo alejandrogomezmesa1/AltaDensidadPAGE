@@ -1,7 +1,142 @@
+const API_TOP10_URL = `${_BASE}/top10`;
+// Estado Top 10
+let top10 = [];
+let productosDisponiblesTop10 = [];
+// ============================
+// TOP 10 — CARGAR Y RENDER
+// ============================
+async function cargarTop10() {
+    const tbody = document.getElementById('tbodyTop10');
+    tbody.innerHTML = `<tr><td colspan="6" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</td></tr>`;
+    try {
+        const res = await fetch(API_TOP10_URL);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        top10 = data.data;
+        renderTablaTop10();
+    } catch (err) {
+        mostrarAlerta('Error al cargar Top 10: ' + err.message, 'error');
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
+    }
+}
+
+function renderTablaTop10() {
+    const tbody = document.getElementById('tbodyTop10');
+    if (!top10.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-row">No hay productos en el Top 10.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = top10.map((p, idx) => `
+        <tr>
+            <td>${idx + 1}</td>
+            <td>${imagenCell(p.imagen)}</td>
+            <td><strong>${escHtml(p.nombre)}</strong></td>
+            <td>${escHtml(p.categoria)}</td>
+            <td>${escHtml(p.genero)}</td>
+            <td>
+                <div class="acciones">
+                    <button class="btn-icon" title="Subir" onclick="moverTop10(${idx},-1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
+                    <button class="btn-icon" title="Bajar" onclick="moverTop10(${idx},1)" ${idx === top10.length-1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+                    <button class="btn-icon eliminar" title="Quitar" onclick="quitarDeTop10(${idx})"><i class="fas fa-times"></i></button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function moverTop10(idx, dir) {
+    if ((idx === 0 && dir === -1) || (idx === top10.length-1 && dir === 1)) return;
+    const temp = top10[idx];
+    top10[idx] = top10[idx+dir];
+    top10[idx+dir] = temp;
+    renderTablaTop10();
+}
+
+function quitarDeTop10(idx) {
+    top10.splice(idx, 1);
+    renderTablaTop10();
+    renderSelectProductosTop10();
+}
+
+function renderSelectProductosTop10() {
+    const select = document.getElementById('selectProductoTop10');
+    select.innerHTML = '<option value="">-- Seleccionar producto --</option>';
+    productosDisponiblesTop10.forEach(p => {
+        if (!top10.some(t => t.producto_id === p.id)) {
+            select.innerHTML += `<option value="${p.id}">${escHtml(p.name)}</option>`;
+        }
+    });
+}
+
+async function cargarProductosDisponiblesTop10() {
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        productosDisponiblesTop10 = data.data;
+        renderSelectProductosTop10();
+    } catch (err) {
+        mostrarAlerta('Error al cargar productos para Top 10: ' + err.message, 'error');
+    }
+}
+
+function agregarProductoATop10() {
+    const select = document.getElementById('selectProductoTop10');
+    const id = parseInt(select.value);
+    if (!id) return;
+    const prod = productosDisponiblesTop10.find(p => p.id === id);
+    if (!prod) return;
+    if (top10.length >= 10) { mostrarAlerta('Solo puedes tener 10 productos en el Top 10.', 'error'); return; }
+    top10.push({
+        producto_id: prod.id,
+        nombre: prod.name,
+        imagen: prod.image,
+        categoria: prod.category,
+        genero: prod.gender,
+        descripcion: prod.description,
+        precio: prod.price,
+        rating: prod.rating
+    });
+    renderTablaTop10();
+    renderSelectProductosTop10();
+}
+
+async function guardarTop10() {
+    if (top10.length !== 10) { mostrarAlerta('Debes seleccionar exactamente 10 productos.', 'error'); return; }
+    const ids = top10.map(p => p.producto_id);
+    const btn = document.getElementById('btnGuardarTop10');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    try {
+        const res = await fetch(API_TOP10_URL, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productos: ids })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Top 10 actualizado', showConfirmButton: false, timer: 3000, background: '#1a1a1a', color: '#D4AF37' });
+    } catch (err) {
+        mostrarAlerta('Error al guardar Top 10: ' + err.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Guardar Top 10';
+    }
+}
+function registrarEventosTop10() {
+    document.getElementById('btnAgregarProductoTop10').addEventListener('click', agregarProductoATop10);
+    document.getElementById('btnGuardarTop10').addEventListener('click', guardarTop10);
+}
 const _BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
 const API_URL = `${_BASE}/productos`;
 const API_ENVASES_URL = `${_BASE}/envases`;
+const API_KITS_URL = `${_BASE}/kits`;
 const API_UPLOAD_URL = `${_BASE}/upload`;
+// Estado Kits
+let kits = [];
+let paginaKits = 1;
+const ITEMS_KIT = 10;
+let beneficiosKitTmp = [];
 
 // ============================
 // UPLOAD DE IMAGEN
@@ -56,9 +191,220 @@ const nombreEliminar    = document.getElementById('nombreEliminar');
 document.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
     cargarEnvases();
+    cargarKits();
+    cargarTop10();
+    cargarProductosDisponiblesTop10();
     registrarEventos();
     registrarEventosEnvases();
+    registrarEventosKits();
+    registrarEventosTop10();
 });
+// ============================
+// KITS — CARGAR LISTA
+// ============================
+async function cargarKits() {
+    const tbody = document.getElementById('tbodyKits');
+    tbody.innerHTML = `<tr><td colspan="7" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando kits...</td></tr>`;
+    try {
+        const res = await fetch(API_KITS_URL);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        kits = data.data;
+        renderTablaKits();
+    } catch (err) {
+        mostrarAlerta('Error al cargar kits: ' + err.message, 'error');
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
+    }
+}
+
+function renderTablaKits() {
+    const tbody = document.getElementById('tbodyKits');
+    const total = kits.length;
+    const totalPags = Math.ceil(total / ITEMS_KIT);
+    if (paginaKits > totalPags && totalPags > 0) paginaKits = totalPags;
+    const inicio = (paginaKits - 1) * ITEMS_KIT;
+    const pagina = kits.slice(inicio, inicio + ITEMS_KIT);
+
+    if (total === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-row"><i class="fas fa-box-open"></i><br>No hay kits registrados.</td></tr>`;
+        document.getElementById('paginacionKits').innerHTML = '';
+        return;
+    }
+    tbody.innerHTML = pagina.map(k => `
+        <tr>
+            <td>${k.id}</td>
+            <td>${imagenCell(k.imagen)}</td>
+            <td><strong>${escHtml(k.nombre)}</strong></td>
+            <td>${escHtml(k.descripcion)}</td>
+            <td>${formatPrecio(k.precio)}</td>
+            <td>${(k.beneficios || []).map(b => `<span class="tag">${escHtml(b)}</span>`).join('')}</td>
+            <td>
+                <div class="acciones">
+                    <button class="btn-icon editar" title="Editar" onclick="abrirEditarKit(${k.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon eliminar" title="Eliminar" onclick="abrirEliminarKit(${k.id}, '${escAttr(k.nombre)}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+
+    renderPag('paginacionKits', paginaKits, totalPags, (p) => {
+        paginaKits = p;
+        renderTablaKits();
+    });
+}
+
+function abrirNuevoKit() {
+    document.getElementById('formKit').reset();
+    document.getElementById('modalTituloKit').textContent = 'Nuevo Kit';
+    document.getElementById('kitId').value = '';
+    beneficiosKitTmp = [];
+    renderBeneficiosKit();
+    limpiarImagenKit();
+    abrirModal(document.getElementById('modalKit'));
+}
+
+function abrirEditarKit(id) {
+    const k = kits.find(x => x.id === id);
+    if (!k) return;
+    document.getElementById('formKit').reset();
+    document.getElementById('modalTituloKit').textContent = 'Editar Kit';
+    document.getElementById('kitId').value = k.id;
+    document.getElementById('kitNombre').value = k.nombre;
+    document.getElementById('kitDescripcion').value = k.descripcion || '';
+    document.getElementById('kitPrecio').value = k.precio;
+    document.getElementById('kitImagen').value = k.imagen || '';
+    beneficiosKitTmp = Array.isArray(k.beneficios) ? [...k.beneficios] : [];
+    renderBeneficiosKit();
+    // Imagen preview
+    const preview = document.getElementById('previewKitImagen');
+    if (k.imagen) {
+        preview.src = k.imagen;
+        preview.style.display = 'block';
+        document.getElementById('kitImgFileName').textContent = k.imagen.split('/').pop();
+    } else {
+        limpiarImagenKit();
+    }
+    abrirModal(document.getElementById('modalKit'));
+}
+
+function renderBeneficiosKit() {
+    const list = document.getElementById('kitBeneficiosList');
+    list.innerHTML = '';
+    beneficiosKitTmp.forEach((b, idx) => {
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.gap = '8px';
+        div.innerHTML = `<span>${escHtml(b)}</span><button type="button" class="btn-icon eliminar" title="Quitar" onclick="quitarBeneficioKit(${idx})"><i class="fas fa-times"></i></button>`;
+        list.appendChild(div);
+    });
+}
+
+function quitarBeneficioKit(idx) {
+    beneficiosKitTmp.splice(idx, 1);
+    renderBeneficiosKit();
+}
+
+function limpiarImagenKit() {
+    const preview = document.getElementById('previewKitImagen');
+    preview.src = '';
+    preview.style.display = 'none';
+    document.getElementById('kitImgFileName').textContent = 'Sin imagen seleccionada';
+    document.getElementById('kitImagenFile').value = '';
+    document.getElementById('kitImagen').value = '';
+}
+
+async function abrirEliminarKit(id, nombre) {
+    document.getElementById('nombreEliminarKit').textContent = nombre;
+    abrirModal(document.getElementById('modalEliminarKit'));
+    document.getElementById('btnConfirmarEliminarKit').onclick = async () => {
+        try {
+            const res = await fetch(`${API_KITS_URL}/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            cerrarModal(document.getElementById('modalEliminarKit'));
+            await cargarKits();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Kit eliminado', showConfirmButton: false, timer: 3000, background: '#1a1a1a', color: '#D4AF37' });
+        } catch (err) {
+            mostrarAlerta('Error al eliminar: ' + err.message, 'error');
+        }
+    };
+}
+
+function registrarEventosKits() {
+    document.getElementById('btnNuevoKit').addEventListener('click', abrirNuevoKit);
+    document.getElementById('btnCerrarModalKit').addEventListener('click', () => cerrarModal(document.getElementById('modalKit')));
+    document.getElementById('btnCancelarKit').addEventListener('click', () => cerrarModal(document.getElementById('modalKit')));
+    document.getElementById('btnCerrarEliminarKit').addEventListener('click', () => cerrarModal(document.getElementById('modalEliminarKit')));
+    document.getElementById('btnCancelarEliminarKit').addEventListener('click', () => cerrarModal(document.getElementById('modalEliminarKit')));
+
+    // Imagen preview
+    vincularFileInput('kitImagenFile', 'previewKitImagen', 'kitImgFileName', 'kitImagen');
+
+    // Agregar beneficio
+    document.getElementById('btnAgregarBeneficio').addEventListener('click', () => {
+        const val = document.getElementById('nuevoBeneficio').value.trim();
+        if (val) {
+            beneficiosKitTmp.push(val);
+            renderBeneficiosKit();
+            document.getElementById('nuevoBeneficio').value = '';
+        }
+    });
+
+    // Guardar kit
+    document.getElementById('formKit').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('kitId').value;
+        const nombre = document.getElementById('kitNombre').value.trim();
+        const descripcion = document.getElementById('kitDescripcion').value.trim();
+        const precio = parseFloat(document.getElementById('kitPrecio').value);
+        const imagen = document.getElementById('kitImagen').value.trim();
+        if (!nombre) { document.getElementById('kitNombre').classList.add('invalid'); mostrarAlerta('El nombre es obligatorio.', 'error'); return; }
+        if (!precio && precio !== 0) { document.getElementById('kitPrecio').classList.add('invalid'); mostrarAlerta('El precio es obligatorio.', 'error'); return; }
+        const btn = document.getElementById('btnGuardarKit');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+        try {
+            // Subir imagen si hay archivo seleccionado
+            const fileInputKit = document.getElementById('kitImagenFile');
+            if (fileInputKit.files[0]) {
+                const rutaSubida = await subirImagen(fileInputKit.files[0]);
+                document.getElementById('kitImagen').value = rutaSubida;
+            }
+            const imagenFinal = document.getElementById('kitImagen').value.trim();
+            const payload = { nombre, descripcion, precio, imagen: imagenFinal, beneficios: beneficiosKitTmp };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_KITS_URL}/${id}` : API_KITS_URL;
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message);
+            cerrarModal(document.getElementById('modalKit'));
+            await cargarKits();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: id ? 'Kit actualizado' : 'Kit creado', showConfirmButton: false, timer: 3000, background: '#1a1a1a', color: '#D4AF37' });
+        } catch (err) {
+            mostrarAlerta('Error al guardar: ' + err.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Guardar';
+        }
+    });
+
+    [document.getElementById('modalKit'), document.getElementById('modalEliminarKit')].forEach(m => {
+        m.addEventListener('click', (e) => { if (e.target === m) cerrarModal(m); });
+    });
+
+    document.getElementById('formKit').querySelectorAll('input, textarea').forEach(el => {
+        el.addEventListener('input', () => el.classList.remove('invalid'));
+    });
+}
 
 // ============================
 // CARGAR LISTA
@@ -310,11 +656,21 @@ function registrarEventos() {
 // ============================
 function cambiarSeccion(seccion) {
     const esProd = seccion === 'productos';
+    const esEnv = seccion === 'envases';
+    const esKit = seccion === 'kits';
+    const esTop = seccion === 'top10';
     document.getElementById('seccionProductos').classList.toggle('hidden', !esProd);
-    document.getElementById('seccionEnvases').classList.toggle('hidden', esProd);
+    document.getElementById('seccionEnvases').classList.toggle('hidden', !esEnv);
+    document.getElementById('seccionKits').classList.toggle('hidden', !esKit);
+    document.getElementById('seccionTop10').classList.toggle('hidden', !esTop);
     document.getElementById('tabProductos').classList.toggle('active', esProd);
-    document.getElementById('tabEnvases').classList.toggle('active', !esProd);
+    document.getElementById('tabEnvases').classList.toggle('active', esEnv);
+    document.getElementById('tabKits').classList.toggle('active', esKit);
+    document.getElementById('tabTop10').classList.toggle('active', esTop);
 }
+// Exponer funciones para botones inline
+window.moverTop10 = moverTop10;
+window.quitarDeTop10 = quitarDeTop10;
 
 // ============================
 // ENVASES — CARGAR

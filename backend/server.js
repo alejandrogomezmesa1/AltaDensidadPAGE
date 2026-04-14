@@ -6,6 +6,8 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const { getConnection } = require('./config/db');
 const productosRouter = require('./routes/productos');
 const envasesRouter = require('./routes/envases');
+const kitsRouter = require('./routes/kits');
+const top10Router = require('./routes/top10');
 const authRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
 
@@ -36,6 +38,8 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas API
 app.use('/api/productos', productosRouter);
 app.use('/api/envases', envasesRouter);
+app.use('/api/kits', kitsRouter);
+app.use('/api/top10', top10Router);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
 
