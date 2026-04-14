@@ -70,8 +70,23 @@ router.post('/create_preference', async (req, res) => {
             return res.json({ success: true, preference: mockPref, mock: true, message: 'MP_ACCESS_TOKEN no configurado — se devuelve preferencia mock para desarrollo local' });
         }
 
-        const mpRes = await mercadopago.preferences.create(preference);
-        return res.json({ success: true, preference: mpRes.body });
+            // En producción/entorno con token use la API HTTP directa (más compatible que depender de la SDK)
+            try {
+                const url = 'https://api.mercadopago.com/checkout/preferences';
+                const resp = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${ACCESS_TOKEN}`
+                    },
+                    body: JSON.stringify(preference)
+                });
+                const body = await resp.json();
+                return res.json({ success: true, preference: body });
+            } catch (httpErr) {
+                console.error('Error creando preferencia via HTTP MP:', httpErr);
+                return res.status(500).json({ success: false, message: 'Error creando preferencia (HTTP)' });
+            }
     } catch (err) {
         console.error('Error creando preferencia MP:', err);
         return res.status(500).json({ success: false, message: err.message || 'Error creando preferencia' });
