@@ -631,8 +631,7 @@ h1, h2, h3, .header-title, .header-tittle {
 .price-label { font-size: 0.75rem; color: rgba(248,249,249,0.6); }
 .price-amount { font-size: 1.15rem; color: var(--azul-dos); font-weight: 800; }
 
-.kit-btn { background: transparent; border: 1px solid rgba(212,175,55,0.14); color: var(--azul-dos); padding: 10px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.12s, transform 0.12s, box-shadow 0.12s; }
-.kit-btn:hover { background: rgba(212,175,55,0.08); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(2,6,23,0.4); }
+.kit-btn { /* eliminado: botón integrado en la card; la card abre el modal al hacer click */ }
 
 .kit-card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(2,6,23,0.6); }
 .kit-card:hover .kit-image-placeholder img { transform: scale(1.04); }
@@ -2277,28 +2276,7 @@ h1, h2, h3, .header-title, .header-tittle {
     font-weight: 800;
 }
 
-.kit-btn {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, var(--azul-dos) 0%, var(--naranja-calido) 100%);
-    color: #000;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-}
-
-.kit-btn:hover {
-    background: linear-gradient(135deg, #F3E5AB 0%, var(--azul-dos) 100%);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
-}
+.kit-btn { /* antiguo botón eliminado */ }
 
 .kits-promo {
     background: linear-gradient(90deg, #111 0%, #000 100%);
@@ -2373,10 +2351,7 @@ h1, h2, h3, .header-title, .header-tittle {
         padding: 20px;
     }
     
-    .kit-btn {
-        padding: 12px;
-        font-size: 1rem;
-    }
+    /* .kit-btn removido en mobile */
 }
 
 /* === NAV SESIÓN === */
