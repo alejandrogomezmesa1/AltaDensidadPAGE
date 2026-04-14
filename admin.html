@@ -224,35 +224,6 @@
                         <label for="inputCategoria">Categoría *</label>
                         <select id="inputCategoria" required>
                             <option value="">-- Seleccionar --</option>
-
-            <!-- Modal Orden Detalle -->
-            <div id="modalOrden" class="modal-overlay hidden">
-                <div class="modal-box">
-                    <div class="modal-header">
-                        <h3 id="modalTituloOrden">Detalle de Orden</h3>
-                        <button class="modal-cerrar" id="btnCerrarModalOrden"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="ordenInfo"></div>
-                        <h4>Items</h4>
-                        <div id="ordenItems"></div>
-                        <h4>Datos raw</h4>
-                        <pre id="ordenRaw" style="max-height:220px;overflow:auto;background:#0b1220;color:#fff;padding:12px;border-radius:6px;"></pre>
-                    </div>
-                    <div class="modal-actions">
-                        <select id="ordenStatusSelect">
-                            <option value="pending">pending</option>
-                            <option value="approved">approved</option>
-                            <option value="cancelled">cancelled</option>
-                            <option value="failed">failed</option>
-                            <option value="refunded">refunded</option>
-                        </select>
-                        <button class="btn-primary" id="btnActualizarOrden">Actualizar estado</button>
-                        <button class="btn-secondary" id="btnForzarVerificacion">Forzar verificación</button>
-                        <button class="btn-secondary" id="btnCerrarOrden">Cerrar</button>
-                    </div>
-                </div>
-            </div>
                             <option value="Diseñador">Diseñador</option>
                             <option value="Arabe">Arabe</option>
                         </select>
@@ -506,6 +477,34 @@
                 <button class="btn-danger" id="btnConfirmarEliminarKit">
                     <i class="fas fa-trash"></i> Eliminar
                 </button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Orden Detalle (moved here to avoid nesting inside forms) -->
+    <div id="modalOrden" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTituloOrden">Detalle de Orden</h3>
+                <button class="modal-cerrar" id="btnCerrarModalOrden"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="ordenInfo"></div>
+                <h4>Items</h4>
+                <div id="ordenItems"></div>
+                <h4>Datos raw</h4>
+                <pre id="ordenRaw" style="max-height:220px;overflow:auto;background:#0b1220;color:#fff;padding:12px;border-radius:6px;"></pre>
+            </div>
+            <div class="modal-actions">
+                <select id="ordenStatusSelect">
+                    <option value="pending">pending</option>
+                    <option value="approved">approved</option>
+                    <option value="cancelled">cancelled</option>
+                    <option value="failed">failed</option>
+                    <option value="refunded">refunded</option>
+                </select>
+                <button class="btn-primary" id="btnActualizarOrden">Actualizar estado</button>
+                <button class="btn-secondary" id="btnForzarVerificacion">Forzar verificación</button>
+                <button class="btn-secondary" id="btnCerrarOrden">Cerrar</button>
             </div>
         </div>
     </div>
