@@ -33,8 +33,11 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Capturar raw body para permitir verificación de firmas en webhooks
+app.use(express.json({
+    verify: (req, res, buf) => { req.rawBody = buf; }
+}));
+app.use(express.urlencoded({ extended: true, verify: (req, res, buf) => { req.rawBody = buf; } }));
 
 // Rutas API
 app.use('/api/productos', productosRouter);

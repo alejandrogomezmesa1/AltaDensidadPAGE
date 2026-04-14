@@ -208,6 +208,9 @@ document.addEventListener('DOMContentLoaded', () => {
     registrarEventosEnvases();
     registrarEventosKits();
     registrarEventosTop10();
+    // Órdenes
+    cargarOrdenes();
+    registrarEventosOrdenes();
 });
 // ============================
 // KITS — CARGAR LISTA
@@ -981,3 +984,167 @@ function escAttr(str) {
     if (!str) return '';
     return String(str).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
+
+// ============================
+// ÓRDENES (Admin)
+// ============================
+const API_MP_URL = `${_BASE}/mercadopago`;
+function getAuthHeaders(includeJson = false) {
+    const headers = {};
+    if (includeJson) headers['Content-Type'] = 'application/json';
+    const token = localStorage.getItem('token');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const adminKey = localStorage.getItem('admin_key');
+    if (adminKey) headers['x-admin-key'] = adminKey;
+    return headers;
+}
+let ordenes = [];
+let paginaOrdenes = 1;
+const ITEMS_ORD = 20;
+
+async function cargarOrdenes(page = 1) {
+    const tbody = document.getElementById('tbodyOrdenes');
+    paginaOrdenes = page;
+    tbody.innerHTML = `<tr><td colspan="9" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando órdenes...</td></tr>`;
+    try {
+        const res = await fetch(`${API_MP_URL}/orders?page=${page}&limit=${ITEMS_ORD}`, { headers: getAuthHeaders() });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Error al obtener órdenes');
+        ordenes = data.data || [];
+        renderTablaOrdenes(data.meta || {});
+    } catch (err) {
+        mostrarAlerta('Error al cargar órdenes: ' + err.message, 'error');
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
+    }
+}
+
+function renderTablaOrdenes(meta = {}) {
+    const tbody = document.getElementById('tbodyOrdenes');
+    if (!ordenes || ordenes.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-row">No hay órdenes registradas.</td></tr>`;
+        document.getElementById('paginacionOrdenes').innerHTML = '';
+        return;
+    }
+    tbody.innerHTML = ordenes.map((o, idx) => `
+        <tr>
+            <td>${(((meta.page || 1) - 1) * ITEMS_ORD) + idx + 1}</td>
+            <td>${escHtml(o.external_reference)}</td>
+            <td>${escHtml(o.preference_id || '')}</td>
+            <td>${escHtml(o.payment_id || '')}</td>
+            <td>${formatPrecio(o.total)}</td>
+            <td>${escHtml(o.currency || 'COP')}</td>
+            <td><strong>${escHtml(o.status || '')}</strong></td>
+            <td>${escHtml(o.created_at ? new Date(o.created_at).toLocaleString() : '')}</td>
+            <td>
+                <div class="acciones">
+                    <button class="btn-icon" title="Ver" onclick="abrirDetalleOrden('${escAttr(o.external_reference)}')"><i class="fas fa-eye"></i></button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+
+    const totalPages = meta.pages || 1;
+    renderPag('paginacionOrdenes', paginaOrdenes, totalPages, (p) => { paginaOrdenes = p; cargarOrdenes(p); });
+}
+
+async function abrirDetalleOrden(external_reference) {
+    try {
+        const res = await fetch(`${API_MP_URL}/order/${encodeURIComponent(external_reference)}`, { headers: getAuthHeaders() });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Orden no encontrada');
+        const o = data.order;
+        document.getElementById('modalTituloOrden').textContent = `Orden ${escHtml(o.external_reference)}`;
+        const info = document.getElementById('ordenInfo');
+        info.innerHTML = `
+            <p><strong>Total:</strong> ${formatPrecio(o.total)} ${escHtml(o.currency || '')}</p>
+            <p><strong>Estado:</strong> ${escHtml(o.status)}</p>
+            <p><strong>Preference ID:</strong> ${escHtml(o.preference_id || '')}</p>
+            <p><strong>Payment ID:</strong> ${escHtml(o.payment_id || '')}</p>
+        `;
+
+        // Items
+        const itemsBox = document.getElementById('ordenItems');
+        let itemsHtml = '';
+        try {
+            const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
+            if (items && items.length) {
+                itemsHtml = `<table class="tabla-productos"><thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th></tr></thead><tbody>` + items.map(it => `
+                    <tr><td>${escHtml(it.title || it.name || it.id)}</td><td>${escHtml(String(it.quantity || it.cantidad || 1))}</td><td>${formatPrecio(it.unit_price || it.price || 0)}</td></tr>
+                `).join('') + `</tbody></table>`;
+            } else {
+                itemsHtml = '<div class="empty-row">Sin items.</div>';
+            }
+        } catch (e) {
+            itemsHtml = '<div class="empty-row">No se pudieron parsear los items.</div>';
+        }
+        itemsBox.innerHTML = itemsHtml;
+
+        document.getElementById('ordenRaw').textContent = JSON.stringify(o, null, 2);
+        document.getElementById('ordenStatusSelect').value = o.status || 'pending';
+
+        // Set actions
+        document.getElementById('btnActualizarOrden').onclick = async () => {
+            const nuevo = document.getElementById('ordenStatusSelect').value;
+            try {
+                const r = await fetch(`${API_MP_URL}/order/${encodeURIComponent(o.external_reference)}`, {
+                    method: 'PUT', headers: getAuthHeaders(true), body: JSON.stringify({ status: nuevo })
+                });
+                const d = await r.json();
+                if (!d.success) throw new Error(d.message || 'Error actualizando');
+                mostrarAlerta('Estado actualizado', 'success');
+                cargarOrdenes(paginaOrdenes);
+                abrirDetalleOrden(o.external_reference);
+            } catch (err) {
+                mostrarAlerta('Error actualizando orden: ' + err.message, 'error');
+            }
+        };
+
+        document.getElementById('btnForzarVerificacion').onclick = async () => {
+            try {
+                const paymentId = o.payment_id;
+                if (!paymentId) return mostrarAlerta('La orden no tiene payment_id para verificar.', 'error');
+                const r = await fetch(`${API_MP_URL}/verify_payment?payment_id=${encodeURIComponent(paymentId)}`);
+                const dd = await r.json();
+                if (!dd.success) throw new Error(dd.message || 'Error verificando');
+                mostrarAlerta('Verificación solicitada', 'success');
+                cargarOrdenes(paginaOrdenes);
+                abrirDetalleOrden(o.external_reference);
+            } catch (err) {
+                mostrarAlerta('Error verificando orden: ' + err.message, 'error');
+            }
+        };
+
+        // Open modal
+        abrirModal(document.getElementById('modalOrden'));
+    } catch (err) {
+        mostrarAlerta('Error al abrir orden: ' + err.message, 'error');
+    }
+}
+
+function registrarEventosOrdenes() {
+    const btnRef = document.getElementById('btnRefrescarOrdenes');
+    if (btnRef) btnRef.addEventListener('click', () => cargarOrdenes(paginaOrdenes));
+    const btnExp = document.getElementById('btnExportarOrdenes');
+    if (btnExp) btnExp.addEventListener('click', () => {
+        if (!ordenes || ordenes.length === 0) return mostrarAlerta('No hay órdenes para exportar', 'error');
+        const csvRows = [];
+        const headers = ['external_reference','preference_id','payment_id','total','currency','status','created_at'];
+        csvRows.push(headers.join(','));
+        ordenes.forEach(o => {
+            csvRows.push([o.external_reference || '', o.preference_id || '', o.payment_id || '', o.total || 0, o.currency || '', o.status || '', o.created_at || ''].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
+        });
+        const csv = csvRows.join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `ordenes_page_${paginaOrdenes}.csv`; document.body.appendChild(a); a.click(); a.remove();
+    });
+
+    // Modal close buttons
+    const btnCerrar = document.getElementById('btnCerrarModalOrden');
+    if (btnCerrar) btnCerrar.addEventListener('click', () => cerrarModal(document.getElementById('modalOrden')));
+    const btnCerrar2 = document.getElementById('btnCerrarOrden');
+    if (btnCerrar2) btnCerrar2.addEventListener('click', () => cerrarModal(document.getElementById('modalOrden')));
+}
+
+window.abrirDetalleOrden = abrirDetalleOrden;

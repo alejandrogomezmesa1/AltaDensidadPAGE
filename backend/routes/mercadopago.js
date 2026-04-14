@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { getConnection } = require('../config/db');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 let mercadopago;
 try { mercadopago = require('mercadopago'); } catch (e) { /* optional */ }
+const crypto = require('crypto');
+
+const WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET || process.env.MP_WEBHOOK_SIGNATURE || null;
 
 const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || process.env.MERCADOPAGO_ACCESS_TOKEN || process.env.MP_TOKEN;
 
@@ -138,7 +142,7 @@ router.get('/verify_payment', async (req, res) => {
 });
 
 // GET /api/mercadopago/order/:external_reference
-router.get('/order/:external_reference', async (req, res) => {
+router.get('/order/:external_reference', requireAdmin, async (req, res) => {
     try {
         const { external_reference } = req.params;
         const pool = await getConnection();
@@ -151,16 +155,98 @@ router.get('/order/:external_reference', async (req, res) => {
     }
 });
 
+// GET /api/mercadopago/orders?page=1&limit=20&status=approved
+router.get('/orders', requireAdmin, async (req, res) => {
+    try {
+        const page = Math.max(1, parseInt(req.query.page || '1'));
+        const limit = Math.max(1, Math.min(100, parseInt(req.query.limit || '20')));
+        const offset = (page - 1) * limit;
+        const status = req.query.status;
+
+        const pool = await getConnection();
+        const where = status ? 'WHERE status = ?' : '';
+        const paramsCount = status ? [status] : [];
+
+        const [countRows] = await pool.query(`SELECT COUNT(*) AS total FROM Ordenes ${where}`, paramsCount);
+        const total = (countRows && countRows[0] && countRows[0].total) ? countRows[0].total : 0;
+
+        const [rows] = await pool.query(`SELECT * FROM Ordenes ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`, [...paramsCount, limit, offset]);
+        return res.json({ success: true, data: rows, meta: { page, limit, total, pages: Math.ceil(total / limit) } });
+    } catch (err) {
+        console.error('Error listando ordenes:', err);
+        return res.status(500).json({ success: false, message: err.message || 'Error listando ordenes' });
+    }
+});
+
+// PUT /api/mercadopago/order/:external_reference  -- actualizar estado manualmente
+router.put('/order/:external_reference', requireAdmin, async (req, res) => {
+    try {
+        const { external_reference } = req.params;
+        const { status } = req.body || {};
+        const allowed = ['pending', 'approved', 'cancelled', 'failed', 'refunded'];
+        if (!status || !allowed.includes(status)) return res.status(400).json({ success: false, message: 'Estado inválido' });
+        const pool = await getConnection();
+        const [upd] = await pool.query('UPDATE Ordenes SET status = ?, updated_at = NOW() WHERE external_reference = ?', [status, external_reference]);
+        if (!upd || (upd && upd.affectedRows === 0)) return res.status(404).json({ success: false, message: 'Orden no encontrada' });
+        const [rows] = await pool.query('SELECT * FROM Ordenes WHERE external_reference = ? LIMIT 1', [external_reference]);
+        return res.json({ success: true, order: rows && rows.length ? rows[0] : null });
+    } catch (err) {
+        console.error('Error actualizando orden:', err);
+        return res.status(500).json({ success: false, message: err.message || 'Error actualizando orden' });
+    }
+});
+
 // Webhook endpoint — procesa notificaciones desde Mercado Pago y actualiza órdenes
 router.post('/webhook', async (req, res) => {
     try {
-        console.log('[MP WEBHOOK] incoming:', { body: req.body, query: req.query });
+        console.log('[MP WEBHOOK] incoming headers:', { headers: req.headers, query: req.query });
+
+        // Verificación HMAC opcional — si `WEBHOOK_SECRET` está configurada
+        if (WEBHOOK_SECRET) {
+            const headerCandidates = [
+                'x-hub-signature-256',
+                'x-hub-signature',
+                'x-mercadopago-signature',
+                'x-mp-signature',
+                'x-signature'
+            ];
+            let sigHeader = null;
+            for (const h of headerCandidates) {
+                if (req.headers[h]) { sigHeader = req.headers[h]; break; }
+            }
+            if (!sigHeader) {
+                console.warn('[MP WEBHOOK] signature header missing');
+                return res.status(401).send('Signature required');
+            }
+            let received = String(sigHeader);
+            const eqIdx = received.indexOf('=');
+            if (eqIdx !== -1) received = received.slice(eqIdx + 1);
+
+            const payloadBuf = (req.rawBody && req.rawBody.length) ? req.rawBody : Buffer.from(JSON.stringify(req.body || {}));
+            const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(payloadBuf).digest('hex');
+
+            try {
+                const recvBuf = Buffer.from(received, 'hex');
+                const expBuf = Buffer.from(expected, 'hex');
+                if (recvBuf.length !== expBuf.length || !crypto.timingSafeEqual(recvBuf, expBuf)) {
+                    console.warn('[MP WEBHOOK] signature mismatch');
+                    return res.status(401).send('Invalid signature');
+                }
+            } catch (ex) {
+                console.warn('[MP WEBHOOK] signature parse error', ex && ex.message);
+                return res.status(401).send('Invalid signature format');
+            }
+        } else {
+            console.log('[MP WEBHOOK] WEBHOOK_SECRET not configured — skipping signature verification');
+        }
+
         const paymentId = req.body?.data?.id || req.query?.id || req.body?.id || req.query?.payment_id || req.body?.collection_id;
         if (!paymentId) return res.status(200).send('OK');
         if (!ACCESS_TOKEN) {
             console.log('[MP WEBHOOK] MP_ACCESS_TOKEN no configurado — recibido id:', paymentId);
             return res.status(200).send('OK');
         }
+
         const mpUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
         const mpResp = await fetch(mpUrl, { headers: { 'Authorization': `Bearer ${ACCESS_TOKEN}` } });
         const payment = await mpResp.json();

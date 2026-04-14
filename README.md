@@ -586,21 +586,34 @@ node seed-admin.js
 
 ## Variables de Entorno
 
-Archivo: `backend/.env`
+
+Archivo: `backend/.env` (copia desde `backend/.env.example`)
 
 ```env
-# Base de datos MySQL
+# ---------- MySQL (Conexion) ----------
 DB_HOST=localhost
 DB_PORT=3306
 DB_DATABASE=altadensidad
 DB_USER=root
-DB_PASSWORD=(encriptada)
+DB_PASSWORD=tu_password
 
-# Servidor
+# ---------- Server ----------
 PORT=3000
+FRONTEND_URL=http://localhost:5500
 
-# Autenticación
+# ---------- Autenticación / Seguridad ----------
 JWT_SECRET=tu_jwt_secret_seguro
+# Llave opcional para peticiones administrativas (header: x-admin-key)
+ADMIN_API_KEY=
+
+# ---------- Mercado Pago ----------
+MP_ACCESS_TOKEN=
+MP_NOTIFICATION_URL=
+
+# ---------- Email (SendGrid) ----------
+SENDGRID_API_KEY=
+
+# ---------- Entorno ----------
 NODE_ENV=development
 ```
 
@@ -687,3 +700,42 @@ npm install mercadopago
 Notas:
 - Asegúrate de usar las URLs correctas en `FRONTEND_URL` y `MP_NOTIFICATION_URL` cuando despliegues a producción.
 - Verifica la moneda y los montos (COP) en la cuenta de Mercado Pago y ajusta `currency_id` si fuera necesario.
+
+### Verificación de firma (webhooks)
+
+Es recomendable habilitar verificación HMAC en los webhooks para evitar procesamiento de notificaciones falsificadas.
+
+- Variable: `MP_WEBHOOK_SECRET` — si la configuras en el backend, el servidor intentará validar la cabecera de firma (por ejemplo `x-hub-signature-256`, `x-mercadopago-signature` o `x-mp-signature`) usando HMAC-SHA256 sobre el body raw.
+- Si la cabecera no está presente o la verificación falla, el webhook responderá `401` y no actualizará la orden.
+- Para habilitar: establece `MP_WEBHOOK_SECRET` en `backend/.env` y, si tu proveedor (o proxy) permite, configura la firma en las notificaciones. Si Mercado Pago no envía firma, deja el valor vacío (verificación omitida).
+
+---
+
+## Despliegue (Railway & Vercel)
+
+Recomendación: desplegar el backend en una plataforma con soporte para Node.js (Railway, Render, Heroku) y servir el frontend como sitio estático (Vercel, Netlify, o el propio Railway). Aquí un ejemplo con Railway (backend) + Vercel (frontend).
+
+1) Railway (backend)
+
+- Crea un nuevo proyecto y conecta tu repo de GitHub.
+- Añade el servicio MySQL (o conecta la base de datos externa) y copia las credenciales a las variables de entorno en Railway: `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USER`, `DB_PASSWORD`.
+- Define variables de entorno en Railway (Settings → Variables):
+  - `JWT_SECRET` — valor fuerte
+  - `MP_ACCESS_TOKEN` — token de producción o sandbox
+  - `MP_NOTIFICATION_URL` — `https://<tu-backend>.railway.app/api/mercadopago/webhook`
+  - `FRONTEND_URL` — URL pública del frontend (ej: `https://tu-frontend.vercel.app`)
+  - `ADMIN_API_KEY` — opcional, clave administrativa para llamadas protegidas (header `x-admin-key`)
+  - `SENDGRID_API_KEY` — opcional, para notificaciones por email
+- Start command: `node server.js`
+- Si prefieres migraciones manuales, ejecuta el script SQL `database/create_orders_table.sql` en la DB de producción; el servidor también intenta crear la tabla `Ordenes` al arrancar.
+
+2) Vercel (frontend)
+
+- Conecta el repositorio y configura el proyecto como sitio estático.
+- Asegúrate de que `FRONTEND_URL` en Railway apunte a la URL pública de Vercel.
+
+3) Notas y comprobaciones
+
+- Registra la `MP_NOTIFICATION_URL` en el panel de Mercado Pago para recibir notificaciones de pago.
+- Verifica en producción con una preferencia real y revisa el webhook: `POST /api/mercadopago/webhook` actualiza el status en la tabla `Ordenes`.
+- Seguridad: protege los endpoints administrativos (`/api/mercadopago/orders`, `/api/mercadopago/order/:external_reference` y `PUT /api/mercadopago/order/:external_reference`) con JWT o `x-admin-key`. Se recomienda crear un usuario admin y usar `JWT_SECRET` seguro.
