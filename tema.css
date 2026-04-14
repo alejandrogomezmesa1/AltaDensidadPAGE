@@ -532,9 +532,12 @@ html.modo-claro .btn-carrito-nav:hover {
     /* Logo: compacto en móvil */
     .logo-container {
         width: auto !important;
-        flex: 0 0 auto !important;
+        flex: 1 1 auto !important;
         min-width: 0 !important;
         padding: 5px 10px 5px 6px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
     }
 
     /* Logo imagen en móvil */
@@ -543,9 +546,17 @@ html.modo-claro .btn-carrito-nav:hover {
         height: 36px !important;
     }
 
-    /* Título del logo: se oculta si no cabe */
+    /* Título del logo: mostrar en móvil con truncamiento si no cabe */
     .header-tittle {
-        display: none !important;
+        display: inline-block !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+        color: var(--texto) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: calc(100vw - 140px) !important;
+        margin-left: 6px !important;
     }
 
     /* Mostrar el hamburger */
