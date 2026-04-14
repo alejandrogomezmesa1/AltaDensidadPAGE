@@ -78,7 +78,7 @@ if (process.env.VERCEL !== '1') {
                 } else {
                     console.error('Error en el servidor:', err.message);
                 }
-                process.exit(1);
+                // No forzamos exit aquí para permitir mejores ciclos de desarrollo (nodemon)
             });
         } catch (error) {
             console.error('Error al iniciar el servidor:', error.message);

@@ -7,7 +7,21 @@ const { getConnection } = require('../config/db');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Inicializar SendGrid solo si la clave parece válida (evita el mensaje "API key does not start with 'SG.'")
+let sgConfigured = false;
+try {
+    const sgKey = process.env.SENDGRID_API_KEY;
+    if (sgKey && typeof sgKey === 'string' && sgKey.startsWith('SG.')) {
+        sgMail.setApiKey(sgKey);
+        sgConfigured = true;
+    } else if (sgKey) {
+        console.warn('SENDGRID_API_KEY no parece válida — omito inicialización de SendGrid.');
+    } else {
+        console.warn('SENDGRID_API_KEY no definida — SendGrid deshabilitado.');
+    }
+} catch (err) {
+    console.warn('Error inicializando SendGrid:', err && err.message ? err.message : err);
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'altadensidad_secret';
 
@@ -122,7 +136,12 @@ router.post('/forgot-password', async (req, res) => {
                    <h2 style="color:#bfa23a;letter-spacing:2px;">${code}</h2>
                    <p>Este código expirará en 10 minutos.</p>`
         };
-        await sgMail.send(msg);
+        if (sgConfigured) {
+            await sgMail.send(msg);
+        } else {
+            // En desarrollo, si SendGrid no está configurado, logueamos el mensaje para prueba.
+            console.log('[EMAIL DEBUG] SendGrid no configurado. Contenido del email:', msg);
+        }
 
         res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación.' });
     } catch (error) {

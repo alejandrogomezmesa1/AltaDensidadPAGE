@@ -8,8 +8,19 @@ try {
 }
 
 const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || process.env.MERCADOPAGO_ACCESS_TOKEN || process.env.MP_TOKEN;
-if (mercadopago && ACCESS_TOKEN) {
-    try { mercadopago.configure({ access_token: ACCESS_TOKEN }); } catch (err) { console.warn('Error configurando MercadoPago:', err.message); }
+// Detectar si la SDK exporta la API esperada (preferences.create)
+const useSdk = Boolean(mercadopago && typeof mercadopago.preferences === 'object' && typeof mercadopago.preferences.create === 'function');
+if (useSdk && ACCESS_TOKEN) {
+    // Solo configurar si la función existe
+    try {
+        if (typeof mercadopago.configure === 'function') {
+            mercadopago.configure({ access_token: ACCESS_TOKEN });
+        }
+    } catch (err) {
+        console.warn('Error configurando MercadoPago:', err && err.message ? err.message : err);
+    }
+} else if (mercadopago && !useSdk) {
+    console.warn('MercadoPago: SDK cargada pero no tiene la API esperada. Usando fallback HTTP cuando sea necesario.');
 } else if (mercadopago) {
     console.warn('MercadoPago: no se encontró variable de entorno MP_ACCESS_TOKEN.');
 }
@@ -77,8 +88,29 @@ router.post('/webhook', async (req, res) => {
         const topic = req.body?.topic || req.query?.topic || req.body?.type;
 
         if (!paymentId) {
-            // No tenemos id identificable — log y OK
-            console.log('[MP WEBHOOK] sin paymentId — payload guardado para revisión');
+                // Si la SDK está disponible y tiene la función, úsala; si no, usar el endpoint HTTP
+                if (useSdk && mercadopago && typeof mercadopago.preferences.create === 'function') {
+                    const mpRes = await mercadopago.preferences.create(preference);
+                    return res.json({ success: true, preference: mpRes.body });
+                }
+
+                // Fallback HTTP a la API de Mercado Pago
+                try {
+                    const url = 'https://api.mercadopago.com/checkout/preferences';
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`
+                        },
+                        body: JSON.stringify(preference)
+                    });
+                    const body = await resp.json();
+                    return res.json({ success: true, preference: body });
+                } catch (httpErr) {
+                    console.error('Error creando preferencia via HTTP MP:', httpErr);
+                    return res.status(500).json({ success: false, message: 'Error creando preferencia (HTTP)' });
+                }
             return res.status(200).send('OK');
         }
 
