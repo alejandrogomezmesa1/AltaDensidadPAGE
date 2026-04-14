@@ -2043,14 +2043,16 @@ h1, h2, h3, .header-title, .header-tittle {
 
 .kits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
     margin-bottom: 40px;
+    align-items: start;
 }
 
 /* Unificar kit-card con product-card */
 .kit-card {
     background-color: var(--blanco-neutro);
+    padding: 20px;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid rgba(212, 175, 55, 0.05);
@@ -2148,6 +2150,24 @@ h1, h2, h3, .header-title, .header-tittle {
     background: rgba(212, 175, 55, 0.05);
     border: 1px solid rgba(212, 175, 55, 0.1);
     border-radius: 10px;
+}
+
+/* Placeholder cards to balance the grid when items < cols */
+.kit-card-placeholder {
+    visibility: hidden;
+    height: 0;
+}
+
+.kits-section .paginacion {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.kits-section .paginacion .pag-btn {
+    padding: 8px 12px;
 }
 
 .price-label {

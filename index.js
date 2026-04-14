@@ -12,41 +12,93 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const data = await res.json();
                 if (!data.success) throw new Error(data.message);
                 const kits = data.data;
+                // Guardar globalmente para paginación
+                window.kitsPublicos = kits;
+                window.kitsPaginaActual = 1;
+                window.KITS_POR_PAGINA = 6;
                 if (!kits.length) {
                     kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">No hay kits disponibles.</div>';
                     return;
                 }
-                kitsGrid.innerHTML = '';
-                kits.forEach(kit => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card kit-card';
-                    card.innerHTML = `
-                        <div class="product-image">
-                            <img src="${kit.imagen}" alt="${kit.nombre}">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-name">${kit.nombre}</div>
-                            <div class="product-category">Kit</div>
-                            <div class="product-price">$${Number(kit.precio).toLocaleString('es-CO')} COP</div>
-                            <div class="kit-benefits-list">
-                                ${(kit.beneficios||[]).map(b=>`<span class='prod-tag'>${b}</span>`).join('')}
-                            </div>
-                        </div>
-                        <button class="kit-btn" type="button">Ver detalles</button>
-                    `;
-                    card.querySelector('.kit-btn').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        abrirModalKitPublico(kit);
-                    });
-                    card.addEventListener('click', (e) => {
-                        if (!e.target.classList.contains('kit-btn')) abrirModalKitPublico(kit);
-                    });
-                    kitsGrid.appendChild(card);
-                });
+                // Render inicial con paginación
+                renderKits(kits);
             } catch (err) {
                 kitsGrid.innerHTML = '<div style="color:#c0392b;padding:2rem;">Error al cargar los kits.</div>';
             }
         }
+
+        // RENDER KITS CON PAGINACIÓN
+        function renderKits(kitsArray) {
+            const grid = document.getElementById('kitsGrid');
+            const pagina = window.kitsPaginaActual || 1;
+            const perPage = window.KITS_POR_PAGINA || 6;
+            const total = kitsArray.length;
+            const totalPaginas = Math.max(1, Math.ceil(total / perPage));
+            if (pagina > totalPaginas) window.kitsPaginaActual = 1;
+            const inicio = (pagina - 1) * perPage;
+            const fin = inicio + perPage;
+            const slice = kitsArray.slice(inicio, fin);
+
+            grid.innerHTML = '';
+            slice.forEach(kit => {
+                const card = document.createElement('div');
+                card.className = 'product-card kit-card';
+                card.innerHTML = `
+                    <div class="kit-image-placeholder"><img src="${kit.imagen}" alt="${kit.nombre}"></div>
+                    <div class="kit-name">${kit.nombre}</div>
+                    <div class="kit-description">${(kit.descripcion||'').slice(0,120)}</div>
+                    <ul class="kit-benefits">${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}</ul>
+                    <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
+                    <button class="kit-btn" type="button">Ver detalles</button>
+                `;
+                card.querySelector('.kit-btn').addEventListener('click', (e) => { e.stopPropagation(); abrirModalKitPublico(kit); });
+                card.addEventListener('click', (e) => { if (!e.target.classList.contains('kit-btn')) abrirModalKitPublico(kit); });
+                grid.appendChild(card);
+            });
+
+            // Rellenar con placeholders para mantener grid consistente (dos filas de 3)
+            const cols = 3;
+            const resto = slice.length % cols;
+            if (resto !== 0) {
+                for (let i = 0; i < cols - resto; i++) {
+                    const ph = document.createElement('div');
+                    ph.className = 'kit-card-placeholder';
+                    grid.appendChild(ph);
+                }
+            }
+
+            renderKitsPaginacion(total);
+        }
+
+        function renderKitsPaginacion(totalItems) {
+            const cont = document.getElementById('kitsPaginacion');
+            const perPage = window.KITS_POR_PAGINA || 6;
+            const totalPaginas = Math.max(1, Math.ceil(totalItems / perPage));
+            const pagina = window.kitsPaginaActual || 1;
+            if (totalPaginas <= 1) { cont.innerHTML = ''; return; }
+
+            let html = '';
+            html += `<button class="pag-btn ${pagina === 1 ? 'pag-disabled' : ''}" onclick="cambiarPaginaKits(${pagina - 1})" ${pagina === 1 ? 'disabled' : ''}><i class='fas fa-chevron-left'></i></button>`;
+
+            for (let p = 1; p <= totalPaginas; p++) {
+                html += `<button class="pag-btn ${p === pagina ? 'pag-active' : ''}" onclick="cambiarPaginaKits(${p})">${p}</button>`;
+            }
+
+            html += `<button class="pag-btn ${pagina === totalPaginas ? 'pag-disabled' : ''}" onclick="cambiarPaginaKits(${pagina + 1})" ${pagina === totalPaginas ? 'disabled' : ''}><i class='fas fa-chevron-right'></i></button>`;
+            cont.innerHTML = html;
+        }
+
+        // Exponer función para controles
+        window.cambiarPaginaKits = function(p) {
+            const total = (window.kitsPublicos || []).length;
+            const totalPaginas = Math.max(1, Math.ceil(total / (window.KITS_POR_PAGINA || 6)));
+            if (p < 1 || p > totalPaginas) return;
+            window.kitsPaginaActual = p;
+            renderKits(window.kitsPublicos || []);
+            // Scroll suave hasta sección kits
+            const kitsSection = document.querySelector('.kits-section');
+            if (kitsSection) kitsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
 
         // Modal de detalles de kit
         function abrirModalKitPublico(kit) {

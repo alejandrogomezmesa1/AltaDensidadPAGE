@@ -727,7 +727,7 @@ ul {
 }
 .nos-stat p {
     font-size: 0.72rem;
-    color: rgba(248,249,249,0.5);
+    color: rgba(248,249,249,0.85);
     text-transform: uppercase;
     letter-spacing: 1.2px;
     text-align: center;
@@ -745,6 +745,92 @@ ul {
         font-size: 1.9rem;
     }
 }
+
+/* Modo claro: aplicar cuando <html> tiene la clase .modo-claro */
+html.modo-claro .nos-hero {
+    background: linear-gradient(160deg, #fff 0%, #f8f6ed 60%, #fff 100%) !important;
+    border-bottom: 1px solid #e6e2c6 !important;
+}
+html.modo-claro .nos-eyebrow {
+    color: #B08D2F !important;
+    border: 1px solid #e6e2c6 !important;
+    background: #fff !important;
+}
+html.modo-claro .nos-title {
+    color: #222 !important;
+}
+html.modo-claro .nos-intro {
+    color: #444 !important;
+}
+html.modo-claro .nos-stats {
+    border: 1px solid #f3e5ab !important;
+    background: #fff !important;
+}
+html.modo-claro .nos-stat {
+    background: #fff !important;
+}
+
+/* Ajustes adicionales para modo claro: tarjetas y secciones */
+html.modo-claro .nosotros,
+html.modo-claro .info {
+    background-color: #fff !important;
+    color: #222 !important;
+}
+
+html.modo-claro .nosotros div,
+html.modo-claro .info div {
+    background: #fff !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06) !important;
+    border: 1px solid #e6e2c6 !important;
+    color: #222 !important;
+}
+
+html.modo-claro .nos-stat p {
+    color: #6b6b6b !important;
+}
+
+/* Correcciones para Tabs y Panels en modo claro */
+html.modo-claro .nos-tabs-header {
+    border-bottom-color: rgba(184,150,12,0.18) !important;
+}
+
+html.modo-claro .nos-tab {
+    color: #444 !important;
+    background: transparent !important;
+}
+
+html.modo-claro .nos-tab:hover {
+    color: var(--azul-dos) !important;
+    background: rgba(184,150,12,0.06) !important;
+}
+
+html.modo-claro .nos-tab.active {
+    color: var(--azul-dos) !important;
+    border-bottom-color: var(--azul-dos) !important;
+    background: rgba(184,150,12,0.08) !important;
+}
+
+html.modo-claro .nos-tab-panels {
+    background: #fff !important;
+    border-color: rgba(184,150,12,0.12) !important;
+}
+
+html.modo-claro .nos-panel {
+    color: #222 !important;
+}
+
+html.modo-claro .nos-panel h3 {
+    color: var(--azul-dos) !important;
+}
+
+html.modo-claro .nos-panel p {
+    color: #444 !important;
+}
+
+html.modo-claro .nos-panel-icon {
+    color: var(--azul-dos) !important;
+}
+
 
 /* Tabs Misión/Visión/Compromiso */
 .nos-mvv {
