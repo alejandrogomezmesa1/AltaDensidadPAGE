@@ -47,6 +47,18 @@ router.post('/create_preference', async (req, res) => {
             notification_url: process.env.MP_NOTIFICATION_URL || `${req.protocol}://${req.get('host')}/api/mercadopago/webhook`
         };
 
+        // Si no hay token de Mercado Pago en entorno, devolver una preferencia mock
+        if (!ACCESS_TOKEN) {
+            const mockId = 'mock_pref_' + Date.now();
+            const mockPref = {
+                id: mockId,
+                init_point: `${hostBase}/_mock_mp_checkout.html?pref_id=${mockId}`,
+                sandbox_init_point: `${hostBase}/_mock_mp_checkout.html?pref_id=${mockId}`,
+                items: mpItems
+            };
+            return res.json({ success: true, preference: mockPref, mock: true, message: 'MP_ACCESS_TOKEN no configurado — se devuelve preferencia mock para desarrollo local' });
+        }
+
         const mpRes = await mercadopago.preferences.create(preference);
         return res.json({ success: true, preference: mpRes.body });
     } catch (err) {
@@ -56,10 +68,39 @@ router.post('/create_preference', async (req, res) => {
 });
 
 // Webhook endpoint (simple logging)
-router.post('/webhook', (req, res) => {
-    console.log('[MP WEBHOOK]', req.method, req.path, req.body || req.query);
-    // Aquí se pueden procesar notificaciones (actualizar ordenes, etc.)
-    res.status(200).send('OK');
+router.post('/webhook', async (req, res) => {
+    try {
+        console.log('[MP WEBHOOK] incoming:', { body: req.body, query: req.query });
+
+        // Mercado Pago puede enviar id en varios lugares. Soportamos los casos comunes
+        const paymentId = req.body?.data?.id || req.query?.id || req.body?.id || req.query?.payment_id;
+        const topic = req.body?.topic || req.query?.topic || req.body?.type;
+
+        if (!paymentId) {
+            // No tenemos id identificable — log y OK
+            console.log('[MP WEBHOOK] sin paymentId — payload guardado para revisión');
+            return res.status(200).send('OK');
+        }
+
+        if (!ACCESS_TOKEN) {
+            console.log('[MP WEBHOOK] MP_ACCESS_TOKEN no configurado — recibido id:', paymentId);
+            return res.status(200).send('OK');
+        }
+
+        // Fetch details del pago desde la API de Mercado Pago (usa Bearer token)
+        const mpUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
+        const mpResp = await fetch(mpUrl, { headers: { 'Authorization': `Bearer ${ACCESS_TOKEN}` } });
+        const payment = await mpResp.json();
+        console.log('[MP WEBHOOK] payment details:', payment);
+
+        // TODO: Mapear payment.external_reference o metadata a una orden en la base de datos
+        // Ejemplo: buscar order por `external_reference` y actualizar estado según payment.status
+
+        return res.status(200).send('OK');
+    } catch (err) {
+        console.error('[MP WEBHOOK] error procesando webhook:', err);
+        return res.status(500).send('ERROR');
+    }
 });
 
 module.exports = router;
