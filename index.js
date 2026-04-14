@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const beneficios = kit.beneficios || [];
             document.getElementById('kitModalBeneficios').innerHTML = beneficios.length ? `<span class='prod-tag-label'>Beneficios:</span> ` + beneficios.map(b => `<span class='prod-tag'>${b}</span>`).join('') : '';
             document.getElementById('kitModalComprar').href = `https://wa.me/3046477694?text=Hola, estoy interesado en el Kit ${encodeURIComponent(kit.nombre)}`;
+            aplicarTemaModal(modal);
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -283,7 +284,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         function abrirModalProducto(product) {
             const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
-
             document.getElementById('prodModalImg').src = product.image;
             document.getElementById('prodModalImg').alt = product.name;
             document.getElementById('prodModalNombre').textContent = product.name;
@@ -292,7 +292,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             document.getElementById('prodModalGenero').textContent = product.gender ? `Género: ${product.gender}` : '';
             document.getElementById('prodModalDesc').textContent = product.description || 'Sin descripción disponible.';
             document.getElementById('prodModalPrecio').textContent = `$${Number(product.price).toLocaleString('es-CO')} COP`;
-
             const tallasEl = document.getElementById('prodModalTallas');
             if (product.sizes && product.sizes.length) {
                 tallasEl.innerHTML = `<span class="prod-tag-label">Tallas:</span>` +
@@ -300,21 +299,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             } else {
                 tallasEl.innerHTML = '';
             }
-
-            const envasesEl = document.getElementById('prodModalEnvases');
-            if (product.bottleTypes && product.bottleTypes.length) {
-                envasesEl.innerHTML = `<span class="prod-tag-label">Envases:</span>` +
-                    product.bottleTypes.map(t => `<span class="prod-tag">${t}</span>`).join('');
-            } else {
-                envasesEl.innerHTML = '';
-            }
-
-            document.getElementById('prodModalCarrito').onclick = () => {
-                agregarAlCarrito({ id: product.id, name: product.name, image: product.image, price: product.price });
-                cerrarModal();
-            };
-
-            productoModal.classList.add('open');
+            const modal = document.getElementById('productoModal');
+            aplicarTemaModal(modal);
+            modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
@@ -350,3 +337,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         displayProducts(productosFiltrados);
         cargarKitsPublico();
 });
+
+// Utilidad para aplicar tema al modal
+function aplicarTemaModal(modal) {
+    const esClaro = document.documentElement.classList.contains('modo-claro');
+    if (esClaro) {
+        modal.classList.add('modal-claro');
+        modal.classList.remove('modal-oscuro');
+    } else {
+        modal.classList.remove('modal-claro');
+        modal.classList.add('modal-oscuro');
+    }
+}
