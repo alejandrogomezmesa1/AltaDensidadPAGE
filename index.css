@@ -631,7 +631,21 @@ h1, h2, h3, .header-title, .header-tittle {
 .price-label { font-size: 0.75rem; color: rgba(248,249,249,0.6); }
 .price-amount { font-size: 1.15rem; color: var(--azul-dos); font-weight: 800; }
 
-.kit-btn { /* eliminado: botón integrado en la card; la card abre el modal al hacer click */ }
+.kit-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(212,175,55,0.25);
+    background: transparent;
+    color: var(--azul-dos);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.12s, transform 0.12s, box-shadow 0.12s;
+}
+.kit-add-btn i { font-size: 1rem; }
+.kit-add-btn:hover { background: rgba(212,175,55,0.06); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,6,23,0.35); }
 
 .kit-card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(2,6,23,0.6); }
 .kit-card:hover .kit-image-placeholder img { transform: scale(1.04); }
@@ -2351,7 +2365,7 @@ h1, h2, h3, .header-title, .header-tittle {
         padding: 20px;
     }
     
-    /* .kit-btn removido en mobile */
+    .kit-add-btn { padding: 12px; font-size: 1rem; width: 100%; justify-content: center; display: inline-flex; align-items: center; gap: 8px; }
 }
 
 /* === NAV SESIÓN === */

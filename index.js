@@ -54,13 +54,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <h3 class="kit-name">${kit.nombre}</h3>
                             <p class="kit-description">${(kit.descripcion||'').slice(0,140)}</p>
                             <ul class="kit-benefits">${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}</ul>
-                            <div class="kit-footer">
-                                <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
-                            </div>
+                                    <div class="kit-footer">
+                                        <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
+                                        <button class="kit-add-btn" type="button" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kit.id || kit._id || Math.floor(Math.random()*1000000), name: kit.nombre || kit.name, image: kit.imagen || kit.image, price: kit.precio || kit.price || 0})})'>
+                                            <i class="fas fa-cart-plus"></i> Agregar
+                                        </button>
+                                    </div>
                         </div>
                     `;
-                    // Abrir modal al hacer click en la tarjeta completa
-                    card.addEventListener('click', () => abrirModalKitPublico(kit));
+                    // Abrir modal al hacer click en la tarjeta completa (ignorar clicks en el botón de agregar)
+                    card.addEventListener('click', (e) => { if (e.target.closest('.kit-add-btn')) return; abrirModalKitPublico(kit); });
                     grid.appendChild(card);
                 });
 
