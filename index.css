@@ -1,3 +1,30 @@
+.modal-claro .prod-modal-img {
+    background: #f8f8f8 !important;
+    border-right: 1px solid #eee !important;
+}
+@media (max-width: 600px) {
+    .modal-claro .prod-modal-img {
+        border-right: none !important;
+        border-bottom: 1px solid #eee !important;
+    }
+}
+.modal-claro .prod-modal-genero {
+    color: rgba(34,34,34,0.55) !important;
+}
+.modal-claro .prod-modal-desc {
+    color: rgba(34,34,34,0.82) !important;
+}
+.modal-claro .prod-modal-tags-group {
+    color: #222 !important;
+}
+.modal-claro .prod-tag-label {
+    color: rgba(34,34,34,0.45) !important;
+}
+.modal-claro .prod-tag {
+    background: rgba(212,175,55,0.13) !important;
+    border: 1px solid rgba(212,175,55,0.25) !important;
+    color: #B08D2F !important;
+}
 /* Tema claro/oscuro para modales de producto y kit */
 .modal-claro .prod-modal,
 .modal-claro .prod-modal-body,
