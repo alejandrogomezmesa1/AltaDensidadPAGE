@@ -3,6 +3,14 @@
     border-right: 1px solid #eee !important;
 }
 
+/* Override adicional para pantallas muy pequeñas: reducir padding de las cards */
+@media (max-width: 480px) {
+    .product-card, .kit-card { padding: 8px !important; }
+    .product-info, .kit-body { padding: 6px 0 !important; }
+    .product-image img, .kit-image-placeholder img { max-height: 200px !important; }
+}
+
+
 /* ============================
    Global Mobile Improvements
    ============================ */
@@ -27,16 +35,16 @@
     .header .header-actions { gap: 8px; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+    html { -webkit-text-size-adjust: 100%; }
+    /* reducir gutters en móvil para aprovechar ancho (ligeramente menor) */
+    .catalog-container, .card-container, .kits-container, .cards-container { padding-left: 3.5%; padding-right: 3.5%; }
+    /* usar una columna para tarjetas en móvil para aprovechar todo el ancho */ 
     #productGrid { grid-template-columns: 1fr; gap: 12px; }
-    .kits-grid { grid-template-columns: 1fr; gap: 18px; }
-    .collection-banner h1 { font-size: 1.4rem; }
-    .header { padding: 8px 4%; min-height: 56px; }
-    .logo-container img { max-width: 34px; height: 34px; }
-    .header-tittle { display: none; }
-    .header-actions { gap: 6px; }
-    .prod-modal-close { width: 44px; height: 44px; top: 8px; right: 8px; }
-    .prod-modal-img img { max-height: 200px; }
+    .kits-grid { grid-template-columns: 1fr; gap: 12px; }
+    .product-card, .kit-card { min-height: auto; padding: 10px; }
+    .product-image img, .kit-image-placeholder img { max-height: 220px; object-fit: cover; width: 100%; }
+    .product-card .product-info, .kit-body { padding: 8px 0; }
     .prod-modal-info { padding: 16px; }
     .prod-modal-precio { font-size: 1.2rem; }
     .prod-modal-btn { padding: 12px 16px; width: 100%; justify-content: center; }
