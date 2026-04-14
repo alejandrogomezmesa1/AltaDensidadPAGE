@@ -662,3 +662,28 @@ Get-NetTCPConnection -LocalPort 3000 -State Listen | Select-Object -ExpandProper
 # Matar el proceso (reemplazar ID)
 Stop-Process -Id <ID> -Force
 ```
+
+---
+
+## Integración Mercado Pago
+
+Pasos rápidos para habilitar el checkout con Mercado Pago (Checkout Pro):
+
+- **Instalar dependencia en el backend**:
+
+```powershell
+cd backend
+npm install mercadopago
+```
+
+- **Variables de entorno**: copia `backend/.env.example` a `backend/.env` y añade `MP_ACCESS_TOKEN` (sandbox o producción) y `FRONTEND_URL`.
+
+- **Endpoint disponible**: `POST /api/mercadopago/create_preference` — espera un body `{ items: [{ id, name, price, quantity, image }] }` y devuelve la `preference` creada por Mercado Pago. El frontend redirige al `preference.init_point`.
+
+- **Webhook**: `POST /api/mercadopago/webhook` está creado como stub; registar la `MP_NOTIFICATION_URL` en el panel de Mercado Pago y completar la lógica para actualizar órdenes/estados.
+
+- **Frontend**: el botón "Pagar con Mercado Pago" en el drawer del carrito llama al endpoint y redirige al checkout. En desarrollo usar `MP_ACCESS_TOKEN` de sandbox y probar con tarjetas de prueba.
+
+Notas:
+- Asegúrate de usar las URLs correctas en `FRONTEND_URL` y `MP_NOTIFICATION_URL` cuando despliegues a producción.
+- Verifica la moneda y los montos (COP) en la cuenta de Mercado Pago y ajusta `currency_id` si fuera necesario.
