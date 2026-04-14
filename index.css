@@ -2,6 +2,54 @@
     background: #f8f8f8 !important;
     border-right: 1px solid #eee !important;
 }
+
+/* ============================
+   Global Mobile Improvements
+   ============================ */
+/* Base adjustments for small/medium screens to improve touch targets, grids and modals */
+@media (max-width: 768px) {
+    html { -webkit-text-size-adjust: 100%; }
+    .catalog-container, .card-container, .kits-container, .cards-container { padding-left: 6%; padding-right: 6%; }
+    #productGrid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .kits-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .product-card, .kit-card { min-height: auto; padding: 14px; }
+    .product-image img, .kit-image-placeholder img { max-height: 260px; object-fit: cover; width: 100%; }
+    .product-card .product-info, .kit-body { padding: 10px 0; }
+    .feature-card { padding: 14px; }
+    .btn-agregar-carrito, .product-button, .prod-modal-btn, .kit-add-btn { min-height: 44px; padding: 12px 14px; font-size: 1rem; }
+    .prod-modal { max-width: 100%; margin: 0; border-radius: 12px; }
+    .prod-modal-body { grid-template-columns: 1fr; }
+    .carrito-panel { width: 100%; right: -100%; }
+    .carrito-panel.abierto { right: 0; }
+    .modal-content input, .modal-content select, .modal-content button { width: 100%; box-sizing: border-box; padding: 10px; }
+    .header .header-actions { gap: 8px; }
+}
+
+@media (max-width: 480px) {
+    #productGrid { grid-template-columns: 1fr; gap: 12px; }
+    .kits-grid { grid-template-columns: 1fr; gap: 18px; }
+    .collection-banner h1 { font-size: 1.4rem; }
+    .header { padding: 8px 4%; min-height: 56px; }
+    .logo-container img { max-width: 34px; height: 34px; }
+    .header-tittle { display: none; }
+    .header-actions { gap: 6px; }
+    .prod-modal-close { width: 44px; height: 44px; top: 8px; right: 8px; }
+    .prod-modal-img img { max-height: 200px; }
+    .prod-modal-info { padding: 16px; }
+    .prod-modal-precio { font-size: 1.2rem; }
+    .prod-modal-btn { padding: 12px 16px; width: 100%; justify-content: center; }
+    .carrito-footer .carrito-btn-pedir, .carrito-footer .carrito-btn-vaciar { width: 100%; display: block; margin-bottom: 8px; }
+    .feature-card { flex-direction: row; gap: 12px; align-items: center; }
+    .product-card .btn-agregar-carrito { padding: 12px; font-size: 1rem; }
+    .nos-hero { padding: 40px 6% 36px; }
+}
+
+/* Small improvements for mid-large tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    #productGrid { grid-template-columns: repeat(3, 1fr); }
+    .kits-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 600px) {
     .modal-claro .prod-modal-img {
         border-right: none !important;
