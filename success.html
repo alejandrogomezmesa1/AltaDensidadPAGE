@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pago exitoso — Alta Densidad</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0} .card{background:#071023;padding:24px;border-radius:10px;max-width:720px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.6)} button{background:#c59d1f;border:0;padding:10px 14px;border-radius:6px;color:#071023;font-weight:700;cursor:pointer}</style>
+  </head>
+<body>
+  <div class="card">
+    <h1>Procesando resultado del pago...</h1>
+    <div id="content">Cargando información del pago, espera un momento...</div>
+    <div style="margin-top:12px"><button id="home">Volver al inicio</button></div>
+  </div>
+
+  <script>
+    const content = document.getElementById('content');
+    document.getElementById('home').addEventListener('click', ()=> location.href = '/index.html');
+
+    function qs(name){ return new URLSearchParams(location.search).get(name); }
+    const paymentId = qs('payment_id') || qs('collection_id') || qs('collection_id') || qs('collection_id');
+    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:3000/api'
+        : 'https://altadensidadpage-production.up.railway.app/api';
+
+    async function verify() {
+      if (!paymentId) { content.textContent = 'No se detectó identificador de pago en la URL.'; return; }
+      try {
+        content.textContent = 'Verificando con el servidor...';
+        const resp = await fetch(`${base}/mercadopago/verify_payment?payment_id=${encodeURIComponent(paymentId)}`);
+        const data = await resp.json();
+        if (!data.success) { content.textContent = 'Error verificando pago: ' + (data.message || ''); return; }
+        const order = data.order;
+        if (order && order.status === 'approved') {
+          // Vaciar carrito local
+          try { sessionStorage.removeItem('altadensidad_carrito'); } catch {};
+          content.innerHTML = `<h3>Pago aprobado ✅</h3><p>Referencia: <strong>${order.external_reference}</strong></p><p>Total: <strong>$${Number(order.total).toLocaleString('es-CO')}</strong></p>`;
+        } else {
+          content.innerHTML = `<h3>Pago no confirmado</h3><p>Estado: ${order ? order.status : 'desconocido'}</p>`;
+        }
+      } catch (err) { content.textContent = 'Error de red al verificar el pago.'; console.error(err); }
+    }
+    verify();
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pago fallido — Alta Densidad</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0} .card{background:#071023;padding:24px;border-radius:10px;max-width:720px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.6)} button{background:#c59d1f;border:0;padding:10px 14px;border-radius:6px;color:#071023;font-weight:700;cursor:pointer}</style>
+  </head>
+<body>
+  <div class="card">
+    <h1>Pago no aprobado</h1>
+    <div id="content">Si tu pago no fue aprobado, puedes intentarlo de nuevo o contactarnos.</div>
+    <div style="margin-top:12px"><button onclick="location.href='/index.html'">Volver al inicio</button></div>
+  </div>
+
+  <script>
+    const content = document.getElementById('content');
+    function qs(name){ return new URLSearchParams(location.search).get(name); }
+    const paymentId = qs('payment_id') || qs('collection_id');
+    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:3000/api'
+        : 'https://altadensidadpage-production.up.railway.app/api';
+    async function verify() {
+      if (!paymentId) return;
+      try {
+        const resp = await fetch(`${base}/mercadopago/verify_payment?payment_id=${encodeURIComponent(paymentId)}`);
+        const data = await resp.json();
+        if (!data.success) return;
+        const order = data.order;
+        content.innerHTML = `<p>Estado: <strong>${order ? order.status : 'desconocido'}</strong></p>`;
+      } catch (err) { console.error(err); }
+    }
+    verify();
+  </script>
+</body>
+</html>

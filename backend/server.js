@@ -66,7 +66,24 @@ app.use((err, req, res, next) => {
 if (process.env.VERCEL !== '1') {
     async function iniciarServidor() {
         try {
-            await getConnection();
+                        const pool = await getConnection();
+                        // Asegurarse de que la tabla Ordenes exista (migración mínima)
+                        const createOrdersSQL = `
+CREATE TABLE IF NOT EXISTS Ordenes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    external_reference VARCHAR(100) UNIQUE,
+    items JSON,
+    total DECIMAL(10,2) DEFAULT 0,
+    currency VARCHAR(10) DEFAULT 'COP',
+    status ENUM('pending','approved','cancelled','failed','refunded') DEFAULT 'pending',
+    preference_id VARCHAR(100),
+    payment_id VARCHAR(100),
+    metadata JSON,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                        `;
+                        try { await pool.query(createOrdersSQL); } catch (err) { console.warn('No se pudo crear tabla Ordenes automáticamente:', err.message || err); }
             const server = app.listen(PORT, () => {
                 console.log(`Servidor corriendo en http://localhost:${PORT}`);
                 console.log(`API disponible en http://localhost:${PORT}/api`);
