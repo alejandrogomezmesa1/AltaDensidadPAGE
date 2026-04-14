@@ -154,8 +154,9 @@
             <div class="top10-agregar-box">
                 <form class="top10-agregar-form" onsubmit="event.preventDefault(); agregarProductoATop10();">
                     <label for="selectProductoTop10" class="top10-agregar-label">Agregar producto al Top 10</label>
-                    <div class="top10-agregar-row">
-                        <select id="selectProductoTop10" class="top10-agregar-select"></select>
+                    <div class="top10-agregar-row" style="flex-wrap: wrap; gap: 8px; align-items: center;">
+                        <input type="text" id="buscadorProductoTop10" class="top10-agregar-buscar" placeholder="Buscar producto..." style="flex:1; min-width:180px;">
+                        <select id="selectProductoTop10" class="top10-agregar-select" style="flex:2; min-width:180px;"></select>
                         <button class="btn-primary" id="btnAgregarProductoTop10" type="submit"><i class="fas fa-plus"></i> Agregar</button>
                     </div>
                 </form>

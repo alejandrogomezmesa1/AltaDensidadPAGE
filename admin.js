@@ -63,12 +63,14 @@ function quitarDeTop10(idx) {
     renderSelectProductosTop10();
 }
 
-function renderSelectProductosTop10() {
+function renderSelectProductosTop10(filtro = '') {
     const select = document.getElementById('selectProductoTop10');
     select.innerHTML = '<option value="">-- Seleccionar producto --</option>';
     productosDisponiblesTop10.forEach(p => {
         if (!top10.some(t => t.producto_id === p.id)) {
-            select.innerHTML += `<option value="${p.id}">${escHtml(p.name)}</option>`;
+            if (!filtro || p.name.toLowerCase().includes(filtro.toLowerCase())) {
+                select.innerHTML += `<option value="${p.id}">${escHtml(p.name)}</option>`;
+            }
         }
     });
 }
@@ -132,7 +134,14 @@ function registrarEventosTop10() {
     document.getElementById('btnAgregarProductoTop10').addEventListener('click', agregarProductoATop10);
     document.getElementById('btnGuardarTop10').addEventListener('click', guardarTop10);
 }
-// ...existing code...
+// Filtrado de productos en el select de Top 10
+const buscadorProductoTop10 = document.getElementById('buscadorProductoTop10');
+if (buscadorProductoTop10) {
+    buscadorProductoTop10.addEventListener('input', function() {
+        renderSelectProductosTop10(this.value);
+    });
+}
+
 // Estado Kits
 let kits = [];
 let paginaKits = 1;
