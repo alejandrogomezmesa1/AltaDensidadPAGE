@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <ul class="kit-benefits">${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}</ul>
                                     <div class="kit-footer">
                                         <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
-                                        <button class="kit-add-btn" type="button" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kit.id || kit._id || Math.floor(Math.random()*1000000), name: kit.nombre || kit.name, image: kit.imagen || kit.image, price: kit.precio || kit.price || 0})})'>
+                                        <button class="btn-agregar-carrito kit-add-btn" type="button" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kit.id || kit._id || Math.floor(Math.random()*1000000), name: kit.nombre || kit.name, image: kit.imagen || kit.image, price: kit.precio || kit.price || 0})})'>
                                             <i class="fas fa-cart-plus"></i> Agregar
                                         </button>
                                     </div>

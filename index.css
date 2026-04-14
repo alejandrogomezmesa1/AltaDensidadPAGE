@@ -626,7 +626,7 @@ h1, h2, h3, .header-title, .header-tittle {
 .kit-benefits { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
 .kit-benefits li { background: rgba(255,255,255,0.02); color: var(--texto); padding: 6px 8px; border-radius: 6px; font-size: 0.9rem; }
 
-.kit-footer { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-top: auto; }
+.kit-footer { display: flex; flex-direction: column; gap: 12px; align-items: stretch; margin-top: auto; }
 .kit-price { display: flex; flex-direction: column; align-items: flex-start; }
 .price-label { font-size: 0.75rem; color: rgba(248,249,249,0.6); }
 .price-amount { font-size: 1.15rem; color: var(--azul-dos); font-weight: 800; }
@@ -646,6 +646,10 @@ h1, h2, h3, .header-title, .header-tittle {
 }
 .kit-add-btn i { font-size: 1rem; }
 .kit-add-btn:hover { background: rgba(212,175,55,0.06); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(2,6,23,0.35); }
+
+/* Cuando el botón de agregar esté dentro del footer del kit, que ocupe todo el ancho */
+.kit-footer .btn-agregar-carrito { width: 100%; margin: 0; padding: 12px 0; border-radius: 10px; justify-content: center; }
+.kit-footer .btn-agregar-carrito i { margin-right: 6px; }
 
 .kit-card:hover { transform: translateY(-6px); box-shadow: 0 14px 36px rgba(2,6,23,0.6); }
 .kit-card:hover .kit-image-placeholder img { transform: scale(1.04); }
