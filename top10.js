@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const API_TOP10_URL = '/api/top10';
+    // Detectar entorno y definir URL base
+    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? 'http://localhost:3000/api'
+        : 'https://altadensidadpage-production.up.railway.app/api';
+    const API_TOP10_URL = base + '/top10';
     const productGrid = document.getElementById('productGrid');
 
     async function cargarTop10() {
