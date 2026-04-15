@@ -78,8 +78,28 @@ router.post('/create_preference', async (req, res) => {
             return res.json({ success: true, preference: mockPref, mock: true, message: 'MP_ACCESS_TOKEN no configurado — se devuelve preferencia mock para desarrollo local' });
         }
 
-        // Crear preferencia via API HTTP (más robusto en entornos como Railway)
+        // Crear preferencia: preferiblemente usar SDK `mercadopago`, con fallback HTTP
         try {
+            // Intentar via SDK si está disponible
+            if (mercadopago && typeof mercadopago.preferences !== 'undefined') {
+                try {
+                    if (mercadopago.configurations && typeof mercadopago.configurations.setAccessToken === 'function') {
+                        mercadopago.configurations.setAccessToken(ACCESS_TOKEN);
+                    } else if (typeof mercadopago.configure === 'function') {
+                        mercadopago.configure({ access_token: ACCESS_TOKEN });
+                    }
+                } catch (cfgErr) {
+                    console.warn('No se pudo configurar SDK mercadopago:', cfgErr && cfgErr.message);
+                }
+
+                const mpResp = await mercadopago.preferences.create(preference);
+                const body = (mpResp && (mpResp.body || mpResp)) ? (mpResp.body || mpResp) : mpResp;
+                // Guardar preference_id en la orden si es posible
+                try { await pool.query('UPDATE Ordenes SET preference_id = ?, updated_at = NOW() WHERE external_reference = ?', [body && body.id || null, external_reference]); } catch (upErr) { /* noop */ }
+                return res.json({ success: true, preference: body });
+            }
+
+            // Fallback a HTTP directo
             const url = 'https://api.mercadopago.com/checkout/preferences';
             const resp = await fetch(url, {
                 method: 'POST',
@@ -90,12 +110,11 @@ router.post('/create_preference', async (req, res) => {
                 body: JSON.stringify(preference)
             });
             const body = await resp.json();
-            // Guardar preference_id en la orden si es posible
             try { await pool.query('UPDATE Ordenes SET preference_id = ?, updated_at = NOW() WHERE external_reference = ?', [body.id || null, external_reference]); } catch (upErr) { /* noop */ }
             return res.json({ success: true, preference: body });
         } catch (httpErr) {
-            console.error('Error creando preferencia via HTTP MP:', httpErr);
-            return res.status(500).json({ success: false, message: 'Error creando preferencia (HTTP)' });
+            console.error('Error creando preferencia MP:', httpErr);
+            return res.status(500).json({ success: false, message: 'Error creando preferencia (MP)' });
         }
     } catch (err) {
         console.error('Error creando preferencia MP:', err);

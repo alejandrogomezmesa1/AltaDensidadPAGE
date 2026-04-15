@@ -158,9 +158,14 @@ async function pagarMercadoPago() {
         image: i.image || i.img || ''
     }));
 
-    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-        ? 'http://localhost:3000/api'
-        : 'https://altadensidadpage-production.up.railway.app/api';
+    // API base: puede ser overrideado en el frontend con `window.API_BASE`.
+    // Por defecto en local usa http://localhost:3000/api para Live Server,
+    // y en despliegue usa rutas relativas '/api' para permitir hosting separado.
+    const base = (typeof window.API_BASE !== 'undefined' && window.API_BASE)
+        ? window.API_BASE
+        : (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+            ? 'http://localhost:3000/api'
+            : '/api';
 
     try {
         const resp = await fetch(`${base}/mercadopago/create_preference`, {
