@@ -52,7 +52,10 @@ router.post('/create_preference', async (req, res) => {
             console.warn('No se pudo insertar orden (verifique la tabla Ordenes):', dbErr.message || dbErr);
         }
 
-        const hostBase = process.env.FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
+        // Prefer explicit FRONTEND_URL, otherwise detect scheme. For common PaaS (railway/vercel) prefer https.
+        const preferHttpsHosts = /railway\.app|vercel\.app|ngrok\.io|localhost/;
+        const protocol = (process.env.FORCE_HTTPS === '1' || preferHttpsHosts.test(req.get('host') || '')) ? 'https' : req.protocol;
+        const hostBase = process.env.FRONTEND_URL || `${protocol}://${req.get('host')}`;
         const preference = {
             items: mpItems,
             payer: payer || undefined,
@@ -229,7 +232,8 @@ router.post('/webhook', async (req, res) => {
                 'x-hub-signature',
                 'x-mercadopago-signature',
                 'x-mp-signature',
-                'x-signature'
+                'x-signature',
+                'x-platform-webhooks-signature'
             ];
             let sigHeader = null;
             for (const h of headerCandidates) {
@@ -242,16 +246,41 @@ router.post('/webhook', async (req, res) => {
             let received = String(sigHeader);
             const eqIdx = received.indexOf('=');
             if (eqIdx !== -1) received = received.slice(eqIdx + 1);
-
             const payloadBuf = (req.rawBody && req.rawBody.length) ? req.rawBody : Buffer.from(JSON.stringify(req.body || {}));
-            const expected = crypto.createHmac('sha256', WEBHOOK_SECRET).update(payloadBuf).digest('hex');
+            // Compute expected HMAC in both hex and base64 to accept either format
+            const expectedHex = crypto.createHmac('sha256', WEBHOOK_SECRET).update(payloadBuf).digest('hex');
+            const expectedBase64 = crypto.createHmac('sha256', WEBHOOK_SECRET).update(payloadBuf).digest('base64');
+
+            // Normalize received signature (could be hex or base64, may include prefix like 'sha256=')
+            const normalize = (s) => String(s).trim();
+            const recv = normalize(received);
+
+            const isHex = /^[0-9a-fA-F]+$/.test(recv);
+            const isBase64 = /^[A-Za-z0-9+/=]+$/.test(recv);
 
             try {
-                const recvBuf = Buffer.from(received, 'hex');
-                const expBuf = Buffer.from(expected, 'hex');
-                if (recvBuf.length !== expBuf.length || !crypto.timingSafeEqual(recvBuf, expBuf)) {
-                    console.warn('[MP WEBHOOK] signature mismatch');
-                    return res.status(401).send('Invalid signature');
+                if (isHex) {
+                    const recvBuf = Buffer.from(recv, 'hex');
+                    const expBuf = Buffer.from(expectedHex, 'hex');
+                    if (recvBuf.length !== expBuf.length || !crypto.timingSafeEqual(recvBuf, expBuf)) {
+                        console.warn('[MP WEBHOOK] signature mismatch (hex)');
+                        return res.status(401).send('Invalid signature');
+                    }
+                } else if (isBase64) {
+                    const recvBuf = Buffer.from(recv, 'base64');
+                    const expBuf = Buffer.from(expectedBase64, 'base64');
+                    if (recvBuf.length !== expBuf.length || !crypto.timingSafeEqual(recvBuf, expBuf)) {
+                        console.warn('[MP WEBHOOK] signature mismatch (base64)');
+                        return res.status(401).send('Invalid signature');
+                    }
+                } else {
+                    // Fallback: compare raw strings (timing safe)
+                    const expHexBuf = Buffer.from(expectedHex, 'utf8');
+                    const recvBuf = Buffer.from(recv, 'utf8');
+                    if (recvBuf.length !== expHexBuf.length || !crypto.timingSafeEqual(recvBuf, expHexBuf)) {
+                        console.warn('[MP WEBHOOK] signature format unknown or mismatch');
+                        return res.status(401).send('Invalid signature format');
+                    }
                 }
             } catch (ex) {
                 console.warn('[MP WEBHOOK] signature parse error', ex && ex.message);
