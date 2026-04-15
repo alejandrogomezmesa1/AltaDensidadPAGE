@@ -80,6 +80,52 @@ node test_create_pref.js
 - [ ] Hacer una prueba E2E desde el frontend desplegado (sandbox o producción según token).
 - [ ] Revisar logs y anotar errores para corregir.
 
+## Pruebas E2E (Sandbox) - flujo listo
+Estos pasos te permiten realizar pruebas con usuarios y pagos de prueba en sandbox.
+
+1) Variables de entorno (en Railway/Vercel)
+	- `MP_ACCESS_TOKEN` : token sandbox (APP_USR-... o APP_USR- en panel MP)
+	- `MP_PUBLIC_KEY` : public key (si usas SDK cliente)
+	- `MP_NOTIFICATION_URL` : `https://altadensidadpage-production.up.railway.app/api/mercadopago/webhook`
+	- `MP_WEBHOOK_SECRET` : secreto HMAC (genera uno seguro y ponlo en el panel MP)
+		- `MP_FORCE_MOCK` : `true|1` forza el flujo mock (dev/probando) aunque `MP_ACCESS_TOKEN` exista. Útil para pruebas con usuarios sin usar Mercado Pago sandbox.
+	- `FRONTEND_URL` : `https://alta-densidad-page.vercel.app`
+
+2) Crear preferencia de prueba
+	- Desde el backend (script incluido):
+	  ```bash
+	  cd backend
+	  node test_create_pref.js
+	  ```
+	  Copia `preference.sandbox_init_point` o `preference.init_point` según prefieras.
+	- Desde el frontend: añade items y pulsa "Pagar con Mercado Pago".
+
+3) Abrir checkout sandbox
+	- Abre `sandbox_init_point` en el navegador.
+	- Usa una tarjeta de prueba (ve Panel MP -> Tarjetas de prueba). Ejemplos comunes:
+	  - Visa sandbox: `4509 9535 6623 3704` (CVV `123`, fecha futura)
+
+4) Verificar webhook y firmas
+	- Si definiste `MP_WEBHOOK_SECRET`, pon el mismo valor en el panel de Mercado Pago (webhooks) como "Clave secreta".
+	- Para enviar un webhook de prueba desde tu máquina (o CI), usa el script incluido:
+	  ```bash
+	  node tools/send_test_webhook.js https://altadensidadpage-production.up.railway.app/api/mercadopago/webhook $MP_WEBHOOK_SECRET
+	  ```
+	  El script envía un payload `test.created` y añade la cabecera `x-hub-signature-256` si se proporciona el secreto.
+
+5) Comprobar resultados
+	- Revisar logs en Railway / Vercel para ver la petición entrante y la respuesta.
+	- Verificar en la tabla `Ordenes` que las filas correspondientes fueron actualizadas (campo `status`, `payment_id`, `preference_id`).
+	- Usar el endpoint admin: `GET /api/mercadopago/order/:external_reference` (requiere credenciales admin) para ver datos de la orden.
+
+6) Tips y debugging
+	- Si recibes `Signature required`, significa que `MP_WEBHOOK_SECRET` está definido en el backend y la petición no incluye firma; usa el script con el secreto o configura el panel MP para enviar la firma.
+	- Si recibes 404 en el panel MP al enviar test, asegúrate que la URL del webhook en MP apunta a `https://altadensidadpage-production.up.railway.app/api/mercadopago/webhook` (no al frontend).
+
+Si quieres, yo puedo:
+- generar el secreto (openssl rand -hex 32) y enviártelo para pegar en Railway y panel MP, o
+- ejecutar el script `node tools/send_test_webhook.js ...` contra tu despliegue (si me das el secreto temporalmente).
+
 ---
 
 Si quieres, mañana puedo: (A) revisar los logs de Railway/Vercel y confirmar que las env vars se cargaron, (B) simular un webhook firmado para validar la verificación HMAC, o (C) ejecutar la migración y crear el admin por ti.

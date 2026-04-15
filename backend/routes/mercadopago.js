@@ -9,6 +9,7 @@ const crypto = require('crypto');
 const WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET || process.env.MP_WEBHOOK_SIGNATURE || null;
 
 const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || process.env.MERCADOPAGO_ACCESS_TOKEN || process.env.MP_TOKEN;
+const FORCE_MOCK = (String(process.env.MP_FORCE_MOCK || '').toLowerCase() === '1' || String(process.env.MP_FORCE_MOCK || '').toLowerCase() === 'true');
 
 function mapPaymentToStatus(paymentStatus) {
     if (!paymentStatus) return 'pending';
@@ -65,8 +66,8 @@ router.post('/create_preference', async (req, res) => {
             notification_url: process.env.MP_NOTIFICATION_URL || `${req.protocol}://${req.get('host')}/api/mercadopago/webhook`
         };
 
-        // Si no hay token devolver preferencia mock
-        if (!ACCESS_TOKEN) {
+        // Si no hay token o se fuerza mock, devolver preferencia mock
+        if (!ACCESS_TOKEN || FORCE_MOCK) {
             const mockId = 'mock_pref_' + Date.now();
             const mockPref = {
                 id: mockId,
@@ -75,7 +76,8 @@ router.post('/create_preference', async (req, res) => {
                 items: mpItems,
                 external_reference
             };
-            return res.json({ success: true, preference: mockPref, mock: true, message: 'MP_ACCESS_TOKEN no configurado — se devuelve preferencia mock para desarrollo local' });
+            const msg = !ACCESS_TOKEN ? 'MP_ACCESS_TOKEN no configurado — se devuelve preferencia mock para desarrollo local' : 'MP_FORCE_MOCK activado — se devuelve preferencia mock para pruebas';
+            return res.json({ success: true, preference: mockPref, mock: true, message: msg });
         }
 
         // Crear preferencia: preferiblemente usar SDK `mercadopago`, con fallback HTTP
