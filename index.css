@@ -28,7 +28,7 @@
     .product-card h3 { font-size: 0.95rem; }
     .product-card .price { font-size: 1.05rem; }
     .feature-card { padding: 14px; }
-    .btn-agregar-carrito, .product-button, .prod-modal-btn, .kit-add-btn { min-height: 44px; padding: 10px 12px; font-size: 0.95rem; width: 100%; border-radius: 8px; }
+    .btn-agregar-carrito, .product-button, .prod-modal-btn, .kit-add-btn { min-height: 44px; padding: 10px 12px; font-size: 0.85rem; width: calc(100% - 24px); margin: 0 auto 10px auto; border-radius: 8px; box-sizing: border-box; display: flex; justify-content: center; align-items: center; }
     .prod-modal { max-width: 100%; margin: 0; border-radius: 12px; width: 95%; max-height: 90vh; overflow-y: auto;}
     .prod-modal-body { grid-template-columns: 1fr; }
     .carrito-panel { width: 85%; right: -100%; max-width: 350px;}

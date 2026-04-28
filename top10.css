@@ -643,7 +643,7 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
     .product-card .product-info { padding: 8px 0; }
     .product-name { font-size: 0.95rem; }
     .product-price { font-size: 1.05rem; }
-    .product-button { min-height: 44px; padding: 10px 12px; font-size: 0.95rem; width: 100%; border-radius: 8px; }
+    .product-button, .btn-agregar-carrito { min-height: 44px; padding: 10px 4px; font-size: 0.85rem; width: calc(100% - 16px); margin: 0 auto 8px auto; border-radius: 8px; box-sizing: border-box; display: flex; justify-content: center; align-items: center; }
 }
 
 @media (max-width: 480px) {
