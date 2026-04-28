@@ -672,14 +672,19 @@ function cambiarSeccion(seccion) {
     const esEnv = seccion === 'envases';
     const esKit = seccion === 'kits';
     const esTop = seccion === 'top10';
+    const esOrd = seccion === 'ordenes';
     document.getElementById('seccionProductos').classList.toggle('hidden', !esProd);
     document.getElementById('seccionEnvases').classList.toggle('hidden', !esEnv);
     document.getElementById('seccionKits').classList.toggle('hidden', !esKit);
     document.getElementById('seccionTop10').classList.toggle('hidden', !esTop);
+    const secOrd = document.getElementById('seccionOrdenes');
+    if (secOrd) secOrd.classList.toggle('hidden', !esOrd);
     document.getElementById('tabProductos').classList.toggle('active', esProd);
     document.getElementById('tabEnvases').classList.toggle('active', esEnv);
     document.getElementById('tabKits').classList.toggle('active', esKit);
     document.getElementById('tabTop10').classList.toggle('active', esTop);
+    const tabOrd = document.getElementById('tabOrdenes');
+    if (tabOrd) tabOrd.classList.toggle('active', esOrd);
 }
 // Exponer funciones para botones inline
 window.moverTop10 = moverTop10;

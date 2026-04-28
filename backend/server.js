@@ -13,6 +13,7 @@ const uploadRouter = require('./routes/upload');
 const mercadopagoRouter = require('./routes/mercadopago');
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
 // Middleware
