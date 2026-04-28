@@ -682,14 +682,26 @@ html.modo-claro .btn-carrito-nav:hover {
     button, 
     .btn, 
     .btn-auth,
-    .btn-agregar-carrito, 
-    .product-button, 
     .masinfo button,
-    .kit-add-btn,
     .prod-modal-btn,
     .btnConfirmarEnvio {
         min-height: 48px !important;
         font-size: 1rem !important;
+    }
+
+    /* Botones dentro de las cards (que ahora están a 2 columnas y tienen menos espacio) */
+    .btn-agregar-carrito, 
+    .product-button, 
+    .kit-add-btn {
+        min-height: 44px !important;
+        font-size: 0.85rem !important;
+        padding: 8px 4px !important;
+        width: 100% !important;
+        white-space: nowrap !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
     }
 
     /* Inputs y Selects más grandes en móvil */
