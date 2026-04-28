@@ -82,6 +82,8 @@ CREATE TABLE IF NOT EXISTS Ordenes (
     status ENUM('pending','approved','cancelled','failed','refunded') DEFAULT 'pending',
     preference_id VARCHAR(100),
     payment_id VARCHAR(100),
+    payer_email VARCHAR(255),
+    payer_name VARCHAR(255),
     metadata JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

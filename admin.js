@@ -1043,12 +1043,16 @@ function renderTablaOrdenes(meta = {}) {
         else if(o.status === 'pending' || o.status === 'in_process') statusColor = '#f39c12';
         else if(o.status === 'rejected' || o.status === 'cancelled' || o.status === 'failed') statusColor = '#e74c3c';
         
+        let compradorText = 'N/A';
+        if (o.payer_email) compradorText = o.payer_name ? `${o.payer_name} <br><small style="color:#888;">${o.payer_email}</small>` : o.payer_email;
+
         return `
         <tr>
             <td>${(((meta.page || 1) - 1) * ITEMS_ORD) + idx + 1}</td>
             <td>${escHtml(o.external_reference)}</td>
             <td>${escHtml(o.preference_id || '')}</td>
             <td>${escHtml(o.payment_id || '')}</td>
+            <td>${compradorText}</td>
             <td>${formatPrecio(o.total)}</td>
             <td>${escHtml(o.currency || 'COP')}</td>
             <td><strong style="color: ${statusColor};">${escHtml(estadoEsp)}</strong></td>
@@ -1082,6 +1086,11 @@ async function abrirDetalleOrden(external_reference) {
         else if(o.status === 'pending' || o.status === 'in_process') statusColor = '#f39c12';
         else if(o.status === 'rejected' || o.status === 'cancelled' || o.status === 'failed') statusColor = '#e74c3c';
 
+        let compradorInfo = 'N/A';
+        if (o.payer_email) {
+            compradorInfo = `<span style="color: var(--text); font-weight: 600;">${escHtml(o.payer_name || '')}</span><br><a href="mailto:${escHtml(o.payer_email)}" style="color: var(--gold); text-decoration: none;">${escHtml(o.payer_email)}</a>`;
+        }
+
         const info = document.getElementById('ordenInfo');
         info.innerHTML = `
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
@@ -1092,6 +1101,10 @@ async function abrirDetalleOrden(external_reference) {
                 <div>
                     <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Estado actual</span>
                     <p style="margin-top: 6px;"><span style="background: ${statusColor}22; color: ${statusColor}; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; border: 1px solid ${statusColor}55;">${escHtml(estadoEsp)}</span></p>
+                </div>
+                <div style="grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: 4px;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Comprador</span>
+                    <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${compradorInfo}</p>
                 </div>
                 <div>
                     <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Preference ID</span>

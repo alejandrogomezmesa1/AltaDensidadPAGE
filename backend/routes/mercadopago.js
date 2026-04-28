@@ -141,17 +141,19 @@ router.get('/verify_payment', async (req, res) => {
 
         const external_reference = payment.external_reference || (payment.order && payment.order.external_reference) || null;
         const status = mapPaymentToStatus(payment.status);
+        const payer_email = payment.payer ? payment.payer.email : null;
+        const payer_name = payment.payer ? (payment.payer.first_name || payment.payer.id || '') : null;
 
         const pool = await getConnection();
         let affected = 0;
         if (external_reference) {
-            const [upd] = await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, preference_id = ?, updated_at = NOW() WHERE external_reference = ?', [status, payment.id || null, payment.preference_id || null, external_reference]);
+            const [upd] = await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, preference_id = ?, payer_email = ?, payer_name = ?, updated_at = NOW() WHERE external_reference = ?', [status, payment.id || null, payment.preference_id || null, payer_email, String(payer_name).substring(0,250), external_reference]);
             affected = upd && upd.affectedRows ? upd.affectedRows : 0;
         }
         // Si no encontramos por external_reference, intentar por preference_id
         if (!external_reference || affected === 0) {
             if (payment.preference_id) {
-                await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, updated_at = NOW() WHERE preference_id = ?', [status, payment.id || null, payment.preference_id]);
+                await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, payer_email = ?, payer_name = ?, updated_at = NOW() WHERE preference_id = ?', [status, payment.id || null, payer_email, String(payer_name).substring(0,250), payment.preference_id]);
             }
         }
 
@@ -304,11 +306,14 @@ router.post('/webhook', async (req, res) => {
 
         const external_reference = payment.external_reference || (payment.order && payment.order.external_reference) || null;
         const status = mapPaymentToStatus(payment.status);
+        const payer_email = payment.payer ? payment.payer.email : null;
+        const payer_name = payment.payer ? (payment.payer.first_name || payment.payer.id || '') : null;
+
         const pool = await getConnection();
         if (external_reference) {
-            await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, preference_id = ?, updated_at = NOW() WHERE external_reference = ?', [status, payment.id || null, payment.preference_id || null, external_reference]);
+            await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, preference_id = ?, payer_email = ?, payer_name = ?, updated_at = NOW() WHERE external_reference = ?', [status, payment.id || null, payment.preference_id || null, payer_email, String(payer_name).substring(0,250), external_reference]);
         } else if (payment.preference_id) {
-            await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, updated_at = NOW() WHERE preference_id = ?', [status, payment.id || null, payment.preference_id]);
+            await pool.query('UPDATE Ordenes SET status = ?, payment_id = ?, payer_email = ?, payer_name = ?, updated_at = NOW() WHERE preference_id = ?', [status, payment.id || null, payer_email, String(payer_name).substring(0,250), payment.preference_id]);
         }
         return res.status(200).send('OK');
     } catch (err) {
