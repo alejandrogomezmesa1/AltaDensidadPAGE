@@ -18,40 +18,32 @@
 @media (max-width: 768px) {
     html { -webkit-text-size-adjust: 100%; }
     /* reducir gutters en móvil para aprovechar ancho */
-    .catalog-container, .card-container, .kits-container, .cards-container { padding-left: 4%; padding-right: 4%; }
-    /* usar una columna para tarjetas en móvil para aprovechar todo el ancho */
-    #productGrid { grid-template-columns: 1fr; gap: 14px; }
-    .kits-grid { grid-template-columns: 1fr; gap: 16px; }
-    .product-card, .kit-card { min-height: auto; padding: 14px; }
-    .product-image img, .kit-image-placeholder img { max-height: 240px; object-fit: cover; width: 100%; }
-    .product-card .product-info, .kit-body { padding: 10px 0; }
+    .catalog-container, .card-container, .kits-container, .cards-container { padding-left: 2%; padding-right: 2%; }
+    /* usar dos columnas para tarjetas en móvil */
+    #productGrid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 5px; }
+    .kits-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .product-card, .kit-card { min-height: auto; padding: 8px; border-radius: 8px; }
+    .product-image img, .kit-image-placeholder img { max-height: 180px; object-fit: cover; width: 100%; }
+    .product-card .product-info, .kit-body { padding: 8px 0; }
+    .product-card h3 { font-size: 0.95rem; }
+    .product-card .price { font-size: 1.05rem; }
     .feature-card { padding: 14px; }
-    .btn-agregar-carrito, .product-button, .prod-modal-btn, .kit-add-btn { min-height: 44px; padding: 12px 14px; font-size: 1rem; }
-    .prod-modal { max-width: 100%; margin: 0; border-radius: 12px; }
+    .btn-agregar-carrito, .product-button, .prod-modal-btn, .kit-add-btn { min-height: 44px; padding: 10px 12px; font-size: 0.95rem; width: 100%; border-radius: 8px; }
+    .prod-modal { max-width: 100%; margin: 0; border-radius: 12px; width: 95%; max-height: 90vh; overflow-y: auto;}
     .prod-modal-body { grid-template-columns: 1fr; }
-    .carrito-panel { width: 100%; right: -100%; }
+    .carrito-panel { width: 85%; right: -100%; max-width: 350px;}
     .carrito-panel.abierto { right: 0; }
     .modal-content input, .modal-content select, .modal-content button { width: 100%; box-sizing: border-box; padding: 10px; }
     .header .header-actions { gap: 8px; }
 }
 
-@media (max-width: 768px) {
-    html { -webkit-text-size-adjust: 100%; }
-    /* reducir gutters en móvil para aprovechar ancho (ligeramente menor) */
-    .catalog-container, .card-container, .kits-container, .cards-container { padding-left: 3.5%; padding-right: 3.5%; }
-    /* usar una columna para tarjetas en móvil para aprovechar todo el ancho */ 
-    #productGrid { grid-template-columns: 1fr; gap: 12px; }
-    .kits-grid { grid-template-columns: 1fr; gap: 12px; }
-    .product-card, .kit-card { min-height: auto; padding: 10px; }
-    .product-image img, .kit-image-placeholder img { max-height: 220px; object-fit: cover; width: 100%; }
-    .product-card .product-info, .kit-body { padding: 8px 0; }
-    .prod-modal-info { padding: 16px; }
-    .prod-modal-precio { font-size: 1.2rem; }
-    .prod-modal-btn { padding: 12px 16px; width: 100%; justify-content: center; }
-    .carrito-footer .carrito-btn-pedir, .carrito-footer .carrito-btn-vaciar { width: 100%; display: block; margin-bottom: 8px; }
-    .feature-card { flex-direction: row; gap: 12px; align-items: center; }
-    .product-card .btn-agregar-carrito { padding: 12px; font-size: 1rem; }
-    .nos-hero { padding: 40px 6% 36px; }
+@media (max-width: 480px) {
+    .product-image img, .kit-image-placeholder img { max-height: 160px; }
+    .prod-modal-info { padding: 12px; }
+    .prod-modal-precio { font-size: 1.1rem; }
+    .feature-card { flex-direction: column; text-align: center; }
+    .nos-hero { padding: 30px 4% 20px; }
+    #productGrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 }
 
 /* Small improvements for mid-large tablets */

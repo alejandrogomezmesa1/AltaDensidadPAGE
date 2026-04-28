@@ -672,3 +672,50 @@ html.modo-claro .btn-carrito-nav:hover {
         margin-left: 0 !important;
     }
 }
+
+/* ================================================
+   GLOBAL MOBILE UI/UX IMPROVEMENTS
+   (Aplicable a todo el sitio)
+   ================================================ */
+@media (max-width: 768px) {
+    /* Touch targets: asegurar altura mínima para pulgares */
+    button, 
+    .btn, 
+    .btn-auth,
+    .btn-agregar-carrito, 
+    .product-button, 
+    .masinfo button,
+    .kit-add-btn,
+    .prod-modal-btn,
+    .btnConfirmarEnvio {
+        min-height: 48px !important;
+        font-size: 1rem !important;
+    }
+
+    /* Inputs y Selects más grandes en móvil */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+        min-height: 48px !important;
+        font-size: 1rem !important; /* Evitar zoom automático en iOS */
+        padding: 12px 14px !important;
+    }
+
+    /* Modales a pantalla casi completa */
+    .modal-content,
+    .prod-modal {
+        width: 95% !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        margin: auto !important;
+        border-radius: 12px !important;
+    }
+    
+    /* Evitar desbordamientos horizontales */
+    body {
+        overflow-x: hidden;
+    }
+}

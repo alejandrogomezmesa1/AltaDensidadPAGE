@@ -674,8 +674,20 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 @media (max-width: 768px) {
     #productGrid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
+        padding: 0 5px;
     }
+    .product-card { min-height: auto; padding: 8px; border-radius: 8px; }
+    .product-image img { max-height: 180px; object-fit: cover; width: 100%; }
+    .product-card .product-info { padding: 8px 0; }
+    .product-name { font-size: 0.95rem; }
+    .product-price { font-size: 1.05rem; }
+    .product-button { min-height: 44px; padding: 10px 12px; font-size: 0.95rem; width: 100%; border-radius: 8px; }
+}
+
+@media (max-width: 480px) {
+    .product-image img { max-height: 160px; }
+    #productGrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 }
 
 /* Animación de sombra */
