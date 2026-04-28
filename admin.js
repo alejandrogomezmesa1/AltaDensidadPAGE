@@ -1030,7 +1030,20 @@ function renderTablaOrdenes(meta = {}) {
         document.getElementById('paginacionOrdenes').innerHTML = '';
         return;
     }
-    tbody.innerHTML = ordenes.map((o, idx) => `
+    
+    const statusMap = {
+        'pending': 'Pendiente', 'approved': 'Aprobado', 'in_process': 'En Proceso',
+        'rejected': 'Rechazado', 'cancelled': 'Cancelado', 'failed': 'Fallido', 'refunded': 'Reembolsado'
+    };
+
+    tbody.innerHTML = ordenes.map((o, idx) => {
+        const estadoEsp = statusMap[o.status] || o.status || '';
+        let statusColor = '#9a9a9a';
+        if(o.status === 'approved') statusColor = '#27ae60';
+        else if(o.status === 'pending' || o.status === 'in_process') statusColor = '#f39c12';
+        else if(o.status === 'rejected' || o.status === 'cancelled' || o.status === 'failed') statusColor = '#e74c3c';
+        
+        return `
         <tr>
             <td>${(((meta.page || 1) - 1) * ITEMS_ORD) + idx + 1}</td>
             <td>${escHtml(o.external_reference)}</td>
@@ -1038,7 +1051,7 @@ function renderTablaOrdenes(meta = {}) {
             <td>${escHtml(o.payment_id || '')}</td>
             <td>${formatPrecio(o.total)}</td>
             <td>${escHtml(o.currency || 'COP')}</td>
-            <td><strong>${escHtml(o.status || '')}</strong></td>
+            <td><strong style="color: ${statusColor};">${escHtml(estadoEsp)}</strong></td>
             <td>${escHtml(o.created_at ? new Date(o.created_at).toLocaleString() : '')}</td>
             <td>
                 <div class="acciones">
@@ -1046,7 +1059,7 @@ function renderTablaOrdenes(meta = {}) {
                 </div>
             </td>
         </tr>
-    `).join('');
+    `}).join('');
 
     const totalPages = meta.pages || 1;
     renderPag('paginacionOrdenes', paginaOrdenes, totalPages, (p) => { paginaOrdenes = p; cargarOrdenes(p); });
@@ -1059,12 +1072,36 @@ async function abrirDetalleOrden(external_reference) {
         if (!data.success) throw new Error(data.message || 'Orden no encontrada');
         const o = data.order;
         document.getElementById('modalTituloOrden').textContent = `Orden ${escHtml(o.external_reference)}`;
+        const statusMap = {
+            'pending': 'Pendiente', 'approved': 'Aprobado', 'in_process': 'En Proceso',
+            'rejected': 'Rechazado', 'cancelled': 'Cancelado', 'failed': 'Fallido', 'refunded': 'Reembolsado'
+        };
+        const estadoEsp = statusMap[o.status] || o.status || '';
+        let statusColor = '#9a9a9a';
+        if(o.status === 'approved') statusColor = '#27ae60';
+        else if(o.status === 'pending' || o.status === 'in_process') statusColor = '#f39c12';
+        else if(o.status === 'rejected' || o.status === 'cancelled' || o.status === 'failed') statusColor = '#e74c3c';
+
         const info = document.getElementById('ordenInfo');
         info.innerHTML = `
-            <p><strong>Total:</strong> ${formatPrecio(o.total)} ${escHtml(o.currency || '')}</p>
-            <p><strong>Estado:</strong> ${escHtml(o.status)}</p>
-            <p><strong>Preference ID:</strong> ${escHtml(o.preference_id || '')}</p>
-            <p><strong>Payment ID:</strong> ${escHtml(o.payment_id || '')}</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px;">
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Total pagado</span>
+                    <p style="font-size: 1.25rem; font-weight: 700; color: var(--gold-soft); margin-top: 4px;">${formatPrecio(o.total)} ${escHtml(o.currency || '')}</p>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Estado actual</span>
+                    <p style="margin-top: 6px;"><span style="background: ${statusColor}22; color: ${statusColor}; padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; border: 1px solid ${statusColor}55;">${escHtml(estadoEsp)}</span></p>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Preference ID</span>
+                    <p style="font-size: 0.85rem; color: var(--text); margin-top: 4px; word-break: break-all;">${escHtml(o.preference_id || 'N/A')}</p>
+                </div>
+                <div>
+                    <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Payment ID</span>
+                    <p style="font-size: 0.85rem; color: var(--text); margin-top: 4px; word-break: break-all;">${escHtml(o.payment_id || 'N/A')}</p>
+                </div>
+            </div>
         `;
 
         // Items
@@ -1073,8 +1110,8 @@ async function abrirDetalleOrden(external_reference) {
         try {
             const items = typeof o.items === 'string' ? JSON.parse(o.items) : (o.items || []);
             if (items && items.length) {
-                itemsHtml = `<table class="tabla-productos"><thead><tr><th>Producto</th><th>Cantidad</th><th>Precio</th></tr></thead><tbody>` + items.map(it => `
-                    <tr><td>${escHtml(it.title || it.name || it.id)}</td><td>${escHtml(String(it.quantity || it.cantidad || 1))}</td><td>${formatPrecio(it.unit_price || it.price || 0)}</td></tr>
+                itemsHtml = `<table class="tabla-productos" style="width:100%; border:none;"><thead><tr><th style="padding-left:0;">Producto</th><th>Cantidad</th><th style="text-align:right;">Precio</th></tr></thead><tbody>` + items.map(it => `
+                    <tr><td style="padding-left:0;">${escHtml(it.title || it.name || it.id)}</td><td>${escHtml(String(it.quantity || it.cantidad || 1))}</td><td style="text-align:right; font-weight:600;">${formatPrecio(it.unit_price || it.price || 0)}</td></tr>
                 `).join('') + `</tbody></table>`;
             } else {
                 itemsHtml = '<div class="empty-row">Sin items.</div>';

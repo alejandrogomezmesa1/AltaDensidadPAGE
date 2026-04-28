@@ -487,20 +487,25 @@
                 <h3 id="modalTituloOrden">Detalle de Orden</h3>
                 <button class="modal-cerrar" id="btnCerrarModalOrden"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding: 20px 24px;">
                 <div id="ordenInfo"></div>
-                <h4>Items</h4>
-                <div id="ordenItems"></div>
-                <h4>Datos raw</h4>
-                <pre id="ordenRaw" style="max-height:220px;overflow:auto;background:#0b1220;color:#fff;padding:12px;border-radius:6px;"></pre>
+                <h4 style="color: var(--gold-soft); margin: 16px 0 8px; font-size: 1.05rem;">Items del Pedido</h4>
+                <div id="ordenItems" style="background: var(--bg-card); border-radius: 8px; padding: 12px; border: 1px solid var(--border); margin-bottom: 16px;"></div>
+                
+                <details style="margin-top: 20px; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; background: rgba(0,0,0,0.2);">
+                    <summary style="color: var(--text-muted); cursor: pointer; font-size: 0.9rem; font-weight: 600;">Ver datos crudos (Raw JSON)</summary>
+                    <pre id="ordenRaw" style="margin-top: 10px; max-height:220px;overflow:auto;background:#0b1220;color:#fff;padding:12px;border-radius:6px; font-size: 0.8rem;"></pre>
+                </details>
             </div>
             <div class="modal-actions">
-                <select id="ordenStatusSelect">
-                    <option value="pending">pending</option>
-                    <option value="approved">approved</option>
-                    <option value="cancelled">cancelled</option>
-                    <option value="failed">failed</option>
-                    <option value="refunded">refunded</option>
+                <select id="ordenStatusSelect" style="padding: 8px 12px; background: var(--bg-card); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); outline: none; font-family: var(--font); cursor: pointer;">
+                    <option value="pending">Pendiente</option>
+                    <option value="approved">Aprobado</option>
+                    <option value="in_process">En Proceso</option>
+                    <option value="rejected">Rechazado</option>
+                    <option value="cancelled">Cancelado</option>
+                    <option value="failed">Fallido</option>
+                    <option value="refunded">Reembolsado</option>
                 </select>
                 <button class="btn-primary" id="btnActualizarOrden">Actualizar estado</button>
                 <button class="btn-secondary" id="btnForzarVerificacion">Forzar verificación</button>
