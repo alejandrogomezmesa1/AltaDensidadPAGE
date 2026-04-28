@@ -1044,7 +1044,12 @@ function renderTablaOrdenes(meta = {}) {
         else if(o.status === 'rejected' || o.status === 'cancelled' || o.status === 'failed') statusColor = '#e74c3c';
         
         let compradorText = 'N/A';
-        if (o.payer_email) compradorText = o.payer_name ? `${o.payer_name} <br><small style="color:#888;">${o.payer_email}</small>` : o.payer_email;
+        const nombreMostrar = o.envio_nombre || o.payer_name || '';
+        const correoMostrar = o.payer_email || '';
+        
+        if (nombreMostrar || correoMostrar) {
+            compradorText = `${escHtml(nombreMostrar)} <br><small style="color:#888;">${escHtml(correoMostrar)}</small>`;
+        }
 
         return `
         <tr>
@@ -1087,8 +1092,35 @@ async function abrirDetalleOrden(external_reference) {
         else if(o.status === 'rejected' || o.status === 'cancelled' || o.status === 'failed') statusColor = '#e74c3c';
 
         let compradorInfo = 'N/A';
-        if (o.payer_email) {
-            compradorInfo = `<span style="color: var(--text); font-weight: 600;">${escHtml(o.payer_name || '')}</span><br><a href="mailto:${escHtml(o.payer_email)}" style="color: var(--gold); text-decoration: none;">${escHtml(o.payer_email)}</a>`;
+        const nombreMostrar = o.envio_nombre || o.payer_name || '';
+        const correoMostrar = o.payer_email || '';
+        if (nombreMostrar || correoMostrar) {
+            compradorInfo = `<span style="color: var(--text); font-weight: 600;">${escHtml(nombreMostrar)}</span>`;
+            if (correoMostrar) compradorInfo += `<br><a href="mailto:${escHtml(correoMostrar)}" style="color: var(--gold); text-decoration: none;">${escHtml(correoMostrar)}</a>`;
+        }
+
+        let envioInfo = '';
+        if (o.envio_ciudad || o.envio_direccion) {
+            envioInfo = `
+                <div style="grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Celular</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_celular || 'N/A')}</p>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Doc. Identidad</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_documento || 'N/A')}</p>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Ciudad</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_ciudad || 'N/A')}</p>
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Dirección</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_direccion || 'N/A')}</p>
+                    </div>
+                </div>
+            `;
         }
 
         const info = document.getElementById('ordenInfo');
@@ -1106,7 +1138,8 @@ async function abrirDetalleOrden(external_reference) {
                     <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Comprador</span>
                     <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${compradorInfo}</p>
                 </div>
-                <div>
+                ${envioInfo}
+                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; margin-top: 4px;">
                     <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Preference ID</span>
                     <p style="font-size: 0.85rem; color: var(--text); margin-top: 4px; word-break: break-all;">${escHtml(o.preference_id || 'N/A')}</p>
                 </div>

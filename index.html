@@ -224,6 +224,38 @@
     <!-- Toast carrito -->
     <div id="carritoToast" class="carrito-toast"></div>
 
+    <!-- ===== MODAL DATOS ENVIO ===== -->
+    <div id="envioModal" class="prod-modal-overlay" style="display:none; z-index: 9999;" role="dialog" aria-modal="true" aria-labelledby="envioModalTitulo">
+        <div class="prod-modal" style="max-width: 500px; padding: 25px; border: 1px solid var(--border);">
+            <button type="button" class="prod-modal-close" id="cerrarEnvioModal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+            <h2 id="envioModalTitulo" style="color: var(--gold); margin-bottom: 10px; font-size: 1.5rem; text-align:center;">Datos de Envío</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Por favor, ingresa los datos para la transportadora.</p>
+            <form id="envioForm" style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Nombre Completo *</label>
+                    <input type="text" id="envNombre" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Documento de Identidad (Cédula/NIT) *</label>
+                    <input type="text" id="envDocumento" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Celular *</label>
+                    <input type="tel" id="envCelular" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Ciudad *</label>
+                    <input type="text" id="envCiudad" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Dirección y Barrio *</label>
+                    <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67, Barrio Centro" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <button type="submit" id="btnConfirmarEnvio" style="margin-top: 10px; background: var(--gold); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
+            </form>
+        </div>
+    </div>
+
     <script src="index.js"></script>
     <script src="carrito.js"></script>
     <script src="nav-sesion.js"></script>

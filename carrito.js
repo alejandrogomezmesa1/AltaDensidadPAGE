@@ -142,14 +142,62 @@ function pedirPorWhatsApp(url) {
     window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-// ---- Pago con Mercado Pago ----
-async function pagarMercadoPago() {
+let _shippingData = null;
+
+// ---- Abrir Modal de Envío ----
+function abrirModalEnvio() {
     const carrito = obtenerCarrito();
-    if (!carrito || carrito.length === 0) {
+    if (carrito.length === 0) {
         alert('El carrito está vacío');
         return;
     }
-    // Mapear items para el backend
+    const modal = document.getElementById('envioModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Auto-fill from localstorage if user is logged in
+        const usrStr = localStorage.getItem('usuario');
+        if (usrStr) {
+            try {
+                const usr = JSON.parse(usrStr);
+                if (usr.nombre && !document.getElementById('envNombre').value) {
+                    document.getElementById('envNombre').value = usr.nombre;
+                }
+            } catch(e){}
+        }
+    }
+}
+
+function cerrarModalEnvio() {
+    const modal = document.getElementById('envioModal');
+    if (modal) modal.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btnCerrarEnvio = document.getElementById('cerrarEnvioModal');
+    if (btnCerrarEnvio) btnCerrarEnvio.addEventListener('click', cerrarModalEnvio);
+
+    const formEnvio = document.getElementById('envioForm');
+    if (formEnvio) {
+        formEnvio.addEventListener('submit', (e) => {
+            e.preventDefault();
+            _shippingData = {
+                nombre: document.getElementById('envNombre').value.trim(),
+                documento: document.getElementById('envDocumento').value.trim(),
+                celular: document.getElementById('envCelular').value.trim(),
+                ciudad: document.getElementById('envCiudad').value.trim(),
+                direccion: document.getElementById('envDireccion').value.trim()
+            };
+            cerrarModalEnvio();
+            procesarPagoMercadoPago();
+        });
+    }
+});
+
+// ---- Pagar con Mercado Pago ----
+async function procesarPagoMercadoPago() {
+    const carrito = obtenerCarrito();
+    if (carrito.length === 0) return;
+    
     const items = carrito.map(i => ({
         id: i.id,
         name: i.name,
@@ -158,36 +206,49 @@ async function pagarMercadoPago() {
         image: i.image || i.img || ''
     }));
 
-    // API base: puede ser overrideado en el frontend con `window.API_BASE`.
-    // Por defecto en local usa http://localhost:3000/api para Live Server,
-    // y en despliegue usa rutas relativas '/api' para permitir hosting separado.
     const base = (typeof window.API_BASE !== 'undefined' && window.API_BASE)
         ? window.API_BASE
         : (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
             ? 'http://localhost:3000/api'
             : 'https://altadensidadpage-production.up.railway.app/api';
 
+    // UI Feedback
+    const btnPagar = document.getElementById('btnPagar');
+    if (btnPagar) {
+        btnPagar.disabled = true;
+        btnPagar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
+    }
+
     try {
         const resp = await fetch(`${base}/mercadopago/create_preference`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items })
+            body: JSON.stringify({ items, shipping: _shippingData })
         });
         const data = await resp.json();
-        if (!data.success) return alert('Error procesando pago: ' + (data.message || '')); 
+        if (!data.success) {
+            if (btnPagar) { btnPagar.disabled = false; btnPagar.textContent = 'Pagar con Mercado Pago'; }
+            return alert('Error procesando pago: ' + (data.message || '')); 
+        }
         const pref = data.preference || {};
         const initPoint = pref.init_point || pref.sandbox_init_point || (pref && pref.init_point);
         if (initPoint) {
-            // Redirigir a Mercado Pago
             window.location.href = initPoint;
         } else {
             console.error('Preferencia MP inesperada', pref);
             alert('No se pudo iniciar el checkout de Mercado Pago');
+            if (btnPagar) { btnPagar.disabled = false; btnPagar.textContent = 'Pagar con Mercado Pago'; }
         }
     } catch (err) {
         console.error('Error al crear preferencia MP', err);
         alert('Error de red al intentar pagar con Mercado Pago');
+        if (btnPagar) { btnPagar.disabled = false; btnPagar.textContent = 'Pagar con Mercado Pago'; }
     }
+}
+
+// Reemplazar la funcion pagarMercadoPago
+async function pagarMercadoPago() {
+    abrirModalEnvio();
 }
 
 // ---- Abrir / cerrar panel ----

@@ -84,6 +84,11 @@ CREATE TABLE IF NOT EXISTS Ordenes (
     payment_id VARCHAR(100),
     payer_email VARCHAR(255),
     payer_name VARCHAR(255),
+    envio_nombre VARCHAR(255),
+    envio_documento VARCHAR(50),
+    envio_celular VARCHAR(50),
+    envio_ciudad VARCHAR(100),
+    envio_direccion VARCHAR(255),
     metadata JSON,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

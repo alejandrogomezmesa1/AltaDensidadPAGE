@@ -23,7 +23,7 @@ function mapPaymentToStatus(paymentStatus) {
 // POST /api/mercadopago/create_preference
 router.post('/create_preference', async (req, res) => {
     try {
-        const { items, payer } = req.body || {};
+        const { items, payer, shipping } = req.body || {};
         if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ success: false, message: 'La lista de items es requerida' });
         }
@@ -45,8 +45,19 @@ router.post('/create_preference', async (req, res) => {
         const pool = await getConnection();
         try {
             await pool.query(
-                'INSERT INTO Ordenes (external_reference, items, total, currency, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())',
-                [external_reference, JSON.stringify(mpItems), total, 'COP', 'pending']
+                'INSERT INTO Ordenes (external_reference, items, total, currency, status, envio_nombre, envio_documento, envio_celular, envio_ciudad, envio_direccion, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())',
+                [
+                    external_reference, 
+                    JSON.stringify(mpItems), 
+                    total, 
+                    'COP', 
+                    'pending',
+                    shipping ? shipping.nombre : null,
+                    shipping ? shipping.documento : null,
+                    shipping ? shipping.celular : null,
+                    shipping ? shipping.ciudad : null,
+                    shipping ? shipping.direccion : null
+                ]
             );
         } catch (dbErr) {
             console.warn('No se pudo insertar orden (verifique la tabla Ordenes):', dbErr.message || dbErr);
@@ -56,9 +67,19 @@ router.post('/create_preference', async (req, res) => {
         const preferHttpsHosts = /railway\.app|vercel\.app|ngrok\.io|localhost/;
         const protocol = (process.env.FORCE_HTTPS === '1' || preferHttpsHosts.test(req.get('host') || '')) ? 'https' : req.protocol;
         const hostBase = process.env.FRONTEND_URL || `${protocol}://${req.get('host')}`;
+        // Usar datos de envío para pre-llenar el pagador de Mercado Pago si no hay payer explícito
+        let mpPayer = payer;
+        if (!mpPayer && shipping && shipping.nombre) {
+            const [name, ...lastNames] = shipping.nombre.split(' ');
+            mpPayer = {
+                name: name || '',
+                surname: lastNames.join(' ') || ''
+            };
+        }
+
         const preference = {
             items: mpItems,
-            payer: payer || undefined,
+            payer: mpPayer || undefined,
             external_reference,
             back_urls: {
                 success: `${hostBase}/success.html`,
