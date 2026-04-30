@@ -12,238 +12,90 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
       crossorigin="anonymous"
     />
-    <script src="tema.js"></script>
-  </head>
-  <body>
-    <header class="header">
-      <div class="logo-container">
-        <a href="index.html">
-          <img
-            src="img/Logo2026.png"
-            alt="Perfumeria de Alta Densidad"
-            class="logo"
-        /></a>
-        <a class="header-tittle" href="index.html">
-          Perfumería de Alta Densidad</a
-        >
-      </div>
-      <nav class="main-nav">
-        <ul>
-          <li><a href="index.html">Inicio</a></li>
-          <li class="dropdown">
-            <a href="#">Selecciones<i class="fas fa-chevron-down"></i></a>
-            <ul class="dropdown-menu">
-              <li><a href="envases.html">Presentaciones</a></li>
-              <li><a href="top10.html">Top 10 mas vendidas</a></li>
-            </ul>
-          </li>
-          <li><a href="nosotros.html">Sobre Nosotros</a></li>
-          <li><a href="#footer">Contacto</a></li>
-          <li class="nav-buy">
-            <a
-              class="header-buy-btn"
-              href="https://wa.me/3046477694?text=Hola, estoy interesado en los perfumes"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Comprar vía WhatsApp"
-              >Comprar</a
-            >
-          </li>
-          <li id="navSesion">
-            <a href="login.html" class="nav-login-btn"
-              ><i class="fas fa-user"></i> Ingresar</a
-            >
-          </li>
-        </ul>
-      </nav>
-      <div class="header-actions">
-        <button
-          id="btnCarrito"
-          class="btn-carrito-nav"
-          aria-label="Ver carrito"
-        >
-          <i class="fas fa-shopping-cart"></i>
-          <span id="carritoBadge" class="carrito-badge" style="display: none"
-            >0</span
-          >
-        </button>
-        <button id="hamburgerBtn" aria-label="Abrir menú" aria-expanded="false">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-      <div class="nav-overlay" id="navOverlay"></div>
-    </header>
+    <!-- ===== MODAL DATOS ENVIO ===== -->
+    <div id="envioModal" class="prod-modal-overlay modal-claro" style="display: none; z-index: 9999" role="dialog" aria-modal="true" aria-labelledby="envioModalTitulo">
+      <div class="prod-modal" style="max-width: 500px; padding: 25px; border: 1px solid var(--border)">
+        <button type="button" class="prod-modal-close" id="cerrarEnvioModal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+        <h2 id="envioModalTitulo" style="color: var(--gold); margin-bottom: 10px; font-size: 1.5rem; text-align: center;">Datos de Envío</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Por favor, ingresa los datos para la transportadora.</p>
 
-    <main class="catalog-container">
-      <section class="collection-banner">
-        <div class="catalog-container">
-          <h1 style="font-size: 1.8rem">
-            Perfumería inspirada en tus fragancias favoritas
-          </h1>
-          <p>La esencia del lujo a una fracción del precio</p>
-        </div>
-      </section>
-
-      <!-- Sección de productos -->
-      <!-- Sección de productos -->
-
-      <button id="openFilters">Filtrar por</button>
-
-      <div id="filterModal" class="modal">
-        <div class="modal-content">
-          <button class="close">&times;</button>
-          <input type="text" id="filterName" placeholder="Buscar por nombre" />
-          <select id="filterCategory">
-            <option value="">Todas las categorías</option>
-            <option value="Diseñador">Diseñador</option>
-            <option value="Arabe">Arabes</option>
-          </select>
-          <select id="filterGender">
-            <option value="">Todos los géneros</option>
-            <option value="Mujer">Dama</option>
-            <option value="Hombre">Caballero</option>
-            <option value="Unisex">Unisex</option>
-          </select>
-          <button id="applyFilters">Aplicar filtros</button>
-          <button id="resetFilters" type="button">Quitar filtros</button>
-        </div>
-      </div>
-
-      <!-- Sección de productos -->
-      <!-- Sección de productos -->
-      <section class="products">
-        <div class="card-container">
-          <div class="products-grid" id="productGrid">
-            <!-- Los productos se cargarán aquí con JavaScript -->
+        <form id="envioForm" style="display: flex; flex-direction: column; gap: 15px">
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Nombre Completo *</label>
+            <input type="text" id="envNombre" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
           </div>
-        </div>
 
-        <div id="paginacion" class="paginacion"></div>
-
-        <div class="special-offer">
-          <p>
-            Combina 3 lociones de 30 ml y obtén un descuento →
-            <strong>3x $50.000 COP</strong>
-          </p>
-        </div>
-      </section>
-    </main>
-
-    <section class="features">
-      <div class="feature-card">
-        <i class="fas fa-star"></i>
-        <h3>Inspiradas en Fragancias Originales</h3>
-        <p>
-          Fragancias inspiradas en las Originales de diseñador con la mejor
-          relación calidad-precio
-        </p>
-      </div>
-
-      <div class="feature-card">
-        <i class="fas fa-box-open"></i>
-        <h3>Variedad de Envases</h3>
-        <p>
-          Cilindro Tradicional, Cartier, Media Luna, Swarosky en distintos
-          tamaños y colores
-        </p>
-        <a class="masinfo" href="envases.html"
-          ><button>Ver presentaciones disponibles</button></a
-        >
-      </div>
-
-      <div class="feature-card">
-        <i class="fas fa-heart"></i>
-        <h3>Feromonas</h3>
-        <p>
-          Nuestras fragancias elaboradas con feromonas, están diseñadas para
-          intensificar la atracción y garantizar una absorción óptima en la
-          piel, ofreciendo una experiencia única y envolvente.
-        </p>
-      </div>
-    </section>
-
-    <section class="kits-section">
-      <div class="kits-container">
-        <h2 class="kits-title">Kits de Cuidado Corporal</h2>
-        <p class="kits-subtitle">
-          Combina loción y crema para una experiencia completa de hidratación y
-          fragancia
-        </p>
-        <div class="kits-grid" id="kitsGrid">
-          <!-- Los kits se cargarán aquí dinámicamente -->
-        </div>
-        <div id="kitsPaginacion" class="paginacion"></div>
-        <!-- Modal para detalles de kit (inyectado por JS) -->
-        <!-- El modal se crea dinámicamente en index.js si no existe -->
-        <div class="kits-promo">
-          <p>
-            <strong>Envío gratis</strong> en compras superiores a $100.000 COP
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div id="footer" class="footer-content">
-        <div class="footer-section">
-          <h3>Contacto</h3>
-          <p>Ubicados en la ciudad de Medellín.</p>
-          <p>+57 3046477694</p>
-          <p>perfumesaltadensidad@gmail.com</p>
-        </div>
-
-        <div class="footer-section">
-          <h3>Enlaces rápidos</h3>
-          <ul>
-            <li><a href="nosotros.html">Preguntas frecuentes</a></li>
-            <li><a href="nosotros.html">Envíos y devoluciones</a></li>
-            <li><a href="nosotros.html">Política de privacidad</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-section">
-          <h3>Redes sociales</h3>
-          <div class="social-icons">
-            <a
-              class="social-tiktok"
-              target="_blank"
-              href="https://www.tiktok.com/@fragancias_altadensidad"
-              aria-label="TikTok"
-              ><i class="fab fa-tiktok"></i
-            ></a>
-            <a
-              class="social-instagram"
-              target="_blank"
-              href="https://www.instagram.com/fragancias_alta_densidad/?hl=es"
-              aria-label="Instagram"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a
-              class="social-whatsapp"
-              href="https://wa.me/3046477694?text=Hola, estoy interesado en los perfumes"
-              target="_blank"
-              aria-label="WhatsApp"
-              ><i class="fab fa-whatsapp"></i
-            ></a>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Documento de Identidad (Cédula/NIT) *</label>
+            <input type="text" id="envDocumento" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
           </div>
-        </div>
-      </div>
 
-      <div class="footer-bottom">
-        <p>
-          &copy; 2026 Fragancias de Alta Densidad. Todos los derechos
-          reservados.
-        </p>
-      </div>
-    </footer>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Celular *</label>
+            <input type="tel" id="envCelular" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
 
-    <!-- ===== MODAL DETALLE PRODUCTO ===== -->
-    <div
-      id="productoModal"
-      class="prod-modal-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="prodModalNombre"
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Ciudad *</label>
+            <input type="text" id="envCiudad" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Dirección y Barrio *</label>
+            <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67, Barrio Centro" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Piso / Apto</label>
+              <input type="text" id="envPiso" placeholder="Piso, apartamento o local" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+            </div>
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Municipio</label>
+              <input type="text" id="envMunicipio" placeholder="Municipio (si aplica)" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Barrio</label>
+              <input type="text" id="envBarrio" placeholder="Barrio / Sector" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+            </div>
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Número de contacto (alternativo)</label>
+              <input type="tel" id="envContactoAlt" placeholder="Teléfono alternativo" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Referencia / Descripción</label>
+            <textarea id="envReferencia" rows="2" placeholder="Descripción breve para facilitar la entrega (p. ej. 'Entrada por la carrera 5, tocar timbre B')" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none; resize: vertical;"></textarea>
+          </div>
+
+          <div id="envioError" class="env-error" role="alert" aria-live="assertive" style="display: none"></div>
+
+          <button type="submit" id="btnConfirmarEnvio" style="margin-top: 10px; background: var(--gold); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
+        </form>
+      </div>
+    </div>
+            </div>
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Número de contacto (alternativo)</label>
+              <input type="tel" id="envContactoAlt" placeholder="Teléfono alternativo" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Referencia / Descripción</label>
+            <textarea id="envReferencia" rows="2" placeholder="Descripción breve para facilitar la entrega (p. ej. 'Entrada por la carrera 5, tocar timbre B')" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none; resize: vertical;"></textarea>
+          </div>
+
+          <div id="envioError" class="env-error" role="alert" aria-live="assertive" style="display: none"></div>
+
+          <button type="submit" id="btnConfirmarEnvio" style="margin-top: 10px; background: var(--gold); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: background 0.2s;">
+            <i class="fas fa-lock"></i> Continuar al Pago Seguro
+          </button>
+        </form>
     >
       <div class="prod-modal">
         <button
@@ -293,215 +145,68 @@
     <div id="carritoToast" class="carrito-toast"></div>
 
     <!-- ===== MODAL DATOS ENVIO ===== -->
-    <div
-      id="envioModal"
-      class="prod-modal-overlay modal-claro"
-      style="display: none; z-index: 9999"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="envioModalTitulo"
-    >
-      <div
-        class="prod-modal"
-        style="max-width: 500px; padding: 25px; border: 1px solid var(--border)"
-      >
-        <button
-          type="button"
-          class="prod-modal-close"
-          id="cerrarEnvioModal"
-          aria-label="Cerrar"
-        >
-          <i class="fas fa-times"></i>
-        </button>
-        <h2
-          id="envioModalTitulo"
-          style="
-            color: var(--gold);
-            margin-bottom: 10px;
-            font-size: 1.5rem;
-            text-align: center;
-          "
-        >
-          Datos de Envío
-        </h2>
-        <p
-          style="
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-          "
-        >
-          Por favor, ingresa los datos para la transportadora.
-        </p>
-        <form
-          id="envioForm"
-          style="display: flex; flex-direction: column; gap: 15px"
-        >
+    <div id="envioModal" class="prod-modal-overlay modal-claro" style="display: none; z-index: 9999" role="dialog" aria-modal="true" aria-labelledby="envioModalTitulo">
+      <div class="prod-modal" style="max-width: 500px; padding: 25px; border: 1px solid var(--border)">
+        <button type="button" class="prod-modal-close" id="cerrarEnvioModal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+        <h2 id="envioModalTitulo" style="color: var(--gold); margin-bottom: 10px; font-size: 1.5rem; text-align: center;">Datos de Envío</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Por favor, ingresa los datos para la transportadora.</p>
+
+        <form id="envioForm" style="display: flex; flex-direction: column; gap: 15px">
           <div style="display: flex; flex-direction: column; gap: 5px">
-            <label
-              style="
-                color: var(--gold-soft);
-          <div style= "display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;" >
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Nombre Completo *</label>
+            <input type="text" id="envNombre" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Documento de Identidad (Cédula/NIT) *</label>
+            <input type="text" id="envDocumento" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Celular *</label>
+            <input type="tel" id="envCelular" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Ciudad *</label>
+            <input type="text" id="envCiudad" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Dirección y Barrio *</label>
+            <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67, Barrio Centro" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
             <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
               <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Piso / Apto</label>
-              <input type="text" id="envPiso" placeholder="Piso, apartamento o local" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+              <input type="text" id="envPiso" placeholder="Piso, apartamento o local" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
             </div>
             <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
               <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Municipio</label>
-              <input type="text" id="envMunicipio" placeholder="Municipio (si aplica)" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+              <input type="text" id="envMunicipio" placeholder="Municipio (si aplica)" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
             </div>
           </div>
+
           <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
             <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
               <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Barrio</label>
-              <input type="text" id="envBarrio" placeholder="Barrio / Sector" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+              <input type="text" id="envBarrio" placeholder="Barrio / Sector" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
             </div>
             <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
               <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Número de contacto (alternativo)</label>
-              <input type="tel" id="envContactoAlt" placeholder="Teléfono alternativo" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+              <input type="tel" id="envContactoAlt" placeholder="Teléfono alternativo" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;" />
             </div>
           </div>
+
           <div style="display: flex; flex-direction: column; gap: 5px;">
             <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Referencia / Descripción</label>
             <textarea id="envReferencia" rows="2" placeholder="Descripción breve para facilitar la entrega (p. ej. 'Entrada por la carrera 5, tocar timbre B')" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none; resize: vertical;"></textarea>
           </div>
-                font-size: 0.85rem;
-                font-weight: 600;
-              "
-              >Nombre Completo *</label
-            >
-            <input
-              type="text"
-              id="envNombre"
-              required
-              style="
-                padding: 10px;
-                border-radius: 6px;
-                border: 1px solid var(--border);
-                background: var(--bg-card);
-                color: var(--text);
-                outline: none;
-              "
-            />
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px">
-            <label
-              style="
-                color: var(--gold-soft);
-                font-size: 0.85rem;
-                font-weight: 600;
-              "
-              >Documento de Identidad (Cédula/NIT) *</label
-            >
-            <input
-              type="text"
-              id="envDocumento"
-              required
-              style="
-                padding: 10px;
-                border-radius: 6px;
-                border: 1px solid var(--border);
-                background: var(--bg-card);
-                color: var(--text);
-                outline: none;
-              "
-            />
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px">
-            <label
-              style="
-                color: var(--gold-soft);
-                font-size: 0.85rem;
-                font-weight: 600;
-              "
-              >Celular *</label
-            >
-            <input
-              type="tel"
-              id="envCelular"
-              required
-              style="
-                padding: 10px;
-                border-radius: 6px;
-                border: 1px solid var(--border);
-                background: var(--bg-card);
-                color: var(--text);
-                outline: none;
-              "
-            />
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px">
-            <label
-              style="
-                color: var(--gold-soft);
-                font-size: 0.85rem;
-                font-weight: 600;
-              "
-              >Ciudad *</label
-            >
-            <input
-              type="text"
-              id="envCiudad"
-              required
-              style="
-                padding: 10px;
-                border-radius: 6px;
-                border: 1px solid var(--border);
-                background: var(--bg-card);
-                color: var(--text);
-                outline: none;
-              "
-            />
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 5px">
-            <label
-              style="
-                color: var(--gold-soft);
-                font-size: 0.85rem;
-                font-weight: 600;
-              "
-              >Dirección y Barrio *</label
-            >
-            <input
-              type="text"
-              id="envDireccion"
-              required
-              placeholder="Ej: Calle 123 #45-67, Barrio Centro"
-              style="
-                padding: 10px;
-                border-radius: 6px;
-                border: 1px solid var(--border);
-                background: var(--bg-card);
-                color: var(--text);
-                outline: none;
-              "
-            />
-          </div>
-          <div
-            id="envioError"
-            class="env-error"
-            role="alert"
-            aria-live="assertive"
-            style="display: none"
-          ></div>
-          <button
-            type="submit"
-            id="btnConfirmarEnvio"
-            style="
-              margin-top: 10px;
-              background: var(--gold);
-              color: #000;
-              font-weight: bold;
-              border: none;
-              padding: 12px;
-              border-radius: 6px;
-              cursor: pointer;
-              transition: background 0.2s;
-            "
-          >
-            <i class="fas fa-lock"></i> Continuar al Pago Seguro
-          </button>
+
+          <div id="envioError" class="env-error" role="alert" aria-live="assertive" style="display: none"></div>
+
+          <button type="submit" id="btnConfirmarEnvio" style="margin-top: 10px; background: var(--gold); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
         </form>
       </div>
     </div>
