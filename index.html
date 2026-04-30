@@ -342,6 +342,30 @@
             <label
               style="
                 color: var(--gold-soft);
+          <div style= "display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;" >
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Piso / Apto</label>
+              <input type="text" id="envPiso" placeholder="Piso, apartamento o local" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+            </div>
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Municipio</label>
+              <input type="text" id="envMunicipio" placeholder="Municipio (si aplica)" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Barrio</label>
+              <input type="text" id="envBarrio" placeholder="Barrio / Sector" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+            </div>
+            <div style="flex:1; min-width:140px; display:flex; flex-direction:column; gap:5px;">
+              <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Número de contacto (alternativo)</label>
+              <input type="tel" id="envContactoAlt" placeholder="Teléfono alternativo" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px;">
+            <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Referencia / Descripción</label>
+            <textarea id="envReferencia" rows="2" placeholder="Descripción breve para facilitar la entrega (p. ej. 'Entrada por la carrera 5, tocar timbre B')" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none; resize: vertical;"></textarea>
+          </div>
                 font-size: 0.85rem;
                 font-weight: 600;
               "

@@ -8,6 +8,18 @@ CREATE TABLE IF NOT EXISTS Ordenes (
   status ENUM('pending','approved','cancelled','failed','refunded') DEFAULT 'pending',
   preference_id VARCHAR(100),
   payment_id VARCHAR(100),
+  -- Campos de envío
+  envio_nombre VARCHAR(255),
+  envio_documento VARCHAR(100),
+  envio_celular VARCHAR(60),
+  envio_ciudad VARCHAR(150),
+  envio_direccion VARCHAR(300),
+  envio_piso VARCHAR(100),
+  envio_municipio VARCHAR(150),
+  envio_barrio VARCHAR(150),
+  envio_contacto_alt VARCHAR(60),
+  envio_referencia TEXT,
+
   metadata JSON,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

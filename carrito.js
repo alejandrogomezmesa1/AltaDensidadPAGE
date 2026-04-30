@@ -236,6 +236,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const celular = document.getElementById("envCelular").value.trim();
       const ciudad = document.getElementById("envCiudad").value.trim();
       const direccion = document.getElementById("envDireccion").value.trim();
+      const piso =
+        (document.getElementById("envPiso") &&
+          document.getElementById("envPiso").value.trim()) ||
+        "";
+      const municipio =
+        (document.getElementById("envMunicipio") &&
+          document.getElementById("envMunicipio").value.trim()) ||
+        "";
+      const barrio =
+        (document.getElementById("envBarrio") &&
+          document.getElementById("envBarrio").value.trim()) ||
+        "";
+      const contactoAlt =
+        (document.getElementById("envContactoAlt") &&
+          document.getElementById("envContactoAlt").value.trim()) ||
+        "";
+      const referencia =
+        (document.getElementById("envReferencia") &&
+          document.getElementById("envReferencia").value.trim()) ||
+        "";
 
       const errorEl = document.getElementById("envioError");
       function showError(msg) {
@@ -253,9 +273,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Validaciones básicas
-      if (!nombre || !documento || !celular || !ciudad || !direccion) {
-        showError("Completa todos los campos requeridos.");
+      // Validaciones básicas (campos obligatorios)
+      if (
+        !nombre ||
+        !documento ||
+        !celular ||
+        !ciudad ||
+        !direccion ||
+        !barrio
+      ) {
+        showError(
+          "Completa los campos obligatorios: Nombre, Cédula, Celular, Ciudad, Dirección y Barrio.",
+        );
         return;
       }
       const phoneClean = celular.replace(/\D/g, "");
@@ -271,7 +300,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       clearError();
-      _shippingData = { nombre, documento, celular, ciudad, direccion };
+      _shippingData = {
+        nombre,
+        documento,
+        celular,
+        ciudad,
+        direccion,
+        piso,
+        municipio,
+        barrio,
+        contactoAlt,
+        referencia,
+      };
       cerrarModalEnvio();
       procesarPagoMercadoPago();
     });
