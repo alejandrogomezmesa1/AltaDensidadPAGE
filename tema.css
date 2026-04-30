@@ -697,11 +697,13 @@ html.modo-claro .btn-carrito-nav:hover {
         font-size: 0.85rem !important;
         padding: 8px 4px !important;
         width: 100% !important;
+        box-sizing: border-box !important;
         white-space: nowrap !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         gap: 4px !important;
+        margin: 0 !important; /* Reset margin just in case */
     }
 
     /* Inputs y Selects más grandes en móvil */
