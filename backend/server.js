@@ -33,7 +33,7 @@ app.use('/api/', limiter);
 // Limitador más estricto para login y registro
 const authLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hora
-    max: 10, // 10 intentos por hora
+    max: 50, // 50 intentos por hora (subido de 10)
     message: { success: false, message: 'Demasiados intentos de acceso. Intenta de nuevo en una hora.' }
 });
 app.use('/api/auth/login', authLimiter);

@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             document.getElementById('kitModalPrecio').textContent = `$${Number(kit.precio).toLocaleString('es-CO')} COP`;
             const beneficios = kit.beneficios || [];
             document.getElementById('kitModalBeneficios').innerHTML = beneficios.length ? `<span class='prod-tag-label'>Beneficios:</span> ` + beneficios.map(b => `<span class='prod-tag'>${b}</span>`).join('') : '';
-            document.getElementById('kitModalComprar').href = `https://wa.me/3046477694?text=Hola, estoy interesado en el Kit ${encodeURIComponent(kit.nombre)}`;
+            document.getElementById('kitModalComprar').href = `https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Me%20encant%C3%B3%20el%20Kit%20*${encodeURIComponent(kit.nombre)}*%20que%20vi%20en%20su%20cat%C3%A1logo.%20%F0%9F%92%8E%20Me%20gustar%C3%ADa%20adquirirlo%2C%20%C2%BFpodr%C3%ADan%20asesorarme%3F`;
             aplicarTemaModal(modal);
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';

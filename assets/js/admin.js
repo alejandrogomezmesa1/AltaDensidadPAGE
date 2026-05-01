@@ -1018,9 +1018,29 @@ async function cargarOrdenes(page = 1) {
         ordenes = data.data || [];
         renderTablaOrdenes(data.meta || {});
     } catch (err) {
+        if (err.message.includes('Token inválido')) {
+            manejarSesionInvalida();
+            return;
+        }
         mostrarAlerta('Error al cargar órdenes: ' + err.message, 'error');
         tbody.innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
     }
+}
+
+function manejarSesionInvalida() {
+    Swal.fire({
+        icon: 'error',
+        title: 'Sesión expirada',
+        text: 'Tu sesión ha terminado o es inválida. Por favor, ingresa de nuevo.',
+        confirmButtonText: 'Ir al Login',
+        background: '#1a1a1a',
+        color: '#fff',
+        confirmButtonColor: '#D4AF37'
+    }).then(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        window.location.href = 'login.html';
+    });
 }
 
 function renderTablaOrdenes(meta = {}) {
@@ -1219,6 +1239,10 @@ async function abrirDetalleOrden(external_reference) {
         // Open modal
         abrirModal(document.getElementById('modalOrden'));
     } catch (err) {
+        if (err.message.includes('Token inválido')) {
+            manejarSesionInvalida();
+            return;
+        }
         mostrarAlerta('Error al abrir orden: ' + err.message, 'error');
     }
 }

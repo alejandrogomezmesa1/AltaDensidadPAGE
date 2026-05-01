@@ -121,7 +121,7 @@ function renderCarrito() {
         `• ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`,
     )
     .join("%0A");
-  const waUrl = `https://wa.me/3046477694?text=Hola, quiero pedir:%0A${msg}%0A%0ATotal: $${subtotal.toLocaleString("es-CO")} COP`;
+  const waUrl = `https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Acabo%20de%20armar%20mi%20pedido%20en%20la%20web%3A%0A----------------------------------%0A${msg}%0A----------------------------------%0A%F0%9F%92%B0%20*Total%3A*%20%24${subtotal.toLocaleString("es-CO")}%20COP%0A%0AMe%20gustar%C3%ADa%20coordinar%20el%20pago%20y%20el%20env%C3%ADo.%20%F0%9F%9A%80`;
 
   footer.innerHTML = `
         <div class="carrito-subtotal">
