@@ -35,7 +35,7 @@ async function crearAdmin() {
 
         const [rows] = await pool.query('SELECT id, nombre, email, rol FROM Usuarios WHERE id = ?', [result.insertId]);
         const admin = rows[0];
-        console.log('âœ” Superusuario creado correctamente:');
+        console.log('✔ Superusuario creado correctamente:');
         console.log(`  ID:     ${admin.id}`);
         console.log(`  Nombre: ${admin.nombre}`);
         console.log(`  Email:  ${admin.email}`);

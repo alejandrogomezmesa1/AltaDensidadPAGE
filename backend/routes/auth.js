@@ -135,24 +135,24 @@ router.post('/forgot-password', async (req, res) => {
         const mailOptions = {
             to: email,
             from: `"Fragancias Alta Densidad" <${process.env.EMAIL_USER}>`,
-            subject: 'Código de recuperación - Alta Densidad',
+            subject: 'C\u00f3digo de recuperaci\u00f3n - Alta Densidad',
             html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
-                    <h2 style="color: #D4AF37; text-align: center;">Recuperación de Contraseña</h2>
+                    <h2 style="color: #D4AF37; text-align: center;">Recuperaci\u00f3n de Contrase\u00f1a</h2>
                     <p>Hola <strong>${users[0].nombre}</strong>,</p>
-                    <p>Has solicitado recuperar tu contraseña. Usa el siguiente código para completar el proceso:</p>
+                    <p>Has solicitado recuperar tu contrase\u00f1a. Usa el siguiente c\u00f3digo para completar el proceso:</p>
                     <div style="background: #f9f9f9; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
                         <span style="font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #333;">${code}</span>
                     </div>
-                    <p>Este código es válido por 10 minutos. Si no solicitaste este cambio, puedes ignorar este correo.</p>
+                    <p>Este c\u00f3digo es v\u00e1lido por 10 minutos. Si no solicitaste este cambio, puedes ignorar este correo.</p>
                     <hr style="border: none; border-top: 1px solid #eee; margin-top: 20px;">
-                    <p style="font-size: 12px; color: #888; text-align: center;">Fragancias de Alta Densidad - Medellín, Colombia</p>
+                    <p style="font-size: 12px; color: #888; text-align: center;">Fragancias de Alta Densidad - Medell\u00edn, Colombia</p>
                 </div>
             `
         };
 
         await transporter.sendMail(mailOptions);
-        res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación.' });
+        res.json({ success: true, message: 'Si el email existe, se enviar\u00e1 un c\u00f3digo de recuperaci\u00f3n.' });
     } catch (error) {
         console.error('Error en forgot-password:', error);
         res.status(500).json({ success: false, message: 'Error al procesar la solicitud', error: error.message });

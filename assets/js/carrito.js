@@ -80,7 +80,7 @@ function renderCarrito() {
     lista.innerHTML = `
             <div class="carrito-vacio">
                 <i class="fas fa-shopping-bag"></i>
-                <p>Tu carrito está vacío</p>
+                <p>Tu carrito est\u00e1 vac\u00edo</p>
             </div>`;
     footer.innerHTML = "";
     return;
@@ -163,7 +163,7 @@ let _envioOverlayClick = null;
 function abrirModalEnvio() {
   const carrito = obtenerCarrito();
   if (carrito.length === 0) {
-    alert("El carrito está vacío");
+    alert("El carrito est\u00e1 vac\u00edo");
     return;
   }
   const modal = document.getElementById("envioModal");

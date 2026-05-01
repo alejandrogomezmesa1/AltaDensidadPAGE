@@ -47,7 +47,7 @@ if (forgotForm) {
         
         setMsg(forgotMsg, '');
         if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-            setMsg(forgotMsg, 'Ingresa un email válido.');
+            setMsg(forgotMsg, 'Ingresa un email v\u00e1lido.');
             return;
         }
 
@@ -65,7 +65,7 @@ if (forgotForm) {
                 showForm(confirmForm);
                 document.getElementById('email-confirm').value = email;
             } else {
-                setMsg(forgotMsg, data.message || 'Error al enviar el código.');
+                setMsg(forgotMsg, data.message || 'Error al enviar el c\u00f3digo.');
             }
         } catch (err) {
             setMsg(forgotMsg, 'Error al conectar con el servidor.');
@@ -84,7 +84,7 @@ if (confirmForm) {
         const email = document.getElementById('email-confirm').value;
         
         if (!code || code.length < 6) {
-            setMsg(confirmMsg, 'Ingresa el código de 6 dígitos.');
+            setMsg(confirmMsg, 'Ingresa el c\u00f3digo de 6 d\u00edgitos.');
             return;
         }
 
@@ -107,11 +107,11 @@ if (resetForm) {
 
         setMsg(resetMsg, '');
         if (password.length < 6) {
-            setMsg(resetMsg, 'Mínimo 6 caracteres.');
+            setMsg(resetMsg, 'M\u00ednimo 6 caracteres.');
             return;
         }
         if (password !== confirm) {
-            setMsg(resetMsg, 'Las contraseñas no coinciden.');
+            setMsg(resetMsg, 'Las contrase\u00f1as no coinciden.');
             return;
         }
 
@@ -126,7 +126,7 @@ if (resetForm) {
             });
             const data = await res.json();
             if (data.success) {
-                setMsg(resetMsg, '¡Contraseña cambiada con éxito! Redirigiendo...', true);
+                setMsg(resetMsg, '\u00a1Contrase\u00f1a cambiada con \u00e9xito! Redirigiendo...', true);
                 setTimeout(() => {
                     window.location.href = 'login.html';
                 }, 2000);
