@@ -4,36 +4,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getConnection } = require('../config/db');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
     console.warn('WARNING: JWT_SECRET is not defined. Authentication will fail.');
 }
 
-// Configuración de Nodemailer (Gmail con IP Directa para evitar IPv6)
-const transporter = nodemailer.createTransport({
-    host: '74.125.142.108', // IP fija de smtp.gmail.com (IPv4)
-    port: 587,
-    secure: false, 
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false,
-        servername: 'smtp.gmail.com' // Necesario para que el certificado SSL coincida
-    }
-});
-
-// Verificar conexión del transportador
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('CRÍTICO: Error en configuración de Email (Nodemailer):', error.message);
-    } else {
-        console.log('✔ Servidor de correos listo para enviar mensajes (Puerto 465)');
-    }
-});
+// El transportador de Nodemailer ha sido reemplazado por SendGrid para evitar bloqueos en Railway.
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
@@ -117,54 +96,68 @@ router.post('/login', async (req, res) => {
 });
 
 // POST /api/auth/forgot-password (ahora envía un código numérico)
+// POST /api/auth/forgot-password
 router.post('/forgot-password', async (req, res) => {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ success: false, message: 'Email requerido' });
-
     try {
-        const pool = await getConnection();
-        const [users] = await pool.query('SELECT id, nombre FROM Usuarios WHERE email = ?', [email]);
-        if (users.length === 0) {
-            // Por seguridad, responde igual aunque no exista
-            return res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación.' });
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'El email es requerido' });
         }
 
-        // Generar código de 6 dígitos
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        const expires = new Date(Date.now() + 1000 * 60 * 10); // 10 minutos
+        const pool = await getConnection();
+        const [rows] = await pool.query('SELECT id, nombre FROM Usuarios WHERE email = ?', [email]);
+
+        if (rows.length === 0) {
+            // No revelamos si el email existe por seguridad
+            return res.json({ success: true, message: 'Si el email existe, se enviar\u00e1 un c\u00f3digo de recuperaci\u00f3n.' });
+        }
+
+        const usuario = rows[0];
+        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiracion = new Date(Date.now() + 3600000); // 1 hora
 
         await pool.query(
-            'UPDATE Usuarios SET reset_token = ?, reset_token_expires = ? WHERE email = ?',
-            [code, expires, email]
+            'UPDATE Usuarios SET reset_token = ?, reset_token_expires = ? WHERE id = ?',
+            [codigo, expiracion, usuario.id]
         );
 
-        const mailOptions = {
+        // Enviar con SendGrid
+        const msg = {
             to: email,
-            from: `"Fragancias Alta Densidad" <${process.env.EMAIL_USER}>`,
-            subject: 'C\u00f3digo de recuperaci\u00f3n - Alta Densidad',
+            from: 'fraganciasaltadensidad@gmail.com', // DEBE ESTAR VERIFICADO EN SENDGRID
+            subject: 'C\u00f3digo de Recuperaci\u00f3n - Alta Densidad',
             html: `
-                <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
-                    <h2 style="color: #D4AF37; text-align: center;">Recuperaci\u00f3n de Contrase\u00f1a</h2>
-                    <p>Hola <strong>${users[0].nombre}</strong>,</p>
-                    <p>Has solicitado recuperar tu contrase\u00f1a. Usa el siguiente c\u00f3digo para completar el proceso:</p>
-                    <div style="background: #f9f9f9; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
-                        <span style="font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #333;">${code}</span>
+                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0a; color: #ffffff; padding: 40px; border-radius: 15px; border: 1px solid #D4AF37; max-width: 600px; margin: auto;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="color: #D4AF37; margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px;">Alta Densidad</h1>
+                        <p style="color: #888; font-size: 14px;">Luxury Fragrance Experience</p>
                     </div>
-                    <p>Este c\u00f3digo es v\u00e1lido por 10 minutos. Si no solicitaste este cambio, puedes ignorar este correo.</p>
-                    <hr style="border: none; border-top: 1px solid #eee; margin-top: 20px;">
-                    <p style="font-size: 12px; color: #888; text-align: center;">Fragancias de Alta Densidad - Medell\u00edn, Colombia</p>
+                    <div style="background-color: rgba(212, 175, 55, 0.05); padding: 30px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                        <h2 style="color: #ffffff; margin-top: 0;">Recuperaci\u00f3n de Contrase\u00f1a</h2>
+                        <p>Hola, <strong>${usuario.nombre}</strong>.</p>
+                        <p>Has solicitado restablecer tu contrase\u00f1a. Utiliza el siguiente c\u00f3digo para continuar con el proceso:</p>
+                        
+                        <div style="background: #1a1a1a; color: #D4AF37; font-size: 36px; font-weight: bold; text-align: center; padding: 20px; margin: 30px 0; border-radius: 8px; border: 1px solid #D4AF37; letter-spacing: 5px;">
+                            ${codigo}
+                        </div>
+                        
+                        <p style="font-size: 13px; color: #888;">Este c\u00f3digo es v\u00e1lido por 60 minutos. Si no has solicitado este cambio, puedes ignorar este mensaje.</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 30px; color: #555; font-size: 12px;">
+                        <p>&copy; 2025 Alta Densidad | Medell\u00edn, Colombia</p>
+                    </div>
                 </div>
             `
         };
 
-        await transporter.sendMail(mailOptions);
+        await sgMail.send(msg);
         res.json({ success: true, message: 'Si el email existe, se enviar\u00e1 un c\u00f3digo de recuperaci\u00f3n.' });
+
     } catch (err) {
-        console.error('Error en forgot-password:', err);
+        console.error('Error en forgot-password (SendGrid):', err);
         res.status(500).json({ 
             success: false, 
-            message: 'Error al enviar email: ' + err.message,
-            debug: err.code 
+            message: 'Error al enviar email a trav\u00e9s de SendGrid. ' + (err.response ? err.response.body.errors[0].message : err.message)
         });
     }
 });
