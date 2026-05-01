@@ -47,19 +47,25 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <div class="kit-media">
                             <div class="kit-image-placeholder">
                                 <img src="${kit.imagen}" alt="${kit.nombre}">
-                                <div class="kit-badge">Kit</div>
+                                <div class="kit-badge">Especial</div>
                             </div>
                         </div>
                         <div class="kit-body">
                             <h3 class="kit-name">${kit.nombre}</h3>
-                            <p class="kit-description">${(kit.descripcion||'').slice(0,140)}</p>
-                            <ul class="kit-benefits">${(kit.beneficios||[]).map(b=>`<li>${b}</li>`).join('')}</ul>
-                                    <div class="kit-footer">
-                                        <div class="kit-price"><div class="price-label">Precio</div><div class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')} COP</div></div>
-                                        <button class="btn-agregar-carrito kit-add-btn" type="button" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kit.id || kit._id || Math.floor(Math.random()*1000000), name: kit.nombre || kit.name, image: kit.imagen || kit.image, price: kit.precio || kit.price || 0})})'>
-                                            <i class="fas fa-cart-plus"></i> Agregar
-                                        </button>
-                                    </div>
+                            <p class="kit-description">${(kit.descripcion||'').slice(0,120)}...</p>
+                            <ul class="kit-benefits">
+                                ${(kit.beneficios||[]).map(b=>`<li><i class="fas fa-check-circle"></i> ${b}</li>`).join('')}
+                            </ul>
+                            <div class="kit-footer">
+                                <div class="kit-price">
+                                    <span class="price-label">Colección Kit</span>
+                                    <span class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')}</span>
+                                </div>
+                                <button class="btn-agregar-carrito kit-add-btn" type="button" 
+                                    onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kit.id || kit._id || Math.floor(Math.random()*1000000), name: kit.nombre || kit.name, image: kit.imagen || kit.image, price: kit.precio || kit.price || 0})})'>
+                                    <i class="fas fa-cart-plus"></i> <span>Agregar</span>
+                                </button>
+                            </div>
                         </div>
                     `;
                     // Abrir modal al hacer click en la tarjeta completa (ignorar clicks en el botón de agregar)
@@ -106,9 +112,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (p < 1 || p > totalPaginas) return;
             window.kitsPaginaActual = p;
             renderKits(window.kitsPublicos || []);
-            // Scroll suave hasta sección kits
-            const kitsSection = document.querySelector('.kits-section');
-            if (kitsSection) kitsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Scroll suave hasta sección kits eliminado por petición del usuario
+            // const kitsSection = document.querySelector('.kits-section');
+            // if (kitsSection) kitsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         // Modal de detalles de kit
@@ -237,8 +243,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             renderPaginacion(productsToShow.length);
 
-            // Scroll suave al inicio del grid al cambiar página
-            productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Scroll suave al inicio del grid al cambiar página eliminado por petición del usuario
+            // productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // ============================

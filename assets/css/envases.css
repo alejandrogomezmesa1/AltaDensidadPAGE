@@ -741,7 +741,7 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 
 .feature-card i {
     font-size: 2.2rem;
-    color: var(--texto);
+    color: var(--azul-dos); /* Cambio a oro para que resalte más */
     margin-bottom: 15px;
 }
 
@@ -800,6 +800,10 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
     font-weight: bolder;
     cursor: pointer;
     transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.masinfo button i {
+    font-size: 1.1rem;
 }
 
 .masinfo button:hover {
