@@ -13,19 +13,24 @@ if (!JWT_SECRET) {
 
 // Configuración de Nodemailer (Gmail)
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // true para puerto 465, false para otros
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // Ayuda a evitar problemas en algunos servidores
     }
 });
 
 // Verificar conexión del transportador
 transporter.verify((error, success) => {
     if (error) {
-        console.warn('Error en configuración de Email (Nodemailer):', error.message);
+        console.error('CRÍTICO: Error en configuración de Email (Nodemailer):', error.message);
     } else {
-        console.log('Servidor de correos listo para enviar mensajes');
+        console.log('✔ Servidor de correos listo para enviar mensajes (Puerto 465)');
     }
 });
 
