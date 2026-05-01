@@ -6,18 +6,26 @@ let pool = null;
 
 async function getConnection() {
     if (pool) return pool;
-    pool = await mysql.createPool({
-        host:     process.env.DB_HOST     || 'localhost',
-        port:     parseInt(process.env.DB_PORT) || 3306,
-        database: process.env.DB_DATABASE,
-        user:     process.env.DB_USER     || 'root',
-        password: process.env.DB_PASSWORD || '',
+    const dbConfig = {
+        host:     process.env.DB_HOST     || process.env.MYSQLHOST || 'localhost',
+        port:     parseInt(process.env.DB_PORT || process.env.MYSQLPORT || '3306'),
+        database: process.env.DB_DATABASE || process.env.MYSQLDATABASE,
+        user:     process.env.DB_USER     || process.env.MYSQLUSER || 'root',
+        password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '',
         charset:  'utf8mb4',
         waitForConnections: true,
         connectionLimit:    10,
-        queueLimit:         0
-    });
-    console.log('Conexión al grupo de bases de datos establecida correctamente');
+        queueLimit:         0,
+        connectTimeout:     10000 // 10 segundos de timeout
+    };
+
+    try {
+        pool = await mysql.createPool(dbConfig);
+        console.log('Conexión al grupo de bases de datos establecida correctamente');
+    } catch (err) {
+        console.error('Error CRÍTICO al crear el pool de MySQL:', err.message);
+        throw err;
+    }
     return pool;
 }
 
