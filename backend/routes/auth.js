@@ -11,20 +11,19 @@ if (!JWT_SECRET) {
     console.warn('WARNING: JWT_SECRET is not defined. Authentication will fail.');
 }
 
-// Configuración de Nodemailer (Gmail)
+// Configuración de Nodemailer (Gmail con IP Directa para evitar IPv6)
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: '74.125.142.108', // IP fija de smtp.gmail.com (IPv4)
     port: 587,
-    secure: false, // STARTTLS
+    secure: false, 
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false
-    },
-    // FORZAR IPv4 (Solución para ENETUNREACH en Railway)
-    family: 4 
+        rejectUnauthorized: false,
+        servername: 'smtp.gmail.com' // Necesario para que el certificado SSL coincida
+    }
 });
 
 // Verificar conexión del transportador
