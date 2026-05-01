@@ -14,14 +14,15 @@ if (!JWT_SECRET) {
 // Configuración de Nodemailer (Gmail)
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // true para puerto 465, false para otros
+    port: 587,
+    secure: false, // false para puerto 587 (usa STARTTLS)
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false // Ayuda a evitar problemas en algunos servidores
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
     }
 });
 
