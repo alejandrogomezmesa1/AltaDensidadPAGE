@@ -674,9 +674,77 @@ html.modo-claro .btn-carrito-nav:hover {
 }
 
 /* ================================================
-   GLOBAL MOBILE UI/UX IMPROVEMENTS
-   (Aplicable a todo el sitio)
+   RESPONSIVE REFINEMENTS (Laptops 13-14" & Tablets)
    ================================================ */
+
+/* Pantallas medianas (Laptops pequeñas / Tablets landscape) */
+@media (min-width: 768px) and (max-width: 1200px) {
+    .header {
+        padding: 0 3% !important;
+        gap: 15px !important;
+    }
+
+    .main-nav ul {
+        gap: 10px !important;
+    }
+
+    .main-nav a {
+        padding: 8px 12px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .header-tittle {
+        font-size: 1.1rem !important;
+    }
+
+    .logo-container img {
+        max-width: 40px !important;
+    }
+
+    /* Grillas de productos: 3 columnas en laptops pequeñas si es necesario */
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+        gap: 15px !important;
+    }
+
+    /* Kits: 2 columnas en lugar de 3 para evitar que se vean muy estrechos */
+    .kits-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+    }
+}
+
+/* Pantallas grandes (Desktop estándar) */
+@media (min-width: 1201px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+    }
+}
+
+/* Ajustes generales de contenedores */
+.container, .main-content {
+    width: 92%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1400px) {
+    .container, .main-content {
+        width: 95%;
+    }
+}
+
+/* Evitar que el banner de colección sea demasiado alto en laptops */
+@media (min-height: 600px) and (max-height: 800px) {
+    .collection-banner {
+        min-height: 250px !important;
+        padding: 40px 20px !important;
+    }
+    .collection-banner h1 {
+        font-size: 2.2rem !important;
+    }
+}
+
+/* Global Mobile Improvements */
 @media (max-width: 768px) {
     /* Touch targets: asegurar altura mínima para pulgares */
     button, 
@@ -689,7 +757,7 @@ html.modo-claro .btn-carrito-nav:hover {
         font-size: 1rem !important;
     }
 
-    /* Botones dentro de las cards (que ahora están a 2 columnas y tienen menos espacio) */
+    /* Botones dentro de las cards */
     .btn-agregar-carrito, 
     .product-button, 
     .kit-add-btn {
@@ -703,7 +771,6 @@ html.modo-claro .btn-carrito-nav:hover {
         align-items: center !important;
         justify-content: center !important;
         gap: 4px !important;
-        margin: 0 !important; /* Reset margin just in case */
     }
 
     /* Inputs y Selects más grandes en móvil */
@@ -714,7 +781,7 @@ html.modo-claro .btn-carrito-nav:hover {
     select,
     textarea {
         min-height: 48px !important;
-        font-size: 1rem !important; /* Evitar zoom automático en iOS */
+        font-size: 1rem !important;
         padding: 12px 14px !important;
     }
 
@@ -728,9 +795,23 @@ html.modo-claro .btn-carrito-nav:hover {
         border-radius: 12px !important;
     }
     
-    /* Evitar desbordamientos horizontales */
     body {
         overflow-x: hidden;
+    }
+}
+
+/* Forzar grilla de productos flexible en todo el sitio */
+.product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+    gap: 20px !important;
+    padding: 20px 0 !important;
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
     }
 }
 
