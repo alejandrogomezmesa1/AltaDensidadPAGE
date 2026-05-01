@@ -14,7 +14,7 @@ Tienda de perfumería de alta gama. Proyecto full-stack con frontend en HTML/CSS
 6. [Paginación](#paginación)
 7. [Carrito de Compras](#carrito-de-compras)
 8. [SweetAlert2](#sweetalert2)
-9. [Kits de Cuidado Corporal](#kits-de-cuidado-corporal)
+9. [Kits de Fragancias Exclusivas](#kits-de-fragancias-exclusivas)
 10. [Integración WhatsApp](#integración-whatsapp)
 11. [Autenticación](#autenticación)
 12. [API REST](#api-rest)
@@ -447,18 +447,18 @@ Swal.fire({
 
 ---
 
-## Kits de Cuidado Corporal
+## Kits de Fragancias Exclusivas
 
-Sección estática en `index.html` que muestra 4 kits combinados (loción + crema corporal). No consume la API.
+Sección dinámica en `index.html` que muestra colecciones de fragancias premium.
 
-| Kit | Fragancia | Precio |
+| Kit | Marca | Precio |
 |---|---|---|
 | Kit Haya | Lattafa | $50.000 COP |
 | Kit Thank U Next *(Más Popular)* | Ariana Grande | $50.000 COP |
 | Kit Bade Oud Sublime | Lattafa | $50.000 COP |
 | Kit Yara | Lattafa | $50.000 COP |
 
-Cada kit incluye: **Loción 150 ml + Crema corporal 230 ml**. El botón "Comprar Kit" genera un enlace directo a WhatsApp con el nombre del kit.
+Cada kit incluye una selección exclusiva de fragancias de alta densidad. El botón "Agregar" permite integrar el kit directamente al carrito de compras.
 
 > Envío gratis en compras superiores a **$100.000 COP**.
 
