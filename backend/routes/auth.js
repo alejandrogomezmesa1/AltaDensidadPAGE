@@ -3,30 +3,31 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getConnection } = require('../config/db');
-
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const sgMail = require('@sendgrid/mail');
-// Inicializar SendGrid solo si la clave parece válida (evita el mensaje "API key does not start with 'SG.'")
-let sgConfigured = false;
-try {
-    const sgKey = process.env.SENDGRID_API_KEY;
-    if (sgKey && typeof sgKey === 'string' && sgKey.startsWith('SG.')) {
-        sgMail.setApiKey(sgKey);
-        sgConfigured = true;
-    } else if (sgKey) {
-        console.warn('SENDGRID_API_KEY no parece válida — omito inicialización de SendGrid.');
-    } else {
-        console.warn('SENDGRID_API_KEY no definida — SendGrid deshabilitado.');
-    }
-} catch (err) {
-    console.warn('Error inicializando SendGrid:', err && err.message ? err.message : err);
-}
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
     console.warn('WARNING: JWT_SECRET is not defined. Authentication will fail.');
 }
+
+// Configuración de Nodemailer (Gmail)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+// Verificar conexión del transportador
+transporter.verify((error, success) => {
+    if (error) {
+        console.warn('Error en configuración de Email (Nodemailer):', error.message);
+    } else {
+        console.log('Servidor de correos listo para enviar mensajes');
+    }
+});
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
@@ -131,21 +132,26 @@ router.post('/forgot-password', async (req, res) => {
             [code, expires, email]
         );
 
-        const msg = {
+        const mailOptions = {
             to: email,
-            from: 'Alejandro <alejandrogomezmesa1@gmail.com>', // remitente verificado en SendGrid
-            subject: 'Código de recuperación de contraseña',
-            html: `<p>Tu código de recuperación es:</p>
-                   <h2 style="color:#bfa23a;letter-spacing:2px;">${code}</h2>
-                   <p>Este código expirará en 10 minutos.</p>`
+            from: `"Fragancias Alta Densidad" <${process.env.EMAIL_USER}>`,
+            subject: 'Código de recuperación - Alta Densidad',
+            html: `
+                <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
+                    <h2 style="color: #D4AF37; text-align: center;">Recuperación de Contraseña</h2>
+                    <p>Hola <strong>${users[0].nombre}</strong>,</p>
+                    <p>Has solicitado recuperar tu contraseña. Usa el siguiente código para completar el proceso:</p>
+                    <div style="background: #f9f9f9; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
+                        <span style="font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #333;">${code}</span>
+                    </div>
+                    <p>Este código es válido por 10 minutos. Si no solicitaste este cambio, puedes ignorar este correo.</p>
+                    <hr style="border: none; border-top: 1px solid #eee; margin-top: 20px;">
+                    <p style="font-size: 12px; color: #888; text-align: center;">Fragancias de Alta Densidad - Medellín, Colombia</p>
+                </div>
+            `
         };
-        if (sgConfigured) {
-            await sgMail.send(msg);
-        } else {
-            // En desarrollo, si SendGrid no está configurado, logueamos el mensaje para prueba.
-            console.log('[EMAIL DEBUG] SendGrid no configurado. Contenido del email:', msg);
-        }
 
+        await transporter.sendMail(mailOptions);
         res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación.' });
     } catch (error) {
         console.error('Error en forgot-password:', error);
