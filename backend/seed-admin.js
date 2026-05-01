@@ -1,4 +1,4 @@
-﻿// Script para crear el superusuario administrador
+// Script para crear el superusuario administrador
 // Ejecutar: node seed-admin.js
 
 const path = require('path');
@@ -20,12 +20,9 @@ async function crearAdmin() {
 
         if (existe.length > 0) {
             const u = existe[0];
-            if (u.rol === 'admin') {
-                console.log(`âœ” El admin ya existe (id: ${u.id}). No se creÃ³ uno nuevo.`);
-            } else {
-                await pool.query("UPDATE Usuarios SET rol = 'admin' WHERE email = ?", [ADMIN.email]);
-                console.log(`âœ” Usuario existente promovido a admin (id: ${u.id}).`);
-            }
+            const password_hash = await bcrypt.hash(ADMIN.password, 10);
+            await pool.query("UPDATE Usuarios SET password_hash = ?, rol = 'admin', activo = 1 WHERE email = ?", [password_hash, ADMIN.email]);
+            console.log(`✔ El admin ya existe (id: ${u.id}). Se ha actualizado su contraseña a la definida en el archivo .env.`);
             await closeConnection();
             return;
         }
