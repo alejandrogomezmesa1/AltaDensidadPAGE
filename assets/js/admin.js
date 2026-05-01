@@ -1119,6 +1119,20 @@ async function abrirDetalleOrden(external_reference) {
                         <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Dirección</span>
                         <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_direccion || 'N/A')}</p>
                     </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Barrio</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_barrio || 'N/A')}</p>
+                    </div>
+                    ${o.envio_piso ? `
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Apto / Piso</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_piso)}</p>
+                    </div>` : ''}
+                    ${o.envio_referencia ? `
+                    <div style="grid-column: 1 / -1;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Referencia</span>
+                        <p style="font-size: 0.9rem; color: var(--text); margin-top: 4px;">${escHtml(o.envio_referencia)}</p>
+                    </div>` : ''}
                 </div>
             `;
         }

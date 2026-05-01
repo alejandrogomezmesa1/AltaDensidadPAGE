@@ -24,23 +24,43 @@
         : 'https://altadensidadpage-production.up.railway.app/api';
 
     async function verify() {
-      if (!paymentId) { content.textContent = 'No se detectó identificador de pago en la URL.'; return; }
+      if (!paymentId) { content.innerHTML = '<p class="text-muted">No se detectó identificador de pago en la URL.</p>'; return; }
       try {
-        content.textContent = 'Verificando con el servidor...';
-        const resp = await fetch(`${base}/mercadopago/verify_payment?payment_id=${encodeURIComponent(paymentId)}`);
+        content.innerHTML = '<div class="loader"><i class="fas fa-circle-notch fa-spin"></i></div><p>Verificando transacción...</p>';
+        const resp = await fetch(`${base}/mercadopago/verify_payment${location.search}`);
         const data = await resp.json();
-        if (!data.success) { content.textContent = 'Error verificando pago: ' + (data.message || ''); return; }
+        if (!data.success) { 
+          content.innerHTML = `<div class="status-icon error"><i class="fas fa-exclamation-triangle"></i></div><h3>Error de Verificación</h3><p>${esc(data.message || '')}</p>`; 
+          return; 
+        }
         const order = data.order;
         if (order && order.status === 'approved') {
-          // Vaciar carrito local
           try { sessionStorage.removeItem('altadensidad_carrito'); } catch {};
-          content.innerHTML = `<h3>Pago aprobado ✅</h3><p>Referencia: <strong>${order.external_reference}</strong></p><p>Total: <strong>$${Number(order.total).toLocaleString('es-CO')}</strong></p>`;
+          content.innerHTML = `
+            <div class="status-icon success"><i class="fas fa-check-circle"></i></div>
+            <h3>¡Gracias por tu compra!</h3>
+            <p>Tu pago ha sido aprobado exitosamente.</p>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 20px; text-align: left;">
+              <p style="margin: 5px 0;">Referencia: <strong>${esc(order.external_reference)}</strong></p>
+              <p style="margin: 5px 0;">Total: <strong>$${Number(order.total).toLocaleString('es-CO')} COP</strong></p>
+            </div>
+            <p style="font-size: 0.85rem; color: #9aa4b2; margin-top: 20px;">Recibirás un correo de confirmación y nos pondremos en contacto pronto.</p>
+          `;
         } else {
-          content.innerHTML = `<h3>Pago no confirmado</h3><p>Estado: ${order ? order.status : 'desconocido'}</p>`;
+          content.innerHTML = `
+            <div class="status-icon pending"><i class="fas fa-clock"></i></div>
+            <h3>Pago en Proceso</h3>
+            <p>El estado actual es: <strong>${esc(order ? order.status : 'desconocido')}</strong></p>
+            <p>Te notificaremos cuando se complete la validación.</p>
+          `;
         }
-      } catch (err) { content.textContent = 'Error de red al verificar el pago.'; console.error(err); }
+      } catch (err) { 
+        content.innerHTML = '<div class="status-icon error"><i class="fas fa-wifi"></i></div><p>Error de red al verificar el pago.</p>'; 
+      }
     }
+    function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
     verify();
   </script>
 </body>
 </html>
+

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/Logo2026.png" type="image/x-icon">
+    <link rel="icon" href="assets/img/Logo2026.png" type="image/x-icon">
     <title >Perfumería de Alta Densidad</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="tema.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="assets/css/tema.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
-    <script src="tema.js"></script>
+    <script src="assets/js/tema.js"></script>
 </head>
 <body>
     <header class="header">
         <div class="logo-container">
-            <a href="index.html">  <img src="img/Logo2026.png" alt="Perfumeria de Alta Densidad" class="logo"></a>
+            <a href="index.html">  <img src="assets/img/Logo2026.png" alt="Perfumeria de Alta Densidad" class="logo"></a>
             <a class="header-tittle" href="index.html"> Perfumería de Alta Densidad</a>
         </div>
         <nav class="main-nav">
@@ -229,7 +229,8 @@
         <div class="prod-modal" style="max-width: 500px; padding: 25px; border: 1px solid var(--border);">
             <button type="button" class="prod-modal-close" id="cerrarEnvioModal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
             <h2 id="envioModalTitulo" style="color: var(--gold); margin-bottom: 10px; font-size: 1.5rem; text-align:center;">Datos de Envío</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Por favor, ingresa los datos para la transportadora.</p>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">Por favor, ingresa los datos para la transportadora.</p>
+            <div id="envioError" style="display:none; background: rgba(192, 57, 43, 0.2); color: #e74c3c; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; border: 1px solid #c0392b; text-align: center;"></div>
             <form id="envioForm" style="display: flex; flex-direction: column; gap: 15px;">
                 <div style="display: flex; flex-direction: column; gap: 5px;">
                     <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Nombre Completo *</label>
@@ -248,16 +249,29 @@
                     <input type="text" id="envCiudad" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Dirección y Barrio *</label>
-                    <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67, Barrio Centro" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Barrio *</label>
+                    <input type="text" id="envBarrio" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Dirección Exacta *</label>
+                    <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Apartamento / Piso / Oficina</label>
+                    <input type="text" id="envPiso" placeholder="Ej: Apto 502" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Referencia de entrega</label>
+                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque, portería 2" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
                 </div>
                 <button type="submit" id="btnConfirmarEnvio" style="margin-top: 10px; background: var(--gold); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
             </form>
         </div>
     </div>
 
-    <script src="index.js"></script>
-    <script src="carrito.js"></script>
-    <script src="nav-sesion.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/carrito.js"></script>
+    <script src="assets/js/nav-sesion.js"></script>
 </body>
 </html>
+

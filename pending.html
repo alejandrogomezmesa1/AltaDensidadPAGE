@@ -1,16 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Pago pendiente — Alta Densidad</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0} .card{background:#071023;padding:24px;border-radius:10px;max-width:720px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.6)} button{background:#c59d1f;border:0;padding:10px 14px;border-radius:6px;color:#071023;font-weight:700;cursor:pointer}</style>
-  </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    :root {
+        --bg: #0b1220;
+        --bg-card: #0d1626;
+        --gold: #D4AF37;
+        --text: #ffffff;
+        --text-muted: #9aa4b2;
+        --pending: #f39c12;
+    }
+    body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: var(--bg-card); padding: 40px; border-radius: 16px; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(212, 175, 55, 0.1); text-align: center; }
+    h1 { color: var(--pending); margin-bottom: 20px; font-size: 1.8rem; }
+    .status-icon { font-size: 4rem; color: var(--pending); margin-bottom: 25px; }
+    p { line-height: 1.6; margin-bottom: 15px; }
+    .btn { display: inline-block; background: var(--gold); border: 0; padding: 12px 24px; border-radius: 8px; color: #000; font-weight: 700; cursor: pointer; text-decoration: none; transition: transform 0.2s; margin-top: 20px; }
+    .btn:active { transform: scale(0.98); }
+    .loader { margin: 20px 0; font-size: 2rem; color: var(--gold); }
+  </style>
+</head>
 <body>
   <div class="card">
+    <div class="status-icon"><i class="fas fa-clock"></i></div>
     <h1>Pago en espera</h1>
-    <div id="content">Vamos a verificar el estado del pago...</div>
-    <div style="margin-top:12px"><button onclick="location.href='/index.html'">Volver al inicio</button></div>
+    <div id="content">
+      <div class="loader"><i class="fas fa-spinner fa-spin"></i></div>
+      <p>Estamos verificando el estado de tu transacción...</p>
+      <p class="text-muted">Esto puede tardar unos minutos dependiendo de tu entidad bancaria.</p>
+    </div>
+    <a href="/index.html" class="btn"><i class="fas fa-home"></i> Volver al Inicio</a>
   </div>
 
   <script>
@@ -20,17 +43,25 @@
     const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
         ? 'http://localhost:3000/api'
         : 'https://altadensidadpage-production.up.railway.app/api';
+
     async function verify() {
-      if (!paymentId) { content.textContent = 'No se detectó identificador de pago en la URL.'; return; }
+      if (!paymentId) return;
       try {
-        const resp = await fetch(`${base}/mercadopago/verify_payment?payment_id=${encodeURIComponent(paymentId)}`);
+        const resp = await fetch(`${base}/mercadopago/verify_payment${location.search}`);
         const data = await resp.json();
-        if (!data.success) { content.textContent = 'Error verificando pago: ' + (data.message || ''); return; }
+        if (!data.success) return;
         const order = data.order;
-        content.innerHTML = `<p>Estado actual: <strong>${order ? order.status : 'desconocido'}</strong></p>`;
-      } catch (err) { content.textContent = 'Error de red al verificar el pago.'; console.error(err); }
+        if (order) {
+            content.innerHTML = `
+                <p>Referencia de orden: <strong>${String(order.external_reference).replace(/&/g,'&amp;')}</strong></p>
+                <p>Estado actual: <strong style="color: var(--pending);">${String(order.status).toUpperCase()}</strong></p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Te enviaremos un correo en cuanto se confirme el pago.</p>
+            `;
+        }
+      } catch (err) { console.error(err); }
     }
     verify();
   </script>
 </body>
 </html>
+

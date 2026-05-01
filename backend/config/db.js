@@ -17,7 +17,7 @@ async function getConnection() {
         connectionLimit:    10,
         queueLimit:         0
     });
-    console.log('Conexion a MySQL (XAMPP) establecida correctamente');
+    console.log('Conexión al grupo de bases de datos establecida correctamente');
     return pool;
 }
 

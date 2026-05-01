@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'altadensidad_secret';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error('CRITICAL ERROR: JWT_SECRET not defined in environment variables.');
+    // No detenemos el proceso inmediatamente pero fallará cualquier validación
+}
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY || null;
 
 function extractBearer(tokenHeader) {

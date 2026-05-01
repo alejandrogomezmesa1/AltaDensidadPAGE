@@ -127,24 +127,10 @@ router.post("/create_preference", async (req, res) => {
         `${req.protocol}://${req.get("host")}/api/mercadopago/webhook`,
     };
 
-    // Si no hay token o se fuerza mock, devolver preferencia mock
-    if (!ACCESS_TOKEN || FORCE_MOCK) {
-      const mockId = "mock_pref_" + Date.now();
-      const mockPref = {
-        id: mockId,
-        init_point: `${hostBase}/_mock_mp_checkout.html?pref_id=${mockId}&external_reference=${external_reference}`,
-        sandbox_init_point: `${hostBase}/_mock_mp_checkout.html?pref_id=${mockId}&external_reference=${external_reference}`,
-        items: mpItems,
-        external_reference,
-      };
-      const msg = !ACCESS_TOKEN
-        ? "MP_ACCESS_TOKEN no configurado — se devuelve preferencia mock para desarrollo local"
-        : "MP_FORCE_MOCK activado — se devuelve preferencia mock para pruebas";
-      return res.json({
-        success: true,
-        preference: mockPref,
-        mock: true,
-        message: msg,
+    if (!ACCESS_TOKEN) {
+      return res.status(500).json({
+        success: false,
+        message: "Error de configuración: MP_ACCESS_TOKEN no encontrado en el servidor.",
       });
     }
 
@@ -233,25 +219,24 @@ router.get("/verify_payment", async (req, res) => {
         .status(400)
         .json({ success: false, message: "payment_id es requerido" });
     if (!ACCESS_TOKEN)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "MP_ACCESS_TOKEN no configurado en backend",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "MP_ACCESS_TOKEN no configurado en backend",
+      });
 
     const mpUrl = `https://api.mercadopago.com/v1/payments/${paymentId}`;
     const mpResp = await fetch(mpUrl, {
       headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
     });
     const payment = await mpResp.json();
-    if (!payment)
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "No se pudo obtener información del pago",
-        });
+    if (!payment || payment.error || payment.message) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "No se pudo obtener información del pago: " +
+          (payment?.message || "Error desconocido"),
+      });
+    }
 
     const external_reference =
       payment.external_reference ||

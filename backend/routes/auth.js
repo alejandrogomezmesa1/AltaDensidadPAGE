@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -23,7 +23,10 @@ try {
     console.warn('Error inicializando SendGrid:', err && err.message ? err.message : err);
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'altadensidad_secret';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.warn('WARNING: JWT_SECRET is not defined. Authentication will fail.');
+}
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
