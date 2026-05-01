@@ -140,9 +140,7 @@
             <div id="kitsPaginacion" class="paginacion"></div>
             <!-- Modal para detalles de kit (inyectado por JS) -->
             <!-- El modal se crea dinámicamente en index.js si no existe -->
-            <div class="kits-promo">
-                <p><strong>Envío gratis</strong> en compras superiores a $100.000 COP</p>
-            </div>
+
         </div>
     </section>
 
@@ -226,45 +224,45 @@
 
     <!-- ===== MODAL DATOS ENVIO ===== -->
     <div id="envioModal" class="prod-modal-overlay" style="display:none; z-index: 9999;" role="dialog" aria-modal="true" aria-labelledby="envioModalTitulo">
-        <div class="prod-modal" style="max-width: 500px; padding: 25px; border: 1px solid var(--border);">
+        <div class="prod-modal shipping-modal-content">
             <button type="button" class="prod-modal-close" id="cerrarEnvioModal" aria-label="Cerrar"><i class="fas fa-times"></i></button>
-            <h2 id="envioModalTitulo" style="color: var(--gold); margin-bottom: 10px; font-size: 1.5rem; text-align:center;">Datos de Envío</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">Por favor, ingresa los datos para la transportadora.</p>
-            <div id="envioError" style="display:none; background: rgba(192, 57, 43, 0.2); color: #e74c3c; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px; border: 1px solid #c0392b; text-align: center;"></div>
-            <form id="envioForm" style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Nombre Completo *</label>
-                    <input type="text" id="envNombre" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+            <h2 id="envioModalTitulo" class="shipping-title">Datos de Envío</h2>
+            <p class="shipping-subtitle">Ingresa los datos para la transportadora.</p>
+            <div id="envioError" class="shipping-error" style="display:none;"></div>
+            <form id="envioForm">
+                <div class="shipping-group">
+                    <label class="shipping-label">Nombre Completo *</label>
+                    <input type="text" id="envNombre" required class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Documento de Identidad (Cédula/NIT) *</label>
-                    <input type="text" id="envDocumento" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Documento (Cédula/NIT) *</label>
+                    <input type="text" id="envDocumento" required class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Celular *</label>
-                    <input type="tel" id="envCelular" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Celular *</label>
+                    <input type="tel" id="envCelular" required class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Ciudad *</label>
-                    <input type="text" id="envCiudad" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Ciudad *</label>
+                    <input type="text" id="envCiudad" required class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Barrio *</label>
-                    <input type="text" id="envBarrio" required style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Barrio *</label>
+                    <input type="text" id="envBarrio" required class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Dirección Exacta *</label>
-                    <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Dirección Exacta *</label>
+                    <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67" class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Apartamento / Piso / Oficina</label>
-                    <input type="text" id="envPiso" placeholder="Ej: Apto 502" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Apto / Piso / Oficina</label>
+                    <input type="text" id="envPiso" placeholder="Ej: Apto 502" class="shipping-input">
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="color: var(--gold-soft); font-size: 0.85rem; font-weight: 600;">Referencia de entrega</label>
-                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque, portería 2" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); outline: none;">
+                <div class="shipping-group">
+                    <label class="shipping-label">Referencia</label>
+                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque" class="shipping-input">
                 </div>
-                <button type="submit" id="btnConfirmarEnvio" style="margin-top: 10px; background: var(--gold); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 6px; cursor: pointer; transition: background 0.2s;"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
+                <button type="submit" id="btnConfirmarEnvio" class="shipping-btn-confirm"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
             </form>
         </div>
     </div>
