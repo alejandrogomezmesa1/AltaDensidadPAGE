@@ -159,9 +159,13 @@ router.post('/forgot-password', async (req, res) => {
 
         await transporter.sendMail(mailOptions);
         res.json({ success: true, message: 'Si el email existe, se enviar\u00e1 un c\u00f3digo de recuperaci\u00f3n.' });
-    } catch (error) {
-        console.error('Error en forgot-password:', error);
-        res.status(500).json({ success: false, message: 'Error al procesar la solicitud', error: error.message });
+    } catch (err) {
+        console.error('Error en forgot-password:', err);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error al enviar email: ' + err.message,
+            debug: err.code 
+        });
     }
 });
 
