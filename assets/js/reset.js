@@ -54,13 +54,23 @@ if (forgotForm) {
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
+        // Añadir controlador de tiempo de espera (Timeout de 15 segundos)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
         try {
+            console.log('Intentando conectar con:', `${BACKEND_URL}/api/auth/forgot-password`);
             const res = await fetch(`${BACKEND_URL}/api/auth/forgot-password`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
+                body: JSON.stringify({ email }),
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
+
             const data = await res.json();
+            console.log('Respuesta del servidor:', data);
+
             if (data.success) {
                 showForm(confirmForm);
                 document.getElementById('email-confirm').value = email;
@@ -68,10 +78,16 @@ if (forgotForm) {
                 setMsg(forgotMsg, data.message || 'Error al enviar el c\u00f3digo.');
             }
         } catch (err) {
-            setMsg(forgotMsg, 'Error al conectar con el servidor.');
+            clearTimeout(timeoutId);
+            console.error('Error detallado:', err);
+            if (err.name === 'AbortError') {
+                setMsg(forgotMsg, 'El servidor tarda demasiado en responder. Revisa los logs de Railway.');
+            } else {
+                setMsg(forgotMsg, 'Error al conectar con el servidor. Verifica tu conexi\u00f3n.');
+            }
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar código';
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar c\u00f3digo';
         }
     });
 }
