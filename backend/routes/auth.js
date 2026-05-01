@@ -15,15 +15,16 @@ if (!JWT_SECRET) {
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false, // false para puerto 587 (usa STARTTLS)
+    secure: false, // STARTTLS
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false,
-        minVersion: 'TLSv1.2'
-    }
+        rejectUnauthorized: false
+    },
+    // FORZAR IPv4 (Solución para ENETUNREACH en Railway)
+    family: 4 
 });
 
 // Verificar conexión del transportador
