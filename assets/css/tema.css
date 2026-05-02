@@ -204,6 +204,11 @@ html.modo-claro .filter-group select {
     border: 1px solid rgba(184, 150, 12, 0.3) !important;
 }
 
+html.modo-claro .filter-group select option {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+}
+
 html.modo-claro .search-box input:focus,
 html.modo-claro .filter-group select:focus {
     border-color: #B8960C !important;
