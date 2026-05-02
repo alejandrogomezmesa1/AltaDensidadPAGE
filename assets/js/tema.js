@@ -93,6 +93,21 @@ function _iniciarMenuMobile() {
         link.addEventListener('click', _cerrarNav);
     });
 
+    // Swipe to close (Deslizar a la izquierda para cerrar)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    nav.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    nav.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 70) { // Deslizamiento de más de 70px a la izquierda
+            _cerrarNav();
+        }
+    }, { passive: true });
+
     // Dropdown toggle — todos los dispositivos (reemplaza hover/focus-within CSS)
     nav.querySelectorAll('.dropdown > a').forEach(link => {
         link.addEventListener('click', function (e) {

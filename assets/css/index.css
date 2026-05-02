@@ -3213,29 +3213,6 @@ html.modo-claro .shipping-input {
   top: 50%;
   transform: translateY(-50%);
   color: var(--azul-dos);
-  font-size: 1.1rem;
-}
-
-.search-box input {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  border-radius: 30px;
-  padding: 1rem 1rem 1rem 3.2rem;
-  color: #fff;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.search-box input:focus {
-  outline: none;
-  border-color: var(--azul-dos);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
-}
-
-.filter-controls {
-  display: grid;
   grid-template-columns: repeat(4, 1fr) 50px;
   gap: 1.5rem;
   align-items: end;
