@@ -488,6 +488,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             document.getElementById('prodModalGenero').textContent = product.gender ? `Género: ${product.gender}` : '';
             document.getElementById('prodModalDesc').textContent = product.description || 'Sin descripción disponible.';
             document.getElementById('prodModalPrecio').textContent = `$${Number(product.price).toLocaleString('es-CO')} COP`;
+            
+            // Vincular botón de carrito en el modal
+            const btnCarrito = document.getElementById('prodModalCarrito');
+            if (btnCarrito) {
+                btnCarrito.onclick = () => {
+                    agregarAlCarrito({
+                        id: product.id,
+                        name: product.name,
+                        image: product.image,
+                        price: product.price
+                    });
+                };
+            }
+
             const tallasEl = document.getElementById('prodModalTallas');
             if (product.sizes && product.sizes.length) {
                 tallasEl.innerHTML = `<span class="prod-tag-label">Tallas:</span>` +
