@@ -62,6 +62,27 @@ function actualizarBadge() {
   badge.style.display = total > 0 ? "flex" : "none";
 }
 
+// ---- WhatsApp (Lógica Global) ----
+function enviarPedidoWhatsApp() {
+  const carrito = obtenerCarrito();
+  if (carrito.length === 0) return;
+
+  const subtotal = carrito.reduce((s, i) => s + Number(i.price) * i.cantidad, 0);
+  
+  const msg = carrito
+    .map(
+      (i) =>
+        `• ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`
+    )
+    .join("\n");
+
+  const text = `¡Hola! 👋 Acabo de armar mi pedido en la web:\n----------------------------------\n${msg}\n----------------------------------\n💰 *Total:* $${subtotal.toLocaleString("es-CO")} COP\n\nMe gustaría coordinar el pago y el envío. 🚀`;
+  
+  const url = `https://wa.me/3046477694?text=${encodeURIComponent(text)}`;
+  
+  window.open(url, "_blank");
+}
+
 // ---- Render panel ----
 function renderCarrito() {
   const lista = document.getElementById("carritoLista");
@@ -99,14 +120,11 @@ function renderCarrito() {
                 <i class="fas fa-times"></i>
             </button>
         </div>
-    `,
+    `
     )
     .join("");
 
-  const subtotal = carrito.reduce(
-    (s, i) => s + Number(i.price) * i.cantidad,
-    0,
-  );
+  const subtotal = carrito.reduce((s, i) => s + Number(i.price) * i.cantidad, 0);
   const totalItems = carrito.reduce((s, i) => s + i.cantidad, 0);
 
   footer.innerHTML = `
@@ -114,40 +132,16 @@ function renderCarrito() {
             <span>${totalItems} producto${totalItems !== 1 ? "s" : ""}</span>
             <span><strong>$${subtotal.toLocaleString("es-CO")} COP</strong></span>
         </div>
-        <button id="btnCarritoWA" class="carrito-btn-pedir">
+        <button class="carrito-btn-pedir" onclick="enviarPedidoWhatsApp()">
             <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
         </button>
-        <button id="btnCarritoMP" class="carrito-btn-mp"><i class="fab fa-cc-visa"></i> Pagar ahora - Mercado Pago</button>
+        <button class="carrito-btn-mp" onclick="pagarMercadoPago()">
+            <i class="fab fa-cc-visa"></i> Pagar ahora - Mercado Pago
+        </button>
         <button class="carrito-btn-vaciar" onclick="vaciarCarrito()">
             <i class="fas fa-trash"></i> Vaciar carrito
         </button>
     `;
-
-  // Vincular botón WhatsApp
-  const btnWA = document.getElementById("btnCarritoWA");
-  if (btnWA) {
-    btnWA.addEventListener("click", () => {
-      const msg = carrito
-        .map(
-          (i) =>
-            `• ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`,
-        )
-        .join("\n");
-      const text = `¡Hola! 👋 Acabo de armar mi pedido en la web:\n----------------------------------\n${msg}\n----------------------------------\n💰 *Total:* $${subtotal.toLocaleString("es-CO")} COP\n\nMe gustaría coordinar el pago y el envío. 🚀`;
-      const url = `https://wa.me/3046477694?text=${encodeURIComponent(text)}`;
-      pedirPorWhatsApp(url);
-    });
-  }
-
-  // Vincular botón Mercado Pago
-  const btnMP = document.getElementById("btnCarritoMP");
-  if (btnMP) btnMP.addEventListener("click", pagarMercadoPago);
-}
-
-// ---- WhatsApp ----
-function pedirPorWhatsApp(url) {
-    if (!url) return;
-    window.open(url, "_blank");
 }
 
 // ---- Mercado Pago ----
@@ -167,8 +161,8 @@ async function procesarPagoMercadoPago() {
   }));
 
   const base = location.hostname === "localhost" || location.hostname === "127.0.0.1"
-        ? "http://localhost:3000/api"
-        : "https://altadensidadpage-production.up.railway.app/api";
+    ? "http://localhost:3000/api"
+    : "https://altadensidadpage-production.up.railway.app/api";
 
   const btnPagar = document.getElementById("btnPagar");
   if (btnPagar) {
@@ -186,7 +180,7 @@ async function procesarPagoMercadoPago() {
     if (data.success && data.preference && data.preference.init_point) {
       window.location.href = data.preference.init_point;
     } else {
-      alert("No se pudo iniciar el checkout: " + (data.message || ""));
+      alert("Error: " + (data.message || "No se pudo iniciar el pago"));
       if (btnPagar) {
         btnPagar.disabled = false;
         btnPagar.textContent = "Pagar ahora - Mercado Pago";
@@ -208,7 +202,6 @@ function abrirModalEnvio() {
   const modal = document.getElementById("envioModal");
   if (modal) modal.style.display = "flex";
 }
-
 function cerrarModalEnvio() {
   const modal = document.getElementById("envioModal");
   if (modal) modal.style.display = "none";
@@ -228,7 +221,6 @@ function escCarrito(str) {
   if (!str) return "";
   return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
-
 function formatCarrito(n) {
   return n != null ? `$${Number(n).toLocaleString("es-CO")}` : "";
 }
@@ -242,7 +234,6 @@ function abrirCarrito() {
   document.body.style.overflow = "hidden";
   renderCarrito();
 }
-
 function cerrarCarrito() {
   const panel = document.getElementById("carritoPanel");
   const overlay = document.getElementById("carritoOverlay");
