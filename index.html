@@ -60,27 +60,51 @@
                             <!-- Sección de productos -->
         
 
-        <button id="openFilters">Filtrar por</button>
+        <!-- BARRA DE FILTROS Y BÚSQUEDA -->
+        <section class="filters-section">
+            <div class="filters-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="filterName" placeholder="Buscar fragancia, marca o aroma...">
+                </div>
+                
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label><i class="fas fa-tags"></i> Marca</label>
+                        <select id="filterBrand">
+                            <option value="">Todas las marcas</option>
+                            <!-- Se llena por JS -->
+                        </select>
+                    </div>
 
-        <div id="filterModal" class="modal">
-            <div class="modal-content">
-                <button class="close">&times;</button>
-                <input type="text" id="filterName" placeholder="Buscar por nombre">
-                <select id="filterCategory">
-                    <option value="">Todas las categorías</option>
-                    <option value="Diseñador">Diseñador</option>
-                    <option value="Arabe">Arabes</option>
-                </select>
-                <select id="filterGender">
-                    <option value="">Todos los géneros</option>
-                    <option value="Mujer">Dama</option>
-                    <option value="Hombre">Caballero</option>
-                    <option value="Unisex">Unisex</option>
-                </select>
-                <button id="applyFilters">Aplicar filtros</button>
-                <button id="resetFilters" type="button">Quitar filtros</button>
+                    <div class="filter-group">
+                        <label><i class="fas fa-layer-group"></i> Categoría</label>
+                        <select id="filterCategory">
+                            <option value="">Todas</option>
+                            <option value="Diseñador">Diseñador</option>
+                            <option value="Arabe">Árabes</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label><i class="fas fa-venus-mars"></i> Género</label>
+                        <select id="filterGender">
+                            <option value="">Todos</option>
+                            <option value="Mujer">Dama</option>
+                            <option value="Hombre">Caballero</option>
+                            <option value="Unisex">Unisex</option>
+                        </select>
+                    </div>
+
+                    <button id="resetFilters" class="btn-reset-filters" title="Limpiar filtros">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                </div>
             </div>
-        </div>
+
+            <!-- Contenedor de filtros activos (Badges) -->
+            <div id="activeFilters" class="active-filters-container"></div>
+        </section>
 
         
 

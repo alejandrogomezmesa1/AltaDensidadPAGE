@@ -211,9 +211,38 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (data.success) {
                 products = data.data;
                 productosFiltrados = products;
+                populateBrandFilter();
             }
         } catch (e) {
             console.error('Error al cargar productos desde la API:', e);
+        }
+
+        function populateBrandFilter() {
+            const filterBrand = document.getElementById('filterBrand');
+            if (!filterBrand) return;
+            
+            // Extraer todas las marcas únicas
+            const marcas = new Set();
+            products.forEach(p => {
+                marcas.add(extraerMarca(p.name));
+            });
+            
+            // Ordenar y añadir al select
+            const sorted = Array.from(marcas).sort();
+            sorted.forEach(m => {
+                if (m === 'Otras Marcas') return;
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                filterBrand.appendChild(opt);
+            });
+            // Al final poner Otras Marcas
+            if (marcas.has('Otras Marcas')) {
+                const opt = document.createElement('option');
+                opt.value = 'Otras Marcas';
+                opt.textContent = 'Otras Marcas';
+                filterBrand.appendChild(opt);
+            }
         }
 
         // ============================
@@ -367,42 +396,79 @@ document.addEventListener('DOMContentLoaded', async function() {
             const name     = document.getElementById('filterName').value.toLowerCase();
             const category = document.getElementById('filterCategory').value;
             const gender   = document.getElementById('filterGender').value;
+            const brand    = document.getElementById('filterBrand').value;
+
             productosFiltrados = products.filter(product => {
-                return product.name.toLowerCase().includes(name)
-                    && (!category || product.category === category)
-                    && (!gender   || product.gender   === gender);
+                const pBrand = extraerMarca(product.name);
+                const matchesName     = product.name.toLowerCase().includes(name) || pBrand.toLowerCase().includes(name);
+                const matchesCategory = !category || product.category === category;
+                const matchesGender   = !gender   || product.gender   === gender;
+                const matchesBrand    = !brand    || pBrand === brand;
+
+                return matchesName && matchesCategory && matchesGender && matchesBrand;
             });
+
             paginaActual = 1;
+            renderActiveFilters();
             displayProducts(productosFiltrados);
+        }
+
+        function renderActiveFilters() {
+            const container = document.getElementById('activeFilters');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const category = document.getElementById('filterCategory').value;
+            const gender   = document.getElementById('filterGender').value;
+            const brand    = document.getElementById('filterBrand').value;
+
+            if (category) createBadge('Categoría: ' + category, () => { 
+                document.getElementById('filterCategory').value = ''; filterProducts(); 
+            });
+            if (gender)   createBadge('Género: ' + gender, () => { 
+                document.getElementById('filterGender').value = ''; filterProducts(); 
+            });
+            if (brand)    createBadge('Marca: ' + brand, () => { 
+                document.getElementById('filterBrand').value = ''; filterProducts(); 
+            });
+
+            function createBadge(text, onRemove) {
+                const badge = document.createElement('div');
+                badge.className = 'filter-badge';
+                badge.innerHTML = `<span>${text}</span><i class="fas fa-times"></i>`;
+                badge.querySelector('i').onclick = onRemove;
+                container.appendChild(badge);
+            }
         }
 
         function resetFilters() {
             document.getElementById('filterName').value = '';
             document.getElementById('filterCategory').value = '';
             document.getElementById('filterGender').value = '';
+            document.getElementById('filterBrand').value = '';
             productosFiltrados = products;
             paginaActual = 1;
-            if (modal) { modal.style.display = 'none'; }
+            renderActiveFilters();
             displayProducts(productosFiltrados);
         }
 
-        document.getElementById('resetFilters').addEventListener('click', resetFilters);
-        document.getElementById('filterName').addEventListener('input', filterProducts);
-        document.getElementById('filterCategory').addEventListener('change', filterProducts);
-        document.getElementById('filterGender').addEventListener('change', filterProducts);
+        const btnReset = document.getElementById('resetFilters');
+        if (btnReset) btnReset.addEventListener('click', resetFilters);
 
-        // ============================
-        // MODAL FILTROS
-        // ============================
-        const modal    = document.getElementById('filterModal');
-        const openBtn  = document.getElementById('openFilters');
-        const closeBtn = document.querySelector('.close');
-        const applyBtn = document.getElementById('applyFilters');
+        const inputName = document.getElementById('filterName');
+        if (inputName) inputName.addEventListener('input', filterProducts);
 
-        openBtn.addEventListener('click', () => { modal.style.display = 'block'; });
-        applyBtn.addEventListener('click', () => { modal.style.display = 'none'; });
-        closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
-        window.addEventListener('click', (event) => { if (event.target === modal) modal.style.display = 'none'; });
+        const selCat = document.getElementById('filterCategory');
+        if (selCat) selCat.addEventListener('change', filterProducts);
+
+        const selGen = document.getElementById('filterGender');
+        if (selGen) selGen.addEventListener('change', filterProducts);
+
+        const selBrand = document.getElementById('filterBrand');
+        if (selBrand) selBrand.addEventListener('change', filterProducts);
+
+        // Filtros manejados dinámicamente en barra lateral
+
 
         // ============================
         // MODAL DETALLE PRODUCTO
