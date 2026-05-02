@@ -33,12 +33,12 @@ function renderTablaTop10() {
     }
     tbody.innerHTML = top10.map((p, idx) => `
         <tr>
-            <td>${idx + 1}</td>
-            <td>${imagenCell(p.imagen)}</td>
-            <td><strong>${escHtml(p.nombre)}</strong></td>
-            <td>${escHtml(p.categoria)}</td>
-            <td>${escHtml(p.genero)}</td>
-            <td>
+            <td data-label="#">${idx + 1}</td>
+            <td data-label="Imagen">${imagenCell(p.imagen)}</td>
+            <td data-label="Nombre"><strong>${escHtml(p.nombre)}</strong></td>
+            <td data-label="Categoría">${escHtml(p.categoria)}</td>
+            <td data-label="Género">${escHtml(p.genero)}</td>
+            <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon" title="Subir" onclick="moverTop10(${idx},-1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
                     <button class="btn-icon" title="Bajar" onclick="moverTop10(${idx},1)" ${idx === top10.length-1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
@@ -245,13 +245,13 @@ function renderTablaKits() {
     }
     tbody.innerHTML = pagina.map(k => `
         <tr>
-            <td>${k.id}</td>
-            <td>${imagenCell(k.imagen)}</td>
-            <td><strong>${escHtml(k.nombre)}</strong></td>
-            <td>${escHtml(k.descripcion)}</td>
-            <td>${formatPrecio(k.precio)}</td>
-            <td>${(k.beneficios || []).map(b => `<span class="tag">${escHtml(b)}</span>`).join('')}</td>
-            <td>
+            <td data-label="#">${k.id}</td>
+            <td data-label="Imagen">${imagenCell(k.imagen)}</td>
+            <td data-label="Nombre"><strong>${escHtml(k.nombre)}</strong></td>
+            <td data-label="Descripción">${escHtml(k.descripcion)}</td>
+            <td data-label="Precio">${formatPrecio(k.precio)}</td>
+            <td data-label="Beneficios">${(k.beneficios || []).map(b => `<span class="tag">${escHtml(b)}</span>`).join('')}</td>
+            <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditarKit(${k.id})">
                         <i class="fas fa-edit"></i>
@@ -454,15 +454,15 @@ function renderTabla() {
 
     tbodyProductos.innerHTML = pagina.map(p => `
         <tr>
-            <td>${p.id}</td>
-            <td>${imagenCell(p.image)}</td>
-            <td><strong>${escHtml(p.name)}</strong></td>
-            <td>${escHtml(p.category)}</td>
-            <td>${escHtml(p.gender)}</td>
-            <td>${formatPrecio(p.price)}</td>
-            <td><span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</span></td>
-            <td>${(p.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
-            <td>
+            <td data-label="#">${p.id}</td>
+            <td data-label="Imagen">${imagenCell(p.image)}</td>
+            <td data-label="Nombre"><strong>${escHtml(p.name)}</strong></td>
+            <td data-label="Categoría">${escHtml(p.category)}</td>
+            <td data-label="Género">${escHtml(p.gender)}</td>
+            <td data-label="Precio">${formatPrecio(p.price)}</td>
+            <td data-label="Rating"><span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</span></td>
+            <td data-label="Tallas">${(p.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
+            <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditar(${p.id})">
                         <i class="fas fa-edit"></i>
@@ -726,13 +726,13 @@ function renderTablaEnvases() {
     }
     tbody.innerHTML = pagina.map(e => `
         <tr>
-            <td>${e.id}</td>
-            <td>${imagenCell(e.image)}</td>
-            <td><strong>${escHtml(e.name)}</strong></td>
-            <td>${escHtml(e.material)}</td>
-            <td>${formatPrecio(e.price)}</td>
-            <td>${(e.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
-            <td>
+            <td data-label="#">${e.id}</td>
+            <td data-label="Imagen">${imagenCell(e.image)}</td>
+            <td data-label="Nombre"><strong>${escHtml(e.name)}</strong></td>
+            <td data-label="Material">${escHtml(e.material)}</td>
+            <td data-label="Precio">${formatPrecio(e.price)}</td>
+            <td data-label="Tallas">${(e.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
+            <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditarEnvase(${e.id})">
                         <i class="fas fa-edit"></i>
@@ -1077,16 +1077,16 @@ function renderTablaOrdenes(meta = {}) {
 
         return `
         <tr>
-            <td>${(((meta.page || 1) - 1) * ITEMS_ORD) + idx + 1}</td>
-            <td>${escHtml(o.external_reference)}</td>
-            <td>${escHtml(o.preference_id || '')}</td>
-            <td>${escHtml(o.payment_id || '')}</td>
-            <td>${compradorText}</td>
-            <td>${formatPrecio(o.total)}</td>
-            <td>${escHtml(o.currency || 'COP')}</td>
-            <td><strong style="color: ${statusColor};">${escHtml(estadoEsp)}</strong></td>
-            <td>${escHtml(o.created_at ? new Date(o.created_at).toLocaleString() : '')}</td>
-            <td>
+            <td data-label="#">${(((meta.page || 1) - 1) * ITEMS_ORD) + idx + 1}</td>
+            <td data-label="Ref. Interna">${escHtml(o.external_reference)}</td>
+            <td data-label="Preferencia MP">${escHtml(o.preference_id || '')}</td>
+            <td data-label="Pago ID">${escHtml(o.payment_id || '')}</td>
+            <td data-label="Comprador">${compradorText}</td>
+            <td data-label="Total">${formatPrecio(o.total)}</td>
+            <td data-label="Moneda">${escHtml(o.currency || 'COP')}</td>
+            <td data-label="Estado"><strong style="color: ${statusColor};">${escHtml(estadoEsp)}</strong></td>
+            <td data-label="Fecha">${escHtml(o.created_at ? new Date(o.created_at).toLocaleString() : '')}</td>
+            <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon" title="Ver" onclick="abrirDetalleOrden('${escAttr(o.external_reference)}')"><i class="fas fa-eye"></i></button>
                 </div>
