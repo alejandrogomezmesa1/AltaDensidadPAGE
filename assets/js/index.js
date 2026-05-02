@@ -181,6 +181,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         const ITEMS_POR_PAGINA = 12;
         let paginaActual = 1;
 
+        const MARCAS_RECONOCIDAS = [
+            'CAROLINA HERRERA', 'LATTAFA', 'PACO RABANNE', 'VERSACE', 'DIOR', 'CHANEL', 
+            'HUGO BOSS', 'LACOSTE', 'ARMAF', 'LOUIS VUITTON', 'ORIENTICA', 'AFNAN', 
+            'PERRY ELLIS', 'VICTORINOX', 'AL HARAMAIN', 'MONTALE', 'BHARARA', 'BOND N*9', 
+            'VALENTINO', 'PARIS HILTON', 'ARIANA GRANDE', 'BVLGARI', 'XERJOFF', 'GIORGIO ARMANI',
+            'YVES SAINT LAURENT', 'CALVIN KLEIN', 'JEAN PAUL GAULTIER', 'DOLCE & GABBANA',
+            'CREED', 'TOM FORD', 'HERMES', 'ROJA DOVE', 'NISHANE', 'MANCERA', 'INITIO'
+        ];
+
+        function extraerMarca(nombre) {
+            if (!nombre) return 'Otras Marcas';
+            const nombreUpper = nombre.toUpperCase();
+            for (const marca of MARCAS_RECONOCIDAS) {
+                if (nombreUpper.includes(marca)) return marca;
+            }
+            const palabras = nombre.split(' ');
+            if (palabras.length > 1) {
+                const ultima = palabras[palabras.length - 1].toUpperCase();
+                if (ultima.length > 3) return ultima;
+            }
+            return 'Otras Marcas';
+        }
+
         try {
             const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
             const res = await fetch(`${base}/productos`);
@@ -198,6 +221,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         // ============================
         function displayProducts(productsToShow) {
             const productGrid = document.getElementById('productGrid');
+            if (!productGrid) return;
+            
             const totalPaginas = Math.ceil(productsToShow.length / ITEMS_POR_PAGINA);
             if (paginaActual > totalPaginas) paginaActual = 1;
 
@@ -205,44 +230,70 @@ document.addEventListener('DOMContentLoaded', async function() {
             const fin    = inicio + ITEMS_POR_PAGINA;
             const pagina = productsToShow.slice(inicio, fin);
 
-            productGrid.innerHTML = '';
+            if (pagina.length === 0) {
+                productGrid.innerHTML = `<div class="empty-row"><i class='fas fa-search'></i> No se encontraron productos con esos filtros.</div>`;
+                document.getElementById('paginacion').innerHTML = '';
+                return;
+            }
+
+            // Agrupar por marca
+            const grupos = {};
             pagina.forEach(product => {
-                const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
-                const productCard = document.createElement('div');
-                productCard.classList.add('product-card');
-                productCard.innerHTML = `
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-rating">${stars}</div>
-                        <div class="product-category">${product.category}</div>
-                        <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
-                    </div>
-                    <button class="btn-agregar-carrito"
-                        onclick='agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
-                        <i class="fas fa-cart-plus"></i> Agregar
-                    </button>
-                `;
-                // Abrir modal al hacer click en la card (no en el botón)
-                productCard.addEventListener('click', (e) => {
-                    if (e.target.closest('.btn-agregar-carrito')) return;
-                    abrirModalProducto(product);
-                });
-                productGrid.appendChild(productCard);
+                const marca = extraerMarca(product.name);
+                if (!grupos[marca]) grupos[marca] = [];
+                grupos[marca].push(product);
             });
 
-            // Rellenar última fila con placeholders para evitar espacios en blanco
-            const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
-            const resto = pagina.length % cols;
-            if (resto !== 0) {
-                for (let i = 0; i < cols - resto; i++) {
-                    const ph = document.createElement('div');
-                    ph.classList.add('product-card-placeholder');
-                    productGrid.appendChild(ph);
-                }
-            }
+            productGrid.innerHTML = '';
+            
+            // Ordenar marcas alfabéticamente (Otras Marcas al final)
+            const marcasOrdenadas = Object.keys(grupos).sort((a, b) => {
+                if (a === 'Otras Marcas') return 1;
+                if (b === 'Otras Marcas') return -1;
+                return a.localeCompare(b);
+            });
+
+            marcasOrdenadas.forEach(marca => {
+                const brandContainer = document.createElement('div');
+                brandContainer.className = 'brand-group-wrapper';
+                brandContainer.innerHTML = `
+                    <div class="brand-group-header">
+                        <h2 class="brand-group-title">${marca}</h2>
+                        <div class="brand-group-line"></div>
+                    </div>
+                    <div class="brand-group-grid"></div>
+                `;
+                
+                const grid = brandContainer.querySelector('.brand-group-grid');
+                
+                grupos[marca].forEach(product => {
+                    const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+                    productCard.innerHTML = `
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-rating">${stars}</div>
+                            <div class="product-category">${product.category}</div>
+                            <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
+                        </div>
+                        <button class="btn-agregar-carrito"
+                            onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
+                            <i class="fas fa-cart-plus"></i> Agregar
+                        </button>
+                    `;
+                    productCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.btn-agregar-carrito')) return;
+                        abrirModalProducto(product);
+                    });
+                    grid.appendChild(productCard);
+                });
+                
+                productGrid.appendChild(brandContainer);
+            });
 
             const countEl = document.getElementById('productCount');
             if (countEl) countEl.textContent = `Resultados encontrados: ${productsToShow.length}`;

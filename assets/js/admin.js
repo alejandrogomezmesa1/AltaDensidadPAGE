@@ -4,6 +4,29 @@ const API_ENVASES_URL = `${_BASE}/envases`;
 const API_KITS_URL = `${_BASE}/kits`;
 const API_UPLOAD_URL = `${_BASE}/upload`;
 const API_TOP10_URL = `${_BASE}/top10`;
+
+const MARCAS_RECONOCIDAS = [
+    'CAROLINA HERRERA', 'LATTAFA', 'PACO RABANNE', 'VERSACE', 'DIOR', 'CHANEL', 
+    'HUGO BOSS', 'LACOSTE', 'ARMAF', 'LOUIS VUITTON', 'ORIENTICA', 'AFNAN', 
+    'PERRY ELLIS', 'VICTORINOX', 'AL HARAMAIN', 'MONTALE', 'BHARARA', 'BOND N*9', 
+    'VALENTINO', 'PARIS HILTON', 'ARIANA GRANDE', 'BVLGARI', 'XERJOFF', 'GIORGIO ARMANI',
+    'YVES SAINT LAURENT', 'CALVIN KLEIN', 'JEAN PAUL GAULTIER', 'DOLCE & GABBANA',
+    'CREED', 'TOM FORD', 'HERMES', 'ROJA DOVE', 'NISHANE', 'MANCERA', 'INITIO'
+];
+
+function extraerMarca(nombre) {
+    if (!nombre) return 'Otras Marcas';
+    const nombreUpper = nombre.toUpperCase();
+    for (const marca of MARCAS_RECONOCIDAS) {
+        if (nombreUpper.includes(marca)) return marca;
+    }
+    const palabras = nombre.split(' ');
+    if (palabras.length > 1) {
+        const ultima = palabras[palabras.length - 1].toUpperCase();
+        if (ultima.length > 3) return ultima;
+    }
+    return 'Otras Marcas';
+}
 // Estado Top 10
 let top10 = [];
 let productosDisponiblesTop10 = [];
@@ -452,28 +475,32 @@ function renderTabla() {
         return;
     }
 
-    tbodyProductos.innerHTML = pagina.map(p => `
-        <tr>
-            <td>${p.id}</td>
-            <td>${imagenCell(p.image)}</td>
-            <td><strong>${escHtml(p.name)}</strong></td>
-            <td>${escHtml(p.category)}</td>
-            <td>${escHtml(p.gender)}</td>
-            <td>${formatPrecio(p.price)}</td>
-            <td><span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</span></td>
-            <td>${(p.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
-            <td>
-                <div class="acciones">
-                    <button class="btn-icon editar" title="Editar" onclick="abrirEditar(${p.id})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-icon eliminar" title="Eliminar" onclick="abrirEliminar(${p.id}, '${escAttr(p.name)}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </td>
-        </tr>
-    `).join('');
+    tbodyProductos.innerHTML = pagina.map(p => {
+        const marca = extraerMarca(p.name);
+        return `
+            <tr>
+                <td>${p.id}</td>
+                <td>${imagenCell(p.image)}</td>
+                <td><strong>${escHtml(p.name)}</strong></td>
+                <td><span class="marca-badge">${escHtml(marca)}</span></td>
+                <td>${escHtml(p.category)}</td>
+                <td>${escHtml(p.gender)}</td>
+                <td>${formatPrecio(p.price)}</td>
+                <td><span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</span></td>
+                <td>${(p.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
+                <td>
+                    <div class="acciones">
+                        <button class="btn-icon editar" title="Editar" onclick="abrirEditar(${p.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-icon eliminar" title="Eliminar" onclick="abrirEliminar(${p.id}, '${escAttr(p.name)}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
 
     renderPag('paginacionProductos', paginaProductos, totalPags, (p) => {
         paginaProductos = p;
