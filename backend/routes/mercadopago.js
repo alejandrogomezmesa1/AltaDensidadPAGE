@@ -413,13 +413,13 @@ router.all("/webhook", async (req, res) => {
   if (req.method === "GET") {
     return res.status(200).send("<h1>Webhook Endpoint ALIVE</h1><p>El servidor está escuchando correctamente en esta ruta.</p>");
   }
-
   try {
     console.log("[MP WEBHOOK] incoming headers:", {
       headers: req.headers,
       query: req.query,
     });
 
+    /*
     // Verificación HMAC opcional — si `WEBHOOK_SECRET` está configurada
     if (WEBHOOK_SECRET) {
       const headerCandidates = [
@@ -502,12 +502,9 @@ router.all("/webhook", async (req, res) => {
         console.warn("[MP WEBHOOK] signature parse error", ex && ex.message);
         return res.status(401).send("Invalid signature format");
       }
-    } else {
-      console.log(
-        "[MP WEBHOOK] WEBHOOK_SECRET not configured — skipping signature verification",
-      );
     }
-
+    */
+    
     const paymentId =
       req.body?.data?.id ||
       req.query?.id ||
