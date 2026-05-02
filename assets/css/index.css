@@ -3374,3 +3374,273 @@ html.modo-claro .shipping-input {
     box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5) !important;
     transform: translateY(-2px) scale(1.05) !important;
 }
+
+/* ================================================
+   CARRITO DRAWER — PREMIUM REDESIGN
+   ================================================ */
+.carrito-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.carrito-overlay.abierto {
+    opacity: 1;
+    visibility: visible;
+}
+
+.carrito-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 400px;
+    max-width: 90%;
+    height: 100dvh;
+    background: linear-gradient(180deg, #0f0f11 0%, #050505 100%);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+    z-index: 2100;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    border-left: 1px solid rgba(212, 175, 55, 0.15);
+}
+.carrito-panel.abierto {
+    right: 0;
+}
+
+.carrito-header {
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+.carrito-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #D4AF37;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.carrito-cerrar {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+}
+.carrito-cerrar:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.carrito-lista {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #D4AF37 transparent;
+}
+.carrito-lista::-webkit-scrollbar { width: 4px; }
+.carrito-lista::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
+
+.carrito-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease, background 0.3s ease;
+    animation: slideInItem 0.4s ease forwards;
+}
+@keyframes slideInItem {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.carrito-item:hover {
+    background: rgba(212, 175, 55, 0.05);
+    transform: scale(1.02);
+    border-color: rgba(212, 175, 55, 0.2);
+}
+
+.carrito-item img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #1a1a1a;
+}
+
+.carrito-item-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.carrito-item-nombre {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #eee;
+    margin-bottom: 4px;
+}
+.carrito-item-precio {
+    color: #D4AF37;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.carrito-item-controles {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
+    border-radius: 20px;
+    height: fit-content;
+    align-self: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.carrito-item-controles button {
+    background: none;
+    border: none;
+    color: #D4AF37;
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+.carrito-item-controles button:hover { transform: scale(1.2); }
+.carrito-item-controles span { font-size: 0.9rem; min-width: 15px; text-align: center; color: #fff; }
+
+.carrito-item-eliminar {
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s;
+    font-size: 1.1rem;
+    padding: 0 5px;
+}
+.carrito-item-eliminar:hover { color: #ff4444; }
+
+.carrito-footer {
+    padding: 24px;
+    background: rgba(10, 10, 12, 0.95);
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.carrito-subtotal {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+.carrito-subtotal strong { color: #D4AF37; font-size: 1.3rem; }
+
+.carrito-btn-pedir, .carrito-btn-mp {
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.carrito-btn-pedir {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+}
+.carrito-btn-pedir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+}
+
+.carrito-btn-mp {
+    background: linear-gradient(135deg, #009EE3 0%, #007EB5 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 158, 227, 0.2);
+}
+.carrito-btn-mp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 158, 227, 0.4);
+}
+
+.carrito-btn-vaciar {
+    background: transparent;
+    border: 1px solid #444;
+    color: #888;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+.carrito-btn-vaciar:hover {
+    border-color: #ff4444;
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.05);
+}
+
+#carritoBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+#carritoBadge.pulse {
+    animation: badgePulse 0.4s ease-out;
+}
+@keyframes badgePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+.carrito-vacio {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    text-align: center;
+    padding: 40px;
+}
+.carrito-vacio i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.2;
+}
+.carrito-vacio p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}

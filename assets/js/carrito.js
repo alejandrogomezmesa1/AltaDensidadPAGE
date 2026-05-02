@@ -29,7 +29,7 @@ function agregarAlCarrito(producto) {
     carrito.push({ ...producto, cantidad: 1 });
   }
   guardarCarrito(carrito);
-  actualizarBadge();
+  actualizarBadge(true); // Pasar true para animar
   renderCarrito();
   mostrarToastCarrito(producto.name);
 }
@@ -41,7 +41,7 @@ function cambiarCantidad(id, delta) {
   carrito[idx].cantidad += delta;
   if (carrito[idx].cantidad <= 0) carrito.splice(idx, 1);
   guardarCarrito(carrito);
-  actualizarBadge();
+  actualizarBadge(delta > 0); // Animar si se suma
   renderCarrito();
 }
 
@@ -58,50 +58,18 @@ function vaciarCarrito() {
   renderCarrito();
 }
 
-// ---- Badge contador ----
-function actualizarBadge() {
+// ---- Badge contador con animacion ----
+function actualizarBadge(animar = false) {
   const badge = document.getElementById("carritoBadge");
   if (!badge) return;
   const total = obtenerCarrito().reduce((s, i) => s + i.cantidad, 0);
   badge.textContent = total;
   badge.style.display = total > 0 ? "flex" : "none";
-}
 
-// ---- WhatsApp (Logica Global) ----
-function enviarPedidoWhatsApp() {
-  console.log("Iniciando proceso de WhatsApp...");
-  const carrito = obtenerCarrito();
-  if (carrito.length === 0) {
-    alert("Tu carrito esta vacio");
-    return;
-  }
-
-  const subtotal = carrito.reduce((s, i) => s + Number(i.price) * i.cantidad, 0);
-  
-  const msgItems = carrito
-    .map(
-      (i) =>
-        `* ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`
-    )
-    .join("\n");
-
-  const saludo = "¡Hola! " + EMOJI_HELLO + " Acabo de armar mi pedido en la web:";
-  const footer = EMOJI_MONEY + " *Total:* $" + subtotal.toLocaleString("es-CO") + " COP";
-  const despedida = "Me gustaria coordinar el pago y el envio. " + EMOJI_ROCKET;
-
-  const fullText = `${saludo}\n----------------------------------\n${msgItems}\n----------------------------------\n${footer}\n\n${despedida}`;
-  
-  const waUrl = `https://wa.me/3046477694?text=${encodeURIComponent(fullText)}`;
-  
-  console.log("Redirigiendo a:", waUrl);
-  
-  // Abrir en pestaña nueva
-  const newWin = window.open(waUrl, "_blank");
-  
-  // Fallback si el bloqueador de popups detiene window.open
-  if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-      console.warn("Popup bloqueado, usando redireccion directa.");
-      window.location.href = waUrl;
+  if (animar && total > 0) {
+      badge.classList.remove("pulse");
+      void badge.offsetWidth; // Force reflow
+      badge.classList.add("pulse");
   }
 }
 
@@ -114,7 +82,14 @@ function renderCarrito() {
   const carrito = obtenerCarrito();
 
   if (carrito.length === 0) {
-    lista.innerHTML = '<div class="carrito-vacio"><i class="fas fa-shopping-bag"></i><p>Tu carrito esta vacio</p></div>';
+    lista.innerHTML = `
+        <div class="carrito-vacio">
+            <i class="fas fa-shopping-bag"></i>
+            <p>Tu carrito esta vacio</p>
+            <button onclick="cerrarCarrito()" class="carrito-btn-vaciar" style="border-color: #D4AF37; color: #D4AF37;">
+                Seguir explorando
+            </button>
+        </div>`;
     footer.innerHTML = "";
     return;
   }
@@ -144,14 +119,29 @@ function renderCarrito() {
   const subtotal = carrito.reduce((s, i) => s + Number(i.price) * i.cantidad, 0);
   const totalItems = carrito.reduce((s, i) => s + i.cantidad, 0);
 
+  // Mensaje para WhatsApp
+  const msgItems = carrito
+    .map(
+      (i) =>
+        `* ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`
+    )
+    .join("\n");
+
+  const saludo = "¡Hola! " + EMOJI_HELLO + " Acabo de armar mi pedido en la web:";
+  const footMsg = EMOJI_MONEY + " *Total:* $" + subtotal.toLocaleString("es-CO") + " COP";
+  const despedida = "Me gustaria coordinar el pago y el envio. " + EMOJI_ROCKET;
+
+  const fullText = `${saludo}\n----------------------------------\n${msgItems}\n----------------------------------\n${footMsg}\n\n${despedida}`;
+  const waUrl = `https://wa.me/3046477694?text=${encodeURIComponent(fullText)}`;
+
   footer.innerHTML = `
         <div class="carrito-subtotal">
             <span>${totalItems} producto${totalItems !== 1 ? "s" : ""}</span>
             <span><strong>$${subtotal.toLocaleString("es-CO")} COP</strong></span>
         </div>
-        <button class="carrito-btn-pedir" id="waBtnManual">
+        <a href="${waUrl}" target="_blank" class="carrito-btn-pedir" style="text-decoration: none;">
             <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
-        </button>
+        </a>
         <button class="carrito-btn-mp" onclick="pagarMercadoPago()">
             <i class="fab fa-cc-visa"></i> Pagar ahora - Mercado Pago
         </button>
@@ -159,12 +149,6 @@ function renderCarrito() {
             <i class="fas fa-trash"></i> Vaciar carrito
         </button>
     `;
-
-    // Vinculacion manual extra para asegurar funcionamiento
-    const waBtn = document.getElementById("waBtnManual");
-    if (waBtn) {
-        waBtn.onclick = function() { enviarPedidoWhatsApp(); };
-    }
 }
 
 // ---- Mercado Pago ----
@@ -230,13 +214,13 @@ function cerrarModalEnvio() {
   if (modal) modal.style.display = "none";
 }
 
-// ---- Toast ----
+// ---- Toast Elegante ----
 function mostrarToastCarrito(nombre) {
   let toast = document.getElementById("carritoToast");
   if (!toast) return;
-  toast.textContent = `Agregado: ${nombre}`;
+  toast.innerHTML = `<i class="fas fa-check-circle" style="color: #D4AF37; margin-right: 10px;"></i> Agregado: <strong>${nombre}</strong>`;
   toast.classList.add("visible");
-  setTimeout(() => toast.classList.remove("visible"), 2500);
+  setTimeout(() => toast.classList.remove("visible"), 3000);
 }
 
 // ---- Utilidades ----
@@ -248,7 +232,7 @@ function formatCarrito(n) {
   return n != null ? `$${Number(n).toLocaleString("es-CO")}` : "";
 }
 
-// ---- Panel Toggle ----
+// ---- Panel Toggle con Scroll Lock ----
 function abrirCarrito() {
   const panel = document.getElementById("carritoPanel");
   const overlay = document.getElementById("carritoOverlay");
