@@ -124,7 +124,7 @@ router.post('/forgot-password', async (req, res) => {
         // Enviar con SendGrid
         const msg = {
             to: email,
-            from: 'fraganciasaltadensidad@gmail.com', // DEBE ESTAR VERIFICADO EN SENDGRID
+            from: 'perfumesaltadensidad@gmail.com', // CORREGIDO: perfumes en lugar de fragancias
             subject: 'C\u00f3digo de Recuperaci\u00f3n - Alta Densidad',
             html: `
                 <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0a; color: #ffffff; padding: 40px; border-radius: 15px; border: 1px solid #D4AF37; max-width: 600px; margin: auto;">
