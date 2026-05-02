@@ -67,9 +67,9 @@ function actualizarBadge(animar = false) {
   badge.style.display = total > 0 ? "flex" : "none";
 
   if (animar && total > 0) {
-      badge.classList.remove("pulse");
-      void badge.offsetWidth; // Force reflow
-      badge.classList.add("pulse");
+    badge.classList.remove("pulse");
+    void badge.offsetWidth; // Force reflow
+    badge.classList.add("pulse");
   }
 }
 
@@ -151,7 +151,32 @@ function renderCarrito() {
     `;
 }
 
-// ---- Mercado Pago ----
+// ---- Logica de Envio y Mercado Pago ----
+
+function obtenerCostoEnvio(zona) {
+  if (zona === "medellin") return 15000;
+  if (zona === "metropolitana") return 20000;
+  if (zona === "nacional") return 20000;
+  return 0;
+}
+
+function actualizarResumenEnvio() {
+  const zonaSelect = document.getElementById("envCiudad");
+  const resumen = document.getElementById("resumenEnvio");
+  const costoTxt = document.getElementById("costoEnvioValor");
+  const totalTxt = document.getElementById("totalConEnvio");
+
+  if (!zonaSelect || !resumen) return;
+
+  const zona = zonaSelect.value;
+  const costo = obtenerCostoEnvio(zona);
+  const subtotal = obtenerCarrito().reduce((s, i) => s + (Number(i.price) * i.cantidad), 0);
+
+  resumen.style.display = "block";
+  costoTxt.textContent = `$${costo.toLocaleString("es-CO")}`;
+  totalTxt.textContent = `$${(subtotal + costo).toLocaleString("es-CO")}`;
+}
+
 async function pagarMercadoPago() {
   abrirModalEnvio();
 }
@@ -160,6 +185,10 @@ async function procesarPagoMercadoPago() {
   const carrito = obtenerCarrito();
   if (carrito.length === 0) return;
 
+  const zonaSelect = document.getElementById("envCiudad");
+  const zona = zonaSelect.value;
+  const costoEnvio = obtenerCostoEnvio(zona);
+
   const items = carrito.map((i) => ({
     id: i.id,
     name: i.name,
@@ -167,11 +196,21 @@ async function procesarPagoMercadoPago() {
     quantity: Number(i.cantidad || 1),
   }));
 
+  // Agregar item de envio si corresponde
+  if (costoEnvio > 0) {
+    items.push({
+      id: "envio-logistica",
+      name: "Servicio de Envio (" + zonaSelect.options[zonaSelect.selectedIndex].text.split(" (")[0] + ")",
+      unit_price: costoEnvio,
+      quantity: 1
+    });
+  }
+
   const base = location.hostname === "localhost" || location.hostname === "127.0.0.1"
     ? "http://localhost:3000/api"
     : "https://altadensidadpage-production.up.railway.app/api";
 
-  const btnPagar = document.getElementById("btnPagar");
+  const btnPagar = document.getElementById("btnConfirmarEnvio");
   if (btnPagar) {
     btnPagar.disabled = true;
     btnPagar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
@@ -187,10 +226,10 @@ async function procesarPagoMercadoPago() {
     if (data.success && data.preference && data.preference.init_point) {
       window.location.href = data.preference.init_point;
     } else {
-      alert("Error en el pago");
+      alert("Error: " + (data.message || "No se pudo iniciar el pago"));
       if (btnPagar) {
         btnPagar.disabled = false;
-        btnPagar.textContent = "Pagar ahora - Mercado Pago";
+        btnPagar.innerHTML = '<i class="fas fa-lock"></i> Continuar al Pago Seguro';
       }
     }
   } catch (err) {
@@ -198,7 +237,7 @@ async function procesarPagoMercadoPago() {
     alert("Error de red");
     if (btnPagar) {
       btnPagar.disabled = false;
-      btnPagar.textContent = "Pagar ahora - Mercado Pago";
+      btnPagar.innerHTML = '<i class="fas fa-lock"></i> Continuar al Pago Seguro';
     }
   }
 }
@@ -207,7 +246,12 @@ async function procesarPagoMercadoPago() {
 let _shippingData = null;
 function abrirModalEnvio() {
   const modal = document.getElementById("envioModal");
-  if (modal) modal.style.display = "flex";
+  if (modal) {
+    modal.style.display = "flex";
+    // Reiniciar resumen
+    document.getElementById("resumenEnvio").style.display = "none";
+    document.getElementById("envCiudad").selectedIndex = 0;
+  }
 }
 function cerrarModalEnvio() {
   const modal = document.getElementById("envioModal");
@@ -266,15 +310,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (formEnvio) {
     formEnvio.addEventListener("submit", (e) => {
       e.preventDefault();
+      const zonaSelect = document.getElementById("envCiudad");
       _shippingData = {
         nombre: document.getElementById("envNombre").value,
         documento: document.getElementById("envDocumento").value,
         celular: document.getElementById("envCelular").value,
-        ciudad: document.getElementById("envCiudad").value,
+        ciudad: zonaSelect.options[zonaSelect.selectedIndex].text.split(" ($")[0], // Guardar el nombre limpio
         direccion: document.getElementById("envDireccion").value,
         barrio: document.getElementById("envBarrio").value
       };
-      cerrarModalEnvio();
       procesarPagoMercadoPago();
     });
   }
