@@ -61,31 +61,31 @@ router.post("/create_preference", async (req, res) => {
       "ORD" + Date.now() + Math.floor(Math.random() * 9000 + 1000);
     const pool = await getConnection();
     try {
-      await pool.query(
-        "INSERT INTO Ordenes (external_reference, items, total, currency, status, envio_nombre, envio_documento, envio_celular, envio_ciudad, envio_direccion, envio_piso, envio_municipio, envio_barrio, envio_contacto_alt, envio_referencia, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-        [
-          external_reference,
-          JSON.stringify(mpItems),
-          total,
-          "COP",
-          "pending",
-          shipping ? shipping.nombre : null,
-          shipping ? shipping.documento : null,
-          shipping ? shipping.celular : null,
-          shipping ? shipping.ciudad : null,
-          shipping ? shipping.direccion : null,
-          shipping ? shipping.piso || null : null,
-          shipping ? shipping.municipio || null : null,
-          shipping ? shipping.barrio || null : null,
-          shipping
-            ? shipping.contactoAlt ||
-              shipping.contacto_alt ||
-              shipping.contacto ||
-              null
-            : null,
-          shipping ? shipping.referencia || shipping.reference || null : null,
-        ],
-      );
+      // Intentar insertar con todos los campos. Si falla por columna faltante, el catch manejará la alerta.
+      const query = `
+        INSERT INTO Ordenes (
+          external_reference, items, total, currency, status, 
+          envio_nombre, envio_documento, envio_celular, envio_ciudad, 
+          envio_direccion, envio_piso, envio_barrio, envio_referencia, 
+          created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+      `;
+      const values = [
+        external_reference,
+        JSON.stringify(mpItems),
+        total,
+        "COP",
+        "pending",
+        shipping ? shipping.nombre : null,
+        shipping ? shipping.documento : null,
+        shipping ? shipping.celular : null,
+        shipping ? shipping.ciudad : null,
+        shipping ? shipping.direccion : null,
+        shipping ? shipping.piso || null : null,
+        shipping ? shipping.barrio || null : null,
+        shipping ? shipping.referencia || shipping.reference || null : null,
+      ];
+      await pool.query(query, values);
     } catch (dbErr) {
       console.error("ERROR CRÍTICO: No se pudo insertar orden en DB:", dbErr);
       return res.status(500).json({ 
