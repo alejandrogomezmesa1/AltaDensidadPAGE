@@ -31,11 +31,6 @@ function mapPaymentToStatus(paymentStatus) {
   return "pending";
 }
 
-// GET /api/mercadopago/test — Para verificar conectividad
-router.get("/test", (req, res) => {
-  res.json({ success: true, message: "MercadoPago Router OK" });
-});
-
 // POST /api/mercadopago/create_preference
 router.post("/create_preference", async (req, res) => {
   try {
@@ -409,10 +404,6 @@ router.put("/order/:external_reference", requireAdmin, async (req, res) => {
 
 // Webhook endpoint — procesa notificaciones desde Mercado Pago y actualiza órdenes
 router.all("/webhook", async (req, res) => {
-  // Diagnóstico: Si se accede por GET (navegador), confirmar que la ruta existe
-  if (req.method === "GET") {
-    return res.status(200).send("<h1>Webhook Endpoint ALIVE</h1><p>El servidor está escuchando correctamente en esta ruta.</p>");
-  }
   try {
     console.log("[MP WEBHOOK] incoming headers:", {
       headers: req.headers,
