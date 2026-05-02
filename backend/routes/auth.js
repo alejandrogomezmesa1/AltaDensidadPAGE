@@ -109,7 +109,7 @@ router.post('/forgot-password', async (req, res) => {
 
         if (rows.length === 0) {
             // No revelamos si el email existe por seguridad
-            return res.json({ success: true, message: 'Si el email existe, se enviar\u00e1 un c\u00f3digo de recuperaci\u00f3n.' });
+            return res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación. No olvides revisar tu carpeta de correo no deseado o Spam.' });
         }
 
         const usuario = rows[0];
@@ -151,7 +151,7 @@ router.post('/forgot-password', async (req, res) => {
         };
 
         await sgMail.send(msg);
-        res.json({ success: true, message: 'Si el email existe, se enviar\u00e1 un c\u00f3digo de recuperaci\u00f3n.' });
+        res.json({ success: true, message: 'Si el email existe, se enviará un código de recuperación. No olvides revisar tu carpeta de correo no deseado o Spam.' });
 
     } catch (err) {
         console.error('Error en forgot-password (SendGrid):', err);

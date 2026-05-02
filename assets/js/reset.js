@@ -74,6 +74,7 @@ if (forgotForm) {
             if (data.success) {
                 showForm(confirmForm);
                 document.getElementById('email-confirm').value = email;
+                setMsg(confirmMsg, data.message, true);
             } else {
                 setMsg(forgotMsg, data.message || 'Error al enviar el c\u00f3digo.');
             }
