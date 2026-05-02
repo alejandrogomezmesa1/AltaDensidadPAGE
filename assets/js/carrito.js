@@ -113,20 +113,12 @@ function renderCarrito() {
   );
   const totalItems = carrito.reduce((s, i) => s + i.cantidad, 0);
 
-  const msg = carrito
-    .map(
-      (i) =>
-        `• ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`,
-    )
-    .join("%0A");
-  const waUrl = `https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Acabo%20de%20armar%20mi%20pedido%20en%20la%20web%3A%0A----------------------------------%0A${msg}%0A----------------------------------%0A%F0%9F%92%B0%20*Total%3A*%20%24${subtotal.toLocaleString("es-CO")}%20COP%0A%0AMe%20gustar%C3%ADa%20coordinar%20el%20pago%20y%20el%20env%C3%ADo.%20%F0%9F%9A%80`;
-
   footer.innerHTML = `
         <div class="carrito-subtotal">
             <span>${totalItems} producto${totalItems !== 1 ? "s" : ""}</span>
             <span><strong>$${subtotal.toLocaleString("es-CO")} COP</strong></span>
         </div>
-        <button class="carrito-btn-pedir" onclick="pedirPorWhatsApp('${waUrl}')">
+        <button id="btnCarritoWA" class="carrito-btn-pedir">
             <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
         </button>
         <button id="btnCarritoMP" class="carrito-btn-mp"><i class="fab fa-cc-visa"></i> Pagar ahora — Mercado Pago</button>
@@ -134,6 +126,22 @@ function renderCarrito() {
             <i class="fas fa-trash"></i> Vaciar carrito
         </button>
     `;
+
+  // Vincular botón WhatsApp
+  const btnWA = document.getElementById("btnCarritoWA");
+  if (btnWA) {
+    btnWA.addEventListener("click", () => {
+      const msg = carrito
+        .map(
+          (i) =>
+            `• ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`,
+        )
+        .join("\n");
+      const text = `¡Hola! 👋 Acabo de armar mi pedido en la web:\n----------------------------------\n${msg}\n----------------------------------\n💰 *Total:* $${subtotal.toLocaleString("es-CO")} COP\n\nMe gustaría coordinar el pago y el envío. 🚀`;
+      const url = `https://wa.me/3046477694?text=${encodeURIComponent(text)}`;
+      pedirPorWhatsApp(url);
+    });
+  }
 
   // Vincular botón Mercado Pago
   const btnMP = document.getElementById("btnCarritoMP");
