@@ -79,6 +79,10 @@ function _iniciarMenuMobile() {
 
     if (overlay) overlay.addEventListener('click', _cerrarNav);
 
+    // Nuevo botón de cierre interno
+    const closeBtn = document.getElementById('closeNav');
+    if (closeBtn) closeBtn.addEventListener('click', _cerrarNav);
+
     // Cerrar nav al presionar Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') _cerrarNav();
