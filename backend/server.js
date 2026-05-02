@@ -154,7 +154,22 @@ CREATE TABLE IF NOT EXISTS Ordenes (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
                         `;
-                        try { await pool.query(createOrdersSQL); } catch (err) { console.warn('No se pudo crear tabla Ordenes automáticamente:', err.message || err); }
+                        try { 
+                            await pool.query(createOrdersSQL); 
+                            // Asegurar que las columnas existan si la tabla ya fue creada anteriormente
+                            const columns = [
+                                'envio_nombre', 'envio_documento', 'envio_celular', 'envio_ciudad', 
+                                'envio_direccion', 'envio_piso', 'envio_municipio', 'envio_barrio', 
+                                'envio_contacto_alt', 'envio_referencia'
+                            ];
+                            for (const col of columns) {
+                                try {
+                                    await pool.query(`ALTER TABLE Ordenes ADD COLUMN IF NOT EXISTS ${col} VARCHAR(255)`);
+                                } catch (e) { /* ignore if already exists */ }
+                            }
+                        } catch (err) { 
+                            console.warn('No se pudo crear tabla Ordenes automáticamente:', err.message || err); 
+                        }
             const server = app.listen(PORT, () => {
                 console.log(`Servidor corriendo en http://localhost:${PORT}`);
                 console.log(`API disponible en http://localhost:${PORT}/api`);

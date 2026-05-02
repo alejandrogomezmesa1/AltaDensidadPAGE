@@ -87,10 +87,12 @@ router.post("/create_preference", async (req, res) => {
         ],
       );
     } catch (dbErr) {
-      console.warn(
-        "No se pudo insertar orden (verifique la tabla Ordenes):",
-        dbErr.message || dbErr,
-      );
+      console.error("ERROR CRÍTICO: No se pudo insertar orden en DB:", dbErr);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Error al registrar la orden en la base de datos. Por favor contacta al administrador.",
+        error: dbErr.message 
+      });
     }
 
     // Prefer explicit FRONTEND_URL, otherwise detect scheme. For common PaaS (railway/vercel) prefer https.
