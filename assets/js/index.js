@@ -217,12 +217,25 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         // ============================
-        // DISPLAY
+        // RENDER PRODUCTOS (Catalogo)
         // ============================
         function displayProducts(productsToShow) {
             const productGrid = document.getElementById('productGrid');
             if (!productGrid) return;
             
+            // ORDENAR POR MARCA Y LUEGO POR NOMBRE
+            productsToShow.sort((a, b) => {
+                const marcaA = extraerMarca(a.name);
+                const marcaB = extraerMarca(b.name);
+                
+                // Primero por marca
+                if (marcaA < marcaB) return -1;
+                if (marcaA > marcaB) return 1;
+                
+                // Si es la misma marca, por nombre
+                return a.name.localeCompare(b.name);
+            });
+
             const totalPaginas = Math.ceil(productsToShow.length / ITEMS_POR_PAGINA);
             if (paginaActual > totalPaginas) paginaActual = 1;
 
@@ -236,64 +249,44 @@ document.addEventListener('DOMContentLoaded', async function() {
                 return;
             }
 
-            // Agrupar por marca
-            const grupos = {};
-            pagina.forEach(product => {
-                const marca = extraerMarca(product.name);
-                if (!grupos[marca]) grupos[marca] = [];
-                grupos[marca].push(product);
-            });
-
             productGrid.innerHTML = '';
             
-            // Ordenar marcas alfabéticamente (Otras Marcas al final)
-            const marcasOrdenadas = Object.keys(grupos).sort((a, b) => {
-                if (a === 'Otras Marcas') return 1;
-                if (b === 'Otras Marcas') return -1;
-                return a.localeCompare(b);
+            pagina.forEach(product => {
+                const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-rating">${stars}</div>
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
+                    </div>
+                    <button class="btn-agregar-carrito"
+                        onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
+                        <i class="fas fa-cart-plus"></i> Agregar
+                    </button>
+                `;
+                productCard.addEventListener('click', (e) => {
+                    if (e.target.closest('.btn-agregar-carrito')) return;
+                    abrirModalProducto(product);
+                });
+                productGrid.appendChild(productCard);
             });
 
-            marcasOrdenadas.forEach(marca => {
-                const brandContainer = document.createElement('div');
-                brandContainer.className = 'brand-group-wrapper';
-                brandContainer.innerHTML = `
-                    <div class="brand-group-header">
-                        <h2 class="brand-group-title">${marca}</h2>
-                        <div class="brand-group-line"></div>
-                    </div>
-                    <div class="brand-group-grid"></div>
-                `;
-                
-                const grid = brandContainer.querySelector('.brand-group-grid');
-                
-                grupos[marca].forEach(product => {
-                    const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
-                    const productCard = document.createElement('div');
-                    productCard.classList.add('product-card');
-                    productCard.innerHTML = `
-                        <div class="product-image">
-                            <img src="${product.image}" alt="${product.name}">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-rating">${stars}</div>
-                            <div class="product-category">${product.category}</div>
-                            <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
-                        </div>
-                        <button class="btn-agregar-carrito"
-                            onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
-                            <i class="fas fa-cart-plus"></i> Agregar
-                        </button>
-                    `;
-                    productCard.addEventListener('click', (e) => {
-                        if (e.target.closest('.btn-agregar-carrito')) return;
-                        abrirModalProducto(product);
-                    });
-                    grid.appendChild(productCard);
-                });
-                
-                productGrid.appendChild(brandContainer);
-            });
+            // Rellenar última fila con placeholders para evitar espacios en blanco
+            const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
+            const resto = pagina.length % cols;
+            if (resto !== 0) {
+                for (let i = 0; i < cols - resto; i++) {
+                    const ph = document.createElement('div');
+                    ph.classList.add('product-card-placeholder');
+                    productGrid.appendChild(ph);
+                }
+            }
 
             const countEl = document.getElementById('productCount');
             if (countEl) countEl.textContent = `Resultados encontrados: ${productsToShow.length}`;

@@ -662,18 +662,3 @@ body {
 }
 .admin-tab:hover { color: #D4AF37; background: rgba(212,175,55,0.06); }
 .admin-tab.active { color: #D4AF37; border-bottom-color: #D4AF37; background: rgba(212,175,55,0.07); }
-
-
-/* Badge para marcas */
-.marca-badge {
-    background: rgba(212, 175, 55, 0.1);
-    color: #d4af37;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    display: inline-block;
-}
