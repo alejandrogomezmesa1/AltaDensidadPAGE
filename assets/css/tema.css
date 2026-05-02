@@ -836,3 +836,65 @@ html.modo-claro .btn-carrito-nav:hover {
     }
 }
 
+
+/* ================================================
+   ADAPTACION DEL CARRITO AL MODO CLARO
+   ================================================ */
+html.modo-claro .carrito-panel {
+    background: linear-gradient(180deg, #ffffff 0%, #f9f9f9 100%) !important;
+    border-left: 1px solid rgba(184, 150, 12, 0.2) !important;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.modo-claro .carrito-header {
+    border-bottom: 1px solid rgba(184, 150, 12, 0.15) !important;
+}
+
+html.modo-claro .carrito-header h3 {
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .carrito-cerrar {
+    color: #666 !important;
+}
+
+html.modo-claro .carrito-item {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.modo-claro .carrito-item:hover {
+    background: rgba(184, 150, 12, 0.05) !important;
+    border-color: rgba(184, 150, 12, 0.25) !important;
+}
+
+html.modo-claro .carrito-item-nombre {
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .carrito-item-controles {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.modo-claro .carrito-item-controles span {
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .carrito-footer {
+    background: #ffffff !important;
+    border-top: 1px solid rgba(184, 150, 12, 0.2) !important;
+}
+
+html.modo-claro .carrito-subtotal {
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .carrito-btn-vaciar {
+    border-color: #ccc !important;
+    color: #666 !important;
+}
+
+html.modo-claro .carrito-vacio {
+    color: #888 !important;
+}
