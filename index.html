@@ -268,14 +268,19 @@
                     <input type="tel" id="envCelular" required class="shipping-input">
                 </div>
                 <div class="shipping-group">
-                    <label class="shipping-label">Ciudad / Zona de Envío *</label>
-                    <select id="envCiudad" required class="shipping-input" onchange="actualizarResumenEnvio()">
-                        <option value="" disabled selected>Selecciona tu ubicación</option>
+                    <label class="shipping-label">Zona de Envío (Para calcular el precio) *</label>
+                    <select id="envZona" required class="shipping-input" onchange="actualizarResumenEnvio()">
+                        <option value="" disabled selected>Selecciona la zona</option>
                         <option value="test">Envío de Prueba (Solo para TEST) ($2.000)</option>
                         <option value="medellin">Medellín ($15.000)</option>
                         <option value="metropolitana">Área Metropolitana: Bello, Envigado, Itagüí, Sabaneta, La Estrella, Copacabana, San Antonio de Prado ($20.000)</option>
                         <option value="nacional">Resto de Colombia - Nacional ($22.000)</option>
                     </select>
+                </div>
+
+                <div class="shipping-group">
+                    <label class="shipping-label">Municipio / Ciudad específica *</label>
+                    <input type="text" id="envCiudad" required placeholder="Ej: Itagüí, Bogotá, Cali..." class="shipping-input">
                 </div>
                 
                 <div id="resumenEnvio" class="shipping-summary-card" style="display: none;">
