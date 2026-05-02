@@ -3793,11 +3793,7 @@ section.filters-section .btn-reset-filters {
     transition: all 0.3s ease !important;
 }
 
-section.filters-section .btn-reset-filters:hover {
-    background: #e74c3c !important;
-    color: #fff !important;
-    transform: rotate(-30deg) !important;
-}
+
 
 /* Modo Claro Fix */
 html.modo-claro section.filters-section .filters-container {
@@ -3828,5 +3824,27 @@ html.modo-claro section.filters-section .filter-group label {
     }
     section.filters-section .btn-reset-filters {
         width: 100% !important;
+        height: 50px !important;
+        margin-top: 10px !important;
+        border-radius: 12px !important;
+        font-size: 1rem !important;
+        gap: 10px !important;
+    }
+    section.filters-section .btn-reset-filters::after {
+        content: "Limpiar Filtros" !important;
+        font-weight: 600 !important;
+    }
+    /* Eliminar rotación en móvil para evitar que se quede pegado */
+    section.filters-section .btn-reset-filters:hover {
+        transform: none !important;
+    }
+}
+
+/* Solo aplicar rotación en dispositivos con puntero (PC) */
+@media (hover: hover) {
+    section.filters-section .btn-reset-filters:hover {
+        transform: rotate(-30deg) !important;
+        background: #e74c3c !important;
+        color: #fff !important;
     }
 }
