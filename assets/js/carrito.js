@@ -1,12 +1,17 @@
 
-// altadensidad_carrito.js — Gestión del carrito de compras
+// altadensidad_carrito.js — Gestion del carrito de compras
 const CARRITO_KEY = "altadensidad_carrito";
+
+// Utilidades de codificacion para evitar problemas de charset
+const EMOJI_HELLO = decodeURIComponent('%F0%9F%91%8B'); // 👋
+const EMOJI_MONEY = decodeURIComponent('%F0%9F%92%B0'); // 💰
+const EMOJI_ROCKET = decodeURIComponent('%F0%9F%9A%80'); // 🚀
 
 // ---- CRUD Storage ----
 function obtenerCarrito() {
   try {
     return JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];
-  } catch {
+  } catch (e) {
     return [];
   }
 }
@@ -62,41 +67,54 @@ function actualizarBadge() {
   badge.style.display = total > 0 ? "flex" : "none";
 }
 
-// ---- WhatsApp (Lógica Global) ----
+// ---- WhatsApp (Logica Global) ----
 function enviarPedidoWhatsApp() {
+  console.log("Iniciando proceso de WhatsApp...");
   const carrito = obtenerCarrito();
-  if (carrito.length === 0) return;
+  if (carrito.length === 0) {
+    alert("Tu carrito esta vacio");
+    return;
+  }
 
   const subtotal = carrito.reduce((s, i) => s + Number(i.price) * i.cantidad, 0);
   
-  const msg = carrito
+  const msgItems = carrito
     .map(
       (i) =>
-        `• ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`
+        `* ${i.cantidad}x ${i.name}${i.price ? " ($" + Number(i.price).toLocaleString("es-CO") + ")" : ""}`
     )
     .join("\n");
 
-  const text = `¡Hola! 👋 Acabo de armar mi pedido en la web:\n----------------------------------\n${msg}\n----------------------------------\n💰 *Total:* $${subtotal.toLocaleString("es-CO")} COP\n\nMe gustaría coordinar el pago y el envío. 🚀`;
+  const saludo = "¡Hola! " + EMOJI_HELLO + " Acabo de armar mi pedido en la web:";
+  const footer = EMOJI_MONEY + " *Total:* $" + subtotal.toLocaleString("es-CO") + " COP";
+  const despedida = "Me gustaria coordinar el pago y el envio. " + EMOJI_ROCKET;
+
+  const fullText = `${saludo}\n----------------------------------\n${msgItems}\n----------------------------------\n${footer}\n\n${despedida}`;
   
-  const url = `https://wa.me/3046477694?text=${encodeURIComponent(text)}`;
+  const waUrl = `https://wa.me/3046477694?text=${encodeURIComponent(fullText)}`;
   
-  window.open(url, "_blank");
+  console.log("Redirigiendo a:", waUrl);
+  
+  // Abrir en pestaña nueva
+  const newWin = window.open(waUrl, "_blank");
+  
+  // Fallback si el bloqueador de popups detiene window.open
+  if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+      console.warn("Popup bloqueado, usando redireccion directa.");
+      window.location.href = waUrl;
+  }
 }
 
 // ---- Render panel ----
 function renderCarrito() {
   const lista = document.getElementById("carritoLista");
   const footer = document.getElementById("carritoFooter");
-  if (!lista) return;
+  if (!lista || !footer) return;
 
   const carrito = obtenerCarrito();
 
   if (carrito.length === 0) {
-    lista.innerHTML = `
-            <div class="carrito-vacio">
-                <i class="fas fa-shopping-bag"></i>
-                <p>Tu carrito está vacío</p>
-            </div>`;
+    lista.innerHTML = '<div class="carrito-vacio"><i class="fas fa-shopping-bag"></i><p>Tu carrito esta vacio</p></div>';
     footer.innerHTML = "";
     return;
   }
@@ -105,8 +123,7 @@ function renderCarrito() {
     .map(
       (item) => `
         <div class="carrito-item">
-            <img src="${item.image || ""}" alt="${escCarrito(item.name)}"
-                 onerror="this.style.display='none'">
+            <img src="${item.image || ""}" alt="${escCarrito(item.name)}" onerror="this.style.display='none'">
             <div class="carrito-item-info">
                 <span class="carrito-item-nombre">${escCarrito(item.name)}</span>
                 <span class="carrito-item-precio">${formatCarrito(item.price)}</span>
@@ -132,7 +149,7 @@ function renderCarrito() {
             <span>${totalItems} producto${totalItems !== 1 ? "s" : ""}</span>
             <span><strong>$${subtotal.toLocaleString("es-CO")} COP</strong></span>
         </div>
-        <button class="carrito-btn-pedir" onclick="enviarPedidoWhatsApp()">
+        <button class="carrito-btn-pedir" id="waBtnManual">
             <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
         </button>
         <button class="carrito-btn-mp" onclick="pagarMercadoPago()">
@@ -142,6 +159,12 @@ function renderCarrito() {
             <i class="fas fa-trash"></i> Vaciar carrito
         </button>
     `;
+
+    // Vinculacion manual extra para asegurar funcionamiento
+    const waBtn = document.getElementById("waBtnManual");
+    if (waBtn) {
+        waBtn.onclick = function() { enviarPedidoWhatsApp(); };
+    }
 }
 
 // ---- Mercado Pago ----
@@ -180,7 +203,7 @@ async function procesarPagoMercadoPago() {
     if (data.success && data.preference && data.preference.init_point) {
       window.location.href = data.preference.init_point;
     } else {
-      alert("Error: " + (data.message || "No se pudo iniciar el pago"));
+      alert("Error en el pago");
       if (btnPagar) {
         btnPagar.disabled = false;
         btnPagar.textContent = "Pagar ahora - Mercado Pago";
@@ -196,7 +219,7 @@ async function procesarPagoMercadoPago() {
   }
 }
 
-// ---- Modal Envío ----
+// ---- Modal Envio ----
 let _shippingData = null;
 function abrirModalEnvio() {
   const modal = document.getElementById("envioModal");
@@ -211,7 +234,7 @@ function cerrarModalEnvio() {
 function mostrarToastCarrito(nombre) {
   let toast = document.getElementById("carritoToast");
   if (!toast) return;
-  toast.textContent = `"${nombre}" agregado al carrito`;
+  toast.textContent = `Agregado: ${nombre}`;
   toast.classList.add("visible");
   setTimeout(() => toast.classList.remove("visible"), 2500);
 }
