@@ -112,9 +112,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (p < 1 || p > totalPaginas) return;
             window.kitsPaginaActual = p;
             renderKits(window.kitsPublicos || []);
-            // Scroll suave hasta sección kits eliminado por petición del usuario
-            // const kitsSection = document.querySelector('.kits-section');
-            // if (kitsSection) kitsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Scroll suave hasta el inicio de los Kits
+            const kitsSection = document.getElementById('kitsGrid');
+            if (kitsSection) {
+                const headerOffset = 100;
+                const elementPosition = kitsSection.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
         };
 
         // Modal de detalles de kit
@@ -243,8 +249,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             renderPaginacion(productsToShow.length);
 
-            // Scroll suave al inicio del grid al cambiar página eliminado por petición del usuario
-            // productGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Scroll suave al inicio del grid de productos al cambiar página
+            if (productGrid && productsToShow.length > 0) {
+                const headerOffset = 120; // Espacio para el header pegajoso
+                const elementPosition = productGrid.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                
+                // Solo hacer scroll si no estamos ya cerca de la parte superior del grid
+                if (Math.abs(elementPosition) > 150) {
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+            }
         }
 
         // ============================
