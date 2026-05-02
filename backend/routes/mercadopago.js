@@ -410,16 +410,13 @@ router.all("/webhook", async (req, res) => {
       query: req.query,
     });
 
-    /*
-    // Verificación HMAC opcional — si `WEBHOOK_SECRET` está configurada
+    // Verificación HMAC activa — requiere que MP_WEBHOOK_SECRET esté en el .env de Railway
     if (WEBHOOK_SECRET) {
       const headerCandidates = [
-        "x-hub-signature-256",
-        "x-hub-signature",
         "x-mercadopago-signature",
-        "x-mp-signature",
         "x-signature",
-        "x-platform-webhooks-signature",
+        "x-hub-signature-256",
+        "x-mp-signature"
       ];
       let sigHeader = null;
       for (const h of headerCandidates) {
@@ -428,18 +425,28 @@ router.all("/webhook", async (req, res) => {
           break;
         }
       }
+
       if (!sigHeader) {
         console.warn("[MP WEBHOOK] signature header missing");
         return res.status(401).send("Signature required");
       }
+
+      // Extraer v1 si viene en formato ts=...,v1=...
       let received = String(sigHeader);
-      const eqIdx = received.indexOf("=");
-      if (eqIdx !== -1) received = received.slice(eqIdx + 1);
+      if (received.includes("v1=")) {
+        const parts = received.split(",");
+        const v1Part = parts.find(p => p.trim().startsWith("v1="));
+        if (v1Part) received = v1Part.trim().substring(3);
+      } else {
+        const eqIdx = received.indexOf("=");
+        if (eqIdx !== -1) received = received.slice(eqIdx + 1);
+      }
+
       const payloadBuf =
         req.rawBody && req.rawBody.length
           ? req.rawBody
           : Buffer.from(JSON.stringify(req.body || {}));
-      // Compute expected HMAC in both hex and base64 to accept either format
+      
       const expectedHex = crypto
         .createHmac("sha256", WEBHOOK_SECRET)
         .update(payloadBuf)
@@ -449,52 +456,31 @@ router.all("/webhook", async (req, res) => {
         .update(payloadBuf)
         .digest("base64");
 
-      // Normalize received signature (could be hex or base64, may include prefix like 'sha256=')
-      const normalize = (s) => String(s).trim();
-      const recv = normalize(received);
-
+      const recv = received.trim();
       const isHex = /^[0-9a-fA-F]+$/.test(recv);
       const isBase64 = /^[A-Za-z0-9+/=]+$/.test(recv);
 
+      let verified = false;
       try {
         if (isHex) {
           const recvBuf = Buffer.from(recv, "hex");
           const expBuf = Buffer.from(expectedHex, "hex");
-          if (
-            recvBuf.length !== expBuf.length ||
-            !crypto.timingSafeEqual(recvBuf, expBuf)
-          ) {
-            console.warn("[MP WEBHOOK] signature mismatch (hex)");
-            return res.status(401).send("Invalid signature");
-          }
-        } else if (isBase64) {
+          if (recvBuf.length === expBuf.length && crypto.timingSafeEqual(recvBuf, expBuf)) verified = true;
+        } 
+        if (!verified && isBase64) {
           const recvBuf = Buffer.from(recv, "base64");
           const expBuf = Buffer.from(expectedBase64, "base64");
-          if (
-            recvBuf.length !== expBuf.length ||
-            !crypto.timingSafeEqual(recvBuf, expBuf)
-          ) {
-            console.warn("[MP WEBHOOK] signature mismatch (base64)");
-            return res.status(401).send("Invalid signature");
-          }
-        } else {
-          // Fallback: compare raw strings (timing safe)
-          const expHexBuf = Buffer.from(expectedHex, "utf8");
-          const recvBuf = Buffer.from(recv, "utf8");
-          if (
-            recvBuf.length !== expHexBuf.length ||
-            !crypto.timingSafeEqual(recvBuf, expHexBuf)
-          ) {
-            console.warn("[MP WEBHOOK] signature format unknown or mismatch");
-            return res.status(401).send("Invalid signature format");
-          }
+          if (recvBuf.length === expBuf.length && crypto.timingSafeEqual(recvBuf, expBuf)) verified = true;
         }
       } catch (ex) {
-        console.warn("[MP WEBHOOK] signature parse error", ex && ex.message);
-        return res.status(401).send("Invalid signature format");
+        console.error("[MP WEBHOOK] crypto error", ex.message);
+      }
+
+      if (!verified) {
+        console.warn("[MP WEBHOOK] signature mismatch");
+        return res.status(401).send("Invalid signature");
       }
     }
-    */
     
     const paymentId =
       req.body?.data?.id ||
