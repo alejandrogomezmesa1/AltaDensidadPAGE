@@ -3672,184 +3672,156 @@ select.shipping-input option {
     background-color: #1a1a1a;
     color: #fff;
 }
-
 /* ==========================================================================
-   MEJORA DE FILTROS (FIX VISUAL ERRORS)
+   ULTRA-SPECIFIC FIX FOR FILTERS (V2)
    ========================================================================== */
 
-.filters-section {
-    padding: clamp(20px, 4vw, 40px) 0;
-    width: 100%;
+section.filters-section .filters-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 25px !important;
+    background: rgba(10, 10, 10, 0.3) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(212, 175, 55, 0.25) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 30px auto !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
 }
 
-.filters-container {
-    background: rgba(20, 20, 20, 0.4);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 20px;
-    padding: clamp(15px, 3vw, 30px);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    align-items: flex-end;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+section.filters-section .search-box {
+    position: relative !important;
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
 }
 
-.search-box {
-    flex: 2 1 300px;
-    position: relative;
-}
-
-.search-box i {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #D4AF37;
-    font-size: 1.1rem;
-    z-index: 5;
-    pointer-events: none;
-}
-
-.search-box input {
-    width: 100%;
-    height: 50px !important;
-    padding: 10px 20px 10px 50px !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 12px !important;
-    color: #fff !important;
-    font-size: 1rem !important;
-    transition: all 0.3s ease !important;
-}
-
-.search-box input:focus {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: #D4AF37 !important;
-    outline: none !important;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15) !important;
-}
-
-.filter-controls {
-    flex: 3 1 500px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: flex-end;
-}
-
-.filter-group {
-    flex: 1 1 150px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.filter-group label {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.filter-group label i {
-    color: #D4AF37;
-}
-
-.filter-group select {
-    height: 50px !important;
-    padding: 0 15px !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 12px !important;
-    color: #fff !important;
-    font-size: 0.95rem !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    appearance: none !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 15px center !important;
-    background-size: 16px !important;
-    padding-right: 45px !important;
-}
-
-.filter-group select:hover {
-    border-color: rgba(212, 175, 55, 0.4) !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-.btn-reset-filters {
-    width: 50px;
-    height: 50px;
-    background: rgba(231, 76, 60, 0.1) !important;
-    border: 1px solid rgba(231, 76, 60, 0.3) !important;
-    color: #e74c3c !important;
-    border-radius: 12px !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
+section.filters-section .search-box i {
+    position: absolute !important;
+    left: 20px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    flex-shrink: 0 !important;
-}
-
-.btn-reset-filters:hover {
-    background: #e74c3c !important;
-    color: #fff !important;
-    transform: rotate(-30deg) !important;
-}
-
-/* --- Active Filters --- */
-.active-filters-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.filter-badge {
-    background: rgba(212, 175, 55, 0.1) !important;
-    border: 1px solid rgba(212, 175, 55, 0.2) !important;
     color: #D4AF37 !important;
-    padding: 6px 14px !important;
-    border-radius: 50px !important;
+    font-size: 1.2rem !important;
+    z-index: 10 !important;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+}
+
+section.filters-section .search-box input {
+    width: 100% !important;
+    height: 55px !important;
+    padding: 0 20px 0 60px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+    font-size: 1.05rem !important;
+    box-sizing: border-box !important;
+}
+
+section.filters-section .filter-controls {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+    align-items: flex-end !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+}
+
+section.filters-section .filter-group {
+    flex: 1 1 200px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin: 0 !important;
+}
+
+section.filters-section .filter-group label {
+    margin: 0 !important;
     font-size: 0.85rem !important;
+    color: rgba(212, 175, 55, 0.8) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
 }
 
-/* MODO CLARO OVERRIDES */
-html.modo-claro .filters-container {
-    background: rgba(255, 255, 255, 0.8) !important;
-    border-color: rgba(184, 150, 12, 0.2) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+section.filters-section .filter-group select {
+    width: 100% !important;
+    height: 48px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 10px !important;
+    color: #fff !important;
+    padding: 0 15px !important;
+    font-size: 0.95rem !important;
+    cursor: pointer !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 15px center !important;
+    background-size: 16px !important;
 }
 
-html.modo-claro .search-box input,
-html.modo-claro .filter-group select {
+section.filters-section .btn-reset-filters {
+    width: 48px !important;
+    height: 48px !important;
+    flex: 0 0 48px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: rgba(231, 76, 60, 0.1) !important;
+    border: 1px solid rgba(231, 76, 60, 0.3) !important;
+    color: #e74c3c !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+section.filters-section .btn-reset-filters:hover {
+    background: #e74c3c !important;
+    color: #fff !important;
+    transform: rotate(-30deg) !important;
+}
+
+/* Modo Claro Fix */
+html.modo-claro section.filters-section .filters-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(184, 150, 12, 0.25) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.modo-claro section.filters-section .search-box input,
+html.modo-claro section.filters-section .filter-group select {
     background: #fff !important;
-    border-color: rgba(0, 0, 0, 0.1) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
     color: #1a1a1a !important;
 }
 
-html.modo-claro .filter-group label {
-    color: #444 !important;
+html.modo-claro section.filters-section .filter-group label {
+    color: #B8960C !important;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-    .search-box { flex: 1 1 100%; }
-    .filter-controls { flex: 1 1 100%; }
-}
-
-@media (max-width: 600px) {
-    .filter-group { flex: 1 1 100%; }
-    .btn-reset-filters { width: 100%; height: 50px; }
+@media (max-width: 768px) {
+    section.filters-section .filter-group {
+        flex: 1 1 100% !important;
+    }
+    section.filters-section .btn-reset-filters {
+        width: 100% !important;
+    }
 }
