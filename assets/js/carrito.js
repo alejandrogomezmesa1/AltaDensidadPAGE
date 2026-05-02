@@ -143,12 +143,6 @@ function renderCarrito() {
 // ---- WhatsApp con verificación de sesión ----
 
 function pedirPorWhatsApp(url) {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    cerrarCarrito();
-    window.location.href = "login.html";
-    return;
-  }
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
