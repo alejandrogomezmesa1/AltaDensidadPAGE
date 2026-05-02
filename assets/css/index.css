@@ -3041,7 +3041,7 @@ html.modo-claro .shipping-input {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 30px;
-    padding: 0.8rem 1rem 0.8rem 3rem;
+    padding: 1rem 1rem 1rem 3.2rem;
     color: #fff;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -3051,58 +3051,57 @@ html.modo-claro .shipping-input {
     outline: none;
     border-color: var(--azul-dos);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
 }
 
 .filter-controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) 50px;
+    gap: 1.5rem;
+    align-items: end;
 }
 
 .filter-group {
-    flex: 1;
-    min-width: 180px;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
 }
 
 .filter-group label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--azul-dos);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+    letter-spacing: 1.2px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .filter-group select {
+    width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 0.7rem;
+    padding: 0.8rem;
     color: #f8f9f9;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.95rem;
-}
-
-.filter-group select:hover, .filter-group select:focus {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--azul-dos);
-    outline: none;
+    font-size: 0.9rem;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23d4af37' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
 }
 
 .btn-reset-filters {
     background: rgba(192, 57, 43, 0.15);
     color: #e74c3c;
     border: 1px solid rgba(192, 57, 43, 0.3);
-    width: 42px;
-    height: 42px;
+    width: 50px;
+    height: 46px;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -3111,11 +3110,33 @@ html.modo-claro .shipping-input {
     transition: all 0.3s ease;
 }
 
-.btn-reset-filters:hover {
-    background: #e74c3c;
-    color: #fff;
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+/* Tablets y Laptops pequeñas */
+@media (max-width: 1100px) {
+    .filter-controls {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .btn-reset-filters {
+        grid-column: span 2;
+        width: 100%;
+    }
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+    .filters-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .filter-controls {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .btn-reset-filters {
+        grid-column: span 1;
+    }
+    .search-box input {
+        font-size: 0.9rem;
+    }
 }
 
 /* Badges de filtros activos */
@@ -3150,8 +3171,9 @@ html.modo-claro .shipping-input {
     opacity: 1;
 }
 
-@media (max-width: 768px) {
-    .filter-group { min-width: 100%; }
-    .filter-controls { flex-direction: column; align-items: stretch; }
-    .btn-reset-filters { width: 100%; }
+/* Estilo para las opciones de los select (visibilidad) */
+.filter-group select option {
+    background-color: #1a1a1c;
+    color: #fff;
+    padding: 10px;
 }
