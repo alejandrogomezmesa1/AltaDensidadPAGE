@@ -36,8 +36,11 @@
           return; 
         }
         const order = data.order;
-        if (order && order.status === 'approved') {
-          try { sessionStorage.removeItem('altadensidad_carrito'); } catch {};
+        if (order && (order.status === 'approved' || order.status === 'pending')) {
+          try { 
+            localStorage.removeItem('altadensidad_carrito');
+            sessionStorage.removeItem('altadensidad_carrito'); // Por si acaso
+          } catch {};
           content.innerHTML = `
             <div class="status-icon success"><i class="fas fa-check-circle"></i></div>
             <h3>¡Gracias por tu compra!</h3>

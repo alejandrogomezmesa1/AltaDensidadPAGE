@@ -1,6 +1,4 @@
-// ============================================================
-// carrito.js — Lógica del carrito de compras
-// Usa sessionStorage: se borra al cerrar la pestaña
+// Usa localStorage: persiste aunque se cierre la pestaña
 // ============================================================
 
 const CARRITO_KEY = "altadensidad_carrito";
@@ -9,14 +7,14 @@ const CARRITO_KEY = "altadensidad_carrito";
 
 function obtenerCarrito() {
   try {
-    return JSON.parse(sessionStorage.getItem(CARRITO_KEY)) || [];
+    return JSON.parse(localStorage.getItem(CARRITO_KEY)) || [];
   } catch {
     return [];
   }
 }
 
 function guardarCarrito(carrito) {
-  sessionStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+  localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
 }
 
 function agregarAlCarrito(producto) {
