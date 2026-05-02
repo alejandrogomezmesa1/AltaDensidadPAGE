@@ -31,6 +31,11 @@ function mapPaymentToStatus(paymentStatus) {
   return "pending";
 }
 
+// GET /api/mercadopago/test — Para verificar conectividad
+router.get("/test", (req, res) => {
+  res.json({ success: true, message: "MercadoPago Router OK" });
+});
+
 // POST /api/mercadopago/create_preference
 router.post("/create_preference", async (req, res) => {
   try {
