@@ -408,7 +408,7 @@ router.put("/order/:external_reference", requireAdmin, async (req, res) => {
 });
 
 // Webhook endpoint — procesa notificaciones desde Mercado Pago y actualiza órdenes
-router.post("/webhook", async (req, res) => {
+router.all("/webhook", async (req, res) => {
   try {
     console.log("[MP WEBHOOK] incoming headers:", {
       headers: req.headers,
