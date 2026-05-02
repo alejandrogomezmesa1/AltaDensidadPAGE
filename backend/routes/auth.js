@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
         });
     } catch (error) {
         console.error('Error en registro:', error);
-        res.status(500).json({ success: false, message: 'Error al registrar usuario', error: error.message });
+        res.status(500).json({ success: false, message: 'Error al registrar usuario' });
     }
 });
 
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
         });
     } catch (error) {
         console.error('Error en login:', error);
-        res.status(500).json({ success: false, message: 'Error al iniciar sesiÃ³n', error: error.message });
+        res.status(500).json({ success: false, message: 'Error al iniciar sesión' });
     }
 });
 
@@ -157,7 +157,7 @@ router.post('/forgot-password', async (req, res) => {
         console.error('Error en forgot-password (SendGrid):', err);
         res.status(500).json({ 
             success: false, 
-            message: 'Error al enviar email a trav\u00e9s de SendGrid. ' + (err.response ? err.response.body.errors[0].message : err.message)
+            message: 'Error al enviar el código de recuperación. Por favor intenta más tarde.'
         });
     }
 });
@@ -195,7 +195,7 @@ router.post('/reset-password', async (req, res) => {
         res.json({ success: true, message: 'Contraseña restablecida correctamente.' });
     } catch (error) {
         console.error('Error en reset-password:', error);
-        res.status(500).json({ success: false, message: 'Error al restablecer contraseña.', error: error.message });
+        res.status(500).json({ success: false, message: 'Error al restablecer contraseña.' });
     }
 });
 
