@@ -3817,6 +3817,11 @@ html.modo-claro section.filters-section .filter-group label {
     color: #B8960C !important;
 }
 
+/* Ocultar botón de cierre de nav por defecto (solo mostrar en móvil) */
+.nav-close-btn {
+    display: none;
+}
+
 @media (max-width: 768px) {
     section.filters-section .filter-group {
         flex: 1 1 100% !important;
