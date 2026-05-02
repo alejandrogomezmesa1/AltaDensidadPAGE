@@ -446,3 +446,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnCerrar) btnCerrar.addEventListener("click", cerrarCarrito);
   if (overlay) overlay.addEventListener("click", cerrarCarrito);
 });
+
+
+// Funcion para abrir WhatsApp en nueva pestaña
+function pedirPorWhatsApp(url) {
+    window.open(url, " _blank\);
+}

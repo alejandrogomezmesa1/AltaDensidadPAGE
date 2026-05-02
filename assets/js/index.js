@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // ============================
         // RENDER PRODUCTOS (Catalogo)
         // ============================
-        function displayProducts(productsToShow) {
+        function displayProducts(productsToShow, shouldScroll = false) {
             const productGrid = document.getElementById('productGrid');
             if (!productGrid) return;
             
@@ -322,13 +322,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             renderPaginacion(productsToShow.length);
 
-            // Scroll suave al inicio del grid de productos al cambiar página
-            if (productGrid && productsToShow.length > 0) {
-                const headerOffset = 120; // Espacio para el header pegajoso
+            // Scroll suave solo si se solicita (por ejemplo, al cambiar de página)
+            if (shouldScroll && productGrid && productsToShow.length > 0) {
+                const headerOffset = 120;
                 const elementPosition = productGrid.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                 
-                // Solo hacer scroll si no estamos ya cerca de la parte superior del grid
                 if (Math.abs(elementPosition) > 150) {
                     window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                 }
@@ -386,7 +385,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const totalPaginas = Math.ceil(productosFiltrados.length / ITEMS_POR_PAGINA);
             if (pagina < 1 || pagina > totalPaginas) return;
             paginaActual = pagina;
-            displayProducts(productosFiltrados);
+            displayProducts(productosFiltrados, true);
         };
 
         // ============================

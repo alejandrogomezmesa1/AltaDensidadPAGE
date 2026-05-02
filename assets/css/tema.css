@@ -187,20 +187,36 @@ html.modo-claro .special-offer {
 /* ================================================
    SECCIÓN FILTROS (index.html)
    ================================================ */
-html.modo-claro #filterPanel,
-html.modo-claro .filter-section {
-    background: #ede9e3;
-    color: #1a1a1a;
+html.modo-claro .filters-section {
+    background: #ede9e3 !important;
+    border: 1px solid rgba(184, 150, 12, 0.25);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
-html.modo-claro #filterPanel label,
-html.modo-claro #filterPanel h3,
-html.modo-claro #filterPanel span,
-html.modo-claro .filter-section label,
-html.modo-claro .filter-section h3 {
-    color: #1a1a1a;
+
+html.modo-claro .filter-group label {
+    color: #1a1a1a !important;
 }
-html.modo-claro #filterPanel input[type="range"] {
-    accent-color: #B8960C;
+
+html.modo-claro .search-box input,
+html.modo-claro .filter-group select {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    border: 1px solid rgba(184, 150, 12, 0.3) !important;
+}
+
+html.modo-claro .search-box input:focus,
+html.modo-claro .filter-group select:focus {
+    border-color: #B8960C !important;
+    box-shadow: 0 0 15px rgba(184, 150, 12, 0.1) !important;
+}
+
+html.modo-claro .btn-reset-filters {
+    background: rgba(192, 57, 43, 0.08) !important;
+    border-color: rgba(192, 57, 43, 0.2) !important;
+}
+
+html.modo-claro .search-box i {
+    color: #B8960C !important;
 }
 
 /* ================================================
