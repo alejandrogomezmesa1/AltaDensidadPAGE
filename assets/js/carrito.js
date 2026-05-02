@@ -163,6 +163,8 @@ function obtenerCostoEnvio(zona) {
 
 function actualizarResumenEnvio() {
     const zonaSelect = document.getElementById("envZona");
+    const groupMetro = document.getElementById("groupMetropolitana");
+    const groupNacional = document.getElementById("groupNacional");
     const resumen = document.getElementById("resumenEnvio");
     const costoTxt = document.getElementById("costoEnvioValor");
     const totalTxt = document.getElementById("totalConEnvio");
@@ -173,6 +175,16 @@ function actualizarResumenEnvio() {
     const costo = obtenerCostoEnvio(zona);
     const subtotal = obtenerCarrito().reduce((s, i) => s + (Number(i.price) * i.cantidad), 0);
     
+    // Control de visibilidad de campos de ciudad
+    if (groupMetro) groupMetro.style.display = (zona === "metropolitana") ? "block" : "none";
+    if (groupNacional) groupNacional.style.display = (zona === "nacional") ? "block" : "none";
+    
+    // Hacer campos requeridos dinamicamente
+    const inputMetro = document.getElementById("envCiudadMetro");
+    const inputNacional = document.getElementById("envCiudadNacional");
+    if (inputMetro) inputMetro.required = (zona === "metropolitana");
+    if (inputNacional) inputNacional.required = (zona === "nacional");
+
     resumen.style.display = "block";
     costoTxt.textContent = `$${costo.toLocaleString("es-CO")}`;
     totalTxt.textContent = `$${(subtotal + costo).toLocaleString("es-CO")}`;
@@ -249,11 +261,16 @@ function abrirModalEnvio() {
   const modal = document.getElementById("envioModal");
   if (modal) {
       modal.style.display = "flex";
-      // Reiniciar resumen
+      // Reiniciar resumen y campos
       const resumen = document.getElementById("resumenEnvio");
       if (resumen) resumen.style.display = "none";
       const zonaSelect = document.getElementById("envZona");
       if (zonaSelect) zonaSelect.selectedIndex = 0;
+      
+      const gMetro = document.getElementById("groupMetropolitana");
+      const gNac = document.getElementById("groupNacional");
+      if (gMetro) gMetro.style.display = "none";
+      if (gNac) gNac.style.display = "none";
   }
 }
 function cerrarModalEnvio() {
@@ -314,12 +331,25 @@ document.addEventListener("DOMContentLoaded", () => {
     formEnvio.addEventListener("submit", (e) => {
       e.preventDefault();
       const zonaSelect = document.getElementById("envZona");
+      const zonaId = zonaSelect.value;
+      
+      let ciudadFinal = "";
+      if (zonaId === "medellin") {
+          ciudadFinal = "Medellín";
+      } else if (zonaId === "metropolitana") {
+          ciudadFinal = document.getElementById("envCiudadMetro").value;
+      } else if (zonaId === "nacional") {
+          ciudadFinal = document.getElementById("envCiudadNacional").value;
+      } else {
+          ciudadFinal = "Prueba";
+      }
+
       _shippingData = {
         nombre: document.getElementById("envNombre").value,
         documento: document.getElementById("envDocumento").value,
         celular: document.getElementById("envCelular").value,
         zona: zonaSelect.options[zonaSelect.selectedIndex].text.split(" ($")[0],
-        ciudad: document.getElementById("envCiudad").value, // Nombre real del municipio
+        ciudad: ciudadFinal,
         direccion: document.getElementById("envDireccion").value,
         barrio: document.getElementById("envBarrio").value
       };

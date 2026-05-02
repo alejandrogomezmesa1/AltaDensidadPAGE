@@ -273,14 +273,33 @@
                         <option value="" disabled selected>Selecciona la zona</option>
                         <option value="test">Envío de Prueba (Solo para TEST) ($2.000)</option>
                         <option value="medellin">Medellín ($15.000)</option>
-                        <option value="metropolitana">Área Metropolitana: Bello, Envigado, Itagüí, Sabaneta, La Estrella, Copacabana, San Antonio de Prado ($20.000)</option>
+                        <option value="metropolitana">Área Metropolitana ($20.000)</option>
                         <option value="nacional">Resto de Colombia - Nacional ($22.000)</option>
                     </select>
                 </div>
 
-                <div class="shipping-group">
-                    <label class="shipping-label">Municipio / Ciudad específica *</label>
-                    <input type="text" id="envCiudad" required placeholder="Ej: Itagüí, Bogotá, Cali..." class="shipping-input">
+                <!-- Campo Condicional: Area Metropolitana -->
+                <div class="shipping-group" id="groupMetropolitana" style="display: none;">
+                    <label class="shipping-label">Municipio del Área Metropolitana *</label>
+                    <select id="envCiudadMetro" class="shipping-input">
+                        <option value="" disabled selected>Selecciona el municipio</option>
+                        <option value="Bello">Bello</option>
+                        <option value="Envigado">Envigado</option>
+                        <option value="Itagüí">Itagüí</option>
+                        <option value="Sabaneta">Sabaneta</option>
+                        <option value="La Estrella">La Estrella</option>
+                        <option value="Copacabana">Copacabana</option>
+                        <option value="San Antonio de Prado">San Antonio de Prado</option>
+                        <option value="Caldas">Caldas</option>
+                        <option value="Girardota">Girardota</option>
+                        <option value="Barbosa">Barbosa</option>
+                    </select>
+                </div>
+
+                <!-- Campo Condicional: Nacional -->
+                <div class="shipping-group" id="groupNacional" style="display: none;">
+                    <label class="shipping-label">Municipio / Ciudad de destino *</label>
+                    <input type="text" id="envCiudadNacional" placeholder="Ej: Bogotá, Cali, Cartagena..." class="shipping-input">
                 </div>
                 
                 <div id="resumenEnvio" class="shipping-summary-card" style="display: none;">

@@ -932,3 +932,39 @@ html.modo-claro select.shipping-input option {
     background-color: #ffffff;
     color: #1a1a1c;
 }
+
+/* Adaptacion Completa del Formulario de Envio al Modo Claro */
+html.modo-claro #envioModal .modal-content {
+    background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%) !important;
+    color: #1a1a1c !important;
+    border: 1px solid rgba(184, 150, 12, 0.2) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.modo-claro .shipping-label {
+    color: #444 !important;
+    font-weight: 600 !important;
+}
+
+html.modo-claro .shipping-input {
+    background-color: #ffffff !important;
+    color: #1a1a1c !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+html.modo-claro .shipping-input:focus {
+    border-color: #B8960C !important;
+    box-shadow: 0 0 8px rgba(184, 150, 12, 0.1) !important;
+}
+
+html.modo-claro .modal-header h2 {
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .cerrar-modal {
+    color: #888 !important;
+}
+
+html.modo-claro .cerrar-modal:hover {
+    color: #000 !important;
+}
