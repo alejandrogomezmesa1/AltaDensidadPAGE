@@ -3114,7 +3114,8 @@ html.modo-claro .shipping-input {
 .btn-reset-filters:hover {
     background: #e74c3c;
     color: #fff;
-    transform: rotate(-180deg);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
 }
 
 /* Badges de filtros activos */

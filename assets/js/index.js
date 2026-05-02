@@ -425,9 +425,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (category) createBadge('Categoría: ' + category, () => { 
                 document.getElementById('filterCategory').value = ''; filterProducts(); 
             });
-            if (gender)   createBadge('Género: ' + gender, () => { 
-                document.getElementById('filterGender').value = ''; filterProducts(); 
-            });
+            if (gender) {
+                const label = gender === 'Masculino' ? 'Caballero' : (gender === 'Femenino' ? 'Dama' : gender);
+                createBadge('Género: ' + label, () => { 
+                    document.getElementById('filterGender').value = ''; filterProducts(); 
+                });
+            }
             if (brand)    createBadge('Marca: ' + brand, () => { 
                 document.getElementById('filterBrand').value = ''; filterProducts(); 
             });
