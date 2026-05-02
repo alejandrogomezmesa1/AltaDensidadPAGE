@@ -271,18 +271,20 @@
                     <label class="shipping-label">Ciudad / Zona de Envío *</label>
                     <select id="envCiudad" required class="shipping-input" onchange="actualizarResumenEnvio()">
                         <option value="" disabled selected>Selecciona tu ubicación</option>
+                        <option value="test">Envío de Prueba (Solo para TEST) ($2.000)</option>
                         <option value="medellin">Medellín ($15.000)</option>
                         <option value="metropolitana">Área Metropolitana: Bello, Envigado, Itagüí, Sabaneta, La Estrella, Copacabana, San Antonio de Prado ($20.000)</option>
                         <option value="nacional">Resto de Colombia - Nacional ($22.000)</option>
                     </select>
                 </div>
-                <div id="resumenEnvio" class="shipping-resumen" style="margin-top: 15px; padding: 12px; background: rgba(212, 175, 55, 0.1); border-radius: 8px; display: none;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;">
+                
+                <div id="resumenEnvio" class="shipping-summary-card" style="display: none;">
+                    <div class="summary-row">
                         <span>Costo de Envío:</span>
                         <span id="costoEnvioValor">$0</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; color: #D4AF37;">
-                        <span>Total a Pagar:</span>
+                    <div class="summary-row total-row">
+                        <span>Total Final:</span>
                         <span id="totalConEnvio">$0</span>
                     </div>
                 </div>

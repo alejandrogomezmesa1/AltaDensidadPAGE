@@ -3644,3 +3644,54 @@ html.modo-claro .shipping-input {
     font-size: 1.1rem;
     margin-bottom: 20px;
 }
+
+/* ================================================
+   SHIPPING SUMMARY CARD — PREMIUM DESIGN
+   ================================================ */
+.shipping-summary-card {
+    margin-top: 20px;
+    padding: 18px;
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #aaa;
+}
+
+.summary-row span:last-child {
+    font-weight: 600;
+    color: #eee;
+}
+
+.summary-row.total-row {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.summary-row.total-row span:last-child {
+    color: #D4AF37;
+    font-size: 1.4rem;
+}
+
+/* Mejora de los select en el formulario */
+select.shipping-input {
+    background-color: #1a1a1a !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    cursor: pointer;
+}
+
+select.shipping-input option {
+    background-color: #1a1a1a;
+    color: #fff;
+}

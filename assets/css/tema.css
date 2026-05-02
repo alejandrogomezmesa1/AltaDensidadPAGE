@@ -898,3 +898,37 @@ html.modo-claro .carrito-btn-vaciar {
 html.modo-claro .carrito-vacio {
     color: #888 !important;
 }
+
+/* Adaptacion del resumen de envio al Modo Claro */
+html.modo-claro .shipping-summary-card {
+    background: #fdfaf3 !important;
+    border: 1px solid rgba(184, 150, 12, 0.3) !important;
+}
+
+html.modo-claro .summary-row {
+    color: #666 !important;
+}
+
+html.modo-claro .summary-row span:last-child {
+    color: #333 !important;
+}
+
+html.modo-claro .summary-row.total-row {
+    border-top: 1px solid rgba(184, 150, 12, 0.2) !important;
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .summary-row.total-row span:last-child {
+    color: #B8960C !important;
+}
+
+html.modo-claro select.shipping-input {
+    background-color: #ffffff !important;
+    color: #1a1a1c !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+html.modo-claro select.shipping-input option {
+    background-color: #ffffff;
+    color: #1a1a1c;
+}
