@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function mostrarTop10(productsToShow) {
         productGrid.innerHTML = '';
-        productsToShow.forEach(product => {
+        productsToShow.forEach((product, index) => {
+            const rank = index + 1;
             const stars = '★'.repeat(product.rating || 5) + '☆'.repeat(5 - (product.rating || 5));
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
 
             productCard.innerHTML = `
+                <div class="product-rank-badge">#${rank}</div>
                 <div class="product-image">
                     <img src="${itemData.image}" alt="${itemData.name}">
                 </div>
