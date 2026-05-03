@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ? 'http://localhost:3000/api'
         : 'https://altadensidadpage-production.up.railway.app/api';
     const API_TOP10_URL = base + '/top10';
-    const productGrid = document.getElementById('productGrid');
+    const productGrid = document.getElementById('top10Grid');
 
     async function cargarTop10() {
         productGrid.innerHTML = '<div class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</div>';
@@ -24,16 +24,40 @@ document.addEventListener('DOMContentLoaded', function() {
             const stars = '★'.repeat(product.rating || 5) + '☆'.repeat(5 - (product.rating || 5));
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
+            
+            // Preparar objeto para funciones globales
+            const itemData = {
+                id: product.producto_id || product.id,
+                name: product.nombre || product.name,
+                image: product.imagen || product.image,
+                category: product.categoria || product.category,
+                gender: product.genero || product.gender,
+                description: product.descripcion || product.description,
+                price: product.precio,
+                rating: product.rating || 5
+            };
+
             productCard.innerHTML = `
                 <div class="product-image">
-                    <img src="${product.imagen || product.image}" alt="${product.nombre || product.name}">
+                    <img src="${itemData.image}" alt="${itemData.name}">
                 </div>
                 <div class="product-info">
-                    <div class="product-name">${product.nombre || product.name}</div>
+                    <div class="product-name">${itemData.name}</div>
                     <div class="product-rating">${stars}</div>
-                    <div class="product-category">${product.descripcion || product.description || ''}</div>
+                    <div class="product-category">${itemData.category || ''}</div>
+                    <div class="product-price">$${Number(itemData.price || 0).toLocaleString('es-CO')} COP</div>
                 </div>
+                <button class="btn-agregar-carrito" 
+                    onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito(${JSON.stringify({id: itemData.id, name: itemData.name, image: itemData.image, price: itemData.price})})'>
+                    <i class="fas fa-cart-plus"></i> Agregar
+                </button>
             `;
+
+            productCard.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-agregar-carrito')) return;
+                if (window.abrirModalProducto) window.abrirModalProducto(itemData);
+            });
+
             productGrid.appendChild(productCard);
         });
         // Rellenar última fila con placeholders para evitar espacios en blanco
