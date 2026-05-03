@@ -120,6 +120,9 @@ function agregarProductoATop10() {
     });
     renderTablaTop10();
     renderSelectProductosTop10();
+    // Resetear el buscador local de productos para agregar
+    const buscadorLocal = document.getElementById('buscadorProductoTop10');
+    if (buscadorLocal) buscadorLocal.value = '';
 }
 
 async function guardarTop10() {
