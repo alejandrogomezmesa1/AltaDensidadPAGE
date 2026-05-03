@@ -465,7 +465,7 @@ async function cargarProductos() {
         renderTabla();
     } catch (err) {
         mostrarAlerta('Error al cargar productos: ' + err.message, 'error');
-        tbodyProductos.innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
+        tbodyProductos.innerHTML = `<tr><td colspan="10" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
     }
 }
 
@@ -487,7 +487,7 @@ function renderTabla() {
     const pagina = filtrados.slice(inicio, inicio + ITEMS_PROD);
 
     if (total === 0) {
-        tbodyProductos.innerHTML = `<tr><td colspan="9" class="empty-row">${searchProductos ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'}</td></tr>`;
+        tbodyProductos.innerHTML = `<tr><td colspan="10" class="empty-row">${searchProductos ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'}</td></tr>`;
         document.getElementById('paginacionProductos').innerHTML = '';
         return;
     }
@@ -500,6 +500,8 @@ function renderTabla() {
             <td data-label="Categoría">${escHtml(p.category)}</td>
             <td data-label="Género">${escHtml(p.gender)}</td>
             <td data-label="Precio">${formatPrecio(p.price)}</td>
+            <td data-label="Rating">${p.rating || 0} <i class="fas fa-star" style="color: #f1c40f; font-size: 0.8rem;"></i></td>
+            <td data-label="Tallas">${(p.sizes || []).join(', ') || '-'}</td>
             <td data-label="Visible">${p.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
             <td data-label="Acciones">
                 <div class="acciones">
@@ -740,7 +742,7 @@ window.quitarDeTop10 = quitarDeTop10;
 // ============================
 async function cargarEnvases() {
     const tbody = document.getElementById('tbodyEnvases');
-    tbody.innerHTML = `<tr><td colspan="7" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</td></tr>`;
     try {
         const res  = await fetch(API_ENVASES_URL);
         const data = await res.json();
@@ -749,7 +751,7 @@ async function cargarEnvases() {
         renderTablaEnvases();
     } catch (err) {
         mostrarAlerta('Error al cargar envases: ' + err.message, 'error');
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-row"><i class="fas fa-exclamation-circle"></i> No se pudo conectar con el servidor.</td></tr>`;
     }
 }
 
@@ -772,7 +774,7 @@ function renderTablaEnvases() {
     const pagina = filtrados.slice(inicio, inicio + ITEMS_ENV);
 
     if (total === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-row">${searchEnvases ? 'No se encontraron resultados.' : 'No hay envases registrados.'}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-row">${searchEnvases ? 'No se encontraron resultados.' : 'No hay envases registrados.'}</td></tr>`;
         document.getElementById('paginacionEnvases').innerHTML = '';
         return;
     }
@@ -783,6 +785,7 @@ function renderTablaEnvases() {
             <td data-label="Nombre"><strong>${escHtml(e.name)}</strong></td>
             <td data-label="Material">${escHtml(e.material)}</td>
             <td data-label="Precio">${formatPrecio(e.price)}</td>
+            <td data-label="Tallas">${(e.sizes || []).join(', ') || '-'}</td>
             <td data-label="Visible">${e.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
             <td data-label="Acciones">
                 <div class="acciones">
@@ -1017,7 +1020,7 @@ function limpiarForm() {
 }
 
 function mostrarCargando() {
-    tbodyProductos.innerHTML = `<tr><td colspan="9" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando productos...</td></tr>`;
+    tbodyProductos.innerHTML = `<tr><td colspan="10" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando productos...</td></tr>`;
 }
 
 function mostrarAlerta(msg, tipo) {
