@@ -616,29 +616,43 @@ document.addEventListener('DOMContentLoaded', async function() {
                 let scrollAmount = 0;
                 const step = 300; // Ancho aproximado de la card + gap
                 
-                document.getElementById('sliderNext').onclick = () => {
+                const moveSlider = (direction) => {
                     const max = container.scrollWidth - container.clientWidth;
-                    if (scrollAmount < max) {
-                        scrollAmount += step;
-                        if (scrollAmount > max) scrollAmount = max;
-                        container.style.transform = `translateX(-${scrollAmount}px)`;
+                    if (direction === 'next') {
+                        if (scrollAmount < max) {
+                            scrollAmount += step;
+                            if (scrollAmount > max) scrollAmount = max;
+                        } else {
+                            scrollAmount = 0;
+                        }
                     } else {
-                        // Opcional: volver al inicio
-                        scrollAmount = 0;
-                        container.style.transform = `translateX(0)`;
+                        if (scrollAmount > 0) {
+                            scrollAmount -= step;
+                            if (scrollAmount < 0) scrollAmount = 0;
+                        } else {
+                            scrollAmount = max;
+                        }
                     }
+                    container.style.transform = `translateX(-${scrollAmount}px)`;
+                };
+
+                // Auto-play cada 5 segundos
+                let autoSlide = setInterval(() => moveSlider('next'), 5000);
+
+                // Reiniciar el timer si el usuario interactúa manualmente
+                const resetAutoSlide = () => {
+                    clearInterval(autoSlide);
+                    autoSlide = setInterval(() => moveSlider('next'), 5000);
+                };
+
+                document.getElementById('sliderNext').onclick = () => {
+                    moveSlider('next');
+                    resetAutoSlide();
                 };
 
                 document.getElementById('sliderPrev').onclick = () => {
-                    if (scrollAmount > 0) {
-                        scrollAmount -= step;
-                        if (scrollAmount < 0) scrollAmount = 0;
-                        container.style.transform = `translateX(-${scrollAmount}px)`;
-                    } else {
-                        // Opcional: ir al final
-                        scrollAmount = container.scrollWidth - container.clientWidth;
-                        container.style.transform = `translateX(-${scrollAmount}px)`;
-                    }
+                    moveSlider('prev');
+                    resetAutoSlide();
                 };
 
             } catch (err) {
