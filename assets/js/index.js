@@ -43,44 +43,37 @@ document.addEventListener('DOMContentLoaded', async function() {
                 slice.forEach(kit => {
                     const kitId = `kit_${kit.id || kit._id}`;
                     const card = document.createElement('div');
-                    card.className = 'product-card kit-card';
+                    card.className = 'product-card kit-card-enhanced';
                     card.innerHTML = `
-                        <div class="kit-media">
-                            <div class="kit-image-placeholder">
-                                <img src="${kit.imagen}" alt="${kit.nombre}">
-                                <div class="kit-badge">Especial</div>
-                            </div>
+                        <div class="product-image">
+                            <img src="${kit.imagen}" alt="${kit.nombre}">
                         </div>
-                        <div class="kit-body">
-                            <h3 class="kit-name">${kit.nombre}</h3>
-                            <p class="kit-description">${(kit.descripcion||'').slice(0,120)}...</p>
-                            <ul class="kit-benefits">
-                                ${(kit.beneficios||[]).map(b=>`<li><i class="fas fa-check-circle"></i> ${b}</li>`).join('')}
-                            </ul>
-                            <div class="kit-footer">
-                                <div class="kit-price">
-                                    <span class="price-label">Colección Kit</span>
-                                    <span class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')}</span>
-                                </div>
-                                <button class="btn-agregar-carrito kit-add-btn" type="button" 
-                                    onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
-                                    <i class="fas fa-cart-plus"></i> <span>Agregar</span>
-                                </button>
+                        <div class="product-info">
+                            <div class="product-name">${kit.nombre}</div>
+                            <div class="kit-tag">Colección Kit Especial</div>
+                            <div class="kit-benefits-mini">
+                                ${(kit.beneficios||[]).slice(0, 3).map(b=>`<span><i class="fas fa-check"></i> ${b}</span>`).join('')}
                             </div>
+                            <div class="product-price">$${Number(kit.precio).toLocaleString('es-CO')} COP</div>
                         </div>
+                        <button class="btn-agregar-carrito kit-add-btn" type="button" 
+                            onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
+                            <i class="fas fa-cart-plus"></i> <span>Agregar al Carrito</span>
+                        </button>
                     `;
-                    // Abrir modal al hacer click en la tarjeta completa (ignorar clicks en el botón de agregar)
+                    // Abrir modal al hacer click en la tarjeta completa
                     card.addEventListener('click', (e) => { if (e.target.closest('.kit-add-btn')) return; abrirModalKitPublico(kit); });
                     grid.appendChild(card);
                 });
 
             // Rellenar con placeholders para mantener grid consistente (dos filas de 3)
-            const cols = 3;
+            // Rellenar con placeholders para mantener grid consistente
+            const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
             const resto = slice.length % cols;
             if (resto !== 0) {
                 for (let i = 0; i < cols - resto; i++) {
                     const ph = document.createElement('div');
-                    ph.className = 'kit-card-placeholder';
+                    ph.className = 'product-card-placeholder';
                     grid.appendChild(ph);
                 }
             }

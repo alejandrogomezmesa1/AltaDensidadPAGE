@@ -3988,3 +3988,59 @@ html.modo-claro .shipping-subtitle {
     font-family: inherit !important;
     font-weight: 600 !important;
 }
+
+/* ===== REFINAMIENTO TOTAL DE KITS ===== */
+.kits-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+}
+
+@media (max-width: 1100px) {
+    .kits-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .kits-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+.kit-card-enhanced {
+    background-color: var(--blanco-neutro) !important;
+    border: 1px solid rgba(212, 175, 55, 0.1) !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.kit-tag {
+    font-size: 0.7rem;
+    color: var(--azul-dos);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.kit-benefits-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 8px 0;
+}
+
+.kit-benefits-mini span {
+    font-size: 0.75rem;
+    color: var(--texto);
+    opacity: 0.7;
+    background: rgba(212, 175, 55, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Ocultar elementos obsoletos */
+.kit-badge, .kit-footer, .kit-body {
+    display: none !important;
+}
