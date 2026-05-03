@@ -1207,11 +1207,11 @@ h3,
 
 @media (max-width: 480px) {
     .slider-container .product-card {
-        flex: 0 0 85%;
-        width: 85%;
+        flex: 0 0 calc(50% - 5px);
+        width: calc(50% - 5px);
     }
     .slider-container {
-        gap: 15px;
+        gap: 10px;
     }
     .home-slider-section {
         padding: 0 10px;
