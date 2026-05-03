@@ -154,7 +154,6 @@ function renderCarrito() {
 // ---- Logica de Envio y Mercado Pago ----
 
 function obtenerCostoEnvio(zona) {
-  if (zona === "test") return 2000;
   if (zona === "medellin") return 15000;
   if (zona === "metropolitana") return 20000;
   if (zona === "nacional") return 22000;
@@ -340,8 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
           ciudadFinal = document.getElementById("envCiudadMetro").value;
       } else if (zonaId === "nacional") {
           ciudadFinal = document.getElementById("envCiudadNacional").value;
-      } else {
-          ciudadFinal = "Prueba";
       }
 
       _shippingData = {

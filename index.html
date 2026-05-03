@@ -258,78 +258,80 @@
             <p class="shipping-subtitle">Ingresa los datos para la transportadora.</p>
             <div id="envioError" class="shipping-error" style="display:none;"></div>
             <form id="envioForm">
-                <div class="shipping-group">
-                    <label class="shipping-label">Nombre Completo *</label>
-                    <input type="text" id="envNombre" required class="shipping-input">
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Documento (Cédula/NIT) *</label>
-                    <input type="text" id="envDocumento" required class="shipping-input">
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Celular *</label>
-                    <input type="tel" id="envCelular" required class="shipping-input">
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Zona de Envío (Para calcular el precio) *</label>
-                    <select id="envZona" required class="shipping-input" onchange="actualizarResumenEnvio()">
-                        <option value="" disabled selected>Selecciona la zona</option>
-                        <option value="test">Envío de Prueba (Solo para TEST) ($2.000)</option>
-                        <option value="medellin">Medellín ($15.000)</option>
-                        <option value="metropolitana">Área Metropolitana ($20.000)</option>
-                        <option value="nacional">Resto de Colombia - Nacional ($22.000)</option>
-                    </select>
-                </div>
-
-                <!-- Campo Condicional: Area Metropolitana -->
-                <div class="shipping-group" id="groupMetropolitana" style="display: none;">
-                    <label class="shipping-label">Municipio del Área Metropolitana *</label>
-                    <select id="envCiudadMetro" class="shipping-input">
-                        <option value="" disabled selected>Selecciona el municipio</option>
-                        <option value="Bello">Bello</option>
-                        <option value="Envigado">Envigado</option>
-                        <option value="Itagüí">Itagüí</option>
-                        <option value="Sabaneta">Sabaneta</option>
-                        <option value="La Estrella">La Estrella</option>
-                        <option value="Copacabana">Copacabana</option>
-                        <option value="San Antonio de Prado">San Antonio de Prado</option>
-                        <option value="Caldas">Caldas</option>
-                        <option value="Girardota">Girardota</option>
-                        <option value="Barbosa">Barbosa</option>
-                    </select>
-                </div>
-
-                <!-- Campo Condicional: Nacional -->
-                <div class="shipping-group" id="groupNacional" style="display: none;">
-                    <label class="shipping-label">Municipio / Ciudad de destino *</label>
-                    <input type="text" id="envCiudadNacional" placeholder="Ej: Bogotá, Cali, Cartagena..." class="shipping-input">
-                </div>
-                
-                <div id="resumenEnvio" class="shipping-summary-card" style="display: none;">
-                    <div class="summary-row">
-                        <span>Costo de Envío:</span>
-                        <span id="costoEnvioValor">$0</span>
+                <div class="shipping-form-grid">
+                    <div class="shipping-group full-width">
+                        <label class="shipping-label">Nombre Completo *</label>
+                        <input type="text" id="envNombre" required class="shipping-input" placeholder="Ej: Juan Pérez">
                     </div>
-                    <div class="summary-row total-row">
-                        <span>Total Final:</span>
-                        <span id="totalConEnvio">$0</span>
+                    <div class="shipping-group">
+                        <label class="shipping-label">Documento (Cédula/NIT) *</label>
+                        <input type="text" id="envDocumento" required class="shipping-input" placeholder="Solo números">
                     </div>
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Barrio *</label>
-                    <input type="text" id="envBarrio" required class="shipping-input">
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Dirección Exacta *</label>
-                    <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67" class="shipping-input">
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Apto / Piso / Oficina</label>
-                    <input type="text" id="envPiso" placeholder="Ej: Apto 502" class="shipping-input">
-                </div>
-                <div class="shipping-group">
-                    <label class="shipping-label">Referencia</label>
-                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque" class="shipping-input">
+                    <div class="shipping-group">
+                        <label class="shipping-label">Celular *</label>
+                        <input type="tel" id="envCelular" required class="shipping-input" placeholder="Ej: 300 123 4567">
+                    </div>
+                    <div class="shipping-group full-width">
+                        <label class="shipping-label">Zona de Envío *</label>
+                        <select id="envZona" required class="shipping-input" onchange="actualizarResumenEnvio()">
+                            <option value="" disabled selected>Selecciona la zona</option>
+                            <option value="medellin">Medellín ($15.000)</option>
+                            <option value="metropolitana">Área Metropolitana ($20.000)</option>
+                            <option value="nacional">Resto de Colombia - Nacional ($22.000)</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Condicional: Area Metropolitana -->
+                    <div class="shipping-group full-width" id="groupMetropolitana" style="display: none;">
+                        <label class="shipping-label">Municipio del Área Metropolitana *</label>
+                        <select id="envCiudadMetro" class="shipping-input">
+                            <option value="" disabled selected>Selecciona el municipio</option>
+                            <option value="Bello">Bello</option>
+                            <option value="Envigado">Envigado</option>
+                            <option value="Itagüí">Itagüí</option>
+                            <option value="Sabaneta">Sabaneta</option>
+                            <option value="La Estrella">La Estrella</option>
+                            <option value="Copacabana">Copacabana</option>
+                            <option value="San Antonio de Prado">San Antonio de Prado</option>
+                            <option value="Caldas">Caldas</option>
+                            <option value="Girardota">Girardota</option>
+                            <option value="Barbosa">Barbosa</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo Condicional: Nacional -->
+                    <div class="shipping-group full-width" id="groupNacional" style="display: none;">
+                        <label class="shipping-label">Municipio / Ciudad de destino *</label>
+                        <input type="text" id="envCiudadNacional" placeholder="Ej: Bogotá, Cali, Cartagena..." class="shipping-input">
+                    </div>
+                    
+                    <div id="resumenEnvio" class="shipping-summary-card" style="display: none;">
+                        <div class="summary-row">
+                            <span>Costo de Envío:</span>
+                            <span id="costoEnvioValor">$0</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span>Total Final:</span>
+                            <span id="totalConEnvio">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="shipping-group">
+                        <label class="shipping-label">Barrio *</label>
+                        <input type="text" id="envBarrio" required class="shipping-input" placeholder="Nombre del barrio">
+                    </div>
+                    <div class="shipping-group">
+                        <label class="shipping-label">Dirección Exacta *</label>
+                        <input type="text" id="envDireccion" required placeholder="Ej: Calle 123 #45-67" class="shipping-input">
+                    </div>
+                    <div class="shipping-group">
+                        <label class="shipping-label">Apto / Piso / Oficina</label>
+                        <input type="text" id="envPiso" placeholder="Ej: Apto 502" class="shipping-input">
+                    </div>
+                    <div class="shipping-group">
+                        <label class="shipping-label">Referencia</label>
+                        <input type="text" id="envReferencia" placeholder="Ej: Frente al parque" class="shipping-input">
+                    </div>
                 </div>
                 <button type="submit" id="btnConfirmarEnvio" class="shipping-btn-confirm"><i class="fas fa-lock"></i> Continuar al Pago Seguro</button>
             </form>
