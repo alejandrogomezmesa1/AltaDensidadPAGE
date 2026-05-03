@@ -571,8 +571,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (dataProd.success) items = [...items, ...dataProd.data.filter(p => p.activo !== 0).slice(0, 8)];
                 if (dataKits.success) items = [...items, ...dataKits.data.filter(k => k.activo !== 0).map(k => ({...k, isKit: true}))];
 
-                // Mezclar un poco los items
-                items.sort(() => Math.random() - 0.5);
+                // Mezclar los items usando una semilla diaria (cambia cada 24 horas)
+                const seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, ''));
+                function seededShuffle(array, seed) {
+                    let m = array.length, t, i;
+                    while (m) {
+                        i = Math.floor(Math.abs(Math.sin(seed++)) * m--);
+                        t = array[m];
+                        array[m] = array[i];
+                        array[i] = t;
+                    }
+                    return array;
+                }
+                seededShuffle(items, seed);
 
                 container.innerHTML = '';
                 items.forEach(item => {
