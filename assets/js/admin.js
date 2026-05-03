@@ -1048,15 +1048,15 @@ const ITEMS_ORD = 20;
 async function cargarOrdenes(page = 1) {
     const tbody = document.getElementById('tbodyOrdenes');
     paginaOrdenes = page;
-    tbody.innerHTML = `<tr><td colspan="9" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando órdenes pagadas...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando órdenes...</td></tr>`;
     try {
-        // Solo pedimos las órdenes aprobadas (pagadas)
-        const res = await fetch(`${API_MP_URL}/orders?page=${page}&limit=${ITEMS_ORD}&status=approved`, { headers: getAuthHeaders() });
+        // Pedimos todas las órdenes (no solo aprobadas) para que el admin las vea todas
+        const res = await fetch(`${API_MP_URL}/orders?page=${page}&limit=${ITEMS_ORD}`, { headers: getAuthHeaders() });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Error al obtener órdenes');
         
-        // Filtro de seguridad en frontend por si la API no soporta el parámetro ?status=approved
-        ordenes = (data.data || []).filter(o => o.status === 'approved');
+        // Asignamos todas las órdenes recibidas
+        ordenes = data.data || [];
         
         renderTablaOrdenes(data.meta || {});
     } catch (err) {
