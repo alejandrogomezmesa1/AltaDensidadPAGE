@@ -463,9 +463,9 @@ h1, h2, h3, .header-title, .header-tittle {
 }
 
 /* Grid de productos - Versión optimizada */
-#productGrid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+#productGrid, #top10Grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 15px;
     width: 100%;
     padding: 0 10px;
@@ -473,7 +473,7 @@ h1, h2, h3, .header-title, .header-tittle {
 }
 
 @media (max-width: 1100px) {
-    #productGrid {
+    #productGrid, #top10Grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
@@ -633,7 +633,7 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 
 /* Media Queries optimizadas */
 @media (max-width: 768px) {
-    #productGrid {
+    #productGrid, #top10Grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         padding: 0 5px;
@@ -648,7 +648,7 @@ html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, s
 
 @media (max-width: 480px) {
     .product-image img { max-height: 160px; }
-    #productGrid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    #productGrid, #top10Grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 }
 
 /* Animación de sombra */
