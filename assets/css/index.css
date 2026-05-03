@@ -137,7 +137,8 @@
   }
   .nos-hero {
     padding: 30px 4% 20px;
-
+  }
+}
 
 /* Small improvements for mid-large tablets */
 
@@ -748,10 +749,6 @@ h3,
 
   }
 
-}
-
-
-  }
 }
 .main-nav a::after {
   content: "";

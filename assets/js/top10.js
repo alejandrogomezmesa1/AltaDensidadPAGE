@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Detectar entorno y definir URL base
     const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
         ? 'http://localhost:3000/api'
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const stars = '★'.repeat(product.rating || 5) + '☆'.repeat(5 - (product.rating || 5));
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
-            
+
             // Preparar objeto para funciones globales
             const itemData = {
                 id: product.producto_id || product.id,
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="product-price">$${Number(itemData.price || 0).toLocaleString('es-CO')} COP</div>
                 </div>
                 <button class="btn-agregar-carrito" 
-                    onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito(${JSON.stringify({id: itemData.id, name: itemData.name, image: itemData.image, price: itemData.price})})'>
+                    onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito(${JSON.stringify({ id: itemData.id, name: itemData.name, image: itemData.image, price: itemData.price })})'>
                     <i class="fas fa-cart-plus"></i> Agregar
                 </button>
             `;
@@ -75,18 +75,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     cargarTop10();
-    
+
 });
 
-    let lastScrollTop = 0;
-    const header = document.querySelector('.header');
-    
-    window.addEventListener('scroll', () => {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > lastScrollTop && scrollTop > 80) {
-            header.classList.add('header--hidden');
-        } else {
-            header.classList.remove('header--hidden');
-        }
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-    });
+let lastScrollTop = 0;
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', () => {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > lastScrollTop && scrollTop > 80) {
+        header.classList.add('header--hidden');
+    } else {
+        header.classList.remove('header--hidden');
+    }
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
