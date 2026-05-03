@@ -6960,29 +6960,47 @@ html.modo-claro .shipping-subtitle {
   .kit-card-enhanced .product-price {
       font-size: 0.95rem;
   }
-  .kit-add-btn {
-      margin: 0 10px 10px !important;
-      width: calc(100% - 20px) !important;
-      padding: 8px !important;
-      font-size: 0.85rem !important;
-  }
+
 }
 
 .kit-add-btn {
     margin: 0 15px 15px !important;
     width: calc(100% - 30px) !important;
-    border-radius: 10px !important;
-    background: transparent !important;
-    border: 1.5px solid var(--azul-dos) !important;
-    color: var(--azul-dos) !important;
+    border-radius: 12px !important;
+    background: var(--azul-dos) !important;
+    border: none !important;
+    color: #fff !important;
     font-weight: 700 !important;
-    transition: all 0.3s ease !important;
+    padding: 12px 10px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);
 }
 
 .kit-add-btn:hover {
-    background: var(--azul-dos) !important;
-    color: #fff !important;
-    transform: scale(1.02);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+    filter: brightness(1.1);
+}
+
+.kit-add-btn i {
+    font-size: 1rem;
+}
+
+@media (max-width: 500px) {
+    .kit-add-btn {
+        margin: 0 8px 12px !important;
+        width: calc(100% - 16px) !important;
+        padding: 10px 5px !important;
+        font-size: 0.8rem !important;
+        gap: 5px;
+    }
+    /* En pantallas muy pequeñas ocultamos el texto largo y dejamos algo más corto si es necesario */
 }
 
 .kit-tag {

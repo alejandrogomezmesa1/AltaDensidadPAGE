@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         </div>
                         <button class="btn-agregar-carrito kit-add-btn" type="button" 
                             onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
-                            <i class="fas fa-cart-plus"></i> <span>Agregar al Carrito</span>
+                            <i class="fas fa-cart-plus"></i> Agregar
                         </button>
                     `;
                     // Abrir modal al hacer click en la tarjeta completa
