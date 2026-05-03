@@ -614,10 +614,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 // Lógica de movimiento
                 let scrollAmount = 0;
-                const step = 300; // Ancho aproximado de la card + gap
                 
                 const moveSlider = (direction) => {
                     const max = container.scrollWidth - container.clientWidth;
+                    // Calcular step dinámicamente (ancho de card + gap)
+                    const firstCard = container.querySelector('.product-card');
+                    const step = firstCard ? firstCard.offsetWidth + 20 : 300;
+
                     if (direction === 'next') {
                         if (scrollAmount < max) {
                             scrollAmount += step;

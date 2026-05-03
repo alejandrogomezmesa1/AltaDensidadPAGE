@@ -1183,7 +1183,8 @@ h3,
 
 /* Reutilizando y ajustando la card para el slider */
 .slider-container .product-card {
-    flex: 0 0 280px; /* Ancho fijo para las cards en el slider */
+    flex: 0 0 280px; /* Ancho fijo en desktop */
+    width: 280px;
     margin: 0;
     opacity: 0.85;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -1197,9 +1198,20 @@ h3,
 @media (max-width: 768px) {
     .slider-container .product-card {
         flex: 0 0 240px;
+        width: 240px;
     }
     .slider-title {
         font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider-container .product-card {
+        flex: 0 0 190px;
+        width: 190px;
+    }
+    .home-slider-section {
+        padding: 0 15px;
     }
 }
 
