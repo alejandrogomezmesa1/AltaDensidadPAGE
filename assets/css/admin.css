@@ -866,3 +866,178 @@ body {
         width: 100%;
     }
 }
+
+/* ==========================================================================
+   ENHANCED ADMIN PREMIUM STYLES (TOTAL REFRESH)
+   ========================================================================== */
+:root {
+    --bg-main: #060608;
+    --bg-surface: #0f0f13;
+    --bg-card: #15151a;
+    --bg-accent: rgba(212, 175, 55, 0.04);
+    --gold: #D4AF37;
+    --gold-glow: rgba(212, 175, 55, 0.3);
+    --gold-text: #f3e5ab;
+    --text-primary: #ffffff;
+    --text-secondary: #9ea0a5;
+    --border-dim: rgba(255, 255, 255, 0.05);
+    --border-accent: rgba(212, 175, 55, 0.15);
+    --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+body {
+    background-color: var(--bg-main) !important;
+    letter-spacing: 0.015em;
+}
+
+/* Glassmorphism Header */
+.admin-header {
+    background: rgba(15, 15, 19, 0.8) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid var(--border-accent) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.admin-logo {
+    box-shadow: 0 0 20px var(--gold-glow) !important;
+    transition: var(--transition-smooth);
+}
+
+.admin-logo:hover {
+    transform: rotate(5deg) scale(1.05);
+}
+
+/* Tabs Redesign */
+.admin-tabs-wrapper {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 10px 0;
+    margin-bottom: 35px !important;
+}
+
+.admin-tab {
+    position: relative;
+    padding: 12px 25px !important;
+    color: var(--text-secondary) !important;
+    border-radius: 12px !important;
+    margin: 0 4px !important;
+    overflow: hidden;
+}
+
+.admin-tab.active {
+    color: var(--gold) !important;
+    background: rgba(212, 175, 55, 0.1) !important;
+    border-bottom: none !important;
+}
+
+.admin-tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 0 10px var(--gold-glow);
+}
+
+/* Cards & Tables Refresh */
+.tabla-wrapper {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-accent) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.tabla-productos th {
+    background: rgba(0,0,0,0.2);
+    color: var(--gold-text) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.1em !important;
+}
+
+.tabla-productos td {
+    padding: 18px 16px !important;
+    border-bottom: 1px solid var(--border-dim) !important;
+    transition: var(--transition-smooth);
+}
+
+.tabla-productos tbody tr:hover {
+    background: rgba(212, 175, 55, 0.03) !important;
+}
+
+/* Buttons Polish */
+.btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%) !important;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2) !important;
+    border-radius: 10px !important;
+    padding: 12px 24px !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Modern Search Inputs */
+.admin-search-input {
+    border-radius: 12px !important;
+    border: 1px solid var(--border-accent) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    padding: 10px 15px 10px 40px !important;
+}
+
+.admin-search-input:focus {
+    background: rgba(0,0,0,0.5) !important;
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Modals Refined */
+.modal-box {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-accent) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8) !important;
+    animation: modalScaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalScaleUp {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Status Badges */
+strong[style*="color: #27ae60"] {
+    background: rgba(39, 174, 96, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+strong[style*="color: #f39c12"] {
+    background: rgba(243, 156, 18, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(243, 156, 18, 0.3);
+}
+
+/* Mobile Polish */
+@media (max-width: 768px) {
+    .tabla-productos tr {
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border-accent) !important;
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .tabla-productos td::before {
+        color: var(--gold) !important;
+        font-size: 0.65rem !important;
+    }
+}
