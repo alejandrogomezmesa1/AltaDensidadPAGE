@@ -630,7 +630,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const max = container.scrollWidth - container.clientWidth;
                     // Calcular step dinámicamente (ancho de card + gap)
                     const firstCard = container.querySelector('.product-card');
-                    const step = firstCard ? firstCard.offsetWidth + 20 : 300;
+                    const gap = parseFloat(getComputedStyle(container).gap) || 20;
+                    const step = firstCard ? firstCard.offsetWidth + gap : 300;
 
                     if (direction === 'next') {
                         if (scrollAmount < max) {

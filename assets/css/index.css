@@ -1207,11 +1207,14 @@ h3,
 
 @media (max-width: 480px) {
     .slider-container .product-card {
-        flex: 0 0 190px;
-        width: 190px;
+        flex: 0 0 85%;
+        width: 85%;
+    }
+    .slider-container {
+        gap: 15px;
     }
     .home-slider-section {
-        padding: 0 15px;
+        padding: 0 10px;
     }
 }
 
@@ -1829,11 +1832,11 @@ h3,
 
   /* Permitir crecimiento dinÃ¡mico */
 
-  overflow: visible;
-
-  /* Mostrar texto completo */
-
-  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
 
   /* Evitar el recorte */
 
@@ -6943,6 +6946,7 @@ html.modo-claro .shipping-subtitle {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    line-clamp: 2;
     overflow: hidden;
 }
 
