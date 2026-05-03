@@ -812,3 +812,57 @@ body {
         color: var(--gold-soft);
     }
 }
+
+/* ---- SEARCH FILTERS ---- */
+.admin-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.admin-search-input {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    padding: 8px 12px 8px 36px;
+    font-size: 0.9rem;
+    width: 240px;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.admin-search-input:focus {
+    border-color: var(--gold);
+    width: 300px;
+    background: #000;
+}
+
+@media (max-width: 768px) {
+    .admin-toolbar-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+    .search-box, .admin-search-input {
+        width: 100%;
+    }
+    .admin-search-input:focus {
+        width: 100%;
+    }
+}

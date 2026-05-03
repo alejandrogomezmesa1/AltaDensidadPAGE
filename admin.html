@@ -40,9 +40,15 @@
         <div id="seccionProductos">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Productos</h2>
-                <button class="btn-primary" id="btnNuevoProducto">
-                    <i class="fas fa-plus"></i> Nuevo Producto
-                </button>
+                <div class="admin-toolbar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchProductos" placeholder="Buscar productos..." class="admin-search-input">
+                    </div>
+                    <button class="btn-primary" id="btnNuevoProducto">
+                        <i class="fas fa-plus"></i> Nuevo Producto
+                    </button>
+                </div>
             </div>
             <div class="tabla-wrapper">
                 <table class="tabla-productos" id="tablaProductos">
@@ -75,7 +81,13 @@
         <div id="seccionEnvases" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Envases</h2>
-                <button class="btn-primary" id="btnNuevoEnvase"><i class="fas fa-plus"></i> Nuevo Envase</button>
+                <div class="admin-toolbar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchEnvases" placeholder="Buscar envases..." class="admin-search-input">
+                    </div>
+                    <button class="btn-primary" id="btnNuevoEnvase"><i class="fas fa-plus"></i> Nuevo Envase</button>
+                </div>
             </div>
             <div class="tabla-wrapper">
                 <table class="tabla-productos" id="tablaEnvases">
@@ -104,7 +116,13 @@
         <div id="seccionKits" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Kits</h2>
-                <button class="btn-primary" id="btnNuevoKit"><i class="fas fa-plus"></i> Nuevo Kit</button>
+                <div class="admin-toolbar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchKits" placeholder="Buscar kits..." class="admin-search-input">
+                    </div>
+                    <button class="btn-primary" id="btnNuevoKit"><i class="fas fa-plus"></i> Nuevo Kit</button>
+                </div>
             </div>
             <div class="tabla-wrapper">
                 <table class="tabla-productos" id="tablaKits">
@@ -133,7 +151,13 @@
         <div id="seccionTop10" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Top 10 Más Vendidos</h2>
-                <button class="btn-primary" id="btnGuardarTop10"><i class="fas fa-save"></i> Guardar Top 10</button>
+                <div class="admin-toolbar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchTop10" placeholder="Filtrar Top 10..." class="admin-search-input">
+                    </div>
+                    <button class="btn-primary" id="btnGuardarTop10"><i class="fas fa-save"></i> Guardar Top 10</button>
+                </div>
             </div>
             <div class="tabla-wrapper">
                 <table class="tabla-productos" id="tablaTop10">
@@ -170,9 +194,15 @@
         <div id="seccionOrdenes" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Órdenes</h2>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <button class="btn-primary" id="btnRefrescarOrdenes"><i class="fas fa-sync-alt"></i> Refrescar</button>
-                    <button class="btn-secondary" id="btnExportarOrdenes"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+                <div class="admin-toolbar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchOrdenes" placeholder="Buscar órdenes..." class="admin-search-input">
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <button class="btn-primary" id="btnRefrescarOrdenes"><i class="fas fa-sync-alt"></i> Refrescar</button>
+                        <button class="btn-secondary" id="btnExportarOrdenes"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+                    </div>
                 </div>
             </div>
             <div class="tabla-wrapper">

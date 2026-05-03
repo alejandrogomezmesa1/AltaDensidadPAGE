@@ -7,6 +7,11 @@ const API_TOP10_URL = `${_BASE}/top10`;
 // Estado Top 10
 let top10 = [];
 let productosDisponiblesTop10 = [];
+let searchTop10 = '';
+let searchKits = '';
+let searchProductos = '';
+let searchEnvases = '';
+let searchOrdenes = '';
 // ============================
 // TOP 10 — CARGAR Y RENDER
 // ============================
@@ -27,11 +32,20 @@ async function cargarTop10() {
 
 function renderTablaTop10() {
     const tbody = document.getElementById('tbodyTop10');
-    if (!top10.length) {
-        tbody.innerHTML = `<tr><td colspan="6" class="empty-row">No hay productos en el Top 10.</td></tr>`;
+    
+    // Filtrar localmente
+    const filtrados = top10.filter(p => 
+        p.nombre.toLowerCase().includes(searchTop10) || 
+        p.categoria.toLowerCase().includes(searchTop10) ||
+        p.genero.toLowerCase().includes(searchTop10)
+    );
+
+    if (!filtrados.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-row">${searchTop10 ? 'No se encontraron resultados.' : 'No hay productos en el Top 10.'}</td></tr>`;
         return;
     }
-    tbody.innerHTML = top10.map((p, idx) => `
+
+    tbody.innerHTML = filtrados.map((p, idx) => `
         <tr>
             <td data-label="#">${idx + 1}</td>
             <td data-label="Imagen">${imagenCell(p.imagen)}</td>
@@ -41,7 +55,7 @@ function renderTablaTop10() {
             <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon" title="Subir" onclick="moverTop10(${idx},-1)" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-arrow-up"></i></button>
-                    <button class="btn-icon" title="Bajar" onclick="moverTop10(${idx},1)" ${idx === top10.length-1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
+                    <button class="btn-icon" title="Bajar" onclick="moverTop10(${idx},1)" ${idx === filtrados.length-1 ? 'disabled' : ''}><i class="fas fa-arrow-down"></i></button>
                     <button class="btn-icon eliminar" title="Quitar" onclick="quitarDeTop10(${idx})"><i class="fas fa-times"></i></button>
                 </div>
             </td>
@@ -232,14 +246,21 @@ async function cargarKits() {
 
 function renderTablaKits() {
     const tbody = document.getElementById('tbodyKits');
-    const total = kits.length;
+    
+    // Filtrar localmente
+    const filtrados = kits.filter(k => 
+        k.nombre.toLowerCase().includes(searchKits) || 
+        k.descripcion.toLowerCase().includes(searchKits)
+    );
+
+    const total     = filtrados.length;
     const totalPags = Math.ceil(total / ITEMS_KIT);
     if (paginaKits > totalPags && totalPags > 0) paginaKits = totalPags;
     const inicio = (paginaKits - 1) * ITEMS_KIT;
-    const pagina = kits.slice(inicio, inicio + ITEMS_KIT);
+    const pagina = filtrados.slice(inicio, inicio + ITEMS_KIT);
 
     if (total === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-row"><i class="fas fa-box-open"></i><br>No hay kits registrados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-row">${searchKits ? 'No se encontraron resultados.' : 'No hay kits registrados.'}</td></tr>`;
         document.getElementById('paginacionKits').innerHTML = '';
         return;
     }
@@ -440,14 +461,21 @@ async function cargarProductos() {
 // RENDER TABLA
 // ============================
 function renderTabla() {
-    const total     = productos.length;
+    // Filtrar localmente
+    const filtrados = productos.filter(p => 
+        p.name.toLowerCase().includes(searchProductos) || 
+        p.category.toLowerCase().includes(searchProductos) ||
+        p.gender.toLowerCase().includes(searchProductos)
+    );
+
+    const total     = filtrados.length;
     const totalPags = Math.ceil(total / ITEMS_PROD);
     if (paginaProductos > totalPags && totalPags > 0) paginaProductos = totalPags;
     const inicio = (paginaProductos - 1) * ITEMS_PROD;
-    const pagina = productos.slice(inicio, inicio + ITEMS_PROD);
+    const pagina = filtrados.slice(inicio, inicio + ITEMS_PROD);
 
     if (total === 0) {
-        tbodyProductos.innerHTML = `<tr><td colspan="9" class="empty-row"><i class="fas fa-box-open"></i><br>No hay productos en el catálogo.</td></tr>`;
+        tbodyProductos.innerHTML = `<tr><td colspan="9" class="empty-row">${searchProductos ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'}</td></tr>`;
         document.getElementById('paginacionProductos').innerHTML = '';
         return;
     }
@@ -713,14 +741,21 @@ async function cargarEnvases() {
 // ============================
 function renderTablaEnvases() {
     const tbody     = document.getElementById('tbodyEnvases');
-    const total     = envases.length;
+    
+    // Filtrar localmente
+    const filtrados = envases.filter(e => 
+        e.name.toLowerCase().includes(searchEnvases) || 
+        e.material.toLowerCase().includes(searchEnvases)
+    );
+
+    const total     = filtrados.length;
     const totalPags = Math.ceil(total / ITEMS_ENV);
     if (paginaEnvases > totalPags && totalPags > 0) paginaEnvases = totalPags;
     const inicio = (paginaEnvases - 1) * ITEMS_ENV;
-    const pagina = envases.slice(inicio, inicio + ITEMS_ENV);
+    const pagina = filtrados.slice(inicio, inicio + ITEMS_ENV);
 
     if (total === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="empty-row"><i class="fas fa-box-open"></i><br>No hay envases registrados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-row">${searchEnvases ? 'No se encontraron resultados.' : 'No hay envases registrados.'}</td></tr>`;
         document.getElementById('paginacionEnvases').innerHTML = '';
         return;
     }
@@ -1049,8 +1084,17 @@ function manejarSesionInvalida() {
 
 function renderTablaOrdenes(meta = {}) {
     const tbody = document.getElementById('tbodyOrdenes');
-    if (!ordenes || ordenes.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty-row">No hay órdenes registradas.</td></tr>`;
+    
+    // Filtrar localmente
+    const filtrados = (ordenes || []).filter(o => 
+        (o.external_reference || '').toLowerCase().includes(searchOrdenes) || 
+        (o.payer_name && o.payer_name.toLowerCase().includes(searchOrdenes)) ||
+        (o.payer_email && o.payer_email.toLowerCase().includes(searchOrdenes)) ||
+        (o.payment_id && String(o.payment_id).includes(searchOrdenes))
+    );
+
+    if (!filtrados || filtrados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="empty-row">${searchOrdenes ? 'No se encontraron resultados.' : 'No hay órdenes registradas.'}</td></tr>`;
         document.getElementById('paginacionOrdenes').innerHTML = '';
         return;
     }
@@ -1060,7 +1104,7 @@ function renderTablaOrdenes(meta = {}) {
         'rejected': 'Rechazado', 'cancelled': 'Cancelado', 'failed': 'Fallido', 'refunded': 'Reembolsado'
     };
 
-    tbody.innerHTML = ordenes.map((o, idx) => {
+    tbody.innerHTML = filtrados.map((o, idx) => {
         const estadoEsp = statusMap[o.status] || o.status || '';
         let statusColor = '#9a9a9a';
         if(o.status === 'approved') statusColor = '#27ae60';
@@ -1095,7 +1139,10 @@ function renderTablaOrdenes(meta = {}) {
     `}).join('');
 
     const totalPages = meta.pages || 1;
-    renderPag('paginacionOrdenes', paginaOrdenes, totalPages, (p) => { paginaOrdenes = p; cargarOrdenes(p); });
+    renderPag('paginacionOrdenes', paginaOrdenes, totalPages, (p) => { 
+        paginaOrdenes = p; 
+        cargarOrdenes(p); 
+    });
 }
 
 async function abrirDetalleOrden(external_reference) {
@@ -1276,5 +1323,61 @@ function registrarEventosOrdenes() {
     const btnCerrar2 = document.getElementById('btnCerrarOrden');
     if (btnCerrar2) btnCerrar2.addEventListener('click', () => cerrarModal(document.getElementById('modalOrden')));
 }
+
+// ============================
+// REGISTRAR BUSCADORES
+// ============================
+function registrarBuscadores() {
+    const inputBusqProd = document.getElementById('searchProductos');
+    if (inputBusqProd) {
+        inputBusqProd.addEventListener('input', (e) => {
+            searchProductos = e.target.value.toLowerCase();
+            paginaProductos = 1;
+            renderTabla();
+        });
+    }
+
+    const inputBusqEnv = document.getElementById('searchEnvases');
+    if (inputBusqEnv) {
+        inputBusqEnv.addEventListener('input', (e) => {
+            searchEnvases = e.target.value.toLowerCase();
+            paginaEnvases = 1;
+            renderTablaEnvases();
+        });
+    }
+
+    const inputBusqKit = document.getElementById('searchKits');
+    if (inputBusqKit) {
+        inputBusqKit.addEventListener('input', (e) => {
+            searchKits = e.target.value.toLowerCase();
+            paginaKits = 1;
+            renderTablaKits();
+        });
+    }
+
+    const inputBusqTop = document.getElementById('searchTop10');
+    if (inputBusqTop) {
+        inputBusqTop.addEventListener('input', (e) => {
+            searchTop10 = e.target.value.toLowerCase();
+            renderTablaTop10();
+        });
+    }
+
+    const inputBusqOrd = document.getElementById('searchOrdenes');
+    if (inputBusqOrd) {
+        inputBusqOrd.addEventListener('input', (e) => {
+            searchOrdenes = e.target.value.toLowerCase();
+            paginaOrdenes = 1;
+            renderTablaOrdenes();
+        });
+    }
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    // Ya existen llamados a cargar data en el archivo original, 
+    // me aseguro de registrar los buscadores.
+    registrarBuscadores();
+});
 
 window.abrirDetalleOrden = abrirDetalleOrden;
