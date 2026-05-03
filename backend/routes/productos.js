@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         const [rows] = await pool.query(`
             SELECT 
                 p.id, p.nombre, p.rating, p.imagen,
-                p.categoria, p.genero, p.descripcion, p.precio,
+                p.categoria, p.genero, p.descripcion, p.precio, p.activo,
                 GROUP_CONCAT(DISTINCT ps.talla ORDER BY ps.talla SEPARATOR ',') AS tallas,
                 GROUP_CONCAT(DISTINCT pt.tipo_envase ORDER BY pt.tipo_envase SEPARATOR ',') AS tipos_envase
             FROM Productos p
@@ -28,6 +28,7 @@ router.get('/', async (req, res) => {
             gender: p.genero,
             description: p.descripcion,
             price: p.precio,
+            activo: p.activo,
             sizes: p.tallas ? p.tallas.split(',') : [],
             bottleTypes: p.tipos_envase ? p.tipos_envase.split(',') : []
         }));
@@ -47,7 +48,7 @@ router.get('/:id', async (req, res) => {
         const [rows] = await pool.query(`
             SELECT 
                 p.id, p.nombre, p.rating, p.imagen,
-                p.categoria, p.genero, p.descripcion, p.precio,
+                p.categoria, p.genero, p.descripcion, p.precio, p.activo,
                 GROUP_CONCAT(DISTINCT ps.talla ORDER BY ps.talla SEPARATOR ',') AS tallas,
                 GROUP_CONCAT(DISTINCT pt.tipo_envase ORDER BY pt.tipo_envase SEPARATOR ',') AS tipos_envase
             FROM Productos p
@@ -67,6 +68,7 @@ router.get('/:id', async (req, res) => {
             data: {
                 id: p.id, name: p.nombre, rating: p.rating, image: p.imagen,
                 category: p.categoria, gender: p.genero, description: p.descripcion, price: p.precio,
+                activo: p.activo,
                 sizes: p.tallas ? p.tallas.split(',') : [],
                 bottleTypes: p.tipos_envase ? p.tipos_envase.split(',') : []
             }
@@ -79,7 +81,7 @@ router.get('/:id', async (req, res) => {
 
 // POST crear producto
 router.post('/', async (req, res) => {
-    const { name, rating, image, category, gender, description, price, sizes, bottleTypes } = req.body;
+    const { name, rating, image, category, gender, description, price, sizes, bottleTypes, activo } = req.body;
     if (!name || !category || !gender) {
         return res.status(400).json({ success: false, message: 'Nombre, categoria y genero son requeridos' });
     }
@@ -88,8 +90,8 @@ router.post('/', async (req, res) => {
     try {
         await conn.beginTransaction();
         const [result] = await conn.query(
-            'INSERT INTO Productos (nombre, rating, imagen, categoria, genero, descripcion, precio) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [name, rating || 4, image || '', category, gender, description || '', price || 0]
+            'INSERT INTO Productos (nombre, rating, imagen, categoria, genero, descripcion, precio, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [name, rating || 4, image || '', category, gender, description || '', price || 0, activo !== undefined ? activo : 1]
         );
         const nuevoId = result.insertId;
         if (Array.isArray(sizes)) {
@@ -112,14 +114,14 @@ router.post('/', async (req, res) => {
 // PUT actualizar producto
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, rating, image, category, gender, description, price, sizes, bottleTypes } = req.body;
+    const { name, rating, image, category, gender, description, price, sizes, bottleTypes, activo } = req.body;
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {
         await conn.beginTransaction();
         const [upd] = await conn.query(
-            'UPDATE Productos SET nombre=?, rating=?, imagen=?, categoria=?, genero=?, descripcion=?, precio=? WHERE id=?',
-            [name, rating, image, category, gender, description, price, id]
+            'UPDATE Productos SET nombre=?, rating=?, imagen=?, categoria=?, genero=?, descripcion=?, precio=?, activo=? WHERE id=?',
+            [name, rating, image, category, gender, description, price, activo !== undefined ? activo : 1, id]
         );
         if (upd.affectedRows === 0) {
             await conn.rollback();

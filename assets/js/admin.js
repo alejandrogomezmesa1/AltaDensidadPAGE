@@ -280,7 +280,7 @@ function renderTablaKits() {
             <td data-label="Nombre"><strong>${escHtml(k.nombre)}</strong></td>
             <td data-label="Descripción">${escHtml(k.descripcion)}</td>
             <td data-label="Precio">${formatPrecio(k.precio)}</td>
-            <td data-label="Beneficios">${(k.beneficios || []).map(b => `<span class="tag">${escHtml(b)}</span>`).join('')}</td>
+            <td data-label="Visible">${k.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
             <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditarKit(${k.id})">
@@ -304,6 +304,7 @@ function abrirNuevoKit() {
     document.getElementById('formKit').reset();
     document.getElementById('modalTituloKit').textContent = 'Nuevo Kit';
     document.getElementById('kitId').value = '';
+    document.getElementById('kitActivo').checked = true;
     beneficiosKitTmp = [];
     renderBeneficiosKit();
     limpiarImagenKit();
@@ -320,6 +321,7 @@ function abrirEditarKit(id) {
     document.getElementById('kitDescripcion').value = k.descripcion || '';
     document.getElementById('kitPrecio').value = k.precio;
     document.getElementById('kitImagen').value = k.imagen || '';
+    document.getElementById('kitActivo').checked = !!k.activo;
     beneficiosKitTmp = Array.isArray(k.beneficios) ? [...k.beneficios] : [];
     renderBeneficiosKit();
     // Imagen preview
@@ -419,7 +421,8 @@ function registrarEventosKits() {
                 document.getElementById('kitImagen').value = rutaSubida;
             }
             const imagenFinal = document.getElementById('kitImagen').value.trim();
-            const payload = { nombre, descripcion, precio, imagen: imagenFinal, beneficios: beneficiosKitTmp };
+            const activo = document.getElementById('kitActivo').checked ? 1 : 0;
+            const payload = { nombre, descripcion, precio, imagen: imagenFinal, beneficios: beneficiosKitTmp, activo };
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_KITS_URL}/${id}` : API_KITS_URL;
             const res = await fetch(url, {
@@ -497,8 +500,7 @@ function renderTabla() {
             <td data-label="Categoría">${escHtml(p.category)}</td>
             <td data-label="Género">${escHtml(p.gender)}</td>
             <td data-label="Precio">${formatPrecio(p.price)}</td>
-            <td data-label="Rating"><span class="stars">${'★'.repeat(p.rating)}${'☆'.repeat(5 - p.rating)}</span></td>
-            <td data-label="Tallas">${(p.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
+            <td data-label="Visible">${p.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
             <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditar(${p.id})">
@@ -525,6 +527,7 @@ function abrirNuevo() {
     limpiarForm();
     modalTitulo.textContent = 'Nuevo Producto';
     document.getElementById('productoId').value = '';
+    document.getElementById('inputActivo').checked = true;
     abrirModal(modalProducto);
 }
 
@@ -546,6 +549,7 @@ function abrirEditar(id) {
     document.getElementById('inputPrecio').value      = p.price;
     document.getElementById('inputRating').value      = p.rating;
     document.getElementById('inputImagen').value      = p.image || '';
+    document.getElementById('inputActivo').checked    = !!p.activo;
 
     // Mostrar imagen actual en el preview
     if (p.image) {
@@ -618,13 +622,14 @@ formProducto.addEventListener('submit', async (e) => {
             document.getElementById('inputImagen').value = rutaSubida;
         }
         const imagenFinal = document.getElementById('inputImagen').value.trim();
+        const activo = document.getElementById('inputActivo').checked ? 1 : 0;
 
         const method  = id ? 'PUT' : 'POST';
         const url     = id ? `${API_URL}/${id}` : API_URL;
         const res     = await fetch(url, {
             method,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...payload, image: imagenFinal })
+            body: JSON.stringify({ ...payload, image: imagenFinal, activo })
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
@@ -778,7 +783,7 @@ function renderTablaEnvases() {
             <td data-label="Nombre"><strong>${escHtml(e.name)}</strong></td>
             <td data-label="Material">${escHtml(e.material)}</td>
             <td data-label="Precio">${formatPrecio(e.price)}</td>
-            <td data-label="Tallas">${(e.sizes || []).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</td>
+            <td data-label="Visible">${e.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
             <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditarEnvase(${e.id})">
@@ -812,6 +817,7 @@ function abrirNuevoEnvase() {
     document.getElementById('envaseImgFileName').textContent = 'Sin imagen seleccionada';
     document.getElementById('envaseImagenFile').value = '';
     document.getElementById('envaseImagen').value = '';
+    document.getElementById('envaseActivo').checked = true;
     abrirModal(document.getElementById('modalEnvase'));
 }
 
@@ -829,6 +835,7 @@ function abrirEditarEnvase(id) {
     document.getElementById('envaseMaterial').value  = e.material;
     document.getElementById('envasePrecio').value    = e.price;
     document.getElementById('envaseImagen').value    = e.image || '';
+    document.getElementById('envaseActivo').checked  = !!e.activo;
 
     // Mostrar imagen actual en el preview
     const previewEnv = document.getElementById('previewEnvaseImagen');
@@ -923,12 +930,14 @@ function registrarEventosEnvases() {
             }
             const imagenFinalEnv = document.getElementById('envaseImagen').value.trim();
 
+            const activo = document.getElementById('envaseActivo').checked ? 1 : 0;
+
             const method = id ? 'PUT' : 'POST';
             const url    = id ? `${API_ENVASES_URL}/${id}` : API_ENVASES_URL;
             const res    = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: nombre, description: descripcion, material, price: precio, image: imagenFinalEnv, sizes })
+                body: JSON.stringify({ name: nombre, description: descripcion, material, price: precio, image: imagenFinalEnv, sizes, activo })
             });
             const data = await res.json();
             if (!data.success) throw new Error(data.message);

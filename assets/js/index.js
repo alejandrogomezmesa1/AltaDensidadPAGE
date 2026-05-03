@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const res = await fetch(`${base}/kits`);
                 const data = await res.json();
                 if (!data.success) throw new Error(data.message);
-                const kits = data.data;
+                const kits = data.data.filter(k => k.activo !== 0);
                 // Guardar globalmente para paginación
                 window.kitsPublicos = kits;
                 window.kitsPaginaActual = 1;
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const res = await fetch(`${base}/productos`);
             const data = await res.json();
             if (data.success) {
-                products = data.data;
+                products = data.data.filter(p => p.activo !== 0);
                 productosFiltrados = products;
                 populateBrandFilter();
             }

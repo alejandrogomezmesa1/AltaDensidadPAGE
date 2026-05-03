@@ -35,15 +35,15 @@ router.get('/:id', async (req, res) => {
 
 // POST crear kit
 router.post('/', async (req, res) => {
-    const { nombre, imagen, descripcion, precio, beneficios } = req.body;
+    const { nombre, imagen, descripcion, precio, beneficios, activo } = req.body;
     if (!nombre) return res.status(400).json({ success: false, message: 'Nombre es requerido' });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {
         await conn.beginTransaction();
         const [result] = await conn.query(
-            'INSERT INTO Kits (nombre, imagen, descripcion, precio) VALUES (?, ?, ?, ?)',
-            [nombre, imagen || '', descripcion || '', precio || 0]
+            'INSERT INTO Kits (nombre, imagen, descripcion, precio, activo) VALUES (?, ?, ?, ?, ?)',
+            [nombre, imagen || '', descripcion || '', precio || 0, activo !== undefined ? activo : 1]
         );
         const kitId = result.insertId;
         if (Array.isArray(beneficios)) {
@@ -64,14 +64,14 @@ router.post('/', async (req, res) => {
 // PUT actualizar kit
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { nombre, imagen, descripcion, precio, beneficios } = req.body;
+    const { nombre, imagen, descripcion, precio, beneficios, activo } = req.body;
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {
         await conn.beginTransaction();
         await conn.query(
-            'UPDATE Kits SET nombre=?, imagen=?, descripcion=?, precio=? WHERE id=?',
-            [nombre, imagen, descripcion, precio, id]
+            'UPDATE Kits SET nombre=?, imagen=?, descripcion=?, precio=?, activo=? WHERE id=?',
+            [nombre, imagen, descripcion, precio, activo !== undefined ? activo : 1, id]
         );
         await conn.query('DELETE FROM KitBeneficios WHERE kit_id=?', [id]);
         if (Array.isArray(beneficios)) {
