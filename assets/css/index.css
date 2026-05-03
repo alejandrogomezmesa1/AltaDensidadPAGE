@@ -1120,10 +1120,97 @@ h3,
 
 
 
-/* ===== Kit Cards â Clean & Elegant ===== */
+/* ===== HOME SLIDER SECTION ===== */
+.home-slider-section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 5%;
+    box-sizing: border-box;
+}
 
-/* ===== Kit Cards â Premium & Professional ===== */
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
 
+.slider-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--azul-dos);
+    margin: 0;
+}
+
+.slider-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.slider-btn {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--azul-dos);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.slider-btn:hover {
+    background: var(--azul-dos);
+    color: #000;
+    transform: scale(1.1);
+}
+
+.slider-viewport {
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 0 30px;
+}
+
+.slider-container {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform;
+}
+
+/* Reutilizando y ajustando la card para el slider */
+.slider-container .product-card {
+    flex: 0 0 280px; /* Ancho fijo para las cards en el slider */
+    margin: 0;
+    opacity: 0.85;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.slider-container .product-card:hover {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .slider-container .product-card {
+        flex: 0 0 240px;
+    }
+    .slider-title {
+        font-size: 1.4rem;
+    }
+}
+
+/* Mejoras visuales para el slider */
+.home-slider-section::after {
+    display: none; /* Limpiar posibles restos de floats o pseudo-elementos */
+}
+
+
+/* ===== Kit Cards â€” Clean & Elegant ===== */
+/* ===== Kit Cards â€” Premium & Professional ===== */
 .kits-section .kits-grid .kit-card {
 
   position: relative;

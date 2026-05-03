@@ -549,10 +549,109 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         // ============================
+        // HOME SLIDER (PRODUCTOS Y KITS)
+        // ============================
+        async function initHomeSlider() {
+            const container = document.getElementById('homeSliderContainer');
+            if (!container) return;
+
+            try {
+                const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
+                
+                // Cargar ambos en paralelo para mayor velocidad
+                const [resProd, resKits] = await Promise.all([
+                    fetch(`${base}/productos`),
+                    fetch(`${base}/kits`)
+                ]);
+                
+                const dataProd = await resProd.json();
+                const dataKits = await resKits.json();
+
+                let items = [];
+                if (dataProd.success) items = [...items, ...dataProd.data.filter(p => p.activo !== 0).slice(0, 8)];
+                if (dataKits.success) items = [...items, ...dataKits.data.filter(k => k.activo !== 0).map(k => ({...k, isKit: true}))];
+
+                // Mezclar un poco los items
+                items.sort(() => Math.random() - 0.5);
+
+                container.innerHTML = '';
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    if (item.isKit) {
+                        const kitId = `kit_${item.id || item._id}`;
+                        card.innerHTML = `
+                            <div class="product-image"><img src="${item.imagen}" alt="${item.nombre}"></div>
+                            <div class="product-info">
+                                <div class="product-name">${item.nombre}</div>
+                                <div class="kit-tag">Colección Kit</div>
+                                <div class="product-price">$${Number(item.precio).toLocaleString('es-CO')} COP</div>
+                            </div>
+                            <button class="btn-agregar-carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: item.nombre, image: item.imagen, price: item.precio})})'>
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
+                        `;
+                        card.onclick = () => abrirModalKitPublico(item);
+                    } else {
+                        const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+                        card.innerHTML = `
+                            <div class="product-image"><img src="${item.image}" alt="${item.name}"></div>
+                            <div class="product-info">
+                                <div class="product-name">${item.name}</div>
+                                <div class="product-rating">${stars}</div>
+                                <div class="product-category">${item.category}</div>
+                                <div class="product-price">$${Number(item.price).toLocaleString('es-CO')} COP</div>
+                            </div>
+                            <button class="btn-agregar-carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: item.id, name: item.name, image: item.image, price: item.price})})'>
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
+                        `;
+                        card.onclick = () => abrirModalProducto(item);
+                    }
+                    container.appendChild(card);
+                });
+
+                // Lógica de movimiento
+                let scrollAmount = 0;
+                const step = 300; // Ancho aproximado de la card + gap
+                
+                document.getElementById('sliderNext').onclick = () => {
+                    const max = container.scrollWidth - container.clientWidth;
+                    if (scrollAmount < max) {
+                        scrollAmount += step;
+                        if (scrollAmount > max) scrollAmount = max;
+                        container.style.transform = `translateX(-${scrollAmount}px)`;
+                    } else {
+                        // Opcional: volver al inicio
+                        scrollAmount = 0;
+                        container.style.transform = `translateX(0)`;
+                    }
+                };
+
+                document.getElementById('sliderPrev').onclick = () => {
+                    if (scrollAmount > 0) {
+                        scrollAmount -= step;
+                        if (scrollAmount < 0) scrollAmount = 0;
+                        container.style.transform = `translateX(-${scrollAmount}px)`;
+                    } else {
+                        // Opcional: ir al final
+                        scrollAmount = container.scrollWidth - container.clientWidth;
+                        container.style.transform = `translateX(-${scrollAmount}px)`;
+                    }
+                };
+
+            } catch (err) {
+                console.error("Error cargando el slider:", err);
+            }
+        }
+
+        // ============================
         // INICIALIZAR
         // ============================
         displayProducts(productosFiltrados);
         cargarKitsPublico();
+        initHomeSlider();
 });
 
 // Utilidad para aplicar tema al modal
