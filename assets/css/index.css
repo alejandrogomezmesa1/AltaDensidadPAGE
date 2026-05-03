@@ -3722,33 +3722,18 @@ h3,
 /* Features Section */
 
 .features {
-
-  display: grid;
-
-  grid-template-columns: 1fr;
-
+  display: flex;
+  justify-content: center;
   gap: 20px;
-
   padding: 30px 5%;
-
-  background-color: var(--bg-light);
-
+  background-color: transparent;
 }
 
-
-
 @media (min-width: 768px) {
-
   .features {
-
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-
-    gap: 30px;
-
     padding: 50px 5%;
-
+    gap: 30px;
   }
-
 }
 
 
@@ -6803,6 +6788,8 @@ html.modo-claro section.filters-section .filter-group label {
   font-size: 0.95rem !important;
   opacity: 0.8;
 }
+
+
 
 .shipping-form-grid {
   display: grid;
