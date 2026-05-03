@@ -6907,23 +6907,80 @@ html.modo-claro .shipping-subtitle {
 }
 
 .kit-card-enhanced {
-  background-color: var(--blanco-neutro) !important;
-  border: 1px solid rgba(212, 175, 55, 0.1) !important;
-  display: flex;
-  flex-direction: column;
-  width: calc(25% - 20px);
-  min-width: 250px;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  margin-bottom: 10px;
+    background-color: var(--blanco-neutro) !important;
+    border: 1px solid rgba(212, 175, 55, 0.1) !important;
+    display: flex;
+    flex-direction: column;
+    width: calc(25% - 20px);
+    min-width: 250px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin-bottom: 10px;
+    height: 100%;
 }
 
 .kit-card-enhanced:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 30px rgba(212, 175, 55, 0.15);
   border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+.kit-card-enhanced .product-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.kit-card-enhanced .product-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--texto);
+    min-height: 2.8rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.kit-card-enhanced .product-price {
+    margin-top: auto;
+    font-weight: 800;
+    color: var(--texto);
+    padding-top: 10px;
+    margin-bottom: 15px;
+}
+
+.kit-add-btn {
+    margin: 0 auto 15px !important;
+    width: calc(100% - 30px) !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    border: 1.5px solid var(--azul-dos) !important;
+    color: var(--azul-dos) !important;
+    font-weight: 700 !important;
+    padding: 10px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.kit-add-btn:hover {
+    background: var(--azul-dos) !important;
+    color: #fff !important;
+    transform: scale(1.02);
+}
+
+.kit-add-btn i {
+    font-size: 1rem;
 }
 
 @media (max-width: 1100px) {
@@ -6944,54 +7001,18 @@ html.modo-claro .shipping-subtitle {
 }
 
 @media (max-width: 500px) {
-  .kit-card-enhanced {
-    width: auto;
-    max-width: none;
-    margin: 0;
-  }
-  .kit-card-enhanced .product-info {
-      padding: 10px;
-  }
-  .kit-card-enhanced .product-name {
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-      line-height: 1.2;
-  }
-  .kit-card-enhanced .product-price {
-      font-size: 0.95rem;
-  }
-
-}
-
-.kit-add-btn {
-    margin: 0 auto 15px !important;
-    width: calc(100% - 30px) !important;
-    border-radius: 12px !important;
-    background: transparent !important;
-    border: 1.5px solid var(--azul-dos) !important;
-    color: var(--azul-dos) !important;
-    font-weight: 700 !important;
-    padding: 10px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-size: 0.9rem !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    cursor: pointer;
-}
-
-.kit-add-btn:hover {
-    background: var(--azul-dos) !important;
-    color: #fff !important;
-    transform: scale(1.02);
-}
-
-.kit-add-btn i {
-    font-size: 1rem;
-}
-
-@media (max-width: 500px) {
+    .kit-card-enhanced .product-info {
+        padding: 10px;
+    }
+    .kit-card-enhanced .product-name {
+        font-size: 0.9rem;
+        min-height: 2.2rem;
+        line-height: 1.2;
+    }
+    .kit-card-enhanced .product-price {
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
     .kit-add-btn {
         margin: 0 auto 12px !important;
         width: calc(100% - 20px) !important;
