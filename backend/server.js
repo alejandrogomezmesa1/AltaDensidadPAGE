@@ -17,32 +17,7 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// 1. Seguridad de Cabeceras con Helmet
-app.use(helmet());
-
-// 2. Rate Limiting - Evitar ataques de fuerza bruta y DoS
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100, // Límite de 100 peticiones por IP por ventana
-    message: { success: false, message: 'Demasiadas peticiones desde esta IP, por favor intenta más tarde.' },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-app.use('/api/', limiter);
-
-// Limitador más estricto para login y registro
-const authLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hora
-    max: 50, // 50 intentos por hora (subido de 10)
-    message: { success: false, message: 'Demasiados intentos de acceso. Intenta de nuevo en una hora.' }
-});
-app.use('/api/auth/login', authLimiter);
-app.use('/api/auth/register', authLimiter);
-
-app.set('trust proxy', 1);
-const PORT = process.env.PORT || 3000;
-
-// Middleware
+// 1. CORS - Debe ser de lo primero para que cualquier respuesta (incluyendo errores) tenga las cabeceras correctas
 app.use(cors({
     origin: function (origin, callback) {
         const allowed = [
@@ -52,8 +27,6 @@ app.use(cors({
             'https://alta-densidad-page.vercel.app',
             process.env.FRONTEND_URL
         ].filter(Boolean);
-        // Permitir peticiones sin origen (como apps móviles o curl) si es necesario, 
-        // pero para web es mejor ser estricto.
         if (!origin || allowed.includes(origin)) {
             callback(null, true);
         } else {
@@ -65,6 +38,31 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-key'],
     credentials: true
 }));
+
+// 2. Seguridad de Cabeceras con Helmet
+app.use(helmet());
+
+// 3. Rate Limiting - Evitar ataques de fuerza bruta y DoS
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 500, // Aumentado a 500 para evitar bloqueos falsos durante pruebas intensas
+    message: { success: false, message: 'Demasiadas peticiones desde esta IP, por favor intenta más tarde.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+app.use('/api/', limiter);
+
+// Limitador más estricto para login y registro
+const authLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hora
+    max: 50,
+    message: { success: false, message: 'Demasiados intentos de acceso. Intenta de nuevo en una hora.' }
+});
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+
+app.set('trust proxy', 1);
+const PORT = process.env.PORT || 3000;
 
 // Capturar raw body para permitir verificación de firmas en webhooks
 app.use(express.json({
