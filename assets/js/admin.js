@@ -228,6 +228,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Órdenes
     cargarOrdenes();
     registrarEventosOrdenes();
+
+    // Restaurar sección activa
+    const savedTab = localStorage.getItem('admin_active_tab');
+    if (savedTab) {
+        cambiarSeccion(savedTab);
+    }
 });
 // ============================
 // KITS — CARGAR LISTA
@@ -716,6 +722,9 @@ function cambiarSeccion(seccion) {
     document.getElementById('tabTop10').classList.toggle('active', esTop);
     const tabOrd = document.getElementById('tabOrdenes');
     if (tabOrd) tabOrd.classList.toggle('active', esOrd);
+
+    // Guardar estado
+    localStorage.setItem('admin_active_tab', seccion);
 }
 // Exponer funciones para botones inline
 window.moverTop10 = moverTop10;
