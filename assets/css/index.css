@@ -3991,21 +3991,13 @@ html.modo-claro .shipping-subtitle {
 
 /* ===== REFINAMIENTO TOTAL DE KITS ===== */
 .kits-grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
     gap: 20px !important;
-}
-
-@media (max-width: 1100px) {
-    .kits-grid {
-        grid-template-columns: repeat(3, 1fr) !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .kits-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
 }
 
 .kit-card-enhanced {
@@ -4013,6 +4005,27 @@ html.modo-claro .shipping-subtitle {
     border: 1px solid rgba(212, 175, 55, 0.1) !important;
     display: flex;
     flex-direction: column;
+    width: calc(25% - 20px); /* Aproximadamente 4 por fila */
+    min-width: 250px;
+    transition: all 0.3s ease !important;
+}
+
+@media (max-width: 1100px) {
+    .kit-card-enhanced {
+        width: calc(33.33% - 20px); /* 3 por fila */
+    }
+}
+
+@media (max-width: 768px) {
+    .kit-card-enhanced {
+        width: calc(50% - 20px); /* 2 por fila */
+    }
+}
+
+@media (max-width: 500px) {
+    .kit-card-enhanced {
+        width: 100%; /* 1 por fila */
+    }
 }
 
 .kit-tag {
