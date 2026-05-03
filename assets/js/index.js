@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             grid.innerHTML = '';
                 slice.forEach(kit => {
+                    const kitId = `kit_${kit.id || kit._id}`;
                     const card = document.createElement('div');
                     card.className = 'product-card kit-card';
                     card.innerHTML = `
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                                     <span class="price-amount">$${Number(kit.precio).toLocaleString('es-CO')}</span>
                                 </div>
                                 <button class="btn-agregar-carrito kit-add-btn" type="button" 
-                                    onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kit.id || kit._id || Math.floor(Math.random()*1000000), name: kit.nombre || kit.name, image: kit.imagen || kit.image, price: kit.precio || kit.price || 0})})'>
+                                    onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
                                     <i class="fas fa-cart-plus"></i> <span>Agregar</span>
                                 </button>
                             </div>
@@ -126,6 +127,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Modal de detalles de kit
         function abrirModalKitPublico(kit) {
             let modal = document.getElementById('kitModalPublico');
+            const kitId = `kit_${kit.id || kit._id}`;
             if (!modal) {
                 modal = document.createElement('div');
                 modal.id = 'kitModalPublico';
@@ -137,12 +139,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                             <div class="prod-modal-img"><img id="kitModalImg" src="" alt="Kit"></div>
                             <div class="prod-modal-info">
                                 <div class="prod-modal-badge">Kit</div>
-                                <div class="prod-modal-nombre" id="kitModalNombre"></div>
+                                <h2 class="prod-modal-nombre" id="kitModalNombre"></h2>
                                 <div class="prod-modal-desc" id="kitModalDesc"></div>
                                 <div class="prod-modal-tags-group" id="kitModalBeneficios"></div>
                                 <div class="prod-modal-footer">
                                     <div class="prod-modal-precio" id="kitModalPrecio"></div>
-                                    <a id="kitModalComprar" class="prod-modal-btn" target="_blank">Comprar Kit</a>
+                                    <button id="kitModalAgregar" class="prod-modal-btn">
+                                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +164,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             document.getElementById('kitModalPrecio').textContent = `$${Number(kit.precio).toLocaleString('es-CO')} COP`;
             const beneficios = kit.beneficios || [];
             document.getElementById('kitModalBeneficios').innerHTML = beneficios.length ? `<span class='prod-tag-label'>Beneficios:</span> ` + beneficios.map(b => `<span class='prod-tag'>${b}</span>`).join('') : '';
-            document.getElementById('kitModalComprar').href = `https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Me%20encant%C3%B3%20el%20Kit%20*${encodeURIComponent(kit.nombre)}*%20que%20vi%20en%20su%20cat%C3%A1logo.%20%F0%9F%92%8E%20Me%20gustar%C3%ADa%20adquirirlo%2C%20%C2%BFpodr%C3%ADan%20asesorarme%3F`;
+            
+            // Vincular botón agregar
+            document.getElementById('kitModalAgregar').onclick = () => {
+                agregarAlCarrito({
+                    id: kitId,
+                    name: kit.nombre,
+                    image: kit.imagen,
+                    price: kit.precio
+                });
+            };
+
             aplicarTemaModal(modal);
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
