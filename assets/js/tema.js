@@ -3,7 +3,9 @@
 
 // 1. Aplicar clase inmediatamente (antes de que el DOM se pinte)
 (function () {
-    if (localStorage.getItem('altadensidad_tema') === 'claro') {
+    const tema = localStorage.getItem('altadensidad_tema');
+    // Si es 'claro' o si no hay nada guardado (primera visita), por defecto es claro
+    if (tema === 'claro' || !tema) {
         document.documentElement.classList.add('modo-claro');
     }
 })();
