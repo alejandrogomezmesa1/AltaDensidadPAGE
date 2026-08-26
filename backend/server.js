@@ -192,11 +192,23 @@ CREATE TABLE IF NOT EXISTS Ordenes (
                                     id INT AUTO_INCREMENT PRIMARY KEY,
                                     titulo VARCHAR(200) NOT NULL,
                                     contenido TEXT NOT NULL,
+                                    tipo VARCHAR(30) NOT NULL DEFAULT 'texto',
+                                    imagen_url VARCHAR(255) NULL,
+                                    video_url VARCHAR(255) NULL,
                                     orden INT NOT NULL DEFAULT 1,
                                     activo TINYINT(1) NOT NULL DEFAULT 1,
                                     creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
                                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
                             `);
+
+                            const colsCapacitacion = [
+                                "ADD COLUMN tipo VARCHAR(30) NOT NULL DEFAULT 'texto'",
+                                "ADD COLUMN imagen_url VARCHAR(255) NULL",
+                                "ADD COLUMN video_url VARCHAR(255) NULL"
+                            ];
+                            for (const colSql of colsCapacitacion) {
+                                try { await pool.query(`ALTER TABLE CapacitacionItems ${colSql}`); } catch (e) {}
+                            }
 
                             await pool.query(`
                                 CREATE TABLE IF NOT EXISTS CapacitacionPreguntas (
@@ -224,12 +236,9 @@ CREATE TABLE IF NOT EXISTS Ordenes (
                                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
                             `);
 
-                            // Sembrar módulos iniciales de capacitación si la tabla está vacía
-                            const [cnt] = await pool.query("SELECT COUNT(*) as total FROM CapacitacionItems");
-                            if (cnt[0].total === 0) {
-                                const seedCapacitacion = require('./seed-capacitacion');
-                                await seedCapacitacion(pool);
-                            }
+                            // Ejecutar siembra de módulos iniciales/actualizados de capacitación
+                            const seedCapacitacion = require('./seed-capacitacion');
+                            await seedCapacitacion(pool);
                         } catch (errMig) {
                             console.warn('Advertencia en migración de capacitación:', errMig.message || errMig);
                         }

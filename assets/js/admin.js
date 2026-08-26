@@ -1585,29 +1585,59 @@ function renderModuloLectura(idx) {
     const mod = induccionItems[idx];
     const contenedor = document.getElementById('induccionContenedorModulo');
 
+    let mediaHtml = '';
+    if (mod.tipo === 'video' || mod.video_url) {
+        const vUrl = mod.video_url || '';
+        mediaHtml = `
+            <div style="margin-bottom: 24px; text-align: center; background: #050505; padding: 18px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.4); box-shadow: 0 6px 20px rgba(0,0,0,0.7);">
+                <video controls style="max-width: 100%; max-height: 520px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6);" preload="metadata">
+                    <source src="${escHtml(vUrl)}" type="video/mp4">
+                    Tu navegador no soporta el reproductor de video.
+                </video>
+            </div>
+        `;
+    } else if (mod.tipo === 'imagen' || mod.imagen_url) {
+        const imgUrl = mod.imagen_url || '';
+        mediaHtml = `
+            <div style="margin-bottom: 24px; text-align: center; background: #0b0b0b; padding: 18px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.4); box-shadow: 0 6px 20px rgba(0,0,0,0.7);">
+                <img src="${escHtml(imgUrl)}" alt="${escHtml(mod.titulo)}" style="max-width: 100%; max-height: 580px; border-radius: 8px; object-fit: contain; box-shadow: 0 4px 15px rgba(0,0,0,0.6); cursor: pointer;" onclick="window.open('${escHtml(imgUrl)}', '_blank')">
+                <p style="color:#aaa; font-size:0.82rem; margin-top:10px;"><i class="fas fa-search-plus"></i> Haz clic en la imagen para abrirla a resolución completa</p>
+            </div>
+        `;
+    }
+
+    const contenidoFormateado = escHtml(mod.contenido || '');
+
     contenedor.innerHTML = `
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-            <span style="color:#D4AF37; font-weight:bold; font-size:0.9rem; text-transform:uppercase;">Módulo ${idx + 1} de ${induccionItems.length}</span>
-            <h3 style="color:#ffffff; margin: 8px 0 16px 0; font-size:1.4rem;">${escHtml(mod.titulo)}</h3>
-            <div style="color:#e0e0e0; font-size:1rem; line-height:1.7; white-space:pre-line; background:#0a0a0a; padding:18px; border-radius:8px; border:1px solid #222; margin-bottom:24px;">
-                ${escHtml(mod.contenido)}
+        <div style="background: rgba(12,12,12,0.95); border: 1px solid rgba(212,175,55,0.35); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="color:#D4AF37; font-weight:bold; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.8px;">
+                    <i class="fas fa-book-reader"></i> Módulo ${idx + 1} de ${induccionItems.length}
+                </span>
+            </div>
+            <h3 style="color:#ffffff; margin: 0 0 20px 0; font-size:1.5rem; font-weight:600;">${escHtml(mod.titulo)}</h3>
+
+            ${mediaHtml}
+
+            <div style="color:#e0e0e0; font-size:1rem; line-height:1.75; white-space:pre-line; background:#080808; padding:20px; border-radius:10px; border:1px solid #222; margin-bottom:28px;">
+                ${contenidoFormateado}
             </div>
 
-            <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 20px;">
-                <h4 style="color:#D4AF37; margin-top:0; font-size:1.1rem;">
-                    <i class="fas fa-question-circle"></i> Preguntas de Validación del Módulo (3 obligatorias)
+            <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 24px;">
+                <h4 style="color:#D4AF37; margin-top:0; font-size:1.15rem; font-weight:600;">
+                    <i class="fas fa-question-circle"></i> Preguntas de Validación del Módulo (${mod.preguntas ? mod.preguntas.length : 0} obligatorias)
                 </h4>
-                <p style="color:#bbb; font-size:0.88rem; margin-bottom:16px;">
-                    Debes responder las 3 preguntas correctamente para avanzar al siguiente módulo.
+                <p style="color:#bbb; font-size:0.88rem; margin-bottom:20px;">
+                    Debes responder las preguntas correctamente para avanzar al siguiente módulo.
                 </p>
                 <form id="formModuloPreguntas">
-                    ${mod.preguntas.map((p, pIdx) => `
-                        <div style="background:#151515; border:1px solid #333; border-radius:8px; padding:16px; margin-bottom:14px;">
-                            <p style="color:#fff; font-weight:600; margin:0 0 10px 0;">${pIdx + 1}. ${escHtml(p.pregunta)}</p>
-                            <div style="display:flex; flex-direction:column; gap:8px;">
+                    ${(mod.preguntas || []).map((p, pIdx) => `
+                        <div style="background:#141414; border:1px solid #2e2e2e; border-radius:10px; padding:18px; margin-bottom:16px;">
+                            <p style="color:#fff; font-weight:600; margin:0 0 12px 0; font-size:0.98rem;">${pIdx + 1}. ${escHtml(p.pregunta)}</p>
+                            <div style="display:flex; flex-direction:column; gap:10px;">
                                 ${p.opciones.map((opt, oIdx) => `
-                                    <label style="display:flex; align-items:center; gap:10px; color:#ddd; cursor:pointer; font-size:0.92rem; background:#0a0a0a; padding:8px 12px; border-radius:6px; border:1px solid #262626;">
-                                        <input type="radio" name="pregunta_${p.id}" value="${oIdx}" required>
+                                    <label style="display:flex; align-items:center; gap:12px; color:#ddd; cursor:pointer; font-size:0.93rem; background:#0a0a0a; padding:10px 14px; border-radius:8px; border:1px solid #262626; transition: all 0.2s ease;">
+                                        <input type="radio" name="pregunta_${p.id}" value="${oIdx}" required style="accent-color: #D4AF37;">
                                         <span>${escHtml(opt)}</span>
                                     </label>
                                 `).join('')}
@@ -1615,9 +1645,9 @@ function renderModuloLectura(idx) {
                         </div>
                     `).join('')}
                     
-                    <div style="display:flex; justify-content:flex-end; margin-top:20px;">
-                        <button type="submit" class="btn-primary" style="padding:12px 24px; font-size:1rem;">
-                            <i class="fas fa-check"></i> Verificar y Continuar al Siguiente Módulo
+                    <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+                        <button type="submit" class="btn-primary" style="padding:14px 28px; font-size:1rem; font-weight:600; display:inline-flex; align-items:center; gap:10px;">
+                            <i class="fas fa-check-circle"></i> Verificar y Continuar al Siguiente Módulo
                         </button>
                     </div>
                 </form>

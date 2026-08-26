@@ -56,7 +56,7 @@ router.get('/items', requireAuth, async (req, res) => {
     try {
         const pool = await getConnection();
         const [items] = await pool.query(
-            'SELECT id, titulo, contenido, orden FROM CapacitacionItems WHERE activo = 1 ORDER BY orden ASC'
+            'SELECT id, titulo, contenido, tipo, imagen_url, video_url, orden FROM CapacitacionItems WHERE activo = 1 ORDER BY orden ASC'
         );
 
         for (let item of items) {
