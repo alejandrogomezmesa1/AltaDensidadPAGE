@@ -848,6 +848,182 @@ RECUERDA SIEMPRE:
                         respuesta_correcta: 0
                     }
                 ]
+            },
+            {
+                titulo: '27. Reporte de Accidentes de Trabajo (Paso a Paso)',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto26_reporte_accidentes.jpg',
+                video_url: null,
+                contenido: `REPORTE DE ACCIDENTES DE TRABAJO - PASO A PASO EN LA PERFUMERÍA:
+
+1. ATENDER AL TRABAJADOR: Verificar el estado de salud del trabajador y brindar primeros auxilios si es necesario.
+2. CONTROLAR EL PELIGRO: Asegurar el área, eliminar/reducir el riesgo (ej. derrames) usando los EPP necesarios.
+3. INFORMAR INMEDIATAMENTE: Comunicar al jefe, supervisor o responsable de SST sin ocultar la información.
+4. REGISTRAR EL ACCIDENTE: Anotar los datos (qué, dónde, cuándo, cómo y quién) y completar el formato de reporte.
+5. INVESTIGAR LO SUCEDIDO: Determinar la causa raíz, condiciones o actos que contribuyeron.
+6. TOMAR MEDIDAS CORRECTIVAS: Capacitación, señalización, orden/limpieza y actualización de procedimientos.
+7. HACER SEGUIMIENTO: Monitorear e inspeccionar para garantizar la mejora continua.
+
+RECUERDA: Reportar a tiempo protege tu salud y la de tus compañeros.`,
+                orden: 27,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es la primera acción obligatoria ante un accidente de trabajo en el punto o bodega?',
+                        opciones: JSON.stringify(['Atender de inmediato al trabajador y brindar primeros auxilios si es necesario', 'Tomar fotos para redes sociales', 'Continuar la labor sin decir nada', 'Retirarse del sitio']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿A quién se debe informar inmediatamente la ocurrencia de un accidente?',
+                        opciones: JSON.stringify(['Al jefe, supervisor o responsable de SST', 'A clientes externos', 'A proveedores de otra ciudad', 'No se debe informar']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es fundamental investigar la causa raíz del accidente y tomar medidas correctivas?',
+                        opciones: JSON.stringify(['Para implementar acciones que eviten que el accidente vuelva a ocurrir', 'Para buscar culpables a quienes sancionar únicamente', 'Es un trámite sin utilidad', 'Para cerrar el punto']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '28. ¿Qué es un Plan de Emergencia?',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto27_que_es_plan_emergencia.png',
+                video_url: null,
+                contenido: `¿QUÉ ES UN PLAN DE EMERGENCIA?
+
+"Un plan de emergencia es una guía que indica qué debemos hacer antes, durante y después de una emergencia, con el objetivo de proteger la vida de los trabajadores y clientes, reducir los riesgos y actuar de manera rápida y organizada."`,
+                orden: 28,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es la definición del Plan de Emergencia en la empresa?',
+                        opciones: JSON.stringify(['Una guía operacional que indica qué hacer antes, durante y después de una emergencia para proteger vidas', 'Un manual de ventas de perfumes', 'Una lista de precios de productos', 'Un horario de vacaciones']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿A quiénes busca proteger el plan de emergencia durante una eventualidad?',
+                        opciones: JSON.stringify(['A los trabajadores y a los clientes', 'Únicamente a los equipos de cómputo', 'Solo a la administración', 'A nadie']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué beneficios aporta actuar bajo un plan de emergencia estructurado?',
+                        opciones: JSON.stringify(['Reducir los riesgos y actuar de manera rápida, coordinada y organizada', 'Generar pánico', 'Retrasar la salida', 'Confundir a los clientes']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '29. Protocolo del Plan de Emergencia (Empleados y Clientes)',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto28_plan_emergencia_protocolo.jpg',
+                video_url: null,
+                contenido: `PLAN DE EMERGENCIA - ¿QUÉ HACER EN UNA EMERGENCIA?
+
+PARA EMPLEADOS:
+1. Mantén la calma y evalúa la situación.
+2. Informa al responsable o activa la alarma.
+3. Identifica el riesgo (incendio, derrame) si es seguro.
+4. Evacúa por rutas señalizadas.
+5. Dirígete al punto de encuentro.
+6. Reporta novedades o personas faltantes.
+
+PARA CLIENTES:
+1. Mantén la calma.
+2. Escucha al personal de la perfumería.
+3. Dirígete a la salida más cercana.
+4. Evacúa con orden (sin correr ni empujar).
+5. Dirígete al punto de encuentro.
+6. No regreses al local hasta nueva orden.
+
+NÚMEROS DE EMERGENCIA: Bomberos 123 | Emergencias 125 | Policía 112`,
+                orden: 29,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es la primera recomendación del protocolo tanto para empleados como para clientes ante una emergencia?',
+                        opciones: JSON.stringify(['Mantener la calma y evaluar la situación', 'Correr desesperadamente', 'Volver por objetos personales', 'Gritar pidiendo auxilio']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Adónde deben dirigirse empleados y clientes tras evacuar el local por las rutas señalizadas?',
+                        opciones: JSON.stringify(['Al Punto de Encuentro externo designado', 'A sus casas de inmediato', 'Al parqueadero subterráneo', 'Al baño']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Está permitido regresar al establecimiento durante una emergencia a buscar pertenencias?',
+                        opciones: JSON.stringify(['No, nunca se debe regresar por objetos personales hasta que el personal autorizado lo indique', 'Sí, si es de mucho valor', 'Solo si no hay humo visible', 'Sí, libremente']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '30. Ejecución del Plan de Emergencia y Simulacros',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto29_como_ejecutar_plan.png',
+                video_url: null,
+                contenido: `¿CÓMO EJECUTAR EL PLAN DE EMERGENCIA?
+
+"El plan de emergencia lo ejecutaríamos capacitando primero a todos los trabajadores y asignando responsables. Mantendríamos señalizadas las rutas de evacuación, salidas y punto de encuentro, además de tener disponibles extintores, botiquín y elementos para controlar derrames.
+
+Realizaríamos simulacros periódicamente y, ante una emergencia, activaríamos la alarma, informaríamos al personal, controlaríamos el riesgo si es seguro y evacuaríamos de forma ordenada. Finalmente, evaluaríamos lo ocurrido y aplicaríamos mejoras para prevenir futuras emergencias."`,
+                orden: 30,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué elementos y recursos deben estar siempre disponibles para atender emergencias en el punto/bodega?',
+                        opciones: JSON.stringify(['Extintores cargados, botiquín de primeros auxilios y elementos para control de derrames', 'Cajas de cartón vacías', 'Solamente agua de grifo', 'No se requiere ningún elemento']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es fundamental realizar simulacros de emergencia periódicamente?',
+                        opciones: JSON.stringify(['Para entrenar al personal, probar las rutas de evacuación y reaccionar eficazmente ante un evento real', 'Por distracción laboral', 'Solo para tomar fotos', 'No es necesario realizar simulacros']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué paso se realiza al finalizar una emergencia para promover la mejora continua?',
+                        opciones: JSON.stringify(['Evaluar lo ocurrido y aplicar mejoras preventivas para futuras situaciones', 'Ignorar lo sucedido', 'Continuar sin revisar causas', 'Ocultar los reportes']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '31. Brigada de Emergencia y Funciones',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto30_brigada_emergencia.jpg',
+                video_url: null,
+                contenido: `¿QUÉ ES LA BRIGADA DE EMERGENCIA?
+
+La brigada es un grupo de trabajadores voluntarios, capacitados para actuar y apoyar en situaciones de emergencia dentro de la empresa.
+
+FUNCIONES PRINCIPALES:
+✓ Prevenir y controlar incendios.
+✓ Brindar primeros auxilios.
+✓ Guiar evacuaciones seguras.
+✓ Comunicar y reportar emergencias.
+✓ Apoyar y cuidar a las personas.
+
+TIPOS DE BRIGADA:
+- Brigada contra incendios
+- Brigada de primeros auxilios
+- Brigada de evacuación
+- Brigada de comunicación y apoyo
+
+EN CASO DE EMERGENCIA: Mantén la calma, informa y sigue las instrucciones de la brigada. ¡Juntos somos una empresa más segura!`,
+                orden: 31,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué es la Brigada de Emergencia de la empresa?',
+                        opciones: JSON.stringify(['Un grupo de trabajadores capacitados para actuar y apoyar durante emergencias', 'Un equipo externo contratado por horas', 'El personal de aseo nocturno únicamente', 'Los clientes que estén en la tienda']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuáles son las funciones principales que realiza la Brigada de Emergencia?',
+                        opciones: JSON.stringify(['Prevenir/controlar incendios, brindar primeros auxilios y guiar evacuaciones seguras', 'Realizar cobros en caja', 'Despachar pedidos por correo', 'Diseñar empaques']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué actitud se debe tomar frente a las indicaciones impartidas por los brigadistas en una emergencia?',
+                        opciones: JSON.stringify(['Mantener la calma y seguir sus instrucciones de inmediato', 'Cuestionar las órdenes', 'Ignorar sus indicaciones', 'Abandonar la brigada']),
+                        respuesta_correcta: 0
+                    }
+                ]
             }
         ];
 
