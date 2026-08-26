@@ -355,6 +355,169 @@ LIDERAZGO POSITIVO: Respeto, Ejemplo y Comunicación.`,
                         respuesta_correcta: 0
                     }
                 ]
+            },
+            {
+                titulo: '12. Uso Responsable de Redes Sociales y Celular',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto11_redes_celular.png',
+                video_url: null,
+                contenido: `USO DE REDES SOCIALES Y CELULAR:
+
+El uso del teléfono celular durante la jornada deberá ser responsable y no afectar la atención al cliente ni las funciones asignadas.
+
+CONTENIDO PROHIBIDO DE PUBLICAR POR EL COLABORADOR:
+✕ Recetas o fórmulas de preparación.
+✕ Procesos internos no autorizados.
+✕ Información financiera o de ventas.
+✕ Datos personales de clientes.
+✕ Conversaciones internas de la empresa.
+✕ Fotografías de documentos privados.
+
+LAS REDES SOCIALES COMO LÍDER:
+Publicación responsable con respeto y alineada a las directrices de la administración.`,
+                orden: 12,
+                preguntas: [
+                    {
+                        pregunta: '¿Cómo debe ser el uso del teléfono celular durante la jornada laboral?',
+                        opciones: JSON.stringify(['Libre y sin restricciones en todo momento', 'Responsable, sin afectar la atención al cliente ni las funciones asignadas', 'Prohibido de llevar en el bolsillo', 'Solo para juegos en línea']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Cuál de las siguientes publicaciones está estrictamente PROHIBIDA para un colaborador?',
+                        opciones: JSON.stringify(['Publicar recetas, fórmulas, conversaciones internas y datos de clientes', 'Compartir promociones públicas oficiales', 'Difundir la imagen corporativa autorizada', 'Saludar a los seguidores de la página oficial']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿A qué directrices debe alinearse cualquier publicación sobre la empresa en redes sociales?',
+                        opciones: JSON.stringify(['A las opiniones del público', 'A las directrices y normas establecidas por la administración', 'A lo que cada colaborador desee libremente', 'A publicaciones de otras marcas']),
+                        respuesta_correcta: 1
+                    }
+                ]
+            },
+            {
+                titulo: '13. Uso de Elementos y Recursos de la Empresa',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto12_recursos_empresa.png',
+                video_url: null,
+                contenido: `USO DE ELEMENTOS Y RECURSOS DE LA EMPRESA:
+
+USO EXCLUSIVO AUTORIZADO - RECURSOS DE FRAGANCIAS DE ALTA DENSIDAD:
+- Equipos y hardware (computadores, impresoras).
+- Materiales y Productos.
+- Documentos y Cuentas.
+- Herramientas de trabajo.
+- Dispositivos de comunicación.
+- Uniformes y EPP (Elementos de Protección Personal).
+
+CUIDADO Y RESPONSABILIDAD:
+Cuidado activo y reporte inmediato. Los recursos deberán utilizarse exclusivamente para las actividades autorizadas. El colaborador deberá reportar inmediatamente cualquier daño, pérdida o uso no autorizado.`,
+                orden: 13,
+                preguntas: [
+                    {
+                        pregunta: '¿Para qué actividades deben utilizarse los recursos y equipos de la empresa?',
+                        opciones: JSON.stringify(['Para actividades personales y comerciales propias', 'Exclusivamente para las actividades autorizadas de la empresa', 'Para prestar a amigos o terceros', 'Para cualquier uso libre']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Qué debe hacer un colaborador si detecta daños, pérdidas o un uso no autorizado en los elementos de la empresa?',
+                        opciones: JSON.stringify(['Ocultar la situación', 'Reportar inmediatamente el daño o novedad', 'Esperar a fin de año', 'Comprar un reemplazo por su cuenta sin avisar']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Cuáles de los siguientes son considerados recursos de la empresa sujetos a cuidado activo?',
+                        opciones: JSON.stringify(['Equipos, materiales, documentos, herramientas, dispositivos de comunicación, uniformes y EPP', 'Únicamente el teléfono personal', 'Los elementos traídos por el cliente', 'Solo los avisos publicitarios del exterior']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '14. Incumplimiento y Debido Proceso',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto13_incumplimiento.png',
+                video_url: null,
+                contenido: `INCUMPLIMIENTO DEL REGLAMENTO INTERNO:
+
+El incumplimiento de las disposiciones establecidas en este reglamento podrá generar las medidas correspondientes de acuerdo con la gravedad de la situación, las políticas internas de la empresa y la legislación laboral colombiana aplicable.
+
+GARANTÍA DE DEBIDO PROCESO:
+Antes de imponer cualquier medida disciplinaria se deberá garantizar el debido proceso correspondiente.`,
+                orden: 14,
+                preguntas: [
+                    {
+                        pregunta: '¿Bajo qué marco se determinan las medidas ante un incumplimiento del reglamento interno?',
+                        opciones: JSON.stringify(['De acuerdo a la gravedad, las políticas internas y la legislación laboral colombiana', 'Según decisiones improvisadas sin justificación', 'Únicamente por votación de clientes', 'Sin considerar las leyes laborales']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué principio fundamental se debe garantizar siempre antes de aplicar cualquier medida disciplinaria?',
+                        opciones: JSON.stringify(['El debido proceso correspondiente', 'La sanción inmediata sin escuchar', 'La renuncia forzada', 'La divulgación pública']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es importante el debido proceso dentro de la empresa?',
+                        opciones: JSON.stringify(['Garantiza transparencia, derecho a la defensa y cumplimiento legal justo', 'Para demorar las decisiones', 'No aporta ningún valor', 'Solo aplica para el personal administrativo']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '15. Portafolio de Productos - Introducción',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto14_portafolio_introduccion.png',
+                video_url: null,
+                contenido: `FRAGANCIAS DE ALTA DENSIDAD: PORTAFOLIO DE PRODUCTOS
+
+"La esencia de lujo a una fracción del precio"
+
+Bienvenido a la sección del portafolio comercial. Aquí aprenderás a identificar nuestras líneas principales de productos, perfumes originales, preparaciones y presentaciones corporativas.`,
+                orden: 15,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es el lema distintivo de Fragancias de Alta Densidad expuesto en el portafolio de productos?',
+                        opciones: JSON.stringify(['"La esencia de lujo a una fracción del precio"', '"Fragancias comunes para todos"', '"Ventas únicamente exclusivas"', '"Sin fijación ni garantía"']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuál es el objetivo de estudiar el Portafolio de Productos en la inducción?',
+                        opciones: JSON.stringify(['Conocer las líneas, presentaciones y oferta comercial para asesorar eficazmente al cliente', 'Solo memorizar nombres sin entenderlos', 'Reemplazar el inventario', 'Ninguno']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué valor diferencial aporta la propuesta de valor de la marca al mercado?',
+                        opciones: JSON.stringify(['Fragancias premium de alta concentración y durabilidad accesibles', 'Precios excesivamente elevados', 'Menor variedad de aromas', 'Aromas sintéticos de corta duración']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '16. Nuestra Línea de Productos',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto15_linea_productos.png',
+                video_url: null,
+                contenido: `NUESTRA LÍNEA DE PRODUCTOS:
+
+1. Perfumería Original
+2. Perfumería Preparada
+3. Dickens
+4. Splash Corporal`,
+                orden: 16,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuáles son las 4 categorías o líneas principales de productos de Alta Densidad?',
+                        opciones: JSON.stringify(['Perfumería original, Perfumería preparada, Dickens y Splash corporal', 'Solo ambientadores de carro', 'Gaseosas y bebidas', 'Únicamente cremas de manos']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué categoría hace referencia a las fragancias corporales ligeras y refrescantes del portafolio?',
+                        opciones: JSON.stringify(['Splash corporal', 'Perfumería preparada concentrada', 'Colección de envases', 'Línea de jabones']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es indispensable que el Líder de Punto diferencie la perfumería original de la preparada?',
+                        opciones: JSON.stringify(['Para brindar la asesoría correcta sobre fijación, composición y preferencias del cliente', 'Para cobrar precios aleatorios', 'No es necesario diferenciarlas', 'Solo para el empaque secundario']),
+                        respuesta_correcta: 0
+                    }
+                ]
             }
         ];
 
