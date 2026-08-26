@@ -148,10 +148,49 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     password_hash VARCHAR(300) NOT NULL,
     rol VARCHAR(20) NOT NULL DEFAULT 'cliente',
     activo BOOLEAN NOT NULL DEFAULT 1,
+    estado_induccion VARCHAR(30) NOT NULL DEFAULT 'pendiente_capacitacion',
+    intentos_examen INT NOT NULL DEFAULT 0,
+    ultimo_puntaje INT NOT NULL DEFAULT 0,
+    autorizado_por INT NULL,
+    fecha_autorizacion DATETIME NULL,
     creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     reset_token VARCHAR(255) NULL,
     reset_token_expires DATETIME NULL,
-    CHECK (rol IN ('admin', 'cliente'))
+    CHECK (rol IN ('admin', 'cliente', 'empleado'))
+);
+
+-- TABLA: CapacitacionItems
+CREATE TABLE IF NOT EXISTS CapacitacionItems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(200) NOT NULL,
+    contenido TEXT NOT NULL,
+    orden INT NOT NULL DEFAULT 1,
+    activo BOOLEAN NOT NULL DEFAULT 1,
+    creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- TABLA: CapacitacionPreguntas
+CREATE TABLE IF NOT EXISTS CapacitacionPreguntas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NULL,
+    pregunta TEXT NOT NULL,
+    opciones JSON NOT NULL,
+    respuesta_correcta INT NOT NULL,
+    explicacion TEXT NULL,
+    orden INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (item_id) REFERENCES CapacitacionItems(id) ON DELETE CASCADE
+);
+
+-- TABLA: UsuarioProgresoInduccion
+CREATE TABLE IF NOT EXISTS UsuarioProgresoInduccion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    item_id INT NOT NULL,
+    completado BOOLEAN NOT NULL DEFAULT 1,
+    fecha_completado DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_usuario_item (usuario_id, item_id),
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES CapacitacionItems(id) ON DELETE CASCADE
 );
 
 -- DATOS INICIALES: Productos

@@ -2,8 +2,11 @@
 backend/.env
 .env
 
-# Dependencias
+# Dependencias y entornos
 node_modules/
+venv/
+.DS_Store
+*.DS_Store
 
 # Imágenes subidas localmente (van a Cloudinary en producción)
 img/[0-9]*_*.jpg

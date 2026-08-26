@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
 
         const pool = await getConnection();
         const [rows] = await pool.query(
-            'SELECT id, nombre, email, password_hash, rol, activo FROM Usuarios WHERE email = ?',
+            'SELECT id, nombre, email, password_hash, rol, activo, estado_induccion, intentos_examen FROM Usuarios WHERE email = ?',
             [email]
         );
 
@@ -82,12 +82,27 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
         }
 
-        const token = jwt.sign({ id: usuario.id, email: usuario.email, rol: usuario.rol }, JWT_SECRET, { expiresIn: '7d' });
+        const estadoInduccion = usuario.estado_induccion || 'pendiente_capacitacion';
+        const intentosExamen = usuario.intentos_examen || 0;
+
+        const token = jwt.sign(
+            { id: usuario.id, email: usuario.email, rol: usuario.rol, estado_induccion: estadoInduccion },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
 
         res.json({
             success: true,
             message: 'Login exitoso',
-            data: { token, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol }
+            data: {
+                token,
+                id: usuario.id,
+                nombre: usuario.nombre,
+                email: usuario.email,
+                rol: usuario.rol,
+                estado_induccion: estadoInduccion,
+                intentos_examen: intentosExamen
+            }
         });
     } catch (error) {
         console.error('Error en login:', error);

@@ -214,8 +214,43 @@ const formProducto      = document.getElementById('formProducto');
 const modalTitulo       = document.getElementById('modalTitulo');
 const nombreEliminar    = document.getElementById('nombreEliminar');
 
-// ---- Init ----
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('token');
+    const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+
+    if (!token || !usuario || (usuario.rol !== 'admin' && usuario.rol !== 'empleado')) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    if (usuario.rol === 'empleado') {
+        try {
+            const res = await fetch(`${API_INDUCCION_URL}/mi-progreso`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if (data.success && data.data) {
+                const est = data.data.usuario.estado_induccion;
+                if (est !== 'autorizado') {
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+                    document.querySelectorAll('.admin-main > div').forEach(d => d.classList.add('hidden'));
+                    const secInd = document.getElementById('seccionInduccion');
+                    if (secInd) secInd.classList.remove('hidden');
+                    await iniciarInduccionEmpleado();
+                    return;
+                }
+            }
+        } catch (e) {
+            console.error('Error al verificar inducción de empleado:', e);
+        }
+    }
+
+    if (usuario.rol === 'admin') {
+        const tabEmp = document.getElementById('tabEmpleados');
+        if (tabEmp) tabEmp.classList.remove('hidden');
+        registrarEventosEmpleados();
+    }
+
     cargarProductos();
     cargarEnvases();
     cargarKits();
@@ -225,13 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
     registrarEventosEnvases();
     registrarEventosKits();
     registrarEventosTop10();
-    // Órdenes
     cargarOrdenes();
     registrarEventosOrdenes();
 
-    // Restaurar sección activa
     const savedTab = localStorage.getItem('admin_active_tab');
-    if (savedTab) {
+    if (savedTab && savedTab !== 'induccion') {
         cambiarSeccion(savedTab);
     }
 });
@@ -711,26 +744,50 @@ function registrarEventos() {
 // ============================
 // TABS
 // ============================
+// ============================
+// TABS
+// ============================
 function cambiarSeccion(seccion) {
     const esProd = seccion === 'productos';
     const esEnv = seccion === 'envases';
     const esKit = seccion === 'kits';
     const esTop = seccion === 'top10';
     const esOrd = seccion === 'ordenes';
-    document.getElementById('seccionProductos').classList.toggle('hidden', !esProd);
-    document.getElementById('seccionEnvases').classList.toggle('hidden', !esEnv);
-    document.getElementById('seccionKits').classList.toggle('hidden', !esKit);
-    document.getElementById('seccionTop10').classList.toggle('hidden', !esTop);
+    const esEmp = seccion === 'empleados';
+    const esInd = seccion === 'induccion';
+
+    const secProd = document.getElementById('seccionProductos');
+    if (secProd) secProd.classList.toggle('hidden', !esProd);
+    const secEnv = document.getElementById('seccionEnvases');
+    if (secEnv) secEnv.classList.toggle('hidden', !esEnv);
+    const secKit = document.getElementById('seccionKits');
+    if (secKit) secKit.classList.toggle('hidden', !esKit);
+    const secTop = document.getElementById('seccionTop10');
+    if (secTop) secTop.classList.toggle('hidden', !esTop);
     const secOrd = document.getElementById('seccionOrdenes');
     if (secOrd) secOrd.classList.toggle('hidden', !esOrd);
-    document.getElementById('tabProductos').classList.toggle('active', esProd);
-    document.getElementById('tabEnvases').classList.toggle('active', esEnv);
-    document.getElementById('tabKits').classList.toggle('active', esKit);
-    document.getElementById('tabTop10').classList.toggle('active', esTop);
+    const secEmp = document.getElementById('seccionEmpleados');
+    if (secEmp) secEmp.classList.toggle('hidden', !esEmp);
+    const secInd = document.getElementById('seccionInduccion');
+    if (secInd) secInd.classList.toggle('hidden', !esInd);
+
+    const tabProd = document.getElementById('tabProductos');
+    if (tabProd) tabProd.classList.toggle('active', esProd);
+    const tabEnv = document.getElementById('tabEnvases');
+    if (tabEnv) tabEnv.classList.toggle('active', esEnv);
+    const tabKit = document.getElementById('tabKits');
+    if (tabKit) tabKit.classList.toggle('active', esKit);
+    const tabTop = document.getElementById('tabTop10');
+    if (tabTop) tabTop.classList.toggle('active', esTop);
     const tabOrd = document.getElementById('tabOrdenes');
     if (tabOrd) tabOrd.classList.toggle('active', esOrd);
+    const tabEmp = document.getElementById('tabEmpleados');
+    if (tabEmp) tabEmp.classList.toggle('active', esEmp);
 
-    // Guardar estado
+    if (esEmp) {
+        cargarEmpleados();
+    }
+
     localStorage.setItem('admin_active_tab', seccion);
 }
 // Exponer funciones para botones inline
@@ -1397,11 +1454,567 @@ function registrarBuscadores() {
     }
 }
 
-// Inicializar
+// Inicializar buscadores al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
-    // Ya existen llamados a cargar data en el archivo original, 
-    // me aseguro de registrar los buscadores.
     registrarBuscadores();
 });
 
 window.abrirDetalleOrden = abrirDetalleOrden;
+
+// ============================================================
+// INDUCCIÓN, CAPACITACIÓN Y GESTIÓN DE COLABORADORES
+// ============================================================
+const API_INDUCCION_URL = `${_BASE}/induccion`;
+const API_EMPLEADOS_URL = `${_BASE}/admin/empleados`;
+
+let induccionItems = [];
+let induccionItemsCompletados = [];
+let induccionProgresoData = null;
+let induccionModuloActualIdx = 0;
+
+// Inicialización de Inducción para Empleados
+async function iniciarInduccionEmpleado() {
+    cambiarSeccion('induccion');
+    await cargarProgresoInduccion();
+}
+
+async function cargarProgresoInduccion() {
+    const token = localStorage.getItem('token');
+    try {
+        const resProgreso = await fetch(`${API_INDUCCION_URL}/mi-progreso`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const dataProgreso = await resProgreso.json();
+        if (!dataProgreso.success) throw new Error(dataProgreso.message);
+
+        induccionProgresoData = dataProgreso.data;
+        induccionItemsCompletados = dataProgreso.data.itemsCompletados || [];
+
+        const resItems = await fetch(`${API_INDUCCION_URL}/items`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const dataItems = await resItems.json();
+        if (!dataItems.success) throw new Error(dataItems.message);
+
+        induccionItems = dataItems.data || [];
+
+        actualizarBarraProgresoInduccion();
+        renderizarPasoInduccion();
+    } catch (err) {
+        console.error('Error al cargar inducción:', err);
+        mostrarAlerta('Error al cargar módulo de inducción: ' + err.message, 'error');
+    }
+}
+
+function actualizarBarraProgresoInduccion() {
+    const total = induccionItems.length;
+    const completados = induccionItemsCompletados.length;
+    const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
+
+    const barra = document.getElementById('induccionBarraProgreso');
+    const texto = document.getElementById('induccionProgresoTexto');
+    const contador = document.getElementById('induccionModulosContador');
+    const badge = document.getElementById('induccionBadgeEstado');
+
+    if (barra) barra.style.width = `${porcentaje}%`;
+    if (texto) texto.textContent = `Progreso de Lectura de Módulos: ${porcentaje}%`;
+    if (contador) contador.textContent = `Módulo ${completados} de ${total}`;
+
+    if (badge) {
+        const est = induccionProgresoData ? induccionProgresoData.usuario.estado_induccion : 'pendiente_capacitacion';
+        if (est === 'examen_aprobado') {
+            badge.innerHTML = `<span style="background:#2563eb;color:#fff;padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:bold;"><i class="fas fa-check-circle"></i> Examen Aprobado</span>`;
+        } else if (est === 'bloqueado') {
+            badge.innerHTML = `<span style="background:#dc2626;color:#fff;padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:bold;"><i class="fas fa-ban"></i> Bloqueado (3 Intentos Consumidos)</span>`;
+        } else {
+            badge.innerHTML = `<span style="background:#d97706;color:#fff;padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:bold;"><i class="fas fa-clock"></i> En Capacitación</span>`;
+        }
+    }
+}
+
+function renderizarPasoInduccion() {
+    const contenedorMod = document.getElementById('induccionContenedorModulo');
+    const contenedorExa = document.getElementById('induccionContenedorExamen');
+    const contenedorAut = document.getElementById('induccionContenedorAutorizacion');
+
+    if (!contenedorMod || !contenedorExa || !contenedorAut) return;
+
+    contenedorMod.classList.add('hidden');
+    contenedorExa.classList.add('hidden');
+    contenedorAut.classList.add('hidden');
+
+    const estado = induccionProgresoData.usuario.estado_induccion;
+
+    if (estado === 'examen_aprobado') {
+        contenedorAut.classList.remove('hidden');
+        renderVistaAutorizacionPendiente();
+        return;
+    }
+
+    if (estado === 'bloqueado') {
+        contenedorAut.classList.remove('hidden');
+        renderVistaBloqueado();
+        return;
+    }
+
+    // Buscar primer módulo no completado
+    let idxSiguiente = -1;
+    for (let i = 0; i < induccionItems.length; i++) {
+        if (!induccionItemsCompletados.includes(induccionItems[i].id)) {
+            idxSiguiente = i;
+            break;
+        }
+    }
+
+    if (idxSiguiente !== -1) {
+        induccionModuloActualIdx = idxSiguiente;
+        contenedorMod.classList.remove('hidden');
+        renderModuloLectura(induccionModuloActualIdx);
+    } else {
+        contenedorExa.classList.remove('hidden');
+        renderPantallaExamenFinal();
+    }
+}
+
+function renderModuloLectura(idx) {
+    const mod = induccionItems[idx];
+    const contenedor = document.getElementById('induccionContenedorModulo');
+
+    contenedor.innerHTML = `
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+            <span style="color:#D4AF37; font-weight:bold; font-size:0.9rem; text-transform:uppercase;">Módulo ${idx + 1} de ${induccionItems.length}</span>
+            <h3 style="color:#ffffff; margin: 8px 0 16px 0; font-size:1.4rem;">${escHtml(mod.titulo)}</h3>
+            <div style="color:#e0e0e0; font-size:1rem; line-height:1.7; white-space:pre-line; background:#0a0a0a; padding:18px; border-radius:8px; border:1px solid #222; margin-bottom:24px;">
+                ${escHtml(mod.contenido)}
+            </div>
+
+            <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 20px;">
+                <h4 style="color:#D4AF37; margin-top:0; font-size:1.1rem;">
+                    <i class="fas fa-question-circle"></i> Preguntas de Validación del Módulo (3 obligatorias)
+                </h4>
+                <p style="color:#bbb; font-size:0.88rem; margin-bottom:16px;">
+                    Debes responder las 3 preguntas correctamente para avanzar al siguiente módulo.
+                </p>
+                <form id="formModuloPreguntas">
+                    ${mod.preguntas.map((p, pIdx) => `
+                        <div style="background:#151515; border:1px solid #333; border-radius:8px; padding:16px; margin-bottom:14px;">
+                            <p style="color:#fff; font-weight:600; margin:0 0 10px 0;">${pIdx + 1}. ${escHtml(p.pregunta)}</p>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                ${p.opciones.map((opt, oIdx) => `
+                                    <label style="display:flex; align-items:center; gap:10px; color:#ddd; cursor:pointer; font-size:0.92rem; background:#0a0a0a; padding:8px 12px; border-radius:6px; border:1px solid #262626;">
+                                        <input type="radio" name="pregunta_${p.id}" value="${oIdx}" required>
+                                        <span>${escHtml(opt)}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                    
+                    <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+                        <button type="submit" class="btn-primary" style="padding:12px 24px; font-size:1rem;">
+                            <i class="fas fa-check"></i> Verificar y Continuar al Siguiente Módulo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('formModuloPreguntas').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const respuestas = {};
+        mod.preguntas.forEach(p => {
+            const sel = document.querySelector(`input[name="pregunta_${p.id}"]:checked`);
+            if (sel) respuestas[p.id] = parseInt(sel.value, 10);
+        });
+
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`${API_INDUCCION_URL}/validar-item`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ item_id: mod.id, respuestas })
+            });
+            const data = await res.json();
+
+            if (data.success && data.completado) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Excelente!',
+                    text: data.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                await cargarProgresoInduccion();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Respuestas Incorrectas',
+                    text: data.message || 'Una o más respuestas no son correctas. Por favor repasa el texto e inténtalo de nuevo.',
+                    confirmButtonText: 'Entendido y Corregir'
+                });
+            }
+        } catch (err) {
+            Swal.fire('Error', 'No se pudo enviar la validación del módulo: ' + err.message, 'error');
+        }
+    });
+}
+
+function renderPantallaExamenFinal() {
+    const contenedor = document.getElementById('induccionContenedorExamen');
+    const intentos = induccionProgresoData.usuario.intentos_examen || 0;
+
+    contenedor.innerHTML = `
+        <div style="background: rgba(212,175,55,0.05); border: 2px solid #D4AF37; border-radius: 12px; padding: 24px; text-align: center;">
+            <div style="font-size: 3rem; color: #D4AF37; margin-bottom: 12px;"><i class="fas fa-file-signature"></i></div>
+            <h3 style="color: #ffffff; font-size: 1.6rem; margin: 0 0 10px 0;">Examen Final de Inducción Obligatorio</h3>
+            <p style="color: #ccc; max-width: 650px; margin: 0 auto 20px auto; font-size: 0.98rem; line-height: 1.6;">
+                Has completado la lectura de todos los módulos. A continuación responderás el examen final que evalúa lo aprendido.
+            </p>
+
+            <div style="background: #1c1917; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin: 0 auto 24px auto; max-width: 600px; text-align: left;">
+                <h4 style="color: #f59e0b; margin: 0 0 8px 0;"><i class="fas fa-exclamation-triangle"></i> ¡ATENCIÓN OBLIGATORIA!</h4>
+                <ul style="color: #e5e7eb; margin: 0; padding-left: 20px; font-size: 0.92rem; line-height: 1.6;">
+                    <li>Debes responder <strong>el 100% de las preguntas de manera correcta</strong> para aprobar el examen.</li>
+                    <li>Cuentas únicamente con <strong>MÁXIMO 3 INTENTOS</strong>.</li>
+                    <li>Llevas consumidos <strong>${intentos} de 3 intentos</strong>.</li>
+                </ul>
+            </div>
+
+            <button id="btnIniciarExamen" class="btn-primary" style="padding: 14px 32px; font-size: 1.1rem; border-radius: 30px;">
+                <i class="fas fa-play-circle"></i> Iniciar Examen Final Ahora
+            </button>
+        </div>
+        <div id="examenPreguntasArea" class="hidden" style="margin-top: 24px;"></div>
+    `;
+
+    document.getElementById('btnIniciarExamen').addEventListener('click', async () => {
+        await cargarPreguntasExamenFinal();
+    });
+}
+
+async function cargarPreguntasExamenFinal() {
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_INDUCCION_URL}/examen`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        const preguntas = data.data || [];
+        const area = document.getElementById('examenPreguntasArea');
+        document.getElementById('btnIniciarExamen').style.display = 'none';
+        area.classList.remove('hidden');
+
+        area.innerHTML = `
+            <form id="formExamenFinalSubmit" style="background:#0e0e0e; border:1px solid #333; border-radius:10px; padding:20px;">
+                <h3 style="color:#D4AF37; margin-top:0;"><i class="fas fa-tasks"></i> Examen Final (Responde todas las preguntas)</h3>
+                ${preguntas.map((p, idx) => `
+                    <div style="background:#171717; border:1px solid #262626; border-radius:8px; padding:16px; margin-bottom:16px;">
+                        <p style="color:#fff; font-weight:600; margin:0 0 10px 0;">${idx + 1}. ${escHtml(p.pregunta)}</p>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            ${p.opciones.map((opt, oIdx) => `
+                                <label style="display:flex; align-items:center; gap:10px; color:#ddd; cursor:pointer; font-size:0.92rem; background:#0a0a0a; padding:10px 14px; border-radius:6px; border:1px solid #333;">
+                                    <input type="radio" name="pregunta_${p.id}" value="${oIdx}" required>
+                                    <span>${escHtml(opt)}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+
+                <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+                    <button type="submit" class="btn-primary" style="padding:14px 28px; font-size:1.05rem;">
+                        <i class="fas fa-paper-plane"></i> Enviar Examen para Evaluación
+                    </button>
+                </div>
+            </form>
+        `;
+
+        document.getElementById('formExamenFinalSubmit').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const respuestas = {};
+            preguntas.forEach(p => {
+                const sel = document.querySelector(`input[name="pregunta_${p.id}"]:checked`);
+                if (sel) respuestas[p.id] = parseInt(sel.value, 10);
+            });
+
+            try {
+                const resEval = await fetch(`${API_INDUCCION_URL}/evaluar-examen`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ respuestas })
+                });
+                const dataEval = await resEval.json();
+
+                if (dataEval.success && dataEval.aprobado) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '🎉 ¡Felicitaciones! Examen Aprobado',
+                        text: dataEval.message,
+                        confirmButtonText: 'Continuar'
+                    }).then(() => {
+                        cargarProgresoInduccion();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: dataEval.bloqueado ? 'error' : 'warning',
+                        title: dataEval.bloqueado ? 'Cuenta Bloqueada' : 'Examen No Aprobado',
+                        text: dataEval.message,
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        cargarProgresoInduccion();
+                    });
+                }
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo procesar la evaluación: ' + err.message, 'error');
+            }
+        });
+    } catch (err) {
+        Swal.fire('Error', 'No se pudo obtener las preguntas del examen: ' + err.message, 'error');
+    }
+}
+
+function renderVistaAutorizacionPendiente() {
+    const contenedor = document.getElementById('induccionContenedorAutorizacion');
+    contenedor.innerHTML = `
+        <div style="background: rgba(37,99,235,0.1); border: 2px solid #2563eb; border-radius: 12px; padding: 32px; text-align: center;">
+            <div style="font-size: 3.5rem; color: #3b82f6; margin-bottom: 12px;"><i class="fas fa-user-check"></i></div>
+            <h3 style="color: #ffffff; font-size: 1.8rem; margin: 0 0 10px 0;">¡Examen de Inducción Aprobado!</h3>
+            <p style="color: #93c5fd; max-width: 600px; margin: 0 auto 16px auto; font-size: 1.05rem; line-height: 1.6;">
+                Has completado la capacitación y aprobado el examen final al 100%. Tu cuenta se encuentra actualmente en estado:
+                <strong style="color:#ffffff;">Pendiente de Autorización</strong>.
+            </p>
+            <p style="color: #aaa; font-size: 0.95rem;">
+                Por favor, notifica al <strong>Administrador</strong> para que confirme tu aprobación y haga clic en <em>"Autorizar Ingreso"</em> desde su panel. Una vez hecho esto, tendrás acceso completo al sistema.
+            </p>
+        </div>
+    `;
+}
+
+function renderVistaBloqueado() {
+    const contenedor = document.getElementById('induccionContenedorAutorizacion');
+    contenedor.innerHTML = `
+        <div style="background: rgba(220,38,38,0.1); border: 2px solid #dc2626; border-radius: 12px; padding: 32px; text-align: center;">
+            <div style="font-size: 3.5rem; color: #ef4444; margin-bottom: 12px;"><i class="fas fa-lock"></i></div>
+            <h3 style="color: #ffffff; font-size: 1.8rem; margin: 0 0 10px 0;">Has Agotado los 3 Intentos</h3>
+            <p style="color: #fca5a5; max-width: 600px; margin: 0 auto 16px auto; font-size: 1.05rem; line-height: 1.6;">
+                Lamentablemente has consumido tus 3 intentos en el examen final sin obtener el 100% de aprobación.
+            </p>
+            <p style="color: #aaa; font-size: 0.95rem;">
+                Comunícate con el Administrador para solicitar una revisión o el reinicio de tus intentos.
+            </p>
+        </div>
+    `;
+}
+
+// ============================================================
+// GESTIÓN DE COLABORADORES (VISTA SUPERADMIN)
+// ============================================================
+async function cargarEmpleados() {
+    const tbody = document.getElementById('tbodyEmpleados');
+    if (!tbody) return;
+
+    tbody.innerHTML = `<tr><td colspan="8" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando lista de colaboradores...</td></tr>`;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(API_EMPLEADOS_URL, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        const empleados = data.data || [];
+        if (empleados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" class="empty-row">No hay colaboradores registrados todavía. Usa el botón "Registrar Nuevo Colaborador" para agregar uno.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = empleados.map((e, idx) => {
+            let badgeEstado = '';
+            let btnAccion = '';
+
+            if (e.estado_induccion === 'autorizado') {
+                badgeEstado = `<span style="background:#16a34a;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-check-double"></i> Autorizado</span>`;
+            } else if (e.estado_induccion === 'examen_aprobado') {
+                badgeEstado = `<span style="background:#2563eb;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-star"></i> Examen Aprobado</span>`;
+                btnAccion = `<button class="btn-primary" style="padding:6px 12px;font-size:0.82rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar Ingreso</button>`;
+            } else if (e.estado_induccion === 'bloqueado') {
+                badgeEstado = `<span style="background:#dc2626;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-lock"></i> Bloqueado</span>`;
+                btnAccion = `<button class="btn-secondary" style="padding:6px 12px;font-size:0.82rem;" onclick="reiniciarIntentosEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-redo"></i> Reiniciar Intentos</button>`;
+            } else {
+                badgeEstado = `<span style="background:#d97706;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-hourglass-half"></i> En Capacitación</span>`;
+                btnAccion = `<button class="btn-primary" style="padding:6px 12px;font-size:0.82rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar Ingreso</button>`;
+            }
+
+            const fechaReg = e.creado_en ? new Date(e.creado_en).toLocaleDateString('es-CO') : '-';
+
+            return `
+                <tr>
+                    <td data-label="#">${idx + 1}</td>
+                    <td data-label="Colaborador"><strong>${escHtml(e.nombre)}</strong></td>
+                    <td data-label="Email">${escHtml(e.email)}</td>
+                    <td data-label="Fecha Registro">${fechaReg}</td>
+                    <td data-label="Progreso Lecturas">${e.items_completados} / ${e.totalItems} (${e.porcentajeLectura}%)</td>
+                    <td data-label="Examen">${e.intentos_examen} / 3 (Nota: ${e.ultimo_puntaje}%)</td>
+                    <td data-label="Estado Inducción">${badgeEstado}</td>
+                    <td data-label="Acciones">${btnAccion}</td>
+                </tr>
+            `;
+        }).join('');
+    } catch (err) {
+        mostrarAlerta('Error al cargar empleados: ' + err.message, 'error');
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-row">Error al conectar con el servidor.</td></tr>`;
+    }
+}
+
+async function autorizarEmpleado(id, nombre) {
+    const result = await Swal.fire({
+        title: '¿Autorizar Ingreso?',
+        html: `¿Estás seguro de autorizar el ingreso del colaborador <strong>${nombre}</strong>?<br><br>Se le concederá acceso completo a los módulos de administración de la tienda.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#D4AF37',
+        cancelButtonColor: '#4b5563',
+        confirmButtonText: 'Sí, Autorizar Ingreso',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_EMPLEADOS_URL}/autorizar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ usuario_id: id })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Colaborador Autorizado!',
+            text: data.message,
+            timer: 2500,
+            showConfirmButton: false
+        });
+
+        cargarEmpleados();
+    } catch (err) {
+        Swal.fire('Error', 'No se pudo autorizar al empleado: ' + err.message, 'error');
+    }
+}
+
+async function reiniciarIntentosEmpleado(id, nombre) {
+    const result = await Swal.fire({
+        title: '¿Reiniciar Intentos?',
+        text: `¿Deseas reiniciar los intentos de examen y restablecer el estado de ${nombre}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, Reiniciar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_EMPLEADOS_URL}/reiniciar-intentos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ usuario_id: id })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        Swal.fire('Reiniciado', data.message, 'success');
+        cargarEmpleados();
+    } catch (err) {
+        Swal.fire('Error', 'No se pudieron reiniciar los intentos: ' + err.message, 'error');
+    }
+}
+
+function registrarEventosEmpleados() {
+    const btnNuevo = document.getElementById('btnNuevoEmpleado');
+    const formBox = document.getElementById('formRegistrarEmpleado');
+    const btnCancelar = document.getElementById('btnCancelarRegistroEmpleado');
+    const formSubmit = document.getElementById('formEmpleadoSubmit');
+
+    if (btnNuevo && formBox) {
+        btnNuevo.addEventListener('click', () => {
+            formBox.classList.remove('hidden');
+        });
+    }
+    if (btnCancelar && formBox) {
+        btnCancelar.addEventListener('click', () => {
+            formBox.classList.add('hidden');
+        });
+    }
+
+    if (formSubmit) {
+        formSubmit.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('empNombre').value.trim();
+            const email = document.getElementById('empEmail').value.trim();
+            const password = document.getElementById('empPassword').value.trim();
+            const telefono = document.getElementById('empTelefono').value.trim();
+
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`${API_EMPLEADOS_URL}/registrar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nombre, email, password, telefono })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.message);
+
+                formBox.classList.add('hidden');
+                formSubmit.reset();
+
+                if (data.data && data.data.whatsapp_url) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Empleado Registrado!',
+                        html: `El colaborador <strong>${nombre}</strong> fue registrado con éxito.<br><br>¿Deseas enviar sus credenciales por WhatsApp ahora?`,
+                        showCancelButton: true,
+                        confirmButtonColor: '#25D366',
+                        confirmButtonText: '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp',
+                        cancelButtonText: 'Cerrar'
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            window.open(data.data.whatsapp_url, '_blank');
+                        }
+                    });
+                } else {
+                    Swal.fire('¡Registrado!', data.message, 'success');
+                }
+
+                cargarEmpleados();
+            } catch (err) {
+                Swal.fire('Error', 'No se pudo registrar al empleado: ' + err.message, 'error');
+            }
+        });
+    }
+}
+
+window.autorizarEmpleado = autorizarEmpleado;
+window.reiniciarIntentosEmpleado = reiniciarIntentosEmpleado;

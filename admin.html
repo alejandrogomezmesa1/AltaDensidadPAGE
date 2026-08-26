@@ -29,6 +29,7 @@
             <button class="admin-tab" id="tabKits" onclick="cambiarSeccion('kits')"><i class="fas fa-gift"></i> Kits</button>
             <button class="admin-tab" id="tabTop10" onclick="cambiarSeccion('top10')"><i class="fas fa-crown"></i> Top 10</button>
             <button class="admin-tab" id="tabOrdenes" onclick="cambiarSeccion('ordenes')"><i class="fas fa-receipt"></i> Órdenes</button>
+            <button class="admin-tab hidden" id="tabEmpleados" onclick="cambiarSeccion('empleados')"><i class="fas fa-users-cog"></i> Colaboradores</button>
         </div>
     </div>
 
@@ -231,6 +232,107 @@
                 </table>
             </div>
             <div id="paginacionOrdenes" class="admin-paginacion"></div>
+        </div>
+
+        <!-- SECCIÓN INDUCCIÓN Y CAPACITACIÓN OBLIGATORIA (VISTA PARA EMPLEADOS) -->
+        <div id="seccionInduccion" class="hidden">
+            <div style="background: var(--bg-card, #121212); border: 1px solid var(--gold-soft, #D4AF37); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 16px;">
+                    <div>
+                        <h2 style="color: #D4AF37; margin: 0; font-size: 1.6rem; text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="fas fa-graduation-cap"></i> Capacitación e Inducción Obligatoria
+                        </h2>
+                        <p style="color: #a0a0a0; margin: 4px 0 0 0; font-size: 0.95rem;">
+                            Bienvenido(a) a Alta Densidad. Debes leer cada módulo, responder las 3 preguntas de validación y aprobar el Examen Final para habilitar tu acceso.
+                        </p>
+                    </div>
+                    <div id="induccionBadgeEstado"></div>
+                </div>
+
+                <!-- Barra de Progreso de Módulos -->
+                <div style="margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: #bbb; margin-bottom: 6px;">
+                        <span id="induccionProgresoTexto">Progreso de Capacitación: 0%</span>
+                        <span id="induccionModulosContador">Módulo 0 de 0</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden;">
+                        <div id="induccionBarraProgreso" style="background: linear-gradient(90deg, #D4AF37, #F3E5AB); width: 0%; height: 100%; transition: width 0.4s ease;"></div>
+                    </div>
+                </div>
+
+                <!-- VISTA DE MÓDULO INTERACTIVO DE LECTURA + 3 PREGUNTAS -->
+                <div id="induccionContenedorModulo"></div>
+
+                <!-- VISTA DE EXAMEN FINAL DE INDUCCIÓN -->
+                <div id="induccionContenedorExamen" class="hidden"></div>
+
+                <!-- VISTA ESPERANDO AUTORIZACIÓN DEL ADMIN -->
+                <div id="induccionContenedorAutorizacion" class="hidden"></div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN GESTIÓN DE COLABORADORES (VISTA EXCLUSIVA DEL SUPERADMIN) -->
+        <div id="seccionEmpleados" class="hidden">
+            <div class="admin-toolbar" style="margin-bottom: 20px;">
+                <h2 class="section-title"><i class="fas fa-users-cog"></i> Gestión de Colaboradores / Empleados</h2>
+                <button class="btn-primary" id="btnNuevoEmpleado">
+                    <i class="fas fa-user-plus"></i> Registrar Nuevo Colaborador
+                </button>
+            </div>
+
+            <!-- Formulario de Registro de Empleado -->
+            <div id="formRegistrarEmpleado" class="hidden" style="background: var(--bg-card, #1a1a1a); border: 1px solid #D4AF37; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+                <h3 style="color: #D4AF37; margin-top: 0;"><i class="fas fa-user-shield"></i> Registrar Nuevo Empleado</h3>
+                <p style="color: #aaa; font-size: 0.9rem;">Asigna las credenciales iniciales. Podrás compartirlas por WhatsApp fácilmente.</p>
+                
+                <form id="formEmpleadoSubmit" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px;">
+                    <div>
+                        <label style="color: #ccc; font-size: 0.85rem; font-weight:600;">Nombre Completo *</label>
+                        <input type="text" id="empNombre" required placeholder="Ej. Carlos Mendoza" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-top: 4px;">
+                    </div>
+                    <div>
+                        <label style="color: #ccc; font-size: 0.85rem; font-weight:600;">Correo Electrónico *</label>
+                        <input type="email" id="empEmail" required placeholder="empleado@altadensidad.com" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-top: 4px;">
+                    </div>
+                    <div>
+                        <label style="color: #ccc; font-size: 0.85rem; font-weight:600;">Contraseña Inicial *</label>
+                        <input type="text" id="empPassword" required minlength="6" placeholder="Mínimo 6 caracteres" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-top: 4px;">
+                    </div>
+                    <div>
+                        <label style="color: #ccc; font-size: 0.85rem; font-weight:600;">WhatsApp / Celular (Opcional)</label>
+                        <input type="tel" id="empTelefono" placeholder="Ej. 573001234567" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-top: 4px;">
+                    </div>
+                    <div style="grid-column: 1 / -1; display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px;">
+                        <button type="button" class="btn-secondary" id="btnCancelarRegistroEmpleado">Cancelar</button>
+                        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Guardar y Generar Registro</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla de Colaboradores -->
+            <div class="tabla-wrapper">
+                <table class="tabla-productos" id="tablaEmpleados">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Colaborador</th>
+                            <th>Email</th>
+                            <th>Fecha Registro</th>
+                            <th>Progreso Lecturas</th>
+                            <th>Examen (Intentos / Nota)</th>
+                            <th>Estado Inducción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyEmpleados">
+                        <tr>
+                            <td colspan="8" class="loading-row">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando lista de colaboradores...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 

@@ -8,12 +8,12 @@
 
     if (token && usuario) {
         // Sesión activa: mostrar nombre + cerrar sesión
-        const esAdmin = usuario.rol === 'admin';
+        const esStaff = usuario.rol === 'admin' || usuario.rol === 'empleado';
         navSesion.innerHTML = `
             <div class="nav-user-menu">
                 <span class="nav-user-name"><i class="fas fa-user-circle"></i> ${usuario.nombre.split(' ')[0]}</span>
                 <ul class="nav-user-dropdown">
-                    ${esAdmin ? `<li><a href="admin.html"><i class="fas fa-cog"></i> Panel Admin</a></li>` : ''}
+                    ${esStaff ? `<li><a href="admin.html"><i class="fas fa-cog"></i> Panel Admin</a></li>` : ''}
                     <li><a href="#" id="btnCerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                 </ul>
             </div>
