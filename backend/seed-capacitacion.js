@@ -518,6 +518,154 @@ Bienvenido a la sección del portafolio comercial. Aquí aprenderás a identific
                         respuesta_correcta: 0
                     }
                 ]
+            },
+            {
+                titulo: '17. Perfumería Original',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto16_perfumeria_original.png',
+                video_url: null,
+                contenido: `PERFUMERÍA ORIGINAL:
+
+Es aquella que se vende oficialmente desde la casa o marca de dicho perfume. Vienen con sellos y tarjetas que aseguran la procedencia del perfume.`,
+                orden: 17,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué caracteriza a la Perfumería Original dentro de la oferta de la tienda?',
+                        opciones: JSON.stringify(['Es vendida oficialmente desde la casa o marca de origen con sellos y tarjetas de procedencia', 'Se prepara manualmente en el punto sin empaque original', 'Es una imitación sin garantía', 'Se vende a granel sin sello']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué elementos aseguran la procedencia y autenticidad de un perfume original?',
+                        opciones: JSON.stringify(['Los sellos, empaques oficiales y tarjetas de garantía', 'Un recibo hecho a mano', 'La recomendación verbal', 'Ningún elemento']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es importante explicar la procedencia original al cliente interesado en marcas de casa?',
+                        opciones: JSON.stringify(['Para respaldar la autenticidad y generar total confianza en su compra', 'No tiene importancia', 'Para aumentar los impuestos', 'Solo para la facturación interna']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '18. Perfumería Preparada',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto17_perfumeria_preparada.png',
+                video_url: null,
+                contenido: `PERFUMERÍA PREPARADA:
+
+Es una alternativa creada para quienes buscan disfrutar de fragancias con perfiles olfativos inspirados en perfumes reconocidos, ofreciendo una excelente relación entre calidad, duración y precio.
+
+Son una opción independiente, inspirada en diferentes estilos y familias olfativas.
+Vienen en diferentes presentaciones de 30, 60 y 100 ML.`,
+                orden: 18,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué es la Perfumería Preparada en Alta Densidad?',
+                        opciones: JSON.stringify(['Una opción independiente inspirada en perfumes reconocidos con excelente relación calidad, duración y precio', 'Una copia barata sin aroma', 'Un perfume usado', 'Un ambientador textil']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿En qué presentaciones de mililitros (ML) vienen las fragancias preparadas?',
+                        opciones: JSON.stringify(['30, 60 y 100 ML', '5 y 10 ML solamente', '200 y 500 ML', '1 litro']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué la perfumería preparada es muy atractiva para los clientes?',
+                        opciones: JSON.stringify(['Ofrece perfiles olfativos reconocidos de alta concentración a un precio accesible', 'Es difícil de conseguir', 'Tiene empaques desechables de plástico fino', 'No tiene variedad']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '19. Línea Dickens (Mini Perfumes 10ML)',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto18_dickens.png',
+                video_url: null,
+                contenido: `DICKENS:
+
+Son mini perfumes, perfectos para llevar en el bolso o tener una primera impresión sobre el perfume que desea el cliente comprar.
+
+Vienen en presentaciones de 10ML y su precio depende de si son extraídas de perfumes originales o preparadas.`,
+                orden: 19,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué es la línea Dickens en el portafolio de Alta Densidad?',
+                        opciones: JSON.stringify(['Mini perfumes de 10ML prácticos para el bolso o como primera prueba de fragancia', 'Cosméticos de maquillaje', 'Frascos gigantes de exhibición', 'Muestras gratuitas de papel']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuál es la presentación en volumen de la línea Dickens?',
+                        opciones: JSON.stringify(['10 ML', '30 ML', '50 ML', '100 ML']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿De qué depende el precio final de un mini perfume Dickens?',
+                        opciones: JSON.stringify(['De si la fragancia es extraída de perfume original o si es preparada', 'Del color de la tapa solamente', 'De la hora de compra', 'Es un precio fijo en todos los productos']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '20. Experiencias de Compra y Canales de Venta',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto19_experiencias_compra.png',
+                video_url: null,
+                contenido: `EXPERIENCIAS DE COMPRA ALTA DENSIDAD:
+
+Atención, calidad, asesoría olfativa, tiempo de envío y diversidad de canales de venta.
+
+• Punto de Venta Físico (Boutique)
+• Omnichannel Web (Tienda virtual e integrada)
+• Venta Corporativa y Regalos`,
+                orden: 20,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuáles son los pilares de las Experiencias de Compra en Alta Densidad?',
+                        opciones: JSON.stringify(['Atención, calidad, asesoría, tiempo de envío y canales de venta', 'Demora en entregas y desatención', 'Ventas informales sin comprobante', 'Únicamente compras al por mayor']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuáles de los siguientes son canales de venta oficiales de la empresa?',
+                        opciones: JSON.stringify(['Punto de Venta Físico, Omnichannel Web y Venta Corporativa & Regalos', 'Únicamente ventas callejeras', 'Ventas por subasta informal', 'Revendedores sin autorización']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué la asesoría personalizada es clave en la experiencia del cliente?',
+                        opciones: JSON.stringify(['Ayuda a guiarlo según sus notas y familias olfativas preferidas asegurando una compra memorable', 'Para forzar las ventas masivas', 'No influye en el cliente', 'Para cobrar recargos']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '21. Compromiso Organizacional y Excelencia en el Servicio',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto20_compromiso_portafolio.png',
+                video_url: null,
+                contenido: `COMPROMISO CON NUESTROS CLIENTES:
+
+En Fragancias de Alta Densidad contamos con un portafolio pensado para ofrecer diferentes opciones y experiencias a nuestros clientes. Desde la perfumería original hasta nuestras fragancias preparadas y presentaciones DICKENS, buscamos brindar variedad, calidad y alternativas para cada necesidad.
+
+Nuestro compromiso es que cada integrante del equipo conozca nuestro portafolio y pueda asesorar al cliente con seguridad, honestidad y excelente servicio.
+
+Fragancias de Alta Densidad: una fragancia para cada estilo, una experiencia para recordar.`,
+                orden: 21,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es el compromiso fundamental de todo integrante del equipo Alta Densidad?',
+                        opciones: JSON.stringify(['Conocer el portafolio y asesorar al cliente con seguridad, honestidad y excelente servicio', 'Desconocer las líneas de perfumes', 'Atender solo cuando el cliente insista', 'Cambiar las fórmulas']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué busca ofrecer la empresa a través de la diversidad de su portafolio?',
+                        opciones: JSON.stringify(['Variedad, calidad y alternativas para cada estilo y necesidad del cliente', 'Productos de baja duración', 'Limitación de opciones', 'Precios inalcanzables']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuál es el lema final de cierre del portafolio e identidad de la marca?',
+                        opciones: JSON.stringify(['"Una fragancia para cada estilo, una experiencia para recordar"', '"Ventas sin garantía"', '"Perfumes temporales"', '"Solo fragancias importadas"']),
+                        respuesta_correcta: 0
+                    }
+                ]
             }
         ];
 
