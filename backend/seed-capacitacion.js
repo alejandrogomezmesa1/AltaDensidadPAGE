@@ -180,6 +180,181 @@ Este reglamento establece los lineamientos, políticas operativas, código de ve
                         respuesta_correcta: 0
                     }
                 ]
+            },
+            {
+                titulo: '7. Horario de Trabajo - Líder de Punto',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto6_horario.png',
+                video_url: null,
+                contenido: `HORARIO ESTABLECIDO PARA EL CARGO DE LÍDER DE PUNTO:
+
+10:00 A. M. A 6:00 P. M.`,
+                orden: 7,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es el horario establecido para el cargo de Líder de Punto en la empresa?',
+                        opciones: JSON.stringify(['8:00 AM a 4:00 PM', '10:00 AM a 6:00 PM', '12:00 PM a 8:00 PM', '7:00 AM a 3:00 PM']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿A qué hora finaliza la jornada ordinaria del Líder de Punto según la programación establecida?',
+                        opciones: JSON.stringify(['5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Por qué es indispensable conocer con claridad el horario del punto de venta?',
+                        opciones: JSON.stringify(['Para coordinar la apertura, atención al cliente y operatividad del punto', 'No es necesario', 'Solo aplica para días festivos', 'Para retirarse antes de tiempo']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '8. Deberes del Colaborador y Puntualidad',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto7_deberes_puntualidad.png',
+                video_url: null,
+                contenido: `EL COLABORADOR DEBERÁ:
+
+• CUMPLIR PUNTUALMENTE EL HORARIO ESTABLECIDO.
+• ESTAR PREPARADO PARA INICIAR SUS FUNCIONES A LAS 10:00 A. M.
+• INFORMAR OPORTUNAMENTE CUALQUIER SITUACIÓN QUE PUEDA GENERAR RETRASOS O AUSENCIAS.
+• RESPETAR LOS TIEMPOS DESTINADOS PARA ALIMENTACIÓN Y DESCANSO.
+• NO ABANDONAR EL PUNTO DE VENTA DURANTE LA JORNADA SIN AUTORIZACIÓN CUANDO ESTO AFECTE LA OPERACIÓN.
+
+LA PUNTUALIDAD SERÁ CONSIDERADA UN ELEMENTO FUNDAMENTAL DEL COMPROMISO Y LIDERAZGO DENTRO DE LA EMPRESA.`,
+                orden: 8,
+                preguntas: [
+                    {
+                        pregunta: '¿A qué hora debe estar preparado el colaborador para iniciar sus funciones?',
+                        opciones: JSON.stringify(['10:00 A. M.', '10:30 A. M.', '11:00 A. M.', 'A cualquier hora sin afán']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué debe hacer el colaborador ante una situación que pueda generar retraso o ausencia?',
+                        opciones: JSON.stringify(['No avisar a nadie', 'Informar oportunamente a su administrador o supervisor', 'Esperar al día siguiente', 'Pedir a un cliente que avise']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Cómo es considerada la puntualidad dentro de la cultura organizacional de Alta Densidad?',
+                        opciones: JSON.stringify(['Como un elemento opcional', 'Como un elemento fundamental del compromiso y liderazgo', 'Sin importancia', 'Solo exigida en reuniones']),
+                        respuesta_correcta: 1
+                    }
+                ]
+            },
+            {
+                titulo: '9. Guía de Presentación Personal y Código de Vestimenta',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto8_vestimenta.png',
+                video_url: null,
+                contenido: `GUÍA DE PRESENTACIÓN - LÍDER DE PUNTO:
+
+VESTIMENTA PERMITIDA (CÓMO SE DEBE PRESENTAR):
+Imagen cómoda, elegante, limpia y profesional. Refleja la marca.
+✓ Camisas, blusas o polos de apariencia elegante.
+✓ Pantalón formal, casual elegante o jean en buen estado.
+✓ Calzado limpio, cómodo y apropiado.
+✓ Prendas acordes con la imagen corporativa.
+
+NO PERMITIDO (CÓMO NO SE DEBE PRESENTAR):
+✕ Ropa rota, sucia o excesivamente informal.
+✕ Chanclas o calzado inadecuado.
+✕ Mensajes ofensivos o incompatibles.
+
+PROFESIONALISMO Y EXCELENCIA.`,
+                orden: 9,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es la prenda superior permitida según la guía de presentación corporativa?',
+                        opciones: JSON.stringify(['Camisas, blusas o polos de apariencia elegante', 'Esqueletos sin mangas', 'Camisetas con mensajes ofensivos', 'Ropa sucia o descosida']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué calzado está explícitamente NO PERMITIDO en el punto de venta?',
+                        opciones: JSON.stringify(['Calzado cómodo, limpio y apropiado', 'Chanclas o calzado inadecuado', 'Zapatos formales limpios', 'Mocasines casuales elegantes']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Qué proyecta la imagen personal del Líder de Punto ante el cliente?',
+                        opciones: JSON.stringify(['Refleja la marca, el profesionalismo y la excelencia de Alta Densidad', 'Únicamente el gusto personal sin importar la marca', 'No influye en las ventas', 'Indiferencia total']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '10. Manejo de Información Confidencial',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto9_confidencialidad.png',
+                video_url: null,
+                contenido: `SE CONSIDERARÁ INFORMACIÓN CONFIDENCIAL, ENTRE OTROS:
+
+• Recetas y fórmulas de preparación.
+• Proporciones y concentraciones utilizadas.
+• Procesos internos de elaboración, métodos de preparación y maceración.
+• Información de proveedores, costos y precios internos.
+• Márgenes de ganancia y estrategias comerciales.
+• Información de clientes y datos financieros.
+• Inventarios y movimientos internos.
+• Contraseñas y accesos a plataformas de la empresa.
+• Documentos internos y estrategias de marketing antes de su publicación.`,
+                orden: 10,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál de las siguientes opciones se considera información altamente confidencial de la empresa?',
+                        opciones: JSON.stringify(['Recetas, fórmulas de preparación, proporciones y accesos a plataformas', 'El nombre comercial público de la marca', 'La dirección física del punto de venta expuesta', 'El catálogo general disponible en la web']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Se pueden divulgar costos internos, márgenes de ganancia o proveedores a personas externas?',
+                        opciones: JSON.stringify(['Sí, a cualquier amigo', 'No, es estrictamente confidencial y reservado de la compañía', 'Solo por redes sociales personales', 'Depende del día de la semana']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Qué manejo se debe dar a las contraseñas y accesos a las plataformas del sistema?',
+                        opciones: JSON.stringify(['Compartirlas abiertamente', 'Mantenerlas bajo estricta confidencialidad y uso autorizado', 'Anotarlas en lugares públicos visiblemente', 'Ninguno']),
+                        respuesta_correcta: 1
+                    }
+                ]
+            },
+            {
+                titulo: '11. Identificación, Liderazgo Positivo y Responsabilidades',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto10_liderazgo.png',
+                video_url: null,
+                contenido: `IDENTIFICACIÓN DEL LÍDER DE PUNTO:
+
+EL LÍDER COMO REFERENCIA:
+El Líder de Punto será una figura de referencia para clientes y colaboradores. Su liderazgo se basa en el respeto, el ejemplo, la comunicación y la responsabilidad, evitando cualquier conducta de maltrato, humillación o abuso de autoridad.
+
+RESPONSABILIDADES CLAVE:
+✓ Supervisar el correcto funcionamiento del punto.
+✓ Orientar y apoyar a los colaboradores.
+✓ Garantizar una adecuada atención al cliente.
+✓ Verificar el orden, presentación e inventarios.
+✓ Reportar novedades y velar por el cumplimiento.
+
+PRÁCTICAS PROHIBIDAS:
+✕ Maltrato o humillación.
+✕ Abuso de autoridad.
+
+LIDERAZGO POSITIVO: Respeto, Ejemplo y Comunicación.`,
+                orden: 11,
+                preguntas: [
+                    {
+                        pregunta: '¿En qué valores se fundamenta el liderazgo del Líder de Punto?',
+                        opciones: JSON.stringify(['Abuso de poder y sanciones', 'Respeto, ejemplo, comunicación y responsabilidad', 'Indiferencia hacia los colaboradores', 'Favoritismos e informalidad']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Cuáles de las siguientes son prácticas prohibidas en el liderazgo de Alta Densidad?',
+                        opciones: JSON.stringify(['Supervisar inventarios y apoyar al equipo', 'Maltrato, humillación y abuso de autoridad', 'Garantizar buena atención al cliente', 'Reportar novedades oportunamente']),
+                        respuesta_correcta: 1
+                    },
+                    {
+                        pregunta: '¿Cuál es una responsabilidad clave del Líder de Punto?',
+                        opciones: JSON.stringify(['Supervisar el correcto funcionamiento, orientar colaboradores y garantizar excelente atención', 'Ignorar el orden del punto', 'Delegar todas sus responsabilidades a clientes', 'No reportar novedades del punto']),
+                        respuesta_correcta: 0
+                    }
+                ]
             }
         ];
 
