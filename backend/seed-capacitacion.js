@@ -1024,6 +1024,164 @@ EN CASO DE EMERGENCIA: Mantén la calma, informa y sigue las instrucciones de la
                         respuesta_correcta: 0
                     }
                 ]
+            },
+            {
+                titulo: '32. ¿Qué es el Comité de Convivencia (COCOLA)?',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto31_cocola.png',
+                video_url: null,
+                contenido: `¿QUÉ ES EL COMITÉ DE CONVIVENCIA (COCOLA)?
+
+COCOLA - Compromiso con el Cuidado de la Vida:
+En COCOLA trabajamos juntos por un ambiente seguro, saludable y responsable.
+
+C - COMPROMISO: Nos comprometemos con la seguridad, la salud y el cuidado de las personas y del entorno.
+O - ORDEN Y LIMPIEZA: Mantenemos nuestro lugar de trabajo limpio y ordenado para prevenir accidentes.
+C - CUIDADO: Cuidamos nuestra vida, la de nuestros compañeros, clientes y visitantes.
+O - OBSERVA Y REPORTA: Observamos los riesgos y reportamos cualquier condición o acto inseguro.
+LA - LA SEGURIDAD ES DE TODOS: La seguridad es responsabilidad de todos. Juntos construimos un entorno más seguro.
+
+NUESTROS COMPROMISOS COCOLA:
+• Cumplimos las normas de seguridad.
+• Prevenimos accidentes y enfermedades.
+• Usamos correctamente los EPP.
+• Conocemos y aplicamos los procedimientos de emergencia.
+• Promovemos la salud y el bienestar.
+• Cuidamos nuestro entorno y los recursos.
+
+RECUERDA: La prevención salva vidas. La seguridad comienza por ti.`,
+                orden: 32,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué significan las siglas y el enfoque principal del comité COCOLA?',
+                        opciones: JSON.stringify(['Compromiso con el Cuidado de la Vida y un ambiente de trabajo seguro y saludable', 'Comité de Compras y Logística Anual', 'Control de Comercialización de Alcoholes', 'Comisión de Contabilidad Laboral']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuáles son los pilares clave representados por la sigla C-O-C-O-LA?',
+                        opciones: JSON.stringify(['Compromiso, Orden y limpieza, Cuidado, Observa y reporta, La seguridad es de todos', 'Calidad, Ofertas, Costos, Operaciones, Logística', 'Celeridad, Oportunidad, Control, Orden, Liderazgo', 'Compras, Operaciones, Cobros, Objetivos, Logros']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es fundamental observar y reportar condiciones o actos inseguros?',
+                        opciones: JSON.stringify(['Para prevenir accidentes antes de que ocurran y mantener un entorno seguro', 'Para penalizar sin justificación', 'Es una sugerencia sin importancia', 'Solo por requerimiento de la aseguradora']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '33. Personal Encargado de la Brigada de Emergencia',
+                tipo: 'video',
+                imagen_url: '/assets/img/induccion/foto32_personal_brigada.png',
+                video_url: '/assets/img/induccion/video_brigada_emergencia.mp4',
+                contenido: `PERSONAL ENCARGADO DE LA BRIGADA DE EMERGENCIA:
+
+Conoce al equipo de brigadistas capacitados y dispuestos a actuar oportunamente en caso de emergencias en la empresa.
+
+Recuerda: Los brigadistas están capacitados en primeros auxilios, control de incendios, evacuación y comunicación.`,
+                orden: 33,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es la función principal del personal encargado de la Brigada de Emergencia?',
+                        opciones: JSON.stringify(['Liderar acciones de prevención, evacuación y primeros auxilios durante contingencias', 'Supervisar el cuadre de caja diario', 'Gestionar las compras a proveedores', 'Revisar la publicidad digital']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cómo se reconoce a los integrantes de la brigada de emergencia en las instalaciones?',
+                        opciones: JSON.stringify(['Por sus distintivos, chalecos o escarapelas oficiales de brigadista', 'Por vestimenta de calle', 'No tienen ningún distintivo', 'Por el color de zapatos']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué debes hacer si el brigadista da una orden de evacuación inmediata?',
+                        opciones: JSON.stringify(['Seguir su indicación de inmediato sin discutir ni devolverte', 'Terminar las tareas pendientes antes de salir', 'Ignorar la señal si estás ocupado', 'Pedir autorización previa al jefe']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '34. Personal Encargado del Comité de Convivencia (COCOLA)',
+                tipo: 'video',
+                imagen_url: '/assets/img/induccion/foto33_personal_cocola.png',
+                video_url: '/assets/img/induccion/video_cocola_atencion.mp4',
+                contenido: `PERSONAL ENCARGADO DEL COMITÉ DE CONVIVENCIA (COCOLA):
+
+Presentación de los representantes encargados de promover un clima laboral sano, respetuoso y prevenir el acoso laboral y riesgos psicosociales.
+
+En COCOLA trabajamos por el cuidado de la vida y el bienestar de cada colaborador.`,
+                orden: 34,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuál es el objetivo central del Comité de Convivencia (COCOLA)?',
+                        opciones: JSON.stringify(['Promover un clima laboral armonioso, respetuoso y resolver conflictos de forma sana y confidencial', 'Organizar eventos de ventas exclusivamente', 'Fijar metas de facturación', 'Modificar el manual de salarios']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿En qué tipo de situaciones se puede acudir al Comité de Convivencia COCOLA?',
+                        opciones: JSON.stringify(['Para presentar inquietudes de convivencia laboral, diferencias interpersonales o sugerencias de bienestar', 'Para solicitar préstamos bancarios', 'Para pedir permisos de vacaciones únicamente', 'Para reclamar productos defectuosos']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cómo deben ser manejadas las consultas o reportes remitidos a COCOLA?',
+                        opciones: JSON.stringify(['Con total confidencialidad, imparcialidad y respeto', 'De manera pública', 'Publicándolas en la cartelera', 'Informando a los clientes']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '35. ¿Qué es la Atención al Cliente?',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto34_que_es_atencion_cliente.png',
+                video_url: null,
+                contenido: `¿QUÉ ES LA ATENCIÓN AL CLIENTE?
+
+"La atención al cliente es el servicio que una empresa brinda para escuchar, orientar y ayudar a sus clientes. Una buena atención debe ser amable, respetuosa, clara y rápida, buscando solucionar las necesidades o problemas del cliente. El objetivo principal es lograr su satisfacción, generar confianza y conseguir que el cliente quiera regresar y recomendar la empresa."`,
+                orden: 35,
+                preguntas: [
+                    {
+                        pregunta: '¿Cómo se define la atención al cliente dentro de nuestra empresa?',
+                        opciones: JSON.stringify(['El servicio dedicado a escuchar, orientar y ayudar al cliente para solucionar sus necesidades', 'Cobrar el mayor valor posible', 'Imponer productos sin escuchar', 'Un trámite exclusivamente telefónico']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuáles son los cuatro atributos fundamentales de una buena atención al cliente?',
+                        opciones: JSON.stringify(['Amable, respetuosa, clara y rápida', 'Indiferente, lenta, confusa y fría', 'Rígida, exigente, costosa e impositiva', 'Casual, improvisada, informal e inconsistente']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuál es el objetivo final de brindar un servicio al cliente excepcional?',
+                        opciones: JSON.stringify(['Lograr la satisfacción del cliente, generar confianza y motivar su regreso y recomendación', 'Hacer ventas de una sola vez', 'Reducir el tiempo de permanencia en tienda', 'Evitar que pregunte']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '36. Atención Adecuada vs Atención Inadecuada',
+                tipo: 'video',
+                imagen_url: '/assets/img/induccion/foto35_atencion_adecuada_inadecuada.png',
+                video_url: '/assets/img/induccion/video_cocola_atencion.mp4',
+                contenido: `ATENCIÓN ADECUADA Y ATENCIÓN INADECUADA EN PERFUMERÍA:
+
+Ejemplo práctico comparativo entre una atención cercana, orientadora y amable frente a una actitud apática, distraída o desinteresada con el comprador.
+
+La diferencia está en la empatía y en hacer sentir especial a cada persona que ingresa a nuestro espacio.`,
+                orden: 36,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué caracteriza a una atención inadecuada en el punto de venta?',
+                        opciones: JSON.stringify(['Actitud apática, brazos cruzados, distracción con el celular o falta de interés por las dudas del cliente', 'Saludar con una sonrisa y escuchar atentamente', 'Explicar las familias olfativas con calma', 'Ofrecer opciones según el presupuesto del cliente']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué impacto genera en el cliente una atención adecuada y empática?',
+                        opciones: JSON.stringify(['Sensación de acogida, confianza en el producto y fidelidad a la marca', 'Molestia y ganas de salir rápido', 'Desconfianza en los precios', 'Ningún impacto']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué debes hacer si un cliente tiene dudas sobre una fragancia o no se decide?',
+                        opciones: JSON.stringify(['Escucharlo, asesorarlo en notas olfativas y mostrarle opciones acordes a sus gustos con amabilidad', 'Presionarlo para que compre la más costosa de inmediato', 'Ignorarlo y atender a otra persona', 'Decirle que todas huelen igual']),
+                        respuesta_correcta: 0
+                    }
+                ]
             }
         ];
 
