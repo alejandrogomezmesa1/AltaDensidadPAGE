@@ -666,6 +666,188 @@ Fragancias de Alta Densidad: una fragancia para cada estilo, una experiencia par
                         respuesta_correcta: 0
                     }
                 ]
+            },
+            {
+                titulo: '22. Presentación del Líder de SST y Atención al Cliente',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto21_victor_manuel_sst.png',
+                video_url: null,
+                contenido: `TE PRESENTAMOS A VICTOR MANUEL:
+
+LÍDER DE SEGURIDAD Y SALUD EN EL TRABAJO (SST) Y ATENCIÓN AL CLIENTE`,
+                orden: 22,
+                preguntas: [
+                    {
+                        pregunta: '¿Quién es la persona a cargo del liderazgo de Seguridad y Salud en el Trabajo (SST) y Atención al Cliente?',
+                        opciones: JSON.stringify(['Victor Manuel', 'Carlos Eduardo', 'Maria Fernanda', 'Juan Pablo']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuáles son los dos frentes clave de liderazgo que desempeña Victor Manuel?',
+                        opciones: JSON.stringify(['Seguridad y Salud en el Trabajo (SST) y Atención al Cliente', 'Únicamente contabilidad', 'Compras internacionales exclusivamente', 'Mantenimiento web únicamente']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué es importante identificar a los líderes del área de SST de la empresa?',
+                        opciones: JSON.stringify(['Para acudir oportunamente ante dudas de seguridad, protocolos, EPP y reportes de prevención', 'Solo para firmar planillas', 'No es necesario conocerlos', 'Para solicitar descuentos']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '23. La Importancia del Uso de EPP en Perfumería',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto22_importancia_epp.png',
+                video_url: null,
+                contenido: `LA IMPORTANCIA DEL USO DE LOS ELEMENTOS DE PROTECCIÓN (EPP):
+
+"¡Hola equipo! En nuestro día a día rodeados de fragancias, el aroma es nuestro trabajo. Pero respirar esencias concentradas todo el día en un lugar cerrado puede agotar tu olfato y darte dolor de cabeza. Por eso, tu mejor EPP es la ventilación constante y el uso de mascarillas para vapores orgánicos si vas a organizar o limpiar el inventario denso. ¡Y no olvides los guantes para proteger tu piel de irritaciones!"
+
+CONSEJOS CLAVE:
+• Fatiga olfativa: usar mascarilla en el almacén evita que satures tu nariz.
+• Cuidado de la piel: los perfumes tienen alcohol que reseca las manos al manipular muchas botellas.
+• Ventilación: el aire fresco es el protector más importante en un lugar de alta densidad.`,
+                orden: 23,
+                preguntas: [
+                    {
+                        pregunta: '¿Por qué es vital usar mascarillas para vapores orgánicos al manipular o limpiar inventario concentrado?',
+                        opciones: JSON.stringify(['Para evitar la fatiga olfativa, saturación nasal y dolores de cabeza por esencias concentradas', 'Por estética solamente', 'Para hablar más bajo', 'No es necesario usarlas']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué efecto puede causar el alcohol de los perfumes en la piel al manipular botellas sin guantes?',
+                        opciones: JSON.stringify(['Resequedad e irritaciones en la piel', 'Manchas permanentes azules', 'Sin ningún efecto', 'Hidratación profunda']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuál es considerado el protector más importante en un espacio de fragancias de alta densidad?',
+                        opciones: JSON.stringify(['La ventilación constante y el aire fresco', 'Encender velas aromatizadas', 'Cerrar las ventanas herméticamente', 'Usar ambientadores sintéticos extra']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '24. ¿Qué es SST? - Seguridad y Salud en el Trabajo',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto23_que_es_sst.jpg',
+                video_url: null,
+                contenido: `¿QUÉ ES SST?
+
+SST significa Seguridad y Salud en el Trabajo.
+Es el conjunto de normas, medidas y actividades que buscan prevenir accidentes y enfermedades laborales, proteger la salud de los trabajadores y garantizar un ambiente de trabajo seguro.
+
+OBJETIVOS PRINCIPALES:
+✓ Prevenir accidentes en el trabajo.
+✓ Proteger la salud de los trabajadores.
+✓ Cumplir con la normativa legal y laboral.
+
+ACCIONES IMPORTANTES:
+- Identificar riesgos y accidentes.
+- Usar los elementos de protección personal (EPP).
+- Mantener el área limpia y segura.
+- Capacitarse y reportar peligros.
+
+¡LA SST ES RESPONSABILIDAD DE TODOS! La atención hace la diferencia.`,
+                orden: 24,
+                preguntas: [
+                    {
+                        pregunta: '¿Qué significan las siglas SST?',
+                        opciones: JSON.stringify(['Seguridad y Salud en el Trabajo', 'Sistema de Soluciones Textil', 'Servicio Superior Técnico', 'Sistemas de Seguridad Tarifaria']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Cuál es el objetivo principal del Sistema de Seguridad y Salud en el Trabajo?',
+                        opciones: JSON.stringify(['Prevenir accidentes y enfermedades laborales, protegiendo la salud de los trabajadores', 'Imponer horarios sin descanso', 'Reducir el salario', 'Aumentar la rotación de personal']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿De quién es la responsabilidad de velar por la Seguridad y Salud en el Trabajo?',
+                        opciones: JSON.stringify(['Es responsabilidad de TODOS en el equipo', 'Únicamente del Administrador', 'Solo de los clientes', 'De la empresa de envíos']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '25. Riesgos en el Puesto de Trabajo y Medidas de Protección',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto24_riesgos_puesto_trabajo.jpg',
+                video_url: null,
+                contenido: `RIESGOS EN EL PUESTO DE TRABAJO - ÁREA DE PRODUCCIÓN Y PUNTO:
+
+En el área de perfumería se realizan tareas con sustancias químicas, aromas concentrados y esencias.
+
+RIESGOS PRINCIPALES:
+✓ Exposición a alcoholes y esencias.
+✓ Inhalación de olores muy concentrados.
+✓ Contacto con piel y ojos.
+✓ Resbalones por derrames de líquidos.
+
+MEDIDAS DE PROTECCIÓN:
+• Usar guantes resistentes y lentes de seguridad.
+• Usar mascarilla o protección respiratoria.
+• Seguir procedimientos de llenado y trasvase de líquidos.
+• Reportar derrames inmediatamente.
+
+LA PREVENCIÓN PROTEGE TU SALUD. Conoce los riesgos de tu puesto y actúa a tiempo.`,
+                orden: 25,
+                preguntas: [
+                    {
+                        pregunta: '¿Cuáles son algunos de los riesgos principales en el puesto de trabajo de perfumería?',
+                        opciones: JSON.stringify(['Exposición a alcoholes, inhalación de olores concentrados, contacto con ojos y resbalones por derrames', 'Cortes con sierra eléctrica', 'Golpes con maquinaria pesada siderúrgica', 'Riesgo de insolación extrema']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué se debe hacer de inmediato si ocurre un derrame de líquido o esencia en el piso?',
+                        opciones: JSON.stringify(['Reportarlo e intervenir inmediatamente para limpiar y evitar resbalones', 'Ignorarlo hasta el final del día', 'Cubrirlo con una alfombra sin avisar', 'Salirse del punto de venta']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué elementos protegen los ojos y manos durante la manipulación de químicos o esencias?',
+                        opciones: JSON.stringify(['Lentes de seguridad y guantes resistentes', 'Gafas oscuras de sol y anillos', 'Guantes de lana', 'Sin protección']),
+                        respuesta_correcta: 0
+                    }
+                ]
+            },
+            {
+                titulo: '26. Guía Completa de EPP en Perfumería',
+                tipo: 'imagen',
+                imagen_url: '/assets/img/induccion/foto25_epp_perfumeria.jpg',
+                video_url: null,
+                contenido: `ELEMENTOS DE PROTECCIÓN PERSONAL (EPP) PARA UNA PERFUMERÍA:
+
+Trabajamos con alcohol, esencias y fragancias. Protégete, trabaja seguro y cuida tu salud.
+
+• Guantes de Nitrilo: Protegen las manos del contacto con alcohol, esencias y químicos.
+• Gafas de Seguridad: Protegen los ojos de salpicaduras.
+• Mascarilla o Respirador: Evita inhalación de vapores y partículas.
+• Bata / Delantal Resistente: Protege la piel y la ropa de salpicaduras o derrames.
+• Calzado Antideslizante: Reduce el riesgo de caídas en el área.
+• Cofia / Cubre Cabello: Evita contaminación del producto.
+• Protección Auditiva (Opcional): Para áreas con ruido elevado.
+
+RECUERDA SIEMPRE:
+✓ Usa siempre tus EPP.
+✓ Mantén tu área ventilada.
+✓ Evita contacto directo con piel y ojos.
+✓ Almacena alcohol y esencias en lugares seguros lejos de fuentes de calor. ¡El alcohol es inflamable!`,
+                orden: 26,
+                preguntas: [
+                    {
+                        pregunta: '¿Por qué los guantes de nitrilo son preferidos sobre otros guantes al manipular esencias y alcohol?',
+                        opciones: JSON.stringify(['Protegen adecuadamente las manos contra el contacto de alcohol, esencias y químicos sin degradarse rápido', 'Por estética', 'Porque son de tela gruesa', 'No protegen']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Por qué se debe almacenar el alcohol y las esencias lejos de fuentes de calor o chispas?',
+                        opciones: JSON.stringify(['Porque el alcohol es una sustancia altamente inflamable', 'Para que no se evaporen las botellas de vidrio', 'Porque el calor cambia el color del frasco solamente', 'No hay peligro alguno']),
+                        respuesta_correcta: 0
+                    },
+                    {
+                        pregunta: '¿Qué beneficio brinda la cofia o cubre cabello en el área de trabajo de perfumería?',
+                        opciones: JSON.stringify(['Evita la contaminación del producto con cabellos sueltos y protege la higiene', 'Para mantener el peinado festivo', 'Es un accesorio decorativo', 'No aporta ningún beneficio']),
+                        respuesta_correcta: 0
+                    }
+                ]
             }
         ];
 
