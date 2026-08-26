@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { getConnection } = require("../config/db");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+const { requireAuth, requireAdmin, requireStaff } = require("../middleware/auth");
 let mercadopago;
 try {
   mercadopago = require("mercadopago");
@@ -301,7 +301,7 @@ router.get("/verify_payment", async (req, res) => {
 });
 
 // GET /api/mercadopago/order/:external_reference
-router.get("/order/:external_reference", requireAdmin, async (req, res) => {
+router.get("/order/:external_reference", requireStaff, async (req, res) => {
   try {
     const { external_reference } = req.params;
     const pool = await getConnection();
@@ -326,7 +326,7 @@ router.get("/order/:external_reference", requireAdmin, async (req, res) => {
 });
 
 // GET /api/mercadopago/orders?page=1&limit=20&status=approved
-router.get("/orders", requireAdmin, async (req, res) => {
+router.get("/orders", requireStaff, async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page || "1"));
     const limit = Math.max(1, Math.min(100, parseInt(req.query.limit || "20")));
@@ -365,7 +365,7 @@ router.get("/orders", requireAdmin, async (req, res) => {
 });
 
 // PUT /api/mercadopago/order/:external_reference  -- actualizar estado manualmente
-router.put("/order/:external_reference", requireAdmin, async (req, res) => {
+router.put("/order/:external_reference", requireStaff, async (req, res) => {
   try {
     const { external_reference } = req.params;
     const { status } = req.body || {};

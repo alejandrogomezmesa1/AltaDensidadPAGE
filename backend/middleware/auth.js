@@ -64,4 +64,43 @@ async function requireAdmin(req, res, next) {
     }
 }
 
-module.exports = { requireAuth, requireAdmin };
+async function requireStaff(req, res, next) {
+    try {
+        const adminKey = req.headers['x-admin-key'] || req.headers['X-Admin-Key'];
+        if (ADMIN_API_KEY && adminKey && adminKey === ADMIN_API_KEY) {
+            req.user = { rol: 'admin', via: 'admin-key' };
+            return next();
+        }
+
+        const auth = req.headers['authorization'] || req.headers['Authorization'];
+        const token = extractBearer(auth);
+        if (!token) return res.status(401).json({ success: false, message: 'Token de autorización requerido' });
+        let payload;
+        try {
+            payload = jwt.verify(token, JWT_SECRET);
+        } catch (err) {
+            return res.status(401).json({ success: false, message: 'Token inválido' });
+        }
+        const rol = String(payload.rol || '').toLowerCase();
+        if (rol === 'admin' || rol === 'superadmin' || rol === 'root') {
+            req.user = payload;
+            return next();
+        }
+        if (rol === 'empleado') {
+            const { getConnection } = require('../config/db');
+            const pool = await getConnection();
+            const [rows] = await pool.query('SELECT estado_induccion FROM Usuarios WHERE id = ?', [payload.id]);
+            if (rows.length > 0 && rows[0].estado_induccion === 'autorizado') {
+                req.user = payload;
+                return next();
+            }
+            return res.status(403).json({ success: false, message: 'Tu cuenta de empleado aún no ha sido autorizada por el Administrador.' });
+        }
+        return res.status(403).json({ success: false, message: 'Permisos insuficientes' });
+    } catch (err) {
+        console.error('Auth requireStaff error:', err);
+        return res.status(500).json({ success: false, message: 'Error en autorización' });
+    }
+}
+
+module.exports = { requireAuth, requireAdmin, requireStaff };

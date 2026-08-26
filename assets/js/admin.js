@@ -748,6 +748,11 @@ function registrarEventos() {
 // TABS
 // ============================
 function cambiarSeccion(seccion) {
+    const usuarioSesion = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (usuarioSesion.rol === 'empleado' && seccion === 'empleados') {
+        seccion = 'productos';
+    }
+
     const esProd = seccion === 'productos';
     const esEnv = seccion === 'envases';
     const esKit = seccion === 'kits';
