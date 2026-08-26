@@ -1840,20 +1840,23 @@ async function cargarEmpleados() {
 
         tbody.innerHTML = empleados.map((e, idx) => {
             let badgeEstado = '';
-            let btnAccion = '';
+            let btnsAccion = `<div style="display:flex;gap:6px;flex-wrap:wrap;">`;
 
             if (e.estado_induccion === 'autorizado') {
                 badgeEstado = `<span style="background:#16a34a;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-check-double"></i> Autorizado</span>`;
             } else if (e.estado_induccion === 'examen_aprobado') {
                 badgeEstado = `<span style="background:#2563eb;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-star"></i> Examen Aprobado</span>`;
-                btnAccion = `<button class="btn-primary" style="padding:6px 12px;font-size:0.82rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar Ingreso</button>`;
+                btnsAccion += `<button class="btn-primary" style="padding:6px 10px;font-size:0.8rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar</button>`;
             } else if (e.estado_induccion === 'bloqueado') {
                 badgeEstado = `<span style="background:#dc2626;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-lock"></i> Bloqueado</span>`;
-                btnAccion = `<button class="btn-secondary" style="padding:6px 12px;font-size:0.82rem;" onclick="reiniciarIntentosEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-redo"></i> Reiniciar Intentos</button>`;
+                btnsAccion += `<button class="btn-secondary" style="padding:6px 10px;font-size:0.8rem;" onclick="reiniciarIntentosEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-redo"></i> Reiniciar</button>`;
             } else {
                 badgeEstado = `<span style="background:#d97706;color:#fff;padding:4px 8px;border-radius:4px;font-weight:600;font-size:0.8rem;"><i class="fas fa-hourglass-half"></i> En Capacitación</span>`;
-                btnAccion = `<button class="btn-primary" style="padding:6px 12px;font-size:0.82rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar Ingreso</button>`;
+                btnsAccion += `<button class="btn-primary" style="padding:6px 10px;font-size:0.8rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar</button>`;
             }
+
+            btnsAccion += `<button class="btn-secondary" style="padding:6px 10px;font-size:0.8rem;" title="Cambiar Contraseña" onclick="cambiarPasswordEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-key"></i> Clave</button>`;
+            btnsAccion += `</div>`;
 
             const fechaReg = e.creado_en ? new Date(e.creado_en).toLocaleDateString('es-CO') : '-';
 
@@ -1866,13 +1869,55 @@ async function cargarEmpleados() {
                     <td data-label="Progreso Lecturas">${e.items_completados} / ${e.totalItems} (${e.porcentajeLectura}%)</td>
                     <td data-label="Examen">${e.intentos_examen} / 3 (Nota: ${e.ultimo_puntaje}%)</td>
                     <td data-label="Estado Inducción">${badgeEstado}</td>
-                    <td data-label="Acciones">${btnAccion}</td>
+                    <td data-label="Acciones">${btnsAccion}</td>
                 </tr>
             `;
         }).join('');
     } catch (err) {
         mostrarAlerta('Error al cargar empleados: ' + err.message, 'error');
         tbody.innerHTML = `<tr><td colspan="8" class="empty-row">Error al conectar con el servidor.</td></tr>`;
+    }
+}
+
+async function cambiarPasswordEmpleado(id, nombre) {
+    const { value: nuevaPassword } = await Swal.fire({
+        title: `Cambiar Contraseña de ${nombre}`,
+        input: 'text',
+        inputLabel: 'Ingresa la nueva contraseña para el colaborador (mínimo 6 caracteres):',
+        inputPlaceholder: 'Escribe la nueva contraseña...',
+        showCancelButton: true,
+        confirmButtonText: 'Guardar Contraseña',
+        cancelButtonText: 'Cancelar',
+        inputValidator: (val) => {
+            if (!val || val.length < 6) {
+                return 'La contraseña debe tener al menos 6 caracteres';
+            }
+        }
+    });
+
+    if (!nuevaPassword) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_EMPLEADOS_URL}/cambiar-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ usuario_id: id, nueva_password: nuevaPassword })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Contraseña Actualizada!',
+            html: `La contraseña para <strong>${nombre}</strong> se cambió con éxito a:<br><br><code style="font-size:1.2rem;color:#D4AF37;background:#000;padding:8px 16px;border-radius:6px;display:inline-block;">${escHtml(nuevaPassword)}</code>`,
+            confirmButtonText: 'Entendido'
+        });
+    } catch (err) {
+        Swal.fire('Error', 'No se pudo cambiar la contraseña: ' + err.message, 'error');
     }
 }
 
@@ -1990,11 +2035,20 @@ function registrarEventosEmpleados() {
                 formBox.classList.add('hidden');
                 formSubmit.reset();
 
+                const htmlMessage = `
+                    El colaborador <strong>${nombre}</strong> fue registrado con éxito.<br><br>
+                    <div style="background:#0a0a0a; border:1px solid #D4AF37; padding:14px; border-radius:8px; text-align:left; margin:10px 0; font-size:0.95rem;">
+                        <strong style="color:#D4AF37;">Credenciales del Empleado:</strong><br>
+                        📧 <strong>Usuario:</strong> <code>${escHtml(email)}</code><br>
+                        🔑 <strong>Contraseña:</strong> <code style="color:#D4AF37; font-weight:bold; font-size:1.1rem;">${escHtml(password)}</code>
+                    </div>
+                `;
+
                 if (data.data && data.data.whatsapp_url) {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Empleado Registrado!',
-                        html: `El colaborador <strong>${nombre}</strong> fue registrado con éxito.<br><br>¿Deseas enviar sus credenciales por WhatsApp ahora?`,
+                        html: htmlMessage + `<p style="color:#aaa; font-size:0.85rem;">Puedes hacer clic en el botón a continuación para enviar los datos por WhatsApp.</p>`,
                         showCancelButton: true,
                         confirmButtonColor: '#25D366',
                         confirmButtonText: '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp',
@@ -2005,7 +2059,12 @@ function registrarEventosEmpleados() {
                         }
                     });
                 } else {
-                    Swal.fire('¡Registrado!', data.message, 'success');
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Empleado Registrado!',
+                        html: htmlMessage,
+                        confirmButtonText: 'Entendido'
+                    });
                 }
 
                 cargarEmpleados();
@@ -2018,3 +2077,4 @@ function registrarEventosEmpleados() {
 
 window.autorizarEmpleado = autorizarEmpleado;
 window.reiniciarIntentosEmpleado = reiniciarIntentosEmpleado;
+window.cambiarPasswordEmpleado = cambiarPasswordEmpleado;

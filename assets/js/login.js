@@ -71,9 +71,9 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
 
         mostrarAlerta(`¡Bienvenido, ${data.data.nombre}!`, 'exito');
 
-        // Redirigir según rol
+        // Redirigir según rol (admin y empleado van al panel admin)
         setTimeout(() => {
-            if (data.data.rol === 'admin') {
+            if (data.data.rol === 'admin' || data.data.rol === 'empleado') {
                 window.location.href = 'admin.html';
             } else {
                 window.location.href = 'index.html';
@@ -152,6 +152,7 @@ document.getElementById('formRegister').addEventListener('submit', async (e) => 
     const token = localStorage.getItem('token');
     if (token) {
         const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-        window.location.href = usuario.rol === 'admin' ? 'admin.html' : 'index.html';
+        const esStaff = usuario.rol === 'admin' || usuario.rol === 'empleado';
+        window.location.href = esStaff ? 'admin.html' : 'index.html';
     }
 })();

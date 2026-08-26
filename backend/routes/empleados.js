@@ -154,4 +154,34 @@ router.post('/reiniciar-intentos', requireAdmin, async (req, res) => {
     }
 });
 
+// POST /api/admin/empleados/cambiar-password (Solo Admin)
+router.post('/cambiar-password', requireAdmin, async (req, res) => {
+    try {
+        const { usuario_id, nueva_password } = req.body;
+        if (!usuario_id || !nueva_password) {
+            return res.status(400).json({ success: false, message: 'ID del empleado y nueva contraseña son requeridos' });
+        }
+        if (nueva_password.length < 6) {
+            return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 6 caracteres' });
+        }
+
+        const pool = await getConnection();
+        const [emp] = await pool.query('SELECT id, nombre FROM Usuarios WHERE id = ? AND rol = "empleado"', [usuario_id]);
+        if (emp.length === 0) {
+            return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
+        }
+
+        const password_hash = await bcrypt.hash(nueva_password, 10);
+        await pool.query('UPDATE Usuarios SET password_hash = ? WHERE id = ?', [password_hash, usuario_id]);
+
+        res.json({
+            success: true,
+            message: `Contraseña de ${emp[0].nombre} actualizada correctamente.`
+        });
+    } catch (err) {
+        console.error('Error al cambiar contraseña de empleado:', err);
+        res.status(500).json({ success: false, message: 'Error al cambiar la contraseña del colaborador' });
+    }
+});
+
 module.exports = router;
