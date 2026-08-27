@@ -1604,23 +1604,21 @@ function renderModuloLectura(idx) {
     const imgUrl = mod.imagen_url || '';
     const vUrl = mod.video_url || '';
 
-    if (imgUrl) {
-        mediaHtml += `
-            <div style="margin-bottom: 24px; text-align: center; background: #0b0b0b; padding: 18px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.4); box-shadow: 0 6px 20px rgba(0,0,0,0.7);">
-                <img src="${escHtml(imgUrl)}" alt="${escHtml(mod.titulo)}" style="max-width: 100%; max-height: 580px; border-radius: 8px; object-fit: contain; box-shadow: 0 4px 15px rgba(0,0,0,0.6); cursor: pointer;" onclick="window.open('${escHtml(imgUrl)}', '_blank')">
-                <p style="color:#aaa; font-size:0.82rem; margin-top:10px;"><i class="fas fa-search-plus"></i> Haz clic en la imagen para abrirla a resolución completa</p>
-            </div>
-        `;
-    }
-
     if (mod.tipo === 'video' || vUrl) {
-        mediaHtml += `
+        mediaHtml = `
             <div style="margin-bottom: 24px; text-align: center; background: #050505; padding: 18px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.4); box-shadow: 0 6px 20px rgba(0,0,0,0.7);">
                 <h4 style="color:#D4AF37; margin: 0 0 12px 0; font-size:1.05rem;"><i class="fas fa-play-circle"></i> Video Explicativo del Módulo</h4>
                 <video controls style="max-width: 100%; max-height: 520px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6);" preload="metadata">
                     <source src="${escHtml(vUrl)}" type="video/mp4">
                     Tu navegador no soporta el reproductor de video.
                 </video>
+            </div>
+        `;
+    } else if (imgUrl) {
+        mediaHtml = `
+            <div style="margin-bottom: 24px; text-align: center; background: #0b0b0b; padding: 18px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.4); box-shadow: 0 6px 20px rgba(0,0,0,0.7);">
+                <img src="${escHtml(imgUrl)}" alt="${escHtml(mod.titulo)}" style="max-width: 100%; max-height: 580px; border-radius: 8px; object-fit: contain; box-shadow: 0 4px 15px rgba(0,0,0,0.6); cursor: pointer;" onclick="window.open('${escHtml(imgUrl)}', '_blank')">
+                <p style="color:#aaa; font-size:0.82rem; margin-top:10px;"><i class="fas fa-search-plus"></i> Haz clic en la imagen para abrirla a resolución completa</p>
             </div>
         `;
     }
