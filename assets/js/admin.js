@@ -1511,10 +1511,16 @@ async function cargarProgresoInduccion() {
     }
 }
 
-function actualizarBarraProgresoInduccion() {
+function actualizarBarraProgresoInduccion(idxActual) {
     const total = induccionItems.length;
     const completados = induccionItemsCompletados.length;
     const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
+
+    let moduloNum = completados < total ? completados + 1 : total;
+    if (typeof idxActual === 'number' && idxActual >= 0) {
+        moduloNum = idxActual + 1;
+    }
+    if (moduloNum > total) moduloNum = total;
 
     const barra = document.getElementById('induccionBarraProgreso');
     const texto = document.getElementById('induccionProgresoTexto');
@@ -1522,8 +1528,8 @@ function actualizarBarraProgresoInduccion() {
     const badge = document.getElementById('induccionBadgeEstado');
 
     if (barra) barra.style.width = `${porcentaje}%`;
-    if (texto) texto.textContent = `Progreso de Lectura de Módulos: ${porcentaje}%`;
-    if (contador) contador.textContent = `Módulo ${completados} de ${total}`;
+    if (texto) texto.textContent = `Progreso de Capacitación: ${porcentaje}%`;
+    if (contador) contador.textContent = `Módulo ${moduloNum} de ${total}`;
 
     if (badge) {
         const est = induccionProgresoData ? induccionProgresoData.usuario.estado_induccion : 'pendiente_capacitacion';
@@ -1582,6 +1588,7 @@ function renderizarPasoInduccion() {
 }
 
 function renderModuloLectura(idx) {
+    actualizarBarraProgresoInduccion(idx);
     const mod = induccionItems[idx];
     const contenedor = document.getElementById('induccionContenedorModulo');
 
@@ -1890,7 +1897,15 @@ async function cargarEmpleados() {
                 btnsAccion += `<button class="btn-primary" style="padding:6px 10px;font-size:0.8rem;" onclick="autorizarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-user-check"></i> Autorizar</button>`;
             }
 
+            // Acciones CRUD completas: Editar, Clave, Estado, Eliminar
+            btnsAccion += `<button class="btn-secondary" style="padding:6px 10px;font-size:0.8rem;background:#0284c7;color:#fff;" title="Editar Datos" onclick="editarEmpleado(${e.id}, '${escHtml(e.nombre)}', '${escHtml(e.email)}')"><i class="fas fa-edit"></i> Editar</button>`;
             btnsAccion += `<button class="btn-secondary" style="padding:6px 10px;font-size:0.8rem;" title="Cambiar Contraseña" onclick="cambiarPasswordEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-key"></i> Clave</button>`;
+            
+            const btnEstadoColor = e.activo ? '#15803d' : '#6b7280';
+            const btnEstadoTexto = e.activo ? 'Activo' : 'Inactivo';
+            btnsAccion += `<button class="btn-secondary" style="padding:6px 10px;font-size:0.8rem;background:${btnEstadoColor};color:#fff;" title="Cambiar Estado Activo/Inactivo" onclick="toggleEstadoEmpleado(${e.id}, '${escHtml(e.nombre)}', ${e.activo ? 1 : 0})"><i class="fas fa-toggle-on"></i> ${btnEstadoTexto}</button>`;
+            
+            btnsAccion += `<button class="btn-danger" style="padding:6px 10px;font-size:0.8rem;background:#dc2626;color:#fff;" title="Eliminar Colaborador" onclick="eliminarEmpleado(${e.id}, '${escHtml(e.nombre)}')"><i class="fas fa-trash-alt"></i> Eliminar</button>`;
             btnsAccion += `</div>`;
 
             const fechaReg = e.creado_en ? new Date(e.creado_en).toLocaleDateString('es-CO') : '-';
@@ -1911,6 +1926,151 @@ async function cargarEmpleados() {
     } catch (err) {
         mostrarAlerta('Error al cargar empleados: ' + err.message, 'error');
         tbody.innerHTML = `<tr><td colspan="8" class="empty-row">Error al conectar con el servidor.</td></tr>`;
+    }
+}
+
+async function editarEmpleado(id, nombreActual, emailActual) {
+    const { value: formValues } = await Swal.fire({
+        title: `Editar Colaborador`,
+        html: `
+            <div style="text-align:left; display:flex; flex-direction:column; gap:12px;">
+                <label style="color:#ddd; font-weight:600; font-size:0.9rem;">Nombre Completo:</label>
+                <input id="swalEditNombre" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box;" value="${escHtml(nombreActual)}" placeholder="Nombre del colaborador">
+                
+                <label style="color:#ddd; font-weight:600; font-size:0.9rem;">Correo Electrónico:</label>
+                <input id="swalEditEmail" type="email" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box;" value="${escHtml(emailActual)}" placeholder="Correo electrónico">
+                
+                <label style="color:#ddd; font-weight:600; font-size:0.9rem;">Nueva Contraseña (opcional):</label>
+                <input id="swalEditPassword" type="password" class="swal2-input" style="margin:0; width:100%; box-sizing:border-box;" placeholder="Dejar en blanco para no cambiar">
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar Cambios',
+        cancelButtonText: 'Cancelar',
+        preConfirm: () => {
+            const nombre = document.getElementById('swalEditNombre').value.trim();
+            const email = document.getElementById('swalEditEmail').value.trim();
+            const password = document.getElementById('swalEditPassword').value;
+
+            if (!nombre || !email) {
+                Swal.showValidationMessage('Nombre y Correo son requeridos');
+                return false;
+            }
+            if (password && password.length < 6) {
+                Swal.showValidationMessage('La contraseña debe tener al menos 6 caracteres');
+                return false;
+            }
+            return { nombre, email, password };
+        }
+    });
+
+    if (!formValues) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_EMPLEADOS_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formValues)
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Colaborador Actualizado!',
+            text: data.message,
+            timer: 2000,
+            showConfirmButton: false
+        });
+        cargarEmpleados();
+    } catch (err) {
+        Swal.fire('Error', 'No se pudo actualizar el colaborador: ' + err.message, 'error');
+    }
+}
+
+async function eliminarEmpleado(id, nombre) {
+    const result = await Swal.fire({
+        title: '¿Eliminar Colaborador?',
+        html: `¿Estás seguro de eliminar permanentemente a <strong>${escHtml(nombre)}</strong>?<br><br><span style="color:#ef4444; font-size:0.9rem;">Esta acción eliminará al usuario y todo su historial de progreso en la plataforma.</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#4b5563',
+        confirmButtonText: 'Sí, Eliminar Permanentemente',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_EMPLEADOS_URL}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Eliminado!',
+            text: data.message,
+            timer: 2000,
+            showConfirmButton: false
+        });
+        cargarEmpleados();
+    } catch (err) {
+        Swal.fire('Error', 'No se pudo eliminar el colaborador: ' + err.message, 'error');
+    }
+}
+
+async function toggleEstadoEmpleado(id, nombre, estadoActual) {
+    const nuevoEstado = estadoActual ? 0 : 1;
+    const textoAccion = nuevoEstado === 1 ? 'activar' : 'desactivar';
+
+    const result = await Swal.fire({
+        title: `¿${nuevoEstado === 1 ? 'Activar' : 'Desactivar'} Colaborador?`,
+        html: `¿Deseas ${textoAccion} el acceso de <strong>${escHtml(nombre)}</strong> al sistema?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: nuevoEstado === 1 ? '#16a34a' : '#d97706',
+        cancelButtonColor: '#4b5563',
+        confirmButtonText: `Sí, ${textoAccion}`,
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(`${API_EMPLEADOS_URL}/${id}/estado`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ activo: nuevoEstado })
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Estado Actualizado!',
+            text: data.message,
+            timer: 2000,
+            showConfirmButton: false
+        });
+        cargarEmpleados();
+    } catch (err) {
+        Swal.fire('Error', 'No se pudo actualizar el estado: ' + err.message, 'error');
     }
 }
 

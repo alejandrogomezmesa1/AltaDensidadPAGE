@@ -184,4 +184,100 @@ router.post('/cambiar-password', requireAdmin, async (req, res) => {
     }
 });
 
+// PUT /api/admin/empleados/:id (Editar Datos del Empleado)
+router.put('/:id', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre, email, password } = req.body;
+
+        if (!nombre || !email) {
+            return res.status(400).json({ success: false, message: 'Nombre y email son requeridos' });
+        }
+
+        const pool = await getConnection();
+        const [emp] = await pool.query('SELECT id FROM Usuarios WHERE id = ? AND rol = "empleado"', [id]);
+        if (emp.length === 0) {
+            return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
+        }
+
+        const [dup] = await pool.query('SELECT id FROM Usuarios WHERE email = ? AND id != ?', [email, id]);
+        if (dup.length > 0) {
+            return res.status(409).json({ success: false, message: 'El email ya está registrado por otro usuario' });
+        }
+
+        if (password && password.trim().length >= 6) {
+            const password_hash = await bcrypt.hash(password, 10);
+            await pool.query(
+                'UPDATE Usuarios SET nombre = ?, email = ?, password_hash = ? WHERE id = ?',
+                [nombre, email, password_hash, id]
+            );
+        } else {
+            await pool.query(
+                'UPDATE Usuarios SET nombre = ?, email = ? WHERE id = ?',
+                [nombre, email, id]
+            );
+        }
+
+        res.json({
+            success: true,
+            message: 'Datos del colaborador actualizados correctamente.'
+        });
+    } catch (err) {
+        console.error('Error al editar empleado:', err);
+        res.status(500).json({ success: false, message: 'Error al actualizar datos del colaborador' });
+    }
+});
+
+// DELETE /api/admin/empleados/:id (Eliminar Empleado)
+router.delete('/:id', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const pool = await getConnection();
+        const [emp] = await pool.query('SELECT id, nombre FROM Usuarios WHERE id = ? AND rol = "empleado"', [id]);
+        if (emp.length === 0) {
+            return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
+        }
+
+        try {
+            await pool.query('DELETE FROM UsuarioProgresoInduccion WHERE usuario_id = ?', [id]);
+        } catch (e) {}
+
+        await pool.query('DELETE FROM Usuarios WHERE id = ?', [id]);
+
+        res.json({
+            success: true,
+            message: `Colaborador ${emp[0].nombre} eliminado correctamente.`
+        });
+    } catch (err) {
+        console.error('Error al eliminar empleado:', err);
+        res.status(500).json({ success: false, message: 'Error al eliminar colaborador' });
+    }
+});
+
+// PATCH /api/admin/empleados/:id/estado (Activar / Desactivar Empleado)
+router.patch('/:id/estado', requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { activo } = req.body;
+
+        const pool = await getConnection();
+        const [emp] = await pool.query('SELECT id, nombre FROM Usuarios WHERE id = ? AND rol = "empleado"', [id]);
+        if (emp.length === 0) {
+            return res.status(404).json({ success: false, message: 'Empleado no encontrado' });
+        }
+
+        const nuevoEstado = activo ? 1 : 0;
+        await pool.query('UPDATE Usuarios SET activo = ? WHERE id = ?', [nuevoEstado, id]);
+
+        res.json({
+            success: true,
+            message: `Estado de ${emp[0].nombre} actualizado a ${nuevoEstado === 1 ? 'Activo' : 'Inactivo'}.`
+        });
+    } catch (err) {
+        console.error('Error al cambiar estado de empleado:', err);
+        res.status(500).json({ success: false, message: 'Error al cambiar estado del colaborador' });
+    }
+});
+
 module.exports = router;

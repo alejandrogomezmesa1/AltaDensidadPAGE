@@ -3,1189 +3,2134 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 const { getConnection } = require('./config/db');
 
 async function seedCapacitacion(existingPool) {
-    console.log('--- Iniciando Siembra de Datos de Capacitación e Inducción ---');
+    console.log('--- Iniciando Siembra de Datos de Capacitación e Inducción (53 Módulos) ---');
     try {
         const pool = existingPool || await getConnection();
 
-        // Módulos de Capacitación en la secuencia solicitada
         const modulos = [
             {
-                titulo: '1. Agenda de Inducción',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto1_agenda.png',
-                video_url: null,
-                contenido: `AGENDA DE INDUCCIÓN - SEPTIEMBRE 01 DE 2026:
-
-• Espacio 1 (8:00 AM a 8:30 AM): Bienvenida y presentación, historia, misión y visión.
-• Espacio 2 (8:30 AM a 9:00 AM): Reglamento interno, políticas, horarios, turno, código de vestimenta, manejo de información confidencial.
-• Espacio 3 (9:00 AM a 10:00 AM): Portafolio de productos, tipos de perfumes.
-• Espacio 4 (10:30 AM a 12:00 PM): Seguridad y salud en el trabajo, uso de EPP, presentación de brigada, COPASST, COCOLA, rutas de evacuación y plan de emergencia.
-• HORA DE ALMUERZO.`,
-                orden: 1,
-                preguntas: [
-                    {
-                        pregunta: '¿A qué hora inicia la jornada de bienvenida y presentación de la empresa según la agenda?',
-                        opciones: JSON.stringify(['7:30 AM', '8:00 AM', '8:30 AM', '9:00 AM']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿En qué espacio se abordan los temas de Reglamento Interno, políticas y código de vestimenta?',
-                        opciones: JSON.stringify(['Espacio 1 (8:00 a 8:30)', 'Espacio 2 (8:30 a 9:00)', 'Espacio 3 (9:00 a 10:00)', 'Espacio 4 (10:30 a 12:00)']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Qué temas se tratan en el Espacio 4 de la agenda?',
-                        opciones: JSON.stringify(['Únicamente hora de almuerzo', 'Ventas y descuentos de perfumes', 'Seguridad y salud en el trabajo, EPP, brigada, COPASST, COCOLA y plan de emergencia', 'Presentación de nuevos clientes']),
-                        respuesta_correcta: 2
-                    }
-                ]
+                        "orden": 1,
+                        "titulo": "1. Bienvenida al Proceso de Inducción y Capacitación",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/1.png",
+                        "video_url": null,
+                        "contenido": "¡BIENVENIDO(A) A FRAGANCIAS ALTA DENSIDAD!\n\nHoy comienzas tu proceso institucional de inducción y capacitación en nuestra empresa. En Fragancias Alta Densidad creemos en la excelencia, la pasión por la perfumería y el compromiso con cada integrante de nuestro equipo.\n\nA través de estos 53 módulos aprenderás primero los aspectos institucionales y de inducción (misión, visión, historia, reglamento interno, seguridad en el trabajo y brigadas), y posteriormente la capacitación operativa (portafolio de fragancias, atención al cliente, estándares de imagen personal y facturación en sistema SIIGO).",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué proceso comienzas hoy en Fragancias Alta Densidad?",
+                                                "opciones": [
+                                                            "Proceso institucional de inducción y capacitación",
+                                                            "Un examen externo voluntario",
+                                                            "Una auditoría de inventario",
+                                                            "Trámite de retiro"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo se estructura la formación interactiva?",
+                                                "opciones": [
+                                                            "En dos etapas: inducción institucional primero y capacitación operativa después",
+                                                            "Solo en manuales impresos",
+                                                            "Un video sin preguntas",
+                                                            "Charlas informales sin evaluación"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo principal de completar esta capacitación?",
+                                                "opciones": [
+                                                            "Asegurar la excelencia operacional, normatividad, seguridad y calidad en el servicio",
+                                                            "Pasar el tiempo en tienda",
+                                                            "Modificar las políticas de la empresa",
+                                                            "Omitir la atención al cliente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '2. Video Institucional Perfumería Alta Densidad',
-                tipo: 'video',
-                imagen_url: null,
-                video_url: '/assets/img/Crear_un_video_elegante_y_prof.mp4',
-                contenido: `VIDEO INSTITUCIONAL DE INDUCCIÓN:
-
-Por favor reproduce y visualiza detenidamente el video institucional de Perfumería Alta Densidad para conocer nuestra esencia de marca, estándares de elegancia y propuesta de valor en fragancias premium de alta fijación.`,
-                orden: 2,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es el objetivo principal del video institucional de Alta Densidad?',
-                        opciones: JSON.stringify(['Presentar la elegancia, identidad y propuesta de valor de la marca', 'Explicar trámites contables externos', 'Mostrar empaques defectuosos', 'Ninguno de los anteriores']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué caracteriza a las fragancias de Alta Densidad según la identidad institucional?',
-                        opciones: JSON.stringify(['Baja concentración y corta duración', 'Alta fijación, concentración y calidad superior', 'Perfumes únicamente de muestra', 'Aromas sin garantía de calidad']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Por qué es obligatorio visualizar el contenido audiovisual durante la capacitación?',
-                        opciones: JSON.stringify(['Para afianzar el conocimiento de la marca y garantizar la excelencia en el servicio', 'Es un paso opcional sin relevancia', 'Solo para probar el sistema reproductor', 'Para consumir tiempo']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 2,
+                        "titulo": "2. Agenda de Inducción",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/2.png",
+                        "video_url": null,
+                        "contenido": "AGENDA DE INDUCCIÓN INSTITUCIONAL:\n\n• Espacio 1 (8:00 AM a 8:30 AM): Bienvenida y presentación institucional, historia, misión y visión.\n• Espacio 2 (8:30 AM a 9:00 AM): Reglamento interno, políticas, horarios, turno, código de vestimenta y confidencialidad.\n• Espacio 3 (9:00 AM a 10:00 AM): Portafolio de productos y líneas de perfumería.\n• Espacio 4 (10:30 AM a 12:00 PM): Seguridad y Salud en el Trabajo (SST), EPP, presentación de Brigada, COPASST, COCOLA y plan de emergencia.\n• HORA DE ALMUERZO Y EVALUACIÓN FINAL.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿A qué hora inicia la presentación institucional según la agenda?",
+                                                "opciones": [
+                                                            "7:30 AM",
+                                                            "8:00 AM",
+                                                            "8:30 AM",
+                                                            "9:00 AM"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿En qué espacio de la agenda se trata el Reglamento Interno y vestimenta?",
+                                                "opciones": [
+                                                            "Espacio 1 (8:00 a 8:30)",
+                                                            "Espacio 2 (8:30 a 9:00)",
+                                                            "Espacio 3 (9:00 a 10:00)",
+                                                            "Espacio 4 (10:30 a 12:00)"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Qué temas corresponden al Espacio 4 de la jornada?",
+                                                "opciones": [
+                                                            "Seguridad y Salud en el Trabajo, EPP, Brigada, COPASST, COCOLA y Plan de Emergencia",
+                                                            "Ventas al por mayor",
+                                                            "Trámites bancarios",
+                                                            "Hora de almuerzo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '3. Nuestra Misión',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto2_mision.png',
-                video_url: null,
-                contenido: `NUESTRA MISIÓN:
-
-Ofrecer fragancias de alta calidad a precios competitivos, brindando a nuestros clientes una experiencia de compra cercana, agradable y confiable. Buscamos que cada aroma permita a las personas sentirse cómodas, seguras y auténticas, acompañándolas en los diferentes momentos de su día a día.`,
-                orden: 3,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es el compromiso principal expuesto en Nuestra Misión?',
-                        opciones: JSON.stringify(['Ofrecer fragancias de alta calidad a precios competitivos', 'Vender únicamente al por mayor fuera del país', 'Reducir la atención al cliente', 'Vender productos sin garantía']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué tipo de experiencia de compra busca brindar Alta Densidad?',
-                        opciones: JSON.stringify(['Distante y compleja', 'Cercana, agradable y confiable', 'Lenta e impersonal', 'Sin soporte técnico']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Qué busca transmitir la marca a través de sus aromas en el día a día del cliente?',
-                        opciones: JSON.stringify(['Permitir que las personas se sientan cómodas, seguras y auténticas', 'Inseguridad y duda', 'Sensación de fragilidad', 'Indiferencia total']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 3,
+                        "titulo": "3. Video Institucional Perfumería Alta Densidad",
+                        "tipo": "video",
+                        "imagen_url": "/assets/img/capacitacion/3.png",
+                        "video_url": "/assets/img/Crear_un_video_elegante_y_prof.mp4",
+                        "contenido": "VIDEO INSTITUCIONAL DE INDUCCIÓN:\n\nVisualiza el video institucional de Perfumería Alta Densidad para conocer nuestra esencia de marca, estándares de elegancia, sofisticación en tiendas y la propuesta de valor en fragancias premium de alta fijación.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el propósito del video institucional?",
+                                                "opciones": [
+                                                            "Presentar la identidad, elegancia y propuesta de valor de la marca",
+                                                            "Mostrar empaques defectuosos",
+                                                            "Explicar contabilidad general",
+                                                            "Vender productos de otras marcas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué caracteriza a nuestras fragancias según la presentación institucional?",
+                                                "opciones": [
+                                                            "Baja duración de aroma",
+                                                            "Alta fijación, concentración cuidadas y lujo accesible",
+                                                            "Perfumes solo de muestra",
+                                                            "Falta de garantía de calidad"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante asimilar el video institucional?",
+                                                "opciones": [
+                                                            "Para proyectar la imagen de marca y brindar una atención sofisticada",
+                                                            "Es un paso opcional sin impacto",
+                                                            "Para cambiar el logo de la tienda",
+                                                            "Solo para usar el reproductor"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '4. Nuestra Visión',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto3_vision.png',
-                video_url: null,
-                contenido: `NUESTRA VISIÓN:
-
-Para el año 2028, Fragancias de Alta Densidad busca consolidarse como una marca referente en el mercado colombiano de fragancias, reconocida por la calidad de sus precios accesibles y la atención personalizada. Aspiramos a fortalecer nuestra presencia en diferentes regiones del país y continuar innovando para ofrecer experiencias únicas a nuestros clientes.`,
-                orden: 4,
-                preguntas: [
-                    {
-                        pregunta: '¿Para qué año proyecta la empresa consolidarse como marca referente en Colombia?',
-                        opciones: JSON.stringify(['2025', '2028', '2030', '2040']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Por qué atributos busca ser reconocida Alta Densidad según su visión?',
-                        opciones: JSON.stringify(['Precios altos y atención impersonal', 'Calidad de precios accesibles y atención personalizada', 'Cierre de puntos de venta', 'Poca variedad de fragancias']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Hacia qué metas de expansión se encamina la visión organizacional?',
-                        opciones: JSON.stringify(['Fortalecer la presencia en diferentes regiones del país e innovar continuamente', 'Permanecer en una sola ciudad sin crecer', 'Abandonar el mercado nacional', 'Vender solo por catálogo impreso']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 4,
+                        "titulo": "4. Conoce Más de Nosotros",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/4.png",
+                        "video_url": null,
+                        "contenido": "FRAGANCIAS ALTA DENSIDAD - CONOCE MÁS DE NOSOTROS:\n\n\"La esencia de lujo a una fracción del precio\"\n\nNuestra propuesta se basa en acercar el universo de la perfumería de alta gama a todas las personas. Nos enfocamos en ofrecer fragancias con alta fijación olfativa, empaques elegantes y precios competitivos, acompañadas de un servicio personalizado.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el eslogan corporativo de la marca?",
+                                                "opciones": [
+                                                            "La esencia de lujo a una fracción del precio",
+                                                            "Perfumes costosos para pocos",
+                                                            "Ventas al por mayor exclusivamente",
+                                                            "Fragancias sin garantía"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es la promesa principal hacia los clientes?",
+                                                "opciones": [
+                                                            "Ofrecer fragancias de alta calidad y fijación a precios justos y competitivos",
+                                                            "Vender perfumes de baja duración",
+                                                            "Cerrar tiendas físicas",
+                                                            "Reducir la variedad de aromas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué atributos destacan en nuestra propuesta de valor?",
+                                                "opciones": [
+                                                            "Calidad de esencias, empaques elegantes, precios accesibles y atención cercana",
+                                                            "Impersonalidad y desorden",
+                                                            "Precios elevados sin garantía",
+                                                            "Atención apática"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '5. Nuestra Historia',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto4_historia.png',
-                video_url: null,
-                contenido: `NUESTRA HISTORIA:
-
-Una historia que comenzó con un sueño y hoy sigue creciendo para dejar huella en cada aroma.
-
-• 2024 - Nace nuestra marca: Surge la idea de crear perfumes duraderos, de alta calidad y a precios accesibles, pensando en todas las personas.
-• 2024 - 2025 - Primeros pasos: Comenzamos a construir nuestra identidad, a conocer los gustos de nuestros clientes y a ampliar nuestra variedad de fragancias.
-• 2025 - Crecimiento: Nuestra marca empieza a ganar reconocimiento gracias a la calidad de nuestros productos, precios competitivos y atención cercana.
-• 2026 - Consolidación: Fortalecemos nuestro portafolio y mejoramos continuamente nuestros productos, buscando ofrecer una experiencia de compra cada vez mejor.
-• Nuevos Proyectos: Apostamos por seguir innovando y proyectamos el desarrollo de fragancias propias que nos permitan diferenciarnos y ofrecer aromas únicos.`,
-                orden: 5,
-                preguntas: [
-                    {
-                        pregunta: '¿En qué año nació la marca Fragancias Alta Densidad?',
-                        opciones: JSON.stringify(['2022', '2024', '2025', '2026']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Qué hito marca el año 2026 en la línea de tiempo de la empresa?',
-                        opciones: JSON.stringify(['Consolidación y fortalecimiento del portafolio', 'Nacimiento de la idea inicial', 'Primeros pasos de exploración', 'Creación de marca externa']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿En qué consisten los nuevos proyectos de Alta Densidad?',
-                        opciones: JSON.stringify(['Innovar continuamente y proyectar el desarrollo de fragancias propias', 'Detener el desarrollo de perfumes', 'Vender solo fragancias importadas de terceros', 'Descontinuar productos']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 5,
+                        "titulo": "5. Nuestra Misión",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/5.png",
+                        "video_url": null,
+                        "contenido": "NUESTRA MISIÓN:\n\nOfrecer fragancias de alta calidad a precios competitivos, brindando a nuestros clientes una experiencia de compra cercana, agradable y confiable. Buscamos que cada aroma permita a las personas sentirse cómodas, seguras y auténticas, acompañándolas en los diferentes momentos de su día a día.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el compromiso central expresado en Nuestra Misión?",
+                                                "opciones": [
+                                                            "Ofrecer fragancias de alta calidad a precios competitivos con atención cercana y confiable",
+                                                            "Vender al por mayor fuera del país",
+                                                            "Disminuir la atención al cliente",
+                                                            "Vender productos sin garantía"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué tipo de experiencia de compra busca generar la empresa?",
+                                                "opciones": [
+                                                            "Distante y fría",
+                                                            "Cercana, agradable y confiable",
+                                                            "Lenta e impersonal",
+                                                            "Sin acompañamiento"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Qué busca transmitir la marca a través de sus perfumes?",
+                                                "opciones": [
+                                                            "Que las personas se sientan cómodas, seguras y auténticas en su día a día",
+                                                            "Inseguridad y molestia",
+                                                            "Sensación de incomodidad",
+                                                            "Indiferencia total"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '6. Nuestro Reglamento Interno (Líder de Punto)',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto5_reglamento.png',
-                video_url: null,
-                contenido: `NUESTRO REGLAMENTO INTERNO - APLICADO: LÍDER DE PUNTO (VERSIÓN 1.0):
-
-Este reglamento establece los lineamientos, políticas operativas, código de vestimenta, horarios, manejo confidencial y deberes fundamentales para los colaboradores y Líderes de Punto de Alta Densidad, garantizando un ambiente seguro, transparente y profesional.`,
-                orden: 6,
-                preguntas: [
-                    {
-                        pregunta: '¿A qué cargo o rol aplica específicamente la Versión 1.0 de este reglamento expuesto?',
-                        opciones: JSON.stringify(['Líder de Punto', 'Cliente ocasional', 'Empresa de envíos', 'Diseñador externo']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es el propósito del Reglamento Interno de Trabajo?',
-                        opciones: JSON.stringify(['Garantizar normas, deberes, seguridad y excelencia operacional', 'Imponer sanciones arbitrarias', 'Limitar los derechos laborales', 'Aumentar el precio de venta']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es importante que el Líder de Punto cumpla y haga cumplir este reglamento?',
-                        opciones: JSON.stringify(['Para asegurar la calidad en la atención, la disciplina y el adecuado funcionamiento del punto de venta', 'No es necesario si hay buenas ventas', 'Solo aplica durante las auditorías', 'Únicamente por orden administrativa voluntaria']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 6,
+                        "titulo": "6. Nuestra Visión",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/6.png",
+                        "video_url": null,
+                        "contenido": "NUESTRA VISIÓN:\n\nPara el año 2028, Fragancias de Alta Densidad busca consolidarse como una marca referente en el mercado colombiano de fragancias, reconocida por la calidad de sus precios accesibles y la atención personalizada. Aspiramos a fortalecer nuestra presencia en diferentes regiones del país y continuar innovando para ofrecer experiencias únicas a nuestros clientes.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Para qué año proyecta la empresa consolidarse como marca referente en Colombia?",
+                                                "opciones": [
+                                                            "2025",
+                                                            "2028",
+                                                            "2030",
+                                                            "2040"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué atributos busca destacar la empresa según su visión?",
+                                                "opciones": [
+                                                            "Calidad de precios accesibles y atención personalizada",
+                                                            "Precios inaccesibles y atención apática",
+                                                            "Cierre de puntos de venta",
+                                                            "Reducción del portafolio"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Hacia qué metas de expansión se orienta la visión organizacional?",
+                                                "opciones": [
+                                                            "Fortalecer la presencia en diferentes regiones del país e innovar continuamente",
+                                                            "Permanecer solo en una ciudad",
+                                                            "Vender únicamente por catálogo impreso",
+                                                            "Descontinuar productos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '7. Horario de Trabajo - Líder de Punto',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto6_horario.png',
-                video_url: null,
-                contenido: `HORARIO ESTABLECIDO PARA EL CARGO DE LÍDER DE PUNTO:
-
-10:00 A. M. A 6:00 P. M.`,
-                orden: 7,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es el horario establecido para el cargo de Líder de Punto en la empresa?',
-                        opciones: JSON.stringify(['8:00 AM a 4:00 PM', '10:00 AM a 6:00 PM', '12:00 PM a 8:00 PM', '7:00 AM a 3:00 PM']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿A qué hora finaliza la jornada ordinaria del Líder de Punto según la programación establecida?',
-                        opciones: JSON.stringify(['5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Por qué es indispensable conocer con claridad el horario del punto de venta?',
-                        opciones: JSON.stringify(['Para coordinar la apertura, atención al cliente y operatividad del punto', 'No es necesario', 'Solo aplica para días festivos', 'Para retirarse antes de tiempo']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 7,
+                        "titulo": "7. Nuestra Historia",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/7.png",
+                        "video_url": null,
+                        "contenido": "NUESTRA HISTORIA - LÍNEA DE TIEMPO ORGANIZACIONAL:\n\n• 2024 (Nace Nuestra Marca): Surge la idea de crear perfumes duraderos, de alta calidad y a precios accesibles.\n• 2024 - 2025 (Primeros Pasos): Construimos nuestra identidad, conocemos a los clientes y ampliamos la variedad olfativa.\n• 2025 (Crecimiento): Reconocimiento en el mercado por calidad, precios competitivos y atención cercana.\n• 2026 (Consolidación): Fortalecimiento de portafolio y mejora continua de la experiencia en tienda.\n• Nuevos Proyectos: Desarrollo de fragancias propias diferenciadoras.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿En qué año nació la marca Fragancias Alta Densidad?",
+                                                "opciones": [
+                                                            "2022",
+                                                            "2024",
+                                                            "2025",
+                                                            "2026"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Qué marca la consolidación de la empresa en el año 2026?",
+                                                "opciones": [
+                                                            "Fortalecimiento de portafolio y mejora continua de productos y servicio",
+                                                            "Primera exploración informal",
+                                                            "Cierre de tiendas físicas",
+                                                            "Venta a terceros"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿En qué consisten los nuevos proyectos de Alta Densidad?",
+                                                "opciones": [
+                                                            "Innovar continuamente y proyectar el desarrollo de fragancias propias",
+                                                            "Dejar de formular aromas",
+                                                            "Vender solo frascos vacíos",
+                                                            "Descontinuar líneas de perfumería"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '8. Deberes del Colaborador y Puntualidad',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto7_deberes_puntualidad.png',
-                video_url: null,
-                contenido: `EL COLABORADOR DEBERÁ:
-
-• CUMPLIR PUNTUALMENTE EL HORARIO ESTABLECIDO.
-• ESTAR PREPARADO PARA INICIAR SUS FUNCIONES A LAS 10:00 A. M.
-• INFORMAR OPORTUNAMENTE CUALQUIER SITUACIÓN QUE PUEDA GENERAR RETRASOS O AUSENCIAS.
-• RESPETAR LOS TIEMPOS DESTINADOS PARA ALIMENTACIÓN Y DESCANSO.
-• NO ABANDONAR EL PUNTO DE VENTA DURANTE LA JORNADA SIN AUTORIZACIÓN CUANDO ESTO AFECTE LA OPERACIÓN.
-
-LA PUNTUALIDAD SERÁ CONSIDERADA UN ELEMENTO FUNDAMENTAL DEL COMPROMISO Y LIDERAZGO DENTRO DE LA EMPRESA.`,
-                orden: 8,
-                preguntas: [
-                    {
-                        pregunta: '¿A qué hora debe estar preparado el colaborador para iniciar sus funciones?',
-                        opciones: JSON.stringify(['10:00 A. M.', '10:30 A. M.', '11:00 A. M.', 'A cualquier hora sin afán']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué debe hacer el colaborador ante una situación que pueda generar retraso o ausencia?',
-                        opciones: JSON.stringify(['No avisar a nadie', 'Informar oportunamente a su administrador o supervisor', 'Esperar al día siguiente', 'Pedir a un cliente que avise']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Cómo es considerada la puntualidad dentro de la cultura organizacional de Alta Densidad?',
-                        opciones: JSON.stringify(['Como un elemento opcional', 'Como un elemento fundamental del compromiso y liderazgo', 'Sin importancia', 'Solo exigida en reuniones']),
-                        respuesta_correcta: 1
-                    }
-                ]
+                        "orden": 8,
+                        "titulo": "8. Gestión Humana y Recursos Humanos (RRHH)",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/8.png",
+                        "video_url": null,
+                        "contenido": "TE PRESENTAMOS A DANIELA - LÍDER DE RECURSOS HUMANOS (RRHH):\n\nGestión Humana acompaña el desarrollo profesional, bienestar, nómina, inducción, capacitaciones y clima laboral de todos los colaboradores. Daniela está al frente del área para apoyarte en tu proceso dentro de Fragancias Alta Densidad.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Quién es la Líder del área de Recursos Humanos (RRHH)?",
+                                                "opciones": [
+                                                            "Daniela",
+                                                            "Victor Manuel",
+                                                            "El cliente",
+                                                            "Un auditor externo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es la misión principal del área de Recursos Humanos?",
+                                                "opciones": [
+                                                            "Acompañar el desarrollo profesional, bienestar, nómina y clima laboral del equipo",
+                                                            "Controlar la caja registradora diariamente",
+                                                            "Elaborar las fórmulas de perfumería",
+                                                            "Supervisar mantenimientos eléctricos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Ante qué situaciones debes contactar al área de Gestión Humana?",
+                                                "opciones": [
+                                                            "Inquietudes laborales, inducción, nómina, capacitaciones y bienestar",
+                                                            "Para realizar pedidos de envases a proveedores",
+                                                            "Para compras personales de los clientes",
+                                                            "Para solicitar cambios de precios"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '9. Guía de Presentación Personal y Código de Vestimenta',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto8_vestimenta.png',
-                video_url: null,
-                contenido: `GUÍA DE PRESENTACIÓN - LÍDER DE PUNTO:
-
-VESTIMENTA PERMITIDA (CÓMO SE DEBE PRESENTAR):
-Imagen cómoda, elegante, limpia y profesional. Refleja la marca.
-✓ Camisas, blusas o polos de apariencia elegante.
-✓ Pantalón formal, casual elegante o jean en buen estado.
-✓ Calzado limpio, cómodo y apropiado.
-✓ Prendas acordes con la imagen corporativa.
-
-NO PERMITIDO (CÓMO NO SE DEBE PRESENTAR):
-✕ Ropa rota, sucia o excesivamente informal.
-✕ Chanclas o calzado inadecuado.
-✕ Mensajes ofensivos o incompatibles.
-
-PROFESIONALISMO Y EXCELENCIA.`,
-                orden: 9,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es la prenda superior permitida según la guía de presentación corporativa?',
-                        opciones: JSON.stringify(['Camisas, blusas o polos de apariencia elegante', 'Esqueletos sin mangas', 'Camisetas con mensajes ofensivos', 'Ropa sucia o descosida']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué calzado está explícitamente NO PERMITIDO en el punto de venta?',
-                        opciones: JSON.stringify(['Calzado cómodo, limpio y apropiado', 'Chanclas o calzado inadecuado', 'Zapatos formales limpios', 'Mocasines casuales elegantes']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Qué proyecta la imagen personal del Líder de Punto ante el cliente?',
-                        opciones: JSON.stringify(['Refleja la marca, el profesionalismo y la excelencia de Alta Densidad', 'Únicamente el gusto personal sin importar la marca', 'No influye en las ventas', 'Indiferencia total']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 9,
+                        "titulo": "9. Reglamento Interno de Trabajo - Líder de Punto",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/9.png",
+                        "video_url": null,
+                        "contenido": "NUESTRO REGLAMENTO INTERNO - APLICADO: LÍDER DE PUNTO (VERSIÓN 1.0):\n\nEste reglamento establece los lineamientos operacionales, políticas de conducta, vestimenta, horarios y deberes fundamentales para los colaboradores y Líderes de Punto de Alta Densidad, asegurando un ambiente de trabajo justo, profesional y transparente.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿A qué cargo aplica específicamente la Versión 1.0 de este reglamento?",
+                                                "opciones": [
+                                                            "Líder de Punto y personal de tienda",
+                                                            "Clientes ocasionales",
+                                                            "Proveedores de insumos",
+                                                            "Diseñadores externos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el propósito del Reglamento Interno de Trabajo?",
+                                                "opciones": [
+                                                            "Garantizar normas, deberes, seguridad y excelencia operacional",
+                                                            "Imponer sanciones arbitrarias",
+                                                            "Limitar los descansos laborales",
+                                                            "Subir los precios de venta"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante que el Líder de Punto cumpla este reglamento?",
+                                                "opciones": [
+                                                            "Para asegurar la calidad en la atención, disciplina y adecuado funcionamiento del punto de venta",
+                                                            "Es opcional si hay buenas ventas",
+                                                            "Solo aplica durante auditorías",
+                                                            "Únicamente por solicitud voluntaria"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '10. Manejo de Información Confidencial',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto9_confidencialidad.png',
-                video_url: null,
-                contenido: `SE CONSIDERARÁ INFORMACIÓN CONFIDENCIAL, ENTRE OTROS:
-
-• Recetas y fórmulas de preparación.
-• Proporciones y concentraciones utilizadas.
-• Procesos internos de elaboración, métodos de preparación y maceración.
-• Información de proveedores, costos y precios internos.
-• Márgenes de ganancia y estrategias comerciales.
-• Información de clientes y datos financieros.
-• Inventarios y movimientos internos.
-• Contraseñas y accesos a plataformas de la empresa.
-• Documentos internos y estrategias de marketing antes de su publicación.`,
-                orden: 10,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál de las siguientes opciones se considera información altamente confidencial de la empresa?',
-                        opciones: JSON.stringify(['Recetas, fórmulas de preparación, proporciones y accesos a plataformas', 'El nombre comercial público de la marca', 'La dirección física del punto de venta expuesta', 'El catálogo general disponible en la web']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Se pueden divulgar costos internos, márgenes de ganancia o proveedores a personas externas?',
-                        opciones: JSON.stringify(['Sí, a cualquier amigo', 'No, es estrictamente confidencial y reservado de la compañía', 'Solo por redes sociales personales', 'Depende del día de la semana']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Qué manejo se debe dar a las contraseñas y accesos a las plataformas del sistema?',
-                        opciones: JSON.stringify(['Compartirlas abiertamente', 'Mantenerlas bajo estricta confidencialidad y uso autorizado', 'Anotarlas en lugares públicos visiblemente', 'Ninguno']),
-                        respuesta_correcta: 1
-                    }
-                ]
+                        "orden": 10,
+                        "titulo": "10. Objetivo del Reglamento Interno",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/10.png",
+                        "video_url": null,
+                        "contenido": "OBJETIVO DEL REGLAMENTO INTERNO:\n\nEstablecer las normas, responsabilidades y lineamientos claros que deben cumplir los colaboradores de Fragancias Alta Densidad, promoviendo el respeto, la seguridad laboral, el buen uso de los recursos y la calidad del servicio en cada punto de venta.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo central del Reglamento Interno?",
+                                                "opciones": [
+                                                            "Establecer normas, responsabilidades y lineamientos claros para todos los colaboradores",
+                                                            "Incrementar los precios al público",
+                                                            "Disminuir la garantía de los productos",
+                                                            "Evitar el uso de computadores"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué ambiente promueve el cumplimiento de las normas internas?",
+                                                "opciones": [
+                                                            "Un entorno de trabajo seguro, ordenado, respetuoso y eficiente",
+                                                            "Un ambiente de desorganización e impuntualidad",
+                                                            "Secretismo y falta de transparencia",
+                                                            "Conflictos interpersonales"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Quiénes deben acatar las normas descritas en el reglamento?",
+                                                "opciones": [
+                                                            "Todos los colaboradores de la empresa en sus jornadas de trabajo",
+                                                            "Solo el personal en periodo de prueba",
+                                                            "Únicamente los administradores generales",
+                                                            "Nadie en particular"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '11. Identificación, Liderazgo Positivo y Responsabilidades',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto10_liderazgo.png',
-                video_url: null,
-                contenido: `IDENTIFICACIÓN DEL LÍDER DE PUNTO:
-
-EL LÍDER COMO REFERENCIA:
-El Líder de Punto será una figura de referencia para clientes y colaboradores. Su liderazgo se basa en el respeto, el ejemplo, la comunicación y la responsabilidad, evitando cualquier conducta de maltrato, humillación o abuso de autoridad.
-
-RESPONSABILIDADES CLAVE:
-✓ Supervisar el correcto funcionamiento del punto.
-✓ Orientar y apoyar a los colaboradores.
-✓ Garantizar una adecuada atención al cliente.
-✓ Verificar el orden, presentación e inventarios.
-✓ Reportar novedades y velar por el cumplimiento.
-
-PRÁCTICAS PROHIBIDAS:
-✕ Maltrato o humillación.
-✕ Abuso de autoridad.
-
-LIDERAZGO POSITIVO: Respeto, Ejemplo y Comunicación.`,
-                orden: 11,
-                preguntas: [
-                    {
-                        pregunta: '¿En qué valores se fundamenta el liderazgo del Líder de Punto?',
-                        opciones: JSON.stringify(['Abuso de poder y sanciones', 'Respeto, ejemplo, comunicación y responsabilidad', 'Indiferencia hacia los colaboradores', 'Favoritismos e informalidad']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Cuáles de las siguientes son prácticas prohibidas en el liderazgo de Alta Densidad?',
-                        opciones: JSON.stringify(['Supervisar inventarios y apoyar al equipo', 'Maltrato, humillación y abuso de autoridad', 'Garantizar buena atención al cliente', 'Reportar novedades oportunamente']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Cuál es una responsabilidad clave del Líder de Punto?',
-                        opciones: JSON.stringify(['Supervisar el correcto funcionamiento, orientar colaboradores y garantizar excelente atención', 'Ignorar el orden del punto', 'Delegar todas sus responsabilidades a clientes', 'No reportar novedades del punto']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 11,
+                        "titulo": "11. Horario de Trabajo - Líder de Punto",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/11.png",
+                        "video_url": null,
+                        "contenido": "HORARIO ESTABLECIDO PARA EL CARGO DE LÍDER DE PUNTO:\n\n10:00 A. M. A 6:00 P. M.\n\nCada colaborador con el cargo de Líder de Punto debe conocer, planificar y respetar su jornada laboral ordinaria conforme al horario oficial establecido.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el horario de trabajo oficial para el cargo de Líder de Punto?",
+                                                "opciones": [
+                                                            "8:00 AM a 4:00 PM",
+                                                            "10:00 AM a 6:00 PM",
+                                                            "12:00 PM a 8:00 PM",
+                                                            "9:00 AM a 5:00 PM"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿A qué hora finaliza la jornada laboral ordinaria del Líder de Punto?",
+                                                "opciones": [
+                                                            "5:00 PM",
+                                                            "6:00 PM",
+                                                            "7:00 PM",
+                                                            "8:00 PM"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante conocer y respetar este horario?",
+                                                "opciones": [
+                                                            "Para garantizar la atención continua al público y el orden operativo de la tienda",
+                                                            "No tiene trascendencia",
+                                                            "Es un horario flexible sin hora fija",
+                                                            "Solo aplica para los fines de semana"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '12. Uso Responsable de Redes Sociales y Celular',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto11_redes_celular.png',
-                video_url: null,
-                contenido: `USO DE REDES SOCIALES Y CELULAR:
-
-El uso del teléfono celular durante la jornada deberá ser responsable y no afectar la atención al cliente ni las funciones asignadas.
-
-CONTENIDO PROHIBIDO DE PUBLICAR POR EL COLABORADOR:
-✕ Recetas o fórmulas de preparación.
-✕ Procesos internos no autorizados.
-✕ Información financiera o de ventas.
-✕ Datos personales de clientes.
-✕ Conversaciones internas de la empresa.
-✕ Fotografías de documentos privados.
-
-LAS REDES SOCIALES COMO LÍDER:
-Publicación responsable con respeto y alineada a las directrices de la administración.`,
-                orden: 12,
-                preguntas: [
-                    {
-                        pregunta: '¿Cómo debe ser el uso del teléfono celular durante la jornada laboral?',
-                        opciones: JSON.stringify(['Libre y sin restricciones en todo momento', 'Responsable, sin afectar la atención al cliente ni las funciones asignadas', 'Prohibido de llevar en el bolsillo', 'Solo para juegos en línea']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Cuál de las siguientes publicaciones está estrictamente PROHIBIDA para un colaborador?',
-                        opciones: JSON.stringify(['Publicar recetas, fórmulas, conversaciones internas y datos de clientes', 'Compartir promociones públicas oficiales', 'Difundir la imagen corporativa autorizada', 'Saludar a los seguidores de la página oficial']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿A qué directrices debe alinearse cualquier publicación sobre la empresa en redes sociales?',
-                        opciones: JSON.stringify(['A las opiniones del público', 'A las directrices y normas establecidas por la administración', 'A lo que cada colaborador desee libremente', 'A publicaciones de otras marcas']),
-                        respuesta_correcta: 1
-                    }
-                ]
+                        "orden": 12,
+                        "titulo": "12. Cumplimiento del Horario y Apertura de Tienda",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/12.png",
+                        "video_url": null,
+                        "contenido": "DEBERES DEL COLABORADOR RESPECTO AL HORARIO:\n\n1. Respetar el horario establecido (10:00 A.M. a 6:00 P.M.).\n2. Llegar con anticipación (10 a 15 minutos antes) para la apertura adecuada del punto de venta.\n3. Registrar la asistencia y el marcado de turnos según el procedimiento indicado por la empresa.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Con cuánta anticipación debe llegar el colaborador antes del inicio del turno?",
+                                                "opciones": [
+                                                            "5 minutos después",
+                                                            "10 a 15 minutos antes",
+                                                            "30 minutos después",
+                                                            "En el momento exacto sin margen de preparación"
+                                                ],
+                                                "respuesta_correcta": 1
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué se requiere llegar de 10 a 15 minutos antes?",
+                                                "opciones": [
+                                                            "Para preparar la apertura del punto, verificar vitrinas, luces y caja",
+                                                            "Para atender ventas informales afuera",
+                                                            "No hay razón específica",
+                                                            "Para retirarse temprano"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo debe registrarse la asistencia diaria?",
+                                                "opciones": [
+                                                            "Según el procedimiento oficial indicado por la empresa (biométrico o sistema)",
+                                                            "No es necesario registrar asistencia",
+                                                            "Mediante mensajes a redes personales",
+                                                            "Solo al final del mes"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '13. Uso de Elementos y Recursos de la Empresa',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto12_recursos_empresa.png',
-                video_url: null,
-                contenido: `USO DE ELEMENTOS Y RECURSOS DE LA EMPRESA:
-
-USO EXCLUSIVO AUTORIZADO - RECURSOS DE FRAGANCIAS DE ALTA DENSIDAD:
-- Equipos y hardware (computadores, impresoras).
-- Materiales y Productos.
-- Documentos y Cuentas.
-- Herramientas de trabajo.
-- Dispositivos de comunicación.
-- Uniformes y EPP (Elementos de Protección Personal).
-
-CUIDADO Y RESPONSABILIDAD:
-Cuidado activo y reporte inmediato. Los recursos deberán utilizarse exclusivamente para las actividades autorizadas. El colaborador deberá reportar inmediatamente cualquier daño, pérdida o uso no autorizado.`,
-                orden: 13,
-                preguntas: [
-                    {
-                        pregunta: '¿Para qué actividades deben utilizarse los recursos y equipos de la empresa?',
-                        opciones: JSON.stringify(['Para actividades personales y comerciales propias', 'Exclusivamente para las actividades autorizadas de la empresa', 'Para prestar a amigos o terceros', 'Para cualquier uso libre']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Qué debe hacer un colaborador si detecta daños, pérdidas o un uso no autorizado en los elementos de la empresa?',
-                        opciones: JSON.stringify(['Ocultar la situación', 'Reportar inmediatamente el daño o novedad', 'Esperar a fin de año', 'Comprar un reemplazo por su cuenta sin avisar']),
-                        respuesta_correcta: 1
-                    },
-                    {
-                        pregunta: '¿Cuáles de los siguientes son considerados recursos de la empresa sujetos a cuidado activo?',
-                        opciones: JSON.stringify(['Equipos, materiales, documentos, herramientas, dispositivos de comunicación, uniformes y EPP', 'Únicamente el teléfono personal', 'Los elementos traídos por el cliente', 'Solo los avisos publicitarios del exterior']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 13,
+                        "titulo": "13. Puntualidad, Asistencia e Imprevistos",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/13.png",
+                        "video_url": null,
+                        "contenido": "PUNTUALIDAD Y ASISTENCIA:\n\n• Llegar a tiempo en todos los turnos asignados.\n• En caso de fuerza mayor o imprevisto, informar con la mayor anticipación posible a la administración.\n• Las tardanzas e inasistencias no justificadas podrán generar llamadas de atención disciplinarias según el reglamento interno.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué debes hacer en caso de un imprevisto o fuerza mayor que impida llegar a tiempo?",
+                                                "opciones": [
+                                                            "Informar con la mayor anticipación posible a la administración",
+                                                            "No avisar y llegar cuando sea posible",
+                                                            "Esperar al siguiente día para justificar",
+                                                            "Pedirle a un cliente que avise"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué consecuencia pueden generar las tardanzas no justificadas reincidentes?",
+                                                "opciones": [
+                                                            "Llamados de atención disciplinarios según el Reglamento Interno",
+                                                            "Aumento de sueldo",
+                                                            "Permisos adicionales",
+                                                            "Felicite por escrito"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué representa la puntualidad en el equipo de Alta Densidad?",
+                                                "opciones": [
+                                                            "Respeto por los clientes, compañeros y compromiso con el trabajo",
+                                                            "Una exigencia innecesaria",
+                                                            "Un tema opcional sin impacto",
+                                                            "Un trámite de poca importancia"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '14. Incumplimiento y Debido Proceso',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto13_incumplimiento.png',
-                video_url: null,
-                contenido: `INCUMPLIMIENTO DEL REGLAMENTO INTERNO:
-
-El incumplimiento de las disposiciones establecidas en este reglamento podrá generar las medidas correspondientes de acuerdo con la gravedad de la situación, las políticas internas de la empresa y la legislación laboral colombiana aplicable.
-
-GARANTÍA DE DEBIDO PROCESO:
-Antes de imponer cualquier medida disciplinaria se deberá garantizar el debido proceso correspondiente.`,
-                orden: 14,
-                preguntas: [
-                    {
-                        pregunta: '¿Bajo qué marco se determinan las medidas ante un incumplimiento del reglamento interno?',
-                        opciones: JSON.stringify(['De acuerdo a la gravedad, las políticas internas y la legislación laboral colombiana', 'Según decisiones improvisadas sin justificación', 'Únicamente por votación de clientes', 'Sin considerar las leyes laborales']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué principio fundamental se debe garantizar siempre antes de aplicar cualquier medida disciplinaria?',
-                        opciones: JSON.stringify(['El debido proceso correspondiente', 'La sanción inmediata sin escuchar', 'La renuncia forzada', 'La divulgación pública']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es importante el debido proceso dentro de la empresa?',
-                        opciones: JSON.stringify(['Garantiza transparencia, derecho a la defensa y cumplimiento legal justo', 'Para demorar las decisiones', 'No aporta ningún valor', 'Solo aplica para el personal administrativo']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 14,
+                        "titulo": "14. Presentación Personal y Código de Vestimenta",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/14.png",
+                        "video_url": null,
+                        "contenido": "PRESENTACIÓN PERSONAL Y VESTIMENTA DEL LÍDER DE PUNTO:\n\nPortar la vestimenta adecuada definida por la empresa:\n• Pantalón negro institucional de vestir.\n• Blusa o camisa blanca impecable.\n• Calzado cómodo y adecuado (preferiblemente negro y cerrado).\n• Presentación personal impecable, cuidando la higiene personal y el orden.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el código de vestimenta oficial para el Líder de Punto?",
+                                                "opciones": [
+                                                            "Pantalón negro, camisa/blusa blanca y calzado cómodo cerrado negro",
+                                                            "Ropa deportiva de cualquier color",
+                                                            "Camiseta roja y Jean desgastado",
+                                                            "Vestuario libre sin restricción"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo debe ser el calzado utilizado durante la jornada laboral?",
+                                                "opciones": [
+                                                            "Cómodo, adecuado, preferiblemente negro y cerrado",
+                                                            "Sandalias abiertas de playa",
+                                                            "Zapatos de tacón alto incómodos",
+                                                            "Tenis deportivos de colores fosforescentes"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué se exige una presentación impecable en el punto de venta?",
+                                                "opciones": [
+                                                            "Porque el colaborador refleja la imagen, elegancia y profesionalismo de la marca",
+                                                            "Solo para fotos de publicidad",
+                                                            "Para cumplir con la fábrica de telas",
+                                                            "No tiene impacto en las ventas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '15. Portafolio de Productos - Introducción',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto14_portafolio_introduccion.png',
-                video_url: null,
-                contenido: `FRAGANCIAS DE ALTA DENSIDAD: PORTAFOLIO DE PRODUCTOS
-
-"La esencia de lujo a una fracción del precio"
-
-Bienvenido a la sección del portafolio comercial. Aquí aprenderás a identificar nuestras líneas principales de productos, perfumes originales, preparaciones y presentaciones corporativas.`,
-                orden: 15,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es el lema distintivo de Fragancias de Alta Densidad expuesto en el portafolio de productos?',
-                        opciones: JSON.stringify(['"La esencia de lujo a una fracción del precio"', '"Fragancias comunes para todos"', '"Ventas únicamente exclusivas"', '"Sin fijación ni garantía"']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es el objetivo de estudiar el Portafolio de Productos en la inducción?',
-                        opciones: JSON.stringify(['Conocer las líneas, presentaciones y oferta comercial para asesorar eficazmente al cliente', 'Solo memorizar nombres sin entenderlos', 'Reemplazar el inventario', 'Ninguno']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué valor diferencial aporta la propuesta de valor de la marca al mercado?',
-                        opciones: JSON.stringify(['Fragancias premium de alta concentración y durabilidad accesibles', 'Precios excesivamente elevados', 'Menor variedad de aromas', 'Aromas sintéticos de corta duración']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 15,
+                        "titulo": "15. Manejo y Confidencialidad de la Información",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/15.png",
+                        "video_url": null,
+                        "contenido": "MANEJO Y CONFIDENCIALIDAD DE LA INFORMACIÓN PROPRIETARIA:\n\nSe considera información reservada y confidencial de la empresa:\n• Recetas, proporciones y fórmulas de preparación de perfumería.\n• Concentraciones de esencias y secretos comerciales.\n• Cifras de ventas, datos de clientes y procesos internos del punto.\n• Mantener estricta reserva de las claves de acceso a los sistemas informáticos.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué información se considera estrictamente confidencial en Alta Densidad?",
+                                                "opciones": [
+                                                            "Recetas, fórmulas, proporciones de esencias, ventas, clientes y claves de acceso",
+                                                            "La dirección de la tienda únicamente",
+                                                            "El nombre comercial de la marca",
+                                                            "El catálogo de precios público"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Está permitido compartir datos de ventas o clientes con personas externas?",
+                                                "opciones": [
+                                                            "No, está rotundamente prohibido por la política de confidencialidad",
+                                                            "Sí, a cualquier amigo en redes sociales",
+                                                            "Solo si pagan por la información",
+                                                            "Sí, no hay restricción alguna"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo deben manejarse las claves de acceso a sistemas y dispositivos?",
+                                                "opciones": [
+                                                            "Con estricta reserva y uso personal e intransferible",
+                                                            "Anotadas en un papel pegado al mostrador",
+                                                            "Compartiéndolas con los clientes",
+                                                            "Enviándolas por chat público"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '16. Nuestra Línea de Productos',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto15_linea_productos.png',
-                video_url: null,
-                contenido: `NUESTRA LÍNEA DE PRODUCTOS:
-
-1. Perfumería Original
-2. Perfumería Preparada
-3. Dickens
-4. Splash Corporal`,
-                orden: 16,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuáles son las 4 categorías o líneas principales de productos de Alta Densidad?',
-                        opciones: JSON.stringify(['Perfumería original, Perfumería preparada, Dickens y Splash corporal', 'Solo ambientadores de carro', 'Gaseosas y bebidas', 'Únicamente cremas de manos']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué categoría hace referencia a las fragancias corporales ligeras y refrescantes del portafolio?',
-                        opciones: JSON.stringify(['Splash corporal', 'Perfumería preparada concentrada', 'Colección de envases', 'Línea de jabones']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es indispensable que el Líder de Punto diferencie la perfumería original de la preparada?',
-                        opciones: JSON.stringify(['Para brindar la asesoría correcta sobre fijación, composición y preferencias del cliente', 'Para cobrar precios aleatorios', 'No es necesario diferenciarlas', 'Solo para el empaque secundario']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 16,
+                        "titulo": "16. Cuidado y Liderazgo en el Punto de Venta",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/16.png",
+                        "video_url": null,
+                        "contenido": "CUIDADO Y LIDERAZGO EN EL PUNTO DE VENTA:\n\n• Supervisar el estado general del punto de venta (limpieza, orden, exhibición impecable).\n• Fomentar un ambiente de trabajo respetuoso, cordial y colaborativo.\n• Atender a los clientes con amabilidad, respeto y alto profesionalismo.\n• Reportar cualquier anomalía de infraestructura o stock al área correspondiente.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuáles son las responsabilidades clave del Líder de Punto en la tienda?",
+                                                "opciones": [
+                                                            "Supervisar limpieza, exhibición, fomentar respeto y brindar excelente atención",
+                                                            "Ignorar las vitrinas y delegar todo",
+                                                            "Atender únicamente cuando la tienda esté llena",
+                                                            "Realizar compras personales durante la jornada"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué tipo de ambiente laboral debe promover el Líder de Punto?",
+                                                "opciones": [
+                                                            "Respetuoso, cordial y colaborativo",
+                                                            "Hostil y competitivo",
+                                                            "Indiferente y desorganizado",
+                                                            "De desconfianza"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué debes hacer al detectar una falla en infraestructura o falta de insumos?",
+                                                "opciones": [
+                                                            "Reportarla oportunamente al área correspondiente para su gestión",
+                                                            "Guardar silencio y esperar a que alguien lo note",
+                                                            "Intentar vender menos",
+                                                            "Dejar la tienda sola"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '17. Perfumería Original',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto16_perfumeria_original.png',
-                video_url: null,
-                contenido: `PERFUMERÍA ORIGINAL:
-
-Es aquella que se vende oficialmente desde la casa o marca de dicho perfume. Vienen con sellos y tarjetas que aseguran la procedencia del perfume.`,
-                orden: 17,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué caracteriza a la Perfumería Original dentro de la oferta de la tienda?',
-                        opciones: JSON.stringify(['Es vendida oficialmente desde la casa o marca de origen con sellos y tarjetas de procedencia', 'Se prepara manualmente en el punto sin empaque original', 'Es una imitación sin garantía', 'Se vende a granel sin sello']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué elementos aseguran la procedencia y autenticidad de un perfume original?',
-                        opciones: JSON.stringify(['Los sellos, empaques oficiales y tarjetas de garantía', 'Un recibo hecho a mano', 'La recomendación verbal', 'Ningún elemento']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es importante explicar la procedencia original al cliente interesado en marcas de casa?',
-                        opciones: JSON.stringify(['Para respaldar la autenticidad y generar total confianza en su compra', 'No tiene importancia', 'Para aumentar los impuestos', 'Solo para la facturación interna']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 17,
+                        "titulo": "17. Uso de Redes Sociales y Dispositivos Móviles",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/17.png",
+                        "video_url": null,
+                        "contenido": "USO ADECUADO DE REDES SOCIALES Y CELULAR:\n\n• Uso del teléfono celular únicamente para temas laborales del punto de venta.\n• Queda prohibido el uso personal del celular (chats personales, juegos, videos) durante la atención a clientes.\n• Manejar las redes sociales personales con responsabilidad, protegiendo siempre la reputación de la empresa.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿En qué momentos está permitido el uso del celular en el punto de venta?",
+                                                "opciones": [
+                                                            "Únicamente para requerimientos y temas laborales del punto",
+                                                            "Para chatear libremente con amigos mientras se atiende",
+                                                            "Para ver películas en el mostrador",
+                                                            "En todo momento sin límite"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué se prohíbe el uso personal del celular durante la atención al cliente?",
+                                                "opciones": [
+                                                            "Porque distrae la atención, transmite falta de respeto y deteriora el servicio",
+                                                            "Para ahorrar batería del teléfono",
+                                                            "Solo por capricho del administrador",
+                                                            "No influye en el cliente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo deben manejarse las redes sociales personales respecto a la marca?",
+                                                "opciones": [
+                                                            "De manera responsable, sin publicar contenidos que comprometan la imagen corporativa",
+                                                            "Publicando secretos de la empresa",
+                                                            "Haciendo comentarios despectivos",
+                                                            "No se requiere ninguna prudencia"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '18. Perfumería Preparada',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto17_perfumeria_preparada.png',
-                video_url: null,
-                contenido: `PERFUMERÍA PREPARADA:
-
-Es una alternativa creada para quienes buscan disfrutar de fragancias con perfiles olfativos inspirados en perfumes reconocidos, ofreciendo una excelente relación entre calidad, duración y precio.
-
-Son una opción independiente, inspirada en diferentes estilos y familias olfativas.
-Vienen en diferentes presentaciones de 30, 60 y 100 ML.`,
-                orden: 18,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué es la Perfumería Preparada en Alta Densidad?',
-                        opciones: JSON.stringify(['Una opción independiente inspirada en perfumes reconocidos con excelente relación calidad, duración y precio', 'Una copia barata sin aroma', 'Un perfume usado', 'Un ambientador textil']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿En qué presentaciones de mililitros (ML) vienen las fragancias preparadas?',
-                        opciones: JSON.stringify(['30, 60 y 100 ML', '5 y 10 ML solamente', '200 y 500 ML', '1 litro']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué la perfumería preparada es muy atractiva para los clientes?',
-                        opciones: JSON.stringify(['Ofrece perfiles olfativos reconocidos de alta concentración a un precio accesible', 'Es difícil de conseguir', 'Tiene empaques desechables de plástico fino', 'No tiene variedad']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 18,
+                        "titulo": "18. Uso de Recursos de la Empresa",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/18.png",
+                        "video_url": null,
+                        "contenido": "USO DE ELEMENTOS Y RECURSOS DE LA EMPRESA:\n\n• Hacer uso exclusivo autorizado de los insumos, probadores, muestras y herramientas de trabajo.\n• Evitar el desperdicio de materia prima, fragancias en exhibición o empaques.\n• Cuidar los equipos tecnológicos, registradoras y mobiliario del punto de venta.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es la norma sobre el uso de insumos, probadores y materias primas?",
+                                                "opciones": [
+                                                            "Hacer uso exclusivo autorizado y evitar cualquier desperdicio de producto",
+                                                            "Regalarlos a amigos sin autorización",
+                                                            "Usarlos para consumo personal ilimitado",
+                                                            "Tirarlos a la basura si no gustan"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué actitud se exige frente al cuidado de los equipos tecnológicos del punto?",
+                                                "opciones": [
+                                                            "Responsabilidad, cuidado y reporte de fallas oportuno",
+                                                            "Negligencia y falta de aseo",
+                                                            "Dejar los equipos encendidos sin protección",
+                                                            "Usarlos para descargas personales"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante evitar el desperdicio en tienda?",
+                                                "opciones": [
+                                                            "Para optimizar recursos, controlar costos y garantizar stock suficiente para clientes",
+                                                            "No afecta la economía de la tienda",
+                                                            "Solo para ahorrar luz",
+                                                            "Para limitar las muestras"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '19. Línea Dickens (Mini Perfumes 10ML)',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto18_dickens.png',
-                video_url: null,
-                contenido: `DICKENS:
-
-Son mini perfumes, perfectos para llevar en el bolso o tener una primera impresión sobre el perfume que desea el cliente comprar.
-
-Vienen en presentaciones de 10ML y su precio depende de si son extraídas de perfumes originales o preparadas.`,
-                orden: 19,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué es la línea Dickens en el portafolio de Alta Densidad?',
-                        opciones: JSON.stringify(['Mini perfumes de 10ML prácticos para el bolso o como primera prueba de fragancia', 'Cosméticos de maquillaje', 'Frascos gigantes de exhibición', 'Muestras gratuitas de papel']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es la presentación en volumen de la línea Dickens?',
-                        opciones: JSON.stringify(['10 ML', '30 ML', '50 ML', '100 ML']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿De qué depende el precio final de un mini perfume Dickens?',
-                        opciones: JSON.stringify(['De si la fragancia es extraída de perfume original o si es preparada', 'Del color de la tapa solamente', 'De la hora de compra', 'Es un precio fijo en todos los productos']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 19,
+                        "titulo": "19. Incumplimiento y Sanciones Disciplinarias",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/19.png",
+                        "video_url": null,
+                        "contenido": "INCUMPLIMIENTO Y SANCIONES:\n\nEl no cumplimiento de las disposiciones de este reglamento podrá generar:\n• Llamado de atención verbal registrado.\n• Llamado de atención escrito con copia a la hoja de vida.\n• Sanciones disciplinarias según el Reglamento Interno General de Trabajo y la ley laboral vigente.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué medidas disciplinarias contempla el reglamento ante faltas de cumplimiento?",
+                                                "opciones": [
+                                                            "Llamado de atención verbal, escrito y sanciones según el Reglamento Interno",
+                                                            "Ninguna consecuencia",
+                                                            "Incentivos económicos",
+                                                            "Descuentos arbitrarios directos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué sucede tras un llamado de atención escrito?",
+                                                "opciones": [
+                                                            "Se anexa copia a la hoja de vida del colaborador para seguimiento formal",
+                                                            "Se borra al día siguiente",
+                                                            "No tiene validez",
+                                                            "Se publica en redes sociales"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo final de las medidas correctivas en la empresa?",
+                                                "opciones": [
+                                                            "Corregir conductas, mantener la disciplina y proteger la excelencia operativa",
+                                                            "Castigar de forma personal",
+                                                            "Perjudicar al trabajador",
+                                                            "Reducir la nómina"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '20. Experiencias de Compra y Canales de Venta',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto19_experiencias_compra.png',
-                video_url: null,
-                contenido: `EXPERIENCIAS DE COMPRA ALTA DENSIDAD:
-
-Atención, calidad, asesoría olfativa, tiempo de envío y diversidad de canales de venta.
-
-• Punto de Venta Físico (Boutique)
-• Omnichannel Web (Tienda virtual e integrada)
-• Venta Corporativa y Regalos`,
-                orden: 20,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuáles son los pilares de las Experiencias de Compra en Alta Densidad?',
-                        opciones: JSON.stringify(['Atención, calidad, asesoría, tiempo de envío y canales de venta', 'Demora en entregas y desatención', 'Ventas informales sin comprobante', 'Únicamente compras al por mayor']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuáles de los siguientes son canales de venta oficiales de la empresa?',
-                        opciones: JSON.stringify(['Punto de Venta Físico, Omnichannel Web y Venta Corporativa & Regalos', 'Únicamente ventas callejeras', 'Ventas por subasta informal', 'Revendedores sin autorización']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué la asesoría personalizada es clave en la experiencia del cliente?',
-                        opciones: JSON.stringify(['Ayuda a guiarlo según sus notas y familias olfativas preferidas asegurando una compra memorable', 'Para forzar las ventas masivas', 'No influye en el cliente', 'Para cobrar recargos']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 20,
+                        "titulo": "20. Portafolio de Productos Alta Densidad",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/20.png",
+                        "video_url": null,
+                        "contenido": "PORTAFOLIO DE PRODUCTOS:\n\n\"La esencia de lujo a una fracción del precio\"\n\nIniciamos la sección dedicada a nuestro portafolio de productos. En Fragancias Alta Densidad ofrecemos una oferta diversa y bien definida para satisfacer los gustos y presupuestos de cada cliente que visita nuestras tiendas.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué sección del aprendizaje iniciamos a partir de este módulo?",
+                                                "opciones": [
+                                                            "El conocimiento detallado del Portafolio de Productos de la empresa",
+                                                            "La historia de la perfumería antigua únicamente",
+                                                            "Procedimientos de contabilidad internacional",
+                                                            "Clases de química avanzada"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el propósito de contar con un portafolio de productos diversificado?",
+                                                "opciones": [
+                                                            "Satisfacer diferentes gustos, necesidades olfativas y presupuestos de los clientes",
+                                                            "Confundir al comprador",
+                                                            "Tener productos sin vender",
+                                                            "Tener una sola opción de aroma"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué valores destacan en la oferta comercial de Alta Densidad?",
+                                                "opciones": [
+                                                            "Alta calidad, variedad de fragancias, excelente fijación y precios competitivos",
+                                                            "Baja duración y empaques genéricos",
+                                                            "Precios elevados sin asesoría",
+                                                            "Poca disponibilidad de inventario"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '21. Compromiso Organizacional y Excelencia en el Servicio',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto20_compromiso_portafolio.png',
-                video_url: null,
-                contenido: `COMPROMISO CON NUESTROS CLIENTES:
-
-En Fragancias de Alta Densidad contamos con un portafolio pensado para ofrecer diferentes opciones y experiencias a nuestros clientes. Desde la perfumería original hasta nuestras fragancias preparadas y presentaciones DICKENS, buscamos brindar variedad, calidad y alternativas para cada necesidad.
-
-Nuestro compromiso es que cada integrante del equipo conozca nuestro portafolio y pueda asesorar al cliente con seguridad, honestidad y excelente servicio.
-
-Fragancias de Alta Densidad: una fragancia para cada estilo, una experiencia para recordar.`,
-                orden: 21,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es el compromiso fundamental de todo integrante del equipo Alta Densidad?',
-                        opciones: JSON.stringify(['Conocer el portafolio y asesorar al cliente con seguridad, honestidad y excelente servicio', 'Desconocer las líneas de perfumes', 'Atender solo cuando el cliente insista', 'Cambiar las fórmulas']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué busca ofrecer la empresa a través de la diversidad de su portafolio?',
-                        opciones: JSON.stringify(['Variedad, calidad y alternativas para cada estilo y necesidad del cliente', 'Productos de baja duración', 'Limitación de opciones', 'Precios inalcanzables']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es el lema final de cierre del portafolio e identidad de la marca?',
-                        opciones: JSON.stringify(['"Una fragancia para cada estilo, una experiencia para recordar"', '"Ventas sin garantía"', '"Perfumes temporales"', '"Solo fragancias importadas"']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 21,
+                        "titulo": "21. Nuestra Línea de Productos",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/21.png",
+                        "video_url": null,
+                        "contenido": "NUESTRA LÍNEA DE PRODUCTOS COMPRENDE:\n\n1. Perfumería Original (Sellada de marca internacional).\n2. Perfumería Preparada (Formatos inspirados de alta concentración).\n3. Dickens (Mini perfumes prácticos de bolsillo).\n4. Splash Corporal y Líneas Complementarias.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuáles son las cuatro líneas principales de producto que comercializamos?",
+                                                "opciones": [
+                                                            "Perfumería original, perfumería preparada, Dickens y splash corporal",
+                                                            "Jabones de barra, detergentes, desodorantes y cremas",
+                                                            "Aceites industriales, envases vacíos, tapas y cajas",
+                                                            "Perfumes usados y de segunda mano"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué permite al asesor conocer detalladamente cada línea de producto?",
+                                                "opciones": [
+                                                            "Recomendar con precisión la opción ideal para las necesidades del cliente",
+                                                            "Aumentar el tiempo de espera en tienda",
+                                                            "Vender solo el producto más caro",
+                                                            "Omitir la explicación de fragancias"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante dominar las diferencias entre las líneas comercializadas?",
+                                                "opciones": [
+                                                            "Para brindar información transparente y generar confianza durante la venta",
+                                                            "Para no responder preguntas",
+                                                            "No es relevante para el asesor",
+                                                            "Solo importa facturar sin asesorar"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '22. Presentación del Líder de SST y Atención al Cliente',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto21_victor_manuel_sst.png',
-                video_url: null,
-                contenido: `TE PRESENTAMOS A VICTOR MANUEL:
-
-LÍDER DE SEGURIDAD Y SALUD EN EL TRABAJO (SST) Y ATENCIÓN AL CLIENTE`,
-                orden: 22,
-                preguntas: [
-                    {
-                        pregunta: '¿Quién es la persona a cargo del liderazgo de Seguridad y Salud en el Trabajo (SST) y Atención al Cliente?',
-                        opciones: JSON.stringify(['Victor Manuel', 'Carlos Eduardo', 'Maria Fernanda', 'Juan Pablo']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuáles son los dos frentes clave de liderazgo que desempeña Victor Manuel?',
-                        opciones: JSON.stringify(['Seguridad y Salud en el Trabajo (SST) y Atención al Cliente', 'Únicamente contabilidad', 'Compras internacionales exclusivamente', 'Mantenimiento web únicamente']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es importante identificar a los líderes del área de SST de la empresa?',
-                        opciones: JSON.stringify(['Para acudir oportunamente ante dudas de seguridad, protocolos, EPP y reportes de prevención', 'Solo para firmar planillas', 'No es necesario conocerlos', 'Para solicitar descuentos']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 22,
+                        "titulo": "22. Perfumería Original",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/22.png",
+                        "video_url": null,
+                        "contenido": "PERFUMERÍA ORIGINAL:\n\nEs aquella fragancia importada que se distribuye oficialmente desde la casa o marca de origen. Vienen con sellos de seguridad, frascos distintivos, empaques sellados de fábrica, número de lote y garantía total de autenticidad.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué define a la Perfumería Original en nuestro catálogo?",
+                                                "opciones": [
+                                                            "Fragancias importadas selladas oficialmente desde las casas de origen",
+                                                            "Aromas elaborados de forma casera",
+                                                            "Envases rellenables de segunda mano",
+                                                            "Perfumes sin marca registrada"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué elementos garantizan la autenticidad de un perfume original?",
+                                                "opciones": [
+                                                            "Sellos de seguridad, caja sellada de fábrica, frasco oficial y número de lote",
+                                                            "Etiquetas hechas a mano",
+                                                            "Ausencia de empaque",
+                                                            "Código borrado"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿A qué público se orienta principalmente la perfumería original?",
+                                                "opciones": [
+                                                            "A clientes que buscan marcas reconocidas internacionales y presentaciones exclusivas",
+                                                            "A personas que buscan fragancias en miniatura solamente",
+                                                            "A laboratorios de prueba",
+                                                            "Únicamente a coleccionistas antiguos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '23. La Importancia del Uso de EPP en Perfumería',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto22_importancia_epp.png',
-                video_url: null,
-                contenido: `LA IMPORTANCIA DEL USO DE LOS ELEMENTOS DE PROTECCIÓN (EPP):
-
-"¡Hola equipo! En nuestro día a día rodeados de fragancias, el aroma es nuestro trabajo. Pero respirar esencias concentradas todo el día en un lugar cerrado puede agotar tu olfato y darte dolor de cabeza. Por eso, tu mejor EPP es la ventilación constante y el uso de mascarillas para vapores orgánicos si vas a organizar o limpiar el inventario denso. ¡Y no olvides los guantes para proteger tu piel de irritaciones!"
-
-CONSEJOS CLAVE:
-• Fatiga olfativa: usar mascarilla en el almacén evita que satures tu nariz.
-• Cuidado de la piel: los perfumes tienen alcohol que reseca las manos al manipular muchas botellas.
-• Ventilación: el aire fresco es el protector más importante en un lugar de alta densidad.`,
-                orden: 23,
-                preguntas: [
-                    {
-                        pregunta: '¿Por qué es vital usar mascarillas para vapores orgánicos al manipular o limpiar inventario concentrado?',
-                        opciones: JSON.stringify(['Para evitar la fatiga olfativa, saturación nasal y dolores de cabeza por esencias concentradas', 'Por estética solamente', 'Para hablar más bajo', 'No es necesario usarlas']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué efecto puede causar el alcohol de los perfumes en la piel al manipular botellas sin guantes?',
-                        opciones: JSON.stringify(['Resequedad e irritaciones en la piel', 'Manchas permanentes azules', 'Sin ningún efecto', 'Hidratación profunda']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es considerado el protector más importante en un espacio de fragancias de alta densidad?',
-                        opciones: JSON.stringify(['La ventilación constante y el aire fresco', 'Encender velas aromatizadas', 'Cerrar las ventanas herméticamente', 'Usar ambientadores sintéticos extra']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 23,
+                        "titulo": "23. Perfumería Preparada",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/23.png",
+                        "video_url": null,
+                        "contenido": "PERFUMERÍA PREPARADA:\n\nEs una alternativa creada para quienes buscan disfrutar de fragancias inspiradas en las mejores tendencias mundiales con perfiles olfativos similares, alta concentración de esencias y durabilidad prolongada en la piel a un precio sumamente accesible.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué caracteriza a la Perfumería Preparada de Alta Densidad?",
+                                                "opciones": [
+                                                            "Formulación inspirada de alta fijación olfativa a un precio accesible",
+                                                            "Fragancias de baja duración que desaparecen rápido",
+                                                            "Copias ilegales sin estándar",
+                                                            "Mezclas de agua sin esencia"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es la principal ventaja para el consumidor al adquirir perfumería preparada?",
+                                                "opciones": [
+                                                            "Disfrutar de aromas exquisitos con excelente durabilidad y menor costo",
+                                                            "No tener fragancia visible",
+                                                            "Tener que retocar cada 5 minutos",
+                                                            "Tener empaques sin etiqueta"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué ingrediente clave garantiza la fijación en la perfumería preparada?",
+                                                "opciones": [
+                                                            "Esencias importadas de alta concentración y alcohol refinado de calidad",
+                                                            "Aceite de cocina",
+                                                            "Agua destilada sin fijador",
+                                                            "Colorantes artificiales gruesos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '24. ¿Qué es SST? - Seguridad y Salud en el Trabajo',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto23_que_es_sst.jpg',
-                video_url: null,
-                contenido: `¿QUÉ ES SST?
-
-SST significa Seguridad y Salud en el Trabajo.
-Es el conjunto de normas, medidas y actividades que buscan prevenir accidentes y enfermedades laborales, proteger la salud de los trabajadores y garantizar un ambiente de trabajo seguro.
-
-OBJETIVOS PRINCIPALES:
-✓ Prevenir accidentes en el trabajo.
-✓ Proteger la salud de los trabajadores.
-✓ Cumplir con la normativa legal y laboral.
-
-ACCIONES IMPORTANTES:
-- Identificar riesgos y accidentes.
-- Usar los elementos de protección personal (EPP).
-- Mantener el área limpia y segura.
-- Capacitarse y reportar peligros.
-
-¡LA SST ES RESPONSABILIDAD DE TODOS! La atención hace la diferencia.`,
-                orden: 24,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué significan las siglas SST?',
-                        opciones: JSON.stringify(['Seguridad y Salud en el Trabajo', 'Sistema de Soluciones Textil', 'Servicio Superior Técnico', 'Sistemas de Seguridad Tarifaria']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es el objetivo principal del Sistema de Seguridad y Salud en el Trabajo?',
-                        opciones: JSON.stringify(['Prevenir accidentes y enfermedades laborales, protegiendo la salud de los trabajadores', 'Imponer horarios sin descanso', 'Reducir el salario', 'Aumentar la rotación de personal']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿De quién es la responsabilidad de velar por la Seguridad y Salud en el Trabajo?',
-                        opciones: JSON.stringify(['Es responsabilidad de TODOS en el equipo', 'Únicamente del Administrador', 'Solo de los clientes', 'De la empresa de envíos']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 24,
+                        "titulo": "24. Línea Dickens (Mini Perfumes)",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/24.png",
+                        "video_url": null,
+                        "contenido": "DICKENS - MINI PERFUMES:\n\nSon mini perfumes de formato portátil, perfectos para llevar en el bolso, bolsillo, auto o viajes. Permiten al cliente tener una primera experiencia inolvidable con la fragancia o probar nuevos aromas antes de comprar frascos más grandes.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué es la línea Dickens en nuestro portafolio?",
+                                                "opciones": [
+                                                            "Mini perfumes portátiles ideales para llevar consigo o probar aromas",
+                                                            "Splash de cuerpo en presentación gigante",
+                                                            "Ambientadores para el hogar",
+                                                            "Muestras gratuitas de papel"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el beneficio de la presentación Dickens para el cliente?",
+                                                "opciones": [
+                                                            "Portabilidad práctica y la oportunidad de probar la fragancia a bajo costo",
+                                                            "Un envase pesado e incómodo",
+                                                            "Uso exclusivo en vitrina",
+                                                            "No se puede aplicar en piel"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿En qué situaciones de venta se sugiere recomendar Dickens?",
+                                                "opciones": [
+                                                            "Como compra impulsiva, retoque de bolsillo, viajes o prueba previa",
+                                                            "Cuando el cliente exige un frasco de 200ml",
+                                                            "Solo en compras institucionales",
+                                                            "Únicamente en regalos empresariales de gran tamaño"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '25. Riesgos en el Puesto de Trabajo y Medidas de Protección',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto24_riesgos_puesto_trabajo.jpg',
-                video_url: null,
-                contenido: `RIESGOS EN EL PUESTO DE TRABAJO - ÁREA DE PRODUCCIÓN Y PUNTO:
-
-En el área de perfumería se realizan tareas con sustancias químicas, aromas concentrados y esencias.
-
-RIESGOS PRINCIPALES:
-✓ Exposición a alcoholes y esencias.
-✓ Inhalación de olores muy concentrados.
-✓ Contacto con piel y ojos.
-✓ Resbalones por derrames de líquidos.
-
-MEDIDAS DE PROTECCIÓN:
-• Usar guantes resistentes y lentes de seguridad.
-• Usar mascarilla o protección respiratoria.
-• Seguir procedimientos de llenado y trasvase de líquidos.
-• Reportar derrames inmediatamente.
-
-LA PREVENCIÓN PROTEGE TU SALUD. Conoce los riesgos de tu puesto y actúa a tiempo.`,
-                orden: 25,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuáles son algunos de los riesgos principales en el puesto de trabajo de perfumería?',
-                        opciones: JSON.stringify(['Exposición a alcoholes, inhalación de olores concentrados, contacto con ojos y resbalones por derrames', 'Cortes con sierra eléctrica', 'Golpes con maquinaria pesada siderúrgica', 'Riesgo de insolación extrema']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué se debe hacer de inmediato si ocurre un derrame de líquido o esencia en el piso?',
-                        opciones: JSON.stringify(['Reportarlo e intervenir inmediatamente para limpiar y evitar resbalones', 'Ignorarlo hasta el final del día', 'Cubrirlo con una alfombra sin avisar', 'Salirse del punto de venta']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué elementos protegen los ojos y manos durante la manipulación de químicos o esencias?',
-                        opciones: JSON.stringify(['Lentes de seguridad y guantes resistentes', 'Gafas oscuras de sol y anillos', 'Guantes de lana', 'Sin protección']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 25,
+                        "titulo": "25. Concentraciones y Colección Niche",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/25.png",
+                        "video_url": null,
+                        "contenido": "CONCENTRACIONES Y FRAGANCIAS NICHE (EXTRAIT DE PARFUM):\n\nContamos con líneas de alta concentración como Oriental Leather, Citrus Amber, Spicy Wood en graduación Extrait de Parfum. Ofrecen acordes olfativos opulentos, estela envolvente y una persistencia superior en piel.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué concentración destaca en las líneas exclusivas como Oriental Leather o Citrus Amber?",
+                                                "opciones": [
+                                                            "Extrait de Parfum (Extracto de perfume de alta concentración)",
+                                                            "Eau de Cologne diluida",
+                                                            "Agua perfumada corporal",
+                                                            "Esencia pura sin alcohol"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué caracteriza a las fragancias de la categoría Niche o Extrait de Parfum?",
+                                                "opciones": [
+                                                            "Riqueza de notas olfativas, mayor fijación y estela envolvente",
+                                                            "Baja durabilidad en piel",
+                                                            "Fragancias genéricas de baja calidad",
+                                                            "Aromas imperceptibles"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Para qué tipo de cliente son ideales estas fragancias de alta densidad?",
+                                                "opciones": [
+                                                            "Para clientes exigentes que buscan alta durabilidad y aromas intensos",
+                                                            "Para personas que no desean oler a perfume",
+                                                            "Solo para niños",
+                                                            "Para aromatizar espacios grandes únicamente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '26. Guía Completa de EPP en Perfumería',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto25_epp_perfumeria.jpg',
-                video_url: null,
-                contenido: `ELEMENTOS DE PROTECCIÓN PERSONAL (EPP) PARA UNA PERFUMERÍA:
-
-Trabajamos con alcohol, esencias y fragancias. Protégete, trabaja seguro y cuida tu salud.
-
-• Guantes de Nitrilo: Protegen las manos del contacto con alcohol, esencias y químicos.
-• Gafas de Seguridad: Protegen los ojos de salpicaduras.
-• Mascarilla o Respirador: Evita inhalación de vapores y partículas.
-• Bata / Delantal Resistente: Protege la piel y la ropa de salpicaduras o derrames.
-• Calzado Antideslizante: Reduce el riesgo de caídas en el área.
-• Cofia / Cubre Cabello: Evita contaminación del producto.
-• Protección Auditiva (Opcional): Para áreas con ruido elevado.
-
-RECUERDA SIEMPRE:
-✓ Usa siempre tus EPP.
-✓ Mantén tu área ventilada.
-✓ Evita contacto directo con piel y ojos.
-✓ Almacena alcohol y esencias en lugares seguros lejos de fuentes de calor. ¡El alcohol es inflamable!`,
-                orden: 26,
-                preguntas: [
-                    {
-                        pregunta: '¿Por qué los guantes de nitrilo son preferidos sobre otros guantes al manipular esencias y alcohol?',
-                        opciones: JSON.stringify(['Protegen adecuadamente las manos contra el contacto de alcohol, esencias y químicos sin degradarse rápido', 'Por estética', 'Porque son de tela gruesa', 'No protegen']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué se debe almacenar el alcohol y las esencias lejos de fuentes de calor o chispas?',
-                        opciones: JSON.stringify(['Porque el alcohol es una sustancia altamente inflamable', 'Para que no se evaporen las botellas de vidrio', 'Porque el calor cambia el color del frasco solamente', 'No hay peligro alguno']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué beneficio brinda la cofia o cubre cabello en el área de trabajo de perfumería?',
-                        opciones: JSON.stringify(['Evita la contaminación del producto con cabellos sueltos y protege la higiene', 'Para mantener el peinado festivo', 'Es un accesorio decorativo', 'No aporta ningún beneficio']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 26,
+                        "titulo": "26. Experiencias de Compra y Portafolio",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/26.png",
+                        "video_url": null,
+                        "contenido": "EXPERIENCIAS DE COMPRA Y PORTAFOLIO COMPLETO:\n\nEn Fragancias Alta Densidad nos enfocamos en que cada cliente viva una experiencia sensorial memorable. Asesoramos según las familias olfativas (cítrica, amaderada, floral, oriental, gourmand), ocasión de uso y personalidad del comprador.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué buscamos ofrecer en la atención al cliente según este módulo?",
+                                                "opciones": [
+                                                            "Una experiencia de compra cercana, personalizada y memorable",
+                                                            "Una transacción rápida sin hablar",
+                                                            "Una venta bajo presión sin escuchar",
+                                                            "Información confusa sobre notas olfativas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué familias olfativas principales se mencionan en la asesoría?",
+                                                "opciones": [
+                                                            "Cítrica, amaderada, floral, oriental, gourmand",
+                                                            "Metálica, plástica, ácida y salada",
+                                                            "Únicamente dulce",
+                                                            "Aromas sin clasificación"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo debe guiarse la recomendación de un perfume?",
+                                                "opciones": [
+                                                            "Escuchando las preferencias del cliente, ocasión de uso y gustos personales",
+                                                            "Ofreciendo siempre el que menos se vende",
+                                                            "Imponiendo un aroma sin preguntar",
+                                                            "Decidiendo por precio alto únicamente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '27. Reporte de Accidentes de Trabajo (Paso a Paso)',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto26_reporte_accidentes.jpg',
-                video_url: null,
-                contenido: `REPORTE DE ACCIDENTES DE TRABAJO - PASO A PASO EN LA PERFUMERÍA:
-
-1. ATENDER AL TRABAJADOR: Verificar el estado de salud del trabajador y brindar primeros auxilios si es necesario.
-2. CONTROLAR EL PELIGRO: Asegurar el área, eliminar/reducir el riesgo (ej. derrames) usando los EPP necesarios.
-3. INFORMAR INMEDIATAMENTE: Comunicar al jefe, supervisor o responsable de SST sin ocultar la información.
-4. REGISTRAR EL ACCIDENTE: Anotar los datos (qué, dónde, cuándo, cómo y quién) y completar el formato de reporte.
-5. INVESTIGAR LO SUCEDIDO: Determinar la causa raíz, condiciones o actos que contribuyeron.
-6. TOMAR MEDIDAS CORRECTIVAS: Capacitación, señalización, orden/limpieza y actualización de procedimientos.
-7. HACER SEGUIMIENTO: Monitorear e inspeccionar para garantizar la mejora continua.
-
-RECUERDA: Reportar a tiempo protege tu salud y la de tus compañeros.`,
-                orden: 27,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es la primera acción obligatoria ante un accidente de trabajo en el punto o bodega?',
-                        opciones: JSON.stringify(['Atender de inmediato al trabajador y brindar primeros auxilios si es necesario', 'Tomar fotos para redes sociales', 'Continuar la labor sin decir nada', 'Retirarse del sitio']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿A quién se debe informar inmediatamente la ocurrencia de un accidente?',
-                        opciones: JSON.stringify(['Al jefe, supervisor o responsable de SST', 'A clientes externos', 'A proveedores de otra ciudad', 'No se debe informar']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es fundamental investigar la causa raíz del accidente y tomar medidas correctivas?',
-                        opciones: JSON.stringify(['Para implementar acciones que eviten que el accidente vuelva a ocurrir', 'Para buscar culpables a quienes sancionar únicamente', 'Es un trámite sin utilidad', 'Para cerrar el punto']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 27,
+                        "titulo": "27. Liderazgo en SST y Atención al Cliente",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/27.png",
+                        "video_url": null,
+                        "contenido": "TE PRESENTAMOS A VICTOR MANUEL - LÍDER DE SST Y ATENCIÓN AL CLIENTE:\n\nVictor Manuel coordina la gestión de Seguridad y Salud en el Trabajo (SST), prevención de riesgos en el punto de venta, cumplimiento de EPP y la estandarización de la calidad de servicio y atención al cliente en nuestra red de tiendas.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué áreas lidera Victor Manuel en la organización?",
+                                                "opciones": [
+                                                            "Seguridad y Salud en el Trabajo (SST) y Atención al Cliente",
+                                                            "Finanzas y Contabilidad internacional",
+                                                            "Diseño de empaques solamente",
+                                                            "Mantenimiento informático externo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante la articulación entre SST y la atención en tienda?",
+                                                "opciones": [
+                                                            "Porque un entorno seguro y bien gestionado permite brindar un servicio de excelencia",
+                                                            "No existe ninguna relación entre ambas",
+                                                            "Solo para cumplir trámites en papel",
+                                                            "Para evitar atender al público"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Ante qué temas puedes contar con la orientación de Victor Manuel?",
+                                                "opciones": [
+                                                            "Seguridad laboral, uso de EPP, prevención de accidentes y protocolos de atención",
+                                                            "Pago de nómina personal únicamente",
+                                                            "Comisión de compras bancarias",
+                                                            "Permisos de vacaciones exclusivamente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '28. ¿Qué es un Plan de Emergencia?',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto27_que_es_plan_emergencia.png',
-                video_url: null,
-                contenido: `¿QUÉ ES UN PLAN DE EMERGENCIA?
-
-"Un plan de emergencia es una guía que indica qué debemos hacer antes, durante y después de una emergencia, con el objetivo de proteger la vida de los trabajadores y clientes, reducir los riesgos y actuar de manera rápida y organizada."`,
-                orden: 28,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es la definición del Plan de Emergencia en la empresa?',
-                        opciones: JSON.stringify(['Una guía operacional que indica qué hacer antes, durante y después de una emergencia para proteger vidas', 'Un manual de ventas de perfumes', 'Una lista de precios de productos', 'Un horario de vacaciones']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿A quiénes busca proteger el plan de emergencia durante una eventualidad?',
-                        opciones: JSON.stringify(['A los trabajadores y a los clientes', 'Únicamente a los equipos de cómputo', 'Solo a la administración', 'A nadie']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué beneficios aporta actuar bajo un plan de emergencia estructurado?',
-                        opciones: JSON.stringify(['Reducir los riesgos y actuar de manera rápida, coordinada y organizada', 'Generar pánico', 'Retrasar la salida', 'Confundir a los clientes']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 28,
+                        "titulo": "28. Importancia del Uso de Elementos de Protección (EPP)",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/28.png",
+                        "video_url": null,
+                        "contenido": "LA IMPORTANCIA DEL USO DE LOS ELEMENTOS DE PROTECCIÓN PERSONAL (EPP):\n\n\"¡Hola equipo! En nuestro día a día rodeados de fragancias, alcoholes y esencias, cuidar nuestra salud es fundamental.\"\n\nEl uso correcto de los EPP previene irritaciones en piel, salpicaduras en ojos y afecciones respiratorias por inhalación concentrada de solventes.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Por qué es obligatorio el uso de EPP en el entorno de perfumería?",
+                                                "opciones": [
+                                                            "Para prevenir irritaciones, derrames y proteger la piel, ojos y vías respiratorias",
+                                                            "Por simple vanidad estética",
+                                                            "Para abrigarse en invierno",
+                                                            "No es obligatorio"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Con qué sustancias químicas principales se trabaja en perfumería?",
+                                                "opciones": [
+                                                            "Alcoholes, esencias concentradas y fijadores químicos",
+                                                            "Agua con azúcar únicamente",
+                                                            "Harina y aceites vegetales",
+                                                            "Gases pesados comprimidos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿De quién es la responsabilidad de portar y cuidar los EPP asignados?",
+                                                "opciones": [
+                                                            "De cada colaborador en su jornada laboral diaria",
+                                                            "Del cliente que compra",
+                                                            "Del transportista externo",
+                                                            "Solo del proveedor de insumos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '29. Protocolo del Plan de Emergencia (Empleados y Clientes)',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto28_plan_emergencia_protocolo.jpg',
-                video_url: null,
-                contenido: `PLAN DE EMERGENCIA - ¿QUÉ HACER EN UNA EMERGENCIA?
-
-PARA EMPLEADOS:
-1. Mantén la calma y evalúa la situación.
-2. Informa al responsable o activa la alarma.
-3. Identifica el riesgo (incendio, derrame) si es seguro.
-4. Evacúa por rutas señalizadas.
-5. Dirígete al punto de encuentro.
-6. Reporta novedades o personas faltantes.
-
-PARA CLIENTES:
-1. Mantén la calma.
-2. Escucha al personal de la perfumería.
-3. Dirígete a la salida más cercana.
-4. Evacúa con orden (sin correr ni empujar).
-5. Dirígete al punto de encuentro.
-6. No regreses al local hasta nueva orden.
-
-NÚMEROS DE EMERGENCIA: Bomberos 123 | Emergencias 125 | Policía 112`,
-                orden: 29,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es la primera recomendación del protocolo tanto para empleados como para clientes ante una emergencia?',
-                        opciones: JSON.stringify(['Mantener la calma y evaluar la situación', 'Correr desesperadamente', 'Volver por objetos personales', 'Gritar pidiendo auxilio']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Adónde deben dirigirse empleados y clientes tras evacuar el local por las rutas señalizadas?',
-                        opciones: JSON.stringify(['Al Punto de Encuentro externo designado', 'A sus casas de inmediato', 'Al parqueadero subterráneo', 'Al baño']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Está permitido regresar al establecimiento durante una emergencia a buscar pertenencias?',
-                        opciones: JSON.stringify(['No, nunca se debe regresar por objetos personales hasta que el personal autorizado lo indique', 'Sí, si es de mucho valor', 'Solo si no hay humo visible', 'Sí, libremente']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 29,
+                        "titulo": "29. ¿Qué es SST? (Seguridad y Salud en el Trabajo)",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/29.png",
+                        "video_url": null,
+                        "contenido": "¿QUÉ ES SST?\n\nSST significa Seguridad y Salud en el Trabajo. Es el conjunto de normas, medidas, actividades y disciplinas que buscan prevenir accidentes laborales y enfermedades ocupacionales, protegiendo el bienestar físico, mental y social de todos los trabajadores.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué significan las siglas SST?",
+                                                "opciones": [
+                                                            "Seguridad y Salud en el Trabajo",
+                                                            "Servicio y Soporte Técnico",
+                                                            "Sistema de Salud Total",
+                                                            "Supervisión y Selección de Tiendas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo principal de implementar un Sistema de SST?",
+                                                "opciones": [
+                                                            "Prevenir accidentes laborales, enfermedades ocupacionales y promover la salud",
+                                                            "Aumentar las horas de trabajo sin descanso",
+                                                            "Generar cobros extra a los empleados",
+                                                            "Reducir la seguridad en instalaciones"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿A quiénes protege la normativa de SST en la empresa?",
+                                                "opciones": [
+                                                            "A todos los trabajadores, colaboradores y personas en las instalaciones",
+                                                            "Solo a los gerentes generales",
+                                                            "Únicamente a los visitantes casuales",
+                                                            "Nadie en particular"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '30. Ejecución del Plan de Emergencia y Simulacros',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto29_como_ejecutar_plan.png',
-                video_url: null,
-                contenido: `¿CÓMO EJECUTAR EL PLAN DE EMERGENCIA?
-
-"El plan de emergencia lo ejecutaríamos capacitando primero a todos los trabajadores y asignando responsables. Mantendríamos señalizadas las rutas de evacuación, salidas y punto de encuentro, además de tener disponibles extintores, botiquín y elementos para controlar derrames.
-
-Realizaríamos simulacros periódicamente y, ante una emergencia, activaríamos la alarma, informaríamos al personal, controlaríamos el riesgo si es seguro y evacuaríamos de forma ordenada. Finalmente, evaluaríamos lo ocurrido y aplicaríamos mejoras para prevenir futuras emergencias."`,
-                orden: 30,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué elementos y recursos deben estar siempre disponibles para atender emergencias en el punto/bodega?',
-                        opciones: JSON.stringify(['Extintores cargados, botiquín de primeros auxilios y elementos para control de derrames', 'Cajas de cartón vacías', 'Solamente agua de grifo', 'No se requiere ningún elemento']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es fundamental realizar simulacros de emergencia periódicamente?',
-                        opciones: JSON.stringify(['Para entrenar al personal, probar las rutas de evacuación y reaccionar eficazmente ante un evento real', 'Por distracción laboral', 'Solo para tomar fotos', 'No es necesario realizar simulacros']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué paso se realiza al finalizar una emergencia para promover la mejora continua?',
-                        opciones: JSON.stringify(['Evaluar lo ocurrido y aplicar mejoras preventivas para futuras situaciones', 'Ignorar lo sucedido', 'Continuar sin revisar causas', 'Ocultar los reportes']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 30,
+                        "titulo": "30. Riesgos en el Puesto de Trabajo",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/30.png",
+                        "video_url": null,
+                        "contenido": "RIESGOS EN EL PUESTO DE TRABAJO - ÁREA DE PERFUMERÍA:\n\nEn el área de trabajo existen riesgos específicos que debemos identificar y controlar:\n• Riesgos Químicos: Manipulación de alcohol e inhalación prolongada de vapores de esencias.\n• Riesgos Físicos y Ergonómicos: Caídas por derrames de líquidos, cortes por frascos de vidrio rotos o postura prolongada de pie.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuáles son los principales riesgos químicos identificados en perfumería?",
+                                                "opciones": [
+                                                            "Contacto con alcohol, salpicaduras de esencias e inhalación de vapores concentrados",
+                                                            "Riesgo de radiación nuclear",
+                                                            "Exposición a polvo de carbón",
+                                                            "Contacto con aceites de motor"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué riesgo físico se puede presentar por un derrame de líquido no limpiado a tiempo?",
+                                                "opciones": [
+                                                            "Resbalones, tropezones y caídas al mismo nivel",
+                                                            "Explosión eléctrica masiva",
+                                                            "Corte de energía",
+                                                            "Ningún riesgo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo se previenen las heridas por manipulación de envases de vidrio?",
+                                                "opciones": [
+                                                            "Manipulando frascos con cuidado, utilizando guantes al reempacar y manteniendo orden",
+                                                            "Lanzando los frascos a las cajas",
+                                                            "Dejando vidrios rotos en el suelo",
+                                                            "Trabajando a oscuras"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '31. Brigada de Emergencia y Funciones',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto30_brigada_emergencia.jpg',
-                video_url: null,
-                contenido: `¿QUÉ ES LA BRIGADA DE EMERGENCIA?
-
-La brigada es un grupo de trabajadores voluntarios, capacitados para actuar y apoyar en situaciones de emergencia dentro de la empresa.
-
-FUNCIONES PRINCIPALES:
-✓ Prevenir y controlar incendios.
-✓ Brindar primeros auxilios.
-✓ Guiar evacuaciones seguras.
-✓ Comunicar y reportar emergencias.
-✓ Apoyar y cuidar a las personas.
-
-TIPOS DE BRIGADA:
-- Brigada contra incendios
-- Brigada de primeros auxilios
-- Brigada de evacuación
-- Brigada de comunicación y apoyo
-
-EN CASO DE EMERGENCIA: Mantén la calma, informa y sigue las instrucciones de la brigada. ¡Juntos somos una empresa más segura!`,
-                orden: 31,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué es la Brigada de Emergencia de la empresa?',
-                        opciones: JSON.stringify(['Un grupo de trabajadores capacitados para actuar y apoyar durante emergencias', 'Un equipo externo contratado por horas', 'El personal de aseo nocturno únicamente', 'Los clientes que estén en la tienda']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuáles son las funciones principales que realiza la Brigada de Emergencia?',
-                        opciones: JSON.stringify(['Prevenir/controlar incendios, brindar primeros auxilios y guiar evacuaciones seguras', 'Realizar cobros en caja', 'Despachar pedidos por correo', 'Diseñar empaques']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué actitud se debe tomar frente a las indicaciones impartidas por los brigadistas en una emergencia?',
-                        opciones: JSON.stringify(['Mantener la calma y seguir sus instrucciones de inmediato', 'Cuestionar las órdenes', 'Ignorar sus indicaciones', 'Abandonar la brigada']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 31,
+                        "titulo": "31. Elementos de Protección Personal (EPP) en Perfumería",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/31.png",
+                        "video_url": null,
+                        "contenido": "ELEMENTOS DE PROTECCIÓN PERSONAL (EPP) PARA PERFUMERÍA:\n\n• Guantes de Nitrilo: Protegen manos del contacto continuo con alcohol y esencias.\n• Gafas de Seguridad: Protegen ojos de salpicaduras accidentales.\n• Mascarilla / Respirador: Evita inhalación excesiva de vapores de fragancias.\n• Bata / Delantal: Protege la ropa y piel.\n• Calzado Antideslizante: Reduce riesgo de caídas por derrames.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Por qué se prefieren los guantes de nitrilo en perfumería?",
+                                                "opciones": [
+                                                            "Porque protegen adecuadamente contra alcoholes, solventes y esencias sin degradarse",
+                                                            "Porque son de lana caliente",
+                                                            "Porque son impermeables al calor extremo únicamente",
+                                                            "Porque sustituyen al uniforme completo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué EPP protege los ojos ante posibles salpicaduras durante la preparación?",
+                                                "opciones": [
+                                                            "Gafas de seguridad transparentes",
+                                                            "Gafas de sol oscuras",
+                                                            "Casco de construcción",
+                                                            "Tapa oídos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es la función del calzado antideslizante en tienda?",
+                                                "opciones": [
+                                                            "Prevenir resbalones y caídas en zonas con posibles derrames de líquidos",
+                                                            "Mejorar la velocidad de carrera",
+                                                            "Hacer juego con la corbata",
+                                                            "No tiene función protectora"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '32. ¿Qué es el Comité de Convivencia (COCOLA)?',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto31_cocola.png',
-                video_url: null,
-                contenido: `¿QUÉ ES EL COMITÉ DE CONVIVENCIA (COCOLA)?
-
-COCOLA - Compromiso con el Cuidado de la Vida:
-En COCOLA trabajamos juntos por un ambiente seguro, saludable y responsable.
-
-C - COMPROMISO: Nos comprometemos con la seguridad, la salud y el cuidado de las personas y del entorno.
-O - ORDEN Y LIMPIEZA: Mantenemos nuestro lugar de trabajo limpio y ordenado para prevenir accidentes.
-C - CUIDADO: Cuidamos nuestra vida, la de nuestros compañeros, clientes y visitantes.
-O - OBSERVA Y REPORTA: Observamos los riesgos y reportamos cualquier condición o acto inseguro.
-LA - LA SEGURIDAD ES DE TODOS: La seguridad es responsabilidad de todos. Juntos construimos un entorno más seguro.
-
-NUESTROS COMPROMISOS COCOLA:
-• Cumplimos las normas de seguridad.
-• Prevenimos accidentes y enfermedades.
-• Usamos correctamente los EPP.
-• Conocemos y aplicamos los procedimientos de emergencia.
-• Promovemos la salud y el bienestar.
-• Cuidamos nuestro entorno y los recursos.
-
-RECUERDA: La prevención salva vidas. La seguridad comienza por ti.`,
-                orden: 32,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué significan las siglas y el enfoque principal del comité COCOLA?',
-                        opciones: JSON.stringify(['Compromiso con el Cuidado de la Vida y un ambiente de trabajo seguro y saludable', 'Comité de Compras y Logística Anual', 'Control de Comercialización de Alcoholes', 'Comisión de Contabilidad Laboral']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuáles son los pilares clave representados por la sigla C-O-C-O-LA?',
-                        opciones: JSON.stringify(['Compromiso, Orden y limpieza, Cuidado, Observa y reporta, La seguridad es de todos', 'Calidad, Ofertas, Costos, Operaciones, Logística', 'Celeridad, Oportunidad, Control, Orden, Liderazgo', 'Compras, Operaciones, Cobros, Objetivos, Logros']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Por qué es fundamental observar y reportar condiciones o actos inseguros?',
-                        opciones: JSON.stringify(['Para prevenir accidentes antes de que ocurran y mantener un entorno seguro', 'Para penalizar sin justificación', 'Es una sugerencia sin importancia', 'Solo por requerimiento de la aseguradora']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 32,
+                        "titulo": "32. Reporte de Accidentes de Trabajo Paso a Paso",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/32.png",
+                        "video_url": null,
+                        "contenido": "REPORTE DE ACCIDENTES DE TRABAJO - PASO A PASO:\n\n1. Atender al Trabajador: Evaluar estado y brindar primeros auxilios.\n2. Controlar el Peligro: Aislar el área o contener el derrame para evitar otros accidentes.\n3. Informar Inmediatamente: Notificar al jefe directo o responsable de SST.\n4. Registrar el Accidente: Diligenciar el formato de reporte formal.\n5. Investigar y Aplicar Medidas Correctivas: Analizar la causa raíz y prevenir recurrencias.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el primer paso inmediato ante un accidente laboral?",
+                                                "opciones": [
+                                                            "Atender al trabajador lesionado y brindar primeros auxilios si es necesario",
+                                                            "Tomar fotografías para redes sociales",
+                                                            "Limpiar apresuradamente para disimular",
+                                                            "Abandonar el puesto de trabajo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿A quién se debe notificar inmediatamente tras ocurrir un accidente?",
+                                                "opciones": [
+                                                            "Al jefe inmediato, supervisor o responsable de SST sin ocultar información",
+                                                            "A los clientes en la fila",
+                                                            "A un medio de comunicación",
+                                                            "A nadie"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es fundamental investigar la causa raíz del accidente?",
+                                                "opciones": [
+                                                            "Para tomar medidas correctivas y prevenir que el accidente vuelva a ocurrir",
+                                                            "Para buscar culpables y sancionar sin escuchar",
+                                                            "Para cerrar la tienda definitivamente",
+                                                            "Es un paso innecesario"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '33. Personal Encargado de la Brigada de Emergencia',
-                tipo: 'video',
-                imagen_url: '/assets/img/induccion/foto32_personal_brigada.png',
-                video_url: '/assets/img/induccion/video_brigada_emergencia.mp4',
-                contenido: `PERSONAL ENCARGADO DE LA BRIGADA DE EMERGENCIA:
-
-Conoce al equipo de brigadistas capacitados y dispuestos a actuar oportunamente en caso de emergencias en la empresa.
-
-Recuerda: Los brigadistas están capacitados en primeros auxilios, control de incendios, evacuación y comunicación.`,
-                orden: 33,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es la función principal del personal encargado de la Brigada de Emergencia?',
-                        opciones: JSON.stringify(['Liderar acciones de prevención, evacuación y primeros auxilios durante contingencias', 'Supervisar el cuadre de caja diario', 'Gestionar las compras a proveedores', 'Revisar la publicidad digital']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cómo se reconoce a los integrantes de la brigada de emergencia en las instalaciones?',
-                        opciones: JSON.stringify(['Por sus distintivos, chalecos o escarapelas oficiales de brigadista', 'Por vestimenta de calle', 'No tienen ningún distintivo', 'Por el color de zapatos']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué debes hacer si el brigadista da una orden de evacuación inmediata?',
-                        opciones: JSON.stringify(['Seguir su indicación de inmediato sin discutir ni devolverte', 'Terminar las tareas pendientes antes de salir', 'Ignorar la señal si estás ocupado', 'Pedir autorización previa al jefe']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 33,
+                        "titulo": "33. ¿Qué es un Plan de Emergencia?",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/33.png",
+                        "video_url": null,
+                        "contenido": "¿QUÉ ES UN PLAN DE EMERGENCIA?\n\n\"Un plan de emergencia es una guía que indica qué debemos hacer antes, durante y después de una emergencia, con el objetivo de proteger la vida de los trabajadores y clientes, reducir los riesgos y actuar de manera rápida y organizada.\" ",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cómo se define un Plan de Emergencia?",
+                                                "opciones": [
+                                                            "Una guía de acciones organizadas antes, durante y después de una emergencia para salvar vidas",
+                                                            "Un catálogo de productos en promoción",
+                                                            "Un folleto publicitario para clientes",
+                                                            "Un documento contable de fin de año"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo prioritario del Plan de Emergencia?",
+                                                "opciones": [
+                                                            "Proteger la vida e integridad de trabajadores y clientes",
+                                                            "Salvar los muebles antes que las personas",
+                                                            "Continuar vendiendo durante un incendio",
+                                                            "Ignorar las alarmas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuándo se deben conocer las rutas de evacuación y procedimientos?",
+                                                "opciones": [
+                                                            "Con anterioridad, de forma previa a que ocurra cualquier emergencia",
+                                                            "Solamente cuando la alarma esté sonando",
+                                                            "Un mes después del evento",
+                                                            "Nunca"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '34. Personal Encargado del Comité de Convivencia (COCOLA)',
-                tipo: 'video',
-                imagen_url: '/assets/img/induccion/foto33_personal_cocola.png',
-                video_url: '/assets/img/induccion/video_cocola_atencion.mp4',
-                contenido: `PERSONAL ENCARGADO DEL COMITÉ DE CONVIVENCIA (COCOLA):
-
-Presentación de los representantes encargados de promover un clima laboral sano, respetuoso y prevenir el acoso laboral y riesgos psicosociales.
-
-En COCOLA trabajamos por el cuidado de la vida y el bienestar de cada colaborador.`,
-                orden: 34,
-                preguntas: [
-                    {
-                        pregunta: '¿Cuál es el objetivo central del Comité de Convivencia (COCOLA)?',
-                        opciones: JSON.stringify(['Promover un clima laboral armonioso, respetuoso y resolver conflictos de forma sana y confidencial', 'Organizar eventos de ventas exclusivamente', 'Fijar metas de facturación', 'Modificar el manual de salarios']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿En qué tipo de situaciones se puede acudir al Comité de Convivencia COCOLA?',
-                        opciones: JSON.stringify(['Para presentar inquietudes de convivencia laboral, diferencias interpersonales o sugerencias de bienestar', 'Para solicitar préstamos bancarios', 'Para pedir permisos de vacaciones únicamente', 'Para reclamar productos defectuosos']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cómo deben ser manejadas las consultas o reportes remitidos a COCOLA?',
-                        opciones: JSON.stringify(['Con total confidencialidad, imparcialidad y respeto', 'De manera pública', 'Publicándolas en la cartelera', 'Informando a los clientes']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 34,
+                        "titulo": "34. Protocolo de Evacuación para Empleados y Clientes",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/34.png",
+                        "video_url": null,
+                        "contenido": "PLAN DE EMERGENCIA - ¿QUÉ HACER EN UNA EMERGENCIA?\n\n• PARA EMPLEADOS:\n1. Mantén la calma y evalúa la situación.\n2. Informa inmediatamente al responsable o activa la alarma.\n3. Suspende tus actividades y evacúa por las rutas señalizadas.\n4. Dirígete al punto de encuentro externo y reporta novedades.\n\n• PARA CLIENTES:\n1. Mantén la calma y escucha las indicaciones del personal.\n2. Evacúa en orden, camina (no corras ni empujes) hacia la salida señalizada.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué acción inicial debe realizar un empleado al detectar una emergencia grave?",
+                                                "opciones": [
+                                                            "Mantener la calma, informar al responsable y activar la alarma",
+                                                            "Gritar y salir corriendo desordenadamente",
+                                                            "Encerrarse en el baño",
+                                                            "Seguir empacando productos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo deben evacuarse las instalaciones durante una emergencia?",
+                                                "opciones": [
+                                                            "Por las rutas de evacuación señalizadas, caminando con orden hacia el punto de encuentro",
+                                                            "Corriendo y empujando a los demás",
+                                                            "Devolviéndose por objetos personales olvidados",
+                                                            "Usando ascensores bloqueados"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Está permitido regresar al local antes de que el personal autorizado lo indique?",
+                                                "opciones": [
+                                                            "No, bajo ninguna circunstancia hasta que se declare zona segura",
+                                                            "Sí, si se olvidó el abrigo personal",
+                                                            "Sí, para seguir vendiendo",
+                                                            "Sí, inmediatamente después de salir"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '35. ¿Qué es la Atención al Cliente?',
-                tipo: 'imagen',
-                imagen_url: '/assets/img/induccion/foto34_que_es_atencion_cliente.png',
-                video_url: null,
-                contenido: `¿QUÉ ES LA ATENCIÓN AL CLIENTE?
-
-"La atención al cliente es el servicio que una empresa brinda para escuchar, orientar y ayudar a sus clientes. Una buena atención debe ser amable, respetuosa, clara y rápida, buscando solucionar las necesidades o problemas del cliente. El objetivo principal es lograr su satisfacción, generar confianza y conseguir que el cliente quiera regresar y recomendar la empresa."`,
-                orden: 35,
-                preguntas: [
-                    {
-                        pregunta: '¿Cómo se define la atención al cliente dentro de nuestra empresa?',
-                        opciones: JSON.stringify(['El servicio dedicado a escuchar, orientar y ayudar al cliente para solucionar sus necesidades', 'Cobrar el mayor valor posible', 'Imponer productos sin escuchar', 'Un trámite exclusivamente telefónico']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuáles son los cuatro atributos fundamentales de una buena atención al cliente?',
-                        opciones: JSON.stringify(['Amable, respetuosa, clara y rápida', 'Indiferente, lenta, confusa y fría', 'Rígida, exigente, costosa e impositiva', 'Casual, improvisada, informal e inconsistente']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Cuál es el objetivo final de brindar un servicio al cliente excepcional?',
-                        opciones: JSON.stringify(['Lograr la satisfacción del cliente, generar confianza y motivar su regreso y recomendación', 'Hacer ventas de una sola vez', 'Reducir el tiempo de permanencia en tienda', 'Evitar que pregunte']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 35,
+                        "titulo": "35. Ejecución y Simulacros del Plan de Emergencia",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/35.png",
+                        "video_url": null,
+                        "contenido": "¿CÓMO EJECUTAR EL PLAN DE EMERGENCIA?\n\nEl plan de emergencia se ejecuta capacitando continuamente al personal, asignando roles claros de brigadistas, verificando extintores, botiquines y rutas despejadas. Realizamos simulacros periódicos para evaluar los tiempos de respuesta y aplicar mejoras preventivas.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cómo se garantiza la efectividad del Plan de Emergencia?",
+                                                "opciones": [
+                                                            "Capacitando al personal, manteniendo señalizaciones y realizando simulacros periódicos",
+                                                            "Guardando el plan en un cajón bajo llave",
+                                                            "Sin realizar ensayos ni revisiones",
+                                                            "Dependiendo únicamente de personas externas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Para qué sirven los simulacros de evacuación en la empresa?",
+                                                "opciones": [
+                                                            "Para poner a prueba la preparación, medir tiempos de respuesta y corregir fallas",
+                                                            "Para perder tiempo de trabajo",
+                                                            "Para asustar a los clientes",
+                                                            "No tienen ninguna utilidad"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué elementos de emergencia deben estar siempre disponibles y señalizados?",
+                                                "opciones": [
+                                                            "Extintores vigentes, botiquín de primeros auxilios y rutas de evacuación despejadas",
+                                                            "Cajas de mercancía apiladas en la salida",
+                                                            "Puertas de emergencia con candado",
+                                                            "Luces apagadas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             },
             {
-                titulo: '36. Atención Adecuada vs Atención Inadecuada',
-                tipo: 'video',
-                imagen_url: '/assets/img/induccion/foto35_atencion_adecuada_inadecuada.png',
-                video_url: '/assets/img/induccion/video_cocola_atencion.mp4',
-                contenido: `ATENCIÓN ADECUADA Y ATENCIÓN INADECUADA EN PERFUMERÍA:
-
-Ejemplo práctico comparativo entre una atención cercana, orientadora y amable frente a una actitud apática, distraída o desinteresada con el comprador.
-
-La diferencia está en la empatía y en hacer sentir especial a cada persona que ingresa a nuestro espacio.`,
-                orden: 36,
-                preguntas: [
-                    {
-                        pregunta: '¿Qué caracteriza a una atención inadecuada en el punto de venta?',
-                        opciones: JSON.stringify(['Actitud apática, brazos cruzados, distracción con el celular o falta de interés por las dudas del cliente', 'Saludar con una sonrisa y escuchar atentamente', 'Explicar las familias olfativas con calma', 'Ofrecer opciones según el presupuesto del cliente']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué impacto genera en el cliente una atención adecuada y empática?',
-                        opciones: JSON.stringify(['Sensación de acogida, confianza en el producto y fidelidad a la marca', 'Molestia y ganas de salir rápido', 'Desconfianza en los precios', 'Ningún impacto']),
-                        respuesta_correcta: 0
-                    },
-                    {
-                        pregunta: '¿Qué debes hacer si un cliente tiene dudas sobre una fragancia o no se decide?',
-                        opciones: JSON.stringify(['Escucharlo, asesorarlo en notas olfativas y mostrarle opciones acordes a sus gustos con amabilidad', 'Presionarlo para que compre la más costosa de inmediato', 'Ignorarlo y atender a otra persona', 'Decirle que todas huelen igual']),
-                        respuesta_correcta: 0
-                    }
-                ]
+                        "orden": 36,
+                        "titulo": "36. ¿Qué es la Brigada de Emergencia?",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/36.png",
+                        "video_url": null,
+                        "contenido": "¿QUÉ ES LA BRIGADA DE EMERGENCIA?\n\nLa Brigada de Emergencia es un grupo de trabajadores voluntarios capacitados y entrenados para actuar en la prevención, control de incendios, primeros auxilios, evacuación y apoyo durante situaciones de riesgo en la empresa.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cómo se define la Brigada de Emergencia?",
+                                                "opciones": [
+                                                            "Grupo de colaboradores capacitados para actuar en prevención, primeros auxilios y evacuación",
+                                                            "Un comité de festejos corporativos",
+                                                            "Un grupo de clientes frecuentes",
+                                                            "Una entidad gubernamental externa"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuáles son las funciones principales de la Brigada?",
+                                                "opciones": [
+                                                            "Control de conatos de incendio, primeros auxilios, guiar evacuaciones y comunicación",
+                                                            "Vender perfumes de edición limitada",
+                                                            "Elaborar la nómina mensual",
+                                                            "Aumentar los precios de tienda"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué actitud se debe mantener frente a las instrucciones de los brigadistas en emergencia?",
+                                                "opciones": [
+                                                            "Seguir sus indicaciones con orden, calma y colaboración inmediata",
+                                                            "Ignorar sus avisos y actuar por cuenta propia",
+                                                            "Discutir las órdenes",
+                                                            "Abandonar la zona sin avisar"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 37,
+                        "titulo": "37. Personal Encargado de la Brigada de Emergencia",
+                        "tipo": "video",
+                        "imagen_url": "/assets/img/capacitacion/37.png",
+                        "video_url": "/assets/img/induccion/video_brigada_emergencia.mp4",
+                        "contenido": "PERSONAL ENCARGADO DE LA BRIGADA DE EMERGENCIA:\n\nPresentación de los brigadistas capacitados en el punto de venta. Visualiza el video para conocer sus distintivos, chalecos o brazaletes y saber a quién dirigirte en caso de emergencia.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cómo puedes identificar al personal de la Brigada de Emergencia en tienda?",
+                                                "opciones": [
+                                                            "Por sus distintivos oficiales (chalecos, brazaletes o carné de brigadista)",
+                                                            "No tienen ninguna identificación",
+                                                            "Llevan ropa de calle común",
+                                                            "Solo por el nombre en redes"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante conocer a los miembros de la brigada de tu sede?",
+                                                "opciones": [
+                                                            "Para acudir rápidamente a ellos y acatar su liderazgo ante un incidente",
+                                                            "Para pedirles permisos de horario",
+                                                            "No es necesario conocerlos",
+                                                            "Solo para eventos festivos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué capacitación reciben los miembros de la brigada de emergencia?",
+                                                "opciones": [
+                                                            "Entrenamiento en primeros auxilios, manejo de extintores y evacuación",
+                                                            "Curso de cocina internacional",
+                                                            "Capacitación en diseño de joyas",
+                                                            "Sin ninguna capacitación"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 38,
+                        "titulo": "38. Comité de Convivencia Laboral (COCOLA)",
+                        "tipo": "video",
+                        "imagen_url": "/assets/img/capacitacion/38.png",
+                        "video_url": "/assets/img/induccion/video_cocola_atencion.mp4",
+                        "contenido": "¿QUÉ ES EL COMITÉ DE CONVIVENCIA LABORAL (COCOLA)?\n\nCOCOLA - COMPROMISO CON EL CUIDADO DE LA VIDA:\n\nEl Comité de Convivencia Laboral es el espacio encargado de promover un clima laboral sano, previniendo el acoso laboral, solucionando conflictos de forma confidencial y garantizando el respeto mutuo entre todos los colaboradores.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo primordial del Comité COCOLA?",
+                                                "opciones": [
+                                                            "Promover un clima laboral armonioso, prevenir el acoso y resolver diferencias interpersonales",
+                                                            "Organizar las ventas del mes",
+                                                            "Revisar los contratos de arrendamiento",
+                                                            "Calcular las horas extras"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Bajo qué principios se manejan los casos remitidos a COCOLA?",
+                                                "opciones": [
+                                                            "Estricta confidencialidad, imparcialidad, respeto y diálogo constructivo",
+                                                            "Publicándolos en carteleras de la empresa",
+                                                            "Contándolo a los clientes",
+                                                            "Mediante discusiones públicas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿En qué situaciones puedes consultar o acudir al Comité COCOLA?",
+                                                "opciones": [
+                                                            "Ante presuntas conductas de acoso laboral, diferencias interpersonales o sugerencias de convivencia",
+                                                            "Para pedir préstamos personales a la empresa",
+                                                            "Para solicitar productos gratis",
+                                                            "Para reclamos de clientes sobre precios"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 39,
+                        "titulo": "39. Personal Encargado del Comité COCOLA",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/39.png",
+                        "video_url": null,
+                        "contenido": "PERSONAL ENCARGADO DEL COMITÉ DE CONVIVENCIA (COCOLA):\n\nConoce a los representantes electos por los trabajadores y la administración que integran el Comité de Convivencia COCOLA. Recuerda que existen canales y formularios oficiales para radicar inquietudes con absoluta reserva.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Quiénes integran el Comité de Convivencia COCOLA?",
+                                                "opciones": [
+                                                            "Representantes elegidos por los trabajadores y representantes designados por la empresa",
+                                                            "Únicamente personas externas a la empresa",
+                                                            "Clientes que visitan la tienda",
+                                                            "Proveedores de insumos"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo se garantiza el debido proceso ante una solicitud enviada a COCOLA?",
+                                                "opciones": [
+                                                            "Escuchando a las partes con imparcialidad y proponiendo acuerdos de convivencia",
+                                                            "Sancionando de inmediato sin investigar",
+                                                            "Ignorando las solicitudes escritas",
+                                                            "Revelando la información a terceros"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el beneficio de contar con un COCOLA activo en la empresa?",
+                                                "opciones": [
+                                                            "Fomentar un entorno de trabajo seguro, saludable, respetuoso y libre de acoso",
+                                                            "Aumentar el precio de venta al público",
+                                                            "Evitar el uso de uniformes",
+                                                            "Eliminar los horarios de trabajo"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 40,
+                        "titulo": "40. ¿Qué es la Atención al Cliente?",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/40.png",
+                        "video_url": null,
+                        "contenido": "¿QUÉ ES LA ATENCIÓN AL CLIENTE?\n\n\"La atención al cliente es el servicio que una empresa brinda para escuchar, orientar y ayudar a sus clientes. Una buena atención debe ser amable, respetuosa, clara y rápida, buscando solucionar las necesidades o problemas del cliente. El objetivo principal es lograr su satisfacción, generar confianza y conseguir que el cliente quiera regresar y recomendar la empresa.\" ",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cómo se define la atención al cliente dentro de nuestra empresa?",
+                                                "opciones": [
+                                                            "El servicio dedicado a escuchar, orientar y ayudar al cliente a solucionar sus necesidades",
+                                                            "Cobrar el mayor valor posible sin asesorar",
+                                                            "Imponer productos sin escuchar",
+                                                            "Un trámite exclusivamente telefónico"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuáles son los cuatro atributos fundamentales de una excelente atención?",
+                                                "opciones": [
+                                                            "Amable, respetuosa, clara y rápida",
+                                                            "Indiferente, lenta, confusa y fría",
+                                                            "Rígida, exigente, costosa e impositiva",
+                                                            "Informal, distraída, brusca e inconsistente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el objetivo final de brindar un servicio al cliente excepcional?",
+                                                "opciones": [
+                                                            "Lograr la satisfacción del cliente, generar confianza y motivar su regreso y recomendación",
+                                                            "Hacer ventas de una sola vez",
+                                                            "Reducir el tiempo de permanencia en tienda echando al cliente",
+                                                            "Evitar que pregunte sobre perfumes"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 41,
+                        "titulo": "41. Atención Adecuada vs Atención Inadecuada",
+                        "tipo": "video",
+                        "imagen_url": "/assets/img/capacitacion/41.png",
+                        "video_url": "/assets/img/induccion/video_cocola_atencion.mp4",
+                        "contenido": "ATENCIÓN ADECUADA Y ATENCIÓN INADECUADA EN PERFUMERÍA:\n\nEjemplo práctico comparativo entre una atención cercana, orientadora y amable frente a una actitud apática, distraída con el celular o desinteresada con el comprador.\n\nLa diferencia radica en la empatía y en hacer sentir especial a cada persona que ingresa a nuestras tiendas.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué caracteriza a una atención inadecuada en el punto de venta?",
+                                                "opciones": [
+                                                            "Actitud apática, brazos cruzados, distracción con el celular o falta de interés",
+                                                            "Saludar con una sonrisa y escuchar atentamente",
+                                                            "Explicar las familias olfativas con calma",
+                                                            "Ofrecer opciones según el presupuesto del cliente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué impacto genera en el cliente una atención adecuada y empática?",
+                                                "opciones": [
+                                                            "Sensación de acogida, confianza en el producto y fidelidad a la marca",
+                                                            "Molestia y ganas de salir rápido",
+                                                            "Desconfianza en los precios",
+                                                            "Ningún impacto"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué debes hacer si un cliente tiene dudas sobre una fragancia o no se decide?",
+                                                "opciones": [
+                                                            "Escucharlo, asesorarlo en notas olfativas y mostrarle opciones acordes a sus gustos con amabilidad",
+                                                            "Presionarlo para que compre la más costosa de inmediato",
+                                                            "Ignorarlo y atender a otra persona",
+                                                            "Decirle que todas huelen igual sin asesorar"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 42,
+                        "titulo": "42. Imagen y Presentación del Personal",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/42.png",
+                        "video_url": null,
+                        "contenido": "IMAGEN Y PRESENTACIÓN DEL PERSONAL:\n\nEn nuestra perfumería, la imagen del empleado es fundamental porque representa la marca. Debemos mantener una presentación limpia, ordenada y profesional acompañada de una actitud amable. Al atender al cliente debemos sonreír, escuchar sus necesidades, ofrecer información clara y recomendar las fragancias adecuadas.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Por qué es tan importante la imagen del empleado en el punto de venta?",
+                                                "opciones": [
+                                                            "Porque el colaborador es la cara visible que representa los valores y profesionalismo de la marca",
+                                                            "No influye en la percepción del cliente",
+                                                            "Solo importa el precio del producto",
+                                                            "Para cumplir trámites de fotografía"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué elementos complementan la imagen personal en la atención?",
+                                                "opciones": [
+                                                            "Una actitud amable, sonrisa sincera, escucha activa e información clara",
+                                                            "Mirada indiferente y lenguaje despectivo",
+                                                            "Respuestas cortantes y falta de saludo",
+                                                            "Hablar por celular mientras se asesora"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué efecto produce en el comprador ser atendido por un asesor con excelente presentación?",
+                                                "opciones": [
+                                                            "Genera confianza inmediata, credibilidad en el producto y una experiencia grata",
+                                                            "Provoca desconfianza",
+                                                            "Le genera prisa por irse",
+                                                            "Haga que reclame la factura"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 43,
+                        "titulo": "43. Estándares de Imagen Correcta del Empleado",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/43.png",
+                        "video_url": null,
+                        "contenido": "¿CÓMO DEBE SER LA IMAGEN CORRECTA DE LOS EMPLEADOS?\n\n• Presentación personal impecable: Uniforme limpio y bien organizado.\n• Buena actitud: Sonrisa, amabilidad y disposición para ayudar.\n• Higiene personal: Manos limpias, cabello organizado y aliento fresco.\n• Aroma personal moderado: Evitar perfumes demasiado fuertes que compitan con las fragancias de la tienda.\n• Contacto visual y lenguaje corporal positivo. Evitar el celular mientras se atiende.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Por qué el aroma personal del asesor debe ser moderado y suave?",
+                                                "opciones": [
+                                                            "Para evitar saturar el ambiente o competir con las fragancias que el cliente está probando",
+                                                            "Porque está prohibido usar perfume",
+                                                            "Para no gastar perfume propio",
+                                                            "Sin ninguna razón olfativa"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué aspectos de higiene personal son indispensables en tienda?",
+                                                "opciones": [
+                                                            "Manos y uñas impecables, cabello arreglado y excelente higiene bucal",
+                                                            "Usar ropa sin lavar",
+                                                            "Tener manos manchadas de tinta",
+                                                            "Uñas descuidadas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué postura corporal transmite disposición y respeto hacia el cliente?",
+                                                "opciones": [
+                                                            "Contacto visual directo, postura erguida, sonrisa y brazos abiertos",
+                                                            "Brazos cruzados y espalda encorvada",
+                                                            "Mirar al piso mientras el cliente habla",
+                                                            "Dar la espalda para ver el teléfono"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 44,
+                        "titulo": "44. Guía Visual: Uso Adecuado vs No Adecuado de Imagen",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/44.png",
+                        "video_url": null,
+                        "contenido": "GUÍA VISUAL DE IMAGEN Y PRESENTACIÓN PARA CLIENTES:\n\n• USO ADECUADO:\n- Saluda con amabilidad y sonríe.\n- Presentación impecable y uniforme limpio.\n- Ambiente limpio, ordenado y profesional.\n- Escucha al cliente y recomienda según sus necesidades.\n- Agradece la visita y se despide cordialmente.\n\n• USO NO ADECUADO (A EVITAR):\n- Usar el celular en área de atención.\n- Conversaciones personales frente al cliente.\n- Comer o masticar chicle en el puesto de trabajo.\n- Estar de brazos cruzados o ignorar al cliente.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuáles de las siguientes conductas están totalmente PROHIBIDAS en la atención?",
+                                                "opciones": [
+                                                            "Usar el celular, masticar chicle, comer o tener conversaciones personales frente al cliente",
+                                                            "Saludar con una sonrisa y agradecer la visita",
+                                                            "Escuchar la necesidad del cliente",
+                                                            "Mantener el mostrador limpio y ordenado"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el resultado de aplicar la guía de uso adecuado de imagen y servicio?",
+                                                "opciones": [
+                                                            "Cliente satisfecho, confianza, fidelización y recomendación de la marca",
+                                                            "Cliente insatisfecho y pérdida de reputación",
+                                                            "Reclamos continuos en tienda",
+                                                            "Cancelación de ventas"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué se debe hacer al finalizar la atención de un cliente?",
+                                                "opciones": [
+                                                            "Agradecer cordialmente su visita y despedirse con amabilidad",
+                                                            "Voltearse de inmediato sin decir nada",
+                                                            "Exigirle que compre más",
+                                                            "Ignorar su salida"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 45,
+                        "titulo": "45. Guía de Presentación Personal Mujeres y Hombres",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/45.png",
+                        "video_url": null,
+                        "contenido": "PRESENTACIÓN PERSONAL EN DETALLE:\n\n• MUJERES:\n- Cabello: Limpio, ordenado y peinado. Recogido si lo requiere la labor.\n- Uniforme: Limpio, planchado y completo.\n- Uñas: Limpias, cortas y cuidadas. Esmaltes en tonos discretos o naturales.\n- Maquillaje y Aroma: Sobrio, fresco y fragancia moderada.\n\n• HOMBRES:\n- Cabello: Limpio, corto o bien peinado.\n- Barba: Afeitada o bien recortada y definida.\n- Uniforme: Limpio, planchado y completo.\n- Uñas y Aroma: Limpias, cortas y fragancia discreta.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cómo deben ser presentadas las uñas y manos en el personal de tienda?",
+                                                "opciones": [
+                                                            "Limpias, cortas y cuidadas, con tonos discretos en el caso de esmaltes",
+                                                            "Uñas largas con colores fosforescentes despicados",
+                                                            "Manos sucias sin lavar",
+                                                            "Sin ninguna norma de cuidado"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es la norma de presentación respecto a la barba en los hombres?",
+                                                "opciones": [
+                                                            "Debe estar completamente afeitada o bien recortada, limpia y definida",
+                                                            "Larga sin peinar",
+                                                            "Con residuos de comida",
+                                                            "Sin definición"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo debe lucir el uniforme institucional diariamente?",
+                                                "opciones": [
+                                                            "Impecable, limpio, completo y planchado",
+                                                            "Arrugado y manchado",
+                                                            "Incompleto sin blusa/camisa institucional",
+                                                            "Modificado sin autorización"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 46,
+                        "titulo": "46. Facturación y Métodos de Pago - Introducción",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/46.png",
+                        "video_url": null,
+                        "contenido": "FACTURACIÓN Y MÉTODOS DE PAGO:\n\n\"Cada venta que realizamos representa un compromiso tanto con nuestro cliente como con nuestra empresa. Por eso, es fundamental que todos los colaboradores conozcan cómo se desarrolla una venta, qué medios de pago manejamos y qué hacer ante cualquier novedad.\"\n\n¿Qué sucede si una venta se registra de forma incorrecta? Genera descuadres de caja, inconsistencias en inventario y problemas en facturación.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Por qué es importante que todo el personal conozca el proceso de facturación?",
+                                                "opciones": [
+                                                            "Porque cada venta es un compromiso legal, contable y de servicio con el cliente y la empresa",
+                                                            "Solo le interesa al área de contabilidad externa",
+                                                            "No influye en el funcionamiento de tienda",
+                                                            "Para cobros informales"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué consecuencias trae registrar incorrectamente una venta en el sistema?",
+                                                "opciones": [
+                                                            "Descuadres de caja, errores en inventarios y fallas en reportes contables",
+                                                            "Ningún problema",
+                                                            "Mayor ganancia para la tienda",
+                                                            "Premios para el vendedor"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué responsabilidad asume el vendedor al cerrar una transacción?",
+                                                "opciones": [
+                                                            "Garantizar el registro fiel de productos, precios y forma de pago ingresada",
+                                                            "Cobrar sin emitir comprobante",
+                                                            "Entregar mercancía sin registrar",
+                                                            "Modificar los precios a su criterio"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 47,
+                        "titulo": "47. ¿Cómo Funciona el Proceso de Facturación?",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/47.png",
+                        "video_url": null,
+                        "contenido": "FACTURACIÓN - ¿CÓMO FUNCIONA EL PROCESO EN 5 PASOS?\n\nEn nuestra empresa, la facturación respalda cada venta garantizando transparencia y control:\n\n1. Compra: El cliente selecciona sus productos.\n2. Registro: Se ingresa la venta y datos del cliente en el sistema.\n3. Facturación: Se genera la factura electrónica correspondiente.\n4. Pago: El cliente elige y efectúa su método de pago.\n5. Entrega: Se confirma la transacción y se entrega el producto empacado.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuáles son los 5 pasos ordenados del proceso de facturación?",
+                                                "opciones": [
+                                                            "Compra, Registro, Facturación, Pago y Entrega",
+                                                            "Pago, Entrega, Registro, Compra y Facturación",
+                                                            "Entrega sin registro ni pago",
+                                                            "Registro únicamente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué garantiza un proceso de facturación claro y transparente?",
+                                                "opciones": [
+                                                            "Control de inventario, respaldo al cliente y confianza en la compra",
+                                                            "Pérdida de información",
+                                                            "Confusión en los precios",
+                                                            "Demoras en la entrega"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿En qué momento del flujo se realiza la entrega del producto al cliente?",
+                                                "opciones": [
+                                                            "Únicamente tras confirmar el pago y la generación/registro de la factura",
+                                                            "Antes de registrar la venta",
+                                                            "Sin verificar el pago",
+                                                            "Al inicio de la visita"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 48,
+                        "titulo": "48. Facturación por Medio de SIIGO",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/48.png",
+                        "video_url": null,
+                        "contenido": "FACTURACIÓN POR MEDIO DE SIIGO:\n\n¿Qué es SIIGO y por qué nos afecta a todos?\n• SIIGO es el sistema oficial donde se registran todas las ventas, productos, clientes y pagos de la empresa.\n• Aunque no seas contador, tu venta se refleja directamente en SIIGO.\n• Un error en SIIGO = Problemas de stock, impuestos y caja para todos.\n• Sirve para controlar inventario en tiempo real, declarar impuestos y llevar contabilidad exacta.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué es SIIGO dentro de nuestra organización?",
+                                                "opciones": [
+                                                            "El sistema oficial donde se registran ventas, inventarios, facturas y pagos",
+                                                            "Una red social de clientes",
+                                                            "Un catálogo digital de fotos",
+                                                            "Un sistema de correo personal"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué afecta a todos los colaboradores la información ingresada en SIIGO?",
+                                                "opciones": [
+                                                            "Porque lo registrado actualiza stock de inventario, impuestos y flujo de caja en tiempo real",
+                                                            "No tiene ningún impacto operativo",
+                                                            "Solo afecta al desarrollador de software",
+                                                            "Únicamente a la gerencia"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué funciones clave cumple el software SIIGO?",
+                                                "opciones": [
+                                                            "Controlar inventarios, registrar ventas, emitir facturas electrónicas y tributación",
+                                                            "Diseñar etiquetas de perfume",
+                                                            "Transmitir videos de tienda",
+                                                            "Reservar hoteles de viaje"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 49,
+                        "titulo": "49. Registro de Venta Paso a Paso en SIIGO",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/49.png",
+                        "video_url": null,
+                        "contenido": "REGISTRO DE VENTA PASO A PASO EN SISTEMA SIIGO:\n\n01. Datos del Cliente: Nombre completo, cédula/NIT, correo electrónico y teléfono.\n02. Producto: Seleccionar la referencia y cantidad exacta adquirida.\n03. Método de Pago: Indicar claramente la modalidad (Efectivo, Nequi, Tarjeta, Crédito).\n04. Generar Factura: Emitir y enviar al correo del cliente.\n05. Confirmar: Verificar que el movimiento quede grabado e inventario actualizado.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué datos obligatorios del cliente deben ingresarse en SIIGO?",
+                                                "opciones": [
+                                                            "Nombre completo, cédula/NIT, correo electrónico y número telefónico",
+                                                            "Solo el primer nombre",
+                                                            "Apodo o pseudónimo casual",
+                                                            "Ningún dato"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué se debe verificar al seleccionar el producto en el sistema?",
+                                                "opciones": [
+                                                            "La referencia exacta y la cantidad comprada para no alterar el inventario",
+                                                            "Elegir cualquier producto con precio similar",
+                                                            "Ingresar cantidades al azar",
+                                                            "No seleccionar producto"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cuál es el último paso al procesar la venta en SIIGO?",
+                                                "opciones": [
+                                                            "Confirmar el registro de la transacción y la actualización automática de stock",
+                                                            "Apagar el computador",
+                                                            "Cancelar la factura",
+                                                            "Borrar los datos del cliente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 50,
+                        "titulo": "50. Métodos de Pago Disponibles",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/50.png",
+                        "video_url": null,
+                        "contenido": "MÉTODOS DE PAGO HABILITADOS EN TIENDA:\n\n• PAGO TRADICIONAL:\n- Efectivo.\n- Tarjeta Débito.\n- Tarjeta Crédito.\n\n• PAGO DIGITAL:\n- Nequi.\n- Daviplata.\n- Transferencias Bancarias.\n- Código QR.\n\n• FINANCIACIÓN / CRÉDITO:\n- Sistecrédito.\n- Addi.\n- Otras plataformas autorizadas.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Cuáles son las tres categorías de métodos de pago recibidas en tienda?",
+                                                "opciones": [
+                                                            "Pago Tradicional, Pago Digital y Financiación/Crédito",
+                                                            "Solo efectivo en billetes de alta denominación",
+                                                            "Únicamente cheques de gerencia",
+                                                            "Fiado verbal únicamente"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué medios corresponden a la categoría de Pago Digital?",
+                                                "opciones": [
+                                                            "Nequi, Daviplata, transferencias bancarias y código QR",
+                                                            "Monedas antiguas",
+                                                            "Billetes físicos",
+                                                            "Pagare manuales"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué plataformas de financiación al crédito manejamos en Alta Densidad?",
+                                                "opciones": [
+                                                            "Sistecrédito y Addi",
+                                                            "Tarjetas de regalo no oficiales",
+                                                            "Préstamos de terceros informales",
+                                                            "Ninguna plataforma"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 51,
+                        "titulo": "51. Protocolo de Pago Tradicional",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/51.png",
+                        "video_url": null,
+                        "contenido": "PAGO TRADICIONAL (EFECTIVO Y TARJETAS):\n\n• EFECTIVO:\n- Contar el dinero en presencia del cliente.\n- Verificar la autenticidad de los billetes recibidos.\n- Entregar el cambio exacto junto con la factura impreso o digital.\n\n• TARJETAS DÉBITO Y CRÉDITO:\n- Procesar la transacción en el datáfono oficial.\n- Verificar el estado APROBADO en la pantalla del datáfono antes de entregar la mercancía.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué verificación se debe realizar al recibir dinero en efectivo?",
+                                                "opciones": [
+                                                            "Contar el dinero frente al cliente y verificar la autenticidad de los billetes",
+                                                            "Guardarlo en el bolsillo sin contar",
+                                                            "Sin revisar los billetes",
+                                                            "Dar el cambio antes de recibir el dinero"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué comprobación en datáfono es indispensable antes de entregar la compra por tarjeta?",
+                                                "opciones": [
+                                                            "Verificar que el comprobante salga APROBADO en la pantalla del datáfono",
+                                                            "Entregar el producto si el datáfono marca RECHAZADO",
+                                                            "No usar datáfono",
+                                                            "Apagar el datáfono"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué comprobante se debe entregar siempre al cliente tras un pago tradicional?",
+                                                "opciones": [
+                                                            "Factura o recibo oficial impreso o digital de la transacción",
+                                                            "Un papel borrador sin valor",
+                                                            "Ningún soporte",
+                                                            "Solo una tarjeta personal"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 52,
+                        "titulo": "52. Protocolo de Pago Digital y Financiación",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/52.png",
+                        "video_url": null,
+                        "contenido": "PAGO DIGITAL Y FINANCIACIÓN:\n\n• PAGO DIGITAL (NEQUI / DAVIPLATA / QR):\n- Exigir el comprobante digital en pantalla.\n- Verificar la llegada efectiva de los fondos a la cuenta oficial del punto o plataforma administrativa ANTES de entregar los productos.\n\n• FINANCIACIÓN (SISTECRÉDITO / ADDI):\n- Validar el código de aprobación o token OTP con el documento del cliente en el portal habilitado.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué regla de oro rige para las ventas por pago digital (Nequi/Daviplata/QR)?",
+                                                "opciones": [
+                                                            "Verificar la confirmación y llegada de dinero en la cuenta oficial ANTES de entregar la mercancía",
+                                                            "Entregar el producto con solo mostrar una foto borrosa de pantalla",
+                                                            "No revisar la cuenta",
+                                                            "Confiar sin comprobante"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Cómo se valida un crédito con Sistecrédito o Addi en tienda?",
+                                                "opciones": [
+                                                            "Verificando la cédula del cliente y el código OTP/aprobación en la plataforma oficial",
+                                                            "Firmando una servilleta",
+                                                            "Sin ingresar a la plataforma",
+                                                            "Tomando una foto casual"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué no se debe entregar mercancía con comprobantes digitales dudosos o no confirmados?",
+                                                "opciones": [
+                                                            "Para prevenir fraudes, comprobantes falsos y pérdidas económicas en tienda",
+                                                            "No hay ningún riesgo",
+                                                            "Solo por perder tiempo",
+                                                            "Porque el sistema se bloquea"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
+            },
+            {
+                        "orden": 53,
+                        "titulo": "53. Evaluación Final y Culminación de Capacitación",
+                        "tipo": "imagen",
+                        "imagen_url": "/assets/img/capacitacion/53.png",
+                        "video_url": null,
+                        "contenido": "EVALUACIÓN Y CULMINACIÓN DEL PROCESO:\n\n¡FELICITACIONES!\n\nHas completado la lectura y evaluación de los 53 módulos del programa de Inducción y Capacitación de Fragancias Alta Densidad. \n\nHas aprendido la cultura institucional, misión, visión, historia, reglamento interno, prevención en SST, brigadas de emergencia, portafolio de perfumería, atención al cliente, estándares de imagen personal y facturación en sistema SIIGO.\n\nA continuación quedas habilitado(a) para presentar el Examen Final Obligatorio.",
+                        "preguntas": [
+                                    {
+                                                "pregunta": "¿Qué logro alcanzaste al finalizar este módulo?",
+                                                "opciones": [
+                                                            "Completar satisfactoriamente los 53 módulos de Inducción y Capacitación de la empresa",
+                                                            "Terminar la secundaria",
+                                                            "Comprar una franquicia",
+                                                            "Ninguno"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Qué paso sigue inmediatamente después de culminar los 53 módulos?",
+                                                "opciones": [
+                                                            "Presentar el Examen Final Obligatorio para habilitar tu autorización laboral",
+                                                            "Retirarte de la empresa",
+                                                            "Reiniciar la capacitación desde cero",
+                                                            "Esperar un año"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    },
+                                    {
+                                                "pregunta": "¿Por qué es importante haber comprendido a cabalidad cada uno de los 53 temas vistos?",
+                                                "opciones": [
+                                                            "Porque garantizan tu excelencia, seguridad y éxito profesional en Fragancias Alta Densidad",
+                                                            "Es solo un trámite sin impacto real",
+                                                            "Para memorizar números sin aplicar",
+                                                            "No tiene mayor relevancia"
+                                                ],
+                                                "respuesta_correcta": 0
+                                    }
+                        ]
             }
-        ];
+];
 
-        // Desactivar items antiguos con orden superior a los 6 nuevos
+        // Desactivar items antiguos con orden superior a los 53 nuevos
         await pool.query('UPDATE CapacitacionItems SET activo = 0 WHERE orden > ?', [modulos.length]);
 
         for (let mod of modulos) {
@@ -1197,14 +2142,12 @@ La diferencia está en la empatía y en hacer sentir especial a cada persona que
                     'UPDATE CapacitacionItems SET titulo = ?, contenido = ?, tipo = ?, imagen_url = ?, video_url = ?, orden = ?, activo = 1 WHERE id = ?',
                     [mod.titulo, mod.contenido, mod.tipo, mod.imagen_url, mod.video_url, mod.orden, itemId]
                 );
-                console.log(`Módulo actualizado: "${mod.titulo}" (ID: ${itemId})`);
             } else {
                 const [ins] = await pool.query(
                     'INSERT INTO CapacitacionItems (titulo, contenido, tipo, imagen_url, video_url, orden, activo) VALUES (?, ?, ?, ?, ?, ?, 1)',
                     [mod.titulo, mod.contenido, mod.tipo, mod.imagen_url, mod.video_url, mod.orden]
                 );
                 itemId = ins.insertId;
-                console.log(`Módulo creado: "${mod.titulo}" (ID: ${itemId})`);
             }
 
             await pool.query('DELETE FROM CapacitacionPreguntas WHERE item_id = ?', [itemId]);
@@ -1212,13 +2155,12 @@ La diferencia está en la empatía y en hacer sentir especial a cada persona que
                 const p = mod.preguntas[idx];
                 await pool.query(
                     'INSERT INTO CapacitacionPreguntas (item_id, pregunta, opciones, respuesta_correcta, orden) VALUES (?, ?, ?, ?, ?)',
-                    [itemId, p.pregunta, p.opciones, p.respuesta_correcta, idx + 1]
+                    [itemId, p.pregunta, JSON.stringify(p.opciones), p.respuesta_correcta, idx + 1]
                 );
             }
-            console.log(`  -> ${mod.preguntas.length} preguntas de validación asociadas al Módulo ${itemId}.`);
         }
 
-        console.log('--- Siembra de Capacitación Finalizada con Éxito ---');
+        console.log(`--- Siembra de Capacitación Finalizada con Éxito (${modulos.length} Módulos Procesados) ---`);
         if (require.main === module) {
             process.exit(0);
         }
