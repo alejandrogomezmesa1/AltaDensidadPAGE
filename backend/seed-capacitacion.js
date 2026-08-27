@@ -1512,35 +1512,35 @@ async function seedCapacitacion(existingPool) {
                         "tipo": "imagen",
                         "imagen_url": "/assets/img/capacitacion/40.png",
                         "video_url": null,
-                        "contenido": "ATENCIÓN ADECUADA VS ATENCIÓN INADECUADA EN PERFUMERÍA:\n\nEjemplo práctico comparativo entre una atención cercana, orientadora y amable frente a una actitud apática, distraída con el celular o desinteresada con el comprador.\n\nLa diferencia está en la empatía y en hacer sentir bienvenido a cada cliente que ingresa a nuestro espacio.",
+                        "contenido": "ATENCIÓN ADECUADA VS ATENCIÓN INADECUADA EN PERFUMERÍA DE ALTA DENSIDAD:\n\nComparativo detallado de los 5 pasos para brindar una atención de excelencia frente a las faltas de una atención inadecuada:\n\n1. SALUDA CORDIALMENTE: Recibe al cliente con una sonrisa y amabilidad.\n2. ESCUCHA Y COMPRENDE: Pregunta qué tipo de fragancia busca y cuáles son sus preferencias.\n3. CONOCE Y RECOMIENDA: Explica las características de las fragancias y recomienda las que mejor se adapten a él.\n4. RESUELVE DUDAS: Brinda información clara y precisa con paciencia y amabilidad.\n5. AGRADECE Y DESPIDE: Agradece la visita y lo invitas a regresar.\n\n• RESULTADO ATENCIÓN ADECUADA: Cliente satisfecho, confianza, fidelización y recomendación.\n• RESULTADO ATENCIÓN INADECUADA (No saludar, no escuchar, información incorrecta, trato grosero, no despedirse): Cliente insatisfecho, desconfianza, pérdida de ventas y mala reputación.",
                         "preguntas": [
                                     {
-                                                "pregunta": "¿Qué distingue a una atención inadecuada en tienda?",
+                                                "pregunta": "¿Cuáles son los resultados directos de brindar una Atención Adecuada?",
                                                 "opciones": [
-                                                            "Actitud apática, brazos cruzados, estar distráido en el celular o desinterés",
-                                                            "Saludar con una sonrisa y escuchar atentamente",
-                                                            "Explicar las familias olfativas con calma",
-                                                            "Ofrecer opciones según el presupuesto"
+                                                            "Cliente satisfecho, confianza, fidelización y recomendación",
+                                                            "Cliente insatisfecho y pérdida de ventas",
+                                                            "Mala reputación y desconfianza",
+                                                            "Ningún impacto en el cliente"
                                                 ],
                                                 "respuesta_correcta": 0
                                     },
                                     {
-                                                "pregunta": "¿Qué genera en el cliente ser atendido de forma empática y adecuada?",
+                                                "pregunta": "¿Qué distingue a una Atención Inadecuada según la guía?",
                                                 "opciones": [
-                                                            "Sensación de acogida, confianza en el producto y fidelidad a la marca",
-                                                            "Ganas de salir corriendo",
-                                                            "Desconfianza en la empresa",
-                                                            "Ningún impacto"
+                                                            "No saludar, no escuchar, dar información incorrecta, trato grosero y no despedirse",
+                                                            "Saludar con sonrisa y escuchar preferencias",
+                                                            "Explicar características y resolver dudas con paciencia",
+                                                            "Agradecer la visita e invitar a regresar"
                                                 ],
                                                 "respuesta_correcta": 0
                                     },
                                     {
-                                                "pregunta": "¿Qué hacer si un cliente está indeciso entre varios perfumes?",
+                                                "pregunta": "¿Qué acción corresponde a la fase de 'Escucha y Comprende'?",
                                                 "opciones": [
-                                                            "Escucharlo, asesorarlo en notas olfativas y recomendar con paciencia y amabilidad",
-                                                            "Presionarlo para que compre la más cara de inmediato",
-                                                            "Ignorarlo y atender a otro",
-                                                            "Decirle que todas huelen igual"
+                                                            "Preguntar qué tipo de fragancia busca y cuáles son sus preferencias",
+                                                            "Ignorar al cliente o hacerlo esperar sin razón",
+                                                            "Responder de manera seca o con mala actitud",
+                                                            "No ofrecer explicaciones sobre los perfumes"
                                                 ],
                                                 "respuesta_correcta": 0
                                     }
