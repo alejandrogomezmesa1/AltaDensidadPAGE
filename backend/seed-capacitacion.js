@@ -1389,9 +1389,9 @@ async function seedCapacitacion(existingPool) {
             {
                         "orden": 37,
                         "titulo": "37. Personal Encargado de la Brigada de Emergencia",
-                        "tipo": "video",
+                        "tipo": "imagen",
                         "imagen_url": "/assets/img/capacitacion/37.png",
-                        "video_url": "/assets/img/induccion/video_brigada_emergencia.mp4",
+                        "video_url": null,
                         "contenido": "PERSONAL ENCARGADO DE LA BRIGADA DE EMERGENCIA:\n\nPresentación de los brigadistas en el punto de venta. Visualiza el video para conocer a los integrantes designados y sus distintivos para saber a quién acudir ante cualquier emergencia médica o conato.",
                         "preguntas": [
                                     {
@@ -1429,9 +1429,9 @@ async function seedCapacitacion(existingPool) {
             {
                         "orden": 38,
                         "titulo": "38. Personal Encargado del Comité COCOLA",
-                        "tipo": "video",
+                        "tipo": "imagen",
                         "imagen_url": "/assets/img/capacitacion/38.png",
-                        "video_url": "/assets/img/induccion/video_cocola_atencion.mp4",
+                        "video_url": null,
                         "contenido": "PERSONAL ENCARGADO DEL COMITÉ DE CONVIVENCIA (COCOLA):\n\nPresentación de los representantes encargados de promover un clima laboral sano, respetuoso y prevenir el acoso laboral o diferencias interpersonales. En COCOLA trabajamos con absoluta reserva y confidencialidad.",
                         "preguntas": [
                                     {
@@ -1511,7 +1511,7 @@ async function seedCapacitacion(existingPool) {
                         "titulo": "40. Atención Adecuada vs Atención Inadecuada",
                         "tipo": "imagen",
                         "imagen_url": "/assets/img/capacitacion/40.png",
-                        "video_url": "/assets/img/induccion/video_cocola_atencion.mp4",
+                        "video_url": null,
                         "contenido": "ATENCIÓN ADECUADA VS ATENCIÓN INADECUADA EN PERFUMERÍA:\n\nEjemplo práctico comparativo entre una atención cercana, orientadora y amable frente a una actitud apática, distraída con el celular o desinteresada con el comprador.\n\nLa diferencia está en la empatía y en hacer sentir bienvenido a cada cliente que ingresa a nuestro espacio.",
                         "preguntas": [
                                     {
