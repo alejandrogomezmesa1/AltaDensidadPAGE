@@ -949,9 +949,9 @@ async function seedCapacitacion(existingPool) {
             {
                         "orden": 26,
                         "titulo": "26. Liderazgo en SST y Atención al Cliente",
-                        "tipo": "imagen",
+                        "tipo": "video",
                         "imagen_url": "/assets/img/capacitacion/26.png",
-                        "video_url": null,
+                        "video_url": "/assets/img/induccion/video_cocola_atencion.mp4",
                         "contenido": "TE PRESENTAMOS A VICTOR MANUEL - LÍDER DE SST Y ATENCIÓN AL CLIENTE:\n\nVictor Manuel lidera la gestión de Seguridad y Salud en el Trabajo (SST) y la estandarización del servicio y atención al cliente en nuestra red de tiendas.",
                         "preguntas": [
                                     {
