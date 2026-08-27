@@ -33,13 +33,17 @@ router.post('/registrar', requireAdmin, async (req, res) => {
         let whatsapp_url = null;
         if (telefono) {
             const numLimpio = telefono.replace(/\D/g, '');
-            const textoMensaje = `*¡Hola ${nombre}!* Bienvenido(a) al equipo de Perfumería Alta Densidad ✨.\n\n` +
-                `Te hemos registrado como nuevo colaborador. Ingresa a tu panel en:\n` +
+            const textoMensaje = `*¡Hola ${nombre}!* ✨\n\n` +
+                `Estas son tus credenciales de acceso para la *Inducción y Capacitación Obligatoria* de *Perfumería Alta Densidad*:\n\n` +
+                `🌐 *Link de ingreso a la plataforma:*\n` +
                 `https://alta-densidad-page.vercel.app/login.html\n\n` +
-                `*Tus credenciales:*\n` +
-                `📧 *Email:* ${email}\n` +
-                `🔑 *Contraseña:* ${password}\n\n` +
-                `*Importante:* Al ingresar debes realizar la capacitación obligatoria y aprobar el examen final de inducción para habilitar tu acceso completo. ¡Muchos éxitos!`;
+                `📧 *Correo registrado:* ${email}\n` +
+                `🔑 *Contraseña temporal:* ${password}\n\n` +
+                `📋 *¿Qué encontrarás al ingresar a la plataforma?*\n` +
+                `1️⃣ *Breve Inducción Institucional:* Conocerás nuestra historia, misión, visión, reglamento interno, políticas de SST, EPP, plan de emergencia y comités (Brigada y COCOLA).\n` +
+                `2️⃣ *Capacitación Operativa:* Aprenderás sobre nuestro portafolio de perfumería, atención al cliente, presentación personal y proceso de facturación en SIIGO.\n` +
+                `3️⃣ *Evaluación Interactiva:* Cada uno de los 53 módulos cuenta con 3 preguntas de validación, seguidas del Examen Final Obligatorio para habilitar tu acceso definitivo.\n\n` +
+                `¡Te deseamos muchos éxitos en tu proceso de aprendizaje! 🚀`;
             
             whatsapp_url = `https://wa.me/${numLimpio}?text=${encodeURIComponent(textoMensaje)}`;
         }

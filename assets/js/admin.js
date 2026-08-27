@@ -2243,15 +2243,17 @@ function registrarEventosEmpleados() {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Empleado Registrado!',
-                        html: htmlMessage + `<p style="color:#aaa; font-size:0.85rem;">Puedes hacer clic en el botón a continuación para enviar los datos por WhatsApp.</p>`,
+                        html: htmlMessage + `
+                            <p style="color:#aaa; font-size:0.85rem; margin-top:12px;">Se ha generado el mensaje predeterminado con las credenciales, link y contexto de la inducción para enviar por WhatsApp.</p>
+                            <div style="margin-top:16px;">
+                                <a href="${escHtml(data.data.whatsapp_url)}" target="_blank" class="swal2-confirm swal2-styled" style="background-color:#25D366; text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:6px; font-weight:600; color:#fff;">
+                                    <i class="fab fa-whatsapp" style="font-size:1.2rem;"></i> Abrir WhatsApp (Nueva Pestaña)
+                                </a>
+                            </div>
+                        `,
+                        showConfirmButton: false,
                         showCancelButton: true,
-                        confirmButtonColor: '#25D366',
-                        confirmButtonText: '<i class="fab fa-whatsapp"></i> Enviar por WhatsApp',
                         cancelButtonText: 'Cerrar'
-                    }).then((res) => {
-                        if (res.isConfirmed) {
-                            window.open(data.data.whatsapp_url, '_blank');
-                        }
                     });
                 } else {
                     Swal.fire({
