@@ -1631,12 +1631,19 @@ function renderModuloLectura(idx) {
             </div>
 
             <div style="border-top: 1px solid rgba(212,175,55,0.3); padding-top: 24px;">
-                <h4 style="color:#D4AF37; margin-top:0; font-size:1.15rem; font-weight:600;">
-                    <i class="fas fa-question-circle"></i> Preguntas de Validación del Módulo (${mod.preguntas ? mod.preguntas.length : 0} obligatorias)
-                </h4>
-                <p style="color:#bbb; font-size:0.88rem; margin-bottom:20px;">
-                    Debes responder las preguntas correctamente para avanzar al siguiente módulo.
-                </p>
+                ${(mod.preguntas && mod.preguntas.length > 0) ? `
+                    <h4 style="color:#D4AF37; margin-top:0; font-size:1.15rem; font-weight:600;">
+                        <i class="fas fa-question-circle"></i> Preguntas de Validación del Módulo (${mod.preguntas.length} obligatorias)
+                    </h4>
+                    <p style="color:#bbb; font-size:0.88rem; margin-bottom:20px;">
+                        Debes responder las preguntas correctamente para avanzar al siguiente módulo.
+                    </p>
+                ` : `
+                    <div style="background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.35); padding: 16px 20px; border-radius: 10px; margin-bottom: 20px; color: #F3E5AB; font-size: 0.95rem; display:flex; align-items:center; gap:12px;">
+                        <i class="fas fa-info-circle" style="font-size:1.4rem; color:#D4AF37;"></i>
+                        <span>Este módulo es una introducción y vista previa. No requiere responder preguntas. Haz clic abajo para registrar la lectura y continuar.</span>
+                    </div>
+                `}
                 <form id="formModuloPreguntas">
                     ${(mod.preguntas || []).map((p, pIdx) => `
                         <div style="background:#141414; border:1px solid #2e2e2e; border-radius:10px; padding:18px; margin-bottom:16px;">
@@ -1654,7 +1661,7 @@ function renderModuloLectura(idx) {
                     
                     <div style="display:flex; justify-content:flex-end; margin-top:24px;">
                         <button type="submit" class="btn-primary" style="padding:14px 28px; font-size:1rem; font-weight:600; display:inline-flex; align-items:center; gap:10px;">
-                            <i class="fas fa-check-circle"></i> Verificar y Continuar al Siguiente Módulo
+                            <i class="${(mod.preguntas && mod.preguntas.length > 0) ? 'fas fa-check-circle' : 'fas fa-arrow-right'}"></i> ${(mod.preguntas && mod.preguntas.length > 0) ? 'Verificar y Continuar al Siguiente Módulo' : 'Continuar al Siguiente Módulo'}
                         </button>
                     </div>
                 </form>

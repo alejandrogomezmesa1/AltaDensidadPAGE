@@ -135,38 +135,7 @@ async function seedCapacitacion(existingPool) {
                         "imagen_url": "/assets/img/capacitacion/4.png",
                         "video_url": null,
                         "contenido": "FRAGANCIAS ALTA DENSIDAD - CONOCE MÁS DE NOSOTROS:\n\n\"La esencia de lujo a una fracción del precio\"\n\nNuestra propuesta se basa en acercar el universo de la perfumería de alta gama a todas las personas. Nos enfocamos en ofrecer fragancias con alta fijación olfativa, empaques elegantes y precios competitivos, acompañadas de un servicio personalizado.",
-                        "preguntas": [
-                                    {
-                                                "pregunta": "¿Cuál es el eslogan corporativo de la marca?",
-                                                "opciones": [
-                                                            "La esencia de lujo a una fracción del precio",
-                                                            "Perfumes costosos para pocos",
-                                                            "Ventas al por mayor exclusivamente",
-                                                            "Fragancias sin garantía"
-                                                ],
-                                                "respuesta_correcta": 0
-                                    },
-                                    {
-                                                "pregunta": "¿Cuál es la promesa principal hacia los clientes?",
-                                                "opciones": [
-                                                            "Ofrecer fragancias de alta calidad y fijación a precios justos y competitivos",
-                                                            "Vender perfumes de baja duración",
-                                                            "Cerrar tiendas físicas",
-                                                            "Reducir la variedad de aromas"
-                                                ],
-                                                "respuesta_correcta": 0
-                                    },
-                                    {
-                                                "pregunta": "¿Qué atributos destacan en nuestra propuesta de valor?",
-                                                "opciones": [
-                                                            "Calidad de esencias, empaques elegantes, precios accesibles y atención cercana",
-                                                            "Impersonalidad y desorden",
-                                                            "Precios elevados sin garantía",
-                                                            "Atención apática"
-                                                ],
-                                                "respuesta_correcta": 0
-                                    }
-                        ]
+                        "preguntas": []
             },
             {
                         "orden": 5,

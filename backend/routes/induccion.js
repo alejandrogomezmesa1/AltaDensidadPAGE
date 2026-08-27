@@ -89,8 +89,8 @@ router.get('/items', requireAuth, async (req, res) => {
 router.post('/validar-item', requireAuth, async (req, res) => {
     try {
         const { item_id, respuestas } = req.body;
-        if (!item_id || !respuestas) {
-            return res.status(400).json({ success: false, message: 'Faltan respuestas o ID de módulo' });
+        if (!item_id) {
+            return res.status(400).json({ success: false, message: 'Falta el ID del módulo' });
         }
 
         const pool = await getConnection();
@@ -99,25 +99,26 @@ router.post('/validar-item', requireAuth, async (req, res) => {
             [item_id]
         );
 
-        if (preguntas.length === 0) {
-            return res.status(400).json({ success: false, message: 'El módulo no tiene preguntas asociadas' });
-        }
-
-        let todasCorrectas = true;
-        for (let p of preguntas) {
-            const respuestaUsuario = parseInt(respuestas[p.id], 10);
-            if (isNaN(respuestaUsuario) || respuestaUsuario !== p.respuesta_correcta) {
-                todasCorrectas = false;
-                break;
+        if (preguntas.length > 0) {
+            if (!respuestas) {
+                return res.status(400).json({ success: false, message: 'Faltan las respuestas del módulo' });
             }
-        }
+            let todasCorrectas = true;
+            for (let p of preguntas) {
+                const respuestaUsuario = parseInt(respuestas[p.id], 10);
+                if (isNaN(respuestaUsuario) || respuestaUsuario !== p.respuesta_correcta) {
+                    todasCorrectas = false;
+                    break;
+                }
+            }
 
-        if (!todasCorrectas) {
-            return res.json({
-                success: false,
-                completado: false,
-                message: 'No todas las respuestas fueron correctas. Revisa el contenido e inténtalo de nuevo.'
-            });
+            if (!todasCorrectas) {
+                return res.json({
+                    success: false,
+                    completado: false,
+                    message: 'No todas las respuestas fueron correctas. Revisa el contenido e inténtalo de nuevo.'
+                });
+            }
         }
 
         // Registrar progreso
@@ -131,7 +132,9 @@ router.post('/validar-item', requireAuth, async (req, res) => {
         res.json({
             success: true,
             completado: true,
-            message: '¡Excelente! Has respondido correctamente todas las preguntas de este módulo.'
+            message: preguntas.length > 0
+                ? '¡Excelente! Has respondido correctamente todas las preguntas de este módulo.'
+                : '¡Excelente! Módulo visto y completado exitosamente.'
         });
     } catch (err) {
         console.error('Error en validar-item:', err);
