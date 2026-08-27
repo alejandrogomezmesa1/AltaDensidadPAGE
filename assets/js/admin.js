@@ -1629,10 +1629,13 @@ function renderModuloLectura(idx) {
 
     contenedor.innerHTML = `
         <div style="background: rgba(12,12,12,0.95); border: 1px solid rgba(212,175,55,0.35); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
                 <span style="color:#D4AF37; font-weight:bold; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.8px;">
                     <i class="fas fa-book-reader"></i> Módulo ${idx + 1} de ${induccionItems.length}
                 </span>
+                <a href="/assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" style="color:#D4AF37; font-size:0.85rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:20px; transition:all 0.2s ease;">
+                    <i class="fas fa-file-pdf" style="color:#e11d48;"></i> Descargar Manual PDF Anexo
+                </a>
             </div>
             <h3 style="color:#ffffff; margin: 0 0 20px 0; font-size:1.5rem; font-weight:600;">${escHtml(mod.titulo)}</h3>
 
@@ -1818,8 +1821,16 @@ async function cargarPreguntasExamenFinal() {
                 if (dataEval.success && dataEval.aprobado) {
                     Swal.fire({
                         icon: 'success',
-                        title: '🎉 ¡Felicitaciones! Examen Aprobado',
-                        text: dataEval.message,
+                        title: '🎉 ¡Felicitaciones! Examen Aprobado al 100%',
+                        html: `
+                            <p style="color:#ddd; font-size:1rem; margin-bottom:16px;">${escHtml(dataEval.message)}</p>
+                            <div style="background:#141414; border:1px solid #D4AF37; padding:18px; border-radius:10px; margin-top:14px; text-align:center;">
+                                <p style="color:#D4AF37; font-weight:bold; font-size:1rem; margin:0 0 10px 0;"><i class="fas fa-file-pdf"></i> Material Obligatorio de Consulta:</p>
+                                <a href="/assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" style="background: linear-gradient(135deg, #D4AF37, #AA7C11); color: #000; font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.98rem; box-shadow: 0 4px 15px rgba(212,175,55,0.4);">
+                                    <i class="fas fa-download"></i> Descargar Manual en PDF
+                                </a>
+                            </div>
+                        `,
                         confirmButtonText: 'Continuar'
                     }).then(() => {
                         cargarProgresoInduccion();
@@ -1846,16 +1857,29 @@ async function cargarPreguntasExamenFinal() {
 function renderVistaAutorizacionPendiente() {
     const contenedor = document.getElementById('induccionContenedorAutorizacion');
     contenedor.innerHTML = `
-        <div style="background: rgba(37,99,235,0.1); border: 2px solid #2563eb; border-radius: 12px; padding: 32px; text-align: center;">
+        <div style="background: rgba(37,99,235,0.08); border: 2px solid #2563eb; border-radius: 14px; padding: 32px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.6);">
             <div style="font-size: 3.5rem; color: #3b82f6; margin-bottom: 12px;"><i class="fas fa-user-check"></i></div>
-            <h3 style="color: #ffffff; font-size: 1.8rem; margin: 0 0 10px 0;">¡Examen de Inducción Aprobado!</h3>
-            <p style="color: #93c5fd; max-width: 600px; margin: 0 auto 16px auto; font-size: 1.05rem; line-height: 1.6;">
-                Has completado la capacitación y aprobado el examen final al 100%. Tu cuenta se encuentra actualmente en estado:
-                <strong style="color:#ffffff;">Pendiente de Autorización</strong>.
+            <h3 style="color: #ffffff; font-size: 1.875rem; margin: 0 0 10px 0; font-weight: 700;">¡Examen de Inducción Aprobado al 100%! 🎉</h3>
+            <p style="color: #93c5fd; max-width: 650px; margin: 0 auto 16px auto; font-size: 1.05rem; line-height: 1.6;">
+                Has completado exitosamente la capacitación y aprobado el examen final. Tu cuenta se encuentra actualmente en estado:
+                <strong style="color:#ffffff; background:#1d4ed8; padding:2px 8px; border-radius:4px;">Pendiente de Autorización</strong>.
             </p>
-            <p style="color: #aaa; font-size: 0.95rem;">
-                Por favor, notifica al <strong>Administrador</strong> para que confirme tu aprobación y haga clic en <em>"Autorizar Ingreso"</em> desde su panel. Una vez hecho esto, tendrás acceso completo al sistema.
+            <p style="color: #aaa; font-size: 0.95rem; margin-bottom: 28px;">
+                Por favor, notifica al <strong>Administrador</strong> para que confirme tu aprobación y autorice tu acceso definitivo al sistema.
             </p>
+
+            <!-- CARD OBLIGATORIA DE DESCARGA DE MATERIAL DE APOYO EN PDF -->
+            <div style="background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(20,20,20,0.95) 100%); border: 2px solid #D4AF37; border-radius: 12px; padding: 26px; max-width: 680px; margin: 0 auto; text-align: center; box-shadow: 0 6px 25px rgba(212,175,55,0.25);">
+                <div style="display:inline-flex; align-items:center; gap:10px; color:#D4AF37; font-size:1.2rem; font-weight:700; margin-bottom:10px;">
+                    <i class="fas fa-file-pdf" style="font-size:1.6rem;"></i> MATERIAL OBLIGATORIO DE APOYO DE CAPACITACIÓN
+                </div>
+                <p style="color:#e5e7eb; font-size:0.95rem; line-height:1.6; margin-bottom:20px;">
+                    Descarga tu <strong>Manual Completo de Capacitación en PDF</strong>. Guarda este archivo para repasar los módulos, portafolio, normas y procedimientos que te servirán como guía de apoyo durante tus primeros días en la empresa.
+                </p>
+                <a href="/assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" class="btn-primary" style="background: linear-gradient(135deg, #D4AF37, #AA7C11); color: #000; font-weight: 700; padding: 14px 28px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; font-size: 1.08rem; box-shadow: 0 4px 18px rgba(212,175,55,0.4);">
+                    <i class="fas fa-download" style="font-size:1.3rem;"></i> Descargar Manual Completo de Capacitación (PDF)
+                </a>
+            </div>
         </div>
     `;
 }
