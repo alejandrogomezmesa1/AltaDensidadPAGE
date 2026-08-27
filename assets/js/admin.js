@@ -1703,24 +1703,23 @@ function renderModuloLectura(idx) {
             const data = await res.json();
 
             if (data.success && data.completado) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Excelente!',
-                    text: data.message,
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+                // Avance directo e instantáneo sin popup molesto por cada módulo
                 await cargarProgresoInduccion();
             } else {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Respuestas Incorrectas',
-                    text: data.message || 'Una o más respuestas no son correctas. Por favor repasa el texto e inténtalo de nuevo.',
-                    confirmButtonText: 'Entendido y Corregir'
+                    icon: 'warning',
+                    title: 'Verifica tus respuestas',
+                    text: data.message || 'Una o más respuestas no son correctas. Por favor repasa la lectura e inténtalo de nuevo.',
+                    confirmButtonText: 'Corregir Respuestas'
                 });
             }
         } catch (err) {
-            Swal.fire('Error', 'No se pudo enviar la validación del módulo: ' + err.message, 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de Validación',
+                text: 'No se pudo enviar la validación del módulo: ' + err.message,
+                confirmButtonText: 'Entendido'
+            });
         }
     });
 }
@@ -1821,15 +1820,16 @@ async function cargarPreguntasExamenFinal() {
                         icon: 'success',
                         title: '🎉 ¡Felicitaciones! Examen Aprobado al 100%',
                         html: `
-                            <p style="color:#ddd; font-size:1rem; margin-bottom:16px;">${escHtml(dataEval.message)}</p>
-                            <div style="background:#141414; border:1px solid #D4AF37; padding:18px; border-radius:10px; margin-top:14px; text-align:center;">
-                                <p style="color:#D4AF37; font-weight:bold; font-size:1rem; margin:0 0 10px 0;"><i class="fas fa-file-pdf"></i> Material Obligatorio de Consulta:</p>
-                                <a href="/assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" style="background: linear-gradient(135deg, #D4AF37, #AA7C11); color: #000; font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.98rem; box-shadow: 0 4px 15px rgba(212,175,55,0.4);">
+                            <p style="color:#e5e7eb; font-size:1.02rem; margin-bottom:18px; line-height:1.6;">${escHtml(dataEval.message)}</p>
+                            <div style="background: linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(20,20,20,0.95) 100%); border: 1px solid #D4AF37; padding:20px; border-radius:12px; margin-top:14px; text-align:center; box-shadow: 0 6px 25px rgba(0,0,0,0.8);">
+                                <p style="color:#D4AF37; font-weight:700; font-size:1.05rem; margin:0 0 8px 0;"><i class="fas fa-file-pdf"></i> Material Obligatorio de Consulta:</p>
+                                <p style="color:#aaa; font-size:0.88rem; margin-bottom:14px;">Descarga tu Guía y Manual Completo en PDF para repasar durante tus primeros días en la empresa.</p>
+                                <a href="/assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" style="background: linear-gradient(135deg, #D4AF37, #AA7C11); color: #000; font-weight: 700; text-decoration: none; padding: 12px 26px; border-radius: 8px; display: inline-flex; align-items: center; gap: 10px; font-size: 0.98rem; box-shadow: 0 4px 18px rgba(212,175,55,0.4);">
                                     <i class="fas fa-download"></i> Descargar Manual en PDF
                                 </a>
                             </div>
                         `,
-                        confirmButtonText: 'Continuar'
+                        confirmButtonText: 'Continuar a Mi Panel'
                     }).then(() => {
                         cargarProgresoInduccion();
                     });
