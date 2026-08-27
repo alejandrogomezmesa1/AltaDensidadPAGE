@@ -1592,6 +1592,14 @@ function renderModuloLectura(idx) {
     const mod = induccionItems[idx];
     const contenedor = document.getElementById('induccionContenedorModulo');
 
+    // Desplazamiento automático suave hacia arriba al cargar un nuevo módulo
+    const secInd = document.getElementById('seccionInduccion') || contenedor;
+    if (secInd) {
+        secInd.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     let mediaHtml = '';
     if (mod.tipo === 'video' || mod.video_url) {
         const vUrl = mod.video_url || '';

@@ -704,38 +704,7 @@ async function seedCapacitacion(existingPool) {
                         "imagen_url": "/assets/img/capacitacion/19.png",
                         "video_url": null,
                         "contenido": "FRAGANCIAS ALTA DENSIDAD - PORTAFOLIO DE PRODUCTOS:\n\n\"La esencia de lujo a una fracción del precio\"\n\nIniciamos la sección comercial de nuestro portafolio de productos. En Fragancias Alta Densidad nos enfocamos en ofrecer una amplia gama de opciones olfativas desarrolladas con los más altos estándares de calidad y durabilidad.",
-                        "preguntas": [
-                                    {
-                                                "pregunta": "¿Qué tema abordamos a partir del módulo 19?",
-                                                "opciones": [
-                                                            "La presentación del Portafolio de Productos de Fragancias Alta Densidad",
-                                                            "Normas de contabilidad fiscal",
-                                                            "Instalación de redes de computadores",
-                                                            "Capacitación en limpieza de cristales"
-                                                ],
-                                                "respuesta_correcta": 0
-                                    },
-                                    {
-                                                "pregunta": "¿Cuál es la promesa que respalda nuestro portafolio comercial?",
-                                                "opciones": [
-                                                            "Ofrecer la esencia de lujo a una fracción del precio",
-                                                            "Vender perfumes de baja duración",
-                                                            "Fragancias caras para pocos clientes",
-                                                            "Ventas exclusivamente al por mayor fuera del país"
-                                                ],
-                                                "respuesta_correcta": 0
-                                    },
-                                    {
-                                                "pregunta": "¿Por qué es importante dominar las líneas que componen nuestro portafolio?",
-                                                "opciones": [
-                                                            "Para orientar al cliente con precisión y brindarle una experiencia de compra personalizada",
-                                                            "No influye en las ventas",
-                                                            "Solo para llenar datos en SIIGO",
-                                                            "Para vender cualquier producto al azar"
-                                                ],
-                                                "respuesta_correcta": 0
-                                    }
-                        ]
+                        "preguntas": []
             },
             {
                         "orden": 20,
@@ -899,39 +868,39 @@ async function seedCapacitacion(existingPool) {
             },
             {
                         "orden": 24,
-                        "titulo": "24. Concentración Extrait de Parfum y Canales de Venta",
+                        "titulo": "24. Concentraciones y Colección Niche",
                         "tipo": "imagen",
                         "imagen_url": "/assets/img/capacitacion/24.png",
                         "video_url": null,
-                        "contenido": "CONCENTRACIÓN EXTRAIT DE PARFUM Y CANALES DE VENTA:\n\n• CONCENTRACIÓN EXTRAIT DE PARFUM:\nEn Fragancias Alta Densidad manejamos la máxima graduación de concentración (Extrait de Parfum) en referencias destacadas como Oriental Leather, Citrus Amber, Spicy Wood y Floral Absolute. Esta concentración garantiza la máxima fijación, intensidad y durabilidad del aroma en la piel.\n\n• EXPERIENCIAS DE COMPRA Y CANALES DE VENTA:\nBrindamos atención personalizada, calidad y asesoría integral a través de nuestros canales:\n1. Punto de Venta Físico (Boutique).\n2. Plataforma Web Oficial.\n3. Venta Corporativa y Regalos Empresariales.",
+                        "contenido": "CONCENTRACIONES Y FRAGANCIAS NICHE (EXTRAIT DE PARFUM):\n\nLíneas exclusivas de alta densidad como Oriental Leather, Citrus Amber, Spicy Wood en concentración Extrait de Parfum, caracterizadas por su riqueza olfativa, notas profundas y una fijación extraordinaria.",
                         "preguntas": [
                                     {
-                                                "pregunta": "¿Cuál es la graduación de concentración de referencias como Oriental Leather, Citrus Amber o Spicy Wood?",
+                                                "pregunta": "¿Qué concentración caracteriza a la línea Niche (Oriental Leather, Citrus Amber, Spicy Wood)?",
                                                 "opciones": [
-                                                            "Extrait de Parfum (Máxima concentración y durabilidad en piel)",
+                                                            "Extrait de Parfum (Extracto de perfume de máxima concentración)",
                                                             "Eau de Cologne diluida",
-                                                            "Splash corporal liviano",
-                                                            "Aceite vegetal sin alcohol"
+                                                            "Agua perfumada de cuerpo",
+                                                            "Esencia pura sin alcohol"
                                                 ],
                                                 "respuesta_correcta": 0
                                     },
                                     {
-                                                "pregunta": "¿Qué beneficio aporta la concentración Extrait de Parfum al consumidor?",
+                                                "pregunta": "¿Qué atributos definen a las fragancias de colección Niche?",
                                                 "opciones": [
-                                                            "Garantiza la máxima fijación, intensidad y durabilidad del aroma",
-                                                            "Reduce el tiempo de permanencia del perfume",
-                                                            "Evapora la fragancia en pocos minutos",
-                                                            "Cambia el color de las prendas"
+                                                            "Notas olfativas complejas, alta densidad de esencia y duración muy prolongada",
+                                                            "Aromas ligeros que se evaporan rápido",
+                                                            "Fragancias genéricas de baja calidad",
+                                                            "Aromas imperceptibles"
                                                 ],
                                                 "respuesta_correcta": 0
                                     },
                                     {
-                                                "pregunta": "¿Cuáles son los canales de venta e interacción habilitados en la empresa?",
+                                                "pregunta": "¿A qué perfil de cliente orientar las fragancias Niche Extrait de Parfum?",
                                                 "opciones": [
-                                                            "Punto de Venta Físico (Boutique), Plataforma Web y Venta Corporativa",
-                                                            "Ventas telefónicas no oficiales",
-                                                            "Subastas informales en la calle",
-                                                            "Venta exclusiva por correo postal"
+                                                            "A clientes exigentes que valoran aromas intensos, exclusivos y de máxima estela",
+                                                            "A personas que buscan aromas muy tenues",
+                                                            "Únicamente para aromatizar ropa guardada",
+                                                            "Solo para niños"
                                                 ],
                                                 "respuesta_correcta": 0
                                     }
@@ -939,39 +908,39 @@ async function seedCapacitacion(existingPool) {
             },
             {
                         "orden": 25,
-                        "titulo": "25. Compromiso con el Portafolio y Asesoría al Cliente",
+                        "titulo": "25. Experiencias de Compra y Portafolio",
                         "tipo": "imagen",
                         "imagen_url": "/assets/img/capacitacion/25.png",
                         "video_url": null,
-                        "contenido": "COMPROMISO CON EL PORTAFOLIO Y ASESORÍA AL CLIENTE:\n\nEn Fragancias de Alta Densidad contamos con un portafolio pensado para ofrecer diferentes opciones y experiencias a nuestros clientes. Desde la perfumería original hasta nuestras fragancias preparadas y presentaciones DICKENS, buscamos brindar variedad, calidad y alternativas para cada necesidad.\n\nNuestro compromiso es que cada integrante del equipo conozca nuestro portafolio y pueda asesorar al cliente con seguridad, honestidad y excelente servicio.\n\nFragancias de Alta Densidad: una fragancia para cada estilo, una experiencia para recordar.",
+                        "contenido": "EXPERIENCIAS DE COMPRA Y PORTAFOLIO COMPLETO:\n\nEn Fragancias Alta Densidad contamos con un portafolio pensado para ofrecer diferentes opciones y experiencias memorables a nuestros clientes, guiándolos a través de familias olfativas y recomendaciones personalizadas.",
                         "preguntas": [
                                     {
-                                                "pregunta": "¿Cuál es el compromiso del equipo frente al portafolio de productos?",
+                                                "pregunta": "¿Qué busca brindar Alta Densidad a través de su portafolio diversificado?",
                                                 "opciones": [
-                                                            "Conocer el portafolio completo para asesorar al cliente con seguridad, honestidad y excelente servicio",
-                                                            "Vender solo el producto más costoso",
-                                                            "Omitir información sobre las alternativas",
-                                                            "Desconocer las presentaciones disponibles"
+                                                            "Diferentes opciones y experiencias de compra memorables para cada cliente",
+                                                            "Una sola opción rígida para todos",
+                                                            "Vender bajo presión sin asesoría",
+                                                            "Entregar productos al azar"
                                                 ],
                                                 "respuesta_correcta": 0
                                     },
                                     {
-                                                "pregunta": "¿Qué alternativas integra nuestro portafolio para brindar variedad?",
+                                                "pregunta": "¿Cómo se orienta al cliente durante la asesoría olfativa en tienda?",
                                                 "opciones": [
-                                                            "Perfumería original, perfumería preparada y presentaciones DICKENS",
-                                                            "Solo muestras en papel",
-                                                            "Productos genéricos sin marca",
-                                                            "Envases vacíos de laboratorio"
+                                                            "Guiándolo según familias olfativas, ocasión de uso y gustos personales",
+                                                            "Imponiendo la fragancia que más pese",
+                                                            "Ofreciendo únicamente la opción más costosa",
+                                                            "Sin mostrar probadores"
                                                 ],
                                                 "respuesta_correcta": 0
                                     },
                                     {
-                                                "pregunta": "¿Cuál es el objetivo final de asesorar con honestidad y excelente servicio?",
+                                                "pregunta": "¿Qué actitud debe demostrar el asesor durante la prueba de aromas?",
                                                 "opciones": [
-                                                            "Brindar una experiencia memorable ofreciendo una fragancia para cada estilo de cliente",
-                                                            "Hacer ventas de una sola vez",
-                                                            "Acelerar la salida del comprador",
-                                                            "Evitar preguntas del cliente"
+                                                            "Paciencia, escucha activa y recomendación experta",
+                                                            "Prisa por cerrar la venta",
+                                                            "Molestia si el cliente prueba varios probadores",
+                                                            "Indiferencia"
                                                 ],
                                                 "respuesta_correcta": 0
                                     }
