@@ -215,18 +215,13 @@ const modalTitulo       = document.getElementById('modalTitulo');
 const nombreEliminar    = document.getElementById('nombreEliminar');
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const token = localStorage.getItem('token');
-    const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
-
-    if (!token || !usuario || (usuario.rol !== 'admin' && usuario.rol !== 'empleado')) {
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // MODIFICACIÓN TEMPORAL: Forzar únicamente la vista de Capacitación e Inducción
+    // MODIFICACIÓN TEMPORAL: Capacitación 100% Pública y Gratuita (sin requerir login)
     document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
     const tabWrapper = document.querySelector('.admin-tabs-wrapper');
     if (tabWrapper) tabWrapper.style.display = 'none';
+
+    const btnVolver = document.querySelector('.btn-volver');
+    if (btnVolver) btnVolver.style.display = 'none';
 
     document.querySelectorAll('.admin-main > div').forEach(d => d.classList.add('hidden'));
     const secInd = document.getElementById('seccionInduccion');
@@ -1450,24 +1445,46 @@ async function iniciarInduccionEmpleado() {
 }
 
 async function cargarProgresoInduccion() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') || '';
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
     try {
-        const resProgreso = await fetch(`${API_INDUCCION_URL}/mi-progreso`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const resProgreso = await fetch(`${API_INDUCCION_URL}/mi-progreso`, { headers });
         const dataProgreso = await resProgreso.json();
-        if (!dataProgreso.success) throw new Error(dataProgreso.message);
+        if (dataProgreso.success && dataProgreso.data) {
+            induccionProgresoData = dataProgreso.data;
+        } else {
+            induccionProgresoData = {
+                usuario: {
+                    id: 0,
+                    nombre: "Visitante",
+                    email: "",
+                    rol: "invitado",
+                    estado_induccion: localStorage.getItem('guest_estado_induccion') || 'pendiente_capacitacion',
+                    intentos_examen: 0,
+                    ultimo_puntaje: 0
+                },
+                totalItems: 0,
+                itemsCompletados: []
+            };
+        }
 
-        induccionProgresoData = dataProgreso.data;
-        induccionItemsCompletados = dataProgreso.data.itemsCompletados || [];
-
-        const resItems = await fetch(`${API_INDUCCION_URL}/items`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const resItems = await fetch(`${API_INDUCCION_URL}/items`);
         const dataItems = await resItems.json();
         if (!dataItems.success) throw new Error(dataItems.message);
 
         induccionItems = dataItems.data || [];
+
+        if (!token) {
+            const guestCompletados = JSON.parse(localStorage.getItem('guest_items_completados') || '[]');
+            induccionItemsCompletados = guestCompletados;
+            const guestEstado = localStorage.getItem('guest_estado_induccion');
+            if (guestEstado) {
+                induccionProgresoData.usuario.estado_induccion = guestEstado;
+            }
+        } else {
+            induccionItemsCompletados = induccionProgresoData.itemsCompletados || [];
+        }
 
         actualizarBarraProgresoInduccion();
         renderizarPasoInduccion();
@@ -1656,20 +1673,26 @@ function renderModuloLectura(idx) {
             if (sel) respuestas[p.id] = parseInt(sel.value, 10);
         });
 
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || '';
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
         try {
             const res = await fetch(`${API_INDUCCION_URL}/validar-item`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                headers,
                 body: JSON.stringify({ item_id: mod.id, respuestas })
             });
             const data = await res.json();
 
             if (data.success && data.completado) {
-                // Avance directo e instantáneo sin popup molesto por cada módulo
+                if (!token) {
+                    let guestCompletados = JSON.parse(localStorage.getItem('guest_items_completados') || '[]');
+                    if (!guestCompletados.includes(mod.id)) {
+                        guestCompletados.push(mod.id);
+                        localStorage.setItem('guest_items_completados', JSON.stringify(guestCompletados));
+                    }
+                }
                 await cargarProgresoInduccion();
             } else {
                 Swal.fire({
@@ -1724,11 +1747,11 @@ function renderPantallaExamenFinal() {
 }
 
 async function cargarPreguntasExamenFinal() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') || '';
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
     try {
-        const res = await fetch(`${API_INDUCCION_URL}/examen`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API_INDUCCION_URL}/examen`, { headers });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
 
@@ -1771,17 +1794,20 @@ async function cargarPreguntasExamenFinal() {
             });
 
             try {
+                const evalHeaders = { 'Content-Type': 'application/json' };
+                if (token) evalHeaders['Authorization'] = `Bearer ${token}`;
+
                 const resEval = await fetch(`${API_INDUCCION_URL}/evaluar-examen`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
+                    headers: evalHeaders,
                     body: JSON.stringify({ respuestas })
                 });
                 const dataEval = await resEval.json();
 
                 if (dataEval.success && dataEval.aprobado) {
+                    if (!token) {
+                        localStorage.setItem('guest_estado_induccion', 'examen_aprobado');
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: '🎉 ¡Felicitaciones! Examen Aprobado al 100%',
@@ -1795,7 +1821,7 @@ async function cargarPreguntasExamenFinal() {
                                 </a>
                             </div>
                         `,
-                        confirmButtonText: 'Continuar a Mi Panel'
+                        confirmButtonText: 'Ver Resultados'
                     }).then(() => {
                         cargarProgresoInduccion();
                     });
@@ -1823,13 +1849,9 @@ function renderVistaAutorizacionPendiente() {
     contenedor.innerHTML = `
         <div style="background: rgba(37,99,235,0.08); border: 2px solid #2563eb; border-radius: 14px; padding: 32px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.6);">
             <div style="font-size: 3.5rem; color: #3b82f6; margin-bottom: 12px;"><i class="fas fa-user-check"></i></div>
-            <h3 style="color: #ffffff; font-size: 1.875rem; margin: 0 0 10px 0; font-weight: 700;">¡Examen de Inducción Aprobado al 100%! 🎉</h3>
-            <p style="color: #93c5fd; max-width: 650px; margin: 0 auto 16px auto; font-size: 1.05rem; line-height: 1.6;">
-                Has completado exitosamente la capacitación y aprobado el examen final. Tu cuenta se encuentra actualmente en estado:
-                <strong style="color:#ffffff; background:#1d4ed8; padding:2px 8px; border-radius:4px;">Pendiente de Autorización</strong>.
-            </p>
-            <p style="color: #aaa; font-size: 0.95rem; margin-bottom: 28px;">
-                Por favor, notifica al <strong>Administrador</strong> para que confirme tu aprobación y autorice tu acceso definitivo al sistema.
+            <h3 style="color: #ffffff; font-size: 1.875rem; margin: 0 0 10px 0; font-weight: 700;">¡Capacitación y Examen Completados al 100%! 🎉</h3>
+            <p style="color: #93c5fd; max-width: 650px; margin: 0 auto 24px auto; font-size: 1.05rem; line-height: 1.6;">
+                Has completado exitosamente la capacitación y aprobado el examen final de <strong>Perfumería Alta Densidad</strong>.
             </p>
 
             <!-- CARD OBLIGATORIA DE DESCARGA DE MATERIAL DE APOYO EN PDF -->
@@ -1838,7 +1860,7 @@ function renderVistaAutorizacionPendiente() {
                     <i class="fas fa-file-pdf" style="font-size:1.6rem;"></i> MATERIAL OBLIGATORIO DE APOYO DE CAPACITACIÓN
                 </div>
                 <p style="color:#e5e7eb; font-size:0.95rem; line-height:1.6; margin-bottom:20px;">
-                    Descarga tu <strong>Manual Completo de Capacitación en PDF</strong>. Guarda este archivo para repasar los módulos, portafolio, normas y procedimientos que te servirán como guía de apoyo durante tus primeros días en la empresa.
+                    Descarga tu <strong>Manual Completo de Capacitación en PDF</strong>. Guarda este archivo para repasar los módulos, portafolio, normas y procedimientos.
                 </p>
                 <a href="/assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" class="btn-primary" style="background: linear-gradient(135deg, #D4AF37, #AA7C11); color: #000; font-weight: 700; padding: 14px 28px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; font-size: 1.08rem; box-shadow: 0 4px 18px rgba(212,175,55,0.4);">
                     <i class="fas fa-download" style="font-size:1.3rem;"></i> Descargar Manual Completo de Capacitación (PDF)

@@ -103,4 +103,23 @@ async function requireStaff(req, res, next) {
     }
 }
 
-module.exports = { requireAuth, requireAdmin, requireStaff };
+async function optionalAuth(req, res, next) {
+    try {
+        const auth = req.headers['authorization'] || req.headers['Authorization'];
+        const token = extractBearer(auth);
+        if (token && JWT_SECRET) {
+            try {
+                req.user = jwt.verify(token, JWT_SECRET);
+            } catch (err) {
+                req.user = null;
+            }
+        } else {
+            req.user = null;
+        }
+    } catch (err) {
+        req.user = null;
+    }
+    next();
+}
+
+module.exports = { requireAuth, requireAdmin, requireStaff, optionalAuth };
