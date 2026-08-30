@@ -7,13 +7,13 @@
   "routes": [
     { "src": "/assets/img/(.*)", "dest": "/assets/img/$1" },
     { "src": "/assets/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))", "dest": "/assets/$1" },
-    { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/login", "dest": "/login.html" },
-    { "src": "/nosotros", "dest": "/admin.html" },
-    { "src": "/top10", "dest": "/admin.html" },
-    { "src": "/envases", "dest": "/admin.html" },
-    { "src": "/reset", "dest": "/reset.html" },
-    { "src": "/(.*)\\.html", "dest": "/$1.html" },
-    { "src": "/", "dest": "/admin.html" }
+    { "src": "/admin", "dest": "/index.html" },
+    { "src": "/login", "dest": "/index.html" },
+    { "src": "/nosotros", "dest": "/index.html" },
+    { "src": "/top10", "dest": "/index.html" },
+    { "src": "/envases", "dest": "/index.html" },
+    { "src": "/reset", "dest": "/index.html" },
+    { "src": "/(.*)\\.html", "dest": "/index.html" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }
