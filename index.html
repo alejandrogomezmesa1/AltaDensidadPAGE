@@ -2,144 +2,397 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capacitación e Inducción Obligatoria | Fragancias de Alta Densidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Capacitación e Inducción | Fragancias de Alta Densidad</title>
     <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="assets/css/tema.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/tema.js"></script>
     <style>
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-secondary: #AA7C11;
+            --gold-light: #F3E5AB;
+            --gold-soft: rgba(212, 175, 55, 0.15);
+            --bg-dark: #0a0a0a;
+            --bg-card: #121212;
+            --bg-card-secondary: #171717;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-gold: rgba(212, 175, 55, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #f3f4f6;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
         }
+
+        /* HEADER RESPONSIVO Y ELEGANTE */
         .landing-header {
-            background: rgba(18, 18, 18, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 16px 24px;
+            background: rgba(14, 14, 14, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-gold);
+            padding: 14px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
+
         .landing-logo-container {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             text-decoration: none;
         }
+
         .landing-logo {
-            height: 44px;
+            height: 42px;
             width: auto;
+            object-fit: contain;
         }
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+        }
+
         .landing-title {
-            color: #D4AF37;
+            color: var(--gold-primary);
+            font-family: 'Outfit', sans-serif;
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.18rem;
             letter-spacing: 0.5px;
+            line-height: 1.2;
         }
-        .public-badge {
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid #D4AF37;
-            color: #D4AF37;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+
+        .landing-subtitle {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
         }
+
+        /* CONTENEDOR PRINCIPAL AUTORESPONSIVO */
         .main-container {
-            max-width: 900px;
-            margin: 32px auto;
-            padding: 0 20px;
+            width: 100%;
+            max-width: 960px;
+            margin: 24px auto;
+            padding: 0 16px;
+            flex: 1;
         }
+
         .card-panel {
-            background: #121212;
-            border: 1px solid #D4AF37;
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
             border-radius: 16px;
             padding: 28px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
             margin-bottom: 32px;
+            transition: all 0.3s ease;
         }
+
         .hero-banner {
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid var(--border-gold);
             padding-bottom: 20px;
             margin-bottom: 24px;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 16px;
         }
+
         .hero-banner h1 {
-            color: #D4AF37;
+            color: var(--gold-primary);
+            font-family: 'Outfit', sans-serif;
             margin: 0;
-            font-size: 1.7rem;
+            font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
+
         .hero-banner p {
-            color: #a0a0a0;
-            margin: 6px 0 0 0;
-            font-size: 0.96rem;
+            color: var(--text-muted);
+            margin: 8px 0 0 0;
+            font-size: clamp(0.88rem, 2.5vw, 0.98rem);
             line-height: 1.5;
         }
+
+        /* BARRA DE PROGRESO Y SELECTOR */
         .progress-wrapper {
-            margin-bottom: 28px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
+
         .progress-info {
             display: flex;
             justify-content: space-between;
-            font-size: 0.88rem;
-            color: #ccc;
-            margin-bottom: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            font-weight: 500;
         }
+
         .progress-bar-bg {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            height: 12px;
+            height: 10px;
             overflow: hidden;
         }
+
         .progress-bar-fill {
-            background: linear-gradient(90deg, #D4AF37, #F3E5AB);
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
             width: 0%;
             height: 100%;
             transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
+
+        /* DROPDOWN SELECTOR DE MÓDULOS */
+        .selector-modulo-wrapper {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .selector-modulo-label {
+            font-size: 0.85rem;
+            color: var(--gold-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .selector-modulo-dropdown {
+            background: #0f0f0f;
+            color: #fff;
+            border: 1px solid var(--border-gold);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            flex: 1;
+            min-width: 220px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .selector-modulo-dropdown:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
+
+        /* MEDIA CONTENEDORES RESPONSIVOS */
+        .media-responsive-container {
+            width: 100%;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .media-responsive-img {
+            max-width: 100%;
+            max-height: 460px;
+            height: auto;
+            width: auto;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            object-fit: contain;
+        }
+
+        .media-responsive-video {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .media-responsive-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* BOTONES GOLD */
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-secondary) 100%);
+            color: #000;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            border: none;
+            padding: 13px 26px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+            transition: all 0.25 ease;
+            text-decoration: none;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(212, 175, 55, 0.5);
+            filter: brightness(1.08);
+        }
+
+        .btn-gold:active {
+            transform: translateY(0);
+        }
+
+        /* OPTION CARDS DE PREGUNTAS */
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 0.94rem;
+            background: #0d0d0d;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .option-card:hover {
+            background: #181818;
+            border-color: var(--gold-primary);
+            color: #fff;
+        }
+
+        .option-card input[type="radio"] {
+            accent-color: var(--gold-primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
         .hidden {
             display: none !important;
+        }
+
+        /* FOOTER DE LA LANDING */
+        .landing-footer {
+            background: #080808;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        /* MEDIA QUERIES RESPONSIVAS EN MÓVILES */
+        @media (max-width: 768px) {
+            .landing-header {
+                padding: 12px 16px;
+            }
+            .landing-logo {
+                height: 36px;
+            }
+            .landing-title {
+                font-size: 1.05rem;
+            }
+            .landing-subtitle {
+                font-size: 0.75rem;
+            }
+            .card-panel {
+                padding: 18px 14px;
+                border-radius: 12px;
+            }
+            .hero-banner {
+                margin-bottom: 16px;
+                padding-bottom: 14px;
+            }
+            .btn-gold {
+                width: 100%;
+                padding: 14px 20px;
+            }
+            .selector-modulo-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .selector-modulo-dropdown {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 0 10px;
+                margin: 16px auto;
+            }
+            .card-panel {
+                padding: 14px 12px;
+            }
+            .option-card {
+                padding: 10px 12px;
+                font-size: 0.88rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER LANDING PAGE -->
+    <!-- HEADER INSTITUCIONAL (LIMPIO Y REFINADO) -->
     <header class="landing-header">
         <a href="index.html" class="landing-logo-container">
             <img src="assets/img/Logo2026.png" alt="Fragancias de Alta Densidad" class="landing-logo">
-            <span class="landing-title">Fragancias de Alta Densidad</span>
+            <div class="header-titles">
+                <span class="landing-title">Fragancias de Alta Densidad</span>
+                <span class="landing-subtitle">Portal Institucional de Capacitación</span>
+            </div>
         </a>
-        <div class="public-badge">
-            <i class="fas fa-globe"></i> Capacitación Pública Gratuita
-        </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL DE LA CAPACITACIÓN -->
+    <!-- CONTENIDO PRINCIPAL ADAPTABLE -->
     <main class="main-container">
         <div class="card-panel">
 
@@ -150,13 +403,13 @@
                         <i class="fas fa-graduation-cap"></i> Capacitación e Inducción Obligatoria
                     </h1>
                     <p>
-                        Bienvenido(a) a Fragancias Alta Densidad. Lee cada módulo, responde las 3 preguntas de validación y aprueba el Examen Final para descargar tu Manual Completo en PDF.
+                        Bienvenido(a) a Fragancias Alta Densidad. Lee los módulos institucionales y operativos, responde las preguntas de validación y aprueba el Examen Final para obtener tu Manual Completo en PDF.
                     </p>
                 </div>
                 <div id="badgeEstado"></div>
             </div>
 
-            <!-- BARRA DE PROGRESO -->
+            <!-- BARRA DE PROGRESO Y SELECTOR DIRECTO -->
             <div class="progress-wrapper">
                 <div class="progress-info">
                     <span id="progresoTexto">Progreso de Capacitación: 0%</span>
@@ -164,6 +417,16 @@
                 </div>
                 <div class="progress-bar-bg">
                     <div id="barraProgreso" class="progress-bar-fill"></div>
+                </div>
+
+                <!-- DESPLEGABLE DE NAVEGACIÓN DIRECTA ENTRE MÓDULOS -->
+                <div class="selector-modulo-wrapper">
+                    <label for="selectModuloDirecto" class="selector-modulo-label">
+                        <i class="fas fa-list-ul"></i> Seleccionar Módulo:
+                    </label>
+                    <select id="selectModuloDirecto" class="selector-modulo-dropdown">
+                        <option value="">Cargando módulos...</option>
+                    </select>
                 </div>
             </div>
 
@@ -173,11 +436,16 @@
             <!-- VISTA DE EXAMEN FINAL DE INDUCCIÓN -->
             <div id="contenedorExamen" class="hidden"></div>
 
-            <!-- VISTA ESPERANDO / ÉXITO FINAL -->
+            <!-- VISTA FINAL DE ÉXITO / DESCARGA DE MATERIAL -->
             <div id="contenedorFinal" class="hidden"></div>
 
         </div>
     </main>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="landing-footer">
+        <p>&copy; 2026 Fragancias de Alta Densidad. Todos los derechos reservados. | Programa de Inducción y Capacitación Empresarial.</p>
+    </footer>
 
     <script src="assets/js/capacitacion-landing.js"></script>
 </body>
