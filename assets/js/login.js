@@ -71,13 +71,9 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
 
         mostrarAlerta(`¡Bienvenido, ${data.data.nombre}!`, 'exito');
 
-        // Redirigir según rol (admin y empleado van al panel admin)
+        // Redirigir siempre al módulo de capacitación (admin.html)
         setTimeout(() => {
-            if (data.data.rol === 'admin' || data.data.rol === 'empleado') {
-                window.location.href = 'admin.html';
-            } else {
-                window.location.href = 'index.html';
-            }
+            window.location.href = 'admin.html';
         }, 1000);
 
     } catch (err) {

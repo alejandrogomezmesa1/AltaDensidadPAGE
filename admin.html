@@ -14,15 +14,15 @@
     <header class="admin-header">
         <div class="admin-header-left">
             <span class="admin-logo">AD</span>
-            <span class="admin-title">Panel de Administración</span>
+            <span class="admin-title">Módulo de Capacitación e Inducción</span>
         </div>
-        <a href="index.html" class="btn-volver">
+        <a href="#" class="btn-volver" style="display:none;">
             <i class="fas fa-arrow-left"></i> Volver al sitio
         </a>
     </header>
 
-    <!-- NAV TABS -->
-    <div class="admin-tabs-wrapper">
+    <!-- NAV TABS (Ocultos para vista exclusiva de Capacitación) -->
+    <div class="admin-tabs-wrapper" style="display: none !important;">
         <div class="admin-tabs">
             <button class="admin-tab active" id="tabProductos" onclick="cambiarSeccion('productos')"><i class="fas fa-spray-can"></i> Productos</button>
             <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')"><i class="fas fa-box"></i> Envases</button>
@@ -38,7 +38,7 @@
 
     <main class="admin-main">
         <!-- SECCIÓN PRODUCTOS -->
-        <div id="seccionProductos">
+        <div id="seccionProductos" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Productos</h2>
                 <div class="admin-toolbar-actions">

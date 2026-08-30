@@ -223,50 +223,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    if (usuario.rol === 'empleado') {
-        try {
-            const res = await fetch(`${API_INDUCCION_URL}/mi-progreso`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            if (data.success && data.data) {
-                const est = data.data.usuario.estado_induccion;
-                if (est !== 'autorizado') {
-                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
-                    document.querySelectorAll('.admin-main > div').forEach(d => d.classList.add('hidden'));
-                    const secInd = document.getElementById('seccionInduccion');
-                    if (secInd) secInd.classList.remove('hidden');
-                    await iniciarInduccionEmpleado();
-                    return;
-                }
-            }
-        } catch (e) {
-            console.error('Error al verificar inducción de empleado:', e);
-        }
-    }
+    // MODIFICACIÓN TEMPORAL: Forzar únicamente la vista de Capacitación e Inducción
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+    const tabWrapper = document.querySelector('.admin-tabs-wrapper');
+    if (tabWrapper) tabWrapper.style.display = 'none';
 
-    if (usuario.rol === 'admin') {
-        const tabEmp = document.getElementById('tabEmpleados');
-        if (tabEmp) tabEmp.classList.remove('hidden');
-        registrarEventosEmpleados();
-    }
+    document.querySelectorAll('.admin-main > div').forEach(d => d.classList.add('hidden'));
+    const secInd = document.getElementById('seccionInduccion');
+    if (secInd) secInd.classList.remove('hidden');
 
-    cargarProductos();
-    cargarEnvases();
-    cargarKits();
-    cargarTop10();
-    cargarProductosDisponiblesTop10();
-    registrarEventos();
-    registrarEventosEnvases();
-    registrarEventosKits();
-    registrarEventosTop10();
-    cargarOrdenes();
-    registrarEventosOrdenes();
-
-    const savedTab = localStorage.getItem('admin_active_tab');
-    if (savedTab && savedTab !== 'induccion') {
-        cambiarSeccion(savedTab);
-    }
+    await iniciarInduccionEmpleado();
 });
 // ============================
 // KITS — CARGAR LISTA
