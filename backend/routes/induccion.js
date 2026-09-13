@@ -237,9 +237,11 @@ router.post('/evaluar-examen', optionalAuth, async (req, res) => {
         }
 
         const puntajePercent = total > 0 ? Math.round((aciertos / total) * 100) : 0;
-        const esAprobado = puntajePercent === 100;
+        let nuevosIntentos = 1;
+        let esEmpleado = false;
 
         if (req.user && req.user.id) {
+            esEmpleado = true;
             const userId = req.user.id;
             const [userRows] = await pool.query(
                 'SELECT id, intentos_examen, estado_induccion FROM Usuarios WHERE id = ?',
@@ -248,7 +250,16 @@ router.post('/evaluar-examen', optionalAuth, async (req, res) => {
             if (userRows.length > 0) {
                 const usuario = userRows[0];
                 const intentosActuales = usuario.intentos_examen || 0;
-                const nuevosIntentos = intentosActuales + 1;
+
+                if (intentosActuales >= 3 && usuario.estado_induccion !== 'examen_aprobado' && usuario.estado_induccion !== 'autorizado') {
+                    return res.status(403).json({
+                        success: false,
+                        bloqueado: true,
+                        message: 'Has agotado tus 3 intentos disponibles. Por favor contacta al Administrador.'
+                    });
+                }
+
+                nuevosIntentos = intentosActuales + 1;
                 let nuevoEstado = usuario.estado_induccion;
                 if (esAprobado) {
                     nuevoEstado = 'examen_aprobado';
@@ -262,23 +273,46 @@ router.post('/evaluar-examen', optionalAuth, async (req, res) => {
             }
         }
 
-        if (esAprobado) {
-            return res.json({
-                success: true,
-                aprobado: true,
-                puntaje: puntajePercent,
-                intentos: 1,
-                message: '¡Felicitaciones! Has aprobado el examen de inducción con 100%. Has completado exitosamente la capacitación.'
-            });
+        if (esEmpleado) {
+            if (esAprobado) {
+                return res.json({
+                    success: true,
+                    aprobado: true,
+                    puntaje: puntajePercent,
+                    intentos: nuevosIntentos,
+                    message: '¡Felicitaciones! Has aprobado el examen de inducción con 100%. Tu estado ahora es Pendiente de Autorización. Informa a tu Administrador.'
+                });
+            } else {
+                return res.json({
+                    success: false,
+                    aprobado: false,
+                    puntaje: puntajePercent,
+                    intentos: nuevosIntentos,
+                    bloqueado: nuevosIntentos >= 3,
+                    message: nuevosIntentos >= 3
+                        ? 'Has agotado tus 3 intentos sin obtener 100%. Contacta a tu Administrador para solicitar revisión.'
+                        : `Obtuviste ${puntajePercent}%. Debes responder el 100% correctamente para aprobar. Te quedan ${3 - nuevosIntentos} intento(s).`
+                });
+            }
         } else {
-            return res.json({
-                success: false,
-                aprobado: false,
-                puntaje: puntajePercent,
-                intentos: 1,
-                bloqueado: false,
-                message: `Obtuviste ${puntajePercent}%. Debes responder el 100% correctamente para aprobar. ¡Puedes volver a intentarlo cuando desees!`
-            });
+            if (esAprobado) {
+                return res.json({
+                    success: true,
+                    aprobado: true,
+                    puntaje: puntajePercent,
+                    intentos: 1,
+                    message: '¡Felicitaciones! Has aprobado el examen de inducción con 100%. Has completado exitosamente la capacitación.'
+                });
+            } else {
+                return res.json({
+                    success: false,
+                    aprobado: false,
+                    puntaje: puntajePercent,
+                    intentos: 1,
+                    bloqueado: false,
+                    message: `Obtuviste ${puntajePercent}%. Debes responder el 100% correctamente para aprobar. ¡Puedes volver a intentarlo cuando desees!`
+                });
+            }
         }
     } catch (err) {
         console.error('Error al evaluar examen:', err);

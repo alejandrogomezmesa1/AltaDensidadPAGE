@@ -8,22 +8,21 @@
     <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
-    <script>window.location.replace('index.html');</script>
 </head>
 <body>
     <!-- HEADER -->
     <header class="admin-header">
         <div class="admin-header-left">
             <span class="admin-logo">AD</span>
-            <span class="admin-title">Módulo de Capacitación e Inducción</span>
+            <span class="admin-title">Panel de Administración</span>
         </div>
-        <a href="#" class="btn-volver" style="display:none;">
+        <a href="index.html" class="btn-volver">
             <i class="fas fa-arrow-left"></i> Volver al sitio
         </a>
     </header>
 
-    <!-- NAV TABS (Ocultos para vista exclusiva de Capacitación) -->
-    <div class="admin-tabs-wrapper" style="display: none !important;">
+    <!-- NAV TABS -->
+    <div class="admin-tabs-wrapper">
         <div class="admin-tabs">
             <button class="admin-tab active" id="tabProductos" onclick="cambiarSeccion('productos')"><i class="fas fa-spray-can"></i> Productos</button>
             <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')"><i class="fas fa-box"></i> Envases</button>
@@ -39,7 +38,7 @@
 
     <main class="admin-main">
         <!-- SECCIÓN PRODUCTOS -->
-        <div id="seccionProductos" class="hidden">
+        <div id="seccionProductos">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Productos</h2>
                 <div class="admin-toolbar-actions">
