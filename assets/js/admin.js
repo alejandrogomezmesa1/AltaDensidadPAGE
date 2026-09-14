@@ -249,6 +249,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const tabEmp = document.getElementById('tabEmpleados');
         if (tabEmp) tabEmp.classList.remove('hidden');
         registrarEventosEmpleados();
+    } else {
+        const tabMon = document.getElementById('tabMonitoreo');
+        if (tabMon) tabMon.classList.add('hidden');
     }
 
     cargarProductos();
@@ -263,7 +266,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     cargarOrdenes();
     registrarEventosOrdenes();
 
-    const savedTab = localStorage.getItem('admin_active_tab');
+    const defaultTab = usuario.rol === 'admin' ? 'monitoreo' : 'productos';
+    const savedTab = localStorage.getItem('admin_active_tab') || defaultTab;
     if (savedTab && savedTab !== 'induccion') {
         cambiarSeccion(savedTab);
     }
@@ -749,10 +753,11 @@ function registrarEventos() {
 // ============================
 function cambiarSeccion(seccion) {
     const usuarioSesion = JSON.parse(localStorage.getItem('usuario') || '{}');
-    if (usuarioSesion.rol === 'empleado' && seccion === 'empleados') {
+    if (usuarioSesion.rol === 'empleado' && (seccion === 'empleados' || seccion === 'monitoreo')) {
         seccion = 'productos';
     }
 
+    const esMon = seccion === 'monitoreo';
     const esProd = seccion === 'productos';
     const esEnv = seccion === 'envases';
     const esKit = seccion === 'kits';
@@ -761,6 +766,8 @@ function cambiarSeccion(seccion) {
     const esEmp = seccion === 'empleados';
     const esInd = seccion === 'induccion';
 
+    const secMon = document.getElementById('seccionMonitoreo');
+    if (secMon) secMon.classList.toggle('hidden', !esMon);
     const secProd = document.getElementById('seccionProductos');
     if (secProd) secProd.classList.toggle('hidden', !esProd);
     const secEnv = document.getElementById('seccionEnvases');
@@ -776,6 +783,8 @@ function cambiarSeccion(seccion) {
     const secInd = document.getElementById('seccionInduccion');
     if (secInd) secInd.classList.toggle('hidden', !esInd);
 
+    const tabMon = document.getElementById('tabMonitoreo');
+    if (tabMon) tabMon.classList.toggle('active', esMon);
     const tabProd = document.getElementById('tabProductos');
     if (tabProd) tabProd.classList.toggle('active', esProd);
     const tabEnv = document.getElementById('tabEnvases');
@@ -789,6 +798,9 @@ function cambiarSeccion(seccion) {
     const tabEmp = document.getElementById('tabEmpleados');
     if (tabEmp) tabEmp.classList.toggle('active', esEmp);
 
+    if (esMon && typeof window.cargarDatosMonitoreo === 'function') {
+        window.cargarDatosMonitoreo();
+    }
     if (esEmp) {
         cargarEmpleados();
     }

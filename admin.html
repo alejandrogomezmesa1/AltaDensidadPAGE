@@ -8,6 +8,7 @@
     <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
     <link rel="stylesheet" href="assets/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- HEADER -->
@@ -24,7 +25,8 @@
     <!-- NAV TABS -->
     <div class="admin-tabs-wrapper">
         <div class="admin-tabs">
-            <button class="admin-tab active" id="tabProductos" onclick="cambiarSeccion('productos')"><i class="fas fa-spray-can"></i> Productos</button>
+            <button class="admin-tab active" id="tabMonitoreo" onclick="cambiarSeccion('monitoreo')"><i class="fas fa-chart-line"></i> Monitoreo</button>
+            <button class="admin-tab" id="tabProductos" onclick="cambiarSeccion('productos')"><i class="fas fa-spray-can"></i> Productos</button>
             <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')"><i class="fas fa-box"></i> Envases</button>
             <button class="admin-tab" id="tabKits" onclick="cambiarSeccion('kits')"><i class="fas fa-gift"></i> Kits</button>
             <button class="admin-tab" id="tabTop10" onclick="cambiarSeccion('top10')"><i class="fas fa-crown"></i> Top 10</button>
@@ -37,8 +39,205 @@
     <div id="alerta" class="alerta hidden"></div>
 
     <main class="admin-main">
+        <!-- ========================================== -->
+        <!-- SECCIÓN MONITOREO Y TELEMETRÍA EN VIVO      -->
+        <!-- ========================================== -->
+        <div id="seccionMonitoreo">
+            <!-- TOOLBAR Y CONTROLADOR DE TIEMPO REAL -->
+            <div class="monitoreo-toolbar">
+                <div class="monitoreo-toolbar-info">
+                    <div class="monitoreo-live-indicator">
+                        <span class="live-dot" id="liveDot"></span>
+                        <span class="live-text" id="liveText">EN VIVO</span>
+                    </div>
+                    <span class="monitoreo-last-update" id="monitoreoLastUpdate">Sincronizando telemetría...</span>
+                </div>
+                <div class="monitoreo-toolbar-actions">
+                    <div class="monitoreo-autorefresh-box">
+                        <label for="selectAutoRefresh"><i class="fas fa-sync-alt"></i> Refresco:</label>
+                        <select id="selectAutoRefresh" class="monitoreo-select">
+                            <option value="0">Pausado</option>
+                            <option value="15">15 seg</option>
+                            <option value="30" selected>30 seg</option>
+                            <option value="60">60 seg</option>
+                        </select>
+                    </div>
+                    <button class="btn-secondary" id="btnPingDb" title="Probar latencia directa de base de datos">
+                        <i class="fas fa-database"></i> <span id="lblPingDb">Ping DB</span>
+                    </button>
+                    <button class="btn-primary" id="btnRefrescarMonitoreo" title="Actualizar métricas inmediatamente">
+                        <i class="fas fa-rotate" id="iconRefresh"></i> Actualizar
+                    </button>
+                    <button class="btn-secondary" id="btnExportarSnapshot" title="Descargar reporte snapshot en JSON">
+                        <i class="fas fa-download"></i> Snapshot
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTENEDOR DE ALERTAS CRÍTICAS -->
+            <div id="monitoreoAlertasContenedor" class="monitoreo-alertas-grid hidden"></div>
+
+            <!-- KPI CARDS GRID (6 MÉTRICAS PRINCIPALES) -->
+            <div class="monitoreo-kpis-grid">
+                <!-- KPI 1: VENTAS DE HOY -->
+                <div class="monitoreo-kpi-card">
+                    <div class="kpi-card-header">
+                        <span class="kpi-title">Ventas Hoy</span>
+                        <div class="kpi-icon-badge gold"><i class="fas fa-calendar-day"></i></div>
+                    </div>
+                    <div class="kpi-main-value" id="kpiVentasHoyValor">$0</div>
+                    <div class="kpi-subtext" id="kpiVentasHoySub">0 órdenes aprobadas</div>
+                </div>
+
+                <!-- KPI 2: INGRESOS MES -->
+                <div class="monitoreo-kpi-card">
+                    <div class="kpi-card-header">
+                        <span class="kpi-title">Ingresos Mes (30d)</span>
+                        <div class="kpi-icon-badge green"><i class="fas fa-chart-line"></i></div>
+                    </div>
+                    <div class="kpi-main-value" id="kpiVentasMesValor">$0</div>
+                    <div class="kpi-subtext">Total facturado últimos 30 días</div>
+                </div>
+
+                <!-- KPI 3: ÓRDENES TOTALES -->
+                <div class="monitoreo-kpi-card">
+                    <div class="kpi-card-header">
+                        <span class="kpi-title">Órdenes Totales</span>
+                        <div class="kpi-icon-badge blue"><i class="fas fa-receipt"></i></div>
+                    </div>
+                    <div class="kpi-main-value" id="kpiTotalOrdenesValor">0</div>
+                    <div class="kpi-subtext" id="kpiTasaAprobacion">0% tasa de aprobación</div>
+                </div>
+
+                <!-- KPI 4: SALUD DEL SISTEMA & DB -->
+                <div class="monitoreo-kpi-card">
+                    <div class="kpi-card-header">
+                        <span class="kpi-title">Salud DB & Servidor</span>
+                        <div class="kpi-icon-badge purple" id="kpiIconDb"><i class="fas fa-server"></i></div>
+                    </div>
+                    <div class="kpi-main-value" id="kpiDbLatencia">0 ms</div>
+                    <div class="kpi-subtext" id="kpiUptime">Uptime: --</div>
+                </div>
+
+                <!-- KPI 5: COLABORADORES EN INDUCCIÓN -->
+                <div class="monitoreo-kpi-card clickable" onclick="cambiarSeccion('empleados')" title="Ver módulo de colaboradores">
+                    <div class="kpi-card-header">
+                        <span class="kpi-title">Equipo en Inducción</span>
+                        <div class="kpi-icon-badge amber"><i class="fas fa-user-graduate"></i></div>
+                    </div>
+                    <div class="kpi-main-value" id="kpiInduccionValor">0</div>
+                    <div class="kpi-subtext" id="kpiInduccionSub">0 pendientes de autorizar</div>
+                </div>
+
+                <!-- KPI 6: CATÁLOGO & STOCK -->
+                <div class="monitoreo-kpi-card clickable" onclick="cambiarSeccion('productos')" title="Ver catálogo de productos">
+                    <div class="kpi-card-header">
+                        <span class="kpi-title">Catálogo Activo</span>
+                        <div class="kpi-icon-badge teal"><i class="fas fa-spray-can"></i></div>
+                    </div>
+                    <div class="kpi-main-value" id="kpiProductosActivosValor">0</div>
+                    <div class="kpi-subtext" id="kpiInventarioSub">0 envases | 0 kits</div>
+                </div>
+            </div>
+
+            <!-- GRÁFICOS INTERACTIVOS (GRID) -->
+            <div class="monitoreo-charts-grid">
+                <!-- GRÁFICO 1: TENDENCIA DE VENTAS E INGRESOS -->
+                <div class="monitoreo-chart-card chart-large">
+                    <div class="chart-card-header">
+                        <div>
+                            <h3 class="chart-title"><i class="fas fa-chart-area"></i> Ventas e Ingresos (Últimos 14 días)</h3>
+                            <span class="chart-subtitle">Comportamiento financiero y volumen de órdenes aprobadas</span>
+                        </div>
+                        <div class="chart-actions">
+                            <button class="btn-chart-toggle active" id="btnToggleIngresos">Ingresos ($)</button>
+                            <button class="btn-chart-toggle" id="btnToggleOrdenes">Órdenes (#)</button>
+                        </div>
+                    </div>
+                    <div class="chart-canvas-wrapper">
+                        <canvas id="chartTendenciaVentas"></canvas>
+                    </div>
+                </div>
+
+                <!-- GRÁFICO 2: DISTRIBUCIÓN DE ÓRDENES POR ESTADO -->
+                <div class="monitoreo-chart-card">
+                    <div class="chart-card-header">
+                        <div>
+                            <h3 class="chart-title"><i class="fas fa-chart-pie"></i> Estados de Órdenes</h3>
+                            <span class="chart-subtitle">Desglose de transacciones</span>
+                        </div>
+                    </div>
+                    <div class="chart-canvas-wrapper doughnut">
+                        <canvas id="chartEstadosOrdenes"></canvas>
+                    </div>
+                </div>
+
+                <!-- GRÁFICO 3: EMBUDO DE CAPACITACIÓN -->
+                <div class="monitoreo-chart-card">
+                    <div class="chart-card-header">
+                        <div>
+                            <h3 class="chart-title"><i class="fas fa-graduation-cap"></i> Avance de Inducción</h3>
+                            <span class="chart-subtitle">Estado del equipo de trabajo</span>
+                        </div>
+                    </div>
+                    <div class="chart-canvas-wrapper bar">
+                        <canvas id="chartAvanceInduccion"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILA INFERIOR: DETALLES DE SERVIDOR Y AUDITORÍA RECIENTE -->
+            <div class="monitoreo-bottom-grid">
+                <!-- INFRAESTRUCTURA & SERVIDOR -->
+                <div class="monitoreo-card server-info-card">
+                    <div class="card-header-styled">
+                        <h3 class="card-title-styled"><i class="fas fa-microchip"></i> Telemetría del Servidor</h3>
+                        <span class="badge-status-server" id="badgeServerNode">Node.js</span>
+                    </div>
+                    <div class="server-metrics-list">
+                        <div class="server-metric-item">
+                            <span class="metric-label">Uso Memoria Heap:</span>
+                            <div class="metric-bar-wrapper">
+                                <div class="metric-bar-fill" id="barHeap" style="width: 0%;"></div>
+                            </div>
+                            <span class="metric-val" id="valHeap">0 MB / 0 MB (0%)</span>
+                        </div>
+                        <div class="server-metric-item">
+                            <span class="metric-label">Memoria RSS Total:</span>
+                            <span class="metric-val" id="valRss">0 MB</span>
+                        </div>
+                        <div class="server-metric-item">
+                            <span class="metric-label">Plataforma & Arquitectura:</span>
+                            <span class="metric-val" id="valPlataforma">--</span>
+                        </div>
+                        <div class="server-metric-item">
+                            <span class="metric-label">Cores de CPU:</span>
+                            <span class="metric-val" id="valCpuCores">--</span>
+                        </div>
+                        <div class="server-metric-item">
+                            <span class="metric-label">Estado Pool MySQL:</span>
+                            <span class="metric-val text-green" id="valDbPool">Conectado (Railway)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEED DE ACTIVIDAD EN TIEMPO REAL -->
+                <div class="monitoreo-card activity-feed-card">
+                    <div class="card-header-styled">
+                        <h3 class="card-title-styled"><i class="fas fa-bolt"></i> Actividad Reciente del Sistema</h3>
+                        <span class="feed-count-badge" id="feedCountBadge">0 eventos</span>
+                    </div>
+                    <div class="activity-feed-list" id="activityFeedList">
+                        <div class="feed-loading">
+                            <i class="fas fa-spinner fa-spin"></i> Cargando actividad reciente...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- SECCIÓN PRODUCTOS -->
-        <div id="seccionProductos">
+        <div id="seccionProductos" class="hidden">
             <div class="admin-toolbar">
                 <h2 class="section-title">Catálogo de Productos</h2>
                 <div class="admin-toolbar-actions">
@@ -671,6 +870,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/admin.js"></script>
+    <script src="assets/js/monitoreo.js"></script>
 </body>
 </html>
 

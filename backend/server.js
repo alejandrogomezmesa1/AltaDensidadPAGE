@@ -13,6 +13,7 @@ const uploadRouter = require('./routes/upload');
 const mercadopagoRouter = require('./routes/mercadopago');
 const induccionRouter = require('./routes/induccion');
 const empleadosRouter = require('./routes/empleados');
+const monitoreoRouter = require('./routes/monitoreo');
 
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -105,6 +106,7 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/mercadopago', mercadopagoRouter);
 app.use('/api/induccion', induccionRouter);
 app.use('/api/admin/empleados', empleadosRouter);
+app.use('/api/admin/monitoreo', monitoreoRouter);
 
 // Ruta de health check
 app.get('/api/health', (req, res) => {
