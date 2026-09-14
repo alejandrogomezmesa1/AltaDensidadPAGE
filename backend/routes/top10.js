@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getConnection } = require('../config/db');
+const { requireStaff } = require('../middleware/auth');
 
 // GET Top 10 productos (ordenados)
 router.get('/', async (req, res) => {
@@ -19,7 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // PUT actualizar Top 10 (recibe array de producto_id en orden)
-router.put('/', async (req, res) => {
+router.put('/', requireStaff, async (req, res) => {
     const { productos } = req.body; // productos: [id1, id2, ...]
     if (!Array.isArray(productos) || productos.length !== 10) {
         return res.status(400).json({ success: false, message: 'Debes enviar un array de 10 IDs de productos.' });

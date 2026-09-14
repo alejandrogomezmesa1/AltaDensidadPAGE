@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getConnection } = require('../config/db');
+const { requireStaff, requireAdmin } = require('../middleware/auth');
 
 // GET todos los kits con beneficios
 router.get('/', async (req, res) => {
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST crear kit
-router.post('/', async (req, res) => {
+router.post('/', requireStaff, async (req, res) => {
     const { nombre, imagen, descripcion, precio, beneficios, activo } = req.body;
     if (!nombre) return res.status(400).json({ success: false, message: 'Nombre es requerido' });
     const pool = await getConnection();
@@ -62,7 +63,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT actualizar kit
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireStaff, async (req, res) => {
     const { id } = req.params;
     const { nombre, imagen, descripcion, precio, beneficios, activo } = req.body;
     const pool = await getConnection();
@@ -90,7 +91,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE eliminar kit
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     const pool = await getConnection();
     try {

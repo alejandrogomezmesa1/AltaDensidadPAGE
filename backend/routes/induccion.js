@@ -237,6 +237,7 @@ router.post('/evaluar-examen', optionalAuth, async (req, res) => {
         }
 
         const puntajePercent = total > 0 ? Math.round((aciertos / total) * 100) : 0;
+        const esAprobado = puntajePercent === 100;
         let nuevosIntentos = 1;
         let esEmpleado = false;
 

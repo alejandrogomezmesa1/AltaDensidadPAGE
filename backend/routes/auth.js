@@ -128,8 +128,8 @@ router.post('/forgot-password', async (req, res) => {
         }
 
         const usuario = rows[0];
-        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-        const expiracion = new Date(Date.now() + 3600000); // 1 hora
+        const codigo = crypto.randomInt(100000, 1000000).toString();
+        const expiracion = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos
 
         await pool.query(
             'UPDATE Usuarios SET reset_token = ?, reset_token_expires = ? WHERE id = ?',
@@ -140,7 +140,7 @@ router.post('/forgot-password', async (req, res) => {
         const msg = {
             to: email,
             from: 'perfumesaltadensidad@gmail.com', // CORREGIDO: perfumes en lugar de fragancias
-            subject: 'C\u00f3digo de Recuperaci\u00f3n - Alta Densidad',
+            subject: 'Código de Recuperación - Alta Densidad',
             html: `
                 <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0a; color: #ffffff; padding: 40px; border-radius: 15px; border: 1px solid #D4AF37; max-width: 600px; margin: auto;">
                     <div style="text-align: center; margin-bottom: 30px;">
@@ -148,18 +148,18 @@ router.post('/forgot-password', async (req, res) => {
                         <p style="color: #888; font-size: 14px;">Luxury Fragrance Experience</p>
                     </div>
                     <div style="background-color: rgba(212, 175, 55, 0.05); padding: 30px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.2);">
-                        <h2 style="color: #ffffff; margin-top: 0;">Recuperaci\u00f3n de Contrase\u00f1a</h2>
+                        <h2 style="color: #ffffff; margin-top: 0;">Recuperación de Contraseña</h2>
                         <p>Hola, <strong>${usuario.nombre}</strong>.</p>
-                        <p>Has solicitado restablecer tu contrase\u00f1a. Utiliza el siguiente c\u00f3digo para continuar con el proceso:</p>
+                        <p>Has solicitado restablecer tu contraseña. Utiliza el siguiente código para continuar con el proceso:</p>
                         
                         <div style="background: #1a1a1a; color: #D4AF37; font-size: 36px; font-weight: bold; text-align: center; padding: 20px; margin: 30px 0; border-radius: 8px; border: 1px solid #D4AF37; letter-spacing: 5px;">
                             ${codigo}
                         </div>
                         
-                        <p style="font-size: 13px; color: #888;">Este c\u00f3digo es v\u00e1lido por 60 minutos. Si no has solicitado este cambio, puedes ignorar este mensaje.</p>
+                        <p style="font-size: 13px; color: #888;">Este código es válido por 15 minutos. Si no has solicitado este cambio, puedes ignorar este mensaje.</p>
                     </div>
                     <div style="text-align: center; margin-top: 30px; color: #555; font-size: 12px;">
-                        <p>&copy; 2025 Alta Densidad | Medell\u00edn, Colombia</p>
+                        <p>&copy; 2025 Alta Densidad | Medellín, Colombia</p>
                     </div>
                 </div>
             `

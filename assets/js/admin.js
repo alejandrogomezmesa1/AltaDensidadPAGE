@@ -4,6 +4,17 @@ const API_ENVASES_URL = `${_BASE}/envases`;
 const API_KITS_URL = `${_BASE}/kits`;
 const API_UPLOAD_URL = `${_BASE}/upload`;
 const API_TOP10_URL = `${_BASE}/top10`;
+
+function getAuthHeaders(includeJson = false) {
+    const headers = {};
+    if (includeJson) headers['Content-Type'] = 'application/json';
+    const token = localStorage.getItem('token');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const adminKey = localStorage.getItem('admin_key');
+    if (adminKey) headers['x-admin-key'] = adminKey;
+    return headers;
+}
+
 // Estado Top 10
 let top10 = [];
 let productosDisponiblesTop10 = [];
@@ -134,7 +145,7 @@ async function guardarTop10() {
     try {
         const res = await fetch(API_TOP10_URL, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(true),
             body: JSON.stringify({ productos: ids })
         });
         const data = await res.json();
@@ -171,7 +182,7 @@ let beneficiosKitTmp = [];
 async function subirImagen(file) {
     const fd = new FormData();
     fd.append('imagen', file);
-    const res  = await fetch(API_UPLOAD_URL, { method: 'POST', body: fd });
+    const res  = await fetch(API_UPLOAD_URL, { method: 'POST', headers: getAuthHeaders(false), body: fd });
     const data = await res.json();
     if (!data.success) throw new Error(data.message);
     return data.path;
@@ -405,7 +416,7 @@ async function abrirEliminarKit(id, nombre) {
     abrirModal(document.getElementById('modalEliminarKit'));
     document.getElementById('btnConfirmarEliminarKit').onclick = async () => {
         try {
-            const res = await fetch(`${API_KITS_URL}/${id}`, { method: 'DELETE' });
+            const res = await fetch(`${API_KITS_URL}/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
             const data = await res.json();
             if (!data.success) throw new Error(data.message);
             cerrarModal(document.getElementById('modalEliminarKit'));
@@ -464,7 +475,7 @@ function registrarEventosKits() {
             const url = id ? `${API_KITS_URL}/${id}` : API_KITS_URL;
             const res = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(true),
                 body: JSON.stringify(payload)
             });
             const data = await res.json();
@@ -667,7 +678,7 @@ formProducto.addEventListener('submit', async (e) => {
         const url     = id ? `${API_URL}/${id}` : API_URL;
         const res     = await fetch(url, {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(true),
             body: JSON.stringify({ ...payload, image: imagenFinal, activo })
         });
         const data = await res.json();
@@ -707,7 +718,7 @@ async function abrirEliminar(id, nombre) {
     });
     if (!result.isConfirmed) return;
     try {
-        const res  = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        const res  = await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
         await cargarProductos();
@@ -954,7 +965,7 @@ async function abrirEliminarEnvase(id, nombre) {
     });
     if (!result.isConfirmed) return;
     try {
-        const res  = await fetch(`${API_ENVASES_URL}/${id}`, { method: 'DELETE' });
+        const res  = await fetch(`${API_ENVASES_URL}/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
         await cargarEnvases();
@@ -1013,7 +1024,7 @@ function registrarEventosEnvases() {
             const url    = id ? `${API_ENVASES_URL}/${id}` : API_ENVASES_URL;
             const res    = await fetch(url, {
                 method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders(true),
                 body: JSON.stringify({ name: nombre, description: descripcion, material, price: precio, image: imagenFinalEnv, sizes, activo })
             });
             const data = await res.json();
@@ -1127,15 +1138,6 @@ function escAttr(str) {
 // ÓRDENES (Admin)
 // ============================
 const API_MP_URL = `${_BASE}/mercadopago`;
-function getAuthHeaders(includeJson = false) {
-    const headers = {};
-    if (includeJson) headers['Content-Type'] = 'application/json';
-    const token = localStorage.getItem('token');
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    const adminKey = localStorage.getItem('admin_key');
-    if (adminKey) headers['x-admin-key'] = adminKey;
-    return headers;
-}
 let ordenes = [];
 let paginaOrdenes = 1;
 const ITEMS_ORD = 20;

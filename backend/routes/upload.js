@@ -3,6 +3,7 @@ const router  = express.Router();
 const multer  = require('multer');
 const path    = require('path');
 const fs      = require('fs');
+const { requireStaff } = require('../middleware/auth');
 
 // ── En producción (Vercel) usa Cloudinary; en local usa disco ──────────────
 let storage;
@@ -61,7 +62,7 @@ const upload = multer({
 });
 
 // POST /api/upload  — sube una imagen y devuelve su URL/ruta
-router.post('/', upload.single('imagen'), (req, res) => {
+router.post('/', requireStaff, upload.single('imagen'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, message: 'No se recibió ningún archivo.' });
     }

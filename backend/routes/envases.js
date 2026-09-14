@@ -1,6 +1,7 @@
-﻿const express = require('express');
+const express = require('express');
 const router = express.Router();
 const { getConnection } = require('../config/db');
+const { requireStaff, requireAdmin } = require('../middleware/auth');
 
 // GET todos los envases
 router.get('/', async (req, res) => {
@@ -49,7 +50,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST crear envase
-router.post('/', async (req, res) => {
+router.post('/', requireStaff, async (req, res) => {
     const { name, image, material, description, price, sizes } = req.body;
     if (!name || !material) return res.status(400).json({ success: false, message: 'Nombre y material son requeridos' });
     const pool = await getConnection();
@@ -76,7 +77,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT actualizar envase
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireStaff, async (req, res) => {
     const { id } = req.params;
     const { name, image, material, description, price, sizes } = req.body;
     const pool = await getConnection();
@@ -104,7 +105,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE eliminar envase
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAdmin, async (req, res) => {
     const { id } = req.params;
     const pool = await getConnection();
     const conn = await pool.getConnection();

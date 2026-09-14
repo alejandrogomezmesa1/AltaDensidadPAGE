@@ -64,6 +64,15 @@ const authLimiter = rateLimit({
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
 
+// Limitador anti-fuerza bruta para recuperación de contraseña
+const resetLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 5, // Máximo 5 intentos cada 15 minutos
+    message: { success: false, message: 'Demasiados intentos de recuperación de contraseña. Por favor intenta más tarde.' }
+});
+app.use('/api/auth/forgot-password', resetLimiter);
+app.use('/api/auth/reset-password', resetLimiter);
+
 app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 

@@ -41,25 +41,91 @@ router.post("/create_preference", async (req, res) => {
         .json({ success: false, message: "La lista de items es requerida" });
     }
 
-    const mpItems = items.map((it) => ({
-      id: String(it.id || ""),
-      title: String(it.name || it.title || "Producto"),
-      description: it.description || "",
-      picture_url: it.image || it.picture_url || "",
-      category_id: it.category || "general",
-      quantity: Number(it.quantity || it.cantidad || 1),
-      currency_id: it.currency || "COP",
-      unit_price: Number(it.price || it.unit_price || 0),
-    }));
+    const pool = await getConnection();
+    const allowedShippingRates = [0, 15000, 20000, 22000];
+    const mpItems = [];
 
-    // Calcular total y crear orden en DB
+    for (const it of items) {
+      const qty = Math.max(1, Math.floor(Number(it.quantity || it.cantidad || 1)));
+      if (isNaN(qty) || qty <= 0) {
+        return res.status(400).json({ success: false, message: "Cantidad de producto inválida" });
+      }
+
+      const itemIdStr = String(it.id || "").trim();
+
+      // 1. Validar item de envío
+      if (itemIdStr === "envio-logistica" || itemIdStr.startsWith("envio-")) {
+        const envioPrice = Number(it.unit_price || it.price || 0);
+        if (!allowedShippingRates.includes(envioPrice)) {
+          return res.status(400).json({ success: false, message: "Tarifa de envío no autorizada" });
+        }
+        mpItems.push({
+          id: itemIdStr,
+          title: String(it.name || it.title || "Servicio de Envío"),
+          description: "Costo de entrega",
+          picture_url: "",
+          category_id: "shipping",
+          quantity: 1,
+          currency_id: "COP",
+          unit_price: envioPrice,
+        });
+        continue;
+      }
+
+      // 2. Validar Kit
+      if (itemIdStr.startsWith("kit_")) {
+        const rawKitId = itemIdStr.replace("kit_", "");
+        const kitId = parseInt(rawKitId, 10);
+        if (isNaN(kitId)) {
+          return res.status(400).json({ success: false, message: "ID de kit inválido" });
+        }
+        const [kRows] = await pool.query("SELECT id, nombre, precio, imagen, activo FROM Kits WHERE id = ?", [kitId]);
+        if (kRows.length === 0 || !kRows[0].activo) {
+          return res.status(400).json({ success: false, message: `Kit no disponible o inactivo (ID: ${kitId})` });
+        }
+        const kit = kRows[0];
+        mpItems.push({
+          id: itemIdStr,
+          title: kit.nombre,
+          description: it.description || "",
+          picture_url: kit.imagen || it.picture_url || "",
+          category_id: "kits",
+          quantity: qty,
+          currency_id: "COP",
+          unit_price: Number(kit.precio),
+        });
+        continue;
+      }
+
+      // 3. Validar Perfume / Producto general
+      const prodId = parseInt(itemIdStr, 10);
+      if (isNaN(prodId)) {
+        return res.status(400).json({ success: false, message: `ID de producto inválido: ${itemIdStr}` });
+      }
+      const [pRows] = await pool.query("SELECT id, nombre, precio, imagen, activo FROM Productos WHERE id = ?", [prodId]);
+      if (pRows.length === 0 || !pRows[0].activo) {
+        return res.status(400).json({ success: false, message: `Producto no disponible o inactivo (ID: ${prodId})` });
+      }
+      const prod = pRows[0];
+      mpItems.push({
+        id: String(prod.id),
+        title: prod.nombre,
+        description: it.description || "",
+        picture_url: prod.imagen || it.picture_url || "",
+        category_id: it.category || "fragancias",
+        quantity: qty,
+        currency_id: "COP",
+        unit_price: Number(prod.precio),
+      });
+    }
+
+    // Calcular total oficial basado exclusivamente en la base de datos
     const total = mpItems.reduce(
       (s, it) => s + Number(it.unit_price || 0) * Number(it.quantity || 0),
       0,
     );
     const external_reference =
       "ORD" + Date.now() + Math.floor(Math.random() * 9000 + 1000);
-    const pool = await getConnection();
     try {
       // Intentar insertar con todos los campos. Si falla por columna faltante, el catch manejará la alerta.
       const query = `
