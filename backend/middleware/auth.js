@@ -82,19 +82,9 @@ async function requireStaff(req, res, next) {
             return res.status(401).json({ success: false, message: 'Token inválido' });
         }
         const rol = String(payload.rol || '').toLowerCase();
-        if (rol === 'admin' || rol === 'superadmin' || rol === 'root') {
+        if (rol === 'admin' || rol === 'superadmin' || rol === 'root' || rol === 'empleado') {
             req.user = payload;
             return next();
-        }
-        if (rol === 'empleado') {
-            const { getConnection } = require('../config/db');
-            const pool = await getConnection();
-            const [rows] = await pool.query('SELECT estado_induccion FROM Usuarios WHERE id = ?', [payload.id]);
-            if (rows.length > 0 && rows[0].estado_induccion === 'autorizado') {
-                req.user = payload;
-                return next();
-            }
-            return res.status(403).json({ success: false, message: 'Tu cuenta de empleado aún no ha sido autorizada por el Administrador.' });
         }
         return res.status(403).json({ success: false, message: 'Permisos insuficientes' });
     } catch (err) {

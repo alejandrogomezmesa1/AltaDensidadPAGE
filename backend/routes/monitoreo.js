@@ -192,17 +192,10 @@ router.get('/resumen', requireAdmin, async (req, res) => {
             console.warn('Error consultando métricas de inventario:', invErr.message);
         }
 
-        // 5. Telemetría de Usuarios y Colaboradores en Inducción
+        // 5. Telemetría de Usuarios
         let personal = {
             totalUsuarios: 0,
-            porRol: [],
-            induccion: {
-                pendiente: 0,
-                enProgreso: 0,
-                examenAprobado: 0,
-                autorizado: 0,
-                bloqueado: 0
-            }
+            porRol: []
         };
 
         try {
@@ -211,48 +204,12 @@ router.get('/resumen', requireAdmin, async (req, res) => {
             );
             personal.porRol = userRoles.map(r => ({ rol: r.rol, count: Number(r.count) }));
             personal.totalUsuarios = personal.porRol.reduce((acc, curr) => acc + curr.count, 0);
-
-            const [indRows] = await pool.query(
-                `SELECT estado_induccion, COUNT(*) AS count 
-                 FROM Usuarios 
-                 WHERE rol = 'empleado' 
-                 GROUP BY estado_induccion`
-            );
-            for (let row of indRows) {
-                const est = row.estado_induccion;
-                const cnt = Number(row.count);
-                if (est === 'pendiente_capacitacion') personal.induccion.pendiente = cnt;
-                else if (est === 'en_progreso') personal.induccion.enProgreso = cnt;
-                else if (est === 'examen_aprobado') personal.induccion.examenAprobado = cnt;
-                else if (est === 'autorizado') personal.induccion.autorizado = cnt;
-                else if (est === 'bloqueado') personal.induccion.bloqueado = cnt;
-            }
         } catch (usrErr) {
             console.warn('Error consultando métricas de personal:', usrErr.message);
         }
 
         // 6. Alertas Dinámicas del Sistema
         const alertas = [];
-        if (personal.induccion.examenAprobado > 0) {
-            alertas.push({
-                id: 'alerta_autorizacion',
-                nivel: 'critico',
-                titulo: `${personal.induccion.examenAprobado} Colaborador(es) esperando Autorización`,
-                detalle: 'Han completado y aprobado el examen final al 100%. Requieren confirmación del administrador.',
-                accion: 'Autorizar Ahora',
-                seccion: 'empleados'
-            });
-        }
-        if (personal.induccion.bloqueado > 0) {
-            alertas.push({
-                id: 'alerta_bloqueados',
-                nivel: 'advertencia',
-                titulo: `${personal.induccion.bloqueado} Colaborador(es) Bloqueado(s)`,
-                detalle: 'Agotaron los 3 intentos del examen de inducción y requieren reinicio o revisión.',
-                accion: 'Ver Colaboradores',
-                seccion: 'empleados'
-            });
-        }
         if (inventario.sinPrecio > 0) {
             alertas.push({
                 id: 'alerta_sin_precio',
@@ -307,25 +264,7 @@ router.get('/resumen', requireAdmin, async (req, res) => {
                 });
             }
 
-            // Últimos colaboradores registrados o autorizados
-            const [ultimosEmpleados] = await pool.query(
-                `SELECT id, nombre, email, estado_induccion, ultimo_puntaje, fecha_autorizacion, creado_en 
-                 FROM Usuarios 
-                 WHERE rol = 'empleado' 
-                 ORDER BY COALESCE(fecha_autorizacion, creado_en) DESC 
-                 LIMIT 6`
-            );
-            for (let emp of ultimosEmpleados) {
-                actividadReciente.push({
-                    tipo: 'empleado',
-                    icono: 'fa-user-graduate',
-                    titulo: `Colaborador: ${emp.nombre}`,
-                    subtitulo: `Estado: ${emp.estado_induccion} (Puntaje: ${emp.ultimo_puntaje}%)`,
-                    monto: null,
-                    estado: emp.estado_induccion,
-                    fecha: emp.fecha_autorizacion || emp.creado_en
-                });
-            }
+
 
             // Ordenar por fecha cronológica descendente
             actividadReciente.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));

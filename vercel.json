@@ -2,8 +2,8 @@
   "version": 2,
   "builds": [
     { "src": "*.html", "use": "@vercel/static" },
-    { "src": "induccion/*.html", "use": "@vercel/static" },
-    { "src": "assets/**/*", "use": "@vercel/static" }
+    { "src": "assets/**/*", "use": "@vercel/static" },
+    { "src": "plataforma-capacitacion/**/*", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/assets/img/(.*)", "dest": "/assets/img/$1" },
@@ -14,9 +14,10 @@
     { "src": "/top10", "dest": "/top10.html" },
     { "src": "/envases", "dest": "/envases.html" },
     { "src": "/reset", "dest": "/reset.html" },
-    { "src": "/induccion", "dest": "/induccion/index.html" },
-    { "src": "/capacitacion", "dest": "/induccion/index.html" },
-    { "src": "/induccion/(.*)", "dest": "/induccion/$1" },
+    { "src": "/capacitacion", "dest": "/plataforma-capacitacion/index.html" },
+    { "src": "/capacitacion/(.*)", "dest": "/plataforma-capacitacion/$1" },
+    { "src": "/induccion", "dest": "/plataforma-capacitacion/index.html" },
+    { "src": "/induccion/(.*)", "dest": "/plataforma-capacitacion/$1" },
     { "src": "/(.*)\\.html", "dest": "/$1.html" },
     { "src": "/", "dest": "/index.html" }
   ]

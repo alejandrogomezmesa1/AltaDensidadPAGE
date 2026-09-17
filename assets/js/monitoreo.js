@@ -9,7 +9,6 @@ const API_MONITOREO_BASE = (location.hostname === 'localhost' || location.hostna
 
 let chartTendenciaInstance = null;
 let chartEstadosInstance = null;
-let chartInduccionInstance = null;
 
 let datosMonitoreoCache = null;
 let timerAutoRefresh = null;
@@ -133,19 +132,7 @@ function renderizarKPIs(data) {
     }
     if (elUptime) elUptime.textContent = `Uptime: ${servidor.uptimeFormatted || '--'}`;
 
-    // 5. Personal en Inducción
-    const elInduccionVal = document.getElementById('kpiInduccionValor');
-    const elInduccionSub = document.getElementById('kpiInduccionSub');
-    const ind = personal.induccion || {};
-    const totalInduccion = (ind.pendiente || 0) + (ind.enProgreso || 0) + (ind.examenAprobado || 0);
-    if (elInduccionVal) elInduccionVal.textContent = totalInduccion;
-    if (elInduccionSub) {
-        if (ind.examenAprobado > 0) {
-            elInduccionSub.innerHTML = `<strong style="color:#f59e0b">${ind.examenAprobado} esperando autorización</strong>`;
-        } else {
-            elInduccionSub.textContent = `${ind.autorizado || 0} autorizados activos`;
-        }
-    }
+
 
     // 6. Inventario
     const elProdActivos = document.getElementById('kpiProductosActivosValor');
@@ -360,60 +347,6 @@ function renderizarGraficos(data) {
                     }
                 },
                 cutout: '70%'
-            }
-        });
-    }
-
-    // 3. GRÁFICO AVANCE DE INDUCCIÓN (BAR HORIZONTAL)
-    const ctxInduccion = document.getElementById('chartAvanceInduccion');
-    if (ctxInduccion) {
-        const ind = data.personal?.induccion || {};
-        const labels = ['Pendientes', 'En Curso', 'Examen Aprobado', 'Autorizados', 'Bloqueados'];
-        const values = [
-            ind.pendiente || 0,
-            ind.enProgreso || 0,
-            ind.examenAprobado || 0,
-            ind.autorizado || 0,
-            ind.bloqueado || 0
-        ];
-        const barColors = [COLOR_BLUE, COLOR_AMBER, COLOR_GOLD, COLOR_GREEN, COLOR_RED];
-
-        if (chartInduccionInstance) chartInduccionInstance.destroy();
-
-        chartInduccionInstance = new Chart(ctxInduccion, {
-            type: 'bar',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Colaboradores',
-                    data: values,
-                    backgroundColor: barColors,
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#121214',
-                        borderColor: 'rgba(212,175,55,0.3)',
-                        borderWidth: 1,
-                        padding: 10
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: 'rgba(255,255,255,0.05)' },
-                        ticks: { color: '#9ca3af', stepSize: 1 }
-                    },
-                    y: {
-                        grid: { display: false },
-                        ticks: { color: '#d1d5db', font: { size: 11 } }
-                    }
-                }
             }
         });
     }

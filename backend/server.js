@@ -11,8 +11,6 @@ const top10Router = require('./routes/top10');
 const authRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
 const mercadopagoRouter = require('./routes/mercadopago');
-const induccionRouter = require('./routes/induccion');
-const empleadosRouter = require('./routes/empleados');
 const monitoreoRouter = require('./routes/monitoreo');
 
 const helmet = require('helmet');
@@ -113,9 +111,11 @@ app.use('/api/top10', top10Router);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/mercadopago', mercadopagoRouter);
-app.use('/api/induccion', induccionRouter);
-app.use('/api/admin/empleados', empleadosRouter);
 app.use('/api/admin/monitoreo', monitoreoRouter);
+
+// Servir la plataforma independiente de capacitación como endpoint autónomo
+app.use('/capacitacion', express.static(path.join(__dirname, '../plataforma-capacitacion')));
+app.use('/induccion', express.static(path.join(__dirname, '../plataforma-capacitacion')));
 
 // Ruta de health check
 app.get('/api/health', (req, res) => {
@@ -183,76 +183,7 @@ CREATE TABLE IF NOT EXISTS Ordenes (
                             console.warn('No se pudo crear tabla Ordenes automáticamente:', err.message || err); 
                         }
 
-                        // Migración automática de tablas y columnas para Rol Empleado e Inducción
-                        try {
-                            try { await pool.query("ALTER TABLE Usuarios MODIFY COLUMN rol VARCHAR(20) NOT NULL DEFAULT 'cliente'"); } catch(e){}
-                            
-                            const colsInduccion = [
-                                "ADD COLUMN estado_induccion VARCHAR(30) NOT NULL DEFAULT 'pendiente_capacitacion'",
-                                "ADD COLUMN intentos_examen INT NOT NULL DEFAULT 0",
-                                "ADD COLUMN ultimo_puntaje INT NOT NULL DEFAULT 0",
-                                "ADD COLUMN autorizado_por INT NULL",
-                                "ADD COLUMN fecha_autorizacion DATETIME NULL"
-                            ];
-                            for (const colSql of colsInduccion) {
-                                try { await pool.query(`ALTER TABLE Usuarios ${colSql}`); } catch (e) {}
-                            }
 
-                            await pool.query(`
-                                CREATE TABLE IF NOT EXISTS CapacitacionItems (
-                                    id INT AUTO_INCREMENT PRIMARY KEY,
-                                    titulo VARCHAR(200) NOT NULL,
-                                    contenido TEXT NOT NULL,
-                                    tipo VARCHAR(30) NOT NULL DEFAULT 'texto',
-                                    imagen_url VARCHAR(255) NULL,
-                                    video_url VARCHAR(255) NULL,
-                                    orden INT NOT NULL DEFAULT 1,
-                                    activo TINYINT(1) NOT NULL DEFAULT 1,
-                                    creado_en DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-                            `);
-
-                            const colsCapacitacion = [
-                                "ADD COLUMN tipo VARCHAR(30) NOT NULL DEFAULT 'texto'",
-                                "ADD COLUMN imagen_url VARCHAR(255) NULL",
-                                "ADD COLUMN video_url VARCHAR(255) NULL"
-                            ];
-                            for (const colSql of colsCapacitacion) {
-                                try { await pool.query(`ALTER TABLE CapacitacionItems ${colSql}`); } catch (e) {}
-                            }
-
-                            await pool.query(`
-                                CREATE TABLE IF NOT EXISTS CapacitacionPreguntas (
-                                    id INT AUTO_INCREMENT PRIMARY KEY,
-                                    item_id INT NULL,
-                                    pregunta TEXT NOT NULL,
-                                    opciones JSON NOT NULL,
-                                    respuesta_correcta INT NOT NULL,
-                                    explicacion TEXT NULL,
-                                    orden INT NOT NULL DEFAULT 1,
-                                    FOREIGN KEY (item_id) REFERENCES CapacitacionItems(id) ON DELETE CASCADE
-                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-                            `);
-
-                            await pool.query(`
-                                CREATE TABLE IF NOT EXISTS UsuarioProgresoInduccion (
-                                    id INT AUTO_INCREMENT PRIMARY KEY,
-                                    usuario_id INT NOT NULL,
-                                    item_id INT NOT NULL,
-                                    completado TINYINT(1) NOT NULL DEFAULT 1,
-                                    fecha_completado DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                    UNIQUE KEY uq_usuario_item (usuario_id, item_id),
-                                    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE,
-                                    FOREIGN KEY (item_id) REFERENCES CapacitacionItems(id) ON DELETE CASCADE
-                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-                            `);
-
-                            // Ejecutar siembra de módulos iniciales/actualizados de capacitación
-                            const seedCapacitacion = require('./seed-capacitacion');
-                            await seedCapacitacion(pool);
-                        } catch (errMig) {
-                            console.warn('Advertencia en migración de capacitación:', errMig.message || errMig);
-                        }
             const server = app.listen(PORT, () => {
                 console.log(`Servidor corriendo en http://localhost:${PORT}`);
                 console.log(`API disponible en http://localhost:${PORT}/api`);
