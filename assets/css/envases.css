@@ -1,22 +1,20 @@
-/* Variables - Tema Premium Dark Luxury */
+/* envases.css — usa design-tokens.css como fuente de verdad.
+   Aliases de retrocompatibilidad para el código existente. */
 :root {
-    /* Paleta Principal Dark/Gold */
-    --azul-uno: #161618; /* Superficies oscuras / Tarjetas */
-    --azul-dos: #D4AF37; /* Oro principal (Reemplaza azul intenso) */
-    --azul-tres: #0a0a0a; /* Fondo muy oscuro */
-    --azul-cuatro: #F3E5AB; /* Oro suave / Champagne */
-    
-    /* Colores complementarios */
-    ---amarillo-suave: #D4AF37; 
-    --naranja-calido: #AA8B22; /* Oro oscuro para bordes/sombras */
-    --gris-elegante: #0f0f11; /* Fondo principal oscuro */
-    --blanco-neutro: #1e1e20; /* Superficie ligeramente más clara */
-    --texto: #F8F9F9; /* Texto principal brillante */
-
-    --purpura: #8A6D3B; /* Bronce/Oro oscuro */
-    --coral: #C5A059; /* Cobre/Oro */
-    --verde: #D4AF37; /* Reemplazo de verde por oro */
-    --rosa-suave: #111111; /* Fondo muy sutil */
+    --azul-uno:       var(--color-surface);
+    --azul-dos:       var(--color-gold);
+    --azul-tres:      var(--color-bg);
+    --azul-cuatro:    var(--color-gold-soft);
+    --naranja-calido: var(--color-gold-dark);
+    --gris-elegante:  var(--color-bg);
+    --blanco-neutro:  var(--color-card);
+    --texto:          var(--color-text);
+    --dorado:         var(--color-gold);
+    --purpura:        #8A6D3B;
+    --coral:          #C5A059;
+    --verde:          var(--color-gold);
+    --rosa-suave:     #111111;
+    --site-font:      var(--font-body);
 }
 
 /* Reset */
@@ -494,9 +492,9 @@ h1, h2, h3, .header-title, .header-tittle {
     backdrop-filter: blur(50px);
 }
 
-/* Forzar tipografía global al final del archivo */
+/* Tipografía global → design-tokens.css */
 :root{
-    --site-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --site-font: var(--font-body);
 }
 
 html, body, button, input, select, textarea, a, h1, h2, h3, h4, h5, h6, p, li, span, div {

@@ -163,8 +163,8 @@ function _iniciarMenuMobile() {
     });
   });
 
-  // Cerrar nav si la ventana se agranda por encima del breakpoint
+  // Cerrar nav si la ventana se agranda por encima del breakpoint tablet
   window.addEventListener("resize", () => {
-    if (window.innerWidth >= 768) _cerrarNav();
+    if (window.innerWidth >= 1200) _cerrarNav();
   });
 }

@@ -34,20 +34,21 @@
    MODO CLARO — Reasignación de variables CSS
    ================================================ */
 html.modo-claro {
-    /* Paleta principal redistribuida para fondo claro */
-    --azul-uno:       #ede9e3;     /* Superficies cálidas claras */
-    --azul-dos:       #B8960C;     /* Oro más oscuro (mejor contraste en claro) */
-    --azul-tres:      #ffffff;
-    --azul-cuatro:    #7a5c00;
-    --gris-elegante:  #f5f2ee;     /* Fondo principal cálido */
-    --blanco-neutro:  #ffffff;     /* Tarjetas blancas */
-    --texto:          #1a1a1a;     /* Texto oscuro */
-    --naranja-calido: #9a7800;
+    /* Las variables globales del modo claro están en design-tokens.css (html.modo-claro).
+       Aquí actualizamos solo los aliases de retrocompatibilidad de este archivo. */
+    --azul-uno:       var(--color-surface);
+    --azul-dos:       var(--color-gold);
+    --azul-tres:      var(--color-bg);
+    --azul-cuatro:    var(--color-gold-soft);
+    --gris-elegante:  var(--color-bg);
+    --blanco-neutro:  var(--color-card);
+    --texto:          var(--color-text);
+    --naranja-calido: var(--color-gold-dark);
     --purpura:        #7a5c00;
     --coral:          #9a7800;
-    --verde:          #B8960C;
+    --verde:          var(--color-gold);
     --rosa-suave:     #f0ede8;
-    --dorado:         #B8960C;
+    --dorado:         var(--color-gold);
 }
 
 

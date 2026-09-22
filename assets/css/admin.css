@@ -76,20 +76,22 @@
    Tema: Dark Luxury / Gold
    ============================================= */
 
+/* admin.css — usa design-tokens.css como fuente de verdad.
+   Alias locales para retrocompatibilidad con el resto del archivo. */
 :root {
-    --bg-main:    #0a0a0a;
-    --bg-surface: #161618;
-    --bg-card:    #1e1e20;
-    --gold:       #D4AF37;
-    --gold-dark:  #AA8B22;
-    --gold-soft:  #F3E5AB;
-    --text:       #F8F9F9;
-    --text-muted: #9a9a9a;
-    --danger:     #e74c3c;
-    --danger-dark:#c0392b;
-    --border:     rgba(212,175,55,0.2);
-    --radius:     8px;
-    --font:       'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --bg-main:    var(--color-bg);
+    --bg-surface: var(--color-surface);
+    --bg-card:    var(--color-card);
+    --gold:       var(--color-gold);
+    --gold-dark:  var(--color-gold-dark);
+    --gold-soft:  var(--color-gold-soft);
+    --text:       var(--color-text);
+    --text-muted: var(--color-text-muted);
+    --danger:     var(--color-danger);
+    --danger-dark: var(--color-danger-dark);
+    --border:     var(--color-border);
+    --radius:     var(--radius-sm);
+    --font:       var(--font-body);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -871,18 +873,19 @@ body {
    ENHANCED ADMIN PREMIUM STYLES (TOTAL REFRESH)
    ========================================================================== */
 :root {
-    --bg-main: #060608;
-    --bg-surface: #0f0f13;
-    --bg-card: #15151a;
-    --bg-accent: rgba(212, 175, 55, 0.04);
-    --gold: #D4AF37;
-    --gold-glow: rgba(212, 175, 55, 0.3);
-    --gold-text: #f3e5ab;
-    --text-primary: #ffffff;
-    --text-secondary: #9ea0a5;
-    --border-dim: rgba(255, 255, 255, 0.05);
-    --border-accent: rgba(212, 175, 55, 0.15);
-    --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    /* Aliases a tokens globales */
+    --bg-main:         var(--color-bg);
+    --bg-surface:      var(--color-surface);
+    --bg-card:         var(--color-card);
+    --bg-accent:       rgba(212, 175, 55, 0.04);
+    --gold:            var(--color-gold);
+    --gold-glow:       var(--color-gold-glow);
+    --gold-text:       var(--color-gold-soft);
+    --text-primary:    var(--color-text);
+    --text-secondary:  var(--color-text-muted);
+    --border-dim:      rgba(255, 255, 255, 0.05);
+    --border-accent:   var(--color-border);
+    --transition-smooth: all var(--transition-slow) cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 body {

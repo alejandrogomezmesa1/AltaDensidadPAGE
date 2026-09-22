@@ -1,16 +1,18 @@
+/* login.css — usa design-tokens.css como fuente de verdad.
+   Alias locales para retrocompatibilidad con el resto del archivo. */
 :root {
-    --bg:       #0a0a0a;
-    --surface:  #161618;
-    --card:     #1e1e20;
-    --gold:     #D4AF37;
-    --gold-dark:#AA8B22;
-    --gold-soft:#F3E5AB;
-    --text:     #F8F9F9;
-    --muted:    #9a9a9a;
-    --danger:   #e74c3c;
-    --border:   rgba(212,175,55,0.2);
-    --radius:   10px;
-    --font:     'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --bg:       var(--color-bg);
+    --surface:  var(--color-surface);
+    --card:     var(--color-card);
+    --gold:     var(--color-gold);
+    --gold-dark:var(--color-gold-dark);
+    --gold-soft:var(--color-gold-soft);
+    --text:     var(--color-text);
+    --muted:    var(--color-text-muted);
+    --danger:   var(--color-danger);
+    --border:   var(--color-border);
+    --radius:   var(--radius-md);
+    --font:     var(--font-body);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

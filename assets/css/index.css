@@ -248,58 +248,23 @@
   box-shadow: 0 10px 28px rgba(212, 175, 55, 0.18) !important;
 }
 
-/* Variables - Tema Premium Dark Luxury */
+/* Variables - index.css usa design-tokens.css como fuente de verdad.
+   Aliases de retrocompatibilidad para el código existente. */
 :root {
-  /* Paleta Principal Dark/Gold */
-  --azul-uno: #161618;
-  /* Superficies oscuras / Tarjetas */
-  --azul-dos: #d4af37;
-  /* Oro principal (Reemplaza azul intenso) */
-  --azul-tres: #0a0a0a;
-  /* Fondo muy oscuro */
-  /* Forzar tipografÃ­a global */
-  :root {
-    --site-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
-  html,
-  body,
-  button,
-  input,
-  select,
-  textarea,
-  a,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  li,
-  span,
-  div {
-    font-family: var(--site-font) !important;
-  }
-  --azul-cuatro: #f3e5ab;
-  /* Oro suave / Champagne */
-  /* Colores complementarios */
-  ---amarillo-suave: #d4af37;
-  --naranja-calido: #aa8b22;
-  /* Oro oscuro para bordes/sombras */
-  --gris-elegante: #0f0f11;
-  /* Fondo principal oscuro */
-  --blanco-neutro: #1e1e20;
-  /* Superficie ligeramente mÃ¡s clara */
-  --texto: #f8f9f9;
-  /* Texto principal brillante */
-  --purpura: #8a6d3b;
-  /* Bronce/Oro oscuro */
-  --coral: #c5a059;
-  /* Cobre/Oro */
-  --verde: #d4af37;
-  /* Reemplazo de verde por oro */
-  --rosa-suave: #111111;
-  /* Fondo muy sutil */
+  /* ── Aliases del sistema antiguo → tokens globales ── */
+  --azul-uno:       var(--color-surface);   /* Superficies oscuras / Tarjetas */
+  --azul-dos:       var(--color-gold);      /* Oro principal */
+  --azul-tres:      var(--color-bg);        /* Fondo muy oscuro */
+  --azul-cuatro:    var(--color-gold-soft); /* Oro suave / Champagne */
+  --naranja-calido: var(--color-gold-dark); /* Oro oscuro para bordes/sombras */
+  --gris-elegante:  var(--color-bg);        /* Fondo principal oscuro */
+  --blanco-neutro:  var(--color-card);      /* Superficie ligeramente más clara */
+  --texto:          var(--color-text);      /* Texto principal brillante */
+  --purpura:        #8a6d3b;                /* Bronce/Oro oscuro */
+  --coral:          #c5a059;                /* Cobre/Oro */
+  --verde:          var(--color-gold);      /* Reemplazo de verde por oro */
+  --rosa-suave:     #111111;                /* Fondo muy sutil */
+  --site-font:      var(--font-body);       /* Tipografía global */
 }
 
 #boton_fijo {
@@ -6717,9 +6682,233 @@ html.modo-claro section.filters-section .filter-group label {
   color: #B8960C !important;
 }
 
-/* Ocultar botón de cierre de nav por defecto (solo mostrar en móvil) */
+/* =======================================================================
+   HEADER RESPONSIVO — Drawer en tablet + móvil (< 1200px)
+   El nav colapsa en pantallas < 1200px (iPad, 13-inch, mobile).
+   En ≥ 1200px se muestra como barra horizontal.
+   ======================================================================= */
+
+/* ── Hamburger — visible en tablet + móvil ─────────────────────────────── */
+#hamburgerBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 8px;
+  color: #D4AF37;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+#hamburgerBtn:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #D4AF37;
+}
+
+/* Modo claro */
+html.modo-claro #hamburgerBtn {
+  border-color: rgba(184, 150, 12, 0.4);
+  color: #B8960C;
+}
+html.modo-claro #hamburgerBtn:hover {
+  background: rgba(184, 150, 12, 0.1);
+  border-color: #B8960C;
+}
+
+/* ── Botón de cierre interno del drawer ────────────────────────────────── */
 .nav-close-btn {
   display: none;
+  align-self: flex-end;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 8px;
+  color: #D4AF37;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0 8px auto;
+  transition: background 0.2s;
+}
+.nav-close-btn:hover { background: rgba(212, 175, 55, 0.12); }
+
+/* ── Overlay de fondo ──────────────────────────────────────────────────── */
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1100;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.nav-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* ── En desktop (≥ 1200px): nav horizontal, hamburger oculto ───────────── */
+@media (min-width: 1200px) {
+  .main-nav {
+    position: static !important;
+    transform: none !important;
+    visibility: visible !important;
+    flex-direction: row;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    padding: 0;
+    z-index: auto;
+  }
+  .main-nav ul {
+    flex-direction: row;
+  }
+  .nav-close-btn { display: none !important; }
+  #hamburgerBtn   { display: none !important; }
+}
+
+/* ── En tablet + móvil (< 1200px): nav como drawer lateral ─────────────── */
+@media (max-width: 1199px) {
+  /* Hamburger visible */
+  #hamburgerBtn { display: inline-flex; }
+
+  /* Header simplificado: logo izquierda, actions derecha */
+  .header {
+    justify-content: space-between;
+  }
+
+  /* Ocultar el botón "Comprar" del nav en tablet (se ve como ícono WhatsApp) */
+  .main-nav .nav-buy {
+    display: none;
+  }
+
+  /* El nav se convierte en drawer */
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100dvh;
+    background: rgba(15, 15, 17, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(212, 175, 55, 0.18);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 18px;
+    z-index: 1200;
+    transition: right 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+
+  /* Drawer abierto */
+  .main-nav.nav-open {
+    right: 0;
+  }
+
+  /* Botón de cierre visible dentro del drawer */
+  .nav-close-btn {
+    display: inline-flex;
+  }
+
+  /* Nav lista vertical */
+  .main-nav ul {
+    flex-direction: column;
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    gap: 2px;
+    width: 100%;
+  }
+
+  .main-nav li {
+    width: 100%;
+  }
+
+  .main-nav a {
+    font-size: 1rem;
+    padding: 11px 14px;
+    border-radius: 8px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .main-nav a::after {
+    display: none;
+  }
+
+  /* Dropdown en drawer */
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+    border-left: 2px solid rgba(212, 175, 55, 0.25);
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0 0 0 16px;
+    padding: 4px 0;
+    display: none;
+  }
+
+  .dropdown.dropdown-open .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu a {
+    padding: 9px 14px;
+    font-size: 0.92rem;
+  }
+
+  /* buy-btn como enlace simple en el drawer */
+  .main-nav .nav-buy {
+    display: list-item;
+  }
+  .header-buy-btn {
+    display: inline-flex;
+    width: 100%;
+    border-radius: 8px;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+}
+
+/* ── Modo claro — drawer ────────────────────────────────────────────────── */
+@media (max-width: 1199px) {
+  html.modo-claro .main-nav {
+    background: rgba(252, 251, 249, 0.98);
+    border-left-color: rgba(184, 150, 12, 0.2);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+  }
+  html.modo-claro .nav-close-btn {
+    border-color: rgba(184, 150, 12, 0.3);
+    color: #B8960C;
+  }
+}
+
+/* ── Ajuste del botón carrito en texto en tablet ────────────────────────── */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .btn-carrito-nav::after {
+    display: none;
+  }
+  .btn-carrito-nav {
+    padding: 7px 10px;
+    border-radius: 8px;
+  }
 }
 
 @media (max-width: 768px) {
