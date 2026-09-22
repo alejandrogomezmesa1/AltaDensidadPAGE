@@ -5,7 +5,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         async function cargarKitsPublico() {
             const kitsGrid = document.getElementById('kitsGrid');
             if (!kitsGrid) return;
-            kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">Cargando kits...</div>';
+            if (window.ADAnimations) {
+                window.ADAnimations.renderSkeletons('#kitsGrid', 3);
+            } else {
+                kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">Cargando kits...</div>';
+            }
             try {
                 const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
                 const res = await fetch(`${base}/kits`);
@@ -215,6 +219,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         try {
+            if (window.ADAnimations) {
+                window.ADAnimations.renderSkeletons('#productGrid', 4);
+            }
             const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
             const res = await fetch(`${base}/productos`);
             const data = await res.json();

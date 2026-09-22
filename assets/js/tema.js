@@ -34,22 +34,25 @@ function _inyectarBotonTema() {
   document.getElementById("toggleTema").addEventListener("click", _toggleTema);
 }
 
-function _actualizarIconoTema() {
+function _actualizarIconoTema(animar = false) {
   const btn = document.getElementById("toggleTema");
   if (!btn) return;
   const esModoClaro = document.documentElement.classList.contains("modo-claro");
-  // En modo claro → mostrar luna (para volver al oscuro)
-  // En modo oscuro → mostrar sol (para ir al claro)
-  btn.innerHTML = esModoClaro
-    ? '<i class="fas fa-moon"></i>'
-    : '<i class="fas fa-sun"></i>';
   btn.title = esModoClaro ? "Cambiar a modo oscuro" : "Cambiar a modo claro";
+
+  if (animar && window.ADAnimations) {
+    window.ADAnimations.animateThemeToggle(btn, esModoClaro);
+  } else {
+    btn.innerHTML = esModoClaro
+      ? '<i class="fas fa-moon"></i>'
+      : '<i class="fas fa-sun"></i>';
+  }
 }
 
 function _toggleTema() {
   const esModoClaro = document.documentElement.classList.toggle("modo-claro");
   localStorage.setItem("altadensidad_tema", esModoClaro ? "claro" : "oscuro");
-  _actualizarIconoTema();
+  _actualizarIconoTema(true);
 }
 
 /* ====================================================

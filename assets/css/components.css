@@ -479,3 +479,128 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap !important;
 }
 
+/* ==========================================================================
+   11. SKELETON SHIMMER LOADER
+   ========================================================================== */
+.skeleton-card {
+  background: var(--color-surface);
+  border: 1px solid rgba(212, 175, 55, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.skeleton-text {
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.skeleton-text--title { width: 75%; height: 18px; }
+.skeleton-text--subtitle { width: 45%; }
+.skeleton-text--price { width: 40%; height: 16px; margin-top: 4px; }
+
+.skeleton-btn {
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  margin-top: auto;
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.1) 50%,
+    transparent 100%
+  );
+  animation: skeleton-sweep 1.6s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes skeleton-sweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+html.modo-claro .skeleton-card {
+  background: var(--color-surface);
+  border-color: rgba(184, 150, 12, 0.18);
+}
+html.modo-claro .skeleton-img,
+html.modo-claro .skeleton-text,
+html.modo-claro .skeleton-btn {
+  background: rgba(0, 0, 0, 0.05);
+}
+html.modo-claro .skeleton-shimmer::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(184, 150, 12, 0.15) 50%,
+    transparent 100%
+  );
+}
+
+/* ==========================================================================
+   12. BOTÓN FLOTANTE WHATSAPP (LUXURY CTA)
+   ========================================================================== */
+.btn-whatsapp-flotante {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1050;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-whatsapp-flotante:hover {
+  color: #ffffff;
+  transform: scale(1.1) !important;
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.7);
+}
+
+@media (max-width: 768px) {
+  .btn-whatsapp-flotante {
+    bottom: 20px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+  }
+}
+
+

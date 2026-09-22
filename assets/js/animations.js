@@ -311,6 +311,99 @@
       document.querySelectorAll('.nos-info-block, .nos-mvv, .nos-stat').forEach(el => {
         observer.observe(el);
       });
+    },
+
+    /**
+     * 11. Resplandor Shimmer & Pulso en Botones de WhatsApp y Comprar
+     */
+    initWhatsAppGlow: function () {
+      if (!this.isReady() || this.prefersReducedMotion()) return;
+
+      // Inyectar botón flotante de WhatsApp si no existe en la página
+      if (!document.querySelector('.btn-whatsapp-flotante')) {
+        const floatBtn = document.createElement('a');
+        floatBtn.className = 'btn-whatsapp-flotante';
+        floatBtn.href = 'https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Vi%20su%20cat%C3%A1logo%20en%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20perfumes.%20%E2%9C%A8';
+        floatBtn.target = '_blank';
+        floatBtn.rel = 'noopener noreferrer';
+        floatBtn.setAttribute('aria-label', 'Contactar por WhatsApp');
+        floatBtn.innerHTML = '<i class="fab fa-whatsapp"></i>';
+        document.body.appendChild(floatBtn);
+      }
+
+      const targets = document.querySelectorAll('.header-buy-btn, .btn-whatsapp-flotante');
+      if (!targets.length) return;
+
+      anime({
+        targets: targets,
+        boxShadow: [
+          { value: '0 4px 15px rgba(212, 175, 55, 0.25)', duration: 0 },
+          { value: '0 4px 28px rgba(212, 175, 55, 0.7)', duration: 1800, easing: 'easeInOutSine' },
+          { value: '0 4px 15px rgba(212, 175, 55, 0.25)', duration: 1800, easing: 'easeInOutSine' }
+        ],
+        scale: [
+          { value: 1, duration: 0 },
+          { value: 1.04, duration: 1800, easing: 'easeInOutSine' },
+          { value: 1, duration: 1800, easing: 'easeInOutSine' }
+        ],
+        loop: true
+      });
+    },
+
+    /**
+     * 12. Transición y Morphing en Toggle de Tema (Sol ↔ Luna)
+     */
+    animateThemeToggle: function (btnElement, isModoClaro) {
+      if (!btnElement) return;
+
+      if (!this.isReady() || this.prefersReducedMotion()) {
+        btnElement.innerHTML = isModoClaro
+          ? '<i class="fas fa-moon"></i>'
+          : '<i class="fas fa-sun"></i>';
+        return;
+      }
+
+      anime.remove(btnElement);
+      anime({
+        targets: btnElement,
+        rotate: isModoClaro ? [0, 360] : [360, 0],
+        scale: [
+          { value: 0.5, duration: 150, easing: 'easeInQuad' },
+          { value: 1.25, duration: 180, easing: 'easeOutQuad' },
+          { value: 1, duration: 170, easing: 'easeOutElastic(1, .6)' }
+        ],
+        complete: function () {
+          btnElement.style.transform = 'none';
+        }
+      });
+
+      setTimeout(() => {
+        btnElement.innerHTML = isModoClaro
+          ? '<i class="fas fa-moon"></i>'
+          : '<i class="fas fa-sun"></i>';
+      }, 150);
+    },
+
+    /**
+     * 13. Skeleton Loader Animado con efecto Shimmer
+     */
+    renderSkeletons: function (containerSelector, count = 4) {
+      const container = typeof containerSelector === 'string' ? document.querySelector(containerSelector) : containerSelector;
+      if (!container) return;
+
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        html += `
+          <div class="skeleton-card skeleton-shimmer">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-text skeleton-text--title"></div>
+            <div class="skeleton-text skeleton-text--subtitle"></div>
+            <div class="skeleton-text skeleton-text--price"></div>
+            <div class="skeleton-btn"></div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
     }
   };
 
@@ -321,6 +414,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     ADAnimations.initHero();
     ADAnimations.initScrollReveals();
+    ADAnimations.initWhatsAppGlow();
   });
 
 })(window, document);

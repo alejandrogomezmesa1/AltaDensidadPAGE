@@ -7,7 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const productGrid = document.getElementById('top10Grid');
 
     async function cargarTop10() {
-        productGrid.innerHTML = '<div class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</div>';
+        if (window.ADAnimations) {
+            window.ADAnimations.renderSkeletons('#top10Grid', 4);
+        } else {
+            productGrid.innerHTML = '<div class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</div>';
+        }
         try {
             const res = await fetch(API_TOP10_URL);
             const data = await res.json();

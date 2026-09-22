@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Cargar desde API
     try {
-        productGrid.innerHTML = '<p style="color:#888;text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</p>';
+        if (window.ADAnimations) {
+            window.ADAnimations.renderSkeletons('#productGrid', 4);
+        } else {
+            productGrid.innerHTML = '<p style="color:#888;text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</p>';
+        }
         const res  = await fetch(API_ENVASES);
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
