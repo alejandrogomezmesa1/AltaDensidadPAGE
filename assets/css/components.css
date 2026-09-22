@@ -565,42 +565,174 @@ html.modo-claro .skeleton-shimmer::after {
 }
 
 /* ==========================================================================
-   12. BOTÓN FLOTANTE WHATSAPP (LUXURY CTA)
+   12. BOTÓN FLOTANTE WHATSAPP (LUXURY CTA) CON ANILLOS DE PULSO
    ========================================================================== */
-.btn-whatsapp-flotante {
+.whatsapp-flotante-wrapper {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 1050;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-  color: #ffffff;
+  width: 58px;
+  height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
-  text-decoration: none;
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.btn-whatsapp-flotante:hover {
-  color: #ffffff;
-  transform: scale(1.1) !important;
-  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.7);
+.whatsapp-ripple-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+}
+
+.btn-whatsapp-flotante {
+  position: relative;
+  z-index: 2;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45);
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
-  .btn-whatsapp-flotante {
+  .whatsapp-flotante-wrapper {
     bottom: 20px;
     right: 18px;
-    width: 48px;
-    height: 48px;
-    font-size: 1.4rem;
+    width: 50px;
+    height: 50px;
+  }
+  .btn-whatsapp-flotante {
+    width: 50px;
+    height: 50px;
+    font-size: 1.45rem;
   }
 }
+
+/* ==========================================================================
+   13. HERO DE LUJO & ELEMENTOS ANIMADOS (ANIME.JS)
+   ========================================================================== */
+.collection-banner {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(18, 18, 22, 0.95) 70%, #0a0a0c 100%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(212, 175, 55, 0.08) !important;
+  padding: clamp(30px, 5vw, 55px) 20px clamp(40px, 6vw, 65px) !important;
+}
+
+.hero-glow-orb {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.28) 0%, rgba(212, 175, 55, 0.05) 50%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: blur(35px);
+  z-index: 1;
+}
+
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 30px;
+  color: #f1d779;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+  backdrop-filter: blur(6px);
+  position: relative;
+  z-index: 2;
+}
+
+.hero-benefits-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 22px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-benefit-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  color: #e6e6e6;
+  font-size: 0.84rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+}
+
+.hero-benefit-item i {
+  color: var(--color-gold);
+}
+
+/* ==========================================================================
+   14. VUELO AL CARRITO (FLY-TO-CART)
+   ========================================================================== */
+.flying-cart-bubble {
+  position: fixed;
+  z-index: 9999;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.65), 0 0 15px rgba(212, 175, 55, 0.4);
+  border: 2px solid #D4AF37;
+  pointer-events: none;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flying-cart-bubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   15. RESPLANDOR Y MEJORAS DE CARDS
+   ========================================================================== */
+.product-card {
+  will-change: transform, box-shadow;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.product-card.is-animating {
+  pointer-events: auto;
+}
+
 
 

@@ -20,7 +20,7 @@ function guardarCarrito(carrito) {
   localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
 }
 
-function agregarAlCarrito(producto) {
+function agregarAlCarrito(producto, originElement = null) {
   const carrito = obtenerCarrito();
   const idx = carrito.findIndex((i) => i.id === producto.id);
   if (idx >= 0) {
@@ -29,7 +29,22 @@ function agregarAlCarrito(producto) {
     carrito.push({ ...producto, cantidad: 1 });
   }
   guardarCarrito(carrito);
-  actualizarBadge(true); // Pasar true para animar
+
+  // Capturar origen del clic si no se pasó directamente
+  if (!originElement && typeof window !== 'undefined' && window.event) {
+    const evTarget = window.event.target;
+    if (evTarget && evTarget.closest) {
+      originElement = evTarget.closest('.btn-agregar-carrito, .product-card, button');
+    }
+  }
+
+  // Disparar vuelo parabólico con Anime.js
+  if (originElement && window.ADAnimations && typeof window.ADAnimations.flyToCart === 'function') {
+    window.ADAnimations.flyToCart(originElement, producto.image);
+  } else {
+    actualizarBadge(true); // Fallback directo
+  }
+
   renderCarrito();
   mostrarToastCarrito(producto.name);
 }

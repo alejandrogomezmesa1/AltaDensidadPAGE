@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   _inyectarBotonTema();
   _actualizarIconoTema();
   _iniciarMenuMobile();
+  _iniciarDropdowns();
 });
 
 function _inyectarBotonTema() {
@@ -135,42 +136,53 @@ function _iniciarMenuMobile() {
     { passive: true },
   );
 
-  // Dropdown toggle — todos los dispositivos (reemplaza hover/focus-within CSS)
-  nav.querySelectorAll(".dropdown > a").forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const dropdown = this.parentElement;
-      const isOpen = dropdown.classList.contains("dropdown-open");
-      // Cerrar todos los dropdowns abiertos
-      nav
-        .querySelectorAll(".dropdown.dropdown-open")
-        .forEach((d) => d.classList.remove("dropdown-open"));
-      // Abrir éste solo si estaba cerrado
-      if (!isOpen) dropdown.classList.add("dropdown-open");
-    });
-  });
-
-  // Cerrar dropdown al hacer clic fuera (desktop y táctil)
-  document.addEventListener("click", function (e) {
-    if (!e.target.closest(".dropdown")) {
-      nav
-        .querySelectorAll(".dropdown.dropdown-open")
-        .forEach((d) => d.classList.remove("dropdown-open"));
-    }
-  });
-
-  // Cerrar dropdown al perder el foco (navegación con teclado)
-  nav.querySelectorAll(".dropdown").forEach((dropdown) => {
-    dropdown.addEventListener("focusout", function (e) {
-      // relatedTarget es el elemento que recibe el foco a continuación
-      if (!dropdown.contains(e.relatedTarget)) {
-        dropdown.classList.remove("dropdown-open");
-      }
-    });
-  });
-
   // Cerrar nav si la ventana se agranda por encima del breakpoint tablet
   window.addEventListener("resize", () => {
     if (window.innerWidth >= 1200) _cerrarNav();
   });
 }
+
+/* ====================================================
+   DROPDOWNS — GESTIÓN GLOBAL ROBUSTA (Desktop + Mobile)
+   ==================================================== */
+function _iniciarDropdowns() {
+  const dropdowns = document.querySelectorAll(".dropdown");
+  if (!dropdowns.length) return;
+
+  dropdowns.forEach((dropdown) => {
+    const trigger = dropdown.querySelector(":scope > a");
+    if (!trigger) return;
+
+    trigger.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = dropdown.classList.contains("dropdown-open");
+
+      // Cerrar otros dropdowns abiertos
+      document.querySelectorAll(".dropdown.dropdown-open").forEach((d) => {
+        if (d !== dropdown) d.classList.remove("dropdown-open");
+      });
+
+      dropdown.classList.toggle("dropdown-open", !isOpen);
+    });
+  });
+
+  // Cerrar al hacer clic fuera
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".dropdown")) {
+      document
+        .querySelectorAll(".dropdown.dropdown-open")
+        .forEach((d) => d.classList.remove("dropdown-open"));
+    }
+  });
+
+  // Cerrar con Escape
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      document
+        .querySelectorAll(".dropdown.dropdown-open")
+        .forEach((d) => d.classList.remove("dropdown-open"));
+    }
+  });
+}
+
