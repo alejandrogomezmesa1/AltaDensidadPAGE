@@ -80,7 +80,18 @@ function actualizarBarraProgreso(idxActual) {
     const completados = modulosCompletados.length;
     const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
 
-    if (barra) barra.style.width = `${porcentaje}%`;
+    if (barra) {
+        if (window.anime) {
+            anime({
+                targets: barra,
+                width: `${porcentaje}%`,
+                duration: 600,
+                easing: 'easeOutCubic'
+            });
+        } else {
+            barra.style.width = `${porcentaje}%`;
+        }
+    }
     if (texto) texto.textContent = `Progreso General: ${porcentaje}% (${completados} de ${total} módulos completados)`;
 
     if (contador) {
@@ -298,6 +309,16 @@ function renderModuloLectura(idx) {
             ${preguntasHtml}
         </div>
     `;
+
+    if (window.anime) {
+        anime({
+            targets: '.module-content-card',
+            opacity: [0, 1],
+            translateY: [18, 0],
+            duration: 400,
+            easing: 'easeOutCubic'
+        });
+    }
 
     // Event listener si no hay preguntas
     const btnSoloLectura = document.getElementById('btnCompletarModuloLectura');

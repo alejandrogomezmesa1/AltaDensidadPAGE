@@ -70,7 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const ph = document.createElement('div');
                 ph.classList.add('product-card-placeholder');
                 productGrid.appendChild(ph);
-            }
+        }
+        if (window.ADAnimations) {
+            window.ADAnimations.animateTop10('#top10Grid');
         }
     }
 

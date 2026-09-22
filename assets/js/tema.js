@@ -67,6 +67,9 @@ function _iniciarMenuMobile() {
     hamburger.innerHTML = '<i class="fas fa-times"></i>';
     if (overlay) overlay.classList.add("active");
     document.body.style.overflow = "hidden";
+    if (window.ADAnimations) {
+      window.ADAnimations.staggerDrawerNav(".main-nav");
+    }
   }
 
   function _cerrarNav() {

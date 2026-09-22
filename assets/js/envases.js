@@ -39,6 +39,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 productGrid.appendChild(ph);
             }
         }
+        if (window.ADAnimations) {
+            window.ADAnimations.animateEnvases('#productGrid');
+        }
     }
 
     // Cargar desde API

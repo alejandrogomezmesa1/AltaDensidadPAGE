@@ -67,9 +67,13 @@ function actualizarBadge(animar = false) {
   badge.style.display = total > 0 ? "flex" : "none";
 
   if (animar && total > 0) {
-      badge.classList.remove("pulse");
-      void badge.offsetWidth; // Force reflow
-      badge.classList.add("pulse");
+      if (window.ADAnimations) {
+          window.ADAnimations.bumpCartBadge();
+      } else {
+          badge.classList.remove("pulse");
+          void badge.offsetWidth; // Force reflow
+          badge.classList.add("pulse");
+      }
   }
 }
 

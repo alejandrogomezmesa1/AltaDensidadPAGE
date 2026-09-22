@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             renderKitsPaginacion(total);
+            if (window.ADAnimations) {
+                window.ADAnimations.staggerCards('#kitsGrid');
+            }
         }
 
         function renderKitsPaginacion(totalItems) {
@@ -328,6 +331,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (countEl) countEl.textContent = `Resultados encontrados: ${productsToShow.length}`;
 
             renderPaginacion(productsToShow.length);
+            if (window.ADAnimations) {
+                window.ADAnimations.staggerCards('#productGrid');
+            }
 
             // Scroll suave solo si se solicita (por ejemplo, al cambiar de página)
             if (shouldScroll && productGrid && productsToShow.length > 0) {
@@ -520,11 +526,21 @@ document.addEventListener('DOMContentLoaded', async function() {
             aplicarTemaModal(modal);
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
+            if (window.ADAnimations) {
+                window.ADAnimations.animateModalOpen(modal, '.modal-content');
+            }
         }
 
         function cerrarModal() {
-            productoModal.classList.remove('open');
-            document.body.style.overflow = '';
+            if (window.ADAnimations) {
+                window.ADAnimations.animateModalClose(productoModal, '.modal-content', () => {
+                    productoModal.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            } else {
+                productoModal.classList.remove('open');
+                document.body.style.overflow = '';
+            }
         }
 
         window.abrirModalProducto = abrirModalProducto;

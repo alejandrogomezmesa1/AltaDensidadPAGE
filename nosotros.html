@@ -282,19 +282,14 @@
         });
     });
 
-    // Contador animado
+    // Contador animado con Anime.js
     function animateCounter(el) {
         const target = parseInt(el.dataset.target);
-        const duration = 1400;
-        const start = performance.now();
-        const update = (now) => {
-            const progress = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target);
-            if (progress < 1) requestAnimationFrame(update);
-            else el.textContent = target;
-        };
-        requestAnimationFrame(update);
+        if (window.ADAnimations) {
+            ADAnimations.animateCounter(el, target, 1600);
+        } else {
+            el.textContent = target;
+        }
     }
 
     // Fade-in + contadores con IntersectionObserver
@@ -321,6 +316,9 @@
     const nosHero = document.querySelector('.nos-hero');
     if (nosHero) counterObserver.observe(nosHero);
 </script>
+<!-- Anime.js & Sistema de Animaciones -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="assets/js/animations.js"></script>
 <script src="assets/js/nav-sesion.js"></script>
 </body>
 </html>
