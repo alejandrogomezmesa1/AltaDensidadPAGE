@@ -471,3 +471,11 @@ h1, h2, h3, h4, h5, h6 {
 .text-gold  { color: var(--color-gold); }
 .text-muted { color: var(--color-text-muted); }
 .text-danger{ color: var(--color-danger); }
+
+/* Header & Nav utility — jamás wrapear texto de navegación */
+.main-nav a,
+.nav-login-btn,
+.header-buy-btn {
+  white-space: nowrap !important;
+}
+

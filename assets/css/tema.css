@@ -547,9 +547,9 @@ html.modo-claro .btn-carrito-nav:hover {
 }
 
 /* ================================================
-   MOBILE NAV — sidebar drawer
+   MOBILE & TABLET NAV — sidebar drawer (< 1200px)
    ================================================ */
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
     /* Header: row layout, sin wrap */
     .header {
         flex-wrap: nowrap !important;
@@ -741,31 +741,42 @@ html.modo-claro .btn-carrito-nav:hover {
    RESPONSIVE REFINEMENTS (Laptops 13-14" & Tablets)
    ================================================ */
 
-/* Pantallas medianas (Laptops pequeñas / Tablets landscape) */
-@media (min-width: 768px) and (max-width: 1200px) {
+/* Pantallas medianas / Laptops (1200px – 1440px): nav horizontal optimizado */
+@media (min-width: 1200px) and (max-width: 1440px) {
+    /* Ocultar texto del logo en pantallas medianas para dar espacio al nav */
+    .header-title,
+    .header-tittle {
+        display: none !important;
+    }
+
+    .logo-container {
+        padding: 5px 8px !important;
+        gap: 0 !important;
+    }
+
     .header {
-        padding: 0 3% !important;
-        gap: 15px !important;
+        padding: 10px 3% !important;
+        gap: 12px !important;
     }
 
     .main-nav ul {
-        gap: 10px !important;
+        gap: 4px !important;
     }
 
     .main-nav a {
-        padding: 8px 12px !important;
-        font-size: 0.9rem !important;
+        padding: 6px 9px !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
     }
 
-    .header-tittle {
-        font-size: 1.1rem !important;
+    .header-buy-btn,
+    .nav-login-btn {
+        padding: 6px 12px !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
     }
 
-    .logo-container img {
-        max-width: 40px !important;
-    }
-
-    /* Grillas de productos: 3 columnas en laptops pequeñas si es necesario */
+    /* Grillas de productos: 3 columnas en laptops si es necesario */
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
         gap: 15px !important;
