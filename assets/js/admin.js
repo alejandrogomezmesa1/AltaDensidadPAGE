@@ -1069,7 +1069,14 @@ function mostrarAlerta(msg, tipo) {
 
 function imagenCell(src) {
     if (!src) return `<div class="sin-imagen"><i class="fas fa-image"></i></div>`;
-    return `<img class="tabla-img" src="${escAttr(src)}" alt="producto" onerror="this.parentNode.innerHTML='<div class=\\'sin-imagen\\'><i class=\\'fas fa-image\\'></i></div>'">`;
+    let finalSrc = src.trim();
+    if (finalSrc.startsWith('img/')) {
+        finalSrc = 'assets/' + finalSrc;
+    } else if (!finalSrc.startsWith('http://') && !finalSrc.startsWith('https://') && !finalSrc.startsWith('assets/')) {
+        finalSrc = 'assets/img/' + finalSrc;
+    }
+    finalSrc = finalSrc.replace(/cartier\.jpeg$/i, 'CARTIER.jpeg');
+    return `<img class="tabla-img" src="${escAttr(finalSrc)}" alt="producto" onerror="this.parentNode.innerHTML='<div class=\\'sin-imagen\\'><i class=\\'fas fa-image\\'></i></div>'">`;
 }
 
 function formatPrecio(n) {

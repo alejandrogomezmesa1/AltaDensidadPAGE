@@ -1,5 +1,18 @@
 const API_ENVASES = ((location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api') + '/envases';
 
+function normalizarImagenEnvase(src) {
+    if (!src) return 'assets/img/logo2025.png';
+    if (src.startsWith('http://') || src.startsWith('https://')) return src;
+    let path = src.trim();
+    if (path.startsWith('img/')) {
+        path = 'assets/' + path;
+    } else if (!path.startsWith('assets/')) {
+        path = 'assets/img/' + path;
+    }
+    // Corrección para sistemas de archivos sensibles a mayúsculas (Linux/Vercel)
+    return path.replace(/cartier\.jpeg$/i, 'CARTIER.jpeg');
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
     const productGrid = document.getElementById('productGrid');
 
@@ -15,9 +28,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         envases.forEach(product => {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
+            const imgUrl = normalizarImagenEnvase(product.image);
             productCard.innerHTML = `
                 <div class="product-image">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${imgUrl}" alt="${product.name}" onerror="this.onerror=null;this.src='assets/img/logo2025.png';">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>

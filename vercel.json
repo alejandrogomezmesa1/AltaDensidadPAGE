@@ -7,6 +7,7 @@
   ],
   "routes": [
     { "src": "/assets/img/(.*)", "dest": "/assets/img/$1" },
+    { "src": "/img/(.*)", "dest": "/assets/img/$1" },
     { "src": "/assets/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))", "dest": "/assets/$1" },
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/login", "dest": "/login.html" },
