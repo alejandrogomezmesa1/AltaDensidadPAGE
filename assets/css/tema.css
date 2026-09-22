@@ -984,40 +984,145 @@ html.modo-claro select.shipping-input option {
     color: #1a1a1c;
 }
 
-/* Adaptacion Completa del Formulario de Envio al Modo Claro */
-html.modo-claro #envioModal .modal-content {
-    background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%) !important;
+/* ==========================================================================
+   ADAPTACIÓN COMPLETA DEL FORMULARIO DE ENVÍO Y MODALES AL MODO CLARO
+   ========================================================================== */
+html.modo-claro .prod-modal-overlay {
+    background-color: rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+html.modo-claro #envioModal .shipping-modal-content,
+html.modo-claro #envioModal .prod-modal,
+html.modo-claro .shipping-modal-content,
+html.modo-claro .prod-modal {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     color: #1a1a1c !important;
-    border: 1px solid rgba(184, 150, 12, 0.2) !important;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(184, 150, 12, 0.35) !important;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.16), 0 0 25px rgba(184, 150, 12, 0.1) !important;
+}
+
+html.modo-claro .shipping-modal-content::before {
+    background: linear-gradient(90deg, #B8960C, #d4af37) !important;
+}
+
+html.modo-claro .shipping-title {
+    color: #7a5c00 !important;
+    text-shadow: none !important;
+}
+
+html.modo-claro .shipping-subtitle {
+    color: #555555 !important;
 }
 
 html.modo-claro .shipping-label {
-    color: #444 !important;
+    color: #5a4400 !important;
     font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.4px !important;
 }
 
 html.modo-claro .shipping-input {
-    background-color: #ffffff !important;
+    background-color: #faf8f5 !important;
     color: #1a1a1c !important;
-    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(184, 150, 12, 0.32) !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
 html.modo-claro .shipping-input:focus {
+    background-color: #ffffff !important;
     border-color: #B8960C !important;
-    box-shadow: 0 0 8px rgba(184, 150, 12, 0.1) !important;
-}
-
-html.modo-claro .modal-header h2 {
+    box-shadow: 0 0 0 3px rgba(184, 150, 12, 0.22) !important;
     color: #1a1a1c !important;
 }
 
-html.modo-claro .cerrar-modal {
-    color: #888 !important;
+html.modo-claro .shipping-input::placeholder {
+    color: #888888 !important;
 }
 
-html.modo-claro .cerrar-modal:hover {
-    color: #000 !important;
+html.modo-claro select.shipping-input {
+    background-color: #faf8f5 !important;
+    color: #1a1a1c !important;
+}
+
+html.modo-claro select.shipping-input option {
+    background-color: #ffffff !important;
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .prod-modal-close,
+html.modo-claro #cerrarEnvioModal {
+    background: rgba(0, 0, 0, 0.06) !important;
+    color: #555555 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.modo-claro .prod-modal-close:hover,
+html.modo-claro #cerrarEnvioModal:hover {
+    background: rgba(184, 150, 12, 0.18) !important;
+    color: #7a5c00 !important;
+}
+
+html.modo-claro .shipping-summary-card {
+    background: rgba(184, 150, 12, 0.08) !important;
+    border: 1px solid rgba(184, 150, 12, 0.28) !important;
+    color: #2b2823 !important;
+}
+
+html.modo-claro .shipping-summary-card .summary-row {
+    color: #444444 !important;
+}
+
+html.modo-claro .shipping-summary-card .summary-row.total-row {
+    color: #7a5c00 !important;
+    border-top: 1px solid rgba(184, 150, 12, 0.3) !important;
+    font-weight: 700 !important;
+}
+
+html.modo-claro .shipping-btn-confirm {
+    background: linear-gradient(135deg, #B8960C 0%, #8a6d00 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 25px rgba(184, 150, 12, 0.35) !important;
+}
+
+html.modo-claro .shipping-btn-confirm:hover {
+    background: linear-gradient(135deg, #c7a412 0%, #9a7a00 100%) !important;
+    box-shadow: 0 14px 35px rgba(184, 150, 12, 0.5) !important;
+}
+
+/* Modal de Detalle de Producto en Modo Claro */
+html.modo-claro #productoModal .prod-modal {
+    background: #ffffff !important;
+    color: #1a1a1c !important;
+    border: 1px solid rgba(184, 150, 12, 0.35) !important;
+}
+
+html.modo-claro .prod-modal-nombre {
+    color: #1a1a1c !important;
+}
+
+html.modo-claro .prod-modal-categoria {
+    color: #7a5c00 !important;
+}
+
+html.modo-claro .prod-modal-desc {
+    color: #555555 !important;
+}
+
+html.modo-claro .prod-modal-precio {
+    color: #7a5c00 !important;
+}
+
+html.modo-claro .prod-modal-genero {
+    color: #666666 !important;
+}
+
+html.modo-claro .prod-tag {
+    background: rgba(184, 150, 12, 0.1) !important;
+    color: #7a5c00 !important;
+    border: 1px solid rgba(184, 150, 12, 0.25) !important;
 }
 
 /* ==========================================================================

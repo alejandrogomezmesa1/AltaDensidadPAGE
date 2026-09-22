@@ -289,11 +289,23 @@ function abrirModalEnvio() {
       const gNac = document.getElementById("groupNacional");
       if (gMetro) gMetro.style.display = "none";
       if (gNac) gNac.style.display = "none";
+
+      if (window.ADAnimations && typeof window.ADAnimations.animateModalOpen === 'function') {
+          window.ADAnimations.animateModalOpen(modal, '.shipping-modal-content');
+      }
   }
 }
 function cerrarModalEnvio() {
   const modal = document.getElementById("envioModal");
-  if (modal) modal.style.display = "none";
+  if (modal) {
+      if (window.ADAnimations && typeof window.ADAnimations.animateModalClose === 'function') {
+          window.ADAnimations.animateModalClose(modal, '.shipping-modal-content', () => {
+              modal.style.display = "none";
+          });
+      } else {
+          modal.style.display = "none";
+      }
+  }
 }
 
 // ---- Toast Elegante ----
@@ -343,6 +355,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnCerrar) btnCerrar.addEventListener("click", cerrarCarrito);
   if (overlay) overlay.addEventListener("click", cerrarCarrito);
   if (btnCerrarEnvio) btnCerrarEnvio.addEventListener("click", cerrarModalEnvio);
+  const modalEnv = document.getElementById("envioModal");
+  if (modalEnv) {
+    modalEnv.addEventListener("click", (e) => {
+      if (e.target === modalEnv) cerrarModalEnvio();
+    });
+  }
 
   const formEnvio = document.getElementById("envioForm");
   if (formEnvio) {

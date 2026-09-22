@@ -697,6 +697,51 @@ html.modo-claro .skeleton-shimmer::after {
   color: var(--color-gold);
 }
 
+.collection-banner p {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+}
+
+/* ==========================================================================
+   HERO EN MODO CLARO
+   ========================================================================== */
+html.modo-claro .collection-banner {
+  background: linear-gradient(145deg, #faf7f2 0%, #ede6dc 100%) !important;
+  border: 1px solid rgba(184, 150, 12, 0.3) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), inset 0 0 45px rgba(184, 150, 12, 0.08) !important;
+}
+
+html.modo-claro .collection-banner h1 {
+  color: #7a5c00 !important;
+  text-shadow: 0 1px 6px rgba(184, 150, 12, 0.15) !important;
+}
+
+html.modo-claro .collection-banner p {
+  color: #4a453e !important;
+}
+
+html.modo-claro .hero-glow-orb {
+  background: radial-gradient(circle, rgba(184, 150, 12, 0.18) 0%, rgba(184, 150, 12, 0.04) 50%, transparent 70%) !important;
+}
+
+html.modo-claro .hero-badge-pill {
+  background: rgba(184, 150, 12, 0.12) !important;
+  border: 1px solid rgba(184, 150, 12, 0.45) !important;
+  color: #7a5c00 !important;
+  box-shadow: 0 4px 15px rgba(184, 150, 12, 0.12) !important;
+}
+
+html.modo-claro .hero-benefit-item {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(184, 150, 12, 0.35) !important;
+  color: #2b2823 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.modo-claro .hero-benefit-item i {
+  color: #B8960C !important;
+}
+
 /* ==========================================================================
    14. VUELO AL CARRITO (FLY-TO-CART)
    ========================================================================== */
