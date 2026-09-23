@@ -12,6 +12,7 @@ const authRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
 const mercadopagoRouter = require('./routes/mercadopago');
 const monitoreoRouter = require('./routes/monitoreo');
+const chatbotRouter = require('./routes/chatbot');
 
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -112,6 +113,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/mercadopago', mercadopagoRouter);
 app.use('/api/admin/monitoreo', monitoreoRouter);
+app.use('/api/chatbot', chatbotRouter);
 
 // Servir la plataforma independiente de capacitación como endpoint autónomo
 app.use('/capacitacion', express.static(path.join(__dirname, '../plataforma-capacitacion')));

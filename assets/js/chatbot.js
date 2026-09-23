@@ -1,6 +1,10 @@
 // ==========================================================================
 // chatbot.js — Widget flotante "Asistente Alta Densidad"
-// Conecta con la API del chatbot (api.py) vía POST /chat.
+// Habla con el backend Node (proxy seguro) en POST /api/chatbot.
+//
+// La API key del chatbot NUNCA se expone aquí: vive en variables de entorno
+// del backend (CHATBOT_API_URL / CHATBOT_API_KEY). El frontend solo llama a
+// {apiUrl}/chatbot, igual que el resto de endpoints de la página.
 //
 // Incluir al final del <body> (con defer) en las páginas públicas.
 // El widget se inyecta automáticamente; no requiere editar el HTML.
@@ -10,12 +14,12 @@
    CONFIGURACIÓN — edita estos valores según tu entorno
    ========================================================================== */
 const AD_CHATBOT_CONFIG = {
-  // URL base del servicio (sin barra final). Para producción, usa la URL
-  // pública del túnel de Cloudflare, p. ej. https://xxxx.trycloudflare.com
-  apiUrl: "http://localhost:8000",
-
-  // API key (ver data/.api_key). Cámbiala aquí si rotas la key.
-  apiKey: "pk-lemw0fTHeR_zIRhw0Jng-hl3tpTBovzZhjB1ghUahR8",
+  // Base del backend Node (sin barra final). El endpoint real es /chatbot.
+  // En producción apunta a Railway (mismo backend que ya usa la página).
+  apiUrl:
+    location.hostname === "localhost" || location.hostname === "127.0.0.1"
+      ? "http://localhost:3000/api"
+      : "https://altadensidadpage-production.up.railway.app/api",
 
   // Identidad del bot
   botName: "Asistente Alta Densidad",
@@ -35,6 +39,16 @@ const AD_CHATBOT_CONFIG = {
   // Tiempo máximo de espera de respuesta (ms)
   timeoutMs: 120000,
 };
+
+// Override en tiempo de ejecución — útil para probar sin redeploy.
+// Desde la consola del navegador:
+//   localStorage.setItem("ad_chatbot_api_url", "http://localhost:3000/api");
+try {
+  const overrideUrl = localStorage.getItem("ad_chatbot_api_url");
+  if (overrideUrl) AD_CHATBOT_CONFIG.apiUrl = overrideUrl;
+} catch (_) {
+  /* localStorage no disponible; se usan los valores por defecto */
+}
 
 (function () {
   "use strict";
@@ -168,24 +182,24 @@ const AD_CHATBOT_CONFIG = {
       const body = { message };
       if (sessionId) body.session_id = sessionId;
 
-      const r = await fetch(CFG.apiUrl.replace(/\/$/, "") + "/chat", {
+      const r = await fetch(CFG.apiUrl.replace(/\/$/, "") + "/chatbot", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + CFG.apiKey,
         },
         body: JSON.stringify(body),
         signal: controller.signal,
       });
 
-      if (r.status === 401) {
-        _addMessage("error", "Error 401: la API key no es válida o falta el header Authorization.");
-        return;
-      }
-
       if (!r.ok) {
-        const detail = await _safeText(r);
-        _addMessage("error", "Error " + r.status + (detail ? ": " + detail : "") + ".");
+        const data = await _safeJson(r);
+        const detail = (data && (data.message || data.detail)) || (await _safeText(r));
+        _addMessage(
+          "error",
+          r.status === 503
+            ? "El asistente aún no está configurado en el servidor."
+            : "Error " + r.status + (detail ? ": " + detail : "") + ".",
+        );
         return;
       }
 
@@ -198,7 +212,7 @@ const AD_CHATBOT_CONFIG = {
       } else {
         _addMessage(
           "error",
-          "No se pudo contactar al asistente. Verifica que el servicio esté corriendo (Paso 1).",
+          "No se pudo contactar al asistente. Inténtalo de nuevo en unos segundos.",
         );
       }
     } finally {
@@ -221,6 +235,14 @@ const AD_CHATBOT_CONFIG = {
       return t.length > 200 ? t.slice(0, 200) : t;
     } catch (_) {
       return "";
+    }
+  }
+
+  async function _safeJson(r) {
+    try {
+      return await r.json();
+    } catch (_) {
+      return null;
     }
   }
 
