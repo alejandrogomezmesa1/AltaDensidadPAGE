@@ -3241,79 +3241,7 @@ h3,
 
 
 
-/* Estilo especÃ­fico para botÃ³n de Mercado Pago en el carrito */
-
-.carrito-btn-mp {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 10px;
-
-  background: linear-gradient(90deg, #00a4e4 0%, #0058a3 100%);
-
-  color: #fff;
-
-  border-radius: 7px;
-
-  font-size: 0.95rem;
-
-  font-weight: 700;
-
-  border: none;
-
-  cursor: pointer;
-
-  box-shadow: 0 6px 18px rgba(0, 84, 166, 0.16);
-
-  transition:
-
-    transform 0.12s ease,
-
-    box-shadow 0.12s ease,
-
-    opacity 0.12s ease;
-
-}
-
-
-
-.carrito-btn-mp i {
-
-  font-size: 1.05rem;
-
-}
-
-
-
-.carrito-btn-mp:hover {
-
-  transform: translateY(-2px);
-
-  box-shadow: 0 10px 28px rgba(0, 84, 166, 0.22);
-
-  opacity: 0.98;
-
-}
-
-
-
-.carrito-btn-mp:disabled {
-
-  opacity: 0.7;
-
-  cursor: not-allowed;
-
-  transform: none;
-
-  box-shadow: none;
-
-}
+/* (Estilos del botón de compra del carrito consolidados en la sección de Carrito) */
 
 
 
@@ -5741,63 +5669,102 @@ html.modo-claro .shipping-input {
 
 
 .shipping-btn-confirm {
-
-  margin-top: 10px;
-
-  background: linear-gradient(135deg, var(--azul-dos) 0%, var(--naranja-calido) 100%);
-
-  color: #000 !important;
-
+  margin-top: 14px;
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 50%, #996515 100%);
+  color: #0d0d0f !important;
   font-weight: 800;
-
-  text-transform: uppercase;
-
-  letter-spacing: 1.2px;
-
   border: none;
-
-  padding: 16px;
-
-  border-radius: 12px;
-
+  padding: 14px 20px;
+  border-radius: 14px;
   cursor: pointer;
-
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
-
   align-items: center;
-
-  justify-content: center;
-
+  justify-content: space-between;
   gap: 12px;
-
-  font-size: 1rem;
-
-  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
-
   width: 100%;
-
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.35);
+  position: relative;
+  overflow: hidden;
 }
 
-
+.shipping-btn-confirm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-25deg);
+  animation: mpBtnShimmer 4s infinite ease-in-out;
+  pointer-events: none;
+}
 
 .shipping-btn-confirm:hover {
-
-  transform: translateY(-3px) scale(1.02);
-
-  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
-
-  filter: brightness(1.1);
-
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 16px 40px rgba(212, 175, 55, 0.5);
+  filter: brightness(1.08);
 }
 
-
-
 .shipping-btn-confirm:active {
-
   transform: translateY(0);
+}
 
+.shipping-btn-confirm:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.shipping-btn-confirm-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 3px;
+  flex: 1;
+}
+
+.shipping-btn-confirm .btn-confirm-main {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0d0d0f;
+}
+
+.shipping-btn-confirm .btn-confirm-main i {
+  font-size: 1.15rem;
+}
+
+.shipping-btn-confirm .btn-confirm-sub {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(13, 13, 15, 0.8);
+  letter-spacing: 0.2px;
+}
+
+.shipping-btn-confirm .shipping-btn-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(13, 13, 15, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #0d0d0f;
+  transition: transform 0.3s ease, background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.shipping-btn-confirm:hover .shipping-btn-arrow {
+  transform: translateX(4px);
+  background: rgba(13, 13, 15, 0.25);
 }
 
 
@@ -6367,58 +6334,190 @@ html.modo-claro .shipping-input {
   font-size: 1.3rem;
 }
 
-.carrito-btn-pedir,
+/* Botón Principal de Compra Directa / Mercado Pago */
 .carrito-btn-mp {
-  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(135deg, #008be3 0%, #005fad 50%, #003e80 100%);
+  color: #ffffff !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 110, 210, 0.38), 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.carrito-btn-mp::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-25deg);
+  animation: mpBtnShimmer 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes mpBtnShimmer {
+  0%, 65% { left: -100%; }
+  100% { left: 160%; }
+}
+
+.carrito-btn-mp:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 12px 30px rgba(0, 140, 255, 0.52), 0 0 22px rgba(0, 190, 255, 0.35);
+  filter: brightness(1.08);
+}
+
+.carrito-btn-mp:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.carrito-btn-mp:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.carrito-btn-mp-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 2px;
+  flex: 1;
+}
+
+.carrito-btn-mp-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.carrito-btn-mp-title i {
+  font-size: 1.12rem;
+  color: #FFE600;
+}
+
+.carrito-btn-mp-subtitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.carrito-btn-mp-subtitle i {
+  font-size: 0.75rem;
+  color: #38ef7d;
+}
+
+.carrito-btn-mp-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #ffffff;
+  transition: transform 0.3s ease, background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.carrito-btn-mp:hover .carrito-btn-mp-arrow {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* Micro-indicadores de Confianza */
+.carrito-trust-signals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  border: none;
-  font-weight: 700;
-  font-size: 1rem;
+  margin: 2px 0;
+}
+
+.trust-signal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #b0b0bb;
+  line-height: 1.15;
+}
+
+.trust-signal-item i {
+  font-size: 0.88rem;
+  color: #D4AF37;
+}
+
+/* Botón Alternativo de WhatsApp (Asesoría / Pedido Asistido) */
+.carrito-btn-pedir {
+  padding: 11px 16px;
+  border-radius: 10px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #25D366 !important;
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-}
-
-.carrito-btn-pedir {
-  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+  gap: 8px;
+  transition: all 0.25s ease;
+  text-decoration: none;
 }
 
 .carrito-btn-pedir:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-}
-
-.carrito-btn-mp {
-  background: linear-gradient(135deg, #009EE3 0%, #007EB5 100%);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 158, 227, 0.2);
-}
-
-.carrito-btn-mp:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 158, 227, 0.4);
+  background: rgba(37, 211, 102, 0.2);
+  border-color: #25D366;
+  color: #25D366 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
 }
 
 .carrito-btn-vaciar {
   background: transparent;
-  border: 1px solid #444;
-  color: #888;
-  padding: 10px;
+  border: 1px solid #3a3a40;
+  color: #888899;
+  padding: 9px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   transition: all 0.3s;
 }
 
 .carrito-btn-vaciar:hover {
-  border-color: #ff4444;
-  color: #ff4444;
-  background: rgba(255, 68, 68, 0.05);
+  border-color: #ff5555;
+  color: #ff5555;
+  background: rgba(255, 85, 85, 0.08);
 }
 
 #carritoBadge {
@@ -7073,17 +7172,6 @@ html.modo-claro .shipping-subtitle {
   font-size: 1.25rem !important;
 }
 
-.shipping-btn-confirm {
-  padding: 18px !important;
-  border-radius: 14px !important;
-  font-size: 1.1rem !important;
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.35) !important;
-}
-
-.shipping-btn-confirm:hover {
-  transform: translateY(-4px) scale(1.01) !important;
-  box-shadow: 0 18px 45px rgba(212, 175, 55, 0.5) !important;
-}
 
 /* ===== UNIFICACIÓN DE ESTILOS KITS vs PRODUCTOS ===== */
 .kit-name {

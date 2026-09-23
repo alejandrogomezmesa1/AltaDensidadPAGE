@@ -158,14 +158,38 @@ function renderCarrito() {
             <span>${totalItems} producto${totalItems !== 1 ? "s" : ""}</span>
             <span><strong>$${subtotal.toLocaleString("es-CO")} COP</strong></span>
         </div>
-        <a href="${waUrl}" target="_blank" class="carrito-btn-pedir" style="text-decoration: none;">
-            <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
-        </a>
-        <button class="carrito-btn-mp" onclick="pagarMercadoPago()">
-            <i class="fab fa-cc-visa"></i> Pagar ahora - Mercado Pago
+        <button class="carrito-btn-mp" onclick="pagarMercadoPago()" id="btnComprarAhora" aria-label="Hacer pedido ahora">
+            <div class="carrito-btn-mp-content">
+                <span class="carrito-btn-mp-title">
+                    <i class="fas fa-bag-shopping"></i> ¡Hacer Pedido Ahora!
+                </span>
+                <span class="carrito-btn-mp-subtitle">
+                    <i class="fas fa-shield-halved"></i> PSE · Nequi · Tarjetas · Pago 100% Seguro
+                </span>
+            </div>
+            <div class="carrito-btn-mp-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
         </button>
+        <div class="carrito-trust-signals">
+            <div class="trust-signal-item">
+                <i class="fas fa-shield-halved"></i>
+                <span>Compra 100% Segura</span>
+            </div>
+            <div class="trust-signal-item">
+                <i class="fas fa-truck-fast"></i>
+                <span>Envíos a Toda Colombia</span>
+            </div>
+            <div class="trust-signal-item">
+                <i class="fas fa-award"></i>
+                <span>Garantía y Calidad</span>
+            </div>
+        </div>
+        <a href="${waUrl}" target="_blank" class="carrito-btn-pedir" style="text-decoration: none;">
+            <i class="fab fa-whatsapp"></i> ¿Dudas? Asesoría por WhatsApp
+        </a>
         <button class="carrito-btn-vaciar" onclick="vaciarCarrito()">
-            <i class="fas fa-trash"></i> Vaciar carrito
+            <i class="fas fa-trash-can"></i> Vaciar carrito
         </button>
     `;
 }
@@ -244,8 +268,15 @@ async function procesarPagoMercadoPago() {
   const btnPagar = document.getElementById("btnConfirmarEnvio");
   if (btnPagar) {
     btnPagar.disabled = true;
-    btnPagar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
+    btnPagar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando tu pedido seguro...';
   }
+
+  const htmlBtnConfirmarRestaurar = `
+    <div class="shipping-btn-confirm-text">
+        <span class="btn-confirm-main"><i class="fas fa-shield-halved"></i> ¡Confirmar y Hacer Pedido!</span>
+        <span class="btn-confirm-sub">PSE · Nequi · Tarjetas · Compra 100% Protegida</span>
+    </div>
+    <i class="fas fa-arrow-right shipping-btn-arrow"></i>`;
 
   try {
     const resp = await fetch(`${base}/mercadopago/create_preference`, {
@@ -257,18 +288,18 @@ async function procesarPagoMercadoPago() {
     if (data.success && data.preference && data.preference.init_point) {
       window.location.href = data.preference.init_point;
     } else {
-      alert("Error en el pago");
+      alert("No se pudo iniciar el proceso de pago seguro. Por favor intenta de nuevo.");
       if (btnPagar) {
         btnPagar.disabled = false;
-        btnPagar.innerHTML = '<i class="fas fa-lock"></i> Continuar al Pago Seguro';
+        btnPagar.innerHTML = htmlBtnConfirmarRestaurar;
       }
     }
   } catch (err) {
     console.error(err);
-    alert("Error de red");
+    alert("Error de conexión al procesar el pedido. Por favor verifica tu conexión o contáctanos.");
     if (btnPagar) {
       btnPagar.disabled = false;
-      btnPagar.innerHTML = '<i class="fas fa-lock"></i> Continuar al Pago Seguro';
+      btnPagar.innerHTML = htmlBtnConfirmarRestaurar;
     }
   }
 }
@@ -276,6 +307,7 @@ async function procesarPagoMercadoPago() {
 // ---- Modal Envio ----
 let _shippingData = null;
 function abrirModalEnvio() {
+  cerrarCarrito();
   const modal = document.getElementById("envioModal");
   if (modal) {
       modal.style.display = "flex";

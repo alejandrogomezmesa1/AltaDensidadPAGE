@@ -941,9 +941,53 @@ html.modo-claro .carrito-subtotal {
     color: #1a1a1c !important;
 }
 
+html.modo-claro .carrito-btn-mp {
+    background: linear-gradient(135deg, #008be3 0%, #005fad 50%, #003e80 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(0, 110, 210, 0.32) !important;
+    border: 1px solid rgba(0, 110, 210, 0.25) !important;
+}
+
+html.modo-claro .carrito-btn-mp-title {
+    color: #ffffff !important;
+}
+
+html.modo-claro .carrito-btn-mp-subtitle {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+html.modo-claro .carrito-btn-mp-arrow {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+html.modo-claro .carrito-trust-signals {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+html.modo-claro .trust-signal-item {
+    color: #475569 !important;
+}
+
+html.modo-claro .trust-signal-item i {
+    color: #b8960c !important;
+}
+
+html.modo-claro .carrito-btn-pedir {
+    background: #eefbf3 !important;
+    border: 1px solid #25D366 !important;
+    color: #0b7842 !important;
+}
+
+html.modo-claro .carrito-btn-pedir:hover {
+    background: #d8f7e3 !important;
+    color: #086134 !important;
+}
+
 html.modo-claro .carrito-btn-vaciar {
-    border-color: #ccc !important;
-    color: #666 !important;
+    border-color: #cbd5e1 !important;
+    color: #64748b !important;
 }
 
 html.modo-claro .carrito-vacio {
@@ -1085,6 +1129,19 @@ html.modo-claro .shipping-btn-confirm {
     background: linear-gradient(135deg, #B8960C 0%, #8a6d00 100%) !important;
     color: #ffffff !important;
     box-shadow: 0 10px 25px rgba(184, 150, 12, 0.35) !important;
+}
+
+html.modo-claro .shipping-btn-confirm .btn-confirm-main {
+    color: #ffffff !important;
+}
+
+html.modo-claro .shipping-btn-confirm .btn-confirm-sub {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+html.modo-claro .shipping-btn-confirm .shipping-btn-arrow {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
 }
 
 html.modo-claro .shipping-btn-confirm:hover {

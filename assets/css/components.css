@@ -321,14 +321,16 @@ h1, h2, h3, h4, h5, h6 {
 .alert[hidden] { display: none !important; }
 
 /* Éxito */
-.alert--success {
+.alert--success,
+.alerta.exito {
   background: rgba(212, 175, 55, 0.10);
   border-color: var(--color-gold);
   color: var(--color-gold-soft);
 }
 
 /* Error */
-.alert--error {
+.alert--error,
+.alerta.error {
   background: rgba(231, 76, 60, 0.10);
   border-color: var(--color-danger);
   color: #f1948a;
@@ -347,10 +349,6 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--color-warning);
   color: #f8c97a;
 }
-
-/* Retro-compat: clases antiguas siguen funcionando */
-.alerta.exito  { @extend .alert--success; }
-.alerta.error  { @extend .alert--error; }
 
 /* ==========================================================================
    5. BADGES
