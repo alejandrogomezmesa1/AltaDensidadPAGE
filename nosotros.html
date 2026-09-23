@@ -5,18 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
-    <title >Fragancias de Alta Densidad</title>
+    
+    <!-- Metadatos SEO Principales -->
+    <title>Sobre Nosotros | Perfumería Artesanal y Alta Concentración en Medellín</title>
+    <meta name="description" content="Conoce la historia, pasión y proceso de elaboración detrás de Fragancias de Alta Densidad en Medellín. Perfumería con máxima concentración y materias primas selectas.">
+    <meta name="keywords" content="sobre nosotros alta densidad, perfumeria artesanal medellin, creadores perfumes alta concentracion, historia fragancias medellin">
+    <meta name="author" content="Fragancias de Alta Densidad">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alta-densidad-page.vercel.app/nosotros.html">
+
+    <!-- Open Graph / Redes Sociales & WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alta-densidad-page.vercel.app/nosotros.html">
+    <meta property="og:title" content="Sobre Nosotros | Perfumería Artesanal Alta Densidad">
+    <meta property="og:description" content="Nuestra historia y compromiso con la alta perfumería y la máxima fijación en Colombia.">
+    <meta property="og:image" content="https://alta-densidad-page.vercel.app/assets/img/Logo2026.png">
+    <meta property="og:site_name" content="Fragancias de Alta Densidad">
+    <meta property="og:locale" content="es_CO">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sobre Nosotros | Fragancias de Alta Densidad">
+    <meta name="twitter:description" content="Pasión por la perfumería de alta concentración en Medellín, Colombia.">
+    <meta name="twitter:image" content="https://alta-densidad-page.vercel.app/assets/img/Logo2026.png">
+
+    <!-- Schema.org AboutPage & Breadcrumb -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Fragancias de Alta Densidad",
+        "url": "https://alta-densidad-page.vercel.app/",
+        "logo": "https://alta-densidad-page.vercel.app/assets/img/Logo2026.png",
+        "description": "Marca de perfumería especializada en fragancias de alta concentración y fijación prolongada en Medellín, Colombia."
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "https://alta-densidad-page.vercel.app/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Nosotros",
+            "item": "https://alta-densidad-page.vercel.app/nosotros.html"
+          }
+        ]
+      }
+    }
+    </script>
+    <!-- Preconnect y DNS-Prefetch para Aceleración de Carga -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://altadensidadpage-production.up.railway.app">
+
     <link rel="stylesheet" href="assets/css/design-tokens.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/tema.css">
     <link rel="stylesheet" href="assets/css/nosotros.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
-    <script src="assets/js/tema.js"></script>
+
+    <!-- Carga Asíncrona / No Bloqueante de FontAwesome -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></noscript>
+
+    <script src="assets/js/tema.js" defer></script>
 </head>
 <body>
     <header class="header">
         <div class="logo-container">
-            <a href="index.html">  <img src="assets/img/Logo2026.png" alt="Fragancias de Alta Densidad" class="logo"></a>
+            <a href="index.html">  <img src="assets/img/Logo2026.png" alt="Logo oficial Fragancias de Alta Densidad" class="logo" width="160" height="48" fetchpriority="high"></a>
             <a class="header-tittle" href="index.html"> Fragancias de Alta Densidad</a>
         </div>
         <nav class="main-nav">
@@ -211,10 +274,10 @@
 
             <div class="footer-section">
                 <h3>Nuestra Ubicación</h3>
-                <p>Ubicados en la ciudad de Medellín. </p>
-                <p><a href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medellín" target="_blank"><i class="fas fa-map-marker-alt"></i> calle 77c # 91b - 74</a></p>
-                <a href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medellín" target="_blank">
-                    <img src="assets/img/ubicacion.png" alt="Mapa de Ubicación" style="width: 100%; max-width: 160px; height: 100px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 1px solid rgba(212, 175, 55, 0.3); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                <p>Ubicados en la ciudad de Medellín.</p>
+                <p><a href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medellín" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> calle 77c # 91b - 74</a></p>
+                <a href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medellín" target="_blank" rel="noopener noreferrer">
+                    <img src="assets/img/ubicacion.png" alt="Mapa de Ubicación Tienda Alta Densidad Medellín" width="160" height="100" loading="lazy" decoding="async" style="width: 100%; max-width: 160px; height: 100px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 1px solid rgba(212, 175, 55, 0.3); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                 </a>
             </div>
 
@@ -230,9 +293,9 @@
             <div class="footer-section">
                 <h3>Redes sociales</h3>
                 <div class="social-icons">
-                    <a class="social-tiktok" target="_blank" href="https://www.tiktok.com/@fragancias_altadensidad" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                    <a class="social-instagram" target="_blank" href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a class="social-whatsapp" href="https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Vi%20su%20cat%C3%A1logo%20en%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20perfumes.%20%E2%9C%A8" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a class="social-tiktok" target="_blank" rel="noopener noreferrer" href="https://www.tiktok.com/@fragancias_altadensidad" aria-label="Visitar perfil de TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+                    <a class="social-instagram" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" aria-label="Visitar perfil de Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a class="social-whatsapp" href="https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Vi%20su%20cat%C3%A1logo%20en%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20perfumes.%20%E2%9C%A8" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
                 </div>
             </div>
 
@@ -244,12 +307,12 @@
 
     </footer>
 
-    <!-- Anime.js & Sistema de Animaciones -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
-    <script src="assets/js/animations.js"></script>
+    <!-- Anime.js & Sistema de Animaciones (Carga Diferida) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
+    <script src="assets/js/animations.js" defer></script>
 
     <script>
-    // Header hide on scroll
+    // Header hide on scroll (Listener Pasivo para Rendimiento de 60fps)
     let lastScrollTop = 0;
     const header = document.querySelector('.header');
     window.addEventListener('scroll', () => {
@@ -260,7 +323,7 @@
             header.classList.remove('header--hidden');
         }
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-    });
+    }, { passive: true });
 
     // Tabs Misión / Visión / Compromiso
     document.querySelectorAll('.nos-tab').forEach(btn => {
@@ -322,7 +385,7 @@
     const nosHero = document.querySelector('.nos-hero');
     if (nosHero) counterObserver.observe(nosHero);
 </script>
-<script src="assets/js/nav-sesion.js"></script>
+<script src="assets/js/nav-sesion.js" defer></script>
 </body>
 </html>
 

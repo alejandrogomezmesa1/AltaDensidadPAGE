@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /top10.html
+Allow: /envases.html
+Allow: /nosotros.html
+Allow: /assets/
+Allow: /img/
+
+# Proteger áreas administrativas, autenticación y callbacks de pago
+Disallow: /admin.html
+Disallow: /admin
+Disallow: /login.html
+Disallow: /login
+Disallow: /reset.html
+Disallow: /reset
+Disallow: /success.html
+Disallow: /failure.html
+Disallow: /pending.html
+Disallow: /api/
+Disallow: /plataforma-capacitacion/
+Disallow: /capacitacion
+Disallow: /induccion
+
+# Mapa del sitio
+Sitemap: https://alta-densidad-page.vercel.app/sitemap.xml

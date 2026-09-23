@@ -50,19 +50,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                     card.className = 'product-card kit-card-enhanced';
                     card.innerHTML = `
                         <div class="product-image">
-                            <img src="${kit.imagen}" alt="${kit.nombre}">
+                            <img src="${kit.imagen}" alt="Kit Especial ${kit.nombre} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async">
                         </div>
                         <div class="product-info">
                             <div class="product-name">${kit.nombre}</div>
                             <div class="kit-tag">Colección Kit Especial</div>
                             <div class="kit-benefits-mini">
-                                ${(kit.beneficios||[]).slice(0, 3).map(b=>`<span><i class="fas fa-check"></i> ${b}</span>`).join('')}
+                                ${(kit.beneficios||[]).slice(0, 3).map(b=>`<span><i class="fas fa-check" aria-hidden="true"></i> ${b}</span>`).join('')}
                             </div>
                             <div class="product-price">$${Number(kit.precio).toLocaleString('es-CO')} COP</div>
                         </div>
-                        <button class="btn-agregar-carrito kit-add-btn" type="button" 
+                        <button class="btn-agregar-carrito kit-add-btn" type="button" aria-label="Agregar kit ${kit.nombre} al carrito"
                             onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
-                            <i class="fas fa-cart-plus"></i> Agregar
+                            <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
                         </button>
                     `;
                     // Abrir modal al hacer click en la tarjeta completa
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModalKitPublico(); });
             }
             document.getElementById('kitModalImg').src = kit.imagen;
-            document.getElementById('kitModalImg').alt = kit.nombre;
+            document.getElementById('kitModalImg').alt = `Kit Especial ${kit.nombre} - Fragancias Alta Densidad`;
             document.getElementById('kitModalNombre').textContent = kit.nombre;
             document.getElementById('kitModalDesc').textContent = kit.descripcion || 'Sin descripción disponible.';
             document.getElementById('kitModalPrecio').textContent = `$${Number(kit.precio).toLocaleString('es-CO')} COP`;
@@ -229,9 +229,51 @@ document.addEventListener('DOMContentLoaded', async function() {
                 products = data.data.filter(p => p.activo !== 0);
                 productosFiltrados = products;
                 populateBrandFilter();
+                inyectarSchemaProductos(products);
             }
         } catch (e) {
             console.error('Error al cargar productos desde la API:', e);
+        }
+
+        function inyectarSchemaProductos(prods) {
+            if (!prods || !prods.length) return;
+            let existing = document.getElementById('schema-productos-dinamico');
+            if (existing) existing.remove();
+
+            const schemaData = {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Catálogo de Perfumes y Fragancias de Alta Densidad",
+                "numberOfItems": prods.length,
+                "itemListElement": prods.map((p, idx) => ({
+                    "@type": "ListItem",
+                    "position": idx + 1,
+                    "item": {
+                        "@type": "Product",
+                        "name": p.name,
+                        "image": p.image ? (p.image.startsWith('http') ? p.image : `https://alta-densidad-page.vercel.app/${p.image}`) : undefined,
+                        "description": p.description || `Perfume ${p.name} con alta concentración y fijación prolongada.`,
+                        "category": p.category || "Perfumería",
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "Alta Densidad"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "priceCurrency": "COP",
+                            "price": Number(p.price || 0),
+                            "availability": p.activo !== 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                            "url": "https://alta-densidad-page.vercel.app/"
+                        }
+                    }
+                }))
+            };
+
+            const script = document.createElement('script');
+            script.id = 'schema-productos-dinamico';
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(schemaData);
+            document.head.appendChild(script);
         }
 
         function populateBrandFilter() {
@@ -301,9 +343,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
+                const altText = `Perfume ${product.name} - Fragancia Alta Concentración ${product.gender ? '(' + product.gender + ')' : ''}`;
                 productCard.innerHTML = `
                     <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}">
+                        <img src="${product.image}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async">
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
@@ -311,9 +354,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <div class="product-category">${product.category}</div>
                         <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
                     </div>
-                    <button class="btn-agregar-carrito"
+                    <button class="btn-agregar-carrito" aria-label="Agregar ${product.name} al carrito"
                         onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
-                        <i class="fas fa-cart-plus"></i> Agregar
+                        <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
                     </button>
                 `;
                 productCard.addEventListener('click', (e) => {
@@ -501,7 +544,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         function abrirModalProducto(product) {
             const stars = '★'.repeat(product.rating) + '☆'.repeat(5 - product.rating);
             document.getElementById('prodModalImg').src = product.image;
-            document.getElementById('prodModalImg').alt = product.name;
+            document.getElementById('prodModalImg').alt = `Perfume ${product.name} - Fragancias de Alta Densidad`;
             document.getElementById('prodModalNombre').textContent = product.name;
             document.getElementById('prodModalCategoria').textContent = product.category;
             document.getElementById('prodModalRating').textContent = stars;
@@ -569,7 +612,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 header.classList.remove('header--hidden');
             }
             lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-        });
+        }, { passive: true });
 
         // ============================
         // HOME SLIDER (PRODUCTOS Y KITS)
@@ -616,29 +659,29 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (item.isKit) {
                         const kitId = `kit_${item.id || item._id}`;
                         card.innerHTML = `
-                            <div class="product-image"><img src="${item.imagen}" alt="${item.nombre}"></div>
+                            <div class="product-image"><img src="${item.imagen}" alt="Kit Especial ${item.nombre} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async"></div>
                             <div class="product-info">
                                 <div class="product-name">${item.nombre}</div>
                                 <div class="kit-tag">Colección Kit</div>
                                 <div class="product-price">$${Number(item.precio).toLocaleString('es-CO')} COP</div>
                             </div>
-                            <button class="btn-agregar-carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: item.nombre, image: item.imagen, price: item.precio})})'>
-                                <i class="fas fa-cart-plus"></i> Agregar
+                            <button class="btn-agregar-carrito" aria-label="Agregar kit ${item.nombre} al carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: item.nombre, image: item.imagen, price: item.precio})})'>
+                                <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
                             </button>
                         `;
                         card.onclick = () => abrirModalKitPublico(item);
                     } else {
                         const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
                         card.innerHTML = `
-                            <div class="product-image"><img src="${item.image}" alt="${item.name}"></div>
+                            <div class="product-image"><img src="${item.image}" alt="Perfume ${item.name} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async"></div>
                             <div class="product-info">
                                 <div class="product-name">${item.name}</div>
                                 <div class="product-rating">${stars}</div>
                                 <div class="product-category">${item.category}</div>
                                 <div class="product-price">$${Number(item.price).toLocaleString('es-CO')} COP</div>
                             </div>
-                            <button class="btn-agregar-carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: item.id, name: item.name, image: item.image, price: item.price})})'>
-                                <i class="fas fa-cart-plus"></i> Agregar
+                            <button class="btn-agregar-carrito" aria-label="Agregar ${item.name} al carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: item.id, name: item.name, image: item.image, price: item.price})})'>
+                                <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
                             </button>
                         `;
                         card.onclick = () => abrirModalProducto(item);

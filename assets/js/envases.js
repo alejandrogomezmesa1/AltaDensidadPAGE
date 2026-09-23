@@ -16,9 +16,50 @@ function normalizarImagenEnvase(src) {
 document.addEventListener('DOMContentLoaded', async function() {
     const productGrid = document.getElementById('productGrid');
 
+    function inyectarSchemaEnvases(envases) {
+        if (!envases || !envases.length) return;
+        let existing = document.getElementById('schema-envases-dinamico');
+        if (existing) existing.remove();
+
+        const schemaData = {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Catálogo de Envases y Presentaciones - Fragancias de Alta Densidad",
+            "numberOfItems": envases.length,
+            "itemListElement": envases.map((e, idx) => ({
+                "@type": "ListItem",
+                "position": idx + 1,
+                "item": {
+                    "@type": "Product",
+                    "name": `Envase ${e.name}`,
+                    "image": normalizarImagenEnvase(e.image),
+                    "description": e.description || `Envase ${e.name} para perfumería en material ${e.material || 'vidrio premium'}.`,
+                    "brand": {
+                        "@type": "Brand",
+                        "name": "Alta Densidad"
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "priceCurrency": "COP",
+                        "price": Number(e.price || 0),
+                        "availability": "https://schema.org/InStock",
+                        "url": "https://alta-densidad-page.vercel.app/envases.html"
+                    }
+                }
+            }))
+        };
+
+        const script = document.createElement('script');
+        script.id = 'schema-envases-dinamico';
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(schemaData);
+        document.head.appendChild(script);
+    }
+
     // Mostrar envases
     function displayProducts(envases) {
         productGrid.innerHTML = '';
+        inyectarSchemaEnvases(envases);
 
         if (!envases || envases.length === 0) {
             productGrid.innerHTML = '<p style="color:#888;text-align:center;padding:40px;">No hay envases disponibles.</p>';
@@ -29,9 +70,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             const imgUrl = normalizarImagenEnvase(product.image);
+            const altText = `Envase para perfume ${product.name} - ${product.material || 'Vidrio Premium'}`;
             productCard.innerHTML = `
                 <div class="product-image">
-                    <img src="${imgUrl}" alt="${product.name}" onerror="this.onerror=null;this.src='assets/img/logo2025.png';">
+                    <img src="${imgUrl}" alt="${altText}" onerror="this.onerror=null;this.src='assets/img/logo2025.png';">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>

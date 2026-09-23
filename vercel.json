@@ -2,10 +2,14 @@
   "version": 2,
   "builds": [
     { "src": "*.html", "use": "@vercel/static" },
+    { "src": "robots.txt", "use": "@vercel/static" },
+    { "src": "sitemap.xml", "use": "@vercel/static" },
     { "src": "assets/**/*", "use": "@vercel/static" },
     { "src": "plataforma-capacitacion/**/*", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/robots.txt", "dest": "/robots.txt" },
+    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
     { "src": "/assets/img/(.*)", "dest": "/assets/img/$1" },
     { "src": "/img/(.*)", "dest": "/assets/img/$1" },
     { "src": "/assets/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))", "dest": "/assets/$1" },

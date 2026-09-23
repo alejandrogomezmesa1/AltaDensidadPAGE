@@ -22,8 +22,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function inyectarSchemaTop10(items) {
+        if (!items || !items.length) return;
+        let existing = document.getElementById('schema-top10-dinamico');
+        if (existing) existing.remove();
+
+        const schemaData = {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Top 10 Perfumes Más Vendidos - Fragancias de Alta Densidad",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": items.length,
+            "itemListElement": items.map((p, idx) => ({
+                "@type": "ListItem",
+                "position": idx + 1,
+                "item": {
+                    "@type": "Product",
+                    "name": p.nombre || p.name,
+                    "image": (p.imagen || p.image) ? ((p.imagen || p.image).startsWith('http') ? (p.imagen || p.image) : `https://alta-densidad-page.vercel.app/${p.imagen || p.image}`) : undefined,
+                    "description": p.descripcion || p.description || `Perfume ${p.nombre || p.name} Top ${idx + 1} en ventas con alta concentración y fijación prolongada.`,
+                    "brand": {
+                        "@type": "Brand",
+                        "name": "Alta Densidad"
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "priceCurrency": "COP",
+                        "price": Number(p.precio || 0),
+                        "availability": "https://schema.org/InStock",
+                        "url": "https://alta-densidad-page.vercel.app/top10.html"
+                    }
+                }
+            }))
+        };
+
+        const script = document.createElement('script');
+        script.id = 'schema-top10-dinamico';
+        script.type = 'application/ld+json';
+        script.textContent = JSON.stringify(schemaData);
+        document.head.appendChild(script);
+    }
+
     function mostrarTop10(productsToShow) {
         productGrid.innerHTML = '';
+        inyectarSchemaTop10(productsToShow);
         productsToShow.forEach((product, index) => {
             const rank = index + 1;
             const stars = '★'.repeat(product.rating || 5) + '☆'.repeat(5 - (product.rating || 5));
@@ -45,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
             productCard.innerHTML = `
                 <div class="product-rank-badge">#${rank}</div>
                 <div class="product-image">
-                    <img src="${itemData.image}" alt="${itemData.name}">
+                    <img src="${itemData.image}" alt="Top #${rank} Perfume ${itemData.name} - Fragancia Alta Concentración" width="280" height="280" loading="lazy" decoding="async">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${itemData.name}</div>
@@ -53,15 +95,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="product-category">${itemData.category || ''}</div>
                     <div class="product-price">$${Number(itemData.price || 0).toLocaleString('es-CO')} COP</div>
                 </div>
-                <button class="btn-agregar-carrito" 
+                <button class="btn-agregar-carrito" aria-label="Agregar ${itemData.name} al carrito"
                     onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito(${JSON.stringify({ id: itemData.id, name: itemData.name, image: itemData.image, price: itemData.price })})'>
-                    <i class="fas fa-cart-plus"></i> Agregar
+                    <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
                 </button>
             `;
 
             productCard.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-agregar-carrito')) return;
-                if (window.abrirModalProducto) window.abrirModalProducto(itemData);
+                abrirModalTop10(itemData);
             });
 
             productGrid.appendChild(productCard);
@@ -81,8 +123,56 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    cargarTop10();
+    function abrirModalTop10(product) {
+        const modal = document.getElementById('productoModal');
+        if (!modal) return;
+        const stars = '★'.repeat(product.rating || 5) + '☆'.repeat(5 - (product.rating || 5));
+        const img = document.getElementById('prodModalImg');
+        if (img) {
+            img.src = product.image || '';
+            img.alt = `Perfume ${product.name} - Fragancias Alta Densidad`;
+        }
+        const nom = document.getElementById('prodModalNombre');
+        if (nom) nom.textContent = product.name || '';
+        const cat = document.getElementById('prodModalCategoria');
+        if (cat) cat.textContent = product.category || 'Perfumería';
+        const rat = document.getElementById('prodModalRating');
+        if (rat) rat.textContent = stars;
+        const gen = document.getElementById('prodModalGenero');
+        if (gen) gen.textContent = product.gender ? `Género: ${product.gender}` : '';
+        const desc = document.getElementById('prodModalDesc');
+        if (desc) desc.textContent = product.description || 'Sin descripción disponible.';
+        const prec = document.getElementById('prodModalPrecio');
+        if (prec) prec.textContent = `$${Number(product.price || 0).toLocaleString('es-CO')} COP`;
 
+        const btnCarrito = document.getElementById('prodModalCarrito');
+        if (btnCarrito) {
+            btnCarrito.onclick = () => {
+                if (window.agregarAlCarrito) {
+                    window.agregarAlCarrito({
+                        id: product.id,
+                        name: product.name,
+                        image: product.image,
+                        price: product.price
+                    });
+                }
+            };
+        }
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    const cerrarBtn = document.getElementById('cerrarProdModal');
+    if (cerrarBtn) {
+        cerrarBtn.addEventListener('click', () => {
+            const modal = document.getElementById('productoModal');
+            if (modal) modal.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    }
+
+    cargarTop10();
 });
 
 let lastScrollTop = 0;
@@ -96,4 +186,4 @@ window.addEventListener('scroll', () => {
         header.classList.remove('header--hidden');
     }
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-});
+}, { passive: true });
