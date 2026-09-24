@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                 window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
             }
+        };
         // ============================
         // MULTI-IMAGEN CARD CAROUSEL
         // ============================
