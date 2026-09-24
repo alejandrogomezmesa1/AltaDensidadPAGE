@@ -919,6 +919,82 @@ html.modo-claro .card-img-indicator.active {
   }
 }
 
+/* ==========================================================================
+   10. ÁTOMOS HAUTE PARFUMERIE (Lujo Editorial & Sensorial)
+   ========================================================================== */
+.up {
+  text-transform: uppercase;
+  letter-spacing: var(--ls-ui, 0.22em);
+  font-size: var(--fs-1, 11px);
+  font-weight: 500;
+}
 
+.disp {
+  font-family: var(--f-display, "Cormorant Garamond", Georgia, serif);
+  font-weight: 300;
+  line-height: var(--lh-tight, 1.02);
+}
 
+.eyebrow {
+  color: var(--c-accent, var(--color-gold));
+  letter-spacing: var(--ls-ui, 0.22em);
+  text-transform: uppercase;
+  font-size: var(--fs-1, 11px);
+  font-weight: 600;
+}
 
+.mute {
+  color: var(--c-mute, var(--color-text-muted));
+}
+
+.link-editorial {
+  border-bottom: var(--bw, 1px) solid currentColor;
+  padding-bottom: 2px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity var(--t-1, 0.25s) ease;
+}
+
+.link-editorial:hover {
+  opacity: 0.75;
+}
+
+/* Frasco Sensorial Dinámico (Representación de líquido por gradiente de notas) */
+.bottle {
+  --h: 32;
+  --s: 1;
+  width: calc(64px * var(--s));
+  height: calc(120px * var(--s));
+  position: relative;
+  margin-top: calc(26px * var(--s));
+  transition: transform var(--t-2, 0.5s) var(--ease, ease);
+  display: inline-block;
+}
+
+.bottle::before {
+  content: "";
+  position: absolute;
+  left: 38%;
+  top: calc(-26px * var(--s));
+  width: 24%;
+  height: calc(26px * var(--s));
+  background: var(--c-ink, var(--color-text));
+}
+
+.bottle i {
+  position: absolute;
+  inset: 0;
+  border: var(--bw, 1px) solid var(--c-ink, var(--color-text));
+  background: linear-gradient(160deg, hsla(var(--h), 70%, 55%, 0.85), hsla(var(--h), 75%, 22%, 0.95));
+  box-shadow: 0 calc(24px * var(--s)) calc(40px * var(--s)) calc(-18px * var(--s)) hsla(var(--h), 70%, 30%, 0.55);
+}
+
+.bottle i::after {
+  content: "";
+  position: absolute;
+  left: 14%;
+  top: 8%;
+  width: 12%;
+  height: 84%;
+  background: rgba(255, 255, 255, 0.28);
+}

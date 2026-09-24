@@ -1,120 +1,167 @@
 /* ==========================================================================
-   DESIGN TOKENS — Alta Densidad
+   DESIGN TOKENS — Alta Densidad (Haute Parfumerie System)
    Sistema único de variables CSS para todo el sitio.
    Importar ANTES de cualquier otro CSS en cada página.
-   ==========================================================================
-   Uso:  <link rel="stylesheet" href="assets/css/design-tokens.css">
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Tipografía del sistema cargada vía <link> en HTML para máximo rendimiento
-   -------------------------------------------------------------------------- */
-
-/* --------------------------------------------------------------------------
-   :root — Modo Oscuro (predeterminado)
-   -------------------------------------------------------------------------- */
 :root {
-  /* ── Color: Fondos ───────────────────────────────────────────────────── */
-  --color-bg:         #0a0a0a;   /* Fondo principal */
-  --color-surface:    #161618;   /* Superficies / cards elevadas */
-  --color-card:       #1e1e20;   /* Cards secundarias */
-  --color-overlay:    rgba(0, 0, 0, 0.75);
+  /* ── 1. Paleta Base Haute Parfumerie ─────────────────────────────────── */
+  --hueso:       #F4F1EA;  /* Fondo pergamino / marfil claro */
+  --hueso-2:     #EAE5DA;  /* Superficies / cards claras */
+  --humo:        #F2EEE6;  /* Inverso o texto sobre fondo oscuro */
+  --filete:      #D6D0C3;  /* Líneas divisorias en modo claro */
 
-  /* ── Color: Marca / Gold ─────────────────────────────────────────────── */
-  --color-gold:       #D4AF37;   /* Oro principal */
-  --color-gold-dark:  #AA8B22;   /* Oro oscuro — hover */
-  --color-gold-soft:  #F3E5AB;   /* Oro suave — texto sobre oscuro */
-  --color-gold-glow:  rgba(212, 175, 55, 0.2);  /* Sombra/borde dorado */
+  --tinta:       #0B0B0C;  /* Fondo negro obsidiana / tinta */
+  --grafito:     #151517;  /* Superficies y tarjetas oscuras */
+  --filete-2:    #2A2A2D;  /* Líneas divisorias en modo oscuro */
 
-  /* ── Color: Texto ────────────────────────────────────────────────────── */
-  --color-text:       #F8F9F9;   /* Texto principal */
-  --color-text-muted: #9a9a9a;   /* Texto secundario */
-  --color-text-faint: #666666;   /* Texto terciario / placeholder */
+  --oro:         #9A7B3F;  /* Oro satinado editorial de autor */
+  --oro-claro:   #C9A961;  /* Oro cálido luminoso para fondos oscuros */
+  --vino:        #5A1220;  /* Borgoña / ámbar licoroso */
+  --gris:        #6B675F;  /* Mute / secundario modo claro */
+  --gris-2:      #9A958A;  /* Mute / secundario modo oscuro */
 
-  /* ── Color: Estado ───────────────────────────────────────────────────── */
-  --color-danger:     #e74c3c;
-  --color-danger-dark:#c0392b;
-  --color-success:    #00ffd2;
-  --color-warning:    #f39c12;
+  /* ── 2. Semántica: Modo Oscuro (Predeterminado) ───────────────────────── */
+  --c-bg:        var(--tinta);
+  --c-surface:   var(--grafito);
+  --c-ink:       var(--humo);
+  --c-mute:      var(--gris-2);
+  --c-line:      var(--filete-2);
+  --c-accent:    var(--oro-claro);
+  --c-wine:      var(--vino);
+  --c-inv-bg:    var(--humo);
+  --c-inv-ink:   var(--tinta);
+  --c-scrim:     rgba(0, 0, 0, 0.75);
 
-  /* ── Bordes ──────────────────────────────────────────────────────────── */
-  --color-border:     rgba(212, 175, 55, 0.18);
-  --color-border-strong: rgba(212, 175, 55, 0.40);
+  /* ── 3. Tipografía Haute Parfumerie ───────────────────────────────────── */
+  --f-display:   "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --f-ui:        "Jost", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--f-display);
+  --font-body:    var(--f-ui);
 
-  /* ── Tipografía ──────────────────────────────────────────────────────── */
-  --font-body:        'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display:     'Playfair Display', Georgia, serif;
+  /* Escalas tipográficas editoriales */
+  --fs-1: 11px;
+  --fs-2: 13px;
+  --fs-3: 15px;
+  --fs-4: 20px;
+  --fs-5: clamp(30px, 4.5vw, 60px);
+  --fs-6: clamp(44px, 7vw, 104px);
 
-  /* ── Escala tipográfica ──────────────────────────────────────────────── */
-  --text-xs:   0.75rem;    /*  12px */
-  --text-sm:   0.82rem;    /*  13px */
-  --text-base: 1rem;       /*  16px */
-  --text-md:   1.0625rem;  /*  17px */
-  --text-lg:   1.125rem;   /*  18px */
-  --text-xl:   1.25rem;    /*  20px */
-  --text-2xl:  1.5rem;     /*  24px */
-  --text-3xl:  1.875rem;   /*  30px */
+  --ls-ui:   0.22em;   /* Subtítulos en mayúsculas, botones, badges */
+  --ls-logo: 0.42em;   /* Marca Alta Densidad */
+  --lh-tight: 1.02;
+  --lh-body:  1.6;
 
-  /* ── Peso tipográfico ────────────────────────────────────────────────── */
-  --fw-normal:  400;
-  --fw-medium:  500;
+  /* ── 4. Tokens Preexistentes (Mapeo de Compatibilidad) ────────────────── */
+  --color-bg:            var(--c-bg);
+  --color-surface:       var(--c-surface);
+  --color-card:          var(--c-surface);
+  --color-overlay:       var(--c-scrim);
+
+  --color-gold:          var(--c-accent);
+  --color-gold-dark:     #8a6d00;
+  --color-gold-soft:     #F3E5AB;
+  --color-gold-glow:     rgba(201, 169, 97, 0.22);
+
+  --color-text:          var(--c-ink);
+  --color-text-muted:    var(--c-mute);
+  --color-text-faint:    #777777;
+
+  --color-danger:        #e74c3c;
+  --color-danger-dark:   #c0392b;
+  --color-success:       #00ffd2;
+  --color-warning:       #f39c12;
+
+  --color-border:        var(--c-line);
+  --color-border-strong: var(--c-accent);
+
+  /* Escala tipográfica secundaria */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.82rem;    /* 13px */
+  --text-base: 1rem;       /* 16px */
+  --text-md:   1.0625rem;  /* 17px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+
+  --fw-normal:   400;
+  --fw-medium:   500;
   --fw-semibold: 600;
-  --fw-bold:    700;
-  --fw-black:   900;
+  --fw-bold:     700;
+  --fw-black:    900;
 
-  /* ── Espaciado ───────────────────────────────────────────────────────── */
-  --space-1:   4px;
-  --space-2:   8px;
-  --space-3:   12px;
-  --space-4:   16px;
-  --space-5:   20px;
-  --space-6:   24px;
-  --space-7:   28px;
-  --space-8:   32px;
-  --space-10:  40px;
-  --space-12:  48px;
-  --space-16:  64px;
+  /* ── 5. Espaciado y Layout ────────────────────────────────────────────── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 16px;
+  --sp-4: 24px;
+  --sp-5: 40px;
+  --sp-6: 64px;
 
-  /* ── Radios de borde ─────────────────────────────────────────────────── */
-  --radius-xs:   4px;
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   14px;
-  --radius-xl:   20px;
-  --radius-2xl:  28px;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --sec:    clamp(56px, 9vw, 120px);
+  --max-width: 1360px;
+  --header-height: 68px;
+
+  /* ── 6. Forma y Filetes ──────────────────────────────────────────────── */
+  --r:  0px;  /* Ángulos puros editoriales */
+  --bw: 1px;  /* Filete fino continuo */
+
+  --radius-xs:   0px;
+  --radius-sm:   2px;
+  --radius-md:   4px;
+  --radius-lg:   6px;
+  --radius-xl:   8px;
+  --radius-2xl:  12px;
   --radius-pill: 9999px;
 
-  /* ── Sombras ─────────────────────────────────────────────────────────── */
-  --shadow-sm:   0 1px 4px rgba(0, 0, 0, 0.25);
-  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.40);
-  --shadow-lg:   0 10px 30px rgba(0, 0, 0, 0.55);
-  --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.35);
-  --shadow-gold-strong: 0 8px 30px rgba(212, 175, 55, 0.55);
+  /* ── 7. Sombras y Luces ──────────────────────────────────────────────── */
+  --shadow-sm:   0 1px 4px rgba(0, 0, 0, 0.35);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.50);
+  --shadow-lg:   0 10px 30px rgba(0, 0, 0, 0.65);
+  --shadow-gold: 0 4px 20px rgba(201, 169, 97, 0.25);
+  --shadow-gold-strong: 0 8px 30px rgba(201, 169, 97, 0.45);
 
-  /* ── Transiciones ────────────────────────────────────────────────────── */
-  --transition-fast:   0.15s ease;
-  --transition-base:   0.22s ease;
-  --transition-slow:   0.35s ease;
+  /* ── 8. Movimiento y Transiciones ────────────────────────────────────── */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-1:  0.25s;
+  --t-2:  0.50s;
+  --t-3:  0.90s;
 
-  /* ── Z-index ─────────────────────────────────────────────────────────── */
-  --z-dropdown:  100;
-  --z-sticky:    200;
-  --z-header:    1001;
-  --z-drawer:    1100;
-  --z-modal:     1200;
-  --z-toast:     1300;
+  --transition-fast: var(--t-1) var(--ease);
+  --transition-base: var(--t-2) var(--ease);
+  --transition-slow: var(--t-3) var(--ease);
 
-  /* ── Layout ──────────────────────────────────────────────────────────── */
-  --max-width:      1400px;
-  --header-height:  68px;
+  /* ── 9. Capas (Z-Index) ──────────────────────────────────────────────── */
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-header:   1000;
+  --z-aura:     1050;
+  --z-scrim:    1100;
+  --z-drawer:   1150;
+  --z-modal:    1200;
+  --z-toast:    1300;
 
-  /* ── Inputs / Forms (tokens atómicos) ────────────────────────────────── */
-  --input-bg:           var(--color-card);
+  /* ── 10. Inputs y Formularios ────────────────────────────────────────── */
+  --input-bg:           var(--color-surface);
   --input-border:       var(--color-border);
   --input-border-focus: var(--color-gold);
   --input-border-error: var(--color-danger);
   --input-text:         var(--color-text);
-  --input-radius:       var(--radius-md);
+  --input-radius:       var(--radius-sm);
   --input-padding-y:    12px;
   --input-padding-x:    14px;
   --input-min-height:   48px;
@@ -122,31 +169,43 @@
 }
 
 /* --------------------------------------------------------------------------
-   Modo Claro — sobrescribe tokens en html.modo-claro
+   Modo Claro — sobrescribe tokens en html.modo-claro y :root[data-theme="light"]
    -------------------------------------------------------------------------- */
-html.modo-claro {
-  --color-bg:         #f5f2ee;
-  --color-surface:    #ffffff;
-  --color-card:       #ede9e3;
-  --color-overlay:    rgba(0, 0, 0, 0.50);
+html.modo-claro,
+:root[data-theme="light"] {
+  --c-bg:        var(--hueso);
+  --c-surface:   var(--hueso-2);
+  --c-ink:       var(--tinta);
+  --c-mute:      var(--gris);
+  --c-line:      var(--filete);
+  --c-accent:    var(--oro);
+  --c-wine:      var(--vino);
+  --c-inv-bg:    var(--tinta);
+  --c-inv-ink:   var(--hueso);
+  --c-scrim:     rgba(0, 0, 0, 0.45);
 
-  --color-gold:       #B8960C;
-  --color-gold-dark:  #8a6d00;
-  --color-gold-soft:  #7a5c00;
-  --color-gold-glow:  rgba(184, 150, 12, 0.18);
+  --color-bg:            var(--c-bg);
+  --color-surface:       var(--c-surface);
+  --color-card:          var(--c-surface);
+  --color-overlay:       var(--c-scrim);
 
-  --color-text:       #1a1a1a;
-  --color-text-muted: #555555;
-  --color-text-faint: #888888;
+  --color-gold:          var(--c-accent);
+  --color-gold-dark:     #7a5c00;
+  --color-gold-soft:     #8a6d00;
+  --color-gold-glow:     rgba(154, 123, 63, 0.18);
 
-  --color-border:     rgba(184, 150, 12, 0.20);
-  --color-border-strong: rgba(184, 150, 12, 0.45);
+  --color-text:          var(--c-ink);
+  --color-text-muted:    var(--c-mute);
+  --color-text-faint:    #888888;
 
-  --shadow-sm:   0 1px 4px rgba(0, 0, 0, 0.08);
-  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.12);
-  --shadow-lg:   0 10px 30px rgba(0, 0, 0, 0.16);
-  --shadow-gold: 0 4px 20px rgba(184, 150, 12, 0.25);
-  --shadow-gold-strong: 0 8px 30px rgba(184, 150, 12, 0.40);
+  --color-border:        var(--c-line);
+  --color-border-strong: var(--c-accent);
 
-  --input-bg: #ffffff;
+  --shadow-sm:   0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.09);
+  --shadow-lg:   0 10px 30px rgba(0, 0, 0, 0.14);
+  --shadow-gold: 0 4px 20px rgba(154, 123, 63, 0.20);
+  --shadow-gold-strong: 0 8px 30px rgba(154, 123, 63, 0.32);
+
+  --input-bg:    var(--hueso);
 }

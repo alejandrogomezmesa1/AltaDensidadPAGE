@@ -1,16 +1,18 @@
 // tema.js — Toggle modo oscuro/claro con persistencia en localStorage
 // IMPORTANTE: incluir en <head> de cada página para evitar flash de modo erróneo
 
-// 1. Aplicar clase inmediatamente (antes de que el DOM se pinte)
+// 1. Aplicar clase e atributo inmediatamente (antes de que el DOM se pinte)
 (function () {
   const tema = localStorage.getItem("altadensidad_tema");
   // Por defecto usar modo oscuro. Sólo activar 'modo-claro' si el usuario
   // tiene explícitamente guardado 'claro'. Si no hay valor, asumimos oscuro.
   if (tema === "claro") {
     document.documentElement.classList.add("modo-claro");
+    document.documentElement.setAttribute("data-theme", "light");
   } else {
-    // Asegurarse de que no exista la clase de modo claro
+    // Asegurarse de que no exista la clase de modo claro y activar data-theme="dark"
     document.documentElement.classList.remove("modo-claro");
+    document.documentElement.setAttribute("data-theme", "dark");
   }
 })();
 
@@ -52,6 +54,7 @@ function _actualizarIconoTema(animar = false) {
 
 function _toggleTema() {
   const esModoClaro = document.documentElement.classList.toggle("modo-claro");
+  document.documentElement.setAttribute("data-theme", esModoClaro ? "light" : "dark");
   localStorage.setItem("altadensidad_tema", esModoClaro ? "claro" : "oscuro");
   _actualizarIconoTema(true);
 }
