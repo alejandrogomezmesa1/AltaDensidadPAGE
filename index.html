@@ -165,46 +165,71 @@
             </div>
         </section>
 
-                           <!-- Sección de productos -->
-                            <!--        <!-- BARRA DE FILTROS Y BÚSQUEDA -->
+        <!-- BARRA DE FILTROS INTERACTIVOS Y BÚSQUEDA SENSORIAL -->
         <section class="filters-section" aria-label="Filtros del catálogo">
             <div class="filters-container">
+                <!-- 1. Buscador Sensorial con Botón Limpiar -->
                 <div class="search-box">
                     <i class="fas fa-search" aria-hidden="true"></i>
-                    <input type="text" id="filterName" placeholder="Buscar fragancia, marca o aroma..." aria-label="Buscar fragancia por nombre, marca o aroma">
-                </div>
-                
-                <div class="filter-controls">
-                    <div class="filter-group">
-                        <label for="filterBrand"><i class="fas fa-tags" aria-hidden="true"></i> Marca</label>
-                        <select id="filterBrand" aria-label="Filtrar por marca">
-                            <option value="">Todas las marcas</option>
-                            <!-- Se llena por JS -->
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label for="filterCategory"><i class="fas fa-layer-group" aria-hidden="true"></i> Categoría</label>
-                        <select id="filterCategory" aria-label="Filtrar por categoría">
-                            <option value="">Todas</option>
-                            <option value="Diseñador">Diseñador</option>
-                            <option value="Arabe">Árabes</option>
-                        </select>
-                    </div>
-
-                    <div class="filter-group">
-                        <label for="filterGender"><i class="fas fa-venus-mars" aria-hidden="true"></i> Género</label>
-                        <select id="filterGender" aria-label="Filtrar por género">
-                            <option value="">Todos</option>
-                            <option value="Femenino">Dama</option>
-                            <option value="Masculino">Caballero</option>
-                            <option value="Unisex">Unisex</option>
-                        </select>
-                    </div>
-
-                    <button id="resetFilters" class="btn-reset-filters" aria-label="Limpiar todos los filtros" title="Limpiar filtros">
-                        <i class="fas fa-undo" aria-hidden="true"></i>
+                    <input type="text" id="filterName" placeholder="Buscar fragancia, marca, nota olfativa (ej: vainilla, madera, noche)..." aria-label="Buscar fragancia por nombre, marca o nota olfativa">
+                    <button type="button" id="clearSearch" class="btn-clear-search" aria-label="Borrar búsqueda" title="Borrar búsqueda">
+                        <i class="fas fa-times" aria-hidden="true"></i>
                     </button>
+                </div>
+
+                <!-- 2. Chips de Colección & Género -->
+                <div class="filter-chips-row">
+                    <span class="chips-label"><i class="fas fa-venus-mars"></i> Colección:</span>
+                    <div class="chips-scroll" id="genderChips">
+                        <button type="button" class="filter-chip active" data-type="gender" data-val="">✨ Todas</button>
+                        <button type="button" class="filter-chip" data-type="gender" data-val="Femenino">👑 Dama</button>
+                        <button type="button" class="filter-chip" data-type="gender" data-val="Masculino">🪵 Caballero</button>
+                        <button type="button" class="filter-chip" data-type="gender" data-val="Unisex">⚧ Unisex</button>
+                        <button type="button" class="filter-chip" data-type="category" data-val="Arabe">🌙 Árabes</button>
+                    </div>
+                </div>
+
+                <!-- 3. Chips de Familia Olfativa & Ocasión -->
+                <div class="filter-chips-row sensory-row">
+                    <span class="chips-label"><i class="fas fa-wind"></i> Notas & Ocasión:</span>
+                    <div class="chips-scroll" id="sensoryChips">
+                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="amaderada"><i class="fas fa-tree"></i> Amaderadas</button>
+                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="citrica"><i class="fas fa-snowflake"></i> Cítricas & Frescas</button>
+                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="dulce"><i class="fas fa-cookie-bite"></i> Dulces & Vainilla</button>
+                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="floral"><i class="fas fa-spa"></i> Florales & Frutales</button>
+                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="noche"><i class="fas fa-moon"></i> Noche & Seducción</button>
+                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="diario"><i class="fas fa-sun"></i> Diario & Oficina</button>
+                    </div>
+                </div>
+
+                <!-- 4. Sub-barra de Herramientas: Contador, Marca, Ordenar y Limpiar -->
+                <div class="filter-toolbar">
+                    <div class="filter-counter" id="filterCount">
+                        <i class="fas fa-sparkles"></i> <span>Cargando fragancias...</span>
+                    </div>
+
+                    <div class="filter-toolbar-controls">
+                        <div class="filter-select-wrapper">
+                            <label for="filterBrand"><i class="fas fa-tags"></i> Marca:</label>
+                            <select id="filterBrand" aria-label="Filtrar por marca">
+                                <option value="">Todas las marcas</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-select-wrapper">
+                            <label for="filterSort"><i class="fas fa-sort-amount-down"></i> Ordenar:</label>
+                            <select id="filterSort" aria-label="Ordenar productos">
+                                <option value="destacados">Recomendados</option>
+                                <option value="precio-asc">Precio: Menor a Mayor</option>
+                                <option value="precio-desc">Precio: Mayor a Menor</option>
+                                <option value="nombre-asc">Nombre: A - Z</option>
+                            </select>
+                        </div>
+
+                        <button id="resetFilters" class="btn-reset-filters" aria-label="Limpiar todos los filtros" title="Restablecer filtros">
+                            <i class="fas fa-undo-alt" aria-hidden="true"></i> <span>Limpiar</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
