@@ -552,13 +552,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function actualizarContador() {
             const countEl = document.getElementById('filterCount');
-            if (!countEl) return;
             const total = products.length;
             const mostrados = productosFiltrados.length;
-            if (mostrados === total) {
-                countEl.innerHTML = `<i class="fas fa-sparkles"></i> Mostrando todas las <strong>${total}</strong> fragancias`;
-            } else {
-                countEl.innerHTML = `<i class="fas fa-filter"></i> <strong>${mostrados}</strong> de ${total} fragancias encontradas`;
+            if (countEl) {
+                if (mostrados === total) {
+                    countEl.innerHTML = `<i class="fas fa-sparkles"></i> Mostrando todas las <strong>${total}</strong> fragancias`;
+                } else {
+                    countEl.innerHTML = `<i class="fas fa-filter"></i> <strong>${mostrados}</strong> de ${total} fragancias encontradas`;
+                }
+            }
+
+            // Actualizar contador del botón del modal
+            const modalResultCount = document.getElementById('modalResultCount');
+            if (modalResultCount) {
+                modalResultCount.textContent = mostrados;
+            }
+
+            // Actualizar badge de filtros activos en la barra
+            let numFiltrosActivos = 0;
+            if (generoSeleccionado || categoriaSeleccionada) numFiltrosActivos++;
+            if (sensorialSeleccionado) numFiltrosActivos++;
+            if (marcaSeleccionada) numFiltrosActivos++;
+
+            const badge = document.getElementById('filterActiveBadge');
+            if (badge) {
+                if (numFiltrosActivos > 0) {
+                    badge.textContent = numFiltrosActivos;
+                    badge.style.display = 'inline-flex';
+                } else {
+                    badge.style.display = 'none';
+                }
             }
         }
 
@@ -597,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (sensorialSeleccionado) {
                 createBadge('Nota: ' + (SENSORY_LABELS[sensorialSeleccionado] || sensorialSeleccionado), () => {
                     sensorialSeleccionado = '';
-                    document.querySelectorAll('#sensoryChips .filter-chip').forEach(b => b.classList.remove('active'));
+                    sincronizarChipsSensoriales();
                     filterProducts();
                 });
             }
@@ -636,6 +659,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        function sincronizarChipsSensoriales() {
+            document.querySelectorAll('.sensory-chip').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.val === sensorialSeleccionado);
+            });
+        }
+
         function resetFilters() {
             const inputName = document.getElementById('filterName');
             if (inputName) inputName.value = '';
@@ -655,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ordenActual = 'destacados';
 
             sincronizarChipsColeccion();
-            document.querySelectorAll('#sensoryChips .filter-chip').forEach(b => b.classList.remove('active'));
+            sincronizarChipsSensoriales();
 
             productosFiltrados = products;
             paginaActual = 1;
@@ -715,11 +744,14 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', () => {
                 const type = btn.dataset.type;
                 const val = btn.dataset.val;
-                if (type === 'gender') {
-                    generoSeleccionado = val;
+                if (val === '') {
+                    generoSeleccionado = '';
+                    categoriaSeleccionada = '';
+                } else if (type === 'gender') {
+                    generoSeleccionado = (generoSeleccionado === val) ? '' : val;
                     categoriaSeleccionada = '';
                 } else if (type === 'category') {
-                    categoriaSeleccionada = val;
+                    categoriaSeleccionada = (categoriaSeleccionada === val) ? '' : val;
                     generoSeleccionado = '';
                 }
                 sincronizarChipsColeccion();
@@ -727,18 +759,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Eventos en chips de Familia Olfativa / Ocasión (Toggle ON/OFF)
-        document.querySelectorAll('#sensoryChips .filter-chip').forEach(btn => {
+        // Eventos en chips de Familia Olfativa / Ocasión (Sensoriales)
+        document.querySelectorAll('.sensory-chip').forEach(btn => {
             btn.addEventListener('click', () => {
                 const val = btn.dataset.val;
                 if (sensorialSeleccionado === val) {
                     sensorialSeleccionado = '';
-                    btn.classList.remove('active');
                 } else {
-                    document.querySelectorAll('#sensoryChips .filter-chip').forEach(b => b.classList.remove('active'));
                     sensorialSeleccionado = val;
-                    btn.classList.add('active');
                 }
+                sincronizarChipsSensoriales();
                 filterProducts();
             });
         });
@@ -748,6 +778,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const selSort = document.getElementById('filterSort');
         if (selSort) selSort.addEventListener('change', filterProducts);
+
+        // Control del Modal de Filtros (Adaptive: Bottom Sheet en móvil, Modal centrado en desktop)
+        const filtersModal = document.getElementById('filtersModal');
+        const openFilterModalBtn = document.getElementById('openFilterModal');
+        const closeFilterModalBtn = document.getElementById('closeFilterModal');
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+
+        function abrirModalFiltros() {
+            if (!filtersModal) return;
+            filtersModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModalFiltros() {
+            if (!filtersModal) return;
+            filtersModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        if (openFilterModalBtn) openFilterModalBtn.addEventListener('click', abrirModalFiltros);
+        if (closeFilterModalBtn) closeFilterModalBtn.addEventListener('click', cerrarModalFiltros);
+
+        if (applyFiltersBtn) {
+            applyFiltersBtn.addEventListener('click', () => {
+                cerrarModalFiltros();
+                const grid = document.getElementById('productGrid');
+                if (grid) {
+                    const headerOffset = 110;
+                    const elementPosition = grid.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+            });
+        }
+
+        if (filtersModal) {
+            filtersModal.addEventListener('click', (e) => {
+                if (e.target === filtersModal) {
+                    cerrarModalFiltros();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && filtersModal && filtersModal.classList.contains('open')) {
+                cerrarModalFiltros();
+            }
+        });
 
 
         // ============================

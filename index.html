@@ -165,77 +165,128 @@
             </div>
         </section>
 
-        <!-- BARRA DE FILTROS INTERACTIVOS Y BÚSQUEDA SENSORIAL -->
-        <section class="filters-section" aria-label="Filtros del catálogo">
-            <div class="filters-container">
-                <!-- 1. Buscador Sensorial con Botón Limpiar -->
-                <div class="search-box">
+        <!-- BARRA COMPACTA DE FILTROS Y BÚSQUEDA -->
+        <section class="filters-bar-section" aria-label="Búsqueda y filtros del catálogo">
+            <div class="filters-bar-container">
+                <!-- 1. Buscador Rápido -->
+                <div class="search-box-compact">
                     <i class="fas fa-search" aria-hidden="true"></i>
-                    <input type="text" id="filterName" placeholder="Buscar fragancia, marca, nota olfativa (ej: vainilla, madera, noche)..." aria-label="Buscar fragancia por nombre, marca o nota olfativa">
-                    <button type="button" id="clearSearch" class="btn-clear-search" aria-label="Borrar búsqueda" title="Borrar búsqueda">
+                    <input type="text" id="filterName" placeholder="Buscar fragancia, marca, aroma o nota..." aria-label="Buscar fragancias">
+                    <button type="button" id="clearSearch" class="btn-clear-search" aria-label="Borrar búsqueda" title="Borrar búsqueda" style="display: none;">
                         <i class="fas fa-times" aria-hidden="true"></i>
                     </button>
                 </div>
 
-                <!-- 2. Chips de Colección & Género -->
-                <div class="filter-chips-row">
-                    <span class="chips-label"><i class="fas fa-venus-mars"></i> Colección:</span>
-                    <div class="chips-scroll" id="genderChips">
-                        <button type="button" class="filter-chip active" data-type="gender" data-val="">✨ Todas</button>
-                        <button type="button" class="filter-chip" data-type="gender" data-val="Femenino">👑 Dama</button>
-                        <button type="button" class="filter-chip" data-type="gender" data-val="Masculino">🪵 Caballero</button>
-                        <button type="button" class="filter-chip" data-type="gender" data-val="Unisex">⚧ Unisex</button>
-                        <button type="button" class="filter-chip" data-type="category" data-val="Arabe">🌙 Árabes</button>
-                    </div>
-                </div>
+                <!-- 2. Botones de Acción: Abrir Modal de Filtros + Ordenar -->
+                <div class="filters-bar-actions">
+                    <button type="button" id="openFilterModal" class="btn-open-filter-modal" aria-label="Abrir panel de filtros avanzados">
+                        <i class="fas fa-sliders-h" aria-hidden="true"></i>
+                        <span>Filtros</span>
+                        <span id="filterActiveBadge" class="filter-active-count" style="display: none;">0</span>
+                    </button>
 
-                <!-- 3. Chips de Familia Olfativa & Ocasión -->
-                <div class="filter-chips-row sensory-row">
-                    <span class="chips-label"><i class="fas fa-wind"></i> Notas & Ocasión:</span>
-                    <div class="chips-scroll" id="sensoryChips">
-                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="amaderada"><i class="fas fa-tree"></i> Amaderadas</button>
-                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="citrica"><i class="fas fa-snowflake"></i> Cítricas & Frescas</button>
-                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="dulce"><i class="fas fa-cookie-bite"></i> Dulces & Vainilla</button>
-                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="floral"><i class="fas fa-spa"></i> Florales & Frutales</button>
-                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="noche"><i class="fas fa-moon"></i> Noche & Seducción</button>
-                        <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="diario"><i class="fas fa-sun"></i> Diario & Oficina</button>
-                    </div>
-                </div>
-
-                <!-- 4. Sub-barra de Herramientas: Contador, Marca, Ordenar y Limpiar -->
-                <div class="filter-toolbar">
-                    <div class="filter-counter" id="filterCount">
-                        <i class="fas fa-sparkles"></i> <span>Cargando fragancias...</span>
-                    </div>
-
-                    <div class="filter-toolbar-controls">
-                        <div class="filter-select-wrapper">
-                            <label for="filterBrand"><i class="fas fa-tags"></i> Marca:</label>
-                            <select id="filterBrand" aria-label="Filtrar por marca">
-                                <option value="">Todas las marcas</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-select-wrapper">
-                            <label for="filterSort"><i class="fas fa-sort-amount-down"></i> Ordenar:</label>
-                            <select id="filterSort" aria-label="Ordenar productos">
-                                <option value="destacados">Recomendados</option>
-                                <option value="precio-asc">Precio: Menor a Mayor</option>
-                                <option value="precio-desc">Precio: Mayor a Menor</option>
-                                <option value="nombre-asc">Nombre: A - Z</option>
-                            </select>
-                        </div>
-
-                        <button id="resetFilters" class="btn-reset-filters" aria-label="Limpiar todos los filtros" title="Restablecer filtros">
-                            <i class="fas fa-undo-alt" aria-hidden="true"></i> <span>Limpiar</span>
-                        </button>
+                    <div class="filter-sort-wrapper">
+                        <label for="filterSort" class="sr-only">Ordenar por</label>
+                        <select id="filterSort" aria-label="Ordenar productos">
+                            <option value="destacados">Recomendados</option>
+                            <option value="precio-asc">Precio: Menor a Mayor</option>
+                            <option value="precio-desc">Precio: Mayor a Menor</option>
+                            <option value="nombre-asc">Nombre: A - Z</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Contenedor de filtros activos (Badges) -->
-            <div id="activeFilters" class="active-filters-container"></div>
+            <!-- Barra de estado: Contador en vivo y Badges aplicados -->
+            <div class="filters-bar-meta">
+                <div class="filter-counter" id="filterCount">
+                    <i class="fas fa-sparkles"></i> <span>Cargando fragancias...</span>
+                </div>
+                <div id="activeFilters" class="active-filters-container"></div>
+            </div>
         </section>
+
+        <!-- ===== MODAL / DRAWER DE FILTROS SENSORIALES (RESPONSIVE) ===== -->
+        <div id="filtersModal" class="filters-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="filtersModalTitle">
+            <div class="filters-modal-dialog">
+                <!-- Barra táctil para móviles -->
+                <div class="filters-modal-drag-bar" aria-hidden="true"></div>
+
+                <!-- Header del Modal -->
+                <div class="filters-modal-header">
+                    <div class="filters-modal-title-group">
+                        <h3 id="filtersModalTitle"><i class="fas fa-sliders-h"></i> Filtros & Preferencias</h3>
+                        <p class="filters-modal-subtitle">Encuentra tu fragancia según colección, ocasión y notas olfativas</p>
+                    </div>
+                    <button type="button" id="closeFilterModal" class="filters-modal-close-btn" aria-label="Cerrar filtros">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <!-- Body del Modal (Scrollable) -->
+                <div class="filters-modal-body">
+                    <!-- Sección 1: Colección & Género -->
+                    <div class="filter-modal-section">
+                        <div class="filter-modal-section-title">
+                            <i class="fas fa-venus-mars"></i> Colección & Género
+                        </div>
+                        <div class="chips-grid" id="genderChips">
+                            <button type="button" class="filter-chip active" data-type="gender" data-val="">✨ Todas</button>
+                            <button type="button" class="filter-chip" data-type="gender" data-val="Femenino">👑 Dama</button>
+                            <button type="button" class="filter-chip" data-type="gender" data-val="Masculino">🪵 Caballero</button>
+                            <button type="button" class="filter-chip" data-type="gender" data-val="Unisex">⚧ Unisex</button>
+                            <button type="button" class="filter-chip" data-type="category" data-val="Arabe">🌙 Árabes</button>
+                        </div>
+                    </div>
+
+                    <!-- Sección 2: Familias Olfativas -->
+                    <div class="filter-modal-section">
+                        <div class="filter-modal-section-title">
+                            <i class="fas fa-wind"></i> Familia Olfativa
+                        </div>
+                        <div class="chips-grid" id="olfactoryFamilyChips">
+                            <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="amaderada"><i class="fas fa-tree"></i> Amaderadas & Cuero</button>
+                            <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="citrica"><i class="fas fa-snowflake"></i> Cítricas & Frescas</button>
+                            <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="dulce"><i class="fas fa-cookie-bite"></i> Dulces & Vainilla</button>
+                            <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="floral"><i class="fas fa-spa"></i> Florales & Frutales</button>
+                        </div>
+                    </div>
+
+                    <!-- Sección 3: Ocasión de Uso -->
+                    <div class="filter-modal-section">
+                        <div class="filter-modal-section-title">
+                            <i class="fas fa-calendar-star"></i> Ocasión de Uso
+                        </div>
+                        <div class="chips-grid" id="occasionChips">
+                            <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="noche"><i class="fas fa-moon"></i> Noche & Seducción</button>
+                            <button type="button" class="filter-chip sensory-chip" data-type="sensory" data-val="diario"><i class="fas fa-sun"></i> Diario & Oficina</button>
+                        </div>
+                    </div>
+
+                    <!-- Sección 4: Marca -->
+                    <div class="filter-modal-section">
+                        <div class="filter-modal-section-title">
+                            <i class="fas fa-tags"></i> Marca
+                        </div>
+                        <div class="filter-modal-select-wrap">
+                            <select id="filterBrand" aria-label="Filtrar por marca">
+                                <option value="">Todas las marcas</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Fijo del Modal -->
+                <div class="filters-modal-footer">
+                    <button type="button" id="resetFilters" class="btn-modal-reset" aria-label="Limpiar todos los filtros">
+                        <i class="fas fa-undo-alt" aria-hidden="true"></i> Limpiar filtros
+                    </button>
+                    <button type="button" id="applyFiltersBtn" class="btn-modal-apply" aria-label="Aplicar filtros y ver resultados">
+                        Ver resultados (<span id="modalResultCount">0</span>)
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <section class="products" aria-label="Lista de fragancias">
             <div class="card-container">
