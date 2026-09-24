@@ -381,21 +381,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 ` : '';
 
+                const pBrand = extraerMarca(product.name);
                 productCard.innerHTML = `
                     <div class="product-image" data-images="${encodedImages}">
+                        <span class="card-haute-tag up">33% Extracto</span>
                         <img class="card-main-img" data-idx="0" src="${imgList[0]}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async">
                         ${arrowsHtml}
                     </div>
                     <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-rating">${stars}</div>
-                        <div class="product-category">${product.category}</div>
-                        <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
+                        <div class="card-haute-meta up">
+                            <span class="eyebrow">${pBrand}</span>
+                            <span class="mute">· ${product.gender || product.category}</span>
+                        </div>
+                        <h3 class="product-name disp">${product.name}</h3>
+                        <div class="card-haute-notes mute">${product.description ? product.description.slice(0, 62) + '...' : 'Fijación +12h · Base feromonas'}</div>
+                        <div class="card-haute-footer">
+                            <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} <small class="mute up">COP</small></div>
+                            <button class="btn-haute-card up" aria-label="Agregar ${product.name} al carrito"
+                                onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: imgList[0], price: product.price})})'>
+                                <i class="fas fa-cart-plus" aria-hidden="true"></i> Añadir
+                            </button>
+                        </div>
                     </div>
-                    <button class="btn-agregar-carrito" aria-label="Agregar ${product.name} al carrito"
-                        onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: imgList[0], price: product.price})})'>
-                        <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
-                    </button>
                 `;
                 productCard.addEventListener('click', (e) => {
                     if (e.target.closest('.btn-agregar-carrito') || e.target.closest('.card-img-arrow')) return;

@@ -113,8 +113,10 @@
 <body>
     <header class="header">
         <div class="logo-container">
-            <a href="index.html">  <img src="assets/img/Logo2026.png" alt="Logo oficial Fragancias de Alta Densidad" class="logo" width="160" height="48" fetchpriority="high"></a>
-            <a class="header-tittle" href="index.html"> Fragancias de Alta Densidad</a>
+            <a href="index.html" class="logo-brand-link">
+                <span class="logo-brand-title up">Alta Densidad</span>
+                <span class="logo-brand-subtitle up">Fragancias de Autor · Medellín</span>
+            </a>
         </div>
         <nav class="main-nav">
             <button id="closeNav" class="nav-close-btn" aria-label="Cerrar menú">
@@ -150,17 +152,33 @@
 
     <main class="catalog-container">
 
-        
-        <section class="collection-banner">
-            <div class="hero-glow-orb"></div>
-            <div class="catalog-container" style="position:relative; z-index:2;">
-                <div class="hero-badge-pill"><i class="fas fa-crown"></i> Alta Perfumería & Concentración Extra</div>
-                <h1 style="font-size: clamp(1.6rem, 4vw, 2.2rem);">Perfumería inspirada en tus fragancias favoritas</h1>
-                <p style="font-size: clamp(0.95rem, 2vw, 1.15rem);">La esencia del lujo con fijación superior a una fracción del precio</p>
-                <div class="hero-benefits-grid">
-                    <div class="hero-benefit-item"><i class="fas fa-clock"></i> +12 Horas de Duración</div>
-                    <div class="hero-benefit-item"><i class="fas fa-gem"></i> 33% Concentración & Feromonas</div>
-                    <div class="hero-benefit-item"><i class="fas fa-truck-fast"></i> Envíos a Todo Colombia</div>
+        <!-- HERO HAUTE PARFUMERIE -->
+        <section class="hero-haute" aria-label="Introducción Alta Densidad">
+            <div class="hero-haute-inner wrap">
+                <div class="hero-haute-content">
+                    <span class="up eyebrow"><i class="fas fa-crown"></i> Medellín · Perfumería de Autor</span>
+                    <h1 class="disp">Menos aroma.<br><em>Más densidad.</em></h1>
+                    <p class="mute">33% de extracto puro y base de feromonas. Una estela que permanece más de doce horas en la piel, con la sofisticación del lujo a una fracción del costo comercial.</p>
+                    <div class="hero-haute-actions">
+                        <a class="btn-haute up" href="#productGrid">Explorar Colección</a>
+                        <a class="btn-haute-line up" href="nosotros.html">Nuestra Fórmula</a>
+                    </div>
+                    <div class="hero-haute-stats up">
+                        <div class="hero-stat-card"><b>33%</b><span>Extracto Puro</span></div>
+                        <div class="hero-stat-card"><b>12h+</b><span>Fijación Extrema</span></div>
+                        <div class="hero-stat-card"><b>+</b><span>Feromonas Activas</span></div>
+                    </div>
+                </div>
+                <div class="hero-haute-stage">
+                    <div class="stage-mist"></div>
+                    <div class="bottle-showcase">
+                        <div class="bottle" style="--h: 34; --s: 2.3"><i></i></div>
+                        <div class="bottle-label-badge">
+                            <span class="up eyebrow">Extracto de Perfume</span>
+                            <span class="bottle-name disp">Alta Densidad</span>
+                            <small class="mute up">Edición Medellín · 50 ml</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
