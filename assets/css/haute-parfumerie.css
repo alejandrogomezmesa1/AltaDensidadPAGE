@@ -276,11 +276,20 @@ h2, h3 {
   overflow: hidden;
 }
 
+.stage .bottle-wrap {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
 .stage img.stage-real-img {
   width: 82%;
   height: 82%;
   object-fit: contain;
   transition: transform var(--t-2) var(--ease);
+  filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.38));
 }
 
 .stage:hover img.stage-real-img {
@@ -395,6 +404,77 @@ h2, h3 {
   .sheet {
     grid-template-columns: 1fr;
     max-height: 90vh;
+  }
+}
+
+/* Modal de Filtros Avanzados (Atelier Olfativo) */
+.filter-modal .sheet {
+  grid-template-columns: 1fr;
+  max-width: 620px;
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.filter-sheet-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: var(--sp-3);
+  border-bottom: var(--bw) solid var(--c-line);
+}
+
+.filter-sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: var(--sp-2);
+  padding-bottom: var(--sp-4);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.filter-label {
+  font-size: var(--fs-1);
+  letter-spacing: var(--ls-ui);
+  color: var(--c-accent);
+}
+
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.filter-pills .chip {
+  padding: 6px 12px;
+  font-size: var(--fs-2);
+}
+
+.filter-sheet-f {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--sp-3);
+  border-top: var(--bw) solid var(--c-line);
+  margin-top: var(--sp-2);
+}
+
+@media(max-width: 720px) {
+  .filter-modal {
+    align-items: end;
+    padding: 0;
+  }
+  .filter-modal .sheet {
+    max-height: 85vh;
+    padding: var(--sp-4);
   }
 }
 
@@ -561,6 +641,92 @@ header.haute-header nav {
   font-family: var(--f-display);
   line-height: 1.05;
   font-weight: 300;
+}
+
+.col-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-ico {
+  position: absolute;
+  left: 12px;
+  color: var(--c-mute);
+  pointer-events: none;
+}
+
+.search-input {
+  background: var(--c-surface);
+  border: var(--bw) solid var(--c-line);
+  color: var(--c-ink);
+  font: 300 var(--fs-2) var(--f-ui);
+  padding: 8px 30px 8px 34px;
+  width: 220px;
+  transition: border-color var(--t-1), width var(--t-1);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--c-accent);
+  width: 260px;
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  color: var(--c-mute);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.btn-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 8px 14px;
+  font-size: var(--fs-2);
+}
+
+.filter-badge {
+  background: var(--c-accent);
+  color: var(--c-inv-ink);
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 6px;
+  line-height: 1.2;
+}
+
+.filter-status {
+  font-size: var(--fs-2);
+  margin-top: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media(max-width: 640px) {
+  .col-actions {
+    width: 100%;
+  }
+  .search-input-wrap {
+    flex: 1;
+  }
+  .search-input {
+    width: 100%;
+  }
+  .search-input:focus {
+    width: 100%;
+  }
 }
 
 /* Grid Colección */

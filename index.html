@@ -96,9 +96,24 @@
     <section class="sec" id="coleccion">
         <div class="wrap">
             <div class="sec-h rv">
-                <h2>La colección</h2>
-                <div class="chips up" id="chips"></div>
+                <div>
+                    <h2>La colección</h2>
+                    <p class="mute" id="coleccionMeta" style="margin-top:var(--sp-1);font-size:var(--fs-2)">33% de extracto puro · Base de feromonas</p>
+                </div>
+                <div class="col-actions">
+                    <div class="search-input-wrap">
+                        <svg class="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="liveSearch" class="search-input" placeholder="Buscar por nombre, nota o marca..." aria-label="Buscar fragancias">
+                        <button id="clearSearch" class="search-clear" aria-label="Limpiar búsqueda" style="display:none">✕</button>
+                    </div>
+                    <button class="btn btn--line up btn-filter" id="btnFilterModal" aria-label="Abrir filtros de fragancias">
+                        <span>Filtros</span>
+                        <span class="filter-badge" id="filterCountBadge" style="display:none">0</span>
+                    </button>
+                </div>
             </div>
+            <div class="chips up" id="chips"></div>
+            <div class="filter-status mute" id="filterStatus" style="display:none"></div>
             <div class="grid" id="grid"></div>
         </div>
     </section>
@@ -227,6 +242,37 @@
     <!-- 10 · MODAL DETALLE DE PRODUCTO (PIRÁMIDE OLFATIVA & PRESENTACIONES) -->
     <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Detalle del producto">
         <div class="sheet" id="sheet"></div>
+    </div>
+
+    <!-- 10.1 · MODAL ATELIER OLFATIVO (FILTROS AVANZADOS) -->
+    <div class="modal filter-modal" id="filterModal" role="dialog" aria-modal="true" aria-label="Filtros avanzados de fragancias">
+        <div class="sheet">
+            <div class="filter-sheet-h">
+                <div>
+                    <span class="up eyebrow">Atelier de Selección</span>
+                    <h3 class="disp" style="font-size:var(--fs-4)">Filtrar Colección</h3>
+                </div>
+                <button class="x up" data-close-filters aria-label="Cerrar filtros">✕ Cerrar</button>
+            </div>
+            <div class="filter-sheet-body">
+                <div class="filter-group">
+                    <label class="up filter-label">Familia Olfativa</label>
+                    <div class="filter-pills" id="fpFamilies"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="up filter-label">Ocasión de Uso</label>
+                    <div class="filter-pills" id="fpOccasions"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="up filter-label">Estilo / Género</label>
+                    <div class="filter-pills" id="fpGenders"></div>
+                </div>
+            </div>
+            <div class="filter-sheet-f">
+                <button class="link up" id="btnResetFilters">Limpiar todo</button>
+                <button class="btn up" id="btnApplyFilters">Ver resultados (<span id="filterMatchingCount">0</span>)</button>
+            </div>
+        </div>
     </div>
 
     <!-- 11 · AURA CONCIERGE -->

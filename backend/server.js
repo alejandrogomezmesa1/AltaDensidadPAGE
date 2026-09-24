@@ -22,14 +22,15 @@ const app = express();
 // 1. CORS - Debe ser de lo primero para que cualquier respuesta (incluyendo errores) tenga las cabeceras correctas
 app.use(cors({
     origin: function (origin, callback) {
-        const allowed = [
-            'http://localhost:5500',
-            'http://127.0.0.1:5500',
-            'http://localhost:3000',
+        if (!origin) return callback(null, true);
+        const isLocalhost = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+        const isVercel = /\.vercel\.app$/.test(origin);
+        const allowedExplicit = [
             'https://alta-densidad-page.vercel.app',
             process.env.FRONTEND_URL
         ].filter(Boolean);
-        if (!origin || allowed.includes(origin)) {
+
+        if (isLocalhost || isVercel || allowedExplicit.includes(origin)) {
             callback(null, true);
         } else {
             console.error('CORS blocked origin:', origin);
