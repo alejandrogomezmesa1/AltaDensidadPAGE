@@ -3689,69 +3689,42 @@ h3,
 
 
 .feature-card h3 {
-
   margin-bottom: 12px;
-
-  color: var(--texto);
-
+  color: var(--azul-dos);
   font-size: 1.1rem;
-
 }
-
-
 
 @media (min-width: 768px) {
-
   .feature-card h3 {
-
     font-size: 1.2rem;
-
     margin-bottom: 15px;
-
   }
-
 }
 
-
-
+.masinfo,
 .masinfo button {
-
-  font-size: 0.8rem;
-
-  color: var(--texto);
-
-  margin-top: 10px;
-
-  padding: 10px;
-
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: #0a0a0a;
+  margin-top: 14px;
+  padding: 9px 20px;
   background-color: var(--azul-dos);
-
-  border: 2px solid var(--azul-dos);
-
-  border-radius: 10px;
-
-  font-weight: bolder;
-
+  border: 1px solid var(--azul-dos);
+  border-radius: var(--radius-md, 10px);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-
-
+.masinfo:hover,
 .masinfo button:hover {
-
-  font-size: 0.9 rem;
-
-  color: var(--blanco-neutro);
-
-  margin-top: 10px;
-
-  padding: 10px;
-
-
-
-  border-radius: 10px;
-
-  transform: scale(1);
-
+  background-color: var(--color-gold-dark, #AA8B22);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+  transform: translateY(-2px);
 }
 
 
