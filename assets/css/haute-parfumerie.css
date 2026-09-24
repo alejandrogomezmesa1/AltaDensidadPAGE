@@ -497,6 +497,15 @@ header.haute-header nav {
   font-size: var(--fs-3);
 }
 
+.hero .stage {
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.hero .stage .bottle {
+  transition: transform 0.15s ease-out;
+}
+
 .hero .stage::after {
   content: "";
   position: absolute;

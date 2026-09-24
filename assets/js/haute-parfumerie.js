@@ -271,62 +271,103 @@
     document.body.style.overflow = "hidden";
   }
 
-  // Integración de productos dinámicos del backend si están disponibles
+  // Integración de productos dinámicos del backend con cache instantáneo
   async function cargarCatalogoBackend() {
     try {
-      const resp = await fetch('/api/productos');
+      const cached = localStorage.getItem("ad_cached_products_v1");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          adaptarYRenderizar(parsed);
+        }
+      }
+    } catch(e) {}
+
+    try {
+      const resp = await fetch('https://altadensidadpage-production.up.railway.app/api/productos');
       if (resp.ok) {
-        const data = await resp.json();
-        if (Array.isArray(data) && data.length > 0) {
-          const nuevos = data.map((item, idx) => {
-            let occ = "Noche";
-            let fam = "Amaderada";
-            let hue = (idx * 37) % 360;
-
-            const nameLow = (item.name || "").toLowerCase();
-            const descLow = (item.description || "").toLowerCase();
-
-            if (descLow.includes("fresc") || descLow.includes("cítric") || descLow.includes("verano") || nameLow.includes("aqua")) {
-              occ = "Verano";
-              fam = "Cítrica / Fresca";
-              hue = 190;
-            } else if (descLow.includes("oficina") || descLow.includes("elegante") || descLow.includes("diario")) {
-              occ = "Oficina";
-              fam = "Aromática";
-              hue = 130;
-            } else if (descLow.includes("dulce") || descLow.includes("vainilla")) {
-              fam = "Dulce";
-              hue = 24;
-            }
-
-            const notasExtraidas = [
-              item.notas_salida || "Bergamota fresca",
-              item.notas_corazon || "Notas de autor",
-              item.notas_fondo || "Ámbar y feromonas"
-            ];
-
-            return {
-              id: item.id || idx,
-              n: item.name,
-              f: fam,
-              o: occ,
-              no: notasExtraidas,
-              p: item.price || 180000,
-              h: hue,
-              img: item.image || (item.images && item.images[0]) || null
-            };
-          });
-
-          if (nuevos.length) {
-            P = nuevos;
-            renderGrid();
-            renderRank();
-          }
+        const json = await resp.json();
+        const lista = json.success ? json.data : (Array.isArray(json) ? json : null);
+        if (lista && lista.length) {
+          const activos = lista.filter(x => x.activo !== 0);
+          try { localStorage.setItem("ad_cached_products_v1", JSON.stringify(activos)); } catch(e) {}
+          adaptarYRenderizar(activos);
         }
       }
     } catch(e) {
-      console.log("Usando colección curada de Alta Densidad");
+      console.log("Modo offline / catálogo curado activo");
     }
+  }
+
+  function adaptarYRenderizar(lista) {
+    const nuevos = lista.map((item, idx) => {
+      let occ = "Noche";
+      let fam = "Amaderada";
+      let hue = (idx * 37) % 360;
+
+      const nameLow = (item.name || "").toLowerCase();
+      const descLow = (item.description || "").toLowerCase();
+
+      if (descLow.includes("fresc") || descLow.includes("cítric") || descLow.includes("verano") || nameLow.includes("aqua")) {
+        occ = "Verano";
+        fam = "Cítrica / Fresca";
+        hue = 190;
+      } else if (descLow.includes("oficina") || descLow.includes("elegante") || descLow.includes("diario")) {
+        occ = "Oficina";
+        fam = "Aromática";
+        hue = 130;
+      } else if (descLow.includes("dulce") || descLow.includes("vainilla")) {
+        fam = "Dulce";
+        hue = 24;
+      }
+
+      const notasExtraidas = [
+        item.notas_salida || "Bergamota fresca",
+        item.notas_corazon || "Notas de autor",
+        item.notas_fondo || "Ámbar y feromonas"
+      ];
+
+      return {
+        id: item.id || idx,
+        n: item.name,
+        f: fam,
+        o: occ,
+        no: notasExtraidas,
+        p: Number(item.price) || 180000,
+        h: hue,
+        img: item.image || (item.images && item.images[0]) || null
+      };
+    });
+
+    if (nuevos.length) {
+      P = nuevos;
+      renderGrid();
+      renderRank();
+    }
+  }
+
+  // Micro-interacción: Botella interactiva en Hero
+  function initHeroBottleInteractivity() {
+    const stage = document.querySelector(".hero .stage");
+    const bottle = document.querySelector(".hero .stage .bottle");
+    if (!stage || !bottle) return;
+
+    stage.addEventListener("mousemove", function(e) {
+      const rect = stage.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      bottle.style.transform = `perspective(600px) rotateY(${x * 16}deg) rotateX(${-y * 16}deg) translateY(-8px)`;
+    });
+
+    stage.addEventListener("mouseleave", function() {
+      bottle.style.transform = "";
+    });
+
+    stage.addEventListener("click", function() {
+      let currentHue = parseInt(bottle.style.getPropertyValue("--h") || "32", 10);
+      let nextHue = (currentHue + 45) % 360;
+      bottle.style.setProperty("--h", nextHue);
+    });
   }
 
   // Inicialización de Eventos Delegados
@@ -415,6 +456,7 @@
     renderSizes();
     drawCart();
     initThemeToggle();
+    initHeroBottleInteractivity();
     cargarCatalogoBackend();
 
     const els = document.querySelectorAll(".rv");
