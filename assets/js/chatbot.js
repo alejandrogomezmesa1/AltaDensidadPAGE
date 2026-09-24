@@ -1,261 +1,470 @@
-// ==========================================================================
-// chatbot.js — Widget flotante "Asistente Alta Densidad"
-// Habla con el backend Node (proxy seguro) en POST /api/chatbot.
-//
-// La API key del chatbot NUNCA se expone aquí: vive en variables de entorno
-// del backend (CHATBOT_API_URL / CHATBOT_API_KEY). El frontend solo llama a
-// {apiUrl}/chatbot, igual que el resto de endpoints de la página.
-//
-// Incluir al final del <body> (con defer) en las páginas públicas.
-// El widget se inyecta automáticamente; no requiere editar el HTML.
-// ==========================================================================
-
-/* ==========================================================================
-   CONFIGURACIÓN — edita estos valores según tu entorno
-   ========================================================================== */
-const AD_CHATBOT_CONFIG = {
-  // Base del backend Node (sin barra final). El endpoint real es /chatbot.
-  // En producción apunta a Railway (mismo backend que ya usa la página).
-  apiUrl:
-    location.hostname === "localhost" || location.hostname === "127.0.0.1"
-      ? "http://localhost:3000/api"
-      : "https://altadensidadpage-production.up.railway.app/api",
-
-  // Identidad del bot
-  botName: "Asistente Alta Densidad",
-  botSubtitle: "En línea",
-
-  // Mensaje de bienvenida (texto, admite saltos de línea \n)
-  welcomeMessage:
-    "¡Hola! Soy el asistente de Alta Densidad.\nPregúntame por perfumes, precios o recomendaciones. Ej: \"¿cuánto cuesta la Bharara King?\"",
-
-  // Sugerencias rápidas mostradas al abrir
-  suggestions: [
-    "Top 10 perfumes",
-    "Perfumes para hombre",
-    "¿Cuánto cuesta la Bharara King?",
-  ],
-
-  // Tiempo máximo de espera de respuesta (ms)
-  timeoutMs: 120000,
-};
-
-// Override en tiempo de ejecución — útil para probar sin redeploy.
-// Desde la consola del navegador:
-//   localStorage.setItem("ad_chatbot_api_url", "http://localhost:3000/api");
-try {
-  const overrideUrl = localStorage.getItem("ad_chatbot_api_url");
-  if (overrideUrl) AD_CHATBOT_CONFIG.apiUrl = overrideUrl;
-} catch (_) {
-  /* localStorage no disponible; se usan los valores por defecto */
-}
+/**
+ * AURA — Asesora Olfativa Virtual & Chatbot IA
+ * Fragancias de Alta Densidad
+ * Dark Luxury Architecture
+ */
 
 (function () {
-  "use strict";
+    'use strict';
 
-  const CFG = AD_CHATBOT_CONFIG;
-  let sessionId = null; // memoria multi-turno proporcionada por la API
+    // ── Estado del Asistente ──────────────────────────────────────────────
+    let chatAbierto = false;
+    let catalogoProductos = [];
+    let catalogoKits = [];
 
-  // ── Inyectar estructura del widget ─────────────────────────────────────
-  function _render() {
-    const root = document.createElement("div");
-    root.className = "ad-chatbot";
-    root.id = "adChatbot";
+    // ── Helpers de Normalización de Campos ─────────────────────────────────
+    // La API devuelve campos en español (nombre, categoria, genero, etc.)
+    // pero algunos cachés/contextos pueden tener campos en inglés.
+    // Estos helpers garantizan compatibilidad en ambos formatos.
+    function prodNombre(p) { return p.name || p.nombre || ''; }
+    function prodCategoria(p) { return p.category || p.categoria || ''; }
+    function prodGenero(p) { return p.gender || p.genero || ''; }
+    function prodDescripcion(p) { return p.description || p.descripcion || ''; }
+    function prodPrecio(p) { return Number(p.price || p.precio || 0); }
+    function prodImagen(p) { return p.image || p.imagen || 'assets/img/Logo2026.png'; }
+    function prodId(p) { return p.id || p._id || ''; }
 
-    const fab =
-      '<span class="ad-chatbot-pulse"></span>' +
-      '<i class="fas fa-comment-dots ad-chatbot-fab-icon" aria-hidden="true"></i>' +
-      '<i class="fas fa-times ad-chatbot-fab-close" aria-hidden="true"></i>';
-
-    root.innerHTML =
-      '<button class="ad-chatbot-fab" id="adChatbotFab" aria-label="Abrir chat" aria-expanded="false">' +
-        fab +
-      "</button>" +
-      '<div class="ad-chatbot-panel" id="adChatbotPanel" aria-hidden="true">' +
-        '<div class="ad-chatbot-header">' +
-          '<div class="ad-chatbot-header-icon"><i class="fas fa-robot" aria-hidden="true"></i></div>' +
-          '<div class="ad-chatbot-header-text">' +
-            '<div class="ad-chatbot-header-title"></div>' +
-            '<div class="ad-chatbot-header-subtitle"><span class="dot"></span></div>' +
-          "</div>" +
-          '<button class="ad-chatbot-header-close" id="adChatbotClose" aria-label="Cerrar chat"><i class="fas fa-chevron-down" aria-hidden="true"></i></button>' +
-        "</div>" +
-        '<div class="ad-chatbot-messages" id="adChatbotMessages"></div>' +
-        '<div class="ad-chatbot-typing" id="adChatbotTyping" hidden>' +
-          "<span></span><span></span><span></span>" +
-        "</div>" +
-        '<div class="ad-chatbot-suggestions" id="adChatbotSuggestions"></div>' +
-        '<form class="ad-chatbot-form" id="adChatbotForm">' +
-          '<input class="ad-chatbot-input" id="adChatbotInput" type="text" placeholder="Escribe tu mensaje..." autocomplete="off" maxlength="500" />' +
-          '<button class="ad-chatbot-send" id="adChatbotSend" type="submit" aria-label="Enviar"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>' +
-        "</form>" +
-      "</div>";
-
-    document.body.appendChild(root);
-
-    root.querySelector(".ad-chatbot-header-title").textContent = CFG.botName;
-    root.querySelector(".ad-chatbot-header-subtitle").appendChild(
-      document.createTextNode(CFG.botSubtitle),
-    );
-
-    _renderSuggestions(root);
-    _addMessage("bot", CFG.welcomeMessage);
-  }
-
-  function _renderSuggestions(root) {
-    const box = root.querySelector("#adChatbotSuggestions");
-    (CFG.suggestions || []).forEach((s) => {
-      const chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "ad-chatbot-chip";
-      chip.textContent = s;
-      chip.addEventListener("click", () => _send(s));
-      box.appendChild(chip);
-    });
-  }
-
-  // ── Estado abierto/cerrado ─────────────────────────────────────────────
-  function _setOpen(open) {
-    const root = document.getElementById("adChatbot");
-    const panel = document.getElementById("adChatbotPanel");
-    const fab = document.getElementById("adChatbotFab");
-    if (!root) return;
-    root.classList.toggle("ad-chatbot-open", open);
-    panel.setAttribute("aria-hidden", String(!open));
-    fab.setAttribute("aria-expanded", String(open));
-    if (open) {
-      const input = document.getElementById("adChatbotInput");
-      if (input) input.focus();
+    // ── Sanitizador HTML para evitar XSS ──────────────────────────────────
+    function sanitizarTexto(texto) {
+        const div = document.createElement('div');
+        div.textContent = texto;
+        return div.innerHTML;
     }
-  }
 
-  function _bind() {
-    document
-      .getElementById("adChatbotFab")
-      .addEventListener("click", () =>
-        _setOpen(!document.getElementById("adChatbot").classList.contains("ad-chatbot-open")),
-      );
-    document.getElementById("adChatbotClose").addEventListener("click", () => _setOpen(false));
-    document.getElementById("adChatbotForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const input = document.getElementById("adChatbotInput");
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = "";
-      _send(text);
-    });
+    // ── Persistencia de Conversación ──────────────────────────────────────
+    const CHAT_HISTORY_KEY = 'ad_chat_history_v1';
 
-    // Cerrar con Escape
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") _setOpen(false);
-    });
-  }
+    function guardarHistorial() {
+        try {
+            const contenedor = document.getElementById('adIaChatMessages');
+            if (!contenedor) return;
+            sessionStorage.setItem(CHAT_HISTORY_KEY, contenedor.innerHTML);
+        } catch (e) { /* silenciar errores de storage */ }
+    }
 
-  // ── Mensajes ───────────────────────────────────────────────────────────
-  function _addMessage(role, text) {
-    const box = document.getElementById("adChatbotMessages");
-    const el = document.createElement("div");
-    el.className = "ad-chatbot-msg ad-chatbot-msg-" + role;
-    el.textContent = text;
-    box.appendChild(el);
-    box.scrollTop = box.scrollHeight;
-    return el;
-  }
+    function restaurarHistorial() {
+        try {
+            const guardado = sessionStorage.getItem(CHAT_HISTORY_KEY);
+            if (!guardado) return false;
+            const contenedor = document.getElementById('adIaChatMessages');
+            if (!contenedor) return false;
+            contenedor.innerHTML = guardado;
+            contenedor.scrollTop = contenedor.scrollHeight;
+            return true;
+        } catch (e) { return false; }
+    }
 
-  function _setTyping(on) {
-    document.getElementById("adChatbotTyping").hidden = !on;
-    const box = document.getElementById("adChatbotMessages");
-    box.scrollTop = box.scrollHeight;
-  }
-
-  // ── Envío a la API ─────────────────────────────────────────────────────
-  async function _send(message) {
-    _setOpen(true);
-    _addMessage("user", message);
-    _setTyping(true);
-    _setBusy(true);
-
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), CFG.timeoutMs);
-
-    try {
-      const body = { message };
-      if (sessionId) body.session_id = sessionId;
-
-      const r = await fetch(CFG.apiUrl.replace(/\/$/, "") + "/chatbot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    // ── Base de Conocimiento Experta en Fragancias ─────────────────────────
+    const KNOWLEDGE_BASE = {
+        feromonas: {
+            keywords: ['feromona', 'feromonas', 'atraer', 'seduccion', 'afrodisiaco', 'atracción'],
+            respuesta: `✨ <strong>Nuestra Fórmula con Feromonas & 33% de Concentración</strong>:<br><br>
+Todas nuestras fragancias están elaboradas con aceites puros importados de grado <em>Extrait de Parfum</em> (33% concentración pura) e integran microcápsulas de feromonas sintéticas de alta afinidad que reaccionan con el calor de tu piel, potenciando la proyección y el atractivo magnético.`
         },
-        body: JSON.stringify(body),
-        signal: controller.signal,
-      });
+        duracion: {
+            keywords: ['duracion', 'duración', 'cuanto dura', 'fijacion', 'fijación', 'horas', 'longevidad', 'desvanece'],
+            respuesta: `⏳ <strong>Fijación Superior Garantizada (+12 Horas)</strong>:<br><br>
+Gracias a nuestra densidad de concentración al 33%, nuestras fragancias duran más de <strong>12 a 16 horas en piel</strong> y permanecen varios días en prendas de vestir. No usamos alcoholes industriales ni diluciones ligeras.`
+        },
+        envios: {
+            keywords: ['envio', 'envios', 'envíos', 'tiempo de entrega', 'ciudades', 'despacho', 'costo envio', 'flete', 'medellin', 'bogota', 'cali'],
+            respuesta: `🚚 <strong>Cobertura y Tiempos de Envío en Colombia</strong>:<br><br>
+• <strong>Medellín (Urbano):</strong> Entregas en 24h hábiles ($15.000 COP).<br>
+• <strong>Área Metropolitana (Bello, Itagüí, Envigado, Sabaneta, etc.):</strong> ($20.000 COP).<br>
+• <strong>Nacional (Bogotá, Cali, Barranquilla y todo el país):</strong> 2 a 3 días hábiles vía Servientrega / Interrapidísimo ($22.000 COP).`
+        },
+        pagos: {
+            keywords: ['pago', 'pagar', 'metodos de pago', 'nequi', 'pse', 'tarjeta', 'transferencia', 'bancolombia'],
+            respuesta: `💳 <strong>Métodos de Pago 100% Seguros</strong>:<br><br>
+• <strong>Pago Online Directo:</strong> Mercado Pago con PSE, Nequi, Tarjetas Débito y Crédito.<br>
+• <strong>Pago por WhatsApp:</strong> Transferencia Bancolombia, Nequi o Daviplata coordinando con un asesor humano.`
+        },
+        ubicacion: {
+            keywords: ['ubicacion', 'ubicación', 'donde estan', 'tienda fisica', 'direccion', 'dirección', 'local'],
+            respuesta: `📍 <strong>Nuestra Sede en Medellín</strong>:<br><br>
+Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</strong>. Atendemos pedidos y despachos a nivel nacional con entregas garantizadas.`
+        }
+    };
 
-      if (!r.ok) {
-        const data = await _safeJson(r);
-        const detail = (data && (data.message || data.detail)) || (await _safeText(r));
-        _addMessage(
-          "error",
-          r.status === 503
-            ? "El asistente aún no está configurado en el servidor."
-            : "Error " + r.status + (detail ? ": " + detail : "") + ".",
+    // ── Cargar Productos desde Caché o API ─────────────────────────────────
+    function obtenerCatalogo() {
+        try {
+            const cp = localStorage.getItem('ad_cached_products_v1');
+            if (cp) catalogoProductos = JSON.parse(cp);
+            const ck = localStorage.getItem('ad_cached_kits_v1');
+            if (ck) catalogoKits = JSON.parse(ck);
+        } catch (e) {
+            console.warn('No se pudo leer caché local para el chatbot');
+        }
+
+        if (!catalogoProductos.length) {
+            const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                ? 'http://localhost:3000/api'
+                : 'https://altadensidadpage-production.up.railway.app/api';
+            fetch(`${base}/productos`)
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success) catalogoProductos = d.data.filter(p => p.activo !== 0);
+                })
+                .catch(() => {});
+        }
+    }
+
+    // ── Inyectar Estructura HTML del Chatbot ───────────────────────────────
+    function inyectarHTMLChatbot() {
+        if (document.getElementById('adIaChatLauncher')) return;
+
+        // Botón Lanzador Flotante
+        // Usa fa-magic como fallback seguro (FA Free v5), con fa-sparkles para FA Pro/v6
+        const launcher = document.createElement('div');
+        launcher.id = 'adIaChatLauncher';
+        launcher.className = 'ia-chat-launcher';
+        launcher.setAttribute('role', 'button');
+        launcher.setAttribute('aria-label', 'Abrir asesora olfativa virtual AURA');
+        launcher.innerHTML = `
+            <div class="ia-launcher-avatar">
+                <i class="fas fa-magic"></i>
+                <div class="ia-pulse-dot"></div>
+            </div>
+            <div class="ia-launcher-text">
+                <span class="ia-launcher-title">AURA IA</span>
+                <span class="ia-launcher-sub">Asesora Olfativa</span>
+            </div>
+        `;
+
+        // Ventana de Chat
+        const widget = document.createElement('div');
+        widget.id = 'adIaChatWidget';
+        widget.className = 'ia-chat-widget';
+        widget.setAttribute('aria-live', 'polite');
+        widget.innerHTML = `
+            <div class="ia-chat-header">
+                <div class="ia-header-brand">
+                    <div class="ia-header-avatar">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="ia-header-info">
+                        <span class="ia-header-name">AURA <span class="ia-header-badge">IA Asesor</span></span>
+                        <span class="ia-header-status"><span class="ia-status-circle"></span> Lista para recomendarte</span>
+                    </div>
+                </div>
+                <button class="ia-chat-close-btn" id="adIaChatClose" aria-label="Cerrar chat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ia-chat-messages" id="adIaChatMessages">
+                <!-- Los mensajes se insertan dinámicamente -->
+            </div>
+            <div class="ia-chat-footer">
+                <form class="ia-chat-form" id="adIaChatForm">
+                    <input type="text" id="adIaChatInput" class="ia-chat-input" placeholder="Pregúntame o describe tu aroma ideal..." autocomplete="off" aria-label="Escribe tu consulta">
+                    <button type="submit" class="ia-chat-send-btn" aria-label="Enviar mensaje">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        `;
+
+        document.body.appendChild(launcher);
+        document.body.appendChild(widget);
+
+        // Event Listeners
+        launcher.onclick = toggleChat;
+        document.getElementById('adIaChatClose').onclick = toggleChat;
+        document.getElementById('adIaChatForm').onsubmit = manejarEnvioMensaje;
+
+        // Restaurar historial previo o mostrar saludo inicial
+        if (!restaurarHistorial()) {
+            mostrarSaludoInicial();
+        }
+    }
+
+    // ── Abrir / Cerrar Chat ───────────────────────────────────────────────
+    function toggleChat() {
+        const widget = document.getElementById('adIaChatWidget');
+        if (!widget) return;
+        chatAbierto = !chatAbierto;
+        if (chatAbierto) {
+            widget.classList.add('active');
+            obtenerCatalogo();
+            setTimeout(() => {
+                const input = document.getElementById('adIaChatInput');
+                if (input && window.innerWidth > 480) input.focus();
+            }, 300);
+        } else {
+            widget.classList.remove('active');
+        }
+    }
+
+    // ── Renderizado de Mensajes ───────────────────────────────────────────
+    function agregarMensaje(texto, remitente = 'bot', extras = null) {
+        const contenedor = document.getElementById('adIaChatMessages');
+        if (!contenedor) return;
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `ia-msg ${remitente}`;
+
+        const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+
+        let contenidoHTML = `<div class="ia-bubble">${texto}</div>`;
+
+        // Render de productos recomendados (con sanitización XSS)
+        if (extras && extras.productos && extras.productos.length) {
+            extras.productos.forEach(prod => {
+                const img = sanitizarTexto(prodImagen(prod));
+                const nombre = sanitizarTexto(prodNombre(prod));
+                const precio = prodPrecio(prod).toLocaleString('es-CO');
+                const categoria = sanitizarTexto(prodCategoria(prod)) || 'Alta Densidad';
+                const pId = sanitizarTexto(String(prodId(prod)));
+                const precioNum = prodPrecio(prod);
+                contenidoHTML += `
+                    <div class="ia-product-card">
+                        <img src="${img}" alt="${nombre}" class="ia-prod-img" onerror="this.src='assets/img/Logo2026.png'">
+                        <div class="ia-prod-details">
+                            <div class="ia-prod-title">${nombre}</div>
+                            <div class="ia-prod-tag">${categoria}</div>
+                            <div class="ia-prod-price">$${precio} COP</div>
+                        </div>
+                        <div class="ia-prod-actions">
+                            <button class="ia-btn-add" onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito({id: "${pId}", name: "${nombre}", image: "${img}", price: ${precioNum}});'>
+                                <i class="fas fa-cart-plus"></i> Añadir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Render de Chips de Acción Rápida
+        if (extras && extras.chips && extras.chips.length) {
+            contenidoHTML += `<div class="ia-quick-chips">`;
+            extras.chips.forEach(chip => {
+                contenidoHTML += `<button type="button" class="ia-chip" onclick="window.adChatbotPreguntar('${chip.query}')">${chip.label}</button>`;
+            });
+            contenidoHTML += `</div>`;
+        }
+
+        contenidoHTML += `<span class="ia-msg-time">${hora}</span>`;
+        msgDiv.innerHTML = contenidoHTML;
+
+        contenedor.appendChild(msgDiv);
+        contenedor.scrollTop = contenedor.scrollHeight;
+
+        // Persistir conversación
+        guardarHistorial();
+    }
+
+    // ── Mostrar Indicador de Escritura ────────────────────────────────────
+    function mostrarTyping() {
+        const contenedor = document.getElementById('adIaChatMessages');
+        if (!contenedor) return;
+        const typing = document.createElement('div');
+        typing.id = 'iaTypingIndicator';
+        typing.className = 'ia-msg bot';
+        typing.innerHTML = `
+            <div class="ia-typing-indicator">
+                <div class="ia-typing-dot"></div>
+                <div class="ia-typing-dot"></div>
+                <div class="ia-typing-dot"></div>
+            </div>
+        `;
+        contenedor.appendChild(typing);
+        contenedor.scrollTop = contenedor.scrollHeight;
+    }
+
+    function removerTyping() {
+        const typing = document.getElementById('iaTypingIndicator');
+        if (typing) typing.remove();
+    }
+
+    // ── Mensaje Inicial ───────────────────────────────────────────────────
+    function mostrarSaludoInicial() {
+        const contenedor = document.getElementById('adIaChatMessages');
+        if (!contenedor || contenedor.children.length > 0) return;
+
+        agregarMensaje(
+            `¡Hola! Soy <strong>AURA</strong>, tu Asesora Olfativa de <em>Fragancias de Alta Densidad</em>. ✨<br><br>
+¿Buscas un perfume para ti o para regalar? Dime qué ocasión o notas te gustan, o elige una opción:`,
+            'bot',
+            {
+                chips: [
+                    { label: '👑 Perfumes de Mujer', query: 'recomendar perfumes de mujer' },
+                    { label: '🪵 Perfumes de Hombre', query: 'recomendar perfumes de hombre' },
+                    { label: '🌙 Perfumería Árabe', query: 'perfumes arabes' },
+                    { label: '🧪 ¿Tienen Feromonas?', query: 'como funcionan las feromonas y duracion' },
+                    { label: '🚚 Costos de Envío', query: 'cuanto cuesta el envio' }
+                ]
+            }
         );
-        return;
-      }
-
-      const data = await r.json();
-      if (data.session_id) sessionId = data.session_id;
-      _addMessage("bot", data.response || "(sin respuesta)");
-    } catch (err) {
-      if (err.name === "AbortError") {
-        _addMessage("error", "La solicitud tardó demasiado. Inténtalo de nuevo.");
-      } else {
-        _addMessage(
-          "error",
-          "No se pudo contactar al asistente. Inténtalo de nuevo en unos segundos.",
-        );
-      }
-    } finally {
-      clearTimeout(timer);
-      _setTyping(false);
-      _setBusy(false);
     }
-  }
 
-  function _setBusy(busy) {
-    const sendBtn = document.getElementById("adChatbotSend");
-    const input = document.getElementById("adChatbotInput");
-    if (sendBtn) sendBtn.disabled = busy;
-    if (input) input.disabled = busy;
-  }
+    // ── Motor Inteligente de Recomendación y Respuestas ───────────────────
+    function procesarConsultaIA(query) {
+        const q = query.toLowerCase().trim();
+        obtenerCatalogo();
 
-  async function _safeText(r) {
-    try {
-      const t = await r.text();
-      return t.length > 200 ? t.slice(0, 200) : t;
-    } catch (_) {
-      return "";
+        // 1. Revisar FAQs / Base de Conocimiento
+        for (const clave in KNOWLEDGE_BASE) {
+            const seccion = KNOWLEDGE_BASE[clave];
+            if (seccion.keywords.some(k => q.includes(k))) {
+                return {
+                    texto: seccion.respuesta,
+                    chips: [
+                        { label: '✨ Ver Perfumes de Mujer', query: 'recomendar perfumes de mujer' },
+                        { label: '💼 Ver Perfumes de Hombre', query: 'recomendar perfumes de hombre' },
+                        { label: '📲 Hablar con un Asesor Humano', query: 'asesor whatsapp' }
+                    ]
+                };
+            }
+        }
+
+        // 2. Intención de Asesor Humano / WhatsApp
+        if (q.includes('asesor') || q.includes('whatsapp') || q.includes('humano') || q.includes('hablar')) {
+            const waUrl = "https://wa.me/3046477694?text=" + encodeURIComponent("¡Hola! Estuve hablando con AURA en la web y me gustaría asesoría personalizada con un experto.");
+            return {
+                texto: `Puedes comunicarte de inmediato con nuestro equipo de asesores en WhatsApp para pedidos personalizados o dudas específicas:<br><br>
+<a href="${waUrl}" target="_blank" class="ia-chip" style="background:#0b8a6a; color:#fff; text-decoration:none; padding:8px 14px; font-weight:600;"><i class="fab fa-whatsapp"></i> Chatear en WhatsApp</a>`
+            };
+        }
+
+        // 3. Recomendaciones por Género y Notas
+        let prodsEncontrados = [];
+
+        // Filtro Mujer
+        if (q.includes('mujer') || q.includes('dama') || q.includes('femenin') || q.includes('chica') || q.includes('novia') || q.includes('esposa')) {
+            prodsEncontrados = catalogoProductos.filter(p => prodGenero(p) === 'Femenino');
+            if (q.includes('dulce') || q.includes('vainilla') || q.includes('caramelo')) {
+                prodsEncontrados = prodsEncontrados.filter(p => (prodNombre(p) + prodDescripcion(p)).toLowerCase().match(/dulce|vainilla|yara|orientica|sweet|cloud|caramelo|good girl/));
+            } else if (q.includes('noche') || q.includes('seductor') || q.includes('fiesta') || q.includes('cita')) {
+                prodsEncontrados = prodsEncontrados.filter(p => (prodNombre(p) + prodDescripcion(p)).toLowerCase().match(/black|intense|scandal|libre|bomb|l'interdit|hypnotic/));
+            } else if (q.includes('floral') || q.includes('elegante') || q.includes('rosa') || q.includes('jazmín') || q.includes('jazmin')) {
+                prodsEncontrados = prodsEncontrados.filter(p => (prodNombre(p) + prodDescripcion(p)).toLowerCase().match(/floral|rosa|jazmín|jazmin|bloom|garden|miss|coco|chance/));
+            }
+            const seleccion = (prodsEncontrados.length ? prodsEncontrados : catalogoProductos.filter(p => prodGenero(p) === 'Femenino')).slice(0, 3);
+            return {
+                texto: `👑 <strong>Selección Exclusiva para Dama:</strong><br>
+Fragancias de fijación extrema, proyección seductora y acordes irresistibles:`,
+                productos: seleccion,
+                chips: [
+                    { label: '🍭 Opciones Más Dulces', query: 'perfumes mujer dulces con vainilla' },
+                    { label: '🌹 Florales & Elegantes', query: 'perfumes mujer elegantes florales' },
+                    { label: '🎁 Ver Kits de Regalo', query: 'kits especiales' }
+                ]
+            };
+        }
+
+        // Filtro Hombre
+        if (q.includes('hombre') || q.includes('caballero') || q.includes('masculin') || q.includes('chico') || q.includes('novio') || q.includes('esposo')) {
+            prodsEncontrados = catalogoProductos.filter(p => prodGenero(p) === 'Masculino');
+            if (q.includes('amaderad') || q.includes('cuero') || q.includes('tabaco') || q.includes('noche')) {
+                prodsEncontrados = prodsEncontrados.filter(p => (prodNombre(p) + prodDescripcion(p)).toLowerCase().match(/club de nuit|sauvage|oud|creed|aventus|tom ford|stronger|one million/));
+            } else if (q.includes('fresco') || q.includes('citrico') || q.includes('oficina') || q.includes('diario')) {
+                prodsEncontrados = prodsEncontrados.filter(p => (prodNombre(p) + prodDescripcion(p)).toLowerCase().match(/acqua|versace|eros|bleu|invictus|lacoste|light blue/));
+            }
+            const seleccion = (prodsEncontrados.length ? prodsEncontrados : catalogoProductos.filter(p => prodGenero(p) === 'Masculino')).slice(0, 3);
+            return {
+                texto: `🪵 <strong>Selección Imponente para Caballero:</strong><br>
+Perfumes con presencia magnética, notas amaderadas/cítricas y fijación de más de 12 horas:`,
+                productos: seleccion,
+                chips: [
+                    { label: '🔥 Seductores de Noche', query: 'perfumes hombre noche seductor' },
+                    { label: '❄️ Frescos para el Día', query: 'perfumes hombre frescos oficina' },
+                    { label: '🌙 Ver Árabes de Hombre', query: 'perfumes arabes hombre' }
+                ]
+            };
+        }
+
+        // Filtro Árabes
+        if (q.includes('arabe') || q.includes('árabe') || q.includes('lattafa') || q.includes('armaf') || q.includes('orientica') || q.includes('afnan') || q.includes('oud')) {
+            prodsEncontrados = catalogoProductos.filter(p => prodCategoria(p) === 'Arabe' || prodNombre(p).toLowerCase().match(/lattafa|armaf|orientica|afnan|yara|khamrah|oud/)).slice(0, 3);
+            return {
+                texto: `🌙 <strong>Colección de Perfumería Árabe Premium:</strong><br>
+Proyección arrolladora, notas de ámbar, vainilla, maderas preciosas y especias orientales:`,
+                productos: prodsEncontrados.length ? prodsEncontrados : catalogoProductos.slice(0, 3),
+                chips: [
+                    { label: '👑 Árabes Femeninos', query: 'recomendar arabes de mujer' },
+                    { label: '🪵 Árabes Masculinos', query: 'recomendar arabes de hombre' }
+                ]
+            };
+        }
+
+        // Filtro Kits
+        if (q.includes('kit') || q.includes('regalo') || q.includes('combos') || q.includes('coleccion')) {
+            return {
+                texto: `🎁 <strong>Kits Especiales Alta Densidad:</strong><br>
+El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un precio exclusivo:`,
+                productos: (catalogoKits.length ? catalogoKits : catalogoProductos).slice(0, 3),
+                chips: [
+                    { label: '👑 Fragancias de Dama', query: 'recomendar perfumes de mujer' },
+                    { label: '🪵 Fragancias de Caballero', query: 'recomendar perfumes de hombre' }
+                ]
+            };
+        }
+
+        // Búsqueda por Nombre / Marca específica (normalizada)
+        const matches = catalogoProductos.filter(p =>
+            prodNombre(p).toLowerCase().includes(q) ||
+            prodDescripcion(p).toLowerCase().includes(q) ||
+            prodCategoria(p).toLowerCase().includes(q)
+        ).slice(0, 3);
+        if (matches.length) {
+            return {
+                texto: `Encontré estas fragancias que coinciden perfectamente con tu búsqueda:`,
+                productos: matches,
+                chips: [
+                    { label: '✨ Ver Más Opciones', query: 'recomendar perfumes' },
+                    { label: '💬 Preguntar en WhatsApp', query: 'asesor whatsapp' }
+                ]
+            };
+        }
+
+        // Respuesta por defecto con guía amigable
+        return {
+            texto: `Puedo ayudarte a encontrar tu fragancia ideal con concentración al 33% y feromonas. ¿Te gustaría ver opciones para <strong>Dama</strong>, <strong>Caballero</strong> o nuestra colección <strong>Árabe</strong>?`,
+            chips: [
+                { label: '👑 Perfumes de Mujer', query: 'recomendar perfumes de mujer' },
+                { label: '🪵 Perfumes de Hombre', query: 'recomendar perfumes de hombre' },
+                { label: '🌙 Perfumes Árabes', query: 'perfumes arabes' },
+                { label: '🧪 Duración y Feromonas', query: 'duracion y fijacion' }
+            ]
+        };
     }
-  }
 
-  async function _safeJson(r) {
-    try {
-      return await r.json();
-    } catch (_) {
-      return null;
+    // ── Enviar Mensaje ────────────────────────────────────────────────────
+    function manejarEnvioMensaje(e) {
+        if (e) e.preventDefault();
+        const input = document.getElementById('adIaChatInput');
+        if (!input) return;
+        const texto = input.value.trim();
+        if (!texto) return;
+
+        // Mostrar mensaje del usuario (sanitizado)
+        agregarMensaje(sanitizarTexto(texto), 'user');
+        input.value = '';
+
+        // Simular respuesta inteligente con typing effect
+        mostrarTyping();
+        setTimeout(() => {
+            removerTyping();
+            const respuesta = procesarConsultaIA(texto);
+            agregarMensaje(respuesta.texto, 'bot', respuesta);
+        }, 600);
     }
-  }
 
-  // ── Iniciar cuando el DOM esté listo ───────────────────────────────────
-  function _init() {
-    if (document.getElementById("adChatbot")) return;
-    _render();
-    _bind();
-  }
+    // ── Exponer Función Global para Chips ─────────────────────────────────
+    window.adChatbotPreguntar = function (query) {
+        const input = document.getElementById('adIaChatInput');
+        if (input) {
+            input.value = query;
+            manejarEnvioMensaje();
+        }
+    };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", _init);
-  } else {
-    _init();
-  }
+    // ── Inicializar al cargar el DOM ──────────────────────────────────────
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', inyectarHTMLChatbot);
+    } else {
+        inyectarHTMLChatbot();
+    }
+
 })();

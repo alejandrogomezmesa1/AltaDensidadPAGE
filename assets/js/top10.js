@@ -6,19 +6,40 @@ document.addEventListener('DOMContentLoaded', function () {
     const API_TOP10_URL = base + '/top10';
     const productGrid = document.getElementById('top10Grid');
 
+    const CACHE_KEY_TOP10 = 'ad_cached_top10_v1';
+
+    // 1. Renderizar de inmediato si hay caché (0ms LCP)
+    try {
+        const cached = localStorage.getItem(CACHE_KEY_TOP10);
+        if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && parsed.length) {
+                mostrarTop10(parsed);
+                inyectarSchemaTop10(parsed);
+            }
+        }
+    } catch(e) {}
+
     async function cargarTop10() {
-        if (window.ADAnimations) {
-            window.ADAnimations.renderSkeletons('#top10Grid', 4);
-        } else {
-            productGrid.innerHTML = '<div class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</div>';
+        const cachedExists = localStorage.getItem(CACHE_KEY_TOP10);
+        if (!cachedExists) {
+            if (window.ADAnimations) {
+                window.ADAnimations.renderSkeletons('#top10Grid', 4);
+            } else {
+                productGrid.innerHTML = '<div class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</div>';
+            }
         }
         try {
             const res = await fetch(API_TOP10_URL);
             const data = await res.json();
             if (!data.success) throw new Error(data.message);
+            try { localStorage.setItem(CACHE_KEY_TOP10, JSON.stringify(data.data)); } catch(e) {}
             mostrarTop10(data.data);
+            inyectarSchemaTop10(data.data);
         } catch (err) {
-            productGrid.innerHTML = `<div class="empty-row"><i class='fas fa-exclamation-circle'></i> No se pudo cargar el Top 10.</div>`;
+            if (!cachedExists) {
+                productGrid.innerHTML = `<div class="empty-row"><i class='fas fa-exclamation-circle'></i> No se pudo cargar el Top 10.</div>`;
+            }
         }
     }
 

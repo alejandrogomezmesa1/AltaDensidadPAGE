@@ -767,14 +767,147 @@ html.modo-claro .hero-benefit-item i {
 /* ==========================================================================
    15. RESPLANDOR Y MEJORAS DE CARDS
    ========================================================================== */
-.product-card {
-  will-change: transform, box-shadow;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+/* ==========================================================================
+   16. CARDS CON CARRUSEL MULTI-FOTO (ESTILO GUCCI / LUXURY)
+   ========================================================================== */
+.product-card .product-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md, 10px);
+  background: #0f0f11;
 }
 
-.product-card.is-animating {
-  pointer-events: auto;
+.product-card .product-image img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
 }
+
+.product-card:hover .product-image img {
+  transform: scale(1.04);
+}
+
+/* Flechas de navegación en hover */
+.card-img-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scale(0.85);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(18, 18, 20, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #F8F9F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.card-img-arrow:hover {
+  background: rgba(212, 175, 55, 0.95);
+  color: #000000;
+  border-color: #D4AF37;
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+}
+
+.card-img-arrow.prev {
+  left: 8px;
+}
+
+.card-img-arrow.next {
+  right: 8px;
+}
+
+.product-card:hover .card-img-arrow {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Barra/puntos indicadores inferiores */
+.card-img-indicators {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 10;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: var(--radius-pill, 9999px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.product-card:hover .card-img-indicators {
+  opacity: 1;
+}
+
+.card-img-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.2s ease;
+}
+
+.card-img-indicator.active {
+  background: #D4AF37;
+  width: 14px;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
+}
+
+/* Modo claro para flechas e indicadores */
+html.modo-claro .card-img-arrow {
+  background: rgba(255, 255, 255, 0.85);
+  color: #1a1a1a;
+  border-color: rgba(184, 150, 12, 0.4);
+}
+
+html.modo-claro .card-img-arrow:hover {
+  background: #B8960C;
+  color: #ffffff;
+}
+
+html.modo-claro .card-img-indicators {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+html.modo-claro .card-img-indicator {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+html.modo-claro .card-img-indicator.active {
+  background: #B8960C;
+}
+
+/* En dispositivos táctiles, mostrar flechas sutiles */
+@media (max-width: 768px) {
+  .card-img-arrow {
+    opacity: 0.85;
+    visibility: visible;
+    transform: translateY(-50%) scale(0.9);
+  }
+  .card-img-indicators {
+    opacity: 0.85;
+  }
+}
+
 
 
 

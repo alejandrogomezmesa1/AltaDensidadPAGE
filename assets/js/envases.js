@@ -56,6 +56,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.head.appendChild(script);
     }
 
+    const CACHE_KEY_ENVASES = 'ad_cached_envases_v1';
+
+    // 1. Cargar cache instantáneo si existe (0ms LCP)
+    try {
+        const cached = localStorage.getItem(CACHE_KEY_ENVASES);
+        if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && parsed.length) {
+                displayProducts(parsed);
+            }
+        }
+    } catch(e) {}
+
     // Mostrar envases
     function displayProducts(envases) {
         productGrid.innerHTML = '';
@@ -73,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const altText = `Envase para perfume ${product.name} - ${product.material || 'Vidrio Premium'}`;
             productCard.innerHTML = `
                 <div class="product-image">
-                    <img src="${imgUrl}" alt="${altText}" onerror="this.onerror=null;this.src='assets/img/logo2025.png';">
+                    <img src="${imgUrl}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/img/logo2025.png';">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
@@ -100,20 +113,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // Cargar desde API
+    // Cargar desde API en segundo plano
     try {
-        if (window.ADAnimations) {
-            window.ADAnimations.renderSkeletons('#productGrid', 4);
-        } else {
-            productGrid.innerHTML = '<p style="color:#888;text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</p>';
+        const cachedExists = localStorage.getItem(CACHE_KEY_ENVASES);
+        if (!cachedExists) {
+            if (window.ADAnimations) {
+                window.ADAnimations.renderSkeletons('#productGrid', 4);
+            } else {
+                productGrid.innerHTML = '<p style="color:#888;text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i> Cargando envases...</p>';
+            }
         }
         const res  = await fetch(API_ENVASES);
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
+        try { localStorage.setItem(CACHE_KEY_ENVASES, JSON.stringify(data.data)); } catch(e) {}
         displayProducts(data.data);
     } catch (err) {
         console.error('Error al cargar envases:', err);
-        productGrid.innerHTML = '<p style="color:#c0392b;text-align:center;padding:40px;">No se pudo conectar con el servidor. Asegúrate de que el backend esté corriendo.</p>';
+        if (!localStorage.getItem(CACHE_KEY_ENVASES)) {
+            productGrid.innerHTML = '<p style="color:#c0392b;text-align:center;padding:40px;">No se pudo conectar con el servidor.</p>';
+        }
     }
 });
 

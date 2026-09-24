@@ -1,39 +1,13 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
+        const CACHE_KEY_PRODUCTS = 'ad_cached_products_v1';
+        const CACHE_KEY_KITS = 'ad_cached_kits_v1';
+
         // ============================
         // KITS DINÁMICOS
         // ============================
-        async function cargarKitsPublico() {
-            const kitsGrid = document.getElementById('kitsGrid');
-            if (!kitsGrid) return;
-            if (window.ADAnimations) {
-                window.ADAnimations.renderSkeletons('#kitsGrid', 3);
-            } else {
-                kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">Cargando kits...</div>';
-            }
-            try {
-                const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
-                const res = await fetch(`${base}/kits`);
-                const data = await res.json();
-                if (!data.success) throw new Error(data.message);
-                const kits = data.data.filter(k => k.activo !== 0);
-                // Guardar globalmente para paginación
-                window.kitsPublicos = kits;
-                window.kitsPaginaActual = 1;
-                window.KITS_POR_PAGINA = 6;
-                if (!kits.length) {
-                    kitsGrid.innerHTML = '<div style="color:#aaa;padding:2rem;">No hay kits disponibles.</div>';
-                    return;
-                }
-                // Render inicial con paginación
-                renderKits(kits);
-            } catch (err) {
-                kitsGrid.innerHTML = '<div style="color:#c0392b;padding:2rem;">Error al cargar los kits.</div>';
-            }
-        }
-
-        // RENDER KITS CON PAGINACIÓN
         function renderKits(kitsArray) {
             const grid = document.getElementById('kitsGrid');
+            if (!grid) return;
             const pagina = window.kitsPaginaActual || 1;
             const perPage = window.KITS_POR_PAGINA || 6;
             const total = kitsArray.length;
@@ -44,33 +18,32 @@ document.addEventListener('DOMContentLoaded', async function() {
             const slice = kitsArray.slice(inicio, fin);
 
             grid.innerHTML = '';
-                slice.forEach(kit => {
-                    const kitId = `kit_${kit.id || kit._id}`;
-                    const card = document.createElement('div');
-                    card.className = 'product-card kit-card-enhanced';
-                    card.innerHTML = `
-                        <div class="product-image">
-                            <img src="${kit.imagen}" alt="Kit Especial ${kit.nombre} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async">
+            slice.forEach(kit => {
+                const kitId = `kit_${kit.id || kit._id}`;
+                const card = document.createElement('div');
+                card.className = 'product-card kit-card-enhanced';
+                card.innerHTML = `
+                    <div class="product-image">
+                        <img src="${kit.imagen}" alt="Kit Especial ${kit.nombre} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${kit.nombre}</div>
+                        <div class="kit-tag">Colección Kit Especial</div>
+                        <div class="kit-benefits-mini">
+                            ${(kit.beneficios||[]).slice(0, 3).map(b=>`<span><i class="fas fa-check" aria-hidden="true"></i> ${b}</span>`).join('')}
                         </div>
-                        <div class="product-info">
-                            <div class="product-name">${kit.nombre}</div>
-                            <div class="kit-tag">Colección Kit Especial</div>
-                            <div class="kit-benefits-mini">
-                                ${(kit.beneficios||[]).slice(0, 3).map(b=>`<span><i class="fas fa-check" aria-hidden="true"></i> ${b}</span>`).join('')}
-                            </div>
-                            <div class="product-price">$${Number(kit.precio).toLocaleString('es-CO')} COP</div>
-                        </div>
-                        <button class="btn-agregar-carrito kit-add-btn" type="button" aria-label="Agregar kit ${kit.nombre} al carrito"
-                            onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
-                            <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
-                        </button>
-                    `;
-                    // Abrir modal al hacer click en la tarjeta completa
-                    card.addEventListener('click', (e) => { if (e.target.closest('.kit-add-btn')) return; abrirModalKitPublico(kit); });
-                    grid.appendChild(card);
-                });
+                        <div class="product-price">$${Number(kit.precio).toLocaleString('es-CO')} COP</div>
+                    </div>
+                    <button class="btn-agregar-carrito kit-add-btn" type="button" aria-label="Agregar kit ${kit.nombre} al carrito"
+                        onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: kit.nombre, image: kit.imagen, price: kit.precio})})'>
+                        <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
+                    </button>
+                `;
+                // Abrir modal al hacer click en la tarjeta completa
+                card.addEventListener('click', (e) => { if (e.target.closest('.kit-add-btn')) return; abrirModalKitPublico(kit); });
+                grid.appendChild(card);
+            });
 
-            // Rellenar con placeholders para mantener grid consistente (dos filas de 3)
             // Rellenar con placeholders para mantener grid consistente
             const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
             const resto = slice.length % cols;
@@ -121,6 +94,37 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const elementPosition = kitsSection.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                 window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+            }
+        // ============================
+        // MULTI-IMAGEN CARD CAROUSEL
+        // ============================
+        window.cambiarFotoCard = function(btn, delta) {
+            const container = btn.closest('.product-image');
+            if (!container) return;
+            const raw = container.getAttribute('data-images');
+            if (!raw) return;
+            try {
+                const images = JSON.parse(decodeURIComponent(raw));
+                if (!images || images.length <= 1) return;
+                const img = container.querySelector('.card-main-img');
+                if (!img) return;
+                let currentIdx = parseInt(img.getAttribute('data-idx') || '0', 10);
+                let nextIdx = (currentIdx + delta + images.length) % images.length;
+                
+                img.style.opacity = '0.4';
+                setTimeout(() => {
+                    img.src = images[nextIdx];
+                    img.setAttribute('data-idx', nextIdx);
+                    img.style.opacity = '1';
+                }, 120);
+
+                const dots = container.querySelectorAll('.card-dot');
+                dots.forEach((dot, idx) => {
+                    if (idx === nextIdx) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+            } catch(e) {
+                console.error('Error al cambiar imagen:', e);
             }
         };
 
@@ -218,22 +222,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return 'Otras Marcas';
         }
 
-        try {
-            if (window.ADAnimations) {
-                window.ADAnimations.renderSkeletons('#productGrid', 4);
-            }
-            const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
-            const res = await fetch(`${base}/productos`);
-            const data = await res.json();
-            if (data.success) {
-                products = data.data.filter(p => p.activo !== 0);
-                productosFiltrados = products;
-                populateBrandFilter();
-                inyectarSchemaProductos(products);
-            }
-        } catch (e) {
-            console.error('Error al cargar productos desde la API:', e);
-        }
+
 
         function inyectarSchemaProductos(prods) {
             if (!prods || !prods.length) return;
@@ -344,9 +333,29 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const productCard = document.createElement('div');
                 productCard.classList.add('product-card');
                 const altText = `Perfume ${product.name} - Fragancia Alta Concentración ${product.gender ? '(' + product.gender + ')' : ''}`;
+                
+                const imgList = (Array.isArray(product.images) && product.images.length > 0)
+                    ? product.images
+                    : (product.image ? [product.image] : ['assets/img/placeholder.jpg']);
+                const hasMultiple = imgList.length > 1;
+                const encodedImages = encodeURIComponent(JSON.stringify(imgList));
+                
+                const arrowsHtml = hasMultiple ? `
+                    <button class="card-img-arrow card-img-prev" aria-label="Foto anterior" onclick="event.stopPropagation(); window.cambiarFotoCard(this, -1);">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button class="card-img-arrow card-img-next" aria-label="Foto siguiente" onclick="event.stopPropagation(); window.cambiarFotoCard(this, 1);">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <div class="card-img-indicators">
+                        ${imgList.map((_, i) => `<span class="card-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}
+                    </div>
+                ` : '';
+
                 productCard.innerHTML = `
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async">
+                    <div class="product-image" data-images="${encodedImages}">
+                        <img class="card-main-img" data-idx="0" src="${imgList[0]}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async">
+                        ${arrowsHtml}
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
@@ -355,13 +364,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <div class="product-price">$${Number(product.price).toLocaleString('es-CO')} COP</div>
                     </div>
                     <button class="btn-agregar-carrito" aria-label="Agregar ${product.name} al carrito"
-                        onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: product.image, price: product.price})})'>
+                        onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: product.id, name: product.name, image: imgList[0], price: product.price})})'>
                         <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
                     </button>
                 `;
                 productCard.addEventListener('click', (e) => {
-                    if (e.target.closest('.btn-agregar-carrito')) return;
-                    abrirModalProducto(product);
+                    if (e.target.closest('.btn-agregar-carrito') || e.target.closest('.card-img-arrow')) return;
+                    window.location.href = `producto.html?id=${encodeURIComponent(product.id)}`;
                 });
                 productGrid.appendChild(productCard);
             });
@@ -617,136 +626,185 @@ document.addEventListener('DOMContentLoaded', async function() {
         // ============================
         // HOME SLIDER (PRODUCTOS Y KITS)
         // ============================
-        async function initHomeSlider() {
+        function renderHomeSlider(prods, kits) {
             const container = document.getElementById('homeSliderContainer');
             if (!container) return;
 
-            try {
-                const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
-                
-                // Cargar ambos en paralelo para mayor velocidad
-                const [resProd, resKits] = await Promise.all([
-                    fetch(`${base}/productos`),
-                    fetch(`${base}/kits`)
-                ]);
-                
-                const dataProd = await resProd.json();
-                const dataKits = await resKits.json();
+            let items = [];
+            if (prods && prods.length) items = [...items, ...prods.slice(0, 8)];
+            if (kits && kits.length) items = [...items, ...kits.map(k => ({...k, isKit: true}))];
+            if (!items.length) return;
 
-                let items = [];
-                if (dataProd.success) items = [...items, ...dataProd.data.filter(p => p.activo !== 0).slice(0, 8)];
-                if (dataKits.success) items = [...items, ...dataKits.data.filter(k => k.activo !== 0).map(k => ({...k, isKit: true}))];
-
-                // Mezclar los items usando una semilla diaria (cambia cada 24 horas)
-                const seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, ''));
-                function seededShuffle(array, seed) {
-                    let m = array.length, t, i;
-                    while (m) {
-                        i = Math.floor(Math.abs(Math.sin(seed++)) * m--);
-                        t = array[m];
-                        array[m] = array[i];
-                        array[i] = t;
-                    }
-                    return array;
+            // Mezclar los items usando una semilla diaria (cambia cada 24 horas)
+            const seed = parseInt(new Date().toISOString().slice(0, 10).replace(/-/g, ''));
+            function seededShuffle(array, s) {
+                let m = array.length, t, i;
+                while (m) {
+                    i = Math.floor(Math.abs(Math.sin(s++)) * m--);
+                    t = array[m];
+                    array[m] = array[i];
+                    array[i] = t;
                 }
-                seededShuffle(items, seed);
+                return array;
+            }
+            seededShuffle(items, seed);
 
-                container.innerHTML = '';
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    
-                    if (item.isKit) {
-                        const kitId = `kit_${item.id || item._id}`;
-                        card.innerHTML = `
-                            <div class="product-image"><img src="${item.imagen}" alt="Kit Especial ${item.nombre} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async"></div>
-                            <div class="product-info">
-                                <div class="product-name">${item.nombre}</div>
-                                <div class="kit-tag">Colección Kit</div>
-                                <div class="product-price">$${Number(item.precio).toLocaleString('es-CO')} COP</div>
-                            </div>
-                            <button class="btn-agregar-carrito" aria-label="Agregar kit ${item.nombre} al carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: item.nombre, image: item.imagen, price: item.precio})})'>
-                                <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
-                            </button>
-                        `;
-                        card.onclick = () => abrirModalKitPublico(item);
-                    } else {
-                        const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
-                        card.innerHTML = `
-                            <div class="product-image"><img src="${item.image}" alt="Perfume ${item.name} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async"></div>
-                            <div class="product-info">
-                                <div class="product-name">${item.name}</div>
-                                <div class="product-rating">${stars}</div>
-                                <div class="product-category">${item.category}</div>
-                                <div class="product-price">$${Number(item.price).toLocaleString('es-CO')} COP</div>
-                            </div>
-                            <button class="btn-agregar-carrito" aria-label="Agregar ${item.name} al carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: item.id, name: item.name, image: item.image, price: item.price})})'>
-                                <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
-                            </button>
-                        `;
-                        card.onclick = () => abrirModalProducto(item);
-                    }
-                    container.appendChild(card);
-                });
-
-                // Lógica de movimiento
-                let scrollAmount = 0;
+            container.innerHTML = '';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
                 
-                const moveSlider = (direction) => {
-                    const max = container.scrollWidth - container.clientWidth;
-                    // Calcular step dinámicamente (ancho de card + gap)
-                    const firstCard = container.querySelector('.product-card');
-                    const gap = parseFloat(getComputedStyle(container).gap) || 20;
-                    const step = firstCard ? firstCard.offsetWidth + gap : 300;
+                if (item.isKit) {
+                    const kitId = `kit_${item.id || item._id}`;
+                    card.innerHTML = `
+                        <div class="product-image"><img src="${item.imagen}" alt="Kit Especial ${item.nombre} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async"></div>
+                        <div class="product-info">
+                            <div class="product-name">${item.nombre}</div>
+                            <div class="kit-tag">Colección Kit</div>
+                            <div class="product-price">$${Number(item.precio).toLocaleString('es-CO')} COP</div>
+                        </div>
+                        <button class="btn-agregar-carrito" aria-label="Agregar kit ${item.nombre} al carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: kitId, name: item.nombre, image: item.imagen, price: item.precio})})'>
+                            <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
+                        </button>
+                    `;
+                    card.onclick = () => abrirModalKitPublico(item);
+                } else {
+                    const stars = '★'.repeat(item.rating || 5) + '☆'.repeat(5 - (item.rating || 5));
+                    card.innerHTML = `
+                        <div class="product-image"><img src="${item.image}" alt="Perfume ${item.name} - Fragancias Alta Densidad" width="280" height="280" loading="lazy" decoding="async"></div>
+                        <div class="product-info">
+                            <div class="product-name">${item.name}</div>
+                            <div class="product-rating">${stars}</div>
+                            <div class="product-category">${item.category || ''}</div>
+                            <div class="product-price">$${Number(item.price).toLocaleString('es-CO')} COP</div>
+                        </div>
+                        <button class="btn-agregar-carrito" aria-label="Agregar ${item.name} al carrito" onclick='event.stopPropagation(); agregarAlCarrito(${JSON.stringify({id: item.id, name: item.name, image: item.image, price: item.price})})'>
+                            <i class="fas fa-cart-plus" aria-hidden="true"></i> Agregar
+                        </button>
+                    `;
+                    card.onclick = () => abrirModalProducto(item);
+                }
+                container.appendChild(card);
+            });
 
-                    if (direction === 'next') {
-                        if (scrollAmount < max) {
-                            scrollAmount += step;
-                            if (scrollAmount > max) scrollAmount = max;
-                        } else {
-                            scrollAmount = 0;
-                        }
+            // Lógica de movimiento
+            let scrollAmount = 0;
+            const moveSlider = (direction) => {
+                const max = container.scrollWidth - container.clientWidth;
+                const firstCard = container.querySelector('.product-card');
+                const gap = parseFloat(getComputedStyle(container).gap) || 20;
+                const step = firstCard ? firstCard.offsetWidth + gap : 300;
+
+                if (direction === 'next') {
+                    if (scrollAmount < max) {
+                        scrollAmount += step;
+                        if (scrollAmount > max) scrollAmount = max;
                     } else {
-                        if (scrollAmount > 0) {
-                            scrollAmount -= step;
-                            if (scrollAmount < 0) scrollAmount = 0;
-                        } else {
-                            scrollAmount = max;
-                        }
+                        scrollAmount = 0;
                     }
-                    container.style.transform = `translateX(-${scrollAmount}px)`;
-                };
+                } else {
+                    if (scrollAmount > 0) {
+                        scrollAmount -= step;
+                        if (scrollAmount < 0) scrollAmount = 0;
+                    } else {
+                        scrollAmount = max;
+                    }
+                }
+                container.style.transform = `translateX(-${scrollAmount}px)`;
+            };
 
-                // Auto-play cada 5 segundos
-                let autoSlide = setInterval(() => moveSlider('next'), 5000);
+            let autoSlide = setInterval(() => moveSlider('next'), 5000);
+            const resetAutoSlide = () => {
+                clearInterval(autoSlide);
+                autoSlide = setInterval(() => moveSlider('next'), 5000);
+            };
 
-                // Reiniciar el timer si el usuario interactúa manualmente
-                const resetAutoSlide = () => {
-                    clearInterval(autoSlide);
-                    autoSlide = setInterval(() => moveSlider('next'), 5000);
-                };
-
-                document.getElementById('sliderNext').onclick = () => {
-                    moveSlider('next');
-                    resetAutoSlide();
-                };
-
-                document.getElementById('sliderPrev').onclick = () => {
-                    moveSlider('prev');
-                    resetAutoSlide();
-                };
-
-            } catch (err) {
-                console.error("Error cargando el slider:", err);
+            const nextBtn = document.getElementById('sliderNext');
+            if (nextBtn) {
+                nextBtn.onclick = () => { moveSlider('next'); resetAutoSlide(); };
+            }
+            const prevBtn = document.getElementById('sliderPrev');
+            if (prevBtn) {
+                prevBtn.onclick = () => { moveSlider('prev'); resetAutoSlide(); };
             }
         }
 
         // ============================
-        // INICIALIZAR
+        // CARGA EN PARALELO + CACHE INSTANTÁNEO
         // ============================
-        displayProducts(productosFiltrados);
-        cargarKitsPublico();
-        initHomeSlider();
+        // 1. Renderizar caché de inmediato si existe (0ms LCP)
+        try {
+            const cachedP = localStorage.getItem(CACHE_KEY_PRODUCTS);
+            if (cachedP) {
+                const parsedP = JSON.parse(cachedP);
+                if (parsedP && parsedP.length) {
+                    products = parsedP;
+                    productosFiltrados = products;
+                    populateBrandFilter();
+                    displayProducts(productosFiltrados);
+                    inyectarSchemaProductos(products);
+                }
+            }
+            const cachedK = localStorage.getItem(CACHE_KEY_KITS);
+            if (cachedK) {
+                const parsedK = JSON.parse(cachedK);
+                if (parsedK && parsedK.length) {
+                    window.kitsPublicos = parsedK;
+                    window.kitsPaginaActual = 1;
+                    window.KITS_POR_PAGINA = 6;
+                    renderKits(parsedK);
+                }
+            }
+            if (products.length || (window.kitsPublicos && window.kitsPublicos.length)) {
+                renderHomeSlider(products, window.kitsPublicos || []);
+            }
+        } catch(e) {}
+
+        // 2. Si no había caché, mostrar esqueletos
+        if (!products.length && window.ADAnimations) {
+            window.ADAnimations.renderSkeletons('#productGrid', 4);
+            window.ADAnimations.renderSkeletons('#kitsGrid', 3);
+        }
+
+        // 3. Petición única en paralelo a la API
+        async function fetchCatalogoAPI() {
+            const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+                ? 'http://localhost:3000/api'
+                : 'https://altadensidadpage-production.up.railway.app/api';
+
+            try {
+                const [resProd, resKits] = await Promise.all([
+                    fetch(`${base}/productos`),
+                    fetch(`${base}/kits`)
+                ]);
+                const dataProd = await resProd.json();
+                const dataKits = await resKits.json();
+
+                if (dataProd.success) {
+                    products = dataProd.data.filter(p => p.activo !== 0);
+                    productosFiltrados = products;
+                    try { localStorage.setItem(CACHE_KEY_PRODUCTS, JSON.stringify(products)); } catch(e) {}
+                    populateBrandFilter();
+                    displayProducts(productosFiltrados);
+                    inyectarSchemaProductos(products);
+                }
+
+                if (dataKits.success) {
+                    const kits = dataKits.data.filter(k => k.activo !== 0);
+                    window.kitsPublicos = kits;
+                    window.kitsPaginaActual = 1;
+                    window.KITS_POR_PAGINA = 6;
+                    try { localStorage.setItem(CACHE_KEY_KITS, JSON.stringify(kits)); } catch(e) {}
+                    renderKits(kits);
+                }
+
+                renderHomeSlider(products, window.kitsPublicos || []);
+            } catch(err) {
+                console.error("Error cargando catálogo desde API:", err);
+            }
+        }
+
+        fetchCatalogoAPI();
 });
 
 // Utilidad para aplicar tema al modal
