@@ -501,7 +501,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .skeleton-text {
   height: 14px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs, 4px);
   background: rgba(255, 255, 255, 0.04);
 }
 
@@ -566,14 +566,19 @@ html.modo-claro .skeleton-shimmer::after {
    ========================================================================== */
 .whatsapp-flotante-wrapper {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1050;
-  width: 58px;
-  height: 58px;
+  bottom: 100px;
+  right: 28px;
+  z-index: 998;
+  width: 46px;
+  height: 46px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform var(--transition-base, 0.22s ease), opacity var(--transition-base, 0.22s ease);
+}
+
+.whatsapp-flotante-wrapper:hover {
+  transform: scale(1.1);
 }
 
 .whatsapp-ripple-ring {
@@ -584,38 +589,44 @@ html.modo-claro .skeleton-shimmer::after {
   border: 2px solid #25D366;
   pointer-events: none;
   opacity: 0;
-  box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.3);
 }
 
 .btn-whatsapp-flotante {
   position: relative;
   z-index: 2;
-  width: 56px;
-  height: 56px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
   color: #ffffff !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.7rem;
-  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45);
+  font-size: 1.35rem;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
   text-decoration: none;
-  border: 2px solid rgba(255, 255, 255, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
+  transition: box-shadow var(--transition-base, 0.22s ease), filter var(--transition-fast, 0.15s ease);
+}
+
+.btn-whatsapp-flotante:hover {
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.5);
+  filter: brightness(1.1);
 }
 
 @media (max-width: 768px) {
   .whatsapp-flotante-wrapper {
-    bottom: 20px;
-    right: 18px;
-    width: 50px;
-    height: 50px;
+    bottom: 82px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
   }
   .btn-whatsapp-flotante {
-    width: 50px;
-    height: 50px;
-    font-size: 1.45rem;
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
   }
 }
 
@@ -652,7 +663,7 @@ html.modo-claro .skeleton-shimmer::after {
   padding: 6px 16px;
   background: rgba(212, 175, 55, 0.12);
   border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 30px;
+  border-radius: var(--radius-2xl, 28px);
   color: #f1d779;
   font-size: 0.85rem;
   font-weight: 600;
@@ -682,7 +693,7 @@ html.modo-claro .skeleton-shimmer::after {
   padding: 7px 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(212, 175, 55, 0.2);
-  border-radius: 20px;
+  border-radius: var(--radius-xl, 20px);
   color: #e6e6e6;
   font-size: 0.84rem;
   font-weight: 500;
@@ -868,7 +879,7 @@ html.modo-claro .hero-benefit-item i {
 .card-img-indicator.active {
   background: #D4AF37;
   width: 14px;
-  border-radius: 4px;
+  border-radius: var(--radius-xs, 4px);
   box-shadow: 0 0 6px rgba(212, 175, 55, 0.8);
 }
 
