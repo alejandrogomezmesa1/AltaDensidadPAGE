@@ -430,8 +430,95 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
         };
     }
 
+    // ── Conexión con el Modelo IA en Vivo (Cloudflare Tunnel) ────────────
+    const AI_API_URL = 'https://referrals-decorating-intellectual-earthquake.trycloudflare.com/chat';
+    const AI_API_KEY = 'pk-lemw0fTHeR_zIRhw0Jng-hl3tpTBovzZhjB1ghUahR8';
+    const SESSION_ID_KEY = 'ad_ai_session_id';
+
+    function obtenerSessionId() {
+        let sid = sessionStorage.getItem(SESSION_ID_KEY);
+        if (!sid) {
+            sid = 'user_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now();
+            sessionStorage.setItem(SESSION_ID_KEY, sid);
+        }
+        return sid;
+    }
+
+    function formatearMarkdown(texto) {
+        if (!texto) return '';
+        let html = sanitizarTexto(texto);
+        // Negrita: **texto**
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        // Cursiva: *texto*
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        // Listas tipo viñeta: - item o * item
+        html = html.replace(/(?:^|<br>)[-*]\s+(.*?)(?=(?:<br>|$))/g, '<br>• $1');
+        // Saltos de línea
+        html = html.replace(/\n/g, '<br>');
+        return html;
+    }
+
+    function extraerProductosMencionados(texto) {
+        if (!catalogoProductos || !catalogoProductos.length || !texto) return [];
+        const t = texto.toLowerCase();
+        const matches = catalogoProductos.filter(p => {
+            const nombre = prodNombre(p).toLowerCase().trim();
+            if (nombre.length < 4) return false;
+            if (t.includes(nombre)) return true;
+            const palabras = nombre.split(/\s+/).filter(w => w.length > 3);
+            if (palabras.length >= 2) {
+                return palabras.every(w => t.includes(w));
+            }
+            return false;
+        });
+        return matches.slice(0, 3);
+    }
+
+    async function consultarAI(texto) {
+        const sessionId = obtenerSessionId();
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 25000);
+
+        try {
+            const resp = await fetch(AI_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${AI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    message: texto,
+                    session_id: sessionId
+                }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+            if (data && data.response) {
+                const prodsMencionados = extraerProductosMencionados(data.response);
+                return {
+                    texto: formatearMarkdown(data.response),
+                    productos: prodsMencionados,
+                    chips: [
+                        { label: '👑 Ver Perfumes Dama', query: 'perfumes de mujer' },
+                        { label: '🪵 Ver Perfumes Hombre', query: 'perfumes de hombre' },
+                        { label: '💬 Asesor Humano en WhatsApp', query: 'asesor whatsapp' }
+                    ]
+                };
+            }
+            throw new Error('Respuesta vacía o formato desconocido');
+        } catch (err) {
+            clearTimeout(timeoutId);
+            console.warn('Asistente IA externo no disponible, usando base de conocimiento local:', err.message);
+            // Fallback elegante a las reglas locales del catálogo
+            return procesarConsultaIA(texto);
+        }
+    }
+
     // ── Enviar Mensaje ────────────────────────────────────────────────────
-    function manejarEnvioMensaje(e) {
+    async function manejarEnvioMensaje(e) {
         if (e) e.preventDefault();
         const input = document.getElementById('adIaChatInput');
         if (!input) return;
@@ -442,13 +529,17 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
         agregarMensaje(sanitizarTexto(texto), 'user');
         input.value = '';
 
-        // Simular respuesta inteligente con typing effect
+        // Indicador de escritura mientras el modelo procesa la respuesta
         mostrarTyping();
-        setTimeout(() => {
+        try {
+            const respuesta = await consultarAI(texto);
             removerTyping();
-            const respuesta = procesarConsultaIA(texto);
             agregarMensaje(respuesta.texto, 'bot', respuesta);
-        }, 600);
+        } catch (err) {
+            removerTyping();
+            const fallback = procesarConsultaIA(texto);
+            agregarMensaje(fallback.texto, 'bot', fallback);
+        }
     }
 
     // ── Exponer Función Global para Chips ─────────────────────────────────
