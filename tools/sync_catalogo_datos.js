@@ -128,7 +128,7 @@ const hauteCode = `/**
     if (p.description) return p.description;
     const f = (p.f || "de autor").toLowerCase();
     const no = p.no || ["Notas cítricas", "Corazón aromático", "Ámbar y feromonas"];
-    return \`Una fragancia \${f} de alta densidad. Abre con \${no[0].toLowerCase()}, se asienta en \${no[1].toLowerCase()} y deja un fondo memorable de \${no[2].toLowerCase()}. Concentración extra al 33% con base de feromonas.\`;
+    return \`Una fragancia \${f} de alta densidad. Abre con \${no[0].toLowerCase()}, se asienta en \${no[1].toLowerCase()} y deja un fondo memorable de \${no[2].toLowerCase()}. Concentración pura Extrait de Parfum con base de feromonas.\`;
   }
 
   function normalizar(txt) {
@@ -215,7 +215,7 @@ const hauteCode = `/**
     }
 
     if (metaEl) {
-      metaEl.textContent = \`\${P.length} formulaciones · 33% de extracto puro · Base de feromonas\`;
+      metaEl.textContent = \`\${P.length} formulaciones · Extrait de Parfum · Base de feromonas\`;
     }
 
     updateFilterBadge();
@@ -237,7 +237,7 @@ const hauteCode = `/**
       return \`
         <article class="card">
           <div class="stage" data-open="\${p.id}">
-            <span class="tag up">33% extracto</span>
+            <span class="tag up">Extrait de Parfum</span>
             \${bt(p.h, 1, p.img, p.n, isPriority)}
             <div class="notes">\${(p.no || []).join(" · ")}</div>
           </div>
@@ -405,7 +405,7 @@ const hauteCode = `/**
           </div>
         \` : ''}
         <div class="specs up" style="margin-top:var(--sp-3);">
-          <div><b>33%</b>Extracto</div>
+          <div><b>Extrait</b>de Parfum</div>
           <div><b>12h+</b>Fijación</div>
           <div><b>+</b>Feromonas</div>
         </div>
@@ -462,7 +462,7 @@ const hauteCode = `/**
           <div><dt class="up">Fondo</dt><dd>\${notas[2] || 'Ámbar y feromonas'}</dd></div>
         </dl>
         <div class="specs up">
-          <div><b>33%</b>Extracto</div>
+          <div><b>Extrait</b>de Parfum</div>
           <div><b>12h+</b>Fijación</div>
           <div><b>+</b>Feromonas</div>
         </div>

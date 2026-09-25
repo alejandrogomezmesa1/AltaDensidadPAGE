@@ -2372,7 +2372,7 @@
     if (p.desc) return p.desc;
     const f = (p.f || "de autor").toLowerCase();
     const no = p.no || ["Notas cítricas", "Corazón aromático", "Ámbar y feromonas"];
-    return `Una fragancia ${f} de alta densidad. Abre con ${no[0].toLowerCase()}, se asienta en ${no[1].toLowerCase()} y deja un fondo memorable de ${no[2].toLowerCase()}. Concentración extra al 33% con base de feromonas.`;
+    return `Una fragancia ${f} de alta densidad. Abre con ${no[0].toLowerCase()}, se asienta en ${no[1].toLowerCase()} y deja un fondo memorable de ${no[2].toLowerCase()}. Concentración pura Extrait de Parfum con base de feromonas.`;
   }
 
   function normalizar(txt) {
@@ -2479,7 +2479,7 @@
     }
 
     if (metaEl) {
-      metaEl.textContent = `${P.length} formulaciones · 33% de extracto puro · Base de feromonas`;
+      metaEl.textContent = `${P.length} formulaciones · Extrait de Parfum · Base de feromonas`;
     }
 
     updateFilterBadge();
@@ -2503,7 +2503,7 @@
       return `
         <article class="card">
           <div class="stage" data-open="${p.id}">
-            <span class="tag up">33% extracto</span>
+            <span class="tag up">Extrait de Parfum</span>
             ${bt(p.h, 1, p.img, p.n, isPriority)}
             <div class="notes">${esc((p.no || []).join(" · "))}</div>
           </div>
@@ -2573,7 +2573,7 @@
             "@type": "Product",
             "name": p.n,
             "image": p.img.startsWith("http") ? p.img : "https://alta-densidad-page.vercel.app/" + p.img,
-            "description": p.desc || ("Perfume " + p.n + " con 33% de extracto y fijación prolongada."),
+            "description": p.desc || ("Perfume " + p.n + " en concentración pura Extrait de Parfum y fijación prolongada."),
             "category": etiquetaColeccion(p.c),
             "brand": { "@type": "Brand", "name": "Alta Densidad" },
             "offers": {
@@ -2828,7 +2828,7 @@
           </div>
         ` : ''}
         <div class="specs up" style="margin-top:var(--sp-3);">
-          <div><b>33%</b>Extracto</div>
+          <div><b>Extrait</b>de Parfum</div>
           <div><b>12h+</b>Fijación</div>
           <div><b>+</b>Feromonas</div>
         </div>
@@ -2879,7 +2879,7 @@
           <div><dt class="up">Fondo</dt><dd>${esc(notas[2] || 'Ámbar y feromonas')}</dd></div>
         </dl>
         <div class="specs up">
-          <div><b>33%</b>Extracto</div>
+          <div><b>Extrait</b>de Parfum</div>
           <div><b>12h+</b>Fijación</div>
           <div><b>+</b>Feromonas</div>
         </div>
@@ -3633,7 +3633,8 @@
     if (!token || !usuario || !usuario.nombre) return;
 
     const nombre = String(usuario.nombre).split(" ")[0];
-    const esStaff = usuario.rol === "admin" || usuario.rol === "empleado";
+    // El panel solo admite rol admin (admin.js)
+    const esStaff = usuario.rol === "admin";
     el.removeAttribute("href");
     el.setAttribute("role", "button");
     el.setAttribute("tabindex", "0");

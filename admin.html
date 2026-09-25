@@ -10,37 +10,96 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap">
-    <link rel="stylesheet" href="assets/css/design-tokens.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/haute-parfumerie.css">
+    <link rel="stylesheet" href="assets/css/admin-hp.css">
+    <script>
+      (function() {
+        try {
+          var claro = localStorage.getItem("altadensidad_tema") === "claro";
+          document.documentElement.classList.toggle("modo-claro", claro);
+          document.documentElement.setAttribute("data-theme", claro ? "light" : "dark");
+          if (localStorage.getItem("admin_sidebar") === "compacto") document.documentElement.classList.add("adm-compacto");
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous"></noscript>
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
-<body>
-    <!-- HEADER -->
-    <header class="admin-header">
-        <div class="admin-header-left">
-            <span class="admin-logo">AD</span>
-            <span class="admin-title">Panel de Administración</span>
+<body class="adm">
+    <!-- SIDEBAR -->
+    <aside class="adm-side" id="admSide" aria-label="Navegación del panel">
+        <div class="adm-brand">
+            <a class="adm-brand-mark" href="index.html" title="Ir a la tienda">AD</a>
+            <div class="adm-brand-txt">
+                <span class="adm-brand-name">Alta Densidad</span>
+                <span class="adm-brand-sub up">Panel de gestión</span>
+            </div>
+            <button type="button" class="adm-side-close" data-side-close aria-label="Cerrar menú"><i class="fas fa-xmark"></i></button>
         </div>
-        <a href="index.html" class="btn-volver">
-            <i class="fas fa-arrow-left"></i> Volver al sitio
-        </a>
-    </header>
 
-    <!-- NAV TABS -->
-    <div class="admin-tabs-wrapper">
-        <div class="admin-tabs">
-            <button class="admin-tab active" id="tabMonitoreo" onclick="cambiarSeccion('monitoreo')"><i class="fas fa-chart-line"></i> Monitoreo</button>
-            <button class="admin-tab" id="tabProductos" onclick="cambiarSeccion('productos')"><i class="fas fa-spray-can"></i> Productos</button>
-            <button class="admin-tab" id="tabEnvases" onclick="cambiarSeccion('envases')"><i class="fas fa-box"></i> Envases</button>
-            <button class="admin-tab" id="tabKits" onclick="cambiarSeccion('kits')"><i class="fas fa-gift"></i> Kits</button>
-            <button class="admin-tab" id="tabTop10" onclick="cambiarSeccion('top10')"><i class="fas fa-crown"></i> Top 10</button>
-            <button class="admin-tab" id="tabOrdenes" onclick="cambiarSeccion('ordenes')"><i class="fas fa-receipt"></i> Órdenes</button>
+        <nav class="adm-nav admin-tabs">
+            <div class="adm-nav-group">
+                <span class="adm-nav-title up">General</span>
+                <button type="button" class="admin-tab adm-nav-item" id="tabMonitoreo" onclick="cambiarSeccion('monitoreo')" data-label="Monitoreo" title="Monitoreo">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i><span>Monitoreo</span>
+                </button>
+            </div>
+            <div class="adm-nav-group">
+                <span class="adm-nav-title up">Catálogo</span>
+                <button type="button" class="admin-tab adm-nav-item" id="tabProductos" onclick="cambiarSeccion('productos')" data-label="Productos" title="Productos">
+                    <i class="fas fa-spray-can" aria-hidden="true"></i><span>Productos</span>
+                </button>
+                <button type="button" class="admin-tab adm-nav-item" id="tabEnvases" onclick="cambiarSeccion('envases')" data-label="Envases" title="Envases">
+                    <i class="fas fa-box" aria-hidden="true"></i><span>Envases</span>
+                </button>
+                <button type="button" class="admin-tab adm-nav-item" id="tabKits" onclick="cambiarSeccion('kits')" data-label="Kits" title="Kits">
+                    <i class="fas fa-gift" aria-hidden="true"></i><span>Kits</span>
+                </button>
+                <button type="button" class="admin-tab adm-nav-item" id="tabTop10" onclick="cambiarSeccion('top10')" data-label="Top 10" title="Top 10">
+                    <i class="fas fa-crown" aria-hidden="true"></i><span>Top 10</span>
+                </button>
+            </div>
+            <div class="adm-nav-group">
+                <span class="adm-nav-title up">Ventas</span>
+                <button type="button" class="admin-tab adm-nav-item" id="tabOrdenes" onclick="cambiarSeccion('ordenes')" data-label="Órdenes" title="Órdenes">
+                    <i class="fas fa-receipt" aria-hidden="true"></i><span>Órdenes</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="adm-side-foot">
+            <a class="adm-nav-item" href="index.html" data-label="Ver tienda" title="Ver tienda">
+                <i class="fas fa-store" aria-hidden="true"></i><span>Ver tienda</span>
+            </a>
+            <button type="button" class="adm-nav-item" id="admTema" data-label="Tema" title="Cambiar tema">
+                <i class="fas fa-sun" aria-hidden="true"></i><span id="admTemaTxt">Modo claro</span>
+            </button>
+            <div class="adm-user">
+                <span class="adm-avatar" id="admAvatar">A</span>
+                <div class="adm-user-txt">
+                    <span class="adm-user-name" id="admUserName">Administrador</span>
+                    <span class="adm-user-role up">Admin</span>
+                </div>
+                <button type="button" class="adm-logout" id="admLogout" title="Cerrar sesión" aria-label="Cerrar sesión"><i class="fas fa-arrow-right-from-bracket"></i></button>
+            </div>
         </div>
-    </div>
+    </aside>
+    <div class="adm-scrim" data-side-close></div>
+
+    <div class="adm-shell">
+        <!-- BARRA SUPERIOR -->
+        <header class="adm-top">
+            <button type="button" class="adm-toggle" id="admToggle" aria-controls="admSide" aria-expanded="true" aria-label="Mostrar u ocultar menú">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="adm-crumb">
+                <span class="up adm-crumb-kicker" id="admCrumbGrupo">General</span>
+                <h1 class="adm-crumb-title" id="admSectionTitle">Monitoreo</h1>
+            </div>
+            <span class="adm-top-date up" id="admFecha"></span>
+        </header>
 
     <!-- ALERTA GLOBAL -->
     <div id="alerta" class="alerta hidden"></div>
@@ -418,6 +477,7 @@
         </div>
 
     </main>
+    </div>
 
     <!-- ===== MODALES ===== -->
     <!-- Modal Producto -->
@@ -755,6 +815,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/js/admin.js"></script>
     <script src="assets/js/monitoreo.js"></script>
+    <script src="assets/js/admin-shell.js"></script>
 </body>
 </html>
 

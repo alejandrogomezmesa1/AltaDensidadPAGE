@@ -230,8 +230,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('token');
     const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
 
-    if (!token || !usuario || usuario.rol !== 'admin') {
+    if (!token || !usuario) {
         window.location.href = 'login.html';
+        return;
+    }
+    // Sesión válida pero sin rol admin: volver a la tienda (evita el bucle login ↔ admin)
+    if (usuario.rol !== 'admin') {
+        window.location.href = 'index.html';
         return;
     }
 
@@ -729,7 +734,7 @@ function registrarEventos() {
 // TABS
 // ============================
 // ============================
-// TABS
+// NAVEGACIÓN ENTRE SECCIONES (sidebar)
 // ============================
 function cambiarSeccion(seccion) {
     const esMon = seccion === 'monitoreo';
@@ -768,6 +773,9 @@ function cambiarSeccion(seccion) {
     if (esMon && typeof window.cargarDatosMonitoreo === 'function') {
         window.cargarDatosMonitoreo();
     }
+
+    // Sidebar / barra superior (admin-shell.js)
+    if (window.adminShell) window.adminShell.alCambiarSeccion(seccion);
 
     localStorage.setItem('admin_active_tab', seccion);
 }

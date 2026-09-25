@@ -57,17 +57,17 @@
     // ── Base de Conocimiento Experta en Fragancias ─────────────────────────
     const KNOWLEDGE_BASE = {
         feromonas: {
-            keywords: ['feromona', 'feromonas', 'atraer', 'seduccion', 'afrodisiaco', 'atracción'],
-            respuesta: `✨ <strong>Nuestra Fórmula con Feromonas & 33% de Concentración</strong>:<br><br>
-Todas nuestras fragancias están elaboradas con aceites puros importados de grado <em>Extrait de Parfum</em> (33% concentración pura) e integran microcápsulas de feromonas sintéticas de alta afinidad que reaccionan con el calor de tu piel, potenciando la proyección y el atractivo magnético.`
+            keywords: ['feromona', 'afrodisiaco'],
+            respuesta: `✨ <strong>Nuestra Fórmula con Feromonas & Concentración Extrait de Parfum</strong>:<br><br>
+Todas nuestras fragancias están elaboradas exclusivamente en concentración <em>Extrait de Parfum</em> (la más alta y pura de la perfumería internacional) e integran microcápsulas de feromonas sintéticas de alta afinidad que reaccionan con el calor de tu piel, potenciando la proyección y el atractivo magnético.`
         },
         duracion: {
-            keywords: ['duracion', 'duración', 'cuanto dura', 'fijacion', 'fijación', 'horas', 'longevidad', 'desvanece'],
+            keywords: ['duracion', 'duración', 'cuanto dura', 'cuánto dura', 'fijacion', 'fijación', 'longevidad', 'desvanece'],
             respuesta: `⏳ <strong>Fijación Superior Garantizada (+12 Horas)</strong>:<br><br>
-Gracias a nuestra densidad de concentración al 33%, nuestras fragancias duran más de <strong>12 a 16 horas en piel</strong> y permanecen varios días en prendas de vestir. No usamos alcoholes industriales ni diluciones ligeras.`
+Gracias a nuestra formulación pura en <em>Extrait de Parfum</em>, nuestras fragancias duran más de <strong>12 a 16 horas en piel</strong> y permanecen varios días en prendas de vestir. No usamos alcoholes industriales ni diluciones ligeras.`
         },
         envios: {
-            keywords: ['envio', 'envios', 'envíos', 'tiempo de entrega', 'ciudades', 'despacho', 'costo envio', 'flete', 'medellin', 'bogota', 'cali'],
+            keywords: ['envio', 'envío', 'envios', 'envíos', 'domicilio', 'tiempo de entrega', 'cuanto se demora', 'cuánto se demora', 'despacho', 'flete'],
             respuesta: `🚚 <strong>Cobertura y Tiempos de Envío en Colombia</strong>:<br><br>
 • <strong>Medellín (Urbano):</strong> Entregas en 24h hábiles ($15.000 COP).<br>
 • <strong>Área Metropolitana (Bello, Itagüí, Envigado, Sabaneta, etc.):</strong> ($20.000 COP).<br>
@@ -97,15 +97,23 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
             console.warn('No se pudo leer caché local para el chatbot');
         }
 
+        const isLocal = typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000';
+        const base = isLocal
+            ? 'http://localhost:3000/api'
+            : 'https://altadensidadpage-production.up.railway.app/api';
         if (!catalogoProductos.length) {
-            const isLocal = typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000';
-            const base = isLocal
-                ? 'http://localhost:3000/api'
-                : 'https://altadensidadpage-production.up.railway.app/api';
             fetch(`${base}/productos`)
                 .then(r => r.json())
                 .then(d => {
                     if (d.success) catalogoProductos = d.data.filter(p => p.activo !== 0);
+                })
+                .catch(() => {});
+        }
+        if (!catalogoKits.length) {
+            fetch(`${base}/kits`)
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success) catalogoKits = d.data.filter(k => k.activo !== 0);
                 })
                 .catch(() => {});
         }
@@ -146,7 +154,7 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
                     </div>
                     <div class="ia-header-info">
                         <span class="ia-header-name">AURA <span class="ia-header-badge">IA Asesor</span></span>
-                        <span class="ia-header-status"><span class="ia-status-circle"></span> Lista para recomendarte</span>
+                        <span class="ia-header-status" id="adIaStatus"><span class="ia-status-circle"></span> <span id="adIaStatusTxt">Conectando…</span></span>
                     </div>
                 </div>
                 <div class="ia-header-actions">
@@ -179,6 +187,14 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
         document.getElementById('adIaChatClose').onclick = toggleChat;
         document.getElementById('adIaChatForm').onsubmit = manejarEnvioMensaje;
 
+        // Añadir a la bolsa desde las tarjetas del chat
+        document.getElementById('adIaChatMessages').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-ia-add]');
+            if (!btn || !window.agregarAlCarrito) return;
+            e.stopPropagation();
+            window.agregarAlCarrito({ id: btn.dataset.iaAdd });
+        });
+
         // Cerrar con tecla Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && chatAbierto) {
@@ -203,6 +219,7 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
             if (launcher) launcher.classList.add('active');
             document.body.classList.add('ia-chat-open');
             obtenerCatalogo();
+            consultarEstadoIA();
             setTimeout(() => {
                 const input = document.getElementById('adIaChatInput');
                 if (input && window.innerWidth > 480) input.focus();
@@ -225,6 +242,9 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
         const hora = new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
 
         let contenidoHTML = `<div class="ia-bubble">${texto}</div>`;
+        if (extras && extras.nota) {
+            contenidoHTML += `<div class="ia-msg-note">${sanitizarTexto(extras.nota)}</div>`;
+        }
 
         // Render de productos recomendados (con sanitización XSS)
         if (extras && extras.productos && extras.productos.length) {
@@ -233,8 +253,9 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
                 const nombre = sanitizarTexto(prodNombre(prod));
                 const precio = prodPrecio(prod).toLocaleString('es-CO');
                 const categoria = sanitizarTexto(prodCategoria(prod)) || 'Alta Densidad';
-                const pId = sanitizarTexto(String(prodId(prod)));
-                const precioNum = prodPrecio(prod);
+                // Los kits del API solo traen "nombre"; los perfumes traen "name"
+                const esKit = !prod.name && !!prod.nombre;
+                const pId = sanitizarTexto((esKit ? 'kit_' : '') + String(prodId(prod)));
                 contenidoHTML += `
                     <div class="ia-product-card">
                         <img src="${img}" alt="${nombre}" class="ia-prod-img" onerror="this.src='assets/img/Logo2026.png'">
@@ -244,7 +265,7 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
                             <div class="ia-prod-price">$${precio} COP</div>
                         </div>
                         <div class="ia-prod-actions">
-                            <button class="ia-btn-add" onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito({id: "${pId}", name: "${nombre}", image: "${img}", price: ${precioNum}});'>
+                            <button type="button" class="ia-btn-add" data-ia-add="${pId}">
                                 <i class="fas fa-cart-plus"></i> Añadir
                             </button>
                         </div>
@@ -438,7 +459,7 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
 
         // Respuesta por defecto con guía amigable
         return {
-            texto: `Puedo ayudarte a encontrar tu fragancia ideal con concentración al 33% y feromonas. ¿Te gustaría ver opciones para <strong>Dama</strong>, <strong>Caballero</strong> o nuestra colección <strong>Árabe</strong>?`,
+            texto: `Puedo ayudarte a encontrar tu fragancia ideal en concentración pura Extrait de Parfum y feromonas. ¿Te gustaría ver opciones para <strong>Dama</strong>, <strong>Caballero</strong> o nuestra colección <strong>Árabe</strong>?`,
             chips: [
                 { label: '👑 Perfumes de Mujer', query: 'recomendar perfumes de mujer' },
                 { label: '🪵 Perfumes de Hombre', query: 'recomendar perfumes de hombre' },
@@ -448,10 +469,36 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
         };
     }
 
-    // ── Conexión con el Modelo IA en Vivo (Cloudflare Tunnel) ────────────
-    const AI_API_URL = 'https://referrals-decorating-intellectual-earthquake.trycloudflare.com/chat';
-    const AI_API_KEY = 'pk-lemw0fTHeR_zIRhw0Jng-hl3tpTBovzZhjB1ghUahR8';
+    // ── Conexión con el Modelo IA (siempre a través del backend) ─────────
+    // La URL y la API key del proveedor viven en el servidor (/api/chatbot/config);
+    // aquí no hay ningún secreto. Si el proveedor cambia, este archivo no se toca.
+    const CHAT_API_BASE = (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000')
+        ? 'http://localhost:3000/api/chatbot'
+        : 'https://altadensidadpage-production.up.railway.app/api/chatbot';
     const SESSION_ID_KEY = 'ad_ai_session_id';
+    let iaDisponible = null;
+
+    function pintarEstadoIA(disponible) {
+        iaDisponible = disponible;
+        const cont = document.getElementById('adIaStatus');
+        const txt = document.getElementById('adIaStatusTxt');
+        if (!cont || !txt) return;
+        cont.classList.toggle('is-basic', !disponible);
+        txt.textContent = disponible ? 'IA en línea' : 'Modo básico';
+        cont.title = disponible
+            ? 'Respuestas del modelo de IA, verificadas con el catálogo'
+            : 'La IA no está disponible: respondo con el catálogo y las preguntas frecuentes';
+    }
+
+    async function consultarEstadoIA() {
+        try {
+            const r = await fetch(`${CHAT_API_BASE}/estado`, { cache: 'no-store' });
+            const d = await r.json();
+            pintarEstadoIA(!!(d && d.disponible));
+        } catch (e) {
+            pintarEstadoIA(false);
+        }
+    }
 
     function obtenerSessionId() {
         let sid = sessionStorage.getItem(SESSION_ID_KEY);
@@ -469,8 +516,8 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
         html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         // Cursiva: *texto*
         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-        // Listas tipo viñeta: - item o * item
-        html = html.replace(/(?:^|<br>)[-*]\s+(.*?)(?=(?:<br>|$))/g, '<br>• $1');
+        // Listas tipo viñeta: "- item" al inicio de cada línea
+        html = html.replace(/^[ \t]*[-*•][ \t]+/gm, '• ');
         // Saltos de línea
         html = html.replace(/\n/g, '<br>');
         return html;
@@ -492,46 +539,71 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
         return matches.slice(0, 3);
     }
 
-    async function consultarAI(texto) {
-        const sessionId = obtenerSessionId();
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 25000);
+    // Preguntas frecuentes y saludos se responden localmente: son exactas y no gastan la IA
+    function respuestaLocalDirecta(texto) {
+        const q = texto.toLowerCase().trim();
+        if (/^(hola|holi|buenas|buenos d[ií]as|buenas tardes|buenas noches|hey|saludos)[\s!.,¡]*$/.test(q)) {
+            return {
+                texto: '¡Hola! Soy <strong>AURA</strong>. Cuéntame para quién es la fragancia o qué notas te gustan (dulce, fresca, amaderada…) y te recomiendo opciones del catálogo.',
+                chips: [
+                    { label: '👑 Perfumes de Mujer', query: 'recomendar perfumes de mujer' },
+                    { label: '🪵 Perfumes de Hombre', query: 'recomendar perfumes de hombre' },
+                    { label: '🚚 Envíos', query: 'costo de envio' }
+                ]
+            };
+        }
+        for (const clave in KNOWLEDGE_BASE) {
+            if (KNOWLEDGE_BASE[clave].keywords.some(k => q.includes(k))) return procesarConsultaIA(texto);
+        }
+        return null;
+    }
 
+    function respuestaModoBasico(texto) {
+        const r = procesarConsultaIA(texto);
+        r.nota = 'Modo básico: la IA no está disponible, te respondo con el catálogo.';
+        return r;
+    }
+
+    async function consultarAI(texto) {
+        const local = respuestaLocalDirecta(texto);
+        if (local) return local;
+        if (iaDisponible === false) return respuestaModoBasico(texto);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 45000);
         try {
-            const resp = await fetch(AI_API_URL, {
+            const resp = await fetch(CHAT_API_BASE, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${AI_API_KEY}`
-                },
-                body: JSON.stringify({
-                    message: texto,
-                    session_id: sessionId
-                }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: texto, session_id: obtenerSessionId() }),
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
+            const data = await resp.json().catch(() => null);
 
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const data = await resp.json();
-            if (data && data.response) {
-                const prodsMencionados = extraerProductosMencionados(data.response);
-                return {
-                    texto: formatearMarkdown(data.response),
-                    productos: prodsMencionados,
-                    chips: [
-                        { label: '👑 Ver Perfumes Dama', query: 'perfumes de mujer' },
-                        { label: '🪵 Ver Perfumes Hombre', query: 'perfumes de hombre' },
-                        { label: '💬 Asesor Humano en WhatsApp', query: 'asesor whatsapp' }
-                    ]
-                };
+            if (resp.status === 429 && data && data.message) {
+                return { texto: sanitizarTexto(data.message), chips: [{ label: '💬 Asesor Humano en WhatsApp', query: 'asesor whatsapp' }] };
             }
-            throw new Error('Respuesta vacía o formato desconocido');
+            if (!resp.ok || !data || !data.success || !data.response) throw new Error(`HTTP ${resp.status}`);
+
+            pintarEstadoIA(true);
+            return {
+                texto: formatearMarkdown(data.response),
+                // El backend ya devuelve solo productos que existen, con su precio real
+                productos: (data.productos && data.productos.length) ? data.productos : extraerProductosMencionados(data.response),
+                chips: [
+                    { label: '👑 Ver Perfumes Dama', query: 'perfumes de mujer' },
+                    { label: '🪵 Ver Perfumes Hombre', query: 'perfumes de hombre' },
+                    { label: '💬 Asesor Humano en WhatsApp', query: 'asesor whatsapp' }
+                ]
+            };
         } catch (err) {
             clearTimeout(timeoutId);
-            console.warn('Asistente IA externo no disponible, usando base de conocimiento local:', err.message);
-            // Fallback elegante a las reglas locales del catálogo
-            return procesarConsultaIA(texto);
+            console.warn('AURA: IA no disponible, respondo en modo básico:', err.message);
+            pintarEstadoIA(false);
+            // Reintentar la IA en el próximo mensaje tras 60 s
+            setTimeout(() => { if (iaDisponible === false) iaDisponible = null; }, 60000);
+            return respuestaModoBasico(texto);
         }
     }
 

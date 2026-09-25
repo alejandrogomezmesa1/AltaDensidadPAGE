@@ -179,8 +179,8 @@ footer{border-top:var(--bw) solid var(--c-line);padding:var(--sp-5) var(--gutter
 <section class="hero">
   <div class="hero-t">
     <span class="up eyebrow">Medellín · Perfumería de autor</span>
-    <h1 class="disp">Menos aroma.<br><em>Más densidad.</em></h1>
-    <p class="mute">33% de extracto y feromonas. Una estela que dura más de doce horas, a una fracción del costo del perfume comercial.</p>
+    <h1 class="disp">Pura intensidad.<br><em>Extrait de Parfum.</em></h1>
+    <p class="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
     <div><a class="btn up" href="#coleccion">Explorar colección</a></div>
   </div>
   <div class="stage"><div class="bottle" style="--h:32;--s:2.3"><i></i></div></div>
@@ -197,7 +197,7 @@ footer{border-top:var(--bw) solid var(--c-line);padding:var(--sp-5) var(--gutter
 </div></section>
 
 <section class="sec" id="envases"><div class="wrap">
-  <div class="sec-h rv"><h2>Envases</h2><p class="mute" style="max-width:38ch">La misma concentración del 33% en tres formatos, según cómo la vivas.</p></div>
+  <div class="sec-h rv"><h2>Envases</h2><p class="mute" style="max-width:38ch">La misma concentración pura Extrait de Parfum en tres formatos, según cómo la vivas.</p></div>
   <div class="sizes" id="sizes"></div>
 </div></section>
 
@@ -206,7 +206,7 @@ footer{border-top:var(--bw) solid var(--c-line);padding:var(--sp-5) var(--gutter
     <span class="up eyebrow">Nosotros</span>
     <h2 class="disp" style="font-size:var(--fs-5);margin-top:var(--sp-3)">Inspirados en los nichos. Concentrados para durar.</h2>
     <p>Somos una casa de perfumería de Medellín. Interpretamos el espíritu de las grandes fragancias de nicho y de diseñador con una concentración superior, para quienes entienden el aroma como la primera forma de presencia.</p>
-    <div class="stats up"><div><b>33%</b>Extracto</div><div><b>12h+</b>Fijación</div><div><b>+</b>Feromonas</div></div>
+    <div class="stats up"><div><b>Extrait</b>de Parfum</div><div><b>12h+</b>Fijación</div><div><b>+</b>Feromonas</div></div>
   </div>
   <div class="rv" style="align-self:center">
     <div class="pill"><h3 class="up">Concentración</h3><p class="mute" style="margin:0">Un tercio de la fórmula es extracto de perfume. Menos alcohol, más carácter.</p></div>
@@ -274,13 +274,13 @@ function bt(h,s){return '<div class="bottle" style="--h:'+h+';--s:'+s+'"><i></i>
 function desc(p){return "Una fragancia "+p.f.toLowerCase()+" de alta densidad. Abre con "+p.no[0].toLowerCase()+", se asienta en "+p.no[1].toLowerCase()+" y deja un fondo de "+p.no[2].toLowerCase()+"."}
 function chips(){$("#chips").innerHTML=["Todos","Noche","Oficina","Verano"].map(function(x){return '<button class="chip'+(x===cur?' on':'')+'" data-f="'+x+'">'+x+'</button>'}).join("")}
 function grid(){$("#grid").innerHTML=P.filter(function(p){return cur==="Todos"||p.o===cur}).map(function(p){
-return '<article class="card"><div class="stage" data-open="'+p.id+'"><span class="tag up">33% extracto</span>'+bt(p.h,1)+'<div class="notes">'+p.no.join(" · ")+'</div></div><div class="info"><div><h3 data-open="'+p.id+'">'+p.n+'</h3><span>'+p.f+' · desde '+fmt(pr(p,30))+'</span></div><button class="link up" data-add="'+p.id+'">Añadir</button></div></article>'}).join("")}
+return '<article class="card"><div class="stage" data-open="'+p.id+'"><span class="tag up">Extrait de Parfum</span>'+bt(p.h,1)+'<div class="notes">'+p.no.join(" · ")+'</div></div><div class="info"><div><h3 data-open="'+p.id+'">'+p.n+'</h3><span>'+p.f+' · desde '+fmt(pr(p,30))+'</span></div><button class="link up" data-add="'+p.id+'">Añadir</button></div></article>'}).join("")}
 function rank(){$("#rank").innerHTML=P.map(function(p,i){return '<div class="row rv"><span class="n">'+(i<9?"0":"")+(i+1)+'</span><div><h3 data-open="'+p.id+'">'+p.n+'</h3><small>'+p.f+' · '+p.no.join(" · ")+'</small></div><span class="pr">'+fmt(pr(p,50))+'</span><button class="link up" data-open="'+p.id+'">Ver</button></div>'}).join("")}
 function sizes(){$("#sizes").innerHTML=SIZES.map(function(z){return '<div class="size rv"><div class="stage">'+bt(32,z.s)+'</div><b>'+z.ml+' ml</b><span class="up eyebrow">'+z.n+'</span><p class="mute" style="font-size:var(--fs-2)">'+z.t+'</p><a class="link up" href="#coleccion">Elegir fragancia</a></div>'}).join("")}
 function detail(){var p=P[D.id],z=sz(D.ml);
 $("#sheet").innerHTML='<button class="x up" data-close>Cerrar</button><div class="stage">'+bt(p.h,z.s+.3)+'</div><div class="d-info"><span class="up eyebrow">'+p.f+' · '+p.o+'</span><h2>'+p.n+'</h2><p class="mute">'+desc(p)+'</p>'
 +'<dl class="pyr"><div><dt class="up">Salida</dt><dd>'+p.no[0]+'</dd></div><div><dt class="up">Corazón</dt><dd>'+p.no[1]+'</dd></div><div><dt class="up">Fondo</dt><dd>'+p.no[2]+'</dd></div></dl>'
-+'<div class="specs up"><div><b>33%</b>Extracto</div><div><b>12h+</b>Fijación</div><div><b>+</b>Feromonas</div></div>'
++'<div class="specs up"><div><b>Extrait</b>de Parfum</div><div><b>12h+</b>Fijación</div><div><b>+</b>Feromonas</div></div>'
 +'<div class="pick up">'+SIZES.map(function(s){return '<button class="chip'+(s.ml===D.ml?' on':'')+'" data-size="'+s.ml+'">'+s.ml+' ml</button>'}).join("")+'</div>'
 +'<div class="buy"><b style="font:300 28px var(--f-display)">'+fmt(pr(p,D.ml)*D.q)+'</b><div class="qty"><button data-dq="-1">−</button><span>'+D.q+'</span><button data-dq="1">+</button></div><button class="btn up" data-adddet>Añadir a la bolsa</button></div></div>'}
 function add(id,ml,q){var l=cart.filter(function(x){return x.id===id&&x.ml===ml})[0];if(l)l.q+=q;else cart.push({id:id,ml:ml,q:q});save();draw()}

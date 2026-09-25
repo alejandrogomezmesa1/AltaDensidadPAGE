@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const pBrand = extraerMarca(product.name);
                 productCard.innerHTML = `
                     <div class="product-image" data-images="${encodedImages}">
-                        <span class="card-haute-tag up">33% Extracto</span>
+                        <span class="card-haute-tag up">Extrait de Parfum</span>
                         <img class="card-main-img" data-idx="0" src="${imgList[0]}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async">
                         ${arrowsHtml}
                     </div>
