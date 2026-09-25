@@ -2073,12 +2073,17 @@
     el.innerHTML = TOP10.map(function(p, i) {
       const pId = p.producto_id || p.id;
       const nom = p.nombre || p.name || p.n;
+      const imgUrl = normalizarImagen(p.imagen || p.image || p.img);
       const fam = p.f || p.categoria || p.category || "Perfumería de Autor";
       const notas = p.no ? p.no.join(" · ") : (p.genero || p.gender || "Unisex");
       const precio = Number(p.precio || p.price || p.p || 75000);
+      const loadingAttr = i < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return `
         <div class="row rv in">
           <span class="n">${i < 9 ? "0" : ""}${i + 1}</span>
+          <div class="rank-thumb-wrap" data-open="${pId}">
+            <img src="${imgUrl}" alt="${nom}" class="rank-thumb" width="60" height="60" ${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
+          </div>
           <div>
             <h3 data-open="${pId}">${nom}</h3>
             <small>${fam} · ${notas}</small>
@@ -2253,12 +2258,13 @@
                   TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
                   { n: "Fragancia", p: 75000, h: 30 };
         const nom = p.n || p.nombre || p.name;
-        const u = pr(p, l.ml);
+        const imgUrl = normalizarImagen(p.img || p.imagen || p.image);
+        const u = pr(p);
         t += u * l.q;
         c += l.q;
         return `
           <div class="it">
-            <div class="mini" style="--h:${p.h || 30}"></div>
+            <img src="${imgUrl}" alt="${nom}" class="mini-cart-img" width="48" height="48" onerror="this.src='assets/img/Logo2026.png';">
             <div>
               <b class="up">${nom}</b>
               <small>${l.ml} ml · ${fmt(u)}</small>

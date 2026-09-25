@@ -743,6 +743,51 @@ ul {
     }
 }
 
+/* Galería de productos insignia en Nosotros */
+.nos-showcase {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+}
+.nos-showcase-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.nos-showcase-item:hover {
+    transform: translateY(-8px);
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.15);
+}
+.nos-showcase-item img {
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    max-width: 100%;
+    height: auto;
+}
+.nos-showcase-item span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--azul-dos);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+.nos-showcase-center {
+    border-color: rgba(212, 175, 55, 0.35);
+    background: rgba(212, 175, 55, 0.04);
+}
+
 /* Modo claro: aplicar cuando <html> tiene la clase .modo-claro */
 html.modo-claro .nos-hero {
     background: linear-gradient(160deg, #fff 0%, #f8f6ed 60%, #fff 100%) !important;
