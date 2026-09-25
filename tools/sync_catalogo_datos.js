@@ -7,7 +7,7 @@ if (!fs.existsSync(datosPath)) {
     process.exit(1);
 }
 
-const { prods, top10, envases } = JSON.parse(fs.readFileSync(datosPath, 'utf8'));
+const { prods, top10, envases, kits } = JSON.parse(fs.readFileSync(datosPath, 'utf8'));
 
 // ============================================================
 // 1. GENERAR ASSETS/JS/HAUTE-PARFUMERIE.JS
@@ -42,10 +42,18 @@ const hauteCode = `/**
   // ============================================================
   const DATOS_DUROS_ENVASES = ${JSON.stringify(envases, null, 2)};
 
+  // ============================================================
+  // DATOS DUROS: KITS DE REGALO Y COLECCIÓN EXCLUSIVA
+  // ============================================================
+  const DATOS_DUROS_KITS = ${JSON.stringify(kits || [], null, 2)};
+
   // Estados reactivos en memoria
   let P = [...DATOS_DUROS_PRODUCTOS];
   let TOP10 = [...DATOS_DUROS_TOP10];
   let ENVASES = [...DATOS_DUROS_ENVASES];
+  let KITS = [...DATOS_DUROS_KITS];
+  let kitsPaginaActual = 1;
+  const KITS_POR_PAGINA = 6;
 
   const $ = function(s) { return document.querySelector(s); };
   const $$ = function(s) { return document.querySelectorAll(s); };
@@ -296,6 +304,138 @@ const hauteCode = `/**
     }).join("");
   }
 
+  function renderKits() {
+    const grid = $("#kitsGrid");
+    if (!grid) return;
+
+    const activos = KITS.filter(k => k.activo !== 0);
+    const total = activos.length;
+    const totalPaginas = Math.max(1, Math.ceil(total / KITS_POR_PAGINA));
+    if (kitsPaginaActual > totalPaginas) kitsPaginaActual = 1;
+
+    const inicio = (kitsPaginaActual - 1) * KITS_POR_PAGINA;
+    const fin = inicio + KITS_POR_PAGINA;
+    const slice = activos.slice(inicio, fin);
+
+    grid.innerHTML = slice.map((k, idx) => {
+      const imgUrl = normalizarImagen(k.imagen || k.image);
+      const precio = Number(k.precio || 60000);
+      const nom = k.nombre || k.name;
+      const desc = k.descripcion || "Kit especial de fragancias de alta densidad en estuche de regalo.";
+      const loadingAttr = idx < 3 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
+
+      return \`
+        <article class="kit-card rv in" data-kit-id="\${k.id}">
+          <span class="tag-kit up">Set Exclusivo</span>
+          <div class="kit-stage" data-open-kit="\${k.id}">
+            <img src="\${imgUrl}" alt="Kit \${nom}" class="kit-img" width="280" height="280" \${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
+          </div>
+          <div class="kit-info">
+            <h3 class="kit-title" data-open-kit="\${k.id}">\${nom}</h3>
+            <p class="kit-desc">\${desc}</p>
+            <div class="kit-footer">
+              <span class="kit-price">\${fmt(precio)}</span>
+              <button class="btn btn--line up" data-addkit="\${k.id}">Añadir</button>
+            </div>
+          </div>
+        </article>
+      \`;
+    }).join("");
+
+    renderKitsPaginacion(total);
+  }
+
+  function renderKitsPaginacion(totalItems) {
+    const cont = $("#kitsPaginacion");
+    if (!cont) return;
+    const totalPaginas = Math.max(1, Math.ceil(totalItems / KITS_POR_PAGINA));
+    if (totalPaginas <= 1) {
+      cont.innerHTML = "";
+      return;
+    }
+
+    let html = "";
+    html += \`<button class="pag-btn" data-kit-page="\${kitsPaginaActual - 1}" \${kitsPaginaActual === 1 ? 'disabled' : ''} aria-label="Página anterior">←</button>\`;
+
+    for (let p = 1; p <= totalPaginas; p++) {
+      html += \`<button class="pag-btn \${p === kitsPaginaActual ? 'pag-active' : ''}" data-kit-page="\${p}" aria-label="Página \${p}">\${p}</button>\`;
+    }
+
+    html += \`<button class="pag-btn" data-kit-page="\${kitsPaginaActual + 1}" \${kitsPaginaActual === totalPaginas ? 'disabled' : ''} aria-label="Página siguiente">→</button>\`;
+    cont.innerHTML = html;
+  }
+
+  window.cambiarPaginaKits = function(p) {
+    const activos = KITS.filter(k => k.activo !== 0);
+    const totalPaginas = Math.max(1, Math.ceil(activos.length / KITS_POR_PAGINA));
+    if (p < 1 || p > totalPaginas) return;
+    kitsPaginaActual = p;
+    renderKits();
+
+    const sec = $("#kits");
+    if (sec) {
+      const top = sec.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
+  function openKitDet(kitId) {
+    const kit = KITS.find(k => k.id === Number(kitId) || \`kit_\${k.id}\` === String(kitId));
+    if (!kit) return;
+    const sheet = $("#sheet");
+    if (!sheet) return;
+    const nom = kit.nombre || kit.n;
+    const imgUrl = normalizarImagen(kit.imagen || kit.img);
+    const precio = Number(kit.precio || kit.p || 60000);
+    const desc = kit.descripcion || "Kit exclusivo con selecciones premium de Alta Densidad.";
+    const beneficios = kit.beneficios || [];
+
+    sheet.innerHTML = \`
+      <button class="x up" data-close aria-label="Cerrar detalle">✕ Cerrar</button>
+      <div class="stage" style="padding:var(--sp-4); display:flex; align-items:center; justify-content:center;">
+        <img src="\${imgUrl}" alt="\${nom}" style="max-height:360px; max-width:90%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
+      </div>
+      <div class="d-info">
+        <span class="up eyebrow">Set Exclusivo · Estuche de Lujo</span>
+        <h2>\${nom}</h2>
+        <p class="mute" style="white-space:pre-line; line-height:1.6; margin-top:var(--sp-2);">\${desc}</p>
+        \${beneficios.length ? \`
+          <div class="kit-modal-beneficios" style="display:flex; flex-wrap:wrap; gap:var(--sp-1); margin:var(--sp-2) 0;">
+            \${beneficios.map(b => \`<span class="chip up" style="font-size:11px;">✓ \${b}</span>\`).join('')}
+          </div>
+        \` : ''}
+        <div class="specs up" style="margin-top:var(--sp-3);">
+          <div><b>33%</b>Extracto</div>
+          <div><b>12h+</b>Fijación</div>
+          <div><b>+</b>Feromonas</div>
+        </div>
+        <div class="buy" style="margin-top:var(--sp-4);">
+          <b style="font:300 28px var(--f-display)">\${fmt(precio)}</b>
+          <button class="btn up" data-addkit="\${kit.id}">Añadir kit a la bolsa</button>
+        </div>
+      </div>
+    \`;
+    const modal = $("#modal");
+    const scrim = $("#scrim");
+    if (modal) modal.classList.add("on");
+    if (scrim) scrim.classList.add("on");
+    document.body.style.overflow = "hidden";
+  }
+
+  function addKitToCart(kitId, q) {
+    const kit = KITS.find(k => k.id === Number(kitId));
+    if (!kit) return;
+    const cid = \`kit_\${kit.id}\`;
+    const item = cart.find(x => x.id === cid);
+    if (item) {
+      item.q += (q || 1);
+    } else {
+      cart.push({ id: cid, isKit: true, kitId: kit.id, q: (q || 1), precio: Number(kit.precio), n: kit.nombre, ml: "Kit" });
+    }
+    save();
+    drawCart();
+  }
+
   function renderDetail() {
     const sheet = $("#sheet");
     if (!sheet) return;
@@ -432,12 +572,22 @@ const hauteCode = `/**
 
     if (cart.length) {
       itemsEl.innerHTML = cart.map((l, i) => {
-        const p = P.find(item => item.id === l.id) ||
-                  TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
-                  { n: "Fragancia", p: 75000, h: 30 };
-        const nom = p.n || p.nombre || p.name;
-        const imgUrl = normalizarImagen(p.img || p.imagen || p.image);
-        const u = pr(p);
+        let nom, imgUrl, u, subtitle;
+        if (l.isKit || String(l.id).startsWith("kit_")) {
+          const kit = KITS.find(k => k.id === (l.kitId || Number(String(l.id).replace("kit_", ""))));
+          nom = kit ? kit.nombre : (l.n || "Kit Especial");
+          imgUrl = kit ? normalizarImagen(kit.imagen) : "assets/img/Logo2026.png";
+          u = kit ? Number(kit.precio) : (l.precio || 60000);
+          subtitle = "Kit Exclusivo";
+        } else {
+          const p = P.find(item => item.id === l.id) ||
+                    TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
+                    { n: "Fragancia", p: 75000, h: 30 };
+          nom = p.n || p.nombre || p.name;
+          imgUrl = normalizarImagen(p.img || p.imagen || p.image);
+          u = pr(p);
+          subtitle = l.ml + " ml";
+        }
         t += u * l.q;
         c += l.q;
         return \`
@@ -445,7 +595,7 @@ const hauteCode = `/**
             <img src="\${imgUrl}" alt="\${nom}" class="mini-cart-img" width="48" height="48" onerror="this.src='assets/img/Logo2026.png';">
             <div>
               <b class="up">\${nom}</b>
-              <small>\${l.ml} ml · \${fmt(u)}</small>
+              <small>\${subtitle} · \${fmt(u)}</small>
               <div class="qty" style="margin-top:var(--sp-2)">
                 <button data-cq="-1" data-i="\${i}">−</button>
                 <span>\${l.q}</span>
@@ -472,11 +622,18 @@ const hauteCode = `/**
     if (waBtn) {
       const msg = "¡Hola! Quiero hacer un pedido en Fragancias de Alta Densidad:\\n\\n" +
         cart.map(l => {
-          const p = P.find(item => item.id === l.id) ||
-                    TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
-                    { n: "Fragancia" };
-          const nom = p.n || p.nombre || p.name;
-          return \`• \${l.q} x \${nom} (\${l.ml} ml) = \${fmt(pr(p, l.ml) * l.q)}\`;
+          if (l.isKit || String(l.id).startsWith("kit_")) {
+            const kit = KITS.find(k => k.id === (l.kitId || Number(String(l.id).replace("kit_", ""))));
+            const nom = kit ? kit.nombre : (l.n || "Kit Especial");
+            const u = kit ? Number(kit.precio) : (l.precio || 60000);
+            return \`• \${l.q} x \${nom} (Kit Exclusivo) = \${fmt(u * l.q)}\`;
+          } else {
+            const p = P.find(item => item.id === l.id) ||
+                      TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
+                      { n: "Fragancia" };
+            const nom = p.n || p.nombre || p.name;
+            return \`• \${l.q} x \${nom} (\${l.ml} ml) = \${fmt(pr(p, l.ml) * l.q)}\`;
+          }
         }).join("\\n") +
         \`\\n\\nTotal: \${fmt(t)}\\n¿Me confirman disponibilidad y despacho? ✨\`;
 
@@ -603,6 +760,26 @@ const hauteCode = `/**
         });
         renderSizes();
         try { localStorage.setItem("ad_cached_envases_v1", JSON.stringify(ENVASES)); } catch(e) {}
+      }
+    } catch(e) {}
+  }
+
+  // Carga reactiva de kits desde API
+  async function cargarKitsBackend() {
+    try {
+      const data = await fetchConFallback("kits");
+      if (data && data.length) {
+        KITS = data.map((k, idx) => ({
+          id: k.id || idx + 1,
+          nombre: k.nombre || k.name,
+          imagen: normalizarImagen(k.imagen || k.image),
+          descripcion: k.descripcion || k.description || "",
+          precio: Number(k.precio || k.price || 60000),
+          activo: k.activo !== undefined ? k.activo : 1,
+          beneficios: k.beneficios || []
+        }));
+        renderKits();
+        try { localStorage.setItem("ad_cached_kits_v1", JSON.stringify(KITS)); } catch(e) {}
       }
     } catch(e) {}
   }
@@ -772,6 +949,13 @@ const hauteCode = `/**
       }
     } else if (x = g("data-open")) {
       openDet(x.dataset.open);
+    } else if (x = g("data-open-kit")) {
+      openKitDet(x.dataset.openKit);
+    } else if (x = g("data-addkit")) {
+      addKitToCart(Number(x.dataset.addkit), 1);
+      openCart();
+    } else if (x = g("data-kit-page")) {
+      window.cambiarPaginaKits(Number(x.dataset.kitPage));
     } else if (g("data-cart")) {
       e.preventDefault();
       openCart();
@@ -845,6 +1029,7 @@ const hauteCode = `/**
     renderGrid();
     renderRank();
     renderSizes();
+    renderKits();
     drawCart();
     initThemeToggle();
     initHeroBottleInteractivity();
@@ -854,10 +1039,26 @@ const hauteCode = `/**
     cargarCatalogoBackend();
     cargarTop10Backend();
     cargarEnvasesBackend();
+    cargarKitsBackend();
 
     const els = document.querySelectorAll(".rv");
     els.forEach(n => n.classList.add("in"));
   }
+
+  // Compatibilidad universal con scripts legacy
+  window.agregarAlCarrito = function(obj) {
+    if (!obj) return;
+    if (obj.id && String(obj.id).startsWith("kit_")) {
+      const kitId = Number(String(obj.id).replace("kit_", ""));
+      addKitToCart(kitId, 1);
+    } else {
+      addToCart(Number(obj.id), 50, 1);
+    }
+    openCart();
+  };
+  window.abrirModalKitPublico = function(kit) {
+    if (kit && kit.id) openKitDet(kit.id);
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", boot);
