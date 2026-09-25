@@ -3,7 +3,7 @@
  * Módulo de Control de Servidor, Ventas, Inventario y Personal
  */
 
-const API_MONITOREO_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+const API_MONITOREO_BASE = (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000')
     ? 'http://localhost:3000/api/admin/monitoreo'
     : 'https://altadensidadpage-production.up.railway.app/api/admin/monitoreo';
 

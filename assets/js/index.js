@@ -1070,10 +1070,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 3. Petición única en paralelo a la API con reintento multiruta
         async function fetchCatalogoAPI() {
-            const endpoints = [
-                'http://localhost:3000/api',
-                'https://altadensidadpage-production.up.railway.app/api'
-            ];
+            const isLocal = typeof location !== 'undefined' && 
+                (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+                location.port === '3000';
+            const endpoints = isLocal
+                ? ['http://localhost:3000/api', 'https://altadensidadpage-production.up.railway.app/api']
+                : ['https://altadensidadpage-production.up.railway.app/api'];
 
             for (const base of endpoints) {
                 try {

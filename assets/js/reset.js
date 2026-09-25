@@ -1,5 +1,5 @@
 // Lógica para recuperación de contraseña - Alta Densidad
-const BACKEND_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') 
+const BACKEND_URL = (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000')
     ? 'http://localhost:3000' 
     : 'https://altadensidadpage-production.up.railway.app';
 

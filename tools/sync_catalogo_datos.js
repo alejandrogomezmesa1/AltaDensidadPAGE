@@ -102,12 +102,13 @@ const hauteCode = `/**
     return Math.round((baseP * sz(ml).x) / 1000) * 1000;
   }
 
-  function bt(h, s, img, name) {
+  function bt(h, s, img, name, isPriority) {
     if (img) {
       const realImg = normalizarImagen(img);
+      const loadingAttr = isPriority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return \`
         <div class="bottle-wrap">
-          <img src="\${realImg}" alt="\${name || 'Fragancia'}" class="stage-real-img" loading="lazy" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='grid';">
+          <img src="\${realImg}" alt="\${name || 'Fragancia'}" class="stage-real-img" width="280" height="280" \${loadingAttr} onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='grid';">
           <div class="bottle fallback-bottle" style="--h:\${h || 32};--s:\${s || 1.7};display:none"><i></i></div>
         </div>
       \`;
@@ -224,12 +225,13 @@ const hauteCode = `/**
       return;
     }
 
-    el.innerHTML = filtrados.map(function(p) {
+    el.innerHTML = filtrados.map(function(p, idx) {
+      const isPriority = idx < 6;
       return \`
         <article class="card">
           <div class="stage" data-open="\${p.id}">
             <span class="tag up">33% extracto</span>
-            \${bt(p.h, 1, p.img, p.n)}
+            \${bt(p.h, 1, p.img, p.n, isPriority)}
             <div class="notes">\${(p.no || []).join(" · ")}</div>
           </div>
           <div class="info">
@@ -270,15 +272,16 @@ const hauteCode = `/**
   function renderSizes() {
     const el = $("#sizes");
     if (!el) return;
-    el.innerHTML = ENVASES.map(function(z) {
+    el.innerHTML = ENVASES.map(function(z, idx) {
       const imgPath = normalizarImagen(z.image || z.imagen);
       const tallas = Array.isArray(z.sizes) && z.sizes.length ? z.sizes.join(" · ") : (z.talla || "30ml · 60ml");
       const nom = z.name || z.nombre;
       const msgWa = encodeURIComponent("¡Hola! Me gustaría pedir mi perfume en el envase " + nom + " de Alta Densidad. ✨");
+      const loadingAttr = idx < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return \`
         <div class="size rv">
           <div class="stage" style="padding:var(--sp-2);">
-            <img src="\${imgPath}" alt="Envase \${nom}" class="stage-real-img" style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" loading="lazy" onerror="this.src='assets/img/Logo2026.png';">
+            <img src="\${imgPath}" alt="Envase \${nom}" class="stage-real-img" width="240" height="200" \${loadingAttr} style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
           </div>
           <b style="font-size:22px; margin-top:var(--sp-1); letter-spacing:0.04em;">\${nom}</b>
           <span class="up eyebrow">\${tallas} · \${z.material || 'Vidrio'}</span>
@@ -304,7 +307,7 @@ const hauteCode = `/**
 
     sheet.innerHTML = \`
       <button class="x up" data-close aria-label="Cerrar detalle">✕ Cerrar</button>
-      <div class="stage">\${bt(p.h || 32, z.s + 0.3, imgUrl, nom)}</div>
+      <div class="stage">\${bt(p.h || 32, z.s + 0.3, imgUrl, nom, true)}</div>
       <div class="d-info">
         <span class="up eyebrow">\${fam} · Ocasión: \${occ}</span>
         <h2>\${nom}</h2>
@@ -512,12 +515,14 @@ const hauteCode = `/**
     document.body.style.overflow = "hidden";
   }
 
-  // Fetch seguro con fallback multiruta (localhost -> Railway)
+  // Fetch seguro con fallback multiruta (solo localhost si el puerto es 3000)
   async function fetchConFallback(rutaApi) {
-    const urls = [
-      \`http://localhost:3000/api/\${rutaApi}\`,
-      \`https://altadensidadpage-production.up.railway.app/api/\${rutaApi}\`
-    ];
+    const isLocal = typeof location !== 'undefined' && 
+      (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+      location.port === '3000';
+    const urls = isLocal
+      ? [\`http://localhost:3000/api/\${rutaApi}\`, \`https://altadensidadpage-production.up.railway.app/api/\${rutaApi}\`]
+      : [\`https://altadensidadpage-production.up.railway.app/api/\${rutaApi}\`];
     for (const url of urls) {
       try {
         const controller = new AbortController();
@@ -908,10 +913,12 @@ const top10Code = `document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Carga en segundo plano desde API con reintento resiliente
     async function cargarTop10() {
-        const endpoints = [
-            'http://localhost:3000/api/top10',
-            'https://altadensidadpage-production.up.railway.app/api/top10'
-        ];
+        const isLocal = typeof location !== 'undefined' && 
+            (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+            location.port === '3000';
+        const endpoints = isLocal
+            ? ['http://localhost:3000/api/top10', 'https://altadensidadpage-production.up.railway.app/api/top10']
+            : ['https://altadensidadpage-production.up.railway.app/api/top10'];
 
         let exito = false;
         for (const url of endpoints) {
@@ -1000,10 +1007,12 @@ const top10Code = `document.addEventListener('DOMContentLoaded', function () {
                 rating: product.rating || 5
             };
 
+            const loadingAttr = index < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
+
             productCard.innerHTML = \`
                 <div class="product-rank-badge">#\${rank}</div>
                 <div class="product-image">
-                    <img src="\${itemData.image}" alt="Top #\${rank} Perfume \${itemData.name} - Fragancia Alta Concentración" width="280" height="280" loading="lazy" decoding="async" onerror="this.src='assets/img/Logo2026.png';">
+                    <img src="\${itemData.image}" alt="Top #\${rank} Perfume \${itemData.name} - Fragancia Alta Concentración" width="280" height="280" \${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
                 </div>
                 <div class="product-info">
                     <div class="product-name">\${itemData.name}</div>
@@ -1203,7 +1212,7 @@ const envasesCode = `document.addEventListener('DOMContentLoaded', async functio
             return;
         }
 
-        envasesList.forEach(product => {
+        envasesList.forEach((product, index) => {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             const imgUrl = normalizarImagenEnvase(product.image || product.imagen);
@@ -1217,10 +1226,11 @@ const envasesCode = `document.addEventListener('DOMContentLoaded', async functio
                 : (coincidencia ? coincidencia.sizes : ['30ml', '60ml']);
 
             const msgWa = encodeURIComponent(\`¡Hola! Me gustaría pedir una fragancia con el envase \${nom} en Alta Densidad. ✨\`);
+            const loadingAttr = index < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
 
             productCard.innerHTML = \`
                 <div class="product-image">
-                    <img src="\${imgUrl}" alt="\${altText}" width="280" height="280" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/img/Logo2026.png';">
+                    <img src="\${imgUrl}" alt="\${altText}" width="280" height="280" \${loadingAttr} onerror="this.onerror=null;this.src='assets/img/Logo2026.png';">
                 </div>
                 <div class="product-info" style="display:flex; flex-direction:column; justify-content:space-between; height:100%;">
                     <div>
@@ -1254,10 +1264,12 @@ const envasesCode = `document.addEventListener('DOMContentLoaded', async functio
 
     // 2. Carga en segundo plano con reintento resiliente
     async function cargarEnvases() {
-        const endpoints = [
-            'http://localhost:3000/api/envases',
-            'https://altadensidadpage-production.up.railway.app/api/envases'
-        ];
+        const isLocal = typeof location !== 'undefined' && 
+            (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+            location.port === '3000';
+        const endpoints = isLocal
+            ? ['http://localhost:3000/api/envases', 'https://altadensidadpage-production.up.railway.app/api/envases']
+            : ['https://altadensidadpage-production.up.railway.app/api/envases'];
 
         let cargados = false;
         for (const url of endpoints) {

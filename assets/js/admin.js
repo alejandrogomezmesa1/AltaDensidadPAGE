@@ -1,4 +1,5 @@
-const _BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
+const _isLocal = typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000';
+const _BASE = _isLocal ? 'http://localhost:3000/api' : 'https://altadensidadpage-production.up.railway.app/api';
 const API_URL = `${_BASE}/productos`;
 const API_ENVASES_URL = `${_BASE}/envases`;
 const API_KITS_URL = `${_BASE}/kits`;

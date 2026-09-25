@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
-        envasesList.forEach(product => {
+        envasesList.forEach((product, index) => {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             const imgUrl = normalizarImagenEnvase(product.image || product.imagen);
@@ -228,10 +228,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                 : (coincidencia ? coincidencia.sizes : ['30ml', '60ml']);
 
             const msgWa = encodeURIComponent(`¡Hola! Me gustaría pedir una fragancia con el envase ${nom} en Alta Densidad. ✨`);
+            const loadingAttr = index < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
 
             productCard.innerHTML = `
                 <div class="product-image">
-                    <img src="${imgUrl}" alt="${altText}" width="280" height="280" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/img/Logo2026.png';">
+                    <img src="${imgUrl}" alt="${altText}" width="280" height="280" ${loadingAttr} onerror="this.onerror=null;this.src='assets/img/Logo2026.png';">
                 </div>
                 <div class="product-info" style="display:flex; flex-direction:column; justify-content:space-between; height:100%;">
                     <div>
@@ -265,10 +266,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // 2. Carga en segundo plano con reintento resiliente
     async function cargarEnvases() {
-        const endpoints = [
-            'http://localhost:3000/api/envases',
-            'https://altadensidadpage-production.up.railway.app/api/envases'
-        ];
+        const isLocal = typeof location !== 'undefined' && 
+            (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+            location.port === '3000';
+        const endpoints = isLocal
+            ? ['http://localhost:3000/api/envases', 'https://altadensidadpage-production.up.railway.app/api/envases']
+            : ['https://altadensidadpage-production.up.railway.app/api/envases'];
 
         let cargados = false;
         for (const url of endpoints) {

@@ -1924,12 +1924,13 @@
     return Math.round((baseP * sz(ml).x) / 1000) * 1000;
   }
 
-  function bt(h, s, img, name) {
+  function bt(h, s, img, name, isPriority) {
     if (img) {
       const realImg = normalizarImagen(img);
+      const loadingAttr = isPriority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return `
         <div class="bottle-wrap">
-          <img src="${realImg}" alt="${name || 'Fragancia'}" class="stage-real-img" loading="lazy" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='grid';">
+          <img src="${realImg}" alt="${name || 'Fragancia'}" class="stage-real-img" width="280" height="280" ${loadingAttr} onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='grid';">
           <div class="bottle fallback-bottle" style="--h:${h || 32};--s:${s || 1.7};display:none"><i></i></div>
         </div>
       `;
@@ -2046,12 +2047,13 @@
       return;
     }
 
-    el.innerHTML = filtrados.map(function(p) {
+    el.innerHTML = filtrados.map(function(p, idx) {
+      const isPriority = idx < 6;
       return `
         <article class="card">
           <div class="stage" data-open="${p.id}">
             <span class="tag up">33% extracto</span>
-            ${bt(p.h, 1, p.img, p.n)}
+            ${bt(p.h, 1, p.img, p.n, isPriority)}
             <div class="notes">${(p.no || []).join(" · ")}</div>
           </div>
           <div class="info">
@@ -2092,15 +2094,16 @@
   function renderSizes() {
     const el = $("#sizes");
     if (!el) return;
-    el.innerHTML = ENVASES.map(function(z) {
+    el.innerHTML = ENVASES.map(function(z, idx) {
       const imgPath = normalizarImagen(z.image || z.imagen);
       const tallas = Array.isArray(z.sizes) && z.sizes.length ? z.sizes.join(" · ") : (z.talla || "30ml · 60ml");
       const nom = z.name || z.nombre;
       const msgWa = encodeURIComponent("¡Hola! Me gustaría pedir mi perfume en el envase " + nom + " de Alta Densidad. ✨");
+      const loadingAttr = idx < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return `
         <div class="size rv">
           <div class="stage" style="padding:var(--sp-2);">
-            <img src="${imgPath}" alt="Envase ${nom}" class="stage-real-img" style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" loading="lazy" onerror="this.src='assets/img/Logo2026.png';">
+            <img src="${imgPath}" alt="Envase ${nom}" class="stage-real-img" width="240" height="200" ${loadingAttr} style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
           </div>
           <b style="font-size:22px; margin-top:var(--sp-1); letter-spacing:0.04em;">${nom}</b>
           <span class="up eyebrow">${tallas} · ${z.material || 'Vidrio'}</span>
@@ -2126,7 +2129,7 @@
 
     sheet.innerHTML = `
       <button class="x up" data-close aria-label="Cerrar detalle">✕ Cerrar</button>
-      <div class="stage">${bt(p.h || 32, z.s + 0.3, imgUrl, nom)}</div>
+      <div class="stage">${bt(p.h || 32, z.s + 0.3, imgUrl, nom, true)}</div>
       <div class="d-info">
         <span class="up eyebrow">${fam} · Ocasión: ${occ}</span>
         <h2>${nom}</h2>
@@ -2334,12 +2337,14 @@
     document.body.style.overflow = "hidden";
   }
 
-  // Fetch seguro con fallback multiruta (localhost -> Railway)
+  // Fetch seguro con fallback multiruta (solo localhost si el puerto es 3000)
   async function fetchConFallback(rutaApi) {
-    const urls = [
-      `http://localhost:3000/api/${rutaApi}`,
-      `https://altadensidadpage-production.up.railway.app/api/${rutaApi}`
-    ];
+    const isLocal = typeof location !== 'undefined' && 
+      (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+      location.port === '3000';
+    const urls = isLocal
+      ? [`http://localhost:3000/api/${rutaApi}`, `https://altadensidadpage-production.up.railway.app/api/${rutaApi}`]
+      : [`https://altadensidadpage-production.up.railway.app/api/${rutaApi}`];
     for (const url of urls) {
       try {
         const controller = new AbortController();

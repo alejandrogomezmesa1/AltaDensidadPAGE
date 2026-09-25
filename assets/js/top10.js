@@ -228,10 +228,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Carga en segundo plano desde API con reintento resiliente
     async function cargarTop10() {
-        const endpoints = [
-            'http://localhost:3000/api/top10',
-            'https://altadensidadpage-production.up.railway.app/api/top10'
-        ];
+        const isLocal = typeof location !== 'undefined' && 
+            (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
+            location.port === '3000';
+        const endpoints = isLocal
+            ? ['http://localhost:3000/api/top10', 'https://altadensidadpage-production.up.railway.app/api/top10']
+            : ['https://altadensidadpage-production.up.railway.app/api/top10'];
 
         let exito = false;
         for (const url of endpoints) {
@@ -320,10 +322,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 rating: product.rating || 5
             };
 
+            const loadingAttr = index < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
+
             productCard.innerHTML = `
                 <div class="product-rank-badge">#${rank}</div>
                 <div class="product-image">
-                    <img src="${itemData.image}" alt="Top #${rank} Perfume ${itemData.name} - Fragancia Alta Concentración" width="280" height="280" loading="lazy" decoding="async" onerror="this.src='assets/img/Logo2026.png';">
+                    <img src="${itemData.image}" alt="Top #${rank} Perfume ${itemData.name} - Fragancia Alta Concentración" width="280" height="280" ${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${itemData.name}</div>

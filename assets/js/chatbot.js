@@ -98,7 +98,8 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
         }
 
         if (!catalogoProductos.length) {
-            const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+            const isLocal = typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3000';
+            const base = isLocal
                 ? 'http://localhost:3000/api'
                 : 'https://altadensidadpage-production.up.railway.app/api';
             fetch(`${base}/productos`)
