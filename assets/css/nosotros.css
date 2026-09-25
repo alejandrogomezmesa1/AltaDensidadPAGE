@@ -622,15 +622,15 @@ ul {
 
 /* ===== NOSOTROS INTERACTIVO ===== */
 
-/* Fade-in on scroll */
+/* Fade-in on scroll (visible por defecto para garantizar que nunca quede la información oculta) */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 1;
+    transform: none;
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .fade-in.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
 }
 
 /* Hero */

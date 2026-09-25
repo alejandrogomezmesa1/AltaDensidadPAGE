@@ -1919,9 +1919,8 @@
     return SIZES.filter(function(z) { return z.ml === ml; })[0] || SIZES[1];
   }
 
-  function pr(p, ml) {
-    const baseP = Number(p.p || p.precio || p.price || 75000);
-    return Math.round((baseP * sz(ml).x) / 1000) * 1000;
+  function pr(p) {
+    return Number(p.p || p.precio || p.price || 75000);
   }
 
   function bt(h, s, img, name, isPriority) {
@@ -2059,7 +2058,7 @@
           <div class="info">
             <div>
               <h3 data-open="${p.id}">${p.n}</h3>
-              <span>${p.f} · desde ${fmt(pr(p, 30))}</span>
+              <span>${p.f} · ${fmt(pr(p))}</span>
             </div>
             <button class="link up" data-add="${p.id}">Añadir</button>
           </div>
@@ -2076,9 +2075,9 @@
       const nom = p.nombre || p.name || p.n;
       const fam = p.f || p.categoria || p.category || "Perfumería de Autor";
       const notas = p.no ? p.no.join(" · ") : (p.genero || p.gender || "Unisex");
-      const precio = p.precio || p.price || p.p || 75000;
+      const precio = Number(p.precio || p.price || p.p || 75000);
       return `
-        <div class="row rv">
+        <div class="row rv in">
           <span class="n">${i < 9 ? "0" : ""}${i + 1}</span>
           <div>
             <h3 data-open="${pId}">${nom}</h3>
@@ -2101,7 +2100,7 @@
       const msgWa = encodeURIComponent("¡Hola! Me gustaría pedir mi perfume en el envase " + nom + " de Alta Densidad. ✨");
       const loadingAttr = idx < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return `
-        <div class="size rv">
+        <div class="size rv in">
           <div class="stage" style="padding:var(--sp-2);">
             <img src="${imgPath}" alt="Envase ${nom}" class="stage-real-img" width="240" height="200" ${loadingAttr} style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
           </div>
@@ -2656,7 +2655,7 @@
     updateLabel();
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
+  function boot() {
     // 1. Render inmediato con datos duros auténticos (0ms LCP, sin parpadeos)
     renderChips();
     renderGrid();
@@ -2673,18 +2672,12 @@
     cargarEnvasesBackend();
 
     const els = document.querySelectorAll(".rv");
-    if ("IntersectionObserver" in window) {
-      const io = new IntersectionObserver(function(es) {
-        es.forEach(function(x) {
-          if (x.isIntersecting) {
-            x.target.classList.add("in");
-            io.unobserve(x.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      els.forEach(n => io.observe(n));
-    } else {
-      els.forEach(n => n.classList.add("in"));
-    }
-  });
+    els.forEach(n => n.classList.add("in"));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 })();

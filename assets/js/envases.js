@@ -1,7 +1,9 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    const productGrid = document.getElementById('productGrid');
-    const CACHE_KEY_ENVASES = 'ad_cached_envases_v1';
-    const WA = "573046477694";
+(function () {
+    function initEnvases() {
+        const productGrid = document.getElementById('productGrid');
+        if (!productGrid) return;
+        const CACHE_KEY_ENVASES = 'ad_cached_envases_v1';
+        const WA = "573046477694";
 
     // DATOS DUROS OFICIALES: CATÁLOGO DE ENVASES
     const DATOS_DUROS_ENVASES = [
@@ -297,8 +299,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    cargarEnvases();
-});
+        cargarEnvases();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEnvases);
+    } else {
+        initEnvases();
+    }
+})();
 
 let lastScrollTop = 0;
 const header = document.querySelector('.header');

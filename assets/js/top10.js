@@ -1,6 +1,8 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const productGrid = document.getElementById('top10Grid');
-    const CACHE_KEY_TOP10 = 'ad_cached_top10_v1';
+(function () {
+    function initTop10() {
+        const productGrid = document.getElementById('top10Grid');
+        if (!productGrid) return;
+        const CACHE_KEY_TOP10 = 'ad_cached_top10_v1';
 
     // DATOS DUROS OFICIALES: TOP 10 PERFUMES MÁS VENDIDOS
     const DATOS_DUROS_TOP10 = [
@@ -412,8 +414,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    cargarTop10();
-});
+        cargarTop10();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTop10);
+    } else {
+        initTop10();
+    }
+})();
 
 let lastScrollTop = 0;
 const header = document.querySelector('.header');

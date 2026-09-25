@@ -97,9 +97,8 @@ const hauteCode = `/**
     return SIZES.filter(function(z) { return z.ml === ml; })[0] || SIZES[1];
   }
 
-  function pr(p, ml) {
-    const baseP = Number(p.p || p.precio || p.price || 75000);
-    return Math.round((baseP * sz(ml).x) / 1000) * 1000;
+  function pr(p) {
+    return Number(p.p || p.precio || p.price || 75000);
   }
 
   function bt(h, s, img, name, isPriority) {
@@ -237,7 +236,7 @@ const hauteCode = `/**
           <div class="info">
             <div>
               <h3 data-open="\${p.id}">\${p.n}</h3>
-              <span>\${p.f} · desde \${fmt(pr(p, 30))}</span>
+              <span>\${p.f} · \${fmt(pr(p))}</span>
             </div>
             <button class="link up" data-add="\${p.id}">Añadir</button>
           </div>
@@ -254,9 +253,9 @@ const hauteCode = `/**
       const nom = p.nombre || p.name || p.n;
       const fam = p.f || p.categoria || p.category || "Perfumería de Autor";
       const notas = p.no ? p.no.join(" · ") : (p.genero || p.gender || "Unisex");
-      const precio = p.precio || p.price || p.p || 75000;
+      const precio = Number(p.precio || p.price || p.p || 75000);
       return \`
-        <div class="row rv">
+        <div class="row rv in">
           <span class="n">\${i < 9 ? "0" : ""}\${i + 1}</span>
           <div>
             <h3 data-open="\${pId}">\${nom}</h3>
@@ -279,7 +278,7 @@ const hauteCode = `/**
       const msgWa = encodeURIComponent("¡Hola! Me gustaría pedir mi perfume en el envase " + nom + " de Alta Densidad. ✨");
       const loadingAttr = idx < 4 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return \`
-        <div class="size rv">
+        <div class="size rv in">
           <div class="stage" style="padding:var(--sp-2);">
             <img src="\${imgPath}" alt="Envase \${nom}" class="stage-real-img" width="240" height="200" \${loadingAttr} style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
           </div>
@@ -834,7 +833,7 @@ const hauteCode = `/**
     updateLabel();
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
+  function boot() {
     // 1. Render inmediato con datos duros auténticos (0ms LCP, sin parpadeos)
     renderChips();
     renderGrid();
@@ -851,20 +850,14 @@ const hauteCode = `/**
     cargarEnvasesBackend();
 
     const els = document.querySelectorAll(".rv");
-    if ("IntersectionObserver" in window) {
-      const io = new IntersectionObserver(function(es) {
-        es.forEach(function(x) {
-          if (x.isIntersecting) {
-            x.target.classList.add("in");
-            io.unobserve(x.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      els.forEach(n => io.observe(n));
-    } else {
-      els.forEach(n => n.classList.add("in"));
-    }
-  });
+    els.forEach(n => n.classList.add("in"));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 })();
 `;
 
@@ -874,9 +867,11 @@ console.log('✅ assets/js/haute-parfumerie.js generado correctamente');
 // ============================================================
 // 2. GENERAR ASSETS/JS/TOP10.JS
 // ============================================================
-const top10Code = `document.addEventListener('DOMContentLoaded', function () {
-    const productGrid = document.getElementById('top10Grid');
-    const CACHE_KEY_TOP10 = 'ad_cached_top10_v1';
+const top10Code = `(function () {
+    function initTop10() {
+        const productGrid = document.getElementById('top10Grid');
+        if (!productGrid) return;
+        const CACHE_KEY_TOP10 = 'ad_cached_top10_v1';
 
     // DATOS DUROS OFICIALES: TOP 10 PERFUMES MÁS VENDIDOS
     const DATOS_DUROS_TOP10 = ${JSON.stringify(top10, null, 2)};
@@ -1097,8 +1092,15 @@ const top10Code = `document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    cargarTop10();
-});
+        cargarTop10();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTop10);
+    } else {
+        initTop10();
+    }
+})();
 
 let lastScrollTop = 0;
 const header = document.querySelector('.header');
@@ -1120,10 +1122,12 @@ console.log('✅ assets/js/top10.js generado correctamente');
 // ============================================================
 // 3. GENERAR ASSETS/JS/ENVASES.JS
 // ============================================================
-const envasesCode = `document.addEventListener('DOMContentLoaded', async function() {
-    const productGrid = document.getElementById('productGrid');
-    const CACHE_KEY_ENVASES = 'ad_cached_envases_v1';
-    const WA = "573046477694";
+const envasesCode = `(function () {
+    function initEnvases() {
+        const productGrid = document.getElementById('productGrid');
+        if (!productGrid) return;
+        const CACHE_KEY_ENVASES = 'ad_cached_envases_v1';
+        const WA = "573046477694";
 
     // DATOS DUROS OFICIALES: CATÁLOGO DE ENVASES
     const DATOS_DUROS_ENVASES = ${JSON.stringify(envases, null, 2)};
@@ -1295,8 +1299,15 @@ const envasesCode = `document.addEventListener('DOMContentLoaded', async functio
         }
     }
 
-    cargarEnvases();
-});
+        cargarEnvases();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEnvases);
+    } else {
+        initEnvases();
+    }
+})();
 
 let lastScrollTop = 0;
 const header = document.querySelector('.header');

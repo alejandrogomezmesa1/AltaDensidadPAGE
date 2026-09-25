@@ -106,20 +106,17 @@
       if (!cards.length) return;
 
       anime.remove(cards);
-      anime.set(cards, { opacity: 0, translateY: 40, scale: 0.92 });
-
       anime({
         targets: cards,
-        opacity: [0, 1],
-        translateY: [40, 0],
-        scale: [0.92, 1],
-        duration: 700,
-        delay: anime.stagger(50, { start: 40 }),
+        opacity: [0.8, 1],
+        translateY: [20, 0],
+        duration: 500,
+        delay: anime.stagger(40, { start: 20 }),
         easing: 'easeOutCubic',
         complete: () => {
           cards.forEach(c => {
             c.style.transform = '';
-            c.style.opacity = '';
+            c.style.opacity = '1';
           });
         }
       });
@@ -392,20 +389,17 @@
       if (!cards.length) return;
 
       anime.remove(cards);
-      anime.set(cards, { opacity: 0, translateY: 45, scale: 0.92 });
-
       anime({
         targets: cards,
-        opacity: [0, 1],
-        translateY: [45, 0],
-        scale: [0.92, 1],
-        duration: 750,
-        delay: anime.stagger(60, { start: 100 }),
+        opacity: [0.8, 1],
+        translateY: [20, 0],
+        duration: 500,
+        delay: anime.stagger(50, { start: 30 }),
         easing: 'easeOutCubic',
         complete: () => {
           cards.forEach(c => {
             c.style.transform = '';
-            c.style.opacity = '';
+            c.style.opacity = '1';
           });
         }
       });

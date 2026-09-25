@@ -1135,10 +1135,10 @@ footer.haute-footer {
   color: var(--c-mute);
 }
 
-/* Revelación al scroll */
+/* Revelación al scroll suave (visible por defecto para garantizar renderizado instantáneo) */
 .rv {
-  opacity: 0;
-  transform: translateY(16px);
+  opacity: 1;
+  transform: none;
   transition: opacity var(--t-3), transform var(--t-3);
 }
 
