@@ -1,41 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión | Fragancias de Alta Densidad</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Iniciar sesión | Fragancias de Alta Densidad</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap">
-    <link rel="stylesheet" href="assets/css/design-tokens.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/login.css">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/haute-parfumerie.css">
+    <link rel="stylesheet" href="assets/css/acceso.css">
+    <script>
+      (function() {
+        var tema = null;
+        try { tema = localStorage.getItem("altadensidad_tema"); } catch (e) {}
+        var claro = tema === "claro";
+        document.documentElement.classList.toggle("modo-claro", claro);
+        document.documentElement.setAttribute("data-theme", claro ? "light" : "dark");
+      })();
+    </script>
 </head>
-<body>
+<body class="acc-body">
 
-    <div class="auth-wrapper">
+    <header class="acc-h">
+        <a class="acc-back up" href="index.html"><span aria-hidden="true">←</span> <span class="acc-back-txt">Colección</span></a>
+        <a class="logo" href="index.html">Alta Densidad<small>Fragancias</small></a>
+        <button id="toggleTema" class="nav-ico" type="button" aria-label="Cambiar a modo claro" title="Cambiar a modo claro"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
+    </header>
 
-        <div class="auth-brand">
-            <a href="index.html" class="brand-logo">AD</a>
-            <p class="brand-name">Fragancias de Alta Densidad</p>
-        </div>
+    <main class="acc">
+        <section class="acc-card">
+            <span class="up eyebrow">Tu cuenta</span>
+            <h1>Bienvenido a <em>la casa.</em></h1>
 
-        <div class="auth-card">
-
-            <!-- Tabs -->
-            <div class="auth-tabs">
-                <button class="tab-btn active" id="tabLogin" onclick="mostrarTab('login')">Iniciar sesión</button>
-                <button class="tab-btn" id="tabRegister" onclick="mostrarTab('register')">Registrarse</button>
+            <!-- Pestañas -->
+            <div class="auth-tabs up">
+                <button type="button" class="tab-btn up active" id="tabLogin" onclick="mostrarTab('login')">Iniciar sesión</button>
+                <button type="button" class="tab-btn up" id="tabRegister" onclick="mostrarTab('register')">Registrarse</button>
             </div>
 
             <!-- Alerta -->
-            <div id="alerta" class="alerta hidden"></div>
+            <div id="alerta" class="alerta hidden" role="alert"></div>
 
             <!-- FORM LOGIN -->
             <form id="formLogin" class="auth-form" novalidate>
@@ -47,7 +55,7 @@
                     <label for="loginPassword"><i class="fas fa-lock"></i> Contraseña</label>
                     <div class="input-icon">
                         <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" required>
-                        <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword', this)">
+                        <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" onclick="togglePassword('loginPassword', this)">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -55,8 +63,8 @@
                 <button type="submit" class="btn-auth" id="btnLogin">
                     <i class="fas fa-sign-in-alt"></i> Ingresar
                 </button>
-                <p class="auth-switch">¿No tienes cuenta? <a href="#" onclick="mostrarTab('register')">Regístrate</a></p>
                 <p class="forgot-link"><a href="reset.html">¿Olvidaste tu contraseña?</a></p>
+                <p class="auth-switch">¿No tienes cuenta? <a href="#" onclick="mostrarTab('register'); return false;">Regístrate</a></p>
             </form>
 
             <!-- FORM REGISTER -->
@@ -73,7 +81,7 @@
                     <label for="regPassword"><i class="fas fa-lock"></i> Contraseña</label>
                     <div class="input-icon">
                         <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
-                        <button type="button" class="toggle-pass" onclick="togglePassword('regPassword', this)">
+                        <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" onclick="togglePassword('regPassword', this)">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -82,7 +90,7 @@
                     <label for="regPassword2"><i class="fas fa-lock"></i> Confirmar contraseña</label>
                     <div class="input-icon">
                         <input type="password" id="regPassword2" placeholder="Repite tu contraseña" autocomplete="new-password" required>
-                        <button type="button" class="toggle-pass" onclick="togglePassword('regPassword2', this)">
+                        <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" onclick="togglePassword('regPassword2', this)">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
@@ -90,18 +98,17 @@
                 <button type="submit" class="btn-auth" id="btnRegister">
                     <i class="fas fa-user-plus"></i> Crear cuenta
                 </button>
-                <p class="auth-switch">¿Ya tienes cuenta? <a href="#" onclick="mostrarTab('login')">Inicia sesión</a></p>
+                <p class="auth-switch">¿Ya tienes cuenta? <a href="#" onclick="mostrarTab('login'); return false;">Inicia sesión</a></p>
             </form>
+        </section>
+    </main>
 
-        </div>
+    <footer class="acc-f up">
+        <span>© 2026 Fragancias de Alta Densidad</span>
+        <span>Medellín · +57 304 647 7694</span>
+    </footer>
 
-        <a href="index.html" class="volver-link">
-            <i class="fas fa-arrow-left"></i> Volver al catálogo
-        </a>
-
-    </div>
-
+    <script src="assets/js/acceso.js"></script>
     <script src="assets/js/login.js"></script>
 </body>
 </html>
-

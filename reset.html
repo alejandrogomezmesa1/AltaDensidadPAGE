@@ -1,104 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña | Fragancias de Alta Densidad</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Recuperar contraseña | Fragancias de Alta Densidad</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
     <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap">
-    <link rel="stylesheet" href="assets/css/design-tokens.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/reset.css">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/haute-parfumerie.css">
+    <link rel="stylesheet" href="assets/css/acceso.css">
+    <script>
+      (function() {
+        var tema = null;
+        try { tema = localStorage.getItem("altadensidad_tema"); } catch (e) {}
+        var claro = tema === "claro";
+        document.documentElement.classList.toggle("modo-claro", claro);
+        document.documentElement.setAttribute("data-theme", claro ? "light" : "dark");
+      })();
+    </script>
 </head>
-<body>
+<body class="acc-body">
 
-    <div class="reset-wrapper">
-        <div class="auth-brand">
-            <a href="index.html" class="brand-logo">AD</a>
-            <p class="brand-name">Fragancias de Alta Densidad</p>
-        </div>
+    <header class="acc-h">
+        <a class="acc-back up" href="login.html"><span aria-hidden="true">←</span> <span class="acc-back-txt">Iniciar sesión</span></a>
+        <a class="logo" href="index.html">Alta Densidad<small>Fragancias</small></a>
+        <button id="toggleTema" class="nav-ico" type="button" aria-label="Cambiar a modo claro" title="Cambiar a modo claro"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
+    </header>
 
-        <div class="reset-card">
+    <main class="acc">
+        <section class="acc-card">
+            <span class="up eyebrow">Recuperar acceso</span>
+
             <!-- Alerta general -->
-            <div id="alerta" class="alerta hidden"></div>
+            <div id="alerta" class="alerta hidden" role="alert"></div>
 
-            <!-- Formulario 1: Solicitar email -->
+            <!-- Paso 1: solicitar email -->
             <form id="forgot-password-form" class="reset-form">
-                <h2>¿Olvidaste tu contraseña?</h2>
+                <h2>¿Olvidaste tu <em>contraseña?</em></h2>
                 <p class="form-instruction">Ingresa tu email y te enviaremos un código de seguridad.</p>
-                
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i> Correo electrónico</label>
                     <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required autocomplete="email">
                 </div>
-                
                 <button type="submit" id="btnForgot">
                     <i class="fas fa-paper-plane"></i> Enviar código
                 </button>
-                <div id="forgot-password-msg" class="reset-msg"></div>
+                <div id="forgot-password-msg" class="reset-msg" role="status"></div>
             </form>
 
-            <!-- Formulario 2: Confirmar código -->
+            <!-- Paso 2: confirmar código -->
             <form id="confirm-code-form" class="reset-form hidden">
-                <h2>Confirma tu código</h2>
+                <h2>Confirma tu <em>código.</em></h2>
                 <p class="form-instruction">Hemos enviado un código a tu correo. Ingrésalo a continuación.</p>
-                
                 <div class="form-group">
                     <label for="code"><i class="fas fa-key"></i> Código de 6 dígitos</label>
-                    <input type="text" id="code" name="code" placeholder="000000" maxlength="6" required autocomplete="one-time-code">
+                    <input type="text" id="code" name="code" placeholder="000000" maxlength="6" inputmode="numeric" required autocomplete="one-time-code">
                 </div>
                 <input type="hidden" id="email-confirm" name="email">
-                
                 <button type="submit" id="btnConfirm">
                     <i class="fas fa-check-circle"></i> Verificar código
                 </button>
-                <div id="confirm-code-msg" class="reset-msg"></div>
-                <p class="resend-text">¿No recibiste nada? <a href="#" onclick="location.reload()">Intentar de nuevo</a></p>
+                <div id="confirm-code-msg" class="reset-msg" role="status"></div>
+                <p class="resend-text">¿No recibiste nada? <a href="#" onclick="location.reload(); return false;">Intentar de nuevo</a></p>
             </form>
 
-            <!-- Formulario 3: Resetear contraseña -->
+            <!-- Paso 3: nueva contraseña -->
             <form id="reset-password-form" class="reset-form hidden">
-                <h2>Nueva contraseña</h2>
+                <h2>Nueva <em>contraseña.</em></h2>
                 <p class="form-instruction">Crea una contraseña segura que no hayas usado antes.</p>
-                
                 <div class="form-group">
                     <label for="new-password"><i class="fas fa-lock"></i> Nueva contraseña</label>
                     <div class="input-group">
                         <input type="password" id="new-password" name="new-password" placeholder="••••••••" required minlength="6" autocomplete="new-password">
-                        <button type="button" class="toggle-pass" onclick="togglePassword('new-password', this)"><i class="fas fa-eye"></i></button>
+                        <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" onclick="togglePassword('new-password', this)"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="confirm-password"><i class="fas fa-lock"></i> Confirmar contraseña</label>
                     <div class="input-group">
                         <input type="password" id="confirm-password" name="confirm-password" placeholder="••••••••" required minlength="6" autocomplete="new-password">
-                        <button type="button" class="toggle-pass" onclick="togglePassword('confirm-password', this)"><i class="fas fa-eye"></i></button>
+                        <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" onclick="togglePassword('confirm-password', this)"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>
-
                 <input type="hidden" id="reset-token" name="token">
                 <input type="hidden" id="reset-email" name="email">
-                
                 <button type="submit" id="btnReset">
                     <i class="fas fa-save"></i> Cambiar contraseña
                 </button>
-                <div id="reset-password-msg" class="reset-msg"></div>
+                <div id="reset-password-msg" class="reset-msg" role="status"></div>
             </form>
-        </div>
+        </section>
+    </main>
 
-        <a href="login.html" class="volver-link">
-            <i class="fas fa-arrow-left"></i> Volver al inicio de sesión
-        </a>
-    </div>
+    <footer class="acc-f up">
+        <span>© 2026 Fragancias de Alta Densidad</span>
+        <span>Medellín · +57 304 647 7694</span>
+    </footer>
 
+    <script src="assets/js/acceso.js"></script>
     <script src="assets/js/reset.js" defer></script>
     <script>
         function togglePassword(inputId, btn) {
@@ -115,4 +118,3 @@
     </script>
 </body>
 </html>
-

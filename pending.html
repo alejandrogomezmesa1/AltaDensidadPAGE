@@ -1,72 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Pago pendiente — Fragancias de Alta Densidad</title>
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
-  <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
-    <link rel="stylesheet" href="assets/css/design-tokens.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <style>
-    :root {
-        --bg: #0b1220;
-        --bg-card: #0d1626;
-        --gold: #D4AF37;
-        --text: #ffffff;
-        --text-muted: #9aa4b2;
-        --pending: #f39c12;
-    }
-    body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-    .card { background: var(--bg-card); padding: 40px; border-radius: 16px; max-width: 500px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(212, 175, 55, 0.1); text-align: center; }
-    h1 { color: var(--pending); margin-bottom: 20px; font-size: 1.8rem; }
-    .status-icon { font-size: 4rem; color: var(--pending); margin-bottom: 25px; }
-    p { line-height: 1.6; margin-bottom: 15px; }
-    .btn { display: inline-block; background: var(--gold); border: 0; padding: 12px 24px; border-radius: 8px; color: #000; font-weight: 700; cursor: pointer; text-decoration: none; transition: transform 0.2s; margin-top: 20px; }
-    .btn:active { transform: scale(0.98); }
-    .loader { margin: 20px 0; font-size: 2rem; color: var(--gold); }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Pago pendiente | Fragancias de Alta Densidad</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/haute-parfumerie.css">
+    <link rel="stylesheet" href="assets/css/acceso.css">
+    <script>
+      (function() {
+        var tema = null;
+        try { tema = localStorage.getItem("altadensidad_tema"); } catch (e) {}
+        var claro = tema === "claro";
+        document.documentElement.classList.toggle("modo-claro", claro);
+        document.documentElement.setAttribute("data-theme", claro ? "light" : "dark");
+      })();
+    </script>
 </head>
-<body>
-  <div class="card">
-    <div class="status-icon"><i class="fas fa-clock"></i></div>
-    <h1>Pago en espera</h1>
-    <div id="content">
-      <div class="loader"><i class="fas fa-spinner fa-spin"></i></div>
-      <p>Estamos verificando el estado de tu transacción...</p>
-      <p class="text-muted">Esto puede tardar unos minutos dependiendo de tu entidad bancaria.</p>
-    </div>
-    <a href="/index.html" class="btn"><i class="fas fa-home"></i> Volver al Inicio</a>
-  </div>
+<body class="acc-body">
 
-  <script>
-    const content = document.getElementById('content');
-    function qs(name){ return new URLSearchParams(location.search).get(name); }
-    const paymentId = qs('payment_id') || qs('collection_id');
-    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-        ? 'http://localhost:3000/api'
-        : 'https://altadensidadpage-production.up.railway.app/api';
+    <header class="acc-h">
+        <a class="acc-back up" href="index.html"><span aria-hidden="true">←</span> <span class="acc-back-txt">Colección</span></a>
+        <a class="logo" href="index.html">Alta Densidad<small>Fragancias</small></a>
+        <button id="toggleTema" class="nav-ico" type="button" aria-label="Cambiar a modo claro" title="Cambiar a modo claro"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
+    </header>
 
-    async function verify() {
-      if (!paymentId) return;
-      try {
-        const resp = await fetch(`${base}/mercadopago/verify_payment${location.search}`);
-        const data = await resp.json();
-        if (!data.success) return;
-        const order = data.order;
-        if (order) {
-            content.innerHTML = `
-                <p>Referencia de orden: <strong>${String(order.external_reference).replace(/&/g,'&amp;')}</strong></p>
-                <p>Estado actual: <strong style="color: var(--pending);">${String(order.status).toUpperCase()}</strong></p>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">Te enviaremos un correo en cuanto se confirme el pago.</p>
-            `;
+    <main class="acc">
+        <section class="acc-card acc-card--result">
+            <div class="status-mark" id="statusMark" aria-hidden="true"><i class="fa-regular fa-clock"></i></div>
+            <h1 id="resultTitle">Pago en <em>espera.</em></h1>
+            <div class="result-body" id="content" role="status">
+                <p><i class="fa-solid fa-circle-notch spin" aria-hidden="true"></i> Estamos verificando el estado de tu transacción…</p>
+                <p>Esto puede tardar unos minutos dependiendo de tu entidad bancaria.</p>
+            </div>
+            <div class="result-actions">
+                <a class="btn up btn--full" href="index.html">Volver a la colección</a>
+                <a class="btn btn--line up btn--full" href="https://wa.me/573046477694?text=%C2%A1Hola!%20Tengo%20una%20consulta%20sobre%20mi%20pedido%20en%20la%20web." target="_blank" rel="noopener noreferrer">Hablar con un asesor</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="acc-f up">
+        <span>© 2026 Fragancias de Alta Densidad</span>
+        <span>Medellín · +57 304 647 7694</span>
+    </footer>
+
+    <script src="assets/js/acceso.js"></script>
+    <script>
+        function qs(name) { return new URLSearchParams(location.search).get(name); }
+        function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        const content = document.getElementById('content');
+        const paymentId = qs('payment_id') || qs('collection_id');
+        const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+            ? 'http://localhost:3000/api'
+            : 'https://altadensidadpage-production.up.railway.app/api';
+        const ESTADOS = { approved: 'Aprobado', pending: 'Pendiente', in_process: 'En proceso', failed: 'No aprobado', rejected: 'Rechazado', cancelled: 'Cancelado' };
+        function refHtml(order) {
+            return `<div class="result-ref">
+                <div><span class="up">Referencia</span><strong>${esc(order.external_reference)}</strong></div>
+                ${order.total != null ? `<div><span class="up">Total</span><strong>$${Number(order.total).toLocaleString('es-CO')} COP</strong></div>` : ''}
+                <div><span class="up">Estado</span><strong>${esc(ESTADOS[order.status] || order.status)}</strong></div>
+            </div>`;
         }
-      } catch (err) { console.error(err); }
-    }
-    verify();
-  </script>
+        async function verify() {
+            if (!paymentId) return;
+            try {
+                const resp = await fetch(`${base}/mercadopago/verify_payment${location.search}`);
+                const data = await resp.json();
+                if (!data.success || !data.order) return;
+                content.innerHTML = `<p>Te enviaremos un correo en cuanto se confirme el pago.</p>${refHtml(data.order)}`;
+            } catch (err) { console.error(err); }
+        }
+        verify();
+    </script>
 </body>
 </html>
-

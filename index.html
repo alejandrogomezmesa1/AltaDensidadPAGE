@@ -78,13 +78,15 @@
             <a href="#envases">Envases</a>
             <a href="#kits">Kits</a>
             <a href="#nosotros">Nosotros</a>
-            <a href="#contacto">Contacto</a>
         </nav>
         <a class="logo" href="#">Alta Densidad<small>Fragancias</small></a>
         <nav class="up nav-r">
-            <a id="navSesion" href="login.html" aria-label="Ingresar a tu cuenta"><i class="fa-regular fa-user" aria-hidden="true"></i><span class="nav-lbl">Ingresar</span></a>
-            <button id="toggleTema" class="up" aria-label="Cambiar modo de luz"><i class="fa-solid fa-sun" aria-hidden="true"></i><span class="nav-lbl">Modo Claro</span></button>
-            <a href="#" data-cart="open">Bolsa (<span id="cnt">0</span>)</a>
+            <button id="toggleTema" class="nav-ico" aria-label="Cambiar a modo claro" title="Cambiar a modo claro"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
+            <div class="acct">
+                <a id="navSesion" class="nav-ico" href="login.html" aria-label="Ingresar a tu cuenta" title="Ingresar"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
+                <div class="acct-menu" id="acctMenu" hidden></div>
+            </div>
+            <a href="#" class="nav-bag" data-cart="open">Bolsa (<span id="cnt">0</span>)</a>
         </nav>
     </header>
 
@@ -238,9 +240,9 @@
             </div>
             <div class="foot-col">
                 <h4 class="up">Información</h4>
-                <a href="nosotros.html">Preguntas frecuentes</a>
-                <a href="nosotros.html">Envíos y devoluciones</a>
-                <a href="nosotros.html">Política de privacidad</a>
+                <a href="nosotros.html#faq">Preguntas frecuentes</a>
+                <a href="nosotros.html#envios">Envíos y devoluciones</a>
+                <a href="nosotros.html#privacidad">Política de privacidad</a>
                 <a href="login.html">Mi cuenta</a>
             </div>
         </div>
@@ -250,96 +252,7 @@
         </div>
     </footer>
 
-    <!-- 9 · DRAWER DE BOLSA (CARRITO) -->
-    <div class="scrim" id="scrim" data-close></div>
-    <aside class="drawer" id="drawer" data-step="bag" aria-label="Bolsa de compras">
-        <div class="drawer-h up">
-            <span id="drawerTitle">Tu bolsa</span>
-            <button class="up" data-close aria-label="Cerrar bolsa">✕ Cerrar</button>
-        </div>
-
-        <!-- Paso 1 · Bolsa -->
-        <div class="bag-view">
-            <div id="items"></div>
-            <div class="tot">
-                <span class="up" style="align-self:center">Subtotal</span>
-                <b id="total">$0</b>
-            </div>
-            <div id="bagActions" class="bag-actions">
-                <button class="btn up btn--full btn-pay" data-checkout>
-                    <span>Hacer pedido · Pago seguro</span>
-                    <small>PSE · Nequi · Tarjetas</small>
-                </button>
-                <a class="btn btn--line up btn--full" id="wa" href="#" target="_blank" rel="noopener">Finalizar por WhatsApp</a>
-                <div class="trust up mute">
-                    <span>Compra protegida</span>
-                    <span>Envíos a toda Colombia</span>
-                    <span>Garantía de calidad</span>
-                </div>
-                <button class="link up bag-empty" data-empty-bag>Vaciar bolsa</button>
-            </div>
-        </div>
-
-        <!-- Paso 2 · Datos de envío y pago -->
-        <form class="ship-view" id="envioForm">
-            <button type="button" class="link up ship-back" data-back>← Volver a la bolsa</button>
-            <p class="mute ship-intro">Ingresa los datos para la transportadora. Luego te llevamos a Mercado Pago para pagar de forma segura.</p>
-            <div class="form-err" id="envioError" role="alert" hidden></div>
-            <div class="field-grid">
-                <label class="field full"><span class="up">Nombre completo *</span>
-                    <input type="text" id="envNombre" required autocomplete="name" placeholder="Ej: Juan Pérez"></label>
-                <label class="field"><span class="up">Documento *</span>
-                    <input type="text" id="envDocumento" required inputmode="numeric" placeholder="Cédula / NIT"></label>
-                <label class="field"><span class="up">Celular *</span>
-                    <input type="tel" id="envCelular" required autocomplete="tel" placeholder="300 123 4567"></label>
-                <label class="field full"><span class="up">Zona de envío *</span>
-                    <select id="envZona" required>
-                        <option value="" disabled selected>Selecciona la zona</option>
-                        <option value="medellin">Medellín ($15.000)</option>
-                        <option value="metropolitana">Área Metropolitana ($20.000)</option>
-                        <option value="nacional">Resto de Colombia ($22.000)</option>
-                    </select></label>
-                <label class="field full" id="groupMetropolitana" hidden><span class="up">Municipio *</span>
-                    <select id="envCiudadMetro">
-                        <option value="" disabled selected>Selecciona el municipio</option>
-                        <option>Bello</option>
-                        <option>Envigado</option>
-                        <option>Itagüí</option>
-                        <option>Sabaneta</option>
-                        <option>La Estrella</option>
-                        <option>Copacabana</option>
-                        <option>San Antonio de Prado</option>
-                        <option>Caldas</option>
-                        <option>Girardota</option>
-                        <option>Barbosa</option>
-                    </select></label>
-                <label class="field full" id="groupNacional" hidden><span class="up">Ciudad de destino *</span>
-                    <input type="text" id="envCiudadNacional" placeholder="Ej: Bogotá, Cali, Cartagena…"></label>
-                <label class="field"><span class="up">Barrio *</span>
-                    <input type="text" id="envBarrio" required placeholder="Nombre del barrio"></label>
-                <label class="field"><span class="up">Dirección *</span>
-                    <input type="text" id="envDireccion" required autocomplete="street-address" placeholder="Calle 123 # 45-67"></label>
-                <label class="field"><span class="up">Apto / Piso</span>
-                    <input type="text" id="envPiso" placeholder="Ej: Apto 502"></label>
-                <label class="field"><span class="up">Referencia</span>
-                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque"></label>
-            </div>
-            <dl class="ship-sum">
-                <div><dt class="up">Subtotal</dt><dd id="shipSubtotal">$0</dd></div>
-                <div><dt class="up">Envío</dt><dd id="shipCosto">Selecciona la zona</dd></div>
-                <div class="ship-total"><dt class="up">Total</dt><dd id="shipTotal">$0</dd></div>
-            </dl>
-            <button type="submit" class="btn up btn--full btn-pay" id="btnPagar">
-                <span>Confirmar y pagar</span>
-                <small>Compra 100% protegida · Mercado Pago</small>
-            </button>
-        </form>
-    </aside>
-
-    <!-- 10 · MODAL DETALLE DE PRODUCTO (PIRÁMIDE OLFATIVA & PRESENTACIONES) -->
-    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Detalle del producto">
-        <div class="sheet" id="sheet"></div>
-    </div>
+    <!-- 9 · BOLSA, CHECKOUT Y DETALLE: se inyectan desde haute-parfumerie.js (asegurarCapas) -->
 
     <!-- 10.1 · MODAL ATELIER OLFATIVO (FILTROS AVANZADOS) -->
     <div class="modal filter-modal" id="filterModal" role="dialog" aria-modal="true" aria-label="Filtros avanzados de fragancias">

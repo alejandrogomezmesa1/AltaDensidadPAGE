@@ -2542,19 +2542,19 @@
       cont.innerHTML = "";
       return;
     }
-    let html = `<button class="pag-btn" data-page="${paginaActual - 1}" ${paginaActual === 1 ? "disabled" : ""} aria-label="Página anterior">←</button>`;
+    let html = `<button class="pag-btn" data-pg="${paginaActual - 1}" ${paginaActual === 1 ? "disabled" : ""} aria-label="Página anterior">←</button>`;
     paginasVisibles(paginaActual, totalPaginas).forEach(function(p) {
       html += p === "..."
         ? `<span class="pag-ellipsis">…</span>`
-        : `<button class="pag-btn ${p === paginaActual ? "pag-active" : ""}" data-page="${p}" aria-label="Página ${p}">${p}</button>`;
+        : `<button class="pag-btn ${p === paginaActual ? "pag-active" : ""}" data-pg="${p}" aria-label="Página ${p}">${p}</button>`;
     });
-    html += `<button class="pag-btn" data-page="${paginaActual + 1}" ${paginaActual === totalPaginas ? "disabled" : ""} aria-label="Página siguiente">→</button>`;
+    html += `<button class="pag-btn" data-pg="${paginaActual + 1}" ${paginaActual === totalPaginas ? "disabled" : ""} aria-label="Página siguiente">→</button>`;
     cont.innerHTML = html;
   }
 
   // Datos estructurados para buscadores (catálogo completo)
   function inyectarSchemaProductos() {
-    if (!P.length) return;
+    if (!P.length || !$("#grid")) return;
     const previo = document.getElementById("schema-productos-dinamico");
     if (previo) previo.remove();
     const script = document.createElement("script");
@@ -2590,6 +2590,91 @@
     document.head.appendChild(script);
   }
 
+  // Schema de las páginas dedicadas (top10.html / envases.html)
+  function inyectarSchemaPagina() {
+    const pagina = document.body.dataset.page;
+    let lista = null;
+    let nombre = "";
+    if (pagina === "top10") {
+      nombre = "Top 10 perfumes más vendidos - Fragancias de Alta Densidad";
+      lista = TOP10.map(t => ({ name: t.nombre || t.name, image: t.imagen || t.image, description: t.descripcion, price: Number(t.precio || t.price || 0) }));
+    } else if (pagina === "envases") {
+      nombre = "Envases para perfume - Fragancias de Alta Densidad";
+      lista = ENVASES.map(z => ({ name: "Envase " + (z.name || z.nombre), image: z.image || z.imagen, description: z.description || z.descripcion }));
+    }
+    if (!lista || !lista.length) return;
+    const previo = document.getElementById("schema-pagina-dinamico");
+    if (previo) previo.remove();
+    const url = "https://alta-densidad-page.vercel.app/" + pagina + ".html";
+    const script = document.createElement("script");
+    script.id = "schema-pagina-dinamico";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": nombre,
+      "itemListOrder": "https://schema.org/ItemListOrderAscending",
+      "numberOfItems": lista.length,
+      "itemListElement": lista.map(function(x, idx) {
+        const img = normalizarImagen(x.image);
+        const item = {
+          "@type": "Product",
+          "name": x.name,
+          "image": img.startsWith("http") ? img : "https://alta-densidad-page.vercel.app/" + img,
+          "description": x.description || x.name,
+          "brand": { "@type": "Brand", "name": "Alta Densidad" }
+        };
+        if (x.price) {
+          item.offers = { "@type": "Offer", "priceCurrency": "COP", "price": x.price, "availability": "https://schema.org/InStock", "url": url };
+        }
+        return { "@type": "ListItem", "position": idx + 1, "item": item };
+      })
+    });
+    document.head.appendChild(script);
+  }
+
+  // Pestañas genéricas: [data-tabs] > [data-tab="x"] controla #tab-x
+  function initTabs() {
+    $$("[data-tabs]").forEach(function(grupo) {
+      const botones = grupo.querySelectorAll("[data-tab]");
+      botones.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          botones.forEach(function(b) {
+            const activo = b === btn;
+            b.classList.toggle("on", activo);
+            b.setAttribute("aria-selected", String(activo));
+            const panel = document.getElementById("tab-" + b.dataset.tab);
+            if (panel) panel.hidden = !activo;
+          });
+        });
+      });
+    });
+  }
+
+  // Contadores animados: <span data-count="99">99</span>
+  function initContadores() {
+    const nums = $$("[data-count]");
+    if (!nums.length || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        obs.unobserve(entry.target);
+        const el = entry.target;
+        const fin = Number(el.dataset.count);
+        const desde = fin > 1000 ? fin - 30 : 0;
+        const inicio = performance.now();
+        function paso(t) {
+          const k = Math.min(1, (t - inicio) / 1400);
+          el.textContent = Math.round(desde + (fin - desde) * (1 - Math.pow(1 - k, 3)));
+          if (k < 1) requestAnimationFrame(paso);
+        }
+        requestAnimationFrame(paso);
+      });
+    }, { threshold: 0.5 });
+    nums.forEach(n => obs.observe(n));
+  }
+
   // ============================================================
   // TOP 10, ENVASES Y KITS
   // ============================================================
@@ -2613,6 +2698,7 @@
           <div>
             <h3 data-open="${pId}">${esc(nom)}</h3>
             <small>${esc(fam)} · ${esc(notas)}</small>
+            <small class="stars" aria-label="${Number(p.rating) || 5} de 5 estrellas">${"★".repeat(Number(p.rating) || 5)}${"☆".repeat(5 - (Number(p.rating) || 5))}</small>
           </div>
           <span class="pr">${fmt(precio)}</span>
           <button class="link up" data-open="${pId}">Ver</button>
@@ -2967,7 +3053,7 @@
       itemsEl.innerHTML = `
         <div class="empty">
           <p>Tu bolsa está vacía.</p>
-          <p style="margin-top:var(--sp-3)"><a class="link up" href="#coleccion" data-close>Ver colección</a></p>
+          <p style="margin-top:var(--sp-3)"><a class="link up" href="index.html#coleccion" data-close>Ver colección</a></p>
         </div>
       `;
     }
@@ -3103,6 +3189,106 @@
   }
 
   // ============================================================
+  // CAPAS COMPARTIDAS: bolsa + checkout + detalle (todas las páginas)
+  // ============================================================
+  const CAPAS_HTML = `
+
+    <div class="scrim" id="scrim" data-close></div>
+    <aside class="drawer" id="drawer" data-step="bag" aria-label="Bolsa de compras">
+        <div class="drawer-h up">
+            <span id="drawerTitle">Tu bolsa</span>
+            <button class="up" data-close aria-label="Cerrar bolsa">✕ Cerrar</button>
+        </div>
+
+        <!-- Paso 1 · Bolsa -->
+        <div class="bag-view">
+            <div id="items"></div>
+            <div class="tot">
+                <span class="up" style="align-self:center">Subtotal</span>
+                <b id="total">$0</b>
+            </div>
+            <div id="bagActions" class="bag-actions">
+                <button class="btn up btn--full btn-pay" data-checkout>
+                    <span>Hacer pedido · Pago seguro</span>
+                    <small>PSE · Nequi · Tarjetas</small>
+                </button>
+                <a class="btn btn--line up btn--full" id="wa" href="#" target="_blank" rel="noopener">Finalizar por WhatsApp</a>
+                <div class="trust up mute">
+                    <span>Compra protegida</span>
+                    <span>Envíos a toda Colombia</span>
+                    <span>Garantía de calidad</span>
+                </div>
+                <button class="link up bag-empty" data-empty-bag>Vaciar bolsa</button>
+            </div>
+        </div>
+
+        <!-- Paso 2 · Datos de envío y pago -->
+        <form class="ship-view" id="envioForm">
+            <button type="button" class="link up ship-back" data-back>← Volver a la bolsa</button>
+            <p class="mute ship-intro">Ingresa los datos para la transportadora. Luego te llevamos a Mercado Pago para pagar de forma segura.</p>
+            <div class="form-err" id="envioError" role="alert" hidden></div>
+            <div class="field-grid">
+                <label class="field full"><span class="up">Nombre completo *</span>
+                    <input type="text" id="envNombre" required autocomplete="name" placeholder="Ej: Juan Pérez"></label>
+                <label class="field"><span class="up">Documento *</span>
+                    <input type="text" id="envDocumento" required inputmode="numeric" placeholder="Cédula / NIT"></label>
+                <label class="field"><span class="up">Celular *</span>
+                    <input type="tel" id="envCelular" required autocomplete="tel" placeholder="300 123 4567"></label>
+                <label class="field full"><span class="up">Zona de envío *</span>
+                    <select id="envZona" required>
+                        <option value="" disabled selected>Selecciona la zona</option>
+                        <option value="medellin">Medellín ($15.000)</option>
+                        <option value="metropolitana">Área Metropolitana ($20.000)</option>
+                        <option value="nacional">Resto de Colombia ($22.000)</option>
+                    </select></label>
+                <label class="field full" id="groupMetropolitana" hidden><span class="up">Municipio *</span>
+                    <select id="envCiudadMetro">
+                        <option value="" disabled selected>Selecciona el municipio</option>
+                        <option>Bello</option>
+                        <option>Envigado</option>
+                        <option>Itagüí</option>
+                        <option>Sabaneta</option>
+                        <option>La Estrella</option>
+                        <option>Copacabana</option>
+                        <option>San Antonio de Prado</option>
+                        <option>Caldas</option>
+                        <option>Girardota</option>
+                        <option>Barbosa</option>
+                    </select></label>
+                <label class="field full" id="groupNacional" hidden><span class="up">Ciudad de destino *</span>
+                    <input type="text" id="envCiudadNacional" placeholder="Ej: Bogotá, Cali, Cartagena…"></label>
+                <label class="field"><span class="up">Barrio *</span>
+                    <input type="text" id="envBarrio" required placeholder="Nombre del barrio"></label>
+                <label class="field"><span class="up">Dirección *</span>
+                    <input type="text" id="envDireccion" required autocomplete="street-address" placeholder="Calle 123 # 45-67"></label>
+                <label class="field"><span class="up">Apto / Piso</span>
+                    <input type="text" id="envPiso" placeholder="Ej: Apto 502"></label>
+                <label class="field"><span class="up">Referencia</span>
+                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque"></label>
+            </div>
+            <dl class="ship-sum">
+                <div><dt class="up">Subtotal</dt><dd id="shipSubtotal">$0</dd></div>
+                <div><dt class="up">Envío</dt><dd id="shipCosto">Selecciona la zona</dd></div>
+                <div class="ship-total"><dt class="up">Total</dt><dd id="shipTotal">$0</dd></div>
+            </dl>
+            <button type="submit" class="btn up btn--full btn-pay" id="btnPagar">
+                <span>Confirmar y pagar</span>
+                <small>Compra 100% protegida · Mercado Pago</small>
+            </button>
+        </form>
+    </aside>
+
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Detalle del producto">
+        <div class="sheet" id="sheet"></div>
+    </div>
+`;
+
+  function asegurarCapas() {
+    if ($("#drawer")) return;
+    document.body.insertAdjacentHTML("beforeend", CAPAS_HTML);
+  }
+
+  // ============================================================
   // APERTURA / CIERRE DE CAPAS
   // ============================================================
   function abrirModal(sel) {
@@ -3194,6 +3380,7 @@
           };
         });
         renderRank();
+        inyectarSchemaPagina();
       }
     } catch(e) {}
   }
@@ -3202,7 +3389,15 @@
     try {
       const data = await fetchConFallback("envases");
       if (data && data.length) {
-        ENVASES = data.map((item, idx) => {
+        // La base tiene envases repetidos (semilla ejecutada varias veces): uno por nombre
+        const vistos = new Set();
+        const unicos = data.filter(function(item) {
+          const clave = String(item.name || item.nombre || "").trim().toUpperCase();
+          if (!clave || vistos.has(clave)) return false;
+          vistos.add(clave);
+          return true;
+        });
+        ENVASES = unicos.map((item, idx) => {
           const coincidencia = DATOS_DUROS_ENVASES.find(e => e.name.toLowerCase() === (item.name || "").toLowerCase());
           const tallasReales = (Array.isArray(item.sizes) && item.sizes.length)
             ? item.sizes
@@ -3217,6 +3412,7 @@
           };
         });
         renderSizes();
+        inyectarSchemaPagina();
       }
     } catch(e) {}
   }
@@ -3306,8 +3502,8 @@
       return;
     }
 
-    if (x = g("data-page")) {
-      paginaActual = Number(x.dataset.page);
+    if (x = g("data-pg")) {
+      paginaActual = Number(x.dataset.pg);
       renderGrid(true);
       return;
     }
@@ -3423,9 +3619,11 @@
   }
 
   // Sesión de cliente / staff (antes en nav-sesion.js)
+  // Cuenta: sin sesión el ícono lleva a login; con sesión abre un menú (nombre, panel, salir)
   function initSesion() {
     const el = $("#navSesion");
-    if (!el) return;
+    const menu = $("#acctMenu");
+    if (!el || !menu) return;
     let token = null;
     let usuario = null;
     try {
@@ -3436,31 +3634,61 @@
 
     const nombre = String(usuario.nombre).split(" ")[0];
     const esStaff = usuario.rol === "admin" || usuario.rol === "empleado";
-    const lbl = el.querySelector(".nav-lbl");
-    if (lbl) lbl.textContent = esStaff ? "Panel · " + nombre : nombre;
-    el.href = esStaff ? "admin.html" : "#";
-    el.title = esStaff ? "Ir al panel de administración" : "Sesión iniciada";
+    el.removeAttribute("href");
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-haspopup", "true");
+    el.setAttribute("aria-expanded", "false");
+    el.setAttribute("aria-label", "Cuenta de " + nombre);
+    el.title = "Mi cuenta";
+    el.classList.add("is-auth");
+    el.dataset.acct = "";
 
-    const salir = document.createElement("button");
-    salir.className = "up";
-    salir.dataset.logout = "";
-    salir.textContent = "Salir";
-    el.after(salir);
+    menu.innerHTML = `
+      <span class="acct-hi">Hola, <b></b></span>
+      ${esStaff ? '<a href="admin.html">Panel de administración</a>' : ''}
+      <button type="button" data-logout>Cerrar sesión</button>
+    `;
+    menu.querySelector("b").textContent = nombre;
   }
 
+  function toggleAcct(abrir) {
+    const el = $("#navSesion");
+    const menu = $("#acctMenu");
+    if (!el || !menu || !el.hasAttribute("data-acct")) return;
+    const abierto = typeof abrir === "boolean" ? abrir : menu.hidden;
+    menu.hidden = !abierto;
+    el.setAttribute("aria-expanded", String(abierto));
+  }
+
+  document.addEventListener("click", function(e) {
+    if (e.target.closest("[data-acct]")) {
+      toggleAcct();
+    } else if (!e.target.closest("#acctMenu")) {
+      toggleAcct(false);
+    }
+  });
+
   document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") closeAll();
+    if (e.key === "Escape") {
+      closeAll();
+      toggleAcct(false);
+    } else if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("[data-acct]")) {
+      e.preventDefault();
+      toggleAcct();
+    }
   });
 
   function initThemeToggle() {
     const btn = $("#toggleTema");
     if (!btn) return;
-    const lbl = btn.querySelector(".nav-lbl");
     const ico = btn.querySelector("i");
 
     function updateLabel() {
       const isLight = document.documentElement.classList.contains("modo-claro");
-      if (lbl) lbl.textContent = isLight ? "Modo Oscuro" : "Modo Claro";
+      const txt = isLight ? "Cambiar a modo oscuro" : "Cambiar a modo claro";
+      btn.setAttribute("aria-label", txt);
+      btn.title = txt;
       if (ico) ico.className = isLight ? "fa-solid fa-moon" : "fa-solid fa-sun";
     }
 
@@ -3476,6 +3704,7 @@
 
   function boot() {
     // 1. Render inmediato con datos duros auténticos (0ms LCP, sin parpadeos)
+    asegurarCapas();
     P = DATOS_DUROS_PRODUCTOS.map(adaptarProducto);
     migrarCarritoLegacy();
     renderChips();
@@ -3490,7 +3719,10 @@
     initSort();
     initCheckout();
     initSesion();
+    initTabs();
+    initContadores();
     inyectarSchemaProductos();
+    inyectarSchemaPagina();
 
     // 2. Conectar en segundo plano con APIs para actualización continua
     cargarCatalogoBackend();
