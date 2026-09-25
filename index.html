@@ -78,10 +78,12 @@
             <a href="#envases">Envases</a>
             <a href="#kits">Kits</a>
             <a href="#nosotros">Nosotros</a>
+            <a href="#contacto">Contacto</a>
         </nav>
         <a class="logo" href="#">Alta Densidad<small>Fragancias</small></a>
         <nav class="up nav-r">
-            <button id="toggleTema" class="up" style="margin-right: var(--sp-3);" aria-label="Cambiar modo de luz">Modo Claro</button>
+            <a id="navSesion" href="login.html" aria-label="Ingresar a tu cuenta"><i class="fa-regular fa-user" aria-hidden="true"></i><span class="nav-lbl">Ingresar</span></a>
+            <button id="toggleTema" class="up" aria-label="Cambiar modo de luz"><i class="fa-solid fa-sun" aria-hidden="true"></i><span class="nav-lbl">Modo Claro</span></button>
             <a href="#" data-cart="open">Bolsa (<span id="cnt">0</span>)</a>
         </nav>
     </header>
@@ -94,7 +96,17 @@
             <p class="mute">33% de extracto y feromonas. Una estela que dura más de doce horas, a una fracción del costo del perfume comercial.</p>
             <div><a class="btn up" href="#coleccion">Explorar colección</a></div>
         </div>
-        <div class="stage"><div class="bottle" style="--h:32;--s:2.3"><i></i></div></div>
+        <div class="stage" aria-label="Frasco insignia de Alta Densidad Fragancias">
+            <div class="hero-image-wrap">
+                <img src="assets/img/hero-alta-densidad.jpg" 
+                     alt="Frasco insignia de Alta Densidad Fragancias — 33% Extracto y Feromonas" 
+                     class="hero-signature-img"
+                     width="600" 
+                     height="600"
+                     loading="eager" 
+                     fetchpriority="high">
+            </div>
+        </div>
     </section>
 
     <!-- 3 · COLECCIÓN & FILTROS -->
@@ -115,11 +127,21 @@
                         <span>Filtros</span>
                         <span class="filter-badge" id="filterCountBadge" style="display:none">0</span>
                     </button>
+                    <label class="sort-wrap">
+                        <span class="sr-only">Ordenar por</span>
+                        <select id="sortSelect" class="sort-select up" aria-label="Ordenar fragancias">
+                            <option value="destacados">Recomendados</option>
+                            <option value="precio-asc">Precio: menor a mayor</option>
+                            <option value="precio-desc">Precio: mayor a menor</option>
+                            <option value="nombre-asc">Nombre: A – Z</option>
+                        </select>
+                    </label>
                 </div>
             </div>
             <div class="chips up" id="chips"></div>
             <div class="filter-status mute" id="filterStatus" style="display:none"></div>
             <div class="grid" id="grid"></div>
+            <div id="paginacion" class="paginacion"></div>
         </div>
     </section>
 
@@ -190,73 +212,128 @@
         </div>
     </section>
 
-    <!-- 7 · SISTEMA DE DISEÑO / CIMIENTOS -->
-    <section class="sec" id="sistema">
-        <div class="wrap">
-            <div class="sec-h rv">
-                <h2>Sistema de diseño</h2>
-                <p class="mute up">Cimientos v1</p>
+    <!-- 8 · FOOTER HAUTE PARFUMERIE -->
+    <footer class="haute-footer" id="contacto">
+        <div class="wrap foot-grid">
+            <div class="foot-col">
+                <a class="logo foot-logo" href="#">Alta Densidad<small>Fragancias</small></a>
+                <p class="mute">Casa de perfumería de autor en Medellín. 33% de extracto y base de feromonas.</p>
+                <div class="foot-social">
+                    <a href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href="https://www.tiktok.com/@fragancias_altadensidad" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="https://wa.me/573046477694" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                </div>
             </div>
-            <div class="ds rv">
-                <div>
-                    <span class="up">Color · semánticos</span>
-                    <div class="sw">
-                        <i style="background:var(--c-bg)"></i>
-                        <i style="background:var(--c-surface)"></i>
-                        <i style="background:var(--c-ink)"></i>
-                        <i style="background:var(--c-accent)"></i>
-                        <i style="background:var(--c-wine)"></i>
-                    </div>
-                    <code>--c-bg · --c-surface · --c-ink<br>--c-accent · --c-wine · --c-line<br>--c-mute · --c-inv-bg/ink</code>
-                </div>
-                <div>
-                    <span class="up">Tipografía</span>
-                    <p class="disp" style="font-size:32px;margin:var(--sp-2) 0;color:var(--c-ink)">Cormorant Garamond</p>
-                    <code>--f-display · --f-ui<br>--fs-1 … --fs-6<br>--ls-ui · --ls-logo</code>
-                </div>
-                <div>
-                    <span class="up">Espacio y forma</span>
-                    <p style="margin:var(--sp-2) 0"></p>
-                    <code>--sp-1 … --sp-6 (4→64px)<br>--gutter · --sec · --maxw<br>--r:0 · --bw:1px</code>
-                </div>
-                <div>
-                    <span class="up">Movimiento y capas</span>
-                    <p style="margin:var(--sp-2) 0"></p>
-                    <code>--ease · --t-1 .25s · --t-2 .5s · --t-3 .9s<br>--z-header · --z-aura · --z-scrim · --z-panel</code>
-                </div>
-                <div>
-                    <span class="up">Componentes</span>
-                    <p style="margin:var(--sp-2) 0"></p>
-                    <code>.btn .btn--line .link .chip .tag<br>.card .stage .bottle .qty<br>.drawer .modal .sheet .scrim</code>
-                </div>
-                <div>
-                    <span class="up">Reglas</span>
-                    <p style="margin:var(--sp-2) 0">Radio 0, filetes de 1px, oro solo como acento, sin sombras pesadas. Las secciones solo usan tokens.</p>
-                </div>
+            <div class="foot-col">
+                <h4 class="up">Contacto</h4>
+                <a href="https://wa.me/573046477694" target="_blank" rel="noopener noreferrer">+57 304 647 7694</a>
+                <a href="mailto:perfumesaltadensidad@gmail.com">perfumesaltadensidad@gmail.com</a>
+            </div>
+            <div class="foot-col">
+                <h4 class="up">Ubicación</h4>
+                <a href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn" target="_blank" rel="noopener noreferrer">Calle 77c # 91b - 74<br>Medellín, Antioquia</a>
+                <a class="foot-map" href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn" target="_blank" rel="noopener noreferrer">
+                    <img src="assets/img/ubicacion.png" alt="Mapa de ubicación de la tienda Alta Densidad en Medellín" width="200" height="110" loading="lazy" decoding="async">
+                </a>
+            </div>
+            <div class="foot-col">
+                <h4 class="up">Información</h4>
+                <a href="nosotros.html">Preguntas frecuentes</a>
+                <a href="nosotros.html">Envíos y devoluciones</a>
+                <a href="nosotros.html">Política de privacidad</a>
+                <a href="login.html">Mi cuenta</a>
             </div>
         </div>
-    </section>
-
-    <!-- 8 · FOOTER HAUTE PARFUMERIE -->
-    <footer class="haute-footer up">
-        <span>© 2026 Fragancias de Alta Densidad</span>
-        <span>Medellín, Colombia · WhatsApp: +57 304 647 7694</span>
+        <div class="wrap foot-bottom up">
+            <span>© 2026 Fragancias de Alta Densidad</span>
+            <span>Envíos a toda Colombia · Pago seguro con Mercado Pago</span>
+        </div>
     </footer>
 
     <!-- 9 · DRAWER DE BOLSA (CARRITO) -->
     <div class="scrim" id="scrim" data-close></div>
-    <aside class="drawer" id="drawer" aria-label="Bolsa de compras">
+    <aside class="drawer" id="drawer" data-step="bag" aria-label="Bolsa de compras">
         <div class="drawer-h up">
-            <span>Tu bolsa</span>
+            <span id="drawerTitle">Tu bolsa</span>
             <button class="up" data-close aria-label="Cerrar bolsa">✕ Cerrar</button>
         </div>
-        <div id="items"></div>
-        <p class="mute" style="font-size:var(--fs-2)">Envío y forma de pago se confirman por WhatsApp.</p>
-        <div class="tot">
-            <span class="up" style="align-self:center">Subtotal</span>
-            <b id="total">$0</b>
+
+        <!-- Paso 1 · Bolsa -->
+        <div class="bag-view">
+            <div id="items"></div>
+            <div class="tot">
+                <span class="up" style="align-self:center">Subtotal</span>
+                <b id="total">$0</b>
+            </div>
+            <div id="bagActions" class="bag-actions">
+                <button class="btn up btn--full btn-pay" data-checkout>
+                    <span>Hacer pedido · Pago seguro</span>
+                    <small>PSE · Nequi · Tarjetas</small>
+                </button>
+                <a class="btn btn--line up btn--full" id="wa" href="#" target="_blank" rel="noopener">Finalizar por WhatsApp</a>
+                <div class="trust up mute">
+                    <span>Compra protegida</span>
+                    <span>Envíos a toda Colombia</span>
+                    <span>Garantía de calidad</span>
+                </div>
+                <button class="link up bag-empty" data-empty-bag>Vaciar bolsa</button>
+            </div>
         </div>
-        <a class="btn up btn--full" id="wa" href="#" target="_blank" rel="noopener">Finalizar por WhatsApp</a>
+
+        <!-- Paso 2 · Datos de envío y pago -->
+        <form class="ship-view" id="envioForm">
+            <button type="button" class="link up ship-back" data-back>← Volver a la bolsa</button>
+            <p class="mute ship-intro">Ingresa los datos para la transportadora. Luego te llevamos a Mercado Pago para pagar de forma segura.</p>
+            <div class="form-err" id="envioError" role="alert" hidden></div>
+            <div class="field-grid">
+                <label class="field full"><span class="up">Nombre completo *</span>
+                    <input type="text" id="envNombre" required autocomplete="name" placeholder="Ej: Juan Pérez"></label>
+                <label class="field"><span class="up">Documento *</span>
+                    <input type="text" id="envDocumento" required inputmode="numeric" placeholder="Cédula / NIT"></label>
+                <label class="field"><span class="up">Celular *</span>
+                    <input type="tel" id="envCelular" required autocomplete="tel" placeholder="300 123 4567"></label>
+                <label class="field full"><span class="up">Zona de envío *</span>
+                    <select id="envZona" required>
+                        <option value="" disabled selected>Selecciona la zona</option>
+                        <option value="medellin">Medellín ($15.000)</option>
+                        <option value="metropolitana">Área Metropolitana ($20.000)</option>
+                        <option value="nacional">Resto de Colombia ($22.000)</option>
+                    </select></label>
+                <label class="field full" id="groupMetropolitana" hidden><span class="up">Municipio *</span>
+                    <select id="envCiudadMetro">
+                        <option value="" disabled selected>Selecciona el municipio</option>
+                        <option>Bello</option>
+                        <option>Envigado</option>
+                        <option>Itagüí</option>
+                        <option>Sabaneta</option>
+                        <option>La Estrella</option>
+                        <option>Copacabana</option>
+                        <option>San Antonio de Prado</option>
+                        <option>Caldas</option>
+                        <option>Girardota</option>
+                        <option>Barbosa</option>
+                    </select></label>
+                <label class="field full" id="groupNacional" hidden><span class="up">Ciudad de destino *</span>
+                    <input type="text" id="envCiudadNacional" placeholder="Ej: Bogotá, Cali, Cartagena…"></label>
+                <label class="field"><span class="up">Barrio *</span>
+                    <input type="text" id="envBarrio" required placeholder="Nombre del barrio"></label>
+                <label class="field"><span class="up">Dirección *</span>
+                    <input type="text" id="envDireccion" required autocomplete="street-address" placeholder="Calle 123 # 45-67"></label>
+                <label class="field"><span class="up">Apto / Piso</span>
+                    <input type="text" id="envPiso" placeholder="Ej: Apto 502"></label>
+                <label class="field"><span class="up">Referencia</span>
+                    <input type="text" id="envReferencia" placeholder="Ej: Frente al parque"></label>
+            </div>
+            <dl class="ship-sum">
+                <div><dt class="up">Subtotal</dt><dd id="shipSubtotal">$0</dd></div>
+                <div><dt class="up">Envío</dt><dd id="shipCosto">Selecciona la zona</dd></div>
+                <div class="ship-total"><dt class="up">Total</dt><dd id="shipTotal">$0</dd></div>
+            </dl>
+            <button type="submit" class="btn up btn--full btn-pay" id="btnPagar">
+                <span>Confirmar y pagar</span>
+                <small>Compra 100% protegida · Mercado Pago</small>
+            </button>
+        </form>
     </aside>
 
     <!-- 10 · MODAL DETALLE DE PRODUCTO (PIRÁMIDE OLFATIVA & PRESENTACIONES) -->
@@ -276,6 +353,10 @@
             </div>
             <div class="filter-sheet-body">
                 <div class="filter-group">
+                    <label class="up filter-label">Colección</label>
+                    <div class="filter-pills" id="fpCategories"></div>
+                </div>
+                <div class="filter-group">
                     <label class="up filter-label">Familia Olfativa</label>
                     <div class="filter-pills" id="fpFamilies"></div>
                 </div>
@@ -286,6 +367,10 @@
                 <div class="filter-group">
                     <label class="up filter-label">Estilo / Género</label>
                     <div class="filter-pills" id="fpGenders"></div>
+                </div>
+                <div class="filter-group">
+                    <label class="up filter-label">Marca</label>
+                    <div class="filter-pills" id="fpBrands"></div>
                 </div>
             </div>
             <div class="filter-sheet-f">

@@ -149,9 +149,14 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
                         <span class="ia-header-status"><span class="ia-status-circle"></span> Lista para recomendarte</span>
                     </div>
                 </div>
-                <button class="ia-chat-close-btn" id="adIaChatClose" aria-label="Cerrar chat">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="ia-header-actions">
+                    <a href="https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Estoy%20consultando%20el%20asistente%20virtual%20AURA%20y%20me%20gustar%C3%ADa%20hablar%20con%20un%20asesor%20humano.%20%E2%9C%A8" target="_blank" rel="noopener noreferrer" class="ia-header-wa-btn" aria-label="Hablar con asesor en WhatsApp" title="Chatear con asesor en WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <button class="ia-chat-close-btn" id="adIaChatClose" aria-label="Cerrar chat" title="Cerrar chat">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
             <div class="ia-chat-messages" id="adIaChatMessages">
                 <!-- Los mensajes se insertan dinámicamente -->
@@ -174,6 +179,13 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
         document.getElementById('adIaChatClose').onclick = toggleChat;
         document.getElementById('adIaChatForm').onsubmit = manejarEnvioMensaje;
 
+        // Cerrar con tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && chatAbierto) {
+                toggleChat();
+            }
+        });
+
         // Restaurar historial previo o mostrar saludo inicial
         if (!restaurarHistorial()) {
             mostrarSaludoInicial();
@@ -183,10 +195,13 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
     // ── Abrir / Cerrar Chat ───────────────────────────────────────────────
     function toggleChat() {
         const widget = document.getElementById('adIaChatWidget');
+        const launcher = document.getElementById('adIaChatLauncher');
         if (!widget) return;
         chatAbierto = !chatAbierto;
         if (chatAbierto) {
             widget.classList.add('active');
+            if (launcher) launcher.classList.add('active');
+            document.body.classList.add('ia-chat-open');
             obtenerCatalogo();
             setTimeout(() => {
                 const input = document.getElementById('adIaChatInput');
@@ -194,6 +209,8 @@ Estamos ubicados en la <strong>Calle 77c # 91b - 74, Medellín, Antioquia</stron
             }, 300);
         } else {
             widget.classList.remove('active');
+            if (launcher) launcher.classList.remove('active');
+            document.body.classList.remove('ia-chat-open');
         }
     }
 

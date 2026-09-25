@@ -574,7 +574,14 @@ html.modo-claro .skeleton-shimmer::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform var(--transition-base, 0.22s ease), opacity var(--transition-base, 0.22s ease);
+  transition: transform var(--transition-base, 0.22s ease), opacity var(--transition-base, 0.22s ease), visibility var(--transition-base, 0.22s ease);
+}
+
+body.ia-chat-open .whatsapp-flotante-wrapper {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: scale(0.6) translateY(20px) !important;
 }
 
 .whatsapp-flotante-wrapper:hover {

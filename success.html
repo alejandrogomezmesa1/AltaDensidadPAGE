@@ -40,6 +40,7 @@
         if (order && (order.status === 'approved' || order.status === 'pending')) {
           try { 
             localStorage.removeItem('altadensidad_carrito');
+            localStorage.removeItem('ad_cart_v2');
             sessionStorage.removeItem('altadensidad_carrito'); // Por si acaso
           } catch {};
           content.innerHTML = `

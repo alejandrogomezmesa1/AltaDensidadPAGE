@@ -102,7 +102,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  z-index: 1000;
+  z-index: 1200;
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px) scale(0.95);
@@ -186,6 +186,34 @@
   height: 6px;
   border-radius: 50%;
   background: #00ffd2;
+}
+
+.ia-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ia-header-wa-btn {
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #25D366;
+  font-size: 1.05rem;
+  text-decoration: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.ia-header-wa-btn:hover {
+  background: #25D366;
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.4);
 }
 
 .ia-chat-close-btn {
@@ -535,6 +563,15 @@ html.modo-claro .ia-chat-input {
   border-color: rgba(184, 150, 12, 0.3);
 }
 
+/* ── Ocultar Botón Flotante de WhatsApp mientras el Chatbot esté Abierto ── */
+body.ia-chat-open .whatsapp-flotante-wrapper {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: scale(0.6) translateY(20px) !important;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease !important;
+}
+
 /* ── Móvil / Responsive ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .ia-chat-launcher {
@@ -543,6 +580,12 @@ html.modo-claro .ia-chat-input {
     padding: 10px 14px 10px 12px;
   }
   
+  body.ia-chat-open .ia-chat-launcher {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
   .ia-chat-widget {
     bottom: 0;
     right: 0;

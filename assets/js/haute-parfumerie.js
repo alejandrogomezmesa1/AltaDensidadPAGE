@@ -7,1535 +7,1660 @@
   "use strict";
 
   const WA = "573046477694";
-  const SIZES = [
-    { ml: 30, x: 0.6, s: 1.3, n: "Viaje", t: "Atomizador compacto para llevar contigo." },
-    { ml: 50, x: 1.0, s: 1.7, n: "Insignia", t: "El formato de la casa, para el uso diario." },
-    { ml: 100, x: 1.8, s: 2.1, n: "Colección", t: "Botella grande para quienes no quieren quedarse sin ella." }
-  ];
 
   // ============================================================
   // DATOS DUROS DEL CATÁLOGO REAL DE FRAGANCIAS DE ALTA DENSIDAD
   // ============================================================
   const DATOS_DUROS_PRODUCTOS = [
   {
-    "id": 1,
-    "n": "212 VIP ROSE CAROLINA HERRERA",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Champaña rosada",
-      "Flor de durazno",
-      "Madera reina · Feromonas"
+    "id": 118,
+    "name": "BHARARA SOLEIL",
+    "price": 130000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 0,
-    "desc": "Es una fragancia femenina con un aire fresco y dinámico. Representa el glamour juvenil y la autenticidad intrépida, ideal para quienes viven la vida al máximo y destacan con seguridad",
-    "img": "assets/img/212-vip-rose.jpg"
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1786065326/altadensidad/ilcuxcvsdqxsnk0ly5yz.jpg",
+    "description": "Bharara King Soleil es una fragancia de la casa Bharara Beauty orientada principalmente al público masculino, caracterizada por un perfil ámbar amaderado y frutal con alta presencia y rendimiento."
   },
   {
-    "id": 2,
-    "n": "GOOD GIRL CAROLINA HERRERA",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Almendra · Café",
-      "Jazmín sambac",
-      "Cacao · Haba tonka"
+    "id": 117,
+    "name": "ALEXANDRIA ll XERJOFF",
+    "price": 125000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 37,
-    "desc": "La dualidad entre la dulzura y la intensidad. Good Girl combina la frescura del jazmín y la almendra con la profundidad del cacao y el café, creando un aroma seductor y poderoso.",
-    "img": "assets/img/GOOD_GIRL.jpg"
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782937023/altadensidad/lk7rqnrckify9tszkd2c.jpg",
+    "description": "La fragancia abre con un contraste fascinante y refinado. La frescura limpia de la lavanda y la dulzura frutal de la manzana se entrelazan de inmediato con la calidez especiada de la canela y la riqueza del palo de rosa de palisandro. Esta salida crea una introducción densa, cremosa y con un aire sumamente aristocrático."
   },
   {
-    "id": 3,
-    "n": "GOOD GIRL BLUSH CAROLINA HERRERA",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Almendra · Café",
-      "Jazmín sambac",
-      "Cacao · Haba tonka"
+    "id": 116,
+    "name": "RENAISSANCE XERJOFF",
+    "price": 125000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 74,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/GOOD_GIRL_BLUSH.png"
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782936767/altadensidad/qnanxrjbgnoszt2enbaw.jpg",
+    "description": "La fragancia abre con una explosión cítrica sumamente realista, jugosa y brillante de limones de Amalfi, mandarina y bergamota de Calabria, matizada por el toque verde y ligeramente amargo del petitgrain."
   },
   {
-    "id": 4,
-    "n": "VERY GOOD GIRL CAROLINA HERRERA",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Almendra · Café",
-      "Jazmín sambac",
-      "Cacao · Haba tonka"
+    "id": 115,
+    "name": "HAWAS ICE RASASI",
+    "price": 150000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 111,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/VERY_GOOD_GIRL.jpg"
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782608166/altadensidad/zczo5gcmhblxgsxquews.jpg",
+    "description": "Una evolución ultra refrescante, cítrica y chispeante del legendario ADN de Hawas. Abre con una explosión helada de manzana fresca, limón italiano y anís estrellado, que evoluciona hacia un corazón frutal y dulce de ciruela y cardamomo. Su fondo de madera flotante y almizcle garantiza una estela limpia, masculina y enérgica de altísima duración."
   },
   {
-    "id": 5,
-    "n": "212 SEXY CAROLINA HERRERA",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
+    "id": 114,
+    "name": "HAWAS FIRE RASASI",
+    "price": 150000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 148,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/212_SEXY.webp"
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782608014/altadensidad/imgvy7okfxnpoujxp4nv.jpg",
+    "description": "Una evolución ultra refrescante, cítrica y chispeante del ADN original. Abre con una explosión helada de manzana jugosa, limón italiano y anís estrellado, que evoluciona hacia un corazón frutal de ciruela y cardamomo. Su fondo de madera flotante y almizcle garantiza una estela limpia y enérgica de alta duración. La opción definitiva para días calurosos y uso diario casual."
   },
   {
-    "id": 6,
-    "n": "212 VIP BLACK CAROLINA HERRERA",
+    "id": 113,
+    "name": "THANK U NEXT 2.0 ARIANA GRANDE",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782607578/altadensidad/ztc2h5y2wrvoyfoetpwd.jpg",
+    "description": "Juguetón, vibrante y sumamente encantador. Esta evolución abre con una explosión refrescante de jugo de manzana, fresa silvestre y granada. Su corazón floral de orquídea blanca y jazmín da paso a un fondo adictivo y cremoso de malvavisco (bombón), almizcle y sándalo. Un perfume alegre y ultra femenino, perfecto para el uso diario."
+  },
+  {
+    "id": 112,
+    "name": "HER CONFESSION LATTAFA",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782607212/altadensidad/fesanygzakp4hyqcdizy.jpg",
+    "description": "Una fragancia que evoca misterio y elegancia absoluta. Abre con una combinación cálida y adictiva de canela y notas místicas, abriendo paso a un corazón intensamente floral de jazmín y nardos con un toque sutil de incienso. Su fondo de vainilla, haba tonka y almizcle envuelve la piel en una estela dulce, cremosa y sumamente magnética."
+  },
+  {
+    "id": 111,
+    "name": "HUGO BOSS RED",
+    "price": 80000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782606963/altadensidad/mfz2pdlbmqefacwqzrmk.jpg",
+    "description": "Una fragancia electrizante y vanguardista que rompe esquemas. Destaca por su innovador concepto de contraste entre el \"frío extremo\" y el \"calor líquido\", abriendo con notas metálicas, toronja y pimienta rosa, que luego dan paso a un corazón frutal de ruibarbo y piña. Cierra con un fondo masculino y reconfortante de haba tonka y ámbar."
+  },
+  {
+    "id": 110,
+    "name": "HIS CONFESSION LATTAFA",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782606774/altadensidad/suzuxazgjw2ejpfspdej.jpg",
+    "description": "Una fragancia imponente que equilibra la frescura de la lavanda y la mandarina con la calidez de la canela especiada. Su evolución revela un corazón elegante de iris y ciprés, sellado por una base adictiva de vainilla, incienso y haba tonka. Un aroma magnético, cremoso y con carácter, diseñado para el hombre moderno que busca destacar con distinción absoluta."
+  },
+  {
+    "id": 109,
+    "name": "BACCARAT ROUGE  540 MAISON FRANCIS",
+    "price": 110000,
+    "category": "Diseñador",
+    "gender": "Unisex",
+    "sizes": [
+      "60ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782606594/altadensidad/zbkuth6wdrw5ehozhzb1.jpg",
+    "description": "Maison Francis Kurkdjian Baccarat Rouge 540: El epítome del lujo contemporáneo. Una obra de arte de la perfumería de nicho francesa que envuelve la piel en un halo poético y sofisticado. Su aroma combina la calidez del azafrán y el jazmín con la densidad del ámbar gris y el cedro recién cortado. Un perfume luminoso, distintivo y con una estela dulce-resinosa que resulta adictiva desde el primer segundo."
+  },
+  {
+    "id": 108,
+    "name": "ETER DESERT ROSE ARMAF",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782605844/altadensidad/kwizxqvktjl4spetmu4p.jpg",
+    "description": "Una obra de arte de la perfumería árabe que equilibra a la perfección la frescura exótica con la calidez del desierto. Abre con ráfagas brillantes de frutas tropicales y notas cítricas, que evolucionan hacia un corazón floral empolvado y un fondo profundo de ámbar, almizcle y maderas finas."
+  },
+  {
+    "id": 107,
+    "name": "VULCAN BLACK FRIDAY FRENCH AVENUE",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782608356/altadensidad/pvyo7tbfrakfuc5qwfyp.jpg",
+    "description": "Una declaración de fuerza y misterio. Este perfume combina una salida vibrante de azafrán, manzana y canela con un corazón imponente de cuero y rosa que le aporta una elegancia imprecionante. Su fondo terroso de pachulí, papiro y musgo sella una estela oscura, madura y profundamente magnética."
+  },
+  {
+    "id": 106,
+    "name": "VULCAN FEU FRENCH AVENUE",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782605075/altadensidad/tfi35ft9uc999cbchgpf.jpg",
+    "description": "Un perfume de nicho, misterioso y sumamente sofisticado. Abre con una salida limpia de bergamota y pimienta rosada que evoluciona hacia un corazón oscuro de madera de oud, suavizado por una base adictiva de vainilla y ámbar. Un aroma opulento, maduro y elegante con una fijación excelente."
+  },
+  {
+    "id": 105,
+    "name": "9PM NIGHT OUT AFNAN",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1782604901/altadensidad/uonp553la39g1ctelq0y.jpg",
+    "description": "La bestia indiscutible de la noche. Una explosión magnética de manzana silvestre, canela y una base ultra seductora de vainilla negra. Su rendimiento es brutal, ideal para salir de fiesta y asegurar cumplidos. Si buscas un aroma dulce, masculino y que dure toda la noche, es este."
+  },
+  {
+    "id": 104,
+    "name": "KHAMRAH QAHWA LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778550601/altadensidad/gfbsyn1im8orrlmkfq3x.jpg",
+    "description": "Khamrah Qahwa toma la base cálida, dulce y reconfortante del aclamado Khamrah original y la eleva con el inconfundible y embriagador aroma del café arábica recién tostado. Esta fragancia gourmand abre con una mezcla especiada de canela y cardamomo, que da paso a un corazón irresistible de praliné y frutas confitadas."
+  },
+  {
+    "id": 103,
+    "name": "212 VIP MEN CAROLINA HERRERA",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778550167/altadensidad/qkv1vwepme5jzimp751i.jpg",
+    "description": "212 VIP Men es una fragancia magnética, enérgica y profundamente seductora, inspirada en la actitud de las fiestas más exclusivas de Nueva York. Su composición es un cóctel vibrante que mezcla notas explosivas de maracuyá y lima con un corazón embriagador de vodka, ginebra y menta fresca."
+  },
+  {
+    "id": 102,
+    "name": "IMAGINATION LOUIS VUITTON",
+    "price": 90000,
+    "category": "Diseñador",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778549747/altadensidad/zzldk89i3cnfymjhsbbd.jpg",
+    "description": "Imagination de Louis Vuitton es una obra maestra de la frescura y la sofisticación contemporánea. Esta fragancia captura la energía radiante de los cítricos italianos más finos y la entrelaza con el carácter distintivo del té negro chino extraído con CO2, creando un contraste perfecto entre luminosidad y profundidad."
+  },
+  {
+    "id": 101,
+    "name": "OMNIA CRYSTALLINE BVLGARY",
+    "price": 65000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778549512/altadensidad/gxpzfjxpgv9hvcay2yyu.jpg",
+    "description": "Omnia Crystalline es una fragancia luminosa y delicada que evoca una frescura acuática y serena. Su composición única fusiona notas de bambú y pera asiática (nashi) con la suavidad de la flor de loto, creando una estela limpia, cristalina y sofisticada."
+  },
+  {
+    "id": 100,
+    "name": "ECLAIRE LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778548678/altadensidad/x4gkfj2cwse0xn1o9rqr.jpg",
+    "description": "Déjate envolver por la dulzura más adictiva y reconfortante. Eclaire de Lattafa es una auténtica pastelería embotellada, diseñada para quienes aman los aromas irresistibles que dejan huella. Esta fragancia gourmand abre con una explosión cremosa de caramelo y leche, evolucionando hacia un corazón suave de miel y flores blancas, para finalmente reposar en una base profunda de vainilla y praliné."
+  },
+  {
+    "id": 99,
+    "name": "ART OF UNIVERSE LATTAFA",
+    "price": 140000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778548440/altadensidad/mygoyvtq4g5pofh410ot.jpg",
+    "description": "Descubre la majestuosidad de Medio Oriente con Art of Universe de Lattafa, una verdadera obra maestra olfativa diseñada para dejar una impresión inolvidable. Esta fragancia envolvente y misteriosa combina la riqueza de las maderas preciosas con la calidez de las especias orientales, creando un aura de lujo, poder y sofisticación."
+  },
+  {
+    "id": 98,
+    "name": "ISLAND BREEZE ARMAF",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778547139/altadensidad/dnjqeagdzaqtqwzrenb0.jpg",
+    "description": "Island Breeze es una fragancia vibrante y refrescante que captura la esencia de la brisa marina y las frutas bañadas por el sol. Su fórmula equilibrada ofrece una estela ligera pero duradera, perfecta para quienes buscan un aroma limpio, exótico y lleno de energía."
+  },
+  {
+    "id": 97,
+    "name": "YARA ELIXIR LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778545898/altadensidad/dqcimmfkgx9uhnm3ydu1.jpg",
+    "description": "Yara Elixir de Lattafa es una fragancia árabe femenina, intensa y sofisticada, con un perfil floral-afrutado que combina frutas tropicales, flores blancas y un fondo dulce y cálido. Es ideal para noches elegantes o climas fríos, dejando una estela envolvente y memorable."
+  },
+  {
+    "id": 96,
+    "name": "CREED AVENTUS",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777778701/altadensidad/z02zdddkcdsz8qnoougp.jpg",
+    "description": "Una de las fragancias más emblemáticas de la casa Creed, reconocida mundialmente por su carácter audaz y sofisticado. Aventus es un homenaje al poder, la visión y el éxito, con un aroma que combina fuerza y elegancia."
+  },
+  {
+    "id": 95,
+    "name": "CREED SILVER MOUNTAIN  WATER",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777778605/altadensidad/f5zjhv12nfimthz5cs1r.jpg",
+    "description": "Fragancia icónica inspirada en la pureza de los Alpes, que combina frescura cristalina con un toque sofisticado y moderno"
+  },
+  {
+    "id": 92,
+    "name": "YUM YUM  BAUL ARMAF",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689864/altadensidad/szkeyxzdssu9djz2drvk.jpg",
+    "description": "Armaf Yum Yum es un perfume femenino dulce, frutal y gourmand, perfecto para mujeres que buscan un aroma coqueto y moderno. Uso diario, citas románticas, climas templados."
+  },
+  {
+    "id": 91,
+    "name": "YARA LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689703/altadensidad/jot6z7ewz1dlkdr7mpst.jpg",
+    "description": "Yara de Lattafa es un perfume femenino dulce, floral y cremoso, ideal para quienes buscan un aroma juvenil y encantador con buena duración y versatilidad. Perfecto para uso diario, citas románticas y climas templados.",
     "f": "Especiada / Árabe",
     "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Cuero noble y feromonas"
-    ],
-    "p": 75000,
-    "h": 185,
-    "desc": "La esencia de la exclusividad. Un perfume oriental especiado, con una salida de absenta y anís, seguida por un corazón de lavanda y cuero.",
-    "img": "assets/img/VIP_212_BLACK.jpg"
-  },
-  {
-    "id": 7,
-    "n": "BOND NO. 9 BLEECKER STREET",
-    "f": "Cuero",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Cuero noble y feromonas"
-    ],
-    "p": 75000,
-    "h": 222,
-    "desc": "Un perfume intenso y seductor que combina notas de cuero, tabaco y especias.",
-    "img": "assets/img/BOND_NO.9_BLEECKER.jpg"
-  },
-  {
-    "id": 8,
-    "n": "LIGHT BLUE DOLCE & GABBANA",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Femenino",
-    "no": [
-      "Manzana verde · Limón",
-      "Bambú · Jazmín",
-      "Cedro · Ámbar"
-    ],
-    "p": 75000,
-    "h": 259,
-    "desc": "Inspirado en la frescura y sensualidad del Mediterráneo, este perfume está dirigido a personas que buscan una fragancia vibrante y juvenil.",
-    "img": "assets/img/ligth_blue.jpg"
-  },
-  {
-    "id": 9,
-    "n": "LIGHT BLUE DOLCE & GABBANA MEN",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Masculino",
-    "no": [
-      "Manzana verde · Limón",
-      "Bambú · Jazmín",
-      "Cedro · Ámbar"
-    ],
-    "p": 75000,
-    "h": 296,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/LIGHT_BLUE_MEN.jpg"
-  },
-  {
-    "id": 10,
-    "n": "SANTAL 33",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Cardamomo · Iris",
-      "Papiro · Violeta",
-      "Sándalo · Cedro · Cuero"
-    ],
-    "p": 75000,
-    "h": 333,
-    "desc": "La esencia de la sofisticación moderna. Una fragancia amanerada especiada, con notas de sándalo, cardamomo y cuero.",
-    "img": "assets/img/SANTAL_33.jpg"
-  },
-  {
-    "id": 11,
-    "n": "TOY 2 BUBBLE GUM MOSCHINO",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 10,
-    "desc": "Es una fragancia floral frutal con un toque divertido y juvenil. Su apertura está marcada por frutas confitadas, naranja amarga y limón.",
-    "img": "assets/img/TOY_2_BUBBLE_GUM.jpg"
-  },
-  {
-    "id": 12,
-    "n": "TOY 2 PEARL MOSCHINO",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 47,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/TOY_PEARL.jpg"
-  },
-  {
-    "id": 13,
-    "n": "TOY 2 EDP MOSCHINO",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 84,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/TOY2EDP.webp"
-  },
-  {
-    "id": 14,
-    "n": "OLYMPEA PACO RABANNE",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 121,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/OLYMPEA.webp"
-  },
-  {
-    "id": 15,
-    "n": "INVICTUS PACO RABANNE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Toronja · Notas marinas",
-      "Hoja de laurel · Jazmín",
-      "Madera de gaiac · Ámbar gris"
-    ],
-    "p": 75000,
-    "h": 158,
-    "desc": "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas.",
-    "img": "assets/img/INVICTUS.webp"
-  },
-  {
-    "id": 16,
-    "n": "LEGEND MONTBLANC",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 195,
-    "desc": "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas.",
-    "img": "assets/img/LEGEND.jpg"
-  },
-  {
-    "id": 17,
-    "n": "AHLI KARPOS",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 232,
-    "desc": "Es una fragancia que evoca la frescura tropical y la dulzura especiada. Desde el primer rocío, despierta los sentidos con una mezcla armoniosa de notas.",
-    "img": "assets/img/AHLI_KARPOS.jpeg"
-  },
-  {
-    "id": 18,
-    "n": "AHLI CORVUS",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 269,
-    "desc": "Es una fragancia que combina notas frutales, florales y amaderadas, creando una experiencia olfativa sofisticada y envolvente.",
-    "img": "assets/img/CORVUS.webp"
-  },
-  {
-    "id": 19,
-    "n": "AHLI VEGA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Especias orientales",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 306,
-    "desc": "Un perfume sensual y seductor que combina notas de flores, frutas y especias.",
-    "img": "assets/img/VEGA.webp"
-  },
-  {
-    "id": 20,
-    "n": "COCO MADEMOISELLE CHANEL",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Naranja de Sicilia · Bergamota",
-      "Rosa de mayo · Jazmín",
-      "Pachulí de Indonesia · Vetiver"
-    ],
-    "p": 75000,
-    "h": 343,
-    "desc": "Un clásico moderno que encapsula la esencia de la sofisticación. Coco Mademoiselle es una fragancia oriental floral con una apertura vibrante de naranja y bergamota.",
-    "img": "assets/img/COCO.jpg"
-  },
-  {
-    "id": 21,
-    "n": "BLEU CHANEL",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Limón · Menta fresca",
-      "Jengibre · Jazmín",
-      "Incienso · Cedro · Sándalo"
-    ],
-    "p": 75000,
-    "h": 20,
-    "desc": "Es una fragancia amaderada aromática, con una apertura fresca de limón, menta y pimienta rosa.",
-    "img": "assets/img/BLEU.jpg"
-  },
-  {
-    "id": 22,
-    "n": "OMBRE NOMADE LOUIS VUITTON",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 57,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/HOMBRENOMADA.webp"
-  },
-  {
-    "id": 23,
-    "n": "IL ROSO DE ILMIN",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 94,
-    "desc": "Es una fragancia floral, frutal y oriental, diseñada para quienes buscan una esencia sofisticada y envolvente.",
-    "img": "assets/img/IL_ROSO3.jpg"
-  },
-  {
-    "id": 24,
-    "n": "IL ORGASME ILMIN",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Especias orientales",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 131,
-    "desc": "Sensualidad y magnetismo absoluto. Un perfume oriental especiado, con una apertura de frutas exóticas y especias.",
-    "img": "assets/img/IL_ORGASME_ILMIN.webp"
-  },
-  {
-    "id": 25,
-    "n": "IL FEMME ILMIN",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Vainilla bourbon y feromonas"
-    ],
-    "p": 75000,
-    "h": 168,
-    "desc": "Una fragancia que evoca la frescura del verano con su mezcla de vainilla, rosa y toques polvorientos.",
-    "img": "assets/img/FEMME.webp"
-  },
-  {
-    "id": 26,
-    "n": "IL KAKUNO ILMIN",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Unisex",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Vainilla bourbon y feromonas"
-    ],
-    "p": 75000,
-    "h": 205,
-    "desc": "Una fragancia que evoca la frescura del verano con su mezcla de vainilla, rosa y toques polvorientos.",
-    "img": "assets/img/KAKUNO.jpg"
-  },
-  {
-    "id": 27,
-    "n": "CLOUD ARIANA GRANDE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Oud ahumado y feromonas"
-    ],
-    "p": 75000,
-    "h": 242,
-    "desc": "Cloud es una fragancia dulce y etérea, con una apertura de lavanda, pera y bergamota que aporta frescura y suavidad.",
-    "img": "assets/img/CLOUD_ARIANA.webp"
-  },
-  {
-    "id": 28,
-    "n": "MOD VANILLA ARIANA GRANDE",
-    "f": "Dulce / Gourmand",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 279,
-    "desc": "Es una fragancia frutal gourmand, con una salida vibrante de frambuesa y pera.",
-    "img": "assets/img/MODVANILLA.jpg"
-  },
-  {
-    "id": 29,
-    "n": "THANK U, NEXT ARIANA GRANDE",
-    "f": "Dulce / Gourmand",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 316,
-    "desc": "Es una fragancia frutal gourmand, con una salida vibrante de frambuesa y pera, seguida por un corazón de rosa y coco.",
-    "img": "assets/img/THANKU2.jpg"
-  },
-  {
-    "id": 30,
-    "n": "BURBERRY HER",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 353,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/B_HER.jpeg"
-  },
-  {
-    "id": 31,
-    "n": "AMOUAGE INTERLUDE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 30,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/AMOUAGE.webp"
-  },
-  {
-    "id": 32,
-    "n": "MEOW KATTY PERY",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 67,
-    "desc": "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante.",
-    "img": "assets/img/MEOW.webp"
-  },
-  {
-    "id": 33,
-    "n": "HEIRESS PARIS HILTON",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 104,
-    "desc": "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante.",
-    "img": "assets/img/HEIRESS2.webp"
-  },
-  {
-    "id": 34,
-    "n": "360 PERRY ELLIS",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 141,
-    "desc": "Un estallido de glamour y frescura. Notas de maracuyá, naranja y melocotón que encantan desde el primer instante.",
-    "img": "assets/img/360.webp"
-  },
-  {
-    "id": 35,
-    "n": "YUM YUM ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 178,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/YUMYUM.webp"
-  },
-  {
-    "id": 36,
-    "n": "ISLAND BLISS ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 215,
-    "desc": "Inspirada en la frescura tropical, esta fragancia está diseñada para quienes buscan un aroma vibrante y exótico.",
-    "img": "assets/img/ISLANDBLISS2.webp"
-  },
-  {
-    "id": 37,
-    "n": "CLUB DE NUIT INTENSE (BESTIA NEGRA) ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Limón · Grosella negra",
-      "Abedul · Jazmín",
-      "Almizcle · Ámbar gris"
-    ],
-    "p": 75000,
-    "h": 252,
-    "desc": "Club de Nuit Intense es una fragancia cítrica y amaderada con una salida de limón, piña y grosella negra.",
-    "img": "assets/img/NUIT2.jpg"
-  },
-  {
-    "id": 38,
-    "n": "CLUB DE NUIT WOMAN ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Limón · Grosella negra",
-      "Abedul · Jazmín",
-      "Almizcle · Ámbar gris"
-    ],
-    "p": 75000,
-    "h": 289,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/NUIT_WOMAN.webp"
-  },
-  {
-    "id": 39,
-    "n": "9PM AFNAN",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Manzana silvestre · Canela",
-      "Flor de azahar",
-      "Vainilla · Haba tonka"
-    ],
-    "p": 75000,
-    "h": 326,
-    "desc": "Seducción nocturna en su máxima expresión. Un perfume dulce y especiado, con una salida de manzana y canela.",
-    "img": "assets/img/9PM2.png"
-  },
-  {
-    "id": 40,
-    "n": "ODYSSEY MANDARIN SKY ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 3,
-    "desc": "Sumérgete en la esencia vibrante y seductora de Odyssey Mandarin Sky, una fragancia masculina que equilibra la frescura cítrica con la calidez envolvente.",
-    "img": "assets/img/ODYSSEY_MANDARIN.png"
-  },
-  {
-    "id": 41,
-    "n": "ODYSSEY CHOCOLATE DUBAI ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Vainilla bourbon y feromonas"
-    ],
-    "p": 75000,
-    "h": 40,
-    "desc": "Un perfume dulce y sensual que combina notas de chocolate, vainilla y caramelos.",
-    "img": "assets/img/ODYSEYCHOCOLATE.jpg"
-  },
-  {
-    "id": 42,
-    "n": "ODYSSEY CANDEE ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 77,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/ODYSEYCANDEE2.jpeg"
-  },
-  {
-    "id": 43,
-    "n": "ODYSSEY MEGA ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 114,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/ODYSEYMEGA.jpeg"
-  },
-  {
-    "id": 44,
-    "n": "ODYSSEY SPECTRA ARMAF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 151,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/ODYSEYSPECTRA.webp"
-  },
-  {
-    "id": 45,
-    "n": "BHARARA ROSE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 188,
-    "desc": "Fragancia de alta concentración con base de feromonas inspirada en BHARARA ROSE.",
-    "img": "assets/img/BHARARAROSE.jpg"
-  },
-  {
-    "id": 46,
-    "n": "BHARARA KING",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Naranja · Bergamota",
-      "Tutti-frutti",
-      "Vainilla blanca · Ámbar"
-    ],
-    "p": 75000,
-    "h": 225,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/BHARARAKING.webp"
-  },
-  {
-    "id": 47,
-    "n": "BHARARA NICHE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 262,
-    "desc": "Fragancia de alta concentración con base de feromonas inspirada en BHARARA NICHE.",
-    "img": "assets/img/BHARARANICHE.webp"
-  },
-  {
-    "id": 48,
-    "n": "YARA CANDY LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
     "no": [
       "Heliotropo · Orquídea",
       "Frutas tropicales",
       "Vainilla · Sándalo"
     ],
-    "p": 75000,
-    "h": 299,
-    "desc": "Dirigida a quienes aman los perfumes dulces y refrescantes, esta fragancia es perfecta para personas con un espíritu alegre y juvenil.",
-    "img": "assets/img/CANDY.jpg"
+    "h": 336
   },
   {
-    "id": 49,
-    "n": "YARA LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Heliotropo · Orquídea",
-      "Frutas tropicales",
-      "Vainilla · Sándalo"
+    "id": 90,
+    "name": "212 VIP BLACK CAROLINA HERRERA",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 336,
-    "desc": "Es una fragancia oriental dulce y sofisticada, diseñada principalmente para mujeres que buscan un aroma envolvente y elegante.",
-    "img": "assets/img/YARA_LATTAFA2.jpg"
-  },
-  {
-    "id": 50,
-    "n": "ASAD LATTAFA",
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689605/altadensidad/focuwtyfmqechm1qcvyi.jpg",
+    "description": "212 VIP Black es un perfume masculino aromático y especiado con fondo cálido, ideal para hombres que buscan un aroma seductor y moderno que destaque en ambientes sociales nocturnos. Perfecto para fiestas, citas nocturnas y climas frescos.",
     "f": "Especiada / Árabe",
     "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 13,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/ASAD_BLACK.jpg"
-  },
-  {
-    "id": 51,
-    "n": "MAYAR INTENSE LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 50,
-    "desc": "Un perfume fresco y cítrico que evoca la esencia de la naturaleza.",
-    "img": "assets/img/MAYARINTENSE.jpg"
-  },
-  {
-    "id": 52,
-    "n": "MAYAR LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 87,
-    "desc": "Es una declaración de elegancia y sensualidad, una fragancia que envuelve los sentidos desde el primer instante.",
-    "img": "assets/img/MAYAR_LATTAFA.jpg"
-  },
-  {
-    "id": 53,
-    "n": "MAYAR CHERRY LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 124,
-    "desc": "Es una declaración de elegancia y sensualidad, una fragancia que envuelve los sentidos desde el primer instante.",
-    "img": "assets/img/MAYAR_LATTAFA_CHERRY.webp"
-  },
-  {
-    "id": 54,
-    "n": "BADE´E AL OUD HONOR & GLORY LATTAFA BLANCA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Azafrán · Nuez moscada",
-      "Rosa · Cuero",
-      "Oud ahumado · Pachulí"
-    ],
-    "p": 75000,
-    "h": 161,
-    "desc": "Poder y presencia en cada gota. Una fragancia amaderada y especiada, con notas de bergamota, pimienta negra y lavanda.",
-    "img": "assets/img/BADE_AL_OUD_HONOR.png"
-  },
-  {
-    "id": 55,
-    "n": "BADEE AL OUD SUBLIME LATTAFA ROJA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Azafrán · Nuez moscada",
-      "Rosa · Cuero",
-      "Oud ahumado · Pachulí"
-    ],
-    "p": 75000,
-    "h": 198,
-    "desc": "Un lujo afrutado y envolvente. Una fragancia amaderada aromática, con notas de frutas tropicales, rosa y vainilla.",
-    "img": "assets/img/ADEE_AL_OUD_SUBLIME.webp"
-  },
-  {
-    "id": 56,
-    "n": "BADE´E AL OUD AMETHYST LATTAFA MORADA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Azafrán · Nuez moscada",
-      "Rosa · Cuero",
-      "Oud ahumado · Pachulí"
-    ],
-    "p": 75000,
-    "h": 235,
-    "desc": "Misterio y elegancia en cada gota. Un perfume oriental floral, con una apertura de bergamota y pimienta rosa.",
-    "img": "assets/img/BADE'E_AL_OUD.png"
-  },
-  {
-    "id": 57,
-    "n": "BADE´E AL OUD FOR GLORY LATTAFA NEGRA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Azafrán · Nuez moscada",
-      "Rosa · Cuero",
-      "Oud ahumado · Pachulí"
-    ],
-    "p": 75000,
-    "h": 272,
-    "desc": "Un perfume misterioso y sensual que combina notas de flores oscuras, cuero y especias.",
-    "img": "assets/img/LATTAFANEGRA.png"
-  },
-  {
-    "id": 58,
-    "n": "BADE´E AL OUD NOBLE BLUSH LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Azafrán · Nuez moscada",
-      "Rosa · Cuero",
-      "Oud ahumado · Pachulí"
-    ],
-    "p": 75000,
-    "h": 309,
-    "desc": "Dirigida a quienes buscan una fragancia dulce y sofisticada, con un toque gourmand.",
-    "img": "assets/img/NOBLEBLUSH.jpeg"
-  },
-  {
-    "id": 59,
-    "n": "KHAMRAH LATTAFA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Canela · Nuez moscada",
-      "Dátiles · Praliné",
-      "Vainilla bourbon · Haba tonka"
-    ],
-    "p": 75000,
-    "h": 346,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/KHAMRAH.jpg"
-  },
-  {
-    "id": 60,
-    "n": "AMBER OUD GOLD EDITION AL HARAMAIN",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Bergamota · Notas verdes",
-      "Melón · Piña dulce",
-      "Ámbar · Vainilla"
-    ],
-    "p": 75000,
-    "h": 23,
-    "desc": "Oro líquido en un frasco. Un perfume oriental amaderado, con una salida de bergamota y notas verdes.",
-    "img": "assets/img/AMBER_OUD_GOLD.jpeg"
-  },
-  {
-    "id": 61,
-    "n": "AMBER ROUGE ORIENTICA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Ámbar cálido y feromonas"
-    ],
-    "p": 75000,
-    "h": 60,
-    "desc": "Intensidad y pasión en cada rocío. Inspirado en Baccarat Rouge 540, combina jazmín, azafrán y ámbar gris.",
-    "img": "assets/img/AMBER_ROUGE.jpg"
-  },
-  {
-    "id": 62,
-    "n": "VELVET GOLF ORIENTICA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 97,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/VELVET_GOLD.webp"
-  },
-  {
-    "id": 63,
-    "n": "AMBER NOIR ORIENTICA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 134,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/AMBER_NOIR.jpg"
-  },
-  {
-    "id": 64,
-    "n": "AZURE ORIENTICA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 171,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/AMBER_AZURE.jpeg"
-  },
-  {
-    "id": 65,
-    "n": "ROYAL BLEU ORIENTICA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Limón · Menta fresca",
-      "Jengibre · Jazmín",
-      "Incienso · Cedro · Sándalo"
-    ],
-    "p": 75000,
-    "h": 208,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/AMBER_BLEU.webp"
-  },
-  {
-    "id": 66,
-    "n": "ROYAL AMBER ORIENTICA",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 245,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/AMBER_ROYAL.webp"
-  },
-  {
-    "id": 67,
-    "n": "ERBA PURA XERJOFF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 282,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/ERBA_PURA.avif"
-  },
-  {
-    "id": 68,
-    "n": "NAXOS XERJOFF",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Unisex",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 319,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/NAXOS.jpeg"
-  },
-  {
-    "id": 69,
-    "n": "ARABIANS TONKA MONTALE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
     "no": [
       "Notas cítricas vibrantes",
       "Especias orientales",
-      "Fondo amaderado y feromonas"
+      "Cuero noble y feromonas"
     ],
-    "p": 75000,
-    "h": 356,
-    "desc": "Montale Poder y misterio en una fragancia. Un perfume oriental especiado, con una apertura de azafrán y bergamota.",
-    "img": "assets/img/ARABIANS_TONKA.jpg"
+    "h": 185
   },
   {
-    "id": 70,
-    "n": "ETERNITY AQUA CALVIN KLEIN",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
+    "id": 89,
+    "name": "VELVET GOLD ORIENTICA",
+    "price": 120000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 33,
-    "desc": "Frescura y elegancia atemporal. Una fragancia acuática amaderada, con notas de pepino, cítricos y lavanda.",
-    "img": "assets/img/ETERNITY_AQUA.jpg"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689452/altadensidad/vaious9fe0dxj0dtsbfg.jpg",
+    "description": "Velvet Gold de Orientica es un perfume oriental ambarado con matices especiados y dulces, perfecto para quienes buscan un aroma sofisticado y envolvente que destaque en ocasiones especiales.  Ideal para eventos nocturnos, citas románticas y climas templados o fríos."
   },
   {
-    "id": 71,
-    "n": "IN 2U HER CALVIN KLEIN",
-    "f": "Aromática",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Ámbar cálido y feromonas"
+    "id": 88,
+    "name": "VERY GOOD GIRL CAROLINA HERRERA",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 70,
-    "desc": "Un perfume sensual y femenino que combina notas de bergamota, flor de azahar y ámbar.",
-    "img": "assets/img/IN2UHER.jpg"
-  },
-  {
-    "id": 72,
-    "n": "DIOR SAUVAGE",
-    "f": "Amaderada",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Bergamota de Calabria",
-      "Pimienta de Sichuan",
-      "Ambroxan · Cedro"
-    ],
-    "p": 75000,
-    "h": 107,
-    "desc": "La fuerza de la naturaleza en un frasco. Un perfume amaderado aromático, con una salida de bergamota y pimienta.",
-    "img": "assets/img/DIORSAUVAGE.PNG"
-  },
-  {
-    "id": 73,
-    "n": "MISS DIOR",
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689371/altadensidad/rwwrlq7dbdmqnjjuixqw.jpg",
+    "description": "Very Good Girl es una fragancia femenina frutal y floral con un fondo cálido, que transmite alegría y sofisticación. Es ideal para mujeres que buscan un perfume moderno, coqueto y versátil. Perfecto para uso diario, citas románticas y climas templados.",
     "f": "Cítrica / Fresca",
     "o": "Noche",
-    "g": "Femenino",
+    "no": [
+      "Almendra · Café",
+      "Jazmín sambac",
+      "Cacao · Haba tonka"
+    ],
+    "h": 111
+  },
+  {
+    "id": 87,
+    "name": "HUGO BOSS BOTTLED UNLIMITED",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689222/altadensidad/mssfblmwnowixfjhgoll.jpg",
+    "description": "Boss Bottled Unlimited es un perfume masculino fresco y deportivo, perfecto para hombres activos que buscan un aroma energético y versátil.  Ideal para uso diario, gimnasio, actividades al aire libre y climas cálidos."
+  },
+  {
+    "id": 86,
+    "name": "TOY 2 DAMA MOSCHINO",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689041/altadensidad/cfvvnrjo5xwa2rmui79q.jpg",
+    "description": "Toy 2 de Moschino es un perfume femenino fresco y floral con un toque frutal, ideal para mujeres que buscan un aroma juvenil, coqueto y elegante.  Perfecto para uso diario, primavera-verano y salidas sociales."
+  },
+  {
+    "id": 85,
+    "name": "TOY 2 PEARL MOSCHINO",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688885/altadensidad/krlcdii1znxkbf5y7c9r.jpg",
+    "description": "Toy 2 Bubble Gum es un perfume femenino dulce y juguetón, que combina notas frutales y especiadas con un fondo cálido. Es ideal para mujeres jóvenes que buscan un aroma alegre, coqueto y moderno, con un toque irreverente y divertido. Perfecto para uso diario, salidas sociales y climas calidos.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
     "no": [
       "Frutas frescas y bayas",
       "Corazón floral de autor",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 144,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/MISSDIOR.jpg"
+    "h": 47
   },
   {
-    "id": 74,
-    "n": "ACQUA DI GIO GIORGIO ARMANI",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
+    "id": 84,
+    "name": "TOY 2 BUBBLE GUM MOSCHINO",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 181,
-    "desc": "La frescura del mar en cada rocío. Una fragancia acuática cítrica, con notas de bergamota, neroli y romero.",
-    "img": "assets/img/ACQUA_DI_GIO.jpg"
-  },
-  {
-    "id": 75,
-    "n": "AQUA DI GIO PROFONDO ARMANI",
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688373/altadensidad/eqygrstbnuqus47rwpuw.jpg",
+    "description": "Toy 2 Bubble Gum es un perfume femenino dulce y juguetón, que combina notas frutales y especiadas con un fondo cálido. Es ideal para mujeres jóvenes que buscan un aroma alegre por su aroma a chicle rosa, coqueto y moderno. Perfecto para uso diario, salidas sociales y climas cálidos.",
     "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "g": "Masculino",
+    "o": "Noche",
     "no": [
       "Frutas frescas y bayas",
       "Corazón floral de autor",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 218,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/DI_GIO_PROFONDO.webp"
+    "h": 10
   },
   {
-    "id": 76,
-    "n": "BORN IN ROMA VALENTINO",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Grosella negra · Pimienta rosa",
-      "Jazmín grandiflorum",
-      "Vainilla bourbon · Madera"
+    "id": 83,
+    "name": "THANK U NEXT ARIANA GRANDE",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 255,
-    "desc": "La sofisticación italiana en un frasco. Una fragancia amaderada especiada, con una apertura vibrante de salvia y jengibre.",
-    "img": "assets/img/BORN_IN_ROMA.jpg"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688238/altadensidad/xompank3ygiknizknxx9.jpg",
+    "description": "Thank U Next es un perfume femenino dulce y frutal con un toque gourmand, ideal para mujeres jóvenes que buscan un aroma alegre, coqueto y moderno, con un aire desenfadado y confiado. Perfecto para uso diario, salidas sociales y climas cálidos."
   },
   {
-    "id": 77,
-    "n": "DONNA BORN IN ROMA VALENTINO",
-    "f": "Aromática",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Grosella negra · Pimienta rosa",
-      "Jazmín grandiflorum",
-      "Vainilla bourbon · Madera"
+    "id": 82,
+    "name": "SANTAL 33 LE LABOO",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 292,
-    "desc": "Inspirada en la elegancia de Roma, esta fragancia está dirigida a mujeres que buscan un perfume sofisticado y moderno.",
-    "img": "assets/img/DONNA_BORN_IN_ROMA.jpeg"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688140/altadensidad/jz4mjl4eyukvk0zxbdvv.jpg",
+    "description": "Santal 33 es un perfume amaderado y especiado, con un aire ahumado y sofisticado que lo ha convertido en un clásico moderno de la perfumería nicho. Es perfecto para quienes buscan un aroma distintivo, elegante y versátil, con gran personalidad. Ideal para uso diario en ambientes urbanos, citas elegantes y climas frescos."
   },
   {
-    "id": 78,
-    "n": "BORN IN ROMA INTENSE VALENTINO",
+    "id": 81,
+    "name": "ONE MILLON PACO RABANNE",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688045/altadensidad/otcuassgathy5joolh2b.jpg",
+    "description": "One Million es un perfume masculino atrevido y opulento, que combina frescura cítrica con especias cálidas y un fondo de cuero y ámbar. Es ideal para hombres que buscan un aroma impactante y seductor, Perfecto para fiestas, citas nocturnas y climas frescos."
+  },
+  {
+    "id": 80,
+    "name": "OMNIA CORAL BVLGARI",
+    "price": 65000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687920/altadensidad/rwqgam5alatla11kqnik.jpg",
+    "description": "Omnia Coral es una fragancia femenina fresca, frutal y floral, que transmite alegría y vitalidad mediterránea. Es ideal para mujeres que buscan un perfume juvenil y luminoso, perfecto para el día a día en primavera y verano. Perfecto para uso diario, salidas sociales y climas cálidos.",
     "f": "Cítrica / Fresca",
     "o": "Noche",
-    "g": "Femenino",
     "no": [
-      "Grosella negra · Pimienta rosa",
-      "Jazmín grandiflorum",
-      "Vainilla bourbon · Madera"
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 329,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/VALENTINO_INTENSE.jpg"
+    "h": 127
   },
   {
     "id": 79,
-    "n": "LACOSTE BLANCA",
+    "name": "ODYSSEY MANDARYN SKY ARMAF",
+    "price": 105000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687824/altadensidad/i2lic2tjh24awmqpp1pf.jpg",
+    "description": "Se distingue por su carácter cítrico, fresco y especiado, con un aire moderno y versátil que la hace ideal para climas cálidos y uso diario. Perfecto para uso diario, oficina, actividades sociales y climas cálidos."
+  },
+  {
+    "id": 78,
+    "name": "ODYSSEY SPECTRA ARMAF",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687662/altadensidad/hdadt2smcfd4ks0xdtr1.jpg",
+    "description": "Se distingue por su carácter fresco, especiado y amaderado, diseñada para hombres que buscan un perfume versátil y moderno con buena presencia. Ideal para uso diario, oficina, salidas sociales y climas templados.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 151
+  },
+  {
+    "id": 77,
+    "name": "ODYSSEY MEGA ARMAF",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687480/altadensidad/cjlgczttyq1vqbbjsqow.jpg",
+    "description": "Se caracteriza por ser intensa, moderna y con un perfil fresco-amaderado, pensada para quienes buscan un perfume versátil pero con gran presencia. Ideal para uso diario, oficina, salidas sociales y climas templados.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 114
+  },
+  {
+    "id": 76,
+    "name": "ODYSSEY CHOCOLATE ARMAF",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687379/altadensidad/es2lljvypzqucc4v5a0o.jpg",
+    "description": "Está pensada para quienes disfrutan de perfumes dulces, cálidos y envolventes, con un marcado protagonismo del cacao y la vainilla. Ideal para citas románticas, eventos nocturnos y climas frescos."
+  },
+  {
+    "id": 75,
+    "name": "ODYSSEY CANDEE ARMAF",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687244/altadensidad/nmlrnf1mp5hnxbstq2sc.jpg",
+    "description": "Uso diario, salidas sociales, climas cálidos, ideal para mujeres jóvenes que buscan un perfume alegre y moderno, con un aire de “postre frutal” sofisticado.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 77
+  },
+  {
+    "id": 74,
+    "name": "CLUB DE NUIT WOMAN ARMAF",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687059/altadensidad/xpvyrmpj8wqxbkkm9fz8.jpg",
+    "description": "Perfil floral, dulce y elegante, con un aire sofisticado y versátil. Perfecto para uso diario, citas románticas y eventos sociales.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Limón · Grosella negra",
+      "Abedul · Jazmín",
+      "Almizcle · Ámbar gris"
+    ],
+    "h": 289
+  },
+  {
+    "id": 73,
+    "name": "CLUB DE NUIT ARMAF",
+    "price": 105000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778550718/altadensidad/dzgkgof614n147vhfrso.jpg",
+    "description": "Muy intensa, expansiva y dominante. Ideal para eventos nocturnos, climas frescos y ocasiones especiales."
+  },
+  {
+    "id": 72,
+    "name": "MISS DIOR",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686760/altadensidad/ldpvogtjx0fwtdeuha3y.jpg",
+    "description": "A lo largo de los años ha tenido varias reinterpretaciones, pero siempre mantiene su esencia romántica, elegante y femenina. Perfecto para citas románticas, eventos especiales, cenas elegantes y uso diario si se aplica con moderación.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 144
+  },
+  {
+    "id": 71,
+    "name": "MAYAR INTENSE LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686641/altadensidad/fvqm0srxgcz9giislgjy.jpg",
+    "description": "Mayar Intense busca un perfil más elegante y duradero, con mayor presencia de notas cálidas y orientales. Ideal para citas románticas, eventos nocturnos y climas frescos, aunque sigue siendo versátil para uso diario.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 50
+  },
+  {
+    "id": 70,
+    "name": "MAYAR CHERRY LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686571/altadensidad/xx7vocgptohl0mk8w0ye.jpg",
+    "description": "Es una fragancia femenina, juvenil y dulce, pensada para quienes disfrutan de aromas golosos con un toque sofisticado. Perfecto para uso diario, salidas sociales, citas románticas y climas cálidos.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 124
+  },
+  {
+    "id": 69,
+    "name": "MAYAR LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686502/altadensidad/v3ieh4zhh3ao3ojlfhqh.jpg",
+    "description": "Es parte de la línea moderna de Lattafa, pensada para quienes disfrutan de fragancias gourmand y alegres. Perfecto para uso diario, salidas sociales, citas románticas y climas cálidos.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 87
+  },
+  {
+    "id": 68,
+    "name": "LIGHT BLUE DAMA DOLCE & GABANNA",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686421/altadensidad/udrg7gnm0axjlkrd9ftr.jpg",
+    "description": "Es una fragancia fresca, mediterránea y muy versátil, que se ha convertido en un clásico para climas cálidos y uso diario.  Perfecto para uso diario, oficina, actividades sociales y climas cálidos."
+  },
+  {
+    "id": 67,
+    "name": "LIGHT BLUE MEN DOLCE & GABANNA",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686341/altadensidad/ebtd5qyrjjghlqfkw2eh.jpg",
+    "description": "Es una fragancia fresca, mediterránea y muy versátil, inspirada en el estilo de vida italiano junto al mar. Perfecto para uso diario, oficina, actividades sociales y climas cálidos."
+  },
+  {
+    "id": 66,
+    "name": "BADEE AL OUD FOR GLORY LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686242/altadensidad/gaj9fjur3hj0iaqpooss.jpg",
+    "description": "Es uno de los perfumes más reconocidos de la casa árabe por su intensidad y su perfil amaderado oriental. Ideal para eventos nocturnos, climas fríos y ocasiones especiales."
+  },
+  {
+    "id": 65,
+    "name": "LACOSTE RED",
+    "price": 65000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "120ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686083/altadensidad/k29egik43cnma8h7wryr.jpg",
+    "description": "Es una fragancia fresca, energética y juvenil, pensada para transmitir dinamismo y vitalidad. Perfecto para uso diario, oficina, actividades sociales y climas cálidos."
+  },
+  {
+    "id": 64,
+    "name": "LACOSTE BLANCA",
+    "price": 65000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686014/altadensidad/ys8kzlde3ywccs5jntee.jpg",
+    "description": "Es una fragancia fresca, limpia y elegante, inspirada en la icónica camiseta polo blanca de Lacoste, símbolo de sencillez y sofisticación deportiva. Perfecto para uso diario, oficina, reuniones sociales y climas cálidos.",
     "f": "Cítrica / Fresca",
     "o": "Oficina",
-    "g": "Masculino",
     "no": [
       "Pomelo · Cardamomo",
       "Ylang-ylang · Nardo",
       "Cedro de Virginia · Gamuza"
     ],
-    "p": 75000,
-    "h": 6,
-    "desc": "La esencia de la elegancia deportiva. Un aroma fresco y limpio, con notas de pomelo, cardamomo y ylang-ylang.",
-    "img": "assets/img/LACOSTE_BLANCA.png"
+    "h": 6
   },
   {
-    "id": 80,
-    "n": "LACOSTE RED STYLE IN PLAY",
+    "id": 63,
+    "name": "KHAMRAH LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777685921/altadensidad/cyfey3ctyid2mvtepg4r.jpg",
+    "description": "Es considerado por muchos como una alternativa accesible a fragancias nicho de estilo oriental.  Ideal para eventos nocturnos, climas fríos y ocasiones especiales.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Canela · Nuez moscada",
+      "Dátiles · Praliné",
+      "Vainilla bourbon · Haba tonka"
+    ],
+    "h": 346
+  },
+  {
+    "id": 62,
+    "name": "ISLAND BLISS ARMAF",
+    "price": 135000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778549998/altadensidad/hgujlhm2xgd0mpmermb8.jpg",
+    "description": "Es un Eau de Parfum con un perfil tropical, refrescante y gourmand, que muchos describen como “jugoso” y parecido a un refresco frutal.  Perfecto para uso diario, actividades sociales y climas cálidos.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 215
+  },
+  {
+    "id": 61,
+    "name": "INVICTUS PACO RABANNE",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777685235/altadensidad/ymclxiwbeszisggrurg5.jpg",
+    "description": "Es una fragancia fresca, deportiva y seductora, inspirada en la victoria y la energía triunfante. Ideal para uso diario, actividades sociales, gimnasio y climas cálidos.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Toronja · Notas marinas",
+      "Hoja de laurel · Jazmín",
+      "Madera de gaiac · Ámbar gris"
+    ],
+    "h": 158
+  },
+  {
+    "id": 60,
+    "name": "HUGO BOSS BOTTLED SILVER",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777685141/altadensidad/dmniqwqmsy1eukixhpsq.jpg",
+    "description": "Se presenta como una fragancia fresca, moderna y versátil, con un perfil más luminoso y metálico. Perfecto para oficina, reuniones sociales y climas templados."
+  },
+  {
+    "id": 59,
+    "name": "HUGO BOSS BOTTLED NIGTH",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777685059/altadensidad/vtnuhnkumsnbol94rzrj.jpg",
+    "description": "Es una fragancia pensada para transmitir confianza y seducción en ambientes nocturnos, con un perfil amaderado aromático más intenso que el clásico Boss Bottled. Ideal para citas románticas, eventos nocturnos y climas frescos."
+  },
+  {
+    "id": 58,
+    "name": "OMBRE NOMADE LOUIS VUITTON",
+    "price": 90000,
+    "category": "Diseñador",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684978/altadensidad/lj7xgvlxdpihwz5if0zc.jpg",
+    "description": "Es una fragancia de lujo, intensa y sofisticada, inspirada en los viajes y en la profundidad de los paisajes desérticos. Ideal para eventos nocturnos, climas fríos y ocasiones especiales.",
     "f": "Cítrica / Fresca",
     "o": "Noche",
-    "g": "Masculino",
     "no": [
       "Frutas frescas y bayas",
       "Corazón floral de autor",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 43,
-    "desc": "Lacoste Red es una fragancia fresca y afrutada con una salida de manzana verde y maclura.",
-    "img": "assets/img/LCRED.jpg"
+    "h": 57
   },
   {
-    "id": 81,
-    "n": "LACOSTE SENSUELLE",
+    "id": 57,
+    "name": "GOOD GIRL BLUSH CAROLINA HERRERA",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684905/altadensidad/z1e7kekzlqbal7kik9ly.jpg",
+    "description": "Es un Eau de Parfum femenino que combina frescura floral con un toque moderno y delicado, pensado para mujeres que buscan un aroma elegante pero más suave y luminoso. Perfecto para uso diario, citas románticas y climas cálidos o templados.",
     "f": "Cítrica / Fresca",
     "o": "Noche",
-    "g": "Femenino",
+    "no": [
+      "Almendra · Café",
+      "Jazmín sambac",
+      "Cacao · Haba tonka"
+    ],
+    "h": 74
+  },
+  {
+    "id": 56,
+    "name": "GOOD GIRL CAROLINA HERRERA",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684839/altadensidad/wmw39uy0tn6qgn3zeq60.jpg",
+    "description": "Es un Eau de Parfum que combina dualidad y contraste: la luz y la oscuridad, lo bueno y lo travieso, reflejando la complejidad de la mujer moderna.  Ideal para citas románticas, eventos nocturnos y climas frescos o fríos.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
+    "no": [
+      "Almendra · Café",
+      "Jazmín sambac",
+      "Cacao · Haba tonka"
+    ],
+    "h": 37
+  },
+  {
+    "id": 55,
+    "name": "EROS ENERGY VERSACE",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684651/altadensidad/kqn0mp9rkbxhtubreqof.jpg",
+    "description": "Se caracteriza por su perfil cítrico intenso y vibrante, pensado para transmitir frescura, dinamismo y energía mediterránea. Perfecto para uso diario, oficina, actividades al aire libre, viajes y climas cálidos.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
+    "no": [
+      "Menta fresca · Manzana verde",
+      "Haba tonka · Geranio",
+      "Vainilla de Madagascar · Cedro"
+    ],
+    "h": 228
+  },
+  {
+    "id": 54,
+    "name": "EROS FLAME VERSACE",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684593/altadensidad/vixara7umfctvro1wn1c.jpg",
+    "description": "Es una interpretación más cálida y apasionada del clásico Eros, diseñada para transmitir fuerza, amor y sensualidad con un perfil cítrico, especiado y ambarado. Ideal para citas románticas, eventos nocturnos y climas fríos o templados.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
+    "no": [
+      "Menta fresca · Manzana verde",
+      "Haba tonka · Geranio",
+      "Vainilla de Madagascar · Cedro"
+    ],
+    "h": 265
+  },
+  {
+    "id": 53,
+    "name": "EROS VERSACE",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684521/altadensidad/ysg7m9slygznddxkephv.jpg",
+    "description": "Es una fragancia intensa, sensual y vibrante, inspirada en el dios griego del amor, Eros, y diseñada para transmitir pasión y fuerza. Ideal para salidas nocturnas, fiestas, citas románticas y climas templados o fríos."
+  },
+  {
+    "id": 52,
+    "name": "ERBA PURA XERJOFF",
+    "price": 130000,
+    "category": "Diseñador",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778549276/altadensidad/newxtcztyebvsp36m0yo.jpg",
+    "description": "Es una fragancia moderna, vibrante y sofisticada, reconocida por su carácter afrutado y almizclado, con gran duración y proyección. Perfecto para eventos nocturnos, climas templados o cálidos, y ocasiones especiales.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
     "no": [
       "Frutas frescas y bayas",
       "Corazón floral de autor",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 80,
-    "desc": "Lacoste Red es una fragancia fresca y afrutada con una salida de manzana verde y maclura.",
-    "img": "assets/img/LACOSTESENSUAL.jpg"
+    "h": 282
   },
   {
-    "id": 82,
-    "n": "ONE MILLON MILLION PACO RABANNE",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Mandarina roja · Pomelo",
-      "Rosa · Canela",
-      "Cuero especiado · Ámbar"
+    "id": 51,
+    "name": "SAUVAGE DIOR",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 117,
-    "desc": "Lujo y audacia en cada gota. Una fragancia amaderada especiada, con una apertura de toronja y menta.",
-    "img": "assets/img/ONE_MILLON.jpg"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684294/altadensidad/drzlo1rkvxaugdkrhylg.jpg",
+    "description": "Es un Eau de Toilette con un carácter fresco, intenso y muy versátil, inspirado en la inmensidad de paisajes desérticos y cielos azules. Perfecto para uso diario, oficina, citas románticas y eventos nocturnos."
   },
   {
-    "id": 83,
-    "n": "BLACK XS L´APHRODISIAQUE PACO RABANNE",
+    "id": 50,
+    "name": "ACQUA DI GIO PROFONDO",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684207/altadensidad/hs9awmx0kgx2ixy69rpo.jpg",
+    "description": "Acqua di Giò Profondo de Giorgio Armani representa una evolución más intensa y moderna del clásico Acqua di Giò, con un perfil marino, aromático y profundo. Ideal para uso nocturno, eventos formales y climas templados o frescos."
+  },
+  {
+    "id": 49,
+    "name": "OMNIA AMETHYSTE BVLGARI",
+    "price": 65000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684118/altadensidad/er2iapojes1ezuvwlbd2.jpg",
+    "description": "Es una fragancia elegante, delicada y sofisticada, inspirada en los matices de la amatista y los jardines de iris al amanecer. Ideal para uso diario, oficina, reuniones sociales y climas templados o frescos.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 201
+  },
+  {
+    "id": 48,
+    "name": "COCO MADEMOISELLE CHANEL",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684012/altadensidad/mehi5mmdeo7rrmqcup3u.jpg",
+    "description": "Es un Eau de Parfum con un carácter elegante, moderno y sofisticado, pensado para mujeres seguras y con estilo.",
     "f": "Especiada / Árabe",
     "o": "Noche",
-    "g": "Masculino",
+    "no": [
+      "Naranja de Sicilia · Bergamota",
+      "Rosa de mayo · Jazmín",
+      "Pachulí de Indonesia · Vetiver"
+    ],
+    "h": 343
+  },
+  {
+    "id": 47,
+    "name": "CLOUD ARIANA GRANDE",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777683896/altadensidad/ttmv9z8hnjci0ltt21nn.jpg",
+    "description": "Es un Eau de Parfum femenino con un perfil dulce, cremoso y gourmand, que transmite una sensación acogedora y romántica.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Oud ahumado y feromonas"
+    ],
+    "h": 242
+  },
+  {
+    "id": 46,
+    "name": "YARA CANDY LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777683787/altadensidad/imdqhqyohvxkises7tqe.jpg",
+    "description": "Es ideal para quienes disfrutan de fragancias azucaradas, juveniles y envolventes, con buena duración y proyección.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Heliotropo · Orquídea",
+      "Frutas tropicales",
+      "Vainilla · Sándalo"
+    ],
+    "h": 299
+  },
+  {
+    "id": 45,
+    "name": "CAN CAN PARIS HILTON",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777683713/altadensidad/n8fpralyfadxlgztwxl7.jpg",
+    "description": "Es una fragancia juvenil, divertida y seductora, con un perfil afrutado-floral que evoluciona hacia un fondo cálido y envolvente."
+  },
+  {
+    "id": 44,
+    "name": "HUGO BOSS BOTTLED",
+    "price": 75000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777683635/altadensidad/u76r1ozd9gqevkbsogtt.jpg",
+    "description": "Boss Bottled es uno de los perfumes masculinos más icónicos de Hugo Boss. Es ideal para uso diario, tanto en ambientes laborales como en ocasiones sociales, gracias a su equilibrio entre frescura y calidez."
+  },
+  {
+    "id": 43,
+    "name": "VALENTINO DONNA BORN IN ROMA",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777682334/altadensidad/ygnf7znr4qh4a5ccsxtv.jpg",
+    "description": "Valentino Donna Born in Roma es un Eau de Parfum femenino. Es una fragancia moderna, sofisticada y con un toque rebelde, inspirada en la cultura urbana de Roma."
+  },
+  {
+    "id": 41,
+    "name": "VALENTINO UOMO BORN IN ROMA",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777681281/altadensidad/w6porka4zqjrwmkgyknz.jpg",
+    "description": "Valentino Uomo Born in Roma es una fragancia masculina moderna y sofisticada, inspirada en la energía urbana de Roma y en la elegancia italiana."
+  },
+  {
+    "id": 40,
+    "name": "BOND N*9 BLEECKER STREET",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777681187/altadensidad/bvernehmxjkrdwhre8lo.jpg",
+    "description": "Fragancia unisex cálida, especiada y afrutada, diseñada para acompañar tanto el día como la noche. Es reconocida por su carácter sofisticado y versátil, con un perfil que mezcla notas verdes, frutales y gourmand."
+  },
+  {
+    "id": 39,
+    "name": "BADE AL OUD BLUSH LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778548976/altadensidad/pfzfhddlsg31ilbtchle.jpg",
+    "description": "Badee Al Oud Noble Blush de Lattafa es una fragancia femenina, perfecto para uso cotidiano, oficina y reuniones sociales."
+  },
+  {
+    "id": 38,
+    "name": "BLEU CHANEL",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680941/altadensidad/qh5vyof9np4jw3grfpwm.jpg",
+    "description": "Bleu de Chanel es uno de los perfumes masculinos más icónicos y versátiles del mercado, con un perfil amaderado-aromático que transmite elegancia, libertad y sofisticación.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
+    "no": [
+      "Limón · Menta fresca",
+      "Jengibre · Jazmín",
+      "Incienso · Cedro · Sándalo"
+    ],
+    "h": 20
+  },
+  {
+    "id": 37,
+    "name": "BHARARA ROSE",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680868/altadensidad/ngi1d015f76jvrmjkaso.jpg",
+    "description": "Bharara Rose es una fragancia femenina, reconocida por su carácter floral dulce y elegante, pensada para quienes buscan un perfume romántico y sofisticado.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 188
+  },
+  {
+    "id": 36,
+    "name": "BHARARA NICHE",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680752/altadensidad/dvfjhwixbvtw22cz60nr.jpg",
+    "description": "Bharara Niche es una fragancia unisex y ligeramente gourmand, ideal para quienes buscan un perfume elegante pero versátil.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 262
+  },
+  {
+    "id": 35,
+    "name": "BHARARA KING",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680632/altadensidad/acmdnhq9mihvqyh8vbod.jpg",
+    "description": "Bharara King es un perfume masculino. Es reconocido por su carácter poderoso, desafiante y moderno.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Naranja · Bergamota",
+      "Tutti-frutti",
+      "Vainilla blanca · Ámbar"
+    ],
+    "h": 225
+  },
+  {
+    "id": 34,
+    "name": "BADE AL OUD AMETHYST LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680524/altadensidad/u9i0purp9mrnp2kdofta.jpg",
+    "description": "Badee Al Oud Amethyst de Lattafa es una fragancia unisex cálida y sofisticada. Recomendada para noche, eventos especiales, climas frescos."
+  },
+  {
+    "id": 33,
+    "name": "BADE AL OUD HONOR & GLORY LATTAFA",
+    "price": 115000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680389/altadensidad/ghqkm6yqq2plxqdxuhmc.jpg",
+    "description": "Badee Al Oud Honor & Glory de Lattafa es una fragancia unisex, con un perfil dulce, especiado y amaderado.  Recomendada para noche, eventos especiales, climas frescos."
+  },
+  {
+    "id": 32,
+    "name": "ASAD BLACK LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680197/altadensidad/k2s5vk6ebusxtrom1jr7.jpg",
+    "description": "Asad Black de Lattafa es un perfume masculino intenso, cálido y especiado, pero con un perfil más dulce. Es ideal para noches frescas, eventos elegantes y quienes buscan una fragancia potente y duradera."
+  },
+  {
+    "id": 31,
+    "name": "ARABIANS TONKA MONTALE",
+    "price": 80000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679909/altadensidad/pnghlzez7bshplpyxztb.jpg",
+    "description": "Reconocida por su carácter oriental especiado y gourmand, con una intensidad que la hace ideal para la noche y climas fríos.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
     "no": [
       "Notas cítricas vibrantes",
       "Especias orientales",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 154,
-    "desc": "Lujo y audacia en cada gota. Una fragancia amaderada especiada, con una apertura de toronja y menta.",
-    "img": "assets/img/LAPHRODISIAQUE2.jpg"
+    "h": 356
   },
   {
-    "id": 84,
-    "n": "EROS EAU DE TOILETTE VERSACE",
-    "f": "Amaderada",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Menta fresca · Manzana verde",
-      "Haba tonka · Geranio",
-      "Vainilla de Madagascar · Cedro"
+    "id": 30,
+    "name": "AMBER ROYAL ORIENTICA",
+    "price": 120000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 191,
-    "desc": "Inspirado en la mitología griega, es una fragancia amaderada aromática, que exuda poder y seducción.",
-    "img": "assets/img/EROS.webp"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679751/altadensidad/mmgkqylnnu93ddoiwdhr.jpg",
+    "description": "Amber Royal (también conocido como Royal Amber) de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter dulce, cálido y envolvente."
   },
   {
-    "id": 85,
-    "n": "EROS ENERGY VERSACE",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Menta fresca · Manzana verde",
-      "Haba tonka · Geranio",
-      "Vainilla de Madagascar · Cedro"
+    "id": 29,
+    "name": "AMBER ROUGE ORIENTICA",
+    "price": 125000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 228,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/EROS_ENERGY.jpg"
-  },
-  {
-    "id": 86,
-    "n": "EROS FLAME VERSACE",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Menta fresca · Manzana verde",
-      "Haba tonka · Geranio",
-      "Vainilla de Madagascar · Cedro"
-    ],
-    "p": 75000,
-    "h": 265,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/EROS_FLAME.webp"
-  },
-  {
-    "id": 87,
-    "n": "SANTAL BOISE VERSACE",
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679479/altadensidad/b0u6msjw28hbpv5kmjhm.jpg",
+    "description": "Amber Rouge de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter sofisticado y envolvente.",
     "f": "Especiada / Árabe",
     "o": "Noche",
-    "g": "Masculino",
+    "no": [
+      "Notas cítricas vibrantes",
+      "Corazón floral de autor",
+      "Ámbar cálido y feromonas"
+    ],
+    "h": 60
+  },
+  {
+    "id": 28,
+    "name": "AMBER OUD GOLD AL HARAMAIN",
+    "price": 125000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679379/altadensidad/yzeo4zzdohwptyg2smbu.jpg",
+    "description": "El Amber Oud Gold Edition de Al Haramain es una fragancia unisex de estilo oriental gourmand, reconocida por su carácter dulce, cálido y sofisticado. Es uno de los perfumes más populares de la casa, ideal para quienes buscan un aroma intenso y duradero."
+  },
+  {
+    "id": 27,
+    "name": "AMBER NOIR ORIENTICA",
+    "price": 120000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679070/altadensidad/scuvoy6yhf2fvmoyugxu.jpg",
+    "description": "El Amber Noir de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter fresco, amaderado y elegante.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Frutas frescas y bayas",
+      "Corazón floral de autor",
+      "Fondo amaderado y feromonas"
+    ],
+    "h": 134
+  },
+  {
+    "id": 26,
+    "name": "AMBER BLEU ORIENTICA",
+    "price": 120000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678952/altadensidad/wl9wu2okqf62fydrjs9i.jpg",
+    "description": "Amber Bleu de Orientica, parte de la colección Luxury, es una fragancia unisex que combina frescura cítrica con un fondo cálido y amaderado, ideal para quienes buscan un perfume versátil y elegante."
+  },
+  {
+    "id": 25,
+    "name": "AMBER AZURE ORIENTICA",
+    "price": 120000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678617/altadensidad/w5ayysnay0uc5oe7mlho.jpg",
+    "description": "Amber Azure de Orientica pertenece a la colección Luxury y es una fragancia unisex que combina notas frescas, afrutadas y amaderadas con un fondo cálido de ámbar y almizcle. Es ideal para quienes buscan un perfume elegante, versátil y con proyección duradera."
+  },
+  {
+    "id": 24,
+    "name": "BLACK XS L´APHRODISIAQUE PACO RABANNE",
+    "price": 80000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678488/altadensidad/kzpmx646qiv7f3ayulug.jpg",
+    "description": "Black XS L’Aphrodisiaque de Paco Rabanne es una fragancia masculina intensa, oscura y seductora. Se caracteriza por su mezcla de especias cálidas, miel y notas gourmand que evocan un estilo rockero y atrevido.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
     "no": [
       "Notas cítricas vibrantes",
       "Especias orientales",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 302,
-    "desc": "Es una fragancia que evoca la frescura tropical y la dulzura especiada.",
-    "img": "assets/img/SANTALBOISE.webp"
+    "h": 154
   },
   {
-    "id": 88,
-    "n": "BOSS BOTTLED ABSOLUTE HUGO BOSS",
-    "f": "Aromática",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
+    "id": 23,
+    "name": "BADEE AL OUD SUBLIME LATTAFA",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Unisex",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 339,
-    "desc": "Fragancia de alta concentración con base de feromonas inspirada en BOSS BOTTLED ABSOLUTE HUGO BOSS.",
-    "img": "assets/img/BOTTLED3.jpg"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678259/altadensidad/xrpollie1l13m6wuuvsf.jpg",
+    "description": "Badee Al Oud Sublime de Lattafa es un perfume unisex lanzado en 2023, con un perfil afrutado, amaderado y oriental."
   },
   {
-    "id": 89,
-    "n": "UNLIMITED HUGO BOSS",
-    "f": "Aromática",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
+    "id": 22,
+    "name": "ACQUA DI GIO",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
     ],
-    "p": 75000,
-    "h": 16,
-    "desc": "Un perfume masculino y sofisticado que combina notas de bergamota, lavanda y madera.",
-    "img": "assets/img/UNLIMITED2.JPG"
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678154/altadensidad/ggr34cnx406hde9css00.jpg",
+    "description": "Acqua di Giò de Giorgio Armani es uno de los perfumes masculinos más icónicos del mundo, reconocido por su frescura marina y su elegancia atemporal. La versión Parfum"
   },
   {
-    "id": 90,
-    "n": "HUGO NIGHT HUGO BOSS",
+    "id": 21,
+    "name": "SWISS ARMY VICTORINOX",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678023/altadensidad/hnepeteb4udoeegstsmk.jpg",
+    "description": "El perfume Swiss Army de Victorinox es una fragancia masculina fresca, aromática y versátil, pensada para hombres activos que disfrutan tanto de la ciudad como de la naturaleza."
+  },
+  {
+    "id": 20,
+    "name": "360* PERRY ELLIS",
+    "price": 85000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777677785/altadensidad/wbpsj2k846g9xwfbwp6n.jpg",
+    "description": "El perfume 360° de Perry Ellis es una fragancia femenina de estilo floral fresco y acuático"
+  },
+  {
+    "id": 19,
+    "name": "9PM AFNAN",
+    "price": 110000,
+    "category": "Arabe",
+    "gender": "Masculino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777677433/altadensidad/orin0rwghlqqqhsghir1.jpg",
+    "description": "El perfume 9PM de Afnan es una fragancia masculina muy popular por su carácter dulce, cálido y seductor, ideal para la noche y climas frescos.",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Manzana silvestre · Canela",
+      "Flor de azahar",
+      "Vainilla · Haba tonka"
+    ],
+    "h": 326
+  },
+  {
+    "id": 18,
+    "name": "212 VIP ROSE CAROLINA HERRERA",
+    "price": 65000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777677296/altadensidad/sbuhaxcnp1bntjjmsygn.jpg",
+    "description": "El perfume 212 VIP Rosé de Carolina Herrera es una fragancia femenina fresca, festiva y sofisticada, inspirada en el glamour urbano y la vida nocturna.",
     "f": "Cítrica / Fresca",
     "o": "Noche",
-    "g": "Masculino",
+    "no": [
+      "Champaña rosada",
+      "Flor de durazno",
+      "Madera reina · Feromonas"
+    ],
+    "h": 0
+  },
+  {
+    "id": 17,
+    "name": "212 SEXY CAROLINA HERRERA",
+    "price": 70000,
+    "category": "Diseñador",
+    "gender": "Femenino",
+    "sizes": [
+      "100ml"
+    ],
+    "bottleTypes": [
+      "Plástico",
+      "Vidrio"
+    ],
+    "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777675965/altadensidad/ycyamcrucoi2jhwq77w5.jpg",
+    "description": "El perfume 212 Sexy de Carolina Herrera es una fragancia femenina de carácter dulce, misterioso y seductor, ideal para la noche y ocasiones especiales.",
+    "f": "Cítrica / Fresca",
+    "o": "Noche",
     "no": [
       "Frutas frescas y bayas",
       "Corazón floral de autor",
       "Fondo amaderado y feromonas"
     ],
-    "p": 75000,
-    "h": 53,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/HUGO_NIGHT.webp"
-  },
-  {
-    "id": 91,
-    "n": "BOSS SILVER HUGO BOSS",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Masculino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 90,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/HUGO_SILVER.jpg"
-  },
-  {
-    "id": 92,
-    "n": "OMNIA CORAL BVLGARI",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 127,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/OMNIA_CORAL.webp"
-  },
-  {
-    "id": 93,
-    "n": "OMNIA CRYSTALLINE BVLGARI",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 164,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/OMNIA_CRISTAL.jpeg"
-  },
-  {
-    "id": 94,
-    "n": "OMNIA AMETHYSTE BVLGARI",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 201,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/CORAL_AMETHYSTE.jpeg"
-  },
-  {
-    "id": 95,
-    "n": "YOU ESIKA",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "g": "Femenino",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "p": 75000,
-    "h": 238,
-    "desc": "Un perfume dulce y juguetón que combina notas de frutas y flores. Un aroma fresco y divertido que seguro hará sonreír.",
-    "img": "assets/img/YOU.webp"
+    "h": 148
   }
 ];
 
@@ -2021,16 +2146,36 @@
 ];
 
   // Estados reactivos en memoria
-  let P = [...DATOS_DUROS_PRODUCTOS];
+  let P = [];
   let TOP10 = [...DATOS_DUROS_TOP10];
   let ENVASES = [...DATOS_DUROS_ENVASES];
   let KITS = [...DATOS_DUROS_KITS];
   let kitsPaginaActual = 1;
   const KITS_POR_PAGINA = 6;
+  const PRODUCTOS_POR_PAGINA = 12;
+  let paginaActual = 1;
+
+  const CART_KEY = "ad_cart_v2";
+  const LEGACY_CART_KEY = "altadensidad_carrito";
+  const ENVIO_TARIFAS = { medellin: 15000, metropolitana: 20000, nacional: 22000 };
+  const ENVIO_ZONAS = { medellin: "Medellín", metropolitana: "Área Metropolitana", nacional: "Nacional" };
 
   const $ = function(s) { return document.querySelector(s); };
   const $$ = function(s) { return document.querySelectorAll(s); };
   const fmt = function(n) { return "$" + Number(n).toLocaleString("es-CO"); };
+  const esc = function(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  };
+
+  // Base del API (localhost:3000 en desarrollo, Railway en producción)
+  function apiBases() {
+    const isLocal = typeof location !== "undefined" &&
+      (location.hostname === "localhost" || location.hostname === "127.0.0.1") &&
+      location.port === "3000";
+    return isLocal
+      ? ["http://localhost:3000/api", "https://altadensidadpage-production.up.railway.app/api"]
+      : ["https://altadensidadpage-production.up.railway.app/api"];
+  }
 
   // Normalizador universal de imágenes para rutas locales y remotas
   function normalizarImagen(src) {
@@ -2050,32 +2195,159 @@
       .replace(/eros\.jpeg$/i, "EROS.jpeg");
   }
 
-  // Filtros activos
-  let filters = {
+  // ============================================================
+  // MODELO DE PRODUCTO (marca, colección, tallas y envases reales)
+  // ============================================================
+  const MARCAS_RECONOCIDAS = [
+    "CAROLINA HERRERA", "LATTAFA", "PACO RABANNE", "VERSACE", "DIOR", "CHANEL",
+    "HUGO BOSS", "LACOSTE", "ARMAF", "LOUIS VUITTON", "ORIENTICA", "AFNAN",
+    "PERRY ELLIS", "VICTORINOX", "AL HARAMAIN", "MONTALE", "BHARARA", "BOND N",
+    "VALENTINO", "PARIS HILTON", "ARIANA GRANDE", "BVLGARI", "XERJOFF", "GIORGIO ARMANI",
+    "YVES SAINT LAURENT", "CALVIN KLEIN", "JEAN PAUL GAULTIER", "DOLCE & GABBANA",
+    "CREED", "TOM FORD", "HERMES", "ROJA DOVE", "NISHANE", "MANCERA", "INITIO",
+    "MOSCHINO", "MONTBLANC", "LE LABO", "ILMIN", "AHLI", "BURBERRY", "AMOUAGE"
+  ];
+
+  function extraerMarca(nombre) {
+    if (!nombre) return "Otras marcas";
+    const up = nombre.toUpperCase();
+    for (const marca of MARCAS_RECONOCIDAS) {
+      if (up.includes(marca)) return marca === "BOND N" ? "BOND NO. 9" : marca;
+    }
+    return "Otras marcas";
+  }
+
+  function etiquetaColeccion(c) {
+    return c === "Arabe" ? "Árabe" : (c || "Diseñador");
+  }
+
+  function normalizarGenero(g) {
+    if (g === "Hombre" || g === "Masculino") return "Masculino";
+    if (g === "Mujer" || g === "Femenino") return "Femenino";
+    return "Unisex";
+  }
+
+  // Familia, ocasión y tono del frasco deducidos de la descripción cuando no hay perfil curado
+  function perfilOlfativo(item, idx) {
+    const nameLow = (item.name || "").toLowerCase();
+    const descLow = (item.description || "").toLowerCase();
+    const catLow = (item.category || "").toLowerCase();
+    let occ = "Noche";
+    let fam = "Amaderada";
+    let hue = (idx * 37) % 360;
+
+    if (descLow.includes("fresc") || descLow.includes("cítric") || descLow.includes("verano") || nameLow.includes("aqua") || nameLow.includes("blue")) {
+      occ = "Verano"; fam = "Cítrica / Fresca"; hue = 190;
+    } else if (descLow.includes("oficina") || descLow.includes("elegante") || descLow.includes("diario") || descLow.includes("versátil")) {
+      occ = "Oficina"; fam = "Aromática"; hue = 130;
+    } else if (descLow.includes("dulce") || descLow.includes("vainilla") || descLow.includes("gourmand") || descLow.includes("caramelo") || nameLow.includes("candy")) {
+      fam = "Dulce / Gourmand"; hue = 24;
+    } else if (descLow.includes("floral") || nameLow.includes("rosa") || nameLow.includes("iris") || nameLow.includes("rose")) {
+      fam = "Floral"; hue = 330;
+    } else if (descLow.includes("cuero") || nameLow.includes("cuero") || nameLow.includes("leather")) {
+      fam = "Cuero"; hue = 16;
+    } else if (catLow.includes("arabe") || descLow.includes("oriental") || descLow.includes("especiad") || nameLow.includes("oud")) {
+      fam = "Especiada / Árabe"; hue = 40;
+    }
+    return { f: fam, o: occ, h: hue };
+  }
+
+  // Convierte un producto con forma de API ({id, name, price, sizes, bottleTypes...}) al modelo interno
+  function adaptarProducto(item, idx) {
+    const curado = DATOS_DUROS_PRODUCTOS.find(function(d) { return d.id === Number(item.id) && d.f; }) || item;
+    const base = perfilOlfativo(item, idx);
+    const nombre = (item.name || item.nombre || "Fragancia").trim();
+    return {
+      id: Number(item.id),
+      n: nombre,
+      b: extraerMarca(nombre),
+      c: item.category || item.categoria || "Diseñador",
+      g: normalizarGenero(item.gender || item.genero),
+      f: curado.f || base.f,
+      o: curado.o || base.o,
+      h: curado.h != null ? curado.h : base.h,
+      no: curado.no || ["Salida vibrante", "Corazón de autor", "Ámbar y feromonas"],
+      p: Number(item.price || item.precio) > 0 ? Number(item.price || item.precio) : 75000,
+      sz: Array.isArray(item.sizes) ? item.sizes.filter(Boolean) : [],
+      env: Array.isArray(item.bottleTypes) ? item.bottleTypes.filter(Boolean) : [],
+      desc: item.description || item.descripcion || null,
+      img: normalizarImagen(item.image || item.imagen || (item.images && item.images[0]))
+    };
+  }
+
+  // Busca un producto por id en el catálogo; si solo existe en el Top 10, lo adapta
+  function buscarProducto(id) {
+    const n = Number(id);
+    const p = P.find(function(x) { return x.id === n; });
+    if (p) return p;
+    const t = TOP10.find(function(x) { return Number(x.producto_id || x.id) === n; });
+    if (t) {
+      return adaptarProducto({
+        id: n, name: t.nombre, price: t.precio, image: t.imagen,
+        category: t.categoria, gender: t.genero, description: t.descripcion,
+        f: t.f, o: t.o, no: t.no
+      }, n);
+    }
+    return null;
+  }
+
+  // Filtros activos y orden
+  const FILTROS_BASE = {
     search: "",
     occasion: "Todos",
     family: "Todos",
-    gender: "Todos"
+    gender: "Todos",
+    category: "Todos",
+    brand: "Todos"
   };
+  let filters = Object.assign({}, FILTROS_BASE);
+  let orden = "destacados";
 
-  // Carrito y selección
+  // Carrito y selección del detalle
   let cart = [];
-  let D = { id: P[0] ? P[0].id : 1, ml: 50, q: 1 };
+  let D = { id: null, ml: "", env: "", q: 1 };
 
   try {
-    cart = JSON.parse(localStorage.getItem("ad_cart") || "[]");
+    cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
   } catch(e) {
     cart = [];
   }
 
   function save() {
     try {
-      localStorage.setItem("ad_cart", JSON.stringify(cart));
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
     } catch(e) {}
   }
 
-  function sz(ml) {
-    return SIZES.filter(function(z) { return z.ml === ml; })[0] || SIZES[1];
+  // Incorpora lo que se agregó desde páginas con el carrito anterior (top10, envases, nosotros)
+  function migrarCarritoLegacy() {
+    let legacy = [];
+    try {
+      legacy = JSON.parse(localStorage.getItem(LEGACY_CART_KEY) || "[]");
+      localStorage.removeItem("ad_cart");
+    } catch(e) {
+      return;
+    }
+    if (!Array.isArray(legacy) || !legacy.length) return;
+    legacy.forEach(function(i) {
+      const q = Math.max(1, Number(i.cantidad) || 1);
+      if (String(i.id).startsWith("kit_")) {
+        const kitId = Number(String(i.id).replace("kit_", ""));
+        const existente = cart.find(function(x) { return x.id === "kit_" + kitId; });
+        if (existente) existente.q += q;
+        else cart.push({ id: "kit_" + kitId, isKit: true, kitId: kitId, q: q, precio: Number(i.price) || 0, n: i.name, ml: "Kit" });
+      } else {
+        const p = buscarProducto(i.id);
+        addToCart(Number(i.id), p ? (p.sz[0] || "") : "", p ? (p.env[0] || "") : "", q, true);
+      }
+    });
+    try { localStorage.removeItem(LEGACY_CART_KEY); } catch(e) {}
+    save();
+  }
+
+  function etiquetaTalla(ml) {
+    if (ml === "" || ml == null) return "";
+    return typeof ml === "number" ? ml + " ml" : String(ml);
   }
 
   function pr(p) {
@@ -2088,7 +2360,7 @@
       const loadingAttr = isPriority ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
       return `
         <div class="bottle-wrap">
-          <img src="${realImg}" alt="${name || 'Fragancia'}" class="stage-real-img" width="280" height="280" ${loadingAttr} onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='grid';">
+          <img src="${realImg}" alt="${esc(name || 'Fragancia')}" class="stage-real-img" width="280" height="280" ${loadingAttr} onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='grid';">
           <div class="bottle fallback-bottle" style="--h:${h || 32};--s:${s || 1.7};display:none"><i></i></div>
         </div>
       `;
@@ -2098,49 +2370,59 @@
 
   function desc(p) {
     if (p.desc) return p.desc;
-    if (p.description) return p.description;
     const f = (p.f || "de autor").toLowerCase();
     const no = p.no || ["Notas cítricas", "Corazón aromático", "Ámbar y feromonas"];
     return `Una fragancia ${f} de alta densidad. Abre con ${no[0].toLowerCase()}, se asienta en ${no[1].toLowerCase()} y deja un fondo memorable de ${no[2].toLowerCase()}. Concentración extra al 33% con base de feromonas.`;
   }
 
   function normalizar(txt) {
-    return (txt || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    return (txt || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
   }
 
+  // ============================================================
+  // COLECCIÓN: BÚSQUEDA, FILTROS, ORDEN Y PAGINACIÓN
+  // ============================================================
   function filtrarProductos() {
     const term = normalizar(filters.search);
     return P.filter(function(p) {
       if (term) {
         const enNombre = normalizar(p.n).includes(term);
+        const enMarca = normalizar(p.b).includes(term);
         const enFamilia = normalizar(p.f).includes(term);
         const enOcasion = normalizar(p.o).includes(term);
         const enNotas = p.no && p.no.some(n => normalizar(n).includes(term));
         const enDesc = p.desc ? normalizar(p.desc).includes(term) : false;
-        if (!enNombre && !enFamilia && !enOcasion && !enNotas && !enDesc) return false;
+        if (!enNombre && !enMarca && !enFamilia && !enOcasion && !enNotas && !enDesc) return false;
       }
-
-      if (filters.occasion !== "Todos") {
-        if (p.o !== filters.occasion) return false;
-      }
-
-      if (filters.family !== "Todos") {
-        if (p.f !== filters.family) return false;
-      }
-
-      if (filters.gender !== "Todos") {
-        if (p.g !== filters.gender) return false;
-      }
-
+      if (filters.occasion !== "Todos" && p.o !== filters.occasion) return false;
+      if (filters.family !== "Todos" && p.f !== filters.family) return false;
+      if (filters.gender !== "Todos" && p.g !== filters.gender) return false;
+      if (filters.category !== "Todos" && p.c !== filters.category) return false;
+      if (filters.brand !== "Todos" && p.b !== filters.brand) return false;
       return true;
     });
   }
 
+  function ordenarProductos(lista) {
+    const copia = lista.slice();
+    switch (orden) {
+      case "precio-asc":
+        return copia.sort((a, b) => pr(a) - pr(b));
+      case "precio-desc":
+        return copia.sort((a, b) => pr(b) - pr(a));
+      case "nombre-asc":
+        return copia.sort((a, b) => a.n.localeCompare(b.n));
+      default:
+        // Recomendados: agrupados por marca y luego por nombre
+        return copia.sort((a, b) => a.b.localeCompare(b.b) || a.n.localeCompare(b.n));
+    }
+  }
+
   function getActiveFilterCount() {
     let count = 0;
-    if (filters.occasion !== "Todos") count++;
-    if (filters.family !== "Todos") count++;
-    if (filters.gender !== "Todos") count++;
+    ["occasion", "family", "gender", "category", "brand"].forEach(function(k) {
+      if (filters[k] !== "Todos") count++;
+    });
     if (filters.search) count++;
     return count;
   }
@@ -2166,17 +2448,26 @@
     }).join("");
   }
 
-  function renderGrid() {
+  function aplicarFiltros() {
+    paginaActual = 1;
+    renderChips();
+    renderGrid();
+  }
+
+  function renderGrid(scroll) {
     const el = $("#grid");
     const statusEl = $("#filterStatus");
     const metaEl = $("#coleccionMeta");
     if (!el) return;
 
-    const filtrados = filtrarProductos();
+    const filtrados = ordenarProductos(filtrarProductos());
+    const totalPaginas = Math.max(1, Math.ceil(filtrados.length / PRODUCTOS_POR_PAGINA));
+    if (paginaActual > totalPaginas) paginaActual = 1;
+    const inicio = (paginaActual - 1) * PRODUCTOS_POR_PAGINA;
+    const pagina = filtrados.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
 
     if (statusEl) {
-      const activeCount = getActiveFilterCount();
-      if (activeCount > 0) {
+      if (getActiveFilterCount() > 0) {
         statusEl.style.display = "flex";
         statusEl.innerHTML = `
           <span>Mostrando <b>${filtrados.length}</b> de ${P.length} fragancias</span>
@@ -2195,37 +2486,113 @@
 
     if (!filtrados.length) {
       el.innerHTML = `
-        <div style="grid-column: 1 / -1; padding: var(--sp-6) var(--sp-4); text-align: center; background: var(--c-bg);">
-          <p class="mute" style="font-size: var(--fs-4); font-family: var(--f-display); margin-bottom: var(--sp-3);">
-            No encontramos ninguna fragancia que coincida con estos criterios.
-          </p>
-          <button class="btn btn--line up" id="btnResetEmpty">Ver toda la colección</button>
+        <div class="grid-empty">
+          <p class="mute">No encontramos ninguna fragancia que coincida con estos criterios.</p>
+          <div class="grid-empty-actions">
+            <button class="btn btn--line up" id="btnResetEmpty">Ver toda la colección</button>
+            <button class="btn up" data-aura>Pedir recomendación a AURA</button>
+          </div>
         </div>
       `;
+      renderPaginacion(0);
       return;
     }
 
-    el.innerHTML = filtrados.map(function(p, idx) {
-      const isPriority = idx < 6;
+    el.innerHTML = pagina.map(function(p, idx) {
+      const isPriority = paginaActual === 1 && idx < 6;
       return `
         <article class="card">
           <div class="stage" data-open="${p.id}">
             <span class="tag up">33% extracto</span>
             ${bt(p.h, 1, p.img, p.n, isPriority)}
-            <div class="notes">${(p.no || []).join(" · ")}</div>
+            <div class="notes">${esc((p.no || []).join(" · "))}</div>
           </div>
           <div class="info">
             <div>
-              <h3 data-open="${p.id}">${p.n}</h3>
-              <span>${p.f} · ${fmt(pr(p))}</span>
+              <small class="up card-brand">${esc(p.b)} · ${esc(etiquetaColeccion(p.c))}</small>
+              <h3 data-open="${p.id}">${esc(p.n)}</h3>
+              <span>${esc(p.f)} · ${fmt(pr(p))}</span>
             </div>
             <button class="link up" data-add="${p.id}">Añadir</button>
           </div>
         </article>
       `;
     }).join("");
+
+    renderPaginacion(filtrados.length);
+
+    if (scroll) {
+      const sec = $("#coleccion");
+      if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.pageYOffset - 80, behavior: "smooth" });
+    }
   }
 
+  function paginasVisibles(actual, total) {
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+    if (actual <= 4) return [1, 2, 3, 4, 5, "...", total];
+    if (actual >= total - 3) return [1, "...", total - 4, total - 3, total - 2, total - 1, total];
+    return [1, "...", actual - 1, actual, actual + 1, "...", total];
+  }
+
+  function renderPaginacion(totalItems) {
+    const cont = $("#paginacion");
+    if (!cont) return;
+    const totalPaginas = Math.ceil(totalItems / PRODUCTOS_POR_PAGINA);
+    if (totalPaginas <= 1) {
+      cont.innerHTML = "";
+      return;
+    }
+    let html = `<button class="pag-btn" data-page="${paginaActual - 1}" ${paginaActual === 1 ? "disabled" : ""} aria-label="Página anterior">←</button>`;
+    paginasVisibles(paginaActual, totalPaginas).forEach(function(p) {
+      html += p === "..."
+        ? `<span class="pag-ellipsis">…</span>`
+        : `<button class="pag-btn ${p === paginaActual ? "pag-active" : ""}" data-page="${p}" aria-label="Página ${p}">${p}</button>`;
+    });
+    html += `<button class="pag-btn" data-page="${paginaActual + 1}" ${paginaActual === totalPaginas ? "disabled" : ""} aria-label="Página siguiente">→</button>`;
+    cont.innerHTML = html;
+  }
+
+  // Datos estructurados para buscadores (catálogo completo)
+  function inyectarSchemaProductos() {
+    if (!P.length) return;
+    const previo = document.getElementById("schema-productos-dinamico");
+    if (previo) previo.remove();
+    const script = document.createElement("script");
+    script.id = "schema-productos-dinamico";
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Catálogo de Fragancias de Alta Densidad",
+      "numberOfItems": P.length,
+      "itemListElement": P.map(function(p, idx) {
+        return {
+          "@type": "ListItem",
+          "position": idx + 1,
+          "item": {
+            "@type": "Product",
+            "name": p.n,
+            "image": p.img.startsWith("http") ? p.img : "https://alta-densidad-page.vercel.app/" + p.img,
+            "description": p.desc || ("Perfume " + p.n + " con 33% de extracto y fijación prolongada."),
+            "category": etiquetaColeccion(p.c),
+            "brand": { "@type": "Brand", "name": "Alta Densidad" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "COP",
+              "price": pr(p),
+              "availability": "https://schema.org/InStock",
+              "url": "https://alta-densidad-page.vercel.app/"
+            }
+          }
+        };
+      })
+    });
+    document.head.appendChild(script);
+  }
+
+  // ============================================================
+  // TOP 10, ENVASES Y KITS
+  // ============================================================
   function renderRank() {
     const el = $("#rank");
     if (!el) return;
@@ -2241,11 +2608,11 @@
         <div class="row rv in">
           <span class="n">${i < 9 ? "0" : ""}${i + 1}</span>
           <div class="rank-thumb-wrap" data-open="${pId}">
-            <img src="${imgUrl}" alt="${nom}" class="rank-thumb" width="60" height="60" ${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
+            <img src="${imgUrl}" alt="${esc(nom)}" class="rank-thumb" width="60" height="60" ${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
           </div>
           <div>
-            <h3 data-open="${pId}">${nom}</h3>
-            <small>${fam} · ${notas}</small>
+            <h3 data-open="${pId}">${esc(nom)}</h3>
+            <small>${esc(fam)} · ${esc(notas)}</small>
           </div>
           <span class="pr">${fmt(precio)}</span>
           <button class="link up" data-open="${pId}">Ver</button>
@@ -2266,11 +2633,11 @@
       return `
         <div class="size rv in">
           <div class="stage" style="padding:var(--sp-2);">
-            <img src="${imgPath}" alt="Envase ${nom}" class="stage-real-img" width="240" height="200" ${loadingAttr} style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
+            <img src="${imgPath}" alt="Envase ${esc(nom)}" class="stage-real-img" width="240" height="200" ${loadingAttr} style="max-height:200px; width:auto; max-width:85%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
           </div>
-          <b style="font-size:22px; margin-top:var(--sp-1); letter-spacing:0.04em;">${nom}</b>
-          <span class="up eyebrow">${tallas} · ${z.material || 'Vidrio'}</span>
-          <p class="mute" style="font-size:var(--fs-2); line-height:1.45; max-width:28ch; margin:var(--sp-1) 0 var(--sp-2);">${z.description || z.descripcion || 'Envase de vidrio premium.'}</p>
+          <b style="font-size:22px; margin-top:var(--sp-1); letter-spacing:0.04em;">${esc(nom)}</b>
+          <span class="up eyebrow">${esc(tallas)} · ${esc(z.material || 'Vidrio')}</span>
+          <p class="mute" style="font-size:var(--fs-2); line-height:1.45; max-width:28ch; margin:var(--sp-1) 0 var(--sp-2);">${esc(z.description || z.descripcion || 'Envase de vidrio premium.')}</p>
           <a class="btn btn--line up" style="font-size:11px; padding:var(--sp-2) var(--sp-3);" href="https://wa.me/${WA}?text=${msgWa}" target="_blank" rel="noopener">Pedir en este envase</a>
         </div>
       `;
@@ -2287,25 +2654,24 @@
     if (kitsPaginaActual > totalPaginas) kitsPaginaActual = 1;
 
     const inicio = (kitsPaginaActual - 1) * KITS_POR_PAGINA;
-    const fin = inicio + KITS_POR_PAGINA;
-    const slice = activos.slice(inicio, fin);
+    const slice = activos.slice(inicio, inicio + KITS_POR_PAGINA);
 
     grid.innerHTML = slice.map((k, idx) => {
       const imgUrl = normalizarImagen(k.imagen || k.image);
       const precio = Number(k.precio || 60000);
       const nom = k.nombre || k.name;
-      const desc = k.descripcion || "Kit especial de fragancias de alta densidad en estuche de regalo.";
+      const texto = k.descripcion || "Kit especial de fragancias de alta densidad en estuche de regalo.";
       const loadingAttr = idx < 3 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy" decoding="async"';
 
       return `
         <article class="kit-card rv in" data-kit-id="${k.id}">
           <span class="tag-kit up">Set Exclusivo</span>
           <div class="kit-stage" data-open-kit="${k.id}">
-            <img src="${imgUrl}" alt="Kit ${nom}" class="kit-img" width="280" height="280" ${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
+            <img src="${imgUrl}" alt="Kit ${esc(nom)}" class="kit-img" width="280" height="280" ${loadingAttr} onerror="this.src='assets/img/Logo2026.png';">
           </div>
           <div class="kit-info">
-            <h3 class="kit-title" data-open-kit="${k.id}">${nom}</h3>
-            <p class="kit-desc">${desc}</p>
+            <h3 class="kit-title" data-open-kit="${k.id}">${esc(nom)}</h3>
+            <p class="kit-desc">${esc(texto)}</p>
             <div class="kit-footer">
               <span class="kit-price">${fmt(precio)}</span>
               <button class="btn btn--line up" data-addkit="${k.id}">Añadir</button>
@@ -2329,11 +2695,9 @@
 
     let html = "";
     html += `<button class="pag-btn" data-kit-page="${kitsPaginaActual - 1}" ${kitsPaginaActual === 1 ? 'disabled' : ''} aria-label="Página anterior">←</button>`;
-
     for (let p = 1; p <= totalPaginas; p++) {
       html += `<button class="pag-btn ${p === kitsPaginaActual ? 'pag-active' : ''}" data-kit-page="${p}" aria-label="Página ${p}">${p}</button>`;
     }
-
     html += `<button class="pag-btn" data-kit-page="${kitsPaginaActual + 1}" ${kitsPaginaActual === totalPaginas ? 'disabled' : ''} aria-label="Página siguiente">→</button>`;
     cont.innerHTML = html;
   }
@@ -2360,21 +2724,21 @@
     const nom = kit.nombre || kit.n;
     const imgUrl = normalizarImagen(kit.imagen || kit.img);
     const precio = Number(kit.precio || kit.p || 60000);
-    const desc = kit.descripcion || "Kit exclusivo con selecciones premium de Alta Densidad.";
+    const texto = kit.descripcion || "Kit exclusivo con selecciones premium de Alta Densidad.";
     const beneficios = kit.beneficios || [];
 
     sheet.innerHTML = `
       <button class="x up" data-close aria-label="Cerrar detalle">✕ Cerrar</button>
       <div class="stage" style="padding:var(--sp-4); display:flex; align-items:center; justify-content:center;">
-        <img src="${imgUrl}" alt="${nom}" style="max-height:360px; max-width:90%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
+        <img src="${imgUrl}" alt="${esc(nom)}" style="max-height:360px; max-width:90%; object-fit:contain;" onerror="this.src='assets/img/Logo2026.png';">
       </div>
       <div class="d-info">
         <span class="up eyebrow">Set Exclusivo · Estuche de Lujo</span>
-        <h2>${nom}</h2>
-        <p class="mute" style="white-space:pre-line; line-height:1.6; margin-top:var(--sp-2);">${desc}</p>
+        <h2>${esc(nom)}</h2>
+        <p class="mute" style="white-space:pre-line; line-height:1.6; margin-top:var(--sp-2);">${esc(texto)}</p>
         ${beneficios.length ? `
           <div class="kit-modal-beneficios" style="display:flex; flex-wrap:wrap; gap:var(--sp-1); margin:var(--sp-2) 0;">
-            ${beneficios.map(b => `<span class="chip up" style="font-size:11px;">✓ ${b}</span>`).join('')}
+            ${beneficios.map(b => `<span class="chip up" style="font-size:11px;">✓ ${esc(b)}</span>`).join('')}
           </div>
         ` : ''}
         <div class="specs up" style="margin-top:var(--sp-3);">
@@ -2388,11 +2752,7 @@
         </div>
       </div>
     `;
-    const modal = $("#modal");
-    const scrim = $("#scrim");
-    if (modal) modal.classList.add("on");
-    if (scrim) scrim.classList.add("on");
-    document.body.style.overflow = "hidden";
+    abrirModal("#modal");
   }
 
   function addKitToCart(kitId, q) {
@@ -2409,43 +2769,50 @@
     drawCart();
   }
 
+  // ============================================================
+  // DETALLE DE PRODUCTO (presentación y envase reales)
+  // ============================================================
   function renderDetail() {
     const sheet = $("#sheet");
-    if (!sheet) return;
-    const p = P.find(item => item.id === D.id) ||
-              TOP10.find(item => (item.id === D.id || item.producto_id === D.id)) ||
-              P[0];
-    const z = sz(D.ml);
-    const nom = p.n || p.nombre || p.name;
-    const fam = p.f || p.categoria || p.category || "Perfumería de Autor";
-    const occ = p.o || "Noche";
-    const imgUrl = p.img || p.imagen || p.image;
+    const p = buscarProducto(D.id);
+    if (!sheet || !p) return;
     const notas = p.no || ["Notas cítricas", "Corazón aromático", "Ámbar y feromonas"];
+    const msgWa = encodeURIComponent(`¡Hola! Quiero más información sobre ${p.n}${D.ml ? " (" + etiquetaTalla(D.ml) + ")" : ""}. ✨`);
 
     sheet.innerHTML = `
       <button class="x up" data-close aria-label="Cerrar detalle">✕ Cerrar</button>
-      <div class="stage">${bt(p.h || 32, z.s + 0.3, imgUrl, nom, true)}</div>
+      <div class="stage">${bt(p.h || 32, 2, p.img, p.n, true)}</div>
       <div class="d-info">
-        <span class="up eyebrow">${fam} · Ocasión: ${occ}</span>
-        <h2>${nom}</h2>
-        <p class="mute">${desc(p)}</p>
+        <span class="up eyebrow">${esc(p.b)} · ${esc(etiquetaColeccion(p.c))}</span>
+        <h2>${esc(p.n)}</h2>
+        <small class="up mute">${esc(p.f)} · ${esc(p.o)} · ${esc(p.g)}</small>
+        <p class="mute">${esc(desc(p))}</p>
         <dl class="pyr">
-          <div><dt class="up">Salida</dt><dd>${notas[0] || 'Notas frescas'}</dd></div>
-          <div><dt class="up">Corazón</dt><dd>${notas[1] || 'Esencia de autor'}</dd></div>
-          <div><dt class="up">Fondo</dt><dd>${notas[2] || 'Ámbar y feromonas'}</dd></div>
+          <div><dt class="up">Salida</dt><dd>${esc(notas[0] || 'Notas frescas')}</dd></div>
+          <div><dt class="up">Corazón</dt><dd>${esc(notas[1] || 'Esencia de autor')}</dd></div>
+          <div><dt class="up">Fondo</dt><dd>${esc(notas[2] || 'Ámbar y feromonas')}</dd></div>
         </dl>
         <div class="specs up">
           <div><b>33%</b>Extracto</div>
           <div><b>12h+</b>Fijación</div>
           <div><b>+</b>Feromonas</div>
         </div>
-        <div class="pick up">
-          ${SIZES.map(s => `
-            <button class="chip ${s.ml === D.ml ? 'on' : ''}" data-size="${s.ml}">${s.ml} ml</button>
-          `).join("")}
-        </div>
+        ${p.sz.length ? `
+          <div class="opt">
+            <span class="up opt-l">Presentación</span>
+            <div class="pick up">
+              ${p.sz.map(s => `<button class="chip ${s === D.ml ? 'on' : ''}" data-size="${esc(s)}">${esc(etiquetaTalla(s))}</button>`).join("")}
+            </div>
+          </div>` : ""}
+        ${p.env.length ? `
+          <div class="opt">
+            <span class="up opt-l">Envase</span>
+            <div class="pick up">
+              ${p.env.map(e => `<button class="chip ${e === D.env ? 'on' : ''}" data-env="${esc(e)}">${esc(e)}</button>`).join("")}
+            </div>
+          </div>` : ""}
         <div class="buy">
-          <b style="font:300 28px var(--f-display)">${fmt(pr(p, D.ml) * D.q)}</b>
+          <b style="font:300 28px var(--f-display)">${fmt(pr(p) * D.q)}</b>
           <div class="qty">
             <button data-dq="-1" aria-label="Disminuir">−</button>
             <span>${D.q}</span>
@@ -2453,49 +2820,52 @@
           </div>
           <button class="btn up" data-adddet>Añadir a la bolsa</button>
         </div>
+        <a class="link up d-wa" href="https://wa.me/${WA}?text=${msgWa}" target="_blank" rel="noopener">Consultar con un asesor por WhatsApp</a>
       </div>
     `;
   }
 
+  function openDet(id) {
+    const p = buscarProducto(id);
+    if (!p) return;
+    D = { id: p.id, ml: p.sz[0] || "", env: p.env[0] || "", q: 1 };
+    renderDetail();
+    abrirModal("#modal");
+  }
+
+  // ============================================================
+  // ATELIER DE FILTROS
+  // ============================================================
+  function pillsHtml(tipo, valores, etiqueta) {
+    return valores.map(v => `
+      <button class="chip up ${filters[tipo] === v ? 'on' : ''}" data-modal-filter="${tipo}" data-val="${esc(v)}">${esc(etiqueta ? etiqueta(v) : v)}</button>
+    `).join("");
+  }
+
   function populateFilterModal() {
-    const fpFamilies = $("#fpFamilies");
-    const fpOccasions = $("#fpOccasions");
-    const fpGenders = $("#fpGenders");
-
-    if (!fpFamilies || !fpOccasions || !fpGenders) return;
-
-    const familias = ["Todos", ...new Set(P.map(x => x.f).filter(Boolean))];
-    fpFamilies.innerHTML = familias.map(f => `
-      <button class="chip up ${filters.family === f ? 'on' : ''}" data-modal-filter="family" data-val="${f}">${f}</button>
-    `).join("");
-
-    const ocasiones = ["Todos", "Noche", "Oficina", "Verano"];
-    fpOccasions.innerHTML = ocasiones.map(o => `
-      <button class="chip up ${filters.occasion === o ? 'on' : ''}" data-modal-filter="occasion" data-val="${o}">${o}</button>
-    `).join("");
-
-    const generos = ["Todos", "Unisex", "Masculino", "Femenino"];
-    fpGenders.innerHTML = generos.map(g => `
-      <button class="chip up ${filters.gender === g ? 'on' : ''}" data-modal-filter="gender" data-val="${g}">${g}</button>
-    `).join("");
-
+    const grupos = {
+      "#fpCategories": ["category", ["Todos", ...new Set(P.map(x => x.c).filter(Boolean))], v => v === "Todos" ? v : etiquetaColeccion(v)],
+      "#fpFamilies": ["family", ["Todos", ...new Set(P.map(x => x.f).filter(Boolean))]],
+      "#fpOccasions": ["occasion", ["Todos", "Noche", "Oficina", "Verano"]],
+      "#fpGenders": ["gender", ["Todos", "Unisex", "Masculino", "Femenino"]],
+      "#fpBrands": ["brand", ["Todos", ...[...new Set(P.map(x => x.b))].sort((a, b) =>
+        (a === "Otras marcas") - (b === "Otras marcas") || a.localeCompare(b))]]
+    };
+    Object.keys(grupos).forEach(function(sel) {
+      const el = $(sel);
+      if (el) el.innerHTML = pillsHtml(grupos[sel][0], grupos[sel][1], grupos[sel][2]);
+    });
     updateFilterModalMatchingCount();
   }
 
   function updateFilterModalMatchingCount() {
     const countEl = $("#filterMatchingCount");
-    if (!countEl) return;
-    const matches = filtrarProductos().length;
-    countEl.textContent = matches;
+    if (countEl) countEl.textContent = filtrarProductos().length;
   }
 
   function openFilterModal() {
     populateFilterModal();
-    const modal = $("#filterModal");
-    const scrim = $("#scrim");
-    if (modal) modal.classList.add("on");
-    if (scrim) scrim.classList.add("on");
-    document.body.style.overflow = "hidden";
+    abrirModal("#filterModal");
   }
 
   function closeFilterModal() {
@@ -2504,34 +2874,60 @@
     if (modal) modal.classList.remove("on");
     if (scrim) scrim.classList.remove("on");
     document.body.style.overflow = "";
+    document.body.classList.remove("ad-layer-open");
+    // Las selecciones del atelier se aplican al instante; mantener la grilla sincronizada
+    aplicarFiltros();
   }
 
   function resetAllFilters() {
-    filters = {
-      search: "",
-      occasion: "Todos",
-      family: "Todos",
-      gender: "Todos"
-    };
+    filters = Object.assign({}, FILTROS_BASE);
     const searchInput = $("#liveSearch");
     const clearBtn = $("#clearSearch");
     if (searchInput) searchInput.value = "";
     if (clearBtn) clearBtn.style.display = "none";
-    renderChips();
-    renderGrid();
-    updateFilterBadge();
+    aplicarFiltros();
   }
 
-  // Carrito / Bolsa
-  function addToCart(id, ml, q) {
-    const item = cart.find(x => x.id === id && x.ml === ml);
+  // ============================================================
+  // BOLSA (CARRITO)
+  // ============================================================
+  function addToCart(id, ml, env, q, silencioso) {
+    const item = cart.find(x => x.id === id && (x.ml || "") === (ml || "") && (x.env || "") === (env || ""));
     if (item) {
       item.q += q;
     } else {
-      cart.push({ id, ml, q });
+      cart.push({ id, ml: ml || "", env: env || "", q });
     }
+    if (silencioso) return;
     save();
     drawCart();
+  }
+
+  // Resuelve nombre, imagen, precio y detalle de una línea de la bolsa
+  function resolverLinea(l) {
+    if (l.isKit || String(l.id).startsWith("kit_")) {
+      const kitId = l.kitId || Number(String(l.id).replace("kit_", ""));
+      const kit = KITS.find(k => k.id === kitId);
+      return {
+        apiId: "kit_" + kitId,
+        nom: kit ? kit.nombre : (l.n || "Kit Especial"),
+        img: kit ? normalizarImagen(kit.imagen) : "assets/img/Logo2026.png",
+        u: kit ? Number(kit.precio) : (l.precio || 60000),
+        sub: "Kit Exclusivo"
+      };
+    }
+    const p = buscarProducto(l.id);
+    return {
+      apiId: String(l.id),
+      nom: p ? p.n : "Fragancia",
+      img: p ? p.img : "assets/img/Logo2026.png",
+      u: p ? pr(p) : 75000,
+      sub: [etiquetaTalla(l.ml), l.env].filter(Boolean).join(" · ") || "Fragancia"
+    };
+  }
+
+  function subtotalBolsa() {
+    return cart.reduce((s, l) => s + resolverLinea(l).u * l.q, 0);
   }
 
   function drawCart() {
@@ -2545,37 +2941,25 @@
 
     if (cart.length) {
       itemsEl.innerHTML = cart.map((l, i) => {
-        let nom, imgUrl, u, subtitle;
-        if (l.isKit || String(l.id).startsWith("kit_")) {
-          const kit = KITS.find(k => k.id === (l.kitId || Number(String(l.id).replace("kit_", ""))));
-          nom = kit ? kit.nombre : (l.n || "Kit Especial");
-          imgUrl = kit ? normalizarImagen(kit.imagen) : "assets/img/Logo2026.png";
-          u = kit ? Number(kit.precio) : (l.precio || 60000);
-          subtitle = "Kit Exclusivo";
-        } else {
-          const p = P.find(item => item.id === l.id) ||
-                    TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
-                    { n: "Fragancia", p: 75000, h: 30 };
-          nom = p.n || p.nombre || p.name;
-          imgUrl = normalizarImagen(p.img || p.imagen || p.image);
-          u = pr(p);
-          subtitle = l.ml + " ml";
-        }
-        t += u * l.q;
+        const r = resolverLinea(l);
+        t += r.u * l.q;
         c += l.q;
         return `
           <div class="it">
-            <img src="${imgUrl}" alt="${nom}" class="mini-cart-img" width="48" height="48" onerror="this.src='assets/img/Logo2026.png';">
+            <img src="${r.img}" alt="${esc(r.nom)}" class="mini-cart-img" width="48" height="48" onerror="this.src='assets/img/Logo2026.png';">
             <div>
-              <b class="up">${nom}</b>
-              <small>${subtitle} · ${fmt(u)}</small>
-              <div class="qty" style="margin-top:var(--sp-2)">
-                <button data-cq="-1" data-i="${i}">−</button>
-                <span>${l.q}</span>
-                <button data-cq="1" data-i="${i}">+</button>
+              <b class="up">${esc(r.nom)}</b>
+              <small>${esc(r.sub)} · ${fmt(r.u)}</small>
+              <div class="it-actions">
+                <div class="qty">
+                  <button data-cq="-1" data-i="${i}" aria-label="Disminuir">−</button>
+                  <span>${l.q}</span>
+                  <button data-cq="1" data-i="${i}" aria-label="Aumentar">+</button>
+                </div>
+                <button class="link up it-rm" data-rm="${i}">Quitar</button>
               </div>
             </div>
-            <div>${fmt(u * l.q)}</div>
+            <div>${fmt(r.u * l.q)}</div>
           </div>
         `;
       }).join("");
@@ -2591,78 +2975,174 @@
     if (totalEl) totalEl.textContent = fmt(t);
     if (cntEl) cntEl.textContent = c;
 
+    const acciones = $("#bagActions");
+    if (acciones) acciones.style.display = cart.length ? "" : "none";
+
     const waBtn = $("#wa");
     if (waBtn) {
       const msg = "¡Hola! Quiero hacer un pedido en Fragancias de Alta Densidad:\n\n" +
         cart.map(l => {
-          if (l.isKit || String(l.id).startsWith("kit_")) {
-            const kit = KITS.find(k => k.id === (l.kitId || Number(String(l.id).replace("kit_", ""))));
-            const nom = kit ? kit.nombre : (l.n || "Kit Especial");
-            const u = kit ? Number(kit.precio) : (l.precio || 60000);
-            return `• ${l.q} x ${nom} (Kit Exclusivo) = ${fmt(u * l.q)}`;
-          } else {
-            const p = P.find(item => item.id === l.id) ||
-                      TOP10.find(item => (item.id === l.id || item.producto_id === l.id)) ||
-                      { n: "Fragancia" };
-            const nom = p.n || p.nombre || p.name;
-            return `• ${l.q} x ${nom} (${l.ml} ml) = ${fmt(pr(p, l.ml) * l.q)}`;
-          }
+          const r = resolverLinea(l);
+          return `• ${l.q} x ${r.nom} (${r.sub}) = ${fmt(r.u * l.q)}`;
         }).join("\n") +
         `\n\nTotal: ${fmt(t)}\n¿Me confirman disponibilidad y despacho? ✨`;
-
       waBtn.href = cart.length ? `https://wa.me/${WA}?text=${encodeURIComponent(msg)}` : "#";
-      waBtn.style.opacity = cart.length ? "1" : "0.4";
-      waBtn.style.pointerEvents = cart.length ? "auto" : "none";
+    }
+
+    if (!cart.length) mostrarPaso("bag");
+    actualizarResumenEnvio();
+  }
+
+  // ============================================================
+  // CHECKOUT: DATOS DE ENVÍO + PAGO SEGURO (MERCADO PAGO)
+  // ============================================================
+  function mostrarPaso(paso) {
+    const drawer = $("#drawer");
+    if (!drawer) return;
+    drawer.dataset.step = paso;
+    const titulo = $("#drawerTitle");
+    if (titulo) titulo.textContent = paso === "ship" ? "Datos de envío" : "Tu bolsa";
+    if (paso === "ship") {
+      actualizarResumenEnvio();
+      const primero = $("#envNombre");
+      if (primero) setTimeout(() => primero.focus(), 300);
     }
   }
 
-  function closeAll() {
-    const drawer = $("#drawer");
-    const modal = $("#modal");
-    const filterModal = $("#filterModal");
+  function actualizarResumenEnvio() {
+    const zonaEl = $("#envZona");
+    if (!zonaEl) return;
+    const zona = zonaEl.value;
+    const costo = ENVIO_TARIFAS[zona] || 0;
+    const subtotal = subtotalBolsa();
+
+    const gMetro = $("#groupMetropolitana");
+    const gNac = $("#groupNacional");
+    if (gMetro) gMetro.hidden = zona !== "metropolitana";
+    if (gNac) gNac.hidden = zona !== "nacional";
+    const inMetro = $("#envCiudadMetro");
+    const inNac = $("#envCiudadNacional");
+    if (inMetro) inMetro.required = zona === "metropolitana";
+    if (inNac) inNac.required = zona === "nacional";
+
+    const set = function(sel, txt) { const el = $(sel); if (el) el.textContent = txt; };
+    set("#shipSubtotal", fmt(subtotal));
+    set("#shipCosto", zona ? fmt(costo) : "Selecciona la zona");
+    set("#shipTotal", fmt(subtotal + costo));
+  }
+
+  function mostrarErrorEnvio(msg) {
+    const el = $("#envioError");
+    if (!el) return;
+    el.textContent = msg || "";
+    el.hidden = !msg;
+  }
+
+  async function procesarPago(e) {
+    e.preventDefault();
+    if (!cart.length) return;
+    mostrarErrorEnvio("");
+
+    const val = function(id) { const el = document.getElementById(id); return el ? el.value.trim() : ""; };
+    const zona = val("envZona");
+    const costoEnvio = ENVIO_TARIFAS[zona] || 0;
+    const ciudad = zona === "medellin" ? "Medellín" : (zona === "metropolitana" ? val("envCiudadMetro") : val("envCiudadNacional"));
+
+    const shipping = {
+      nombre: val("envNombre"),
+      documento: val("envDocumento"),
+      celular: val("envCelular"),
+      zona: ENVIO_ZONAS[zona] || zona,
+      ciudad: ciudad,
+      direccion: val("envDireccion"),
+      barrio: val("envBarrio"),
+      piso: val("envPiso"),
+      referencia: val("envReferencia")
+    };
+
+    const items = cart.map(function(l) {
+      const r = resolverLinea(l);
+      return { id: r.apiId, name: r.nom, description: r.sub, unit_price: r.u, quantity: l.q };
+    });
+    if (costoEnvio > 0) {
+      items.push({ id: "envio-logistica", name: "Servicio de Envío (" + (ENVIO_ZONAS[zona] || zona) + ")", unit_price: costoEnvio, quantity: 1 });
+    }
+
+    const btn = $("#btnPagar");
+    const textoOriginal = btn ? btn.innerHTML : "";
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Preparando tu pago seguro…";
+    }
+
+    let error = "No se pudo iniciar el pago seguro. Intenta de nuevo o finaliza por WhatsApp.";
+    for (const base of apiBases()) {
+      try {
+        const resp = await fetch(`${base}/mercadopago/create_preference`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items, shipping })
+        });
+        const data = await resp.json();
+        if (data.success && data.preference && data.preference.init_point) {
+          window.location.href = data.preference.init_point;
+          return;
+        }
+        if (data.message) error = data.message;
+        break;
+      } catch(err) {
+        error = "Error de conexión al procesar el pedido. Verifica tu internet o finaliza por WhatsApp.";
+      }
+    }
+
+    mostrarErrorEnvio(error);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = textoOriginal;
+    }
+  }
+
+  // ============================================================
+  // APERTURA / CIERRE DE CAPAS
+  // ============================================================
+  function abrirModal(sel) {
+    const modal = $(sel);
     const scrim = $("#scrim");
-    if (drawer) drawer.classList.remove("on");
-    if (modal) modal.classList.remove("on");
-    if (filterModal) filterModal.classList.remove("on");
-    if (scrim) scrim.classList.remove("on");
+    if (modal) modal.classList.add("on");
+    if (scrim) scrim.classList.add("on");
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("ad-layer-open");
+  }
+
+  function closeAll() {
+    const filtrosAbiertos = $("#filterModal") && $("#filterModal").classList.contains("on");
+    ["#drawer", "#modal", "#filterModal", "#scrim"].forEach(function(sel) {
+      const el = $(sel);
+      if (el) el.classList.remove("on");
+    });
     document.body.style.overflow = "";
+    document.body.classList.remove("ad-layer-open");
+    if (filtrosAbiertos) aplicarFiltros();
   }
 
   function openCart() {
     const modal = $("#modal");
     const filterModal = $("#filterModal");
-    const drawer = $("#drawer");
-    const scrim = $("#scrim");
     if (modal) modal.classList.remove("on");
     if (filterModal) filterModal.classList.remove("on");
-    if (drawer) drawer.classList.add("on");
-    if (scrim) scrim.classList.add("on");
-    document.body.style.overflow = "hidden";
+    mostrarPaso("bag");
+    abrirModal("#drawer");
   }
 
-  function openDet(id) {
-    D = { id: Number(id), ml: 50, q: 1 };
-    renderDetail();
-    const modal = $("#modal");
-    const scrim = $("#scrim");
-    if (modal) modal.classList.add("on");
-    if (scrim) scrim.classList.add("on");
-    document.body.style.overflow = "hidden";
-  }
-
-  // Fetch seguro con fallback multiruta (solo localhost si el puerto es 3000)
+  // ============================================================
+  // CARGA DESDE EL BACKEND (con datos duros como respaldo)
+  // ============================================================
   async function fetchConFallback(rutaApi) {
-    const isLocal = typeof location !== 'undefined' && 
-      (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && 
-      location.port === '3000';
-    const urls = isLocal
-      ? [`http://localhost:3000/api/${rutaApi}`, `https://altadensidadpage-production.up.railway.app/api/${rutaApi}`]
-      : [`https://altadensidadpage-production.up.railway.app/api/${rutaApi}`];
-    for (const url of urls) {
+    for (const base of apiBases()) {
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 3500);
-        const resp = await fetch(url, { signal: controller.signal });
+        const resp = await fetch(`${base}/${rutaApi}`, { signal: controller.signal });
         clearTimeout(timeout);
         if (resp.ok) {
           const json = await resp.json();
@@ -2674,45 +3154,50 @@
     return null;
   }
 
-  // Carga reactiva de productos desde API
+  function cargarProductos(lista) {
+    const nuevos = lista.filter(x => x.activo !== 0).map(adaptarProducto);
+    if (!nuevos.length) return;
+    P = nuevos;
+    renderChips();
+    renderGrid();
+    drawCart();
+    inyectarSchemaProductos();
+  }
+
   async function cargarCatalogoBackend() {
     try {
       const data = await fetchConFallback("productos");
-      if (data && data.length) {
-        const activos = data.filter(x => x.activo !== 0);
-        if (activos.length) {
-          adaptarYRenderizar(activos);
-          try { localStorage.setItem("ad_cached_products_v1", JSON.stringify(activos)); } catch(e) {}
-        }
-      }
+      if (data && data.length) cargarProductos(data);
     } catch(e) {}
   }
 
-  // Carga reactiva del ranking Top 10 desde API
   async function cargarTop10Backend() {
     try {
       const data = await fetchConFallback("top10");
       if (data && data.length) {
-        TOP10 = data.map((t, idx) => ({
-          posicion: t.posicion || idx + 1,
-          producto_id: t.producto_id || t.id,
-          id: t.producto_id || t.id,
-          nombre: t.nombre || t.name,
-          imagen: normalizarImagen(t.imagen || t.image),
-          categoria: t.categoria || t.category || "Perfumería",
-          genero: t.genero || t.gender || "Unisex",
-          f: t.categoria || "Perfumería de Autor",
-          descripcion: t.descripcion || t.description || "",
-          precio: Number(t.precio || t.price || 75000),
-          rating: t.rating || 5
-        }));
+        TOP10 = data.map((t, idx) => {
+          const curado = DATOS_DUROS_TOP10.find(d => d.producto_id === (t.producto_id || t.id)) || {};
+          return {
+            posicion: t.posicion || idx + 1,
+            producto_id: t.producto_id || t.id,
+            id: t.producto_id || t.id,
+            nombre: t.nombre || t.name,
+            imagen: normalizarImagen(t.imagen || t.image),
+            categoria: t.categoria || t.category || "Perfumería",
+            genero: t.genero || t.gender || "Unisex",
+            f: curado.f || t.categoria || "Perfumería de Autor",
+            o: curado.o,
+            no: curado.no,
+            descripcion: t.descripcion || t.description || "",
+            precio: Number(t.precio || t.price || 75000),
+            rating: t.rating || 5
+          };
+        });
         renderRank();
-        try { localStorage.setItem("ad_cached_top10_v1", JSON.stringify(TOP10)); } catch(e) {}
       }
     } catch(e) {}
   }
 
-  // Carga reactiva de envases desde API
   async function cargarEnvasesBackend() {
     try {
       const data = await fetchConFallback("envases");
@@ -2732,12 +3217,10 @@
           };
         });
         renderSizes();
-        try { localStorage.setItem("ad_cached_envases_v1", JSON.stringify(ENVASES)); } catch(e) {}
       }
     } catch(e) {}
   }
 
-  // Carga reactiva de kits desde API
   async function cargarKitsBackend() {
     try {
       const data = await fetchConFallback("kits");
@@ -2752,105 +3235,40 @@
           beneficios: k.beneficios || []
         }));
         renderKits();
-        try { localStorage.setItem("ad_cached_kits_v1", JSON.stringify(KITS)); } catch(e) {}
+        drawCart();
       }
     } catch(e) {}
   }
 
-  function adaptarYRenderizar(lista) {
-    const nuevos = lista.map((item, idx) => {
-      let occ = "Noche";
-      let fam = "Amaderada";
-      let gen = "Unisex";
-      let hue = (idx * 37) % 360;
-
-      const nameLow = (item.name || "").toLowerCase();
-      const descLow = (item.description || "").toLowerCase();
-      const catLow = (item.category || "").toLowerCase();
-
-      if (item.gender) {
-        gen = (item.gender === "Hombre" || item.gender === "Masculino") ? "Masculino" :
-              ((item.gender === "Mujer" || item.gender === "Femenino") ? "Femenino" : "Unisex");
-      } else if (descLow.includes("femenin") || nameLow.includes("rose") || nameLow.includes("mujer")) {
-        gen = "Femenino";
-      } else if (descLow.includes("masculin") || nameLow.includes("hombre")) {
-        gen = "Masculino";
-      }
-
-      if (descLow.includes("fresc") || descLow.includes("cítric") || descLow.includes("verano") || nameLow.includes("aqua") || nameLow.includes("blue")) {
-        occ = "Verano";
-        fam = "Cítrica / Fresca";
-        hue = 190;
-      } else if (descLow.includes("oficina") || descLow.includes("elegante") || descLow.includes("diario") || descLow.includes("versátil")) {
-        occ = "Oficina";
-        fam = "Aromática";
-        hue = 130;
-      } else if (descLow.includes("dulce") || descLow.includes("vainilla") || descLow.includes("gourmand") || descLow.includes("caramelo") || nameLow.includes("candy")) {
-        fam = "Dulce / Gourmand";
-        hue = 24;
-      } else if (descLow.includes("floral") || nameLow.includes("rosa") || nameLow.includes("iris") || nameLow.includes("rose")) {
-        fam = "Floral";
-        hue = 330;
-      } else if (descLow.includes("cuero") || nameLow.includes("cuero") || nameLow.includes("leather")) {
-        fam = "Cuero";
-        hue = 16;
-      } else if (catLow.includes("arabe") || descLow.includes("oriental") || descLow.includes("especiad") || nameLow.includes("oud")) {
-        fam = "Especiada / Árabe";
-        hue = 40;
-      }
-
-      const notasExtraidas = [
-        item.notas_salida || "Salida vibrante",
-        item.notas_corazon || "Corazón de autor",
-        item.notas_fondo || "Ámbar y feromonas"
-      ];
-
-      return {
-        id: item.id || (1000 + idx),
-        n: item.name,
-        f: fam,
-        o: occ,
-        g: gen,
-        no: notasExtraidas,
-        p: Number(item.price) > 0 ? Number(item.price) : 75000,
-        h: hue,
-        desc: item.description || null,
-        img: normalizarImagen(item.image || (item.images && item.images[0]))
-      };
-    });
-
-    if (nuevos.length) {
-      P = nuevos;
-      renderChips();
-      renderGrid();
-    }
-  }
-
-  // Micro-interacción: Botella 3D en Hero
+  // Micro-interacción: imagen del Hero con inclinación 3D
   function initHeroBottleInteractivity() {
     const stage = document.querySelector(".hero .stage");
-    const bottle = document.querySelector(".hero .stage .bottle");
-    if (!stage || !bottle) return;
+    const target = document.querySelector(".hero .hero-image-wrap") || document.querySelector(".hero .stage .bottle");
+    if (!stage || !target) return;
 
     stage.addEventListener("mousemove", function(e) {
       const rect = stage.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      bottle.style.transform = `perspective(600px) rotateY(${x * 16}deg) rotateX(${-y * 16}deg) translateY(-8px)`;
+      target.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) translateY(-4px)`;
     });
 
     stage.addEventListener("mouseleave", function() {
-      bottle.style.transform = "";
+      target.style.transform = "";
     });
 
-    stage.addEventListener("click", function() {
-      let currentHue = parseInt(bottle.style.getPropertyValue("--h") || "32", 10);
-      let nextHue = (currentHue + 45) % 360;
-      bottle.style.setProperty("--h", nextHue);
-    });
+    const bottleCss = document.querySelector(".hero .stage .bottle");
+    if (bottleCss) {
+      stage.addEventListener("click", function() {
+        let currentHue = parseInt(bottleCss.style.getPropertyValue("--h") || "32", 10);
+        bottleCss.style.setProperty("--h", (currentHue + 45) % 360);
+      });
+    }
   }
 
-  // Inicialización de Eventos Delegados
+  // ============================================================
+  // EVENTOS DELEGADOS
+  // ============================================================
   document.addEventListener("click", function(e) {
     const t = e.target;
     const g = function(a) { return t.closest("[" + a + "]"); };
@@ -2863,51 +3281,49 @@
 
     if (x = g("data-f")) {
       filters.occasion = x.dataset.f;
-      renderChips();
-      renderGrid();
+      aplicarFiltros();
       return;
     }
 
-    if (t.id === "btnFilterModal" || t.closest("#btnFilterModal")) {
+    if (t.closest("#btnFilterModal")) {
       openFilterModal();
       return;
     }
-    if (g("data-close-filters")) {
+    if (g("data-close-filters") || t.closest("#btnApplyFilters")) {
       closeFilterModal();
       return;
     }
 
     if (x = g("data-modal-filter")) {
-      const type = x.dataset.modalFilter;
-      const val = x.dataset.val;
-      filters[type] = val;
+      filters[x.dataset.modalFilter] = x.dataset.val;
       populateFilterModal();
-      return;
-    }
-
-    if (t.id === "btnApplyFilters" || t.closest("#btnApplyFilters")) {
-      renderChips();
-      renderGrid();
-      closeFilterModal();
       return;
     }
 
     if (t.id === "btnResetFilters" || t.id === "btnResetInline" || t.id === "btnResetEmpty") {
       resetAllFilters();
-      if (t.id === "btnResetFilters") {
-        populateFilterModal();
-      }
+      if (t.id === "btnResetFilters") populateFilterModal();
+      return;
+    }
+
+    if (x = g("data-page")) {
+      paginaActual = Number(x.dataset.page);
+      renderGrid(true);
       return;
     }
 
     if (x = g("data-add")) {
-      addToCart(Number(x.dataset.add), 50, 1);
+      const p = buscarProducto(x.dataset.add);
+      if (p) addToCart(p.id, p.sz[0] || "", p.env[0] || "", 1);
       openCart();
     } else if (g("data-adddet")) {
-      addToCart(D.id, D.ml, D.q);
+      addToCart(D.id, D.ml, D.env, D.q);
       openCart();
     } else if (x = g("data-size")) {
-      D.ml = Number(x.dataset.size);
+      D.ml = x.dataset.size;
+      renderDetail();
+    } else if (x = g("data-env")) {
+      D.env = x.dataset.env;
       renderDetail();
     } else if (x = g("data-dq")) {
       D.q = Math.max(1, D.q + Number(x.dataset.dq));
@@ -2920,6 +3336,18 @@
         save();
         drawCart();
       }
+    } else if (x = g("data-rm")) {
+      cart.splice(Number(x.dataset.rm), 1);
+      save();
+      drawCart();
+    } else if (g("data-empty-bag")) {
+      cart = [];
+      save();
+      drawCart();
+    } else if (g("data-checkout")) {
+      if (cart.length) mostrarPaso("ship");
+    } else if (g("data-back")) {
+      mostrarPaso("bag");
     } else if (x = g("data-open")) {
       openDet(x.dataset.open);
     } else if (x = g("data-open-kit")) {
@@ -2932,9 +3360,17 @@
     } else if (g("data-cart")) {
       e.preventDefault();
       openCart();
+    } else if (g("data-logout")) {
+      e.preventDefault();
+      try {
+        localStorage.removeItem("token");
+        localStorage.removeItem("usuario");
+      } catch(err) {}
+      window.location.reload();
     } else if (g("data-close")) {
       closeAll();
     } else if (g("data-aura")) {
+      closeAll();
       const launcher = $("#adIaChatLauncher");
       if (launcher) launcher.click();
     }
@@ -2952,6 +3388,7 @@
       if (clearBtn) clearBtn.style.display = val ? "block" : "none";
       timeout = setTimeout(function() {
         filters.search = val;
+        paginaActual = 1;
         renderGrid();
       }, 150);
     });
@@ -2961,10 +3398,54 @@
         input.value = "";
         clearBtn.style.display = "none";
         filters.search = "";
+        paginaActual = 1;
         renderGrid();
         input.focus();
       });
     }
+  }
+
+  function initSort() {
+    const sel = $("#sortSelect");
+    if (!sel) return;
+    sel.addEventListener("change", function() {
+      orden = sel.value;
+      paginaActual = 1;
+      renderGrid();
+    });
+  }
+
+  function initCheckout() {
+    const form = $("#envioForm");
+    const zona = $("#envZona");
+    if (zona) zona.addEventListener("change", actualizarResumenEnvio);
+    if (form) form.addEventListener("submit", procesarPago);
+  }
+
+  // Sesión de cliente / staff (antes en nav-sesion.js)
+  function initSesion() {
+    const el = $("#navSesion");
+    if (!el) return;
+    let token = null;
+    let usuario = null;
+    try {
+      token = localStorage.getItem("token");
+      usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+    } catch(e) {}
+    if (!token || !usuario || !usuario.nombre) return;
+
+    const nombre = String(usuario.nombre).split(" ")[0];
+    const esStaff = usuario.rol === "admin" || usuario.rol === "empleado";
+    const lbl = el.querySelector(".nav-lbl");
+    if (lbl) lbl.textContent = esStaff ? "Panel · " + nombre : nombre;
+    el.href = esStaff ? "admin.html" : "#";
+    el.title = esStaff ? "Ir al panel de administración" : "Sesión iniciada";
+
+    const salir = document.createElement("button");
+    salir.className = "up";
+    salir.dataset.logout = "";
+    salir.textContent = "Salir";
+    el.after(salir);
   }
 
   document.addEventListener("keydown", function(e) {
@@ -2974,16 +3455,19 @@
   function initThemeToggle() {
     const btn = $("#toggleTema");
     if (!btn) return;
+    const lbl = btn.querySelector(".nav-lbl");
+    const ico = btn.querySelector("i");
 
     function updateLabel() {
       const isLight = document.documentElement.classList.contains("modo-claro");
-      btn.textContent = isLight ? "Modo Oscuro" : "Modo Claro";
+      if (lbl) lbl.textContent = isLight ? "Modo Oscuro" : "Modo Claro";
+      if (ico) ico.className = isLight ? "fa-solid fa-moon" : "fa-solid fa-sun";
     }
 
     btn.addEventListener("click", function() {
       const isLight = document.documentElement.classList.toggle("modo-claro");
       document.documentElement.setAttribute("data-theme", isLight ? "light" : "dark");
-      localStorage.setItem("altadensidad_tema", isLight ? "claro" : "oscuro");
+      try { localStorage.setItem("altadensidad_tema", isLight ? "claro" : "oscuro"); } catch(e) {}
       updateLabel();
     });
 
@@ -2992,6 +3476,8 @@
 
   function boot() {
     // 1. Render inmediato con datos duros auténticos (0ms LCP, sin parpadeos)
+    P = DATOS_DUROS_PRODUCTOS.map(adaptarProducto);
+    migrarCarritoLegacy();
     renderChips();
     renderGrid();
     renderRank();
@@ -3001,6 +3487,10 @@
     initThemeToggle();
     initHeroBottleInteractivity();
     initLiveSearch();
+    initSort();
+    initCheckout();
+    initSesion();
+    inyectarSchemaProductos();
 
     // 2. Conectar en segundo plano con APIs para actualización continua
     cargarCatalogoBackend();
@@ -3008,18 +3498,17 @@
     cargarEnvasesBackend();
     cargarKitsBackend();
 
-    const els = document.querySelectorAll(".rv");
-    els.forEach(n => n.classList.add("in"));
+    $$(".rv").forEach(n => n.classList.add("in"));
   }
 
   // Compatibilidad universal con scripts legacy
   window.agregarAlCarrito = function(obj) {
     if (!obj) return;
     if (obj.id && String(obj.id).startsWith("kit_")) {
-      const kitId = Number(String(obj.id).replace("kit_", ""));
-      addKitToCart(kitId, 1);
+      addKitToCart(Number(String(obj.id).replace("kit_", "")), 1);
     } else {
-      addToCart(Number(obj.id), 50, 1);
+      const p = buscarProducto(obj.id);
+      addToCart(Number(obj.id), p ? (p.sz[0] || "") : "", p ? (p.env[0] || "") : "", 1);
     }
     openCart();
   };
