@@ -2935,14 +2935,8 @@
     } else if (g("data-close")) {
       closeAll();
     } else if (g("data-aura")) {
-      const aura = $("#aura");
-      if (aura) aura.classList.toggle("on");
-    } else if (x = g("data-o")) {
-      const m = P.find(p => p.o === x.dataset.o) || P[0];
-      const r = $("#aura-r");
-      if (r) {
-        r.innerHTML = `Le sugiero <b>${m.n}</b>: ${(m.no || []).join(", ").toLowerCase()}. <button class="link up" data-open="${m.id}">Ver detalle</button>`;
-      }
+      const launcher = $("#adIaChatLauncher");
+      if (launcher) launcher.click();
     }
   });
 

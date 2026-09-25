@@ -47,8 +47,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
     
-    <!-- Hoja de Estilos Haute Parfumerie -->
+    <!-- FontAwesome Oficial -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
+    <!-- Hoja de Estilos Haute Parfumerie & Asistente IA AURA -->
     <link rel="stylesheet" href="assets/css/haute-parfumerie.css">
+    <link rel="stylesheet" href="assets/css/chatbot.css">
 
     <!-- Script inicial para persistencia de tema (evita destellos de color) -->
     <script>
@@ -291,18 +295,17 @@
         </div>
     </div>
 
-    <!-- 11 · AURA CONCIERGE -->
-    <div class="aura" id="aura">
-        <span class="up eyebrow">Aura · Concierge</span>
-        <p class="q">¿Para qué momento busca su fragancia?</p>
-        <button class="chip" data-o="Noche">Una noche de seducción</button>
-        <button class="chip" data-o="Oficina">Un día de oficina</button>
-        <button class="chip" data-o="Verano">Un plan de verano</button>
-        <div id="aura-r"></div>
+    <!-- 11 · BOTÓN FLOTANTE WHATSAPP CON PULSO Y ANILLOS -->
+    <div class="whatsapp-flotante-wrapper" aria-label="Contacto directo por WhatsApp">
+        <div class="whatsapp-ripple-ring ring-1"></div>
+        <div class="whatsapp-ripple-ring ring-2"></div>
+        <a class="btn-whatsapp-flotante" href="https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Vi%20su%20cat%C3%A1logo%20en%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20perfumes.%20%E2%9C%A8" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        </a>
     </div>
-    <button class="aura-b up" data-aura>Aura</button>
 
-    <!-- Scripts Oficiales Haute Parfumerie -->
+    <!-- Scripts Oficiales: Haute Parfumerie & Chatbot IA AURA -->
     <script src="assets/js/haute-parfumerie.js"></script>
+    <script src="assets/js/chatbot.js" defer></script>
 </body>
 </html>
