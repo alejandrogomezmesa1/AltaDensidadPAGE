@@ -363,9 +363,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 productCard.classList.add('product-card');
                 const altText = `Perfume ${product.name} - Fragancia Alta Concentración ${product.gender ? '(' + product.gender + ')' : ''}`;
                 
-                const imgList = (Array.isArray(product.images) && product.images.length > 0)
+                function normalizarImgPath(src) {
+                    if (!src) return 'assets/img/Logo2026.png';
+                    if (src.startsWith('http://') || src.startsWith('https://')) return src;
+                    let p = src.trim();
+                    if (p.startsWith('img/')) return 'assets/' + p;
+                    if (!p.startsWith('assets/')) return 'assets/img/' + p;
+                    return p;
+                }
+
+                const rawImgs = (Array.isArray(product.images) && product.images.length > 0)
                     ? product.images
-                    : (product.image ? [product.image] : ['assets/img/placeholder.jpg']);
+                    : (product.image ? [product.image] : ['assets/img/Logo2026.png']);
+                const imgList = rawImgs.map(normalizarImgPath);
                 const hasMultiple = imgList.length > 1;
                 const encodedImages = encodeURIComponent(JSON.stringify(imgList));
                 
@@ -1058,42 +1068,55 @@ document.addEventListener('DOMContentLoaded', function() {
             window.ADAnimations.renderSkeletons('#kitsGrid', 3);
         }
 
-        // 3. Petición única en paralelo a la API
+        // 3. Petición única en paralelo a la API con reintento multiruta
         async function fetchCatalogoAPI() {
-            const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-                ? 'http://localhost:3000/api'
-                : 'https://altadensidadpage-production.up.railway.app/api';
+            const endpoints = [
+                'http://localhost:3000/api',
+                'https://altadensidadpage-production.up.railway.app/api'
+            ];
 
-            try {
-                const [resProd, resKits] = await Promise.all([
-                    fetch(`${base}/productos`),
-                    fetch(`${base}/kits`)
-                ]);
-                const dataProd = await resProd.json();
-                const dataKits = await resKits.json();
+            for (const base of endpoints) {
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 3500);
+                    const [resProd, resKits] = await Promise.all([
+                        fetch(`${base}/productos`, { signal: controller.signal }),
+                        fetch(`${base}/kits`, { signal: controller.signal })
+                    ]);
+                    clearTimeout(timer);
 
-                if (dataProd.success) {
-                    products = dataProd.data.filter(p => p.activo !== 0);
-                    productosFiltrados = products;
-                    try { localStorage.setItem(CACHE_KEY_PRODUCTS, JSON.stringify(products)); } catch(e) {}
-                    populateBrandFilter();
-                    actualizarContador();
-                    displayProducts(productosFiltrados);
-                    inyectarSchemaProductos(products);
+                    let actualizo = false;
+                    if (resProd.ok) {
+                        const dataProd = await resProd.json();
+                        if (dataProd.success && dataProd.data && dataProd.data.length) {
+                            products = dataProd.data.filter(p => p.activo !== 0);
+                            productosFiltrados = products;
+                            try { localStorage.setItem(CACHE_KEY_PRODUCTS, JSON.stringify(products)); } catch(e) {}
+                            populateBrandFilter();
+                            actualizarContador();
+                            displayProducts(productosFiltrados);
+                            inyectarSchemaProductos(products);
+                            actualizo = true;
+                        }
+                    }
+
+                    if (resKits.ok) {
+                        const dataKits = await resKits.json();
+                        if (dataKits.success && dataKits.data && dataKits.data.length) {
+                            const kits = dataKits.data.filter(k => k.activo !== 0);
+                            window.kitsPublicos = kits;
+                            window.kitsPaginaActual = 1;
+                            window.KITS_POR_PAGINA = 6;
+                            try { localStorage.setItem(CACHE_KEY_KITS, JSON.stringify(kits)); } catch(e) {}
+                            renderKits(kits);
+                        }
+                    }
+
+                    renderHomeSlider(products, window.kitsPublicos || []);
+                    if (actualizo) break;
+                } catch(err) {
+                    console.warn("Intento con API falló:", base, err.message);
                 }
-
-                if (dataKits.success) {
-                    const kits = dataKits.data.filter(k => k.activo !== 0);
-                    window.kitsPublicos = kits;
-                    window.kitsPaginaActual = 1;
-                    window.KITS_POR_PAGINA = 6;
-                    try { localStorage.setItem(CACHE_KEY_KITS, JSON.stringify(kits)); } catch(e) {}
-                    renderKits(kits);
-                }
-
-                renderHomeSlider(products, window.kitsPublicos || []);
-            } catch(err) {
-                console.error("Error cargando catálogo desde API:", err);
             }
         }
 

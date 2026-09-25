@@ -1,14 +1,214 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Detectar entorno y definir URL base
-    const base = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-        ? 'http://localhost:3000/api'
-        : 'https://altadensidadpage-production.up.railway.app/api';
-    const API_TOP10_URL = base + '/top10';
     const productGrid = document.getElementById('top10Grid');
-
     const CACHE_KEY_TOP10 = 'ad_cached_top10_v1';
 
-    // 1. Renderizar de inmediato si hay caché (0ms LCP)
+    // DATOS DUROS OFICIALES: TOP 10 PERFUMES MÁS VENDIDOS
+    const DATOS_DUROS_TOP10 = [
+  {
+    "posicion": 1,
+    "producto_id": 82,
+    "id": 82,
+    "nombre": "SANTAL 33 LE LABO",
+    "imagen": "assets/img/SANTAL_33.jpg",
+    "categoria": "Diseñador",
+    "genero": "Unisex",
+    "f": "Amaderada",
+    "o": "Oficina",
+    "no": [
+      "Cardamomo · Iris",
+      "Papiro · Violeta",
+      "Sándalo · Cedro · Cuero"
+    ],
+    "descripcion": "Santal 33 es un perfume amaderado y especiado, con un aire ahumado y sofisticado que lo ha convertido en un clásico moderno de la perfumería nicho.",
+    "precio": 75000,
+    "rating": 5
+  },
+  {
+    "posicion": 2,
+    "producto_id": 68,
+    "id": 68,
+    "nombre": "LIGHT BLUE DAMA DOLCE & GABBANA",
+    "imagen": "assets/img/ligth_blue.jpg",
+    "categoria": "Diseñador",
+    "genero": "Femenino",
+    "f": "Cítrica / Fresca",
+    "o": "Verano",
+    "no": [
+      "Manzana verde · Limón",
+      "Bambú · Jazmín",
+      "Cedro · Ámbar"
+    ],
+    "descripcion": "Es una fragancia fresca, mediterránea y muy versátil, que se ha convertido en un clásico para climas cálidos y uso diario.",
+    "precio": 75000,
+    "rating": 4
+  },
+  {
+    "posicion": 3,
+    "producto_id": 64,
+    "id": 64,
+    "nombre": "LACOSTE BLANCA",
+    "imagen": "assets/img/LACOSTE_BLANCA.png",
+    "categoria": "Diseñador",
+    "genero": "Masculino",
+    "f": "Aromática",
+    "o": "Oficina",
+    "no": [
+      "Pomelo · Cardamomo",
+      "Ylang-ylang · Nardo",
+      "Cedro de Virginia · Gamuza"
+    ],
+    "descripcion": "Es una fragancia fresca, limpia y elegante, inspirada en la icónica camiseta polo blanca de Lacoste.",
+    "precio": 65000,
+    "rating": 4
+  },
+  {
+    "posicion": 4,
+    "producto_id": 35,
+    "id": 35,
+    "nombre": "BHARARA KING",
+    "imagen": "assets/img/BHARARAKING.webp",
+    "categoria": "Arabe",
+    "genero": "Masculino",
+    "f": "Dulce / Gourmand",
+    "o": "Noche",
+    "no": [
+      "Naranja · Bergamota",
+      "Tutti-frutti",
+      "Vainilla blanca · Ámbar"
+    ],
+    "descripcion": "Bharara King es un perfume masculino reconocido por su carácter poderoso, desafiante y moderno.",
+    "precio": 110000,
+    "rating": 5
+  },
+  {
+    "posicion": 5,
+    "producto_id": 96,
+    "id": 96,
+    "nombre": "CREED AVENTUS",
+    "imagen": "assets/img/creed_adventus.webp",
+    "categoria": "Diseñador",
+    "genero": "Masculino",
+    "f": "Amaderada",
+    "o": "Noche",
+    "no": [
+      "Piña ahumada · Grosella",
+      "Abedul · Jazmín",
+      "Almizcle · Musgo de roble"
+    ],
+    "descripcion": "Una de las fragancias más emblemáticas de la casa Creed, homenaje al poder, la visión y el éxito.",
+    "precio": 70000,
+    "rating": 4
+  },
+  {
+    "posicion": 6,
+    "producto_id": 28,
+    "id": 28,
+    "nombre": "AMBER OUD GOLD AL HARAMAIN",
+    "imagen": "assets/img/AMBER_OUD_GOLD.jpeg",
+    "categoria": "Arabe",
+    "genero": "Unisex",
+    "f": "Dulce / Gourmand",
+    "o": "Noche",
+    "no": [
+      "Bergamota · Notas verdes",
+      "Melón · Piña dulce",
+      "Ámbar · Vainilla"
+    ],
+    "descripcion": "El Amber Oud Gold Edition de Al Haramain es una fragancia unisex de estilo oriental gourmand, dulce, cálida y sofisticada.",
+    "precio": 125000,
+    "rating": 5
+  },
+  {
+    "posicion": 7,
+    "producto_id": 23,
+    "id": 23,
+    "nombre": "BADEE AL OUD SUBLIME LATTAFA",
+    "imagen": "assets/img/ADEE_AL_OUD_SUBLIME.webp",
+    "categoria": "Arabe",
+    "genero": "Unisex",
+    "f": "Especiada / Árabe",
+    "o": "Noche",
+    "no": [
+      "Manzana · Ciruela · Lichi",
+      "Rosa · Jazmín",
+      "Vainilla · Cedro · Pachulí"
+    ],
+    "descripcion": "Badee Al Oud Sublime de Lattafa es un perfume unisex con un perfil afrutado, amaderado y oriental.",
+    "precio": 110000,
+    "rating": 5
+  },
+  {
+    "posicion": 8,
+    "producto_id": 43,
+    "id": 43,
+    "nombre": "VALENTINO DONNA BORN IN ROMA",
+    "imagen": "assets/img/DONNA_BORN_IN_ROMA.jpeg",
+    "categoria": "Diseñador",
+    "genero": "Femenino",
+    "f": "Floral",
+    "o": "Noche",
+    "no": [
+      "Grosella negra · Pimienta rosa",
+      "Jazmín grandiflorum",
+      "Vainilla bourbon · Madera"
+    ],
+    "descripcion": "Valentino Donna Born in Roma es una fragancia moderna, sofisticada y con un toque rebelde, inspirada en Roma.",
+    "precio": 85000,
+    "rating": 5
+  },
+  {
+    "posicion": 9,
+    "producto_id": 90,
+    "id": 90,
+    "nombre": "212 VIP BLACK CAROLINA HERRERA",
+    "imagen": "assets/img/VIP_212_BLACK.jpg",
+    "categoria": "Diseñador",
+    "genero": "Masculino",
+    "f": "Aromática",
+    "o": "Noche",
+    "no": [
+      "Absenta · Anís",
+      "Lavanda francesa",
+      "Cuero negro · Vainilla"
+    ],
+    "descripcion": "212 VIP Black es un perfume masculino aromático y especiado con fondo cálido, ideal para ambientes sociales nocturnos.",
+    "precio": 70000,
+    "rating": 5
+  },
+  {
+    "posicion": 10,
+    "producto_id": 91,
+    "id": 91,
+    "nombre": "YARA LATTAFA",
+    "imagen": "assets/img/YARA_LATTAFA2.jpg",
+    "categoria": "Arabe",
+    "genero": "Femenino",
+    "f": "Dulce / Gourmand",
+    "o": "Oficina",
+    "no": [
+      "Heliotropo · Orquídea",
+      "Frutas tropicales",
+      "Vainilla · Sándalo"
+    ],
+    "descripcion": "Yara de Lattafa es un perfume femenino dulce, floral y cremoso, juvenil y encantador con gran duración y versatilidad.",
+    "precio": 110000,
+    "rating": 5
+  }
+];
+
+    function normalizarImagen(src) {
+        if (!src) return 'assets/img/Logo2026.png';
+        if (src.startsWith('http://') || src.startsWith('https://')) return src;
+        let p = src.trim();
+        if (p.startsWith('img/')) {
+            p = 'assets/' + p;
+        } else if (!p.startsWith('assets/')) {
+            p = 'assets/img/' + p;
+        }
+        return p;
+    }
+
+    // 1. Render inmediato: Caché o Datos Duros (0ms LCP, nunca queda en blanco)
     try {
         const cached = localStorage.getItem(CACHE_KEY_TOP10);
         if (cached) {
@@ -16,30 +216,46 @@ document.addEventListener('DOMContentLoaded', function () {
             if (parsed && parsed.length) {
                 mostrarTop10(parsed);
                 inyectarSchemaTop10(parsed);
-            }
-        }
-    } catch(e) {}
-
-    async function cargarTop10() {
-        const cachedExists = localStorage.getItem(CACHE_KEY_TOP10);
-        if (!cachedExists) {
-            if (window.ADAnimations) {
-                window.ADAnimations.renderSkeletons('#top10Grid', 4);
             } else {
-                productGrid.innerHTML = '<div class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando Top 10...</div>';
+                mostrarTop10(DATOS_DUROS_TOP10);
             }
+        } else {
+            mostrarTop10(DATOS_DUROS_TOP10);
         }
-        try {
-            const res = await fetch(API_TOP10_URL);
-            const data = await res.json();
-            if (!data.success) throw new Error(data.message);
-            try { localStorage.setItem(CACHE_KEY_TOP10, JSON.stringify(data.data)); } catch(e) {}
-            mostrarTop10(data.data);
-            inyectarSchemaTop10(data.data);
-        } catch (err) {
-            if (!cachedExists) {
-                productGrid.innerHTML = `<div class="empty-row"><i class='fas fa-exclamation-circle'></i> No se pudo cargar el Top 10.</div>`;
-            }
+    } catch(e) {
+        mostrarTop10(DATOS_DUROS_TOP10);
+    }
+
+    // 2. Carga en segundo plano desde API con reintento resiliente
+    async function cargarTop10() {
+        const endpoints = [
+            'http://localhost:3000/api/top10',
+            'https://altadensidadpage-production.up.railway.app/api/top10'
+        ];
+
+        let exito = false;
+        for (const url of endpoints) {
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 3500);
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(timer);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.data && data.data.length) {
+                        try { localStorage.setItem(CACHE_KEY_TOP10, JSON.stringify(data.data)); } catch(e) {}
+                        mostrarTop10(data.data);
+                        inyectarSchemaTop10(data.data);
+                        exito = true;
+                        break;
+                    }
+                }
+            } catch (err) {}
+        }
+
+        // Si fallan todas las redes pero no hay nada renderizado, asegurar datos duros
+        if (!exito && (!productGrid.children || productGrid.children.length === 0)) {
+            mostrarTop10(DATOS_DUROS_TOP10);
         }
     }
 
@@ -60,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 "item": {
                     "@type": "Product",
                     "name": p.nombre || p.name,
-                    "image": (p.imagen || p.image) ? ((p.imagen || p.image).startsWith('http') ? (p.imagen || p.image) : `https://alta-densidad-page.vercel.app/${p.imagen || p.image}`) : undefined,
+                    "image": normalizarImagen(p.imagen || p.image),
                     "description": p.descripcion || p.description || `Perfume ${p.nombre || p.name} Top ${idx + 1} en ventas con alta concentración y fijación prolongada.`,
                     "brand": {
                         "@type": "Brand",
@@ -69,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     "offers": {
                         "@type": "Offer",
                         "priceCurrency": "COP",
-                        "price": Number(p.precio || 0),
+                        "price": Number(p.precio || p.price || 0),
                         "availability": "https://schema.org/InStock",
                         "url": "https://alta-densidad-page.vercel.app/top10.html"
                     }
@@ -93,28 +309,27 @@ document.addEventListener('DOMContentLoaded', function () {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
 
-            // Preparar objeto para funciones globales
             const itemData = {
                 id: product.producto_id || product.id,
                 name: product.nombre || product.name,
-                image: product.imagen || product.image,
-                category: product.categoria || product.category,
-                gender: product.genero || product.gender,
-                description: product.descripcion || product.description,
-                price: product.precio,
+                image: normalizarImagen(product.imagen || product.image),
+                category: product.categoria || product.category || 'Perfumería',
+                gender: product.genero || product.gender || 'Unisex',
+                description: product.descripcion || product.description || '',
+                price: Number(product.precio || product.price || 75000),
                 rating: product.rating || 5
             };
 
             productCard.innerHTML = `
                 <div class="product-rank-badge">#${rank}</div>
                 <div class="product-image">
-                    <img src="${itemData.image}" alt="Top #${rank} Perfume ${itemData.name} - Fragancia Alta Concentración" width="280" height="280" loading="lazy" decoding="async">
+                    <img src="${itemData.image}" alt="Top #${rank} Perfume ${itemData.name} - Fragancia Alta Concentración" width="280" height="280" loading="lazy" decoding="async" onerror="this.src='assets/img/Logo2026.png';">
                 </div>
                 <div class="product-info">
                     <div class="product-name">${itemData.name}</div>
                     <div class="product-rating">${stars}</div>
-                    <div class="product-category">${itemData.category || ''}</div>
-                    <div class="product-price">$${Number(itemData.price || 0).toLocaleString('es-CO')} COP</div>
+                    <div class="product-category">${itemData.category}</div>
+                    <div class="product-price">$${itemData.price.toLocaleString('es-CO')} COP</div>
                 </div>
                 <button class="btn-agregar-carrito" aria-label="Agregar ${itemData.name} al carrito"
                     onclick='event.stopPropagation(); if(window.agregarAlCarrito) window.agregarAlCarrito(${JSON.stringify({ id: itemData.id, name: itemData.name, image: itemData.image, price: itemData.price })})'>
@@ -129,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             productGrid.appendChild(productCard);
         });
-        // Rellenar última fila con placeholders para evitar espacios en blanco
+
         const cols = window.innerWidth > 1100 ? 4 : window.innerWidth > 768 ? 3 : 2;
         const resto = productsToShow.length % cols;
         if (resto !== 0) {
@@ -202,9 +417,9 @@ const header = document.querySelector('.header');
 window.addEventListener('scroll', () => {
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > lastScrollTop && scrollTop > 80) {
-        header.classList.add('header--hidden');
+        if (header) header.classList.add('header--hidden');
     } else {
-        header.classList.remove('header--hidden');
+        if (header) header.classList.remove('header--hidden');
     }
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 }, { passive: true });
