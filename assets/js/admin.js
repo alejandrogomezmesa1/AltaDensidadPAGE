@@ -16,6 +16,52 @@ function getAuthHeaders(includeJson = false) {
     return headers;
 }
 
+// ============================
+// INTEGRACIÓN DATA — enlace con el inventario
+// ============================
+const API_INTEGRACION_URL = `${_BASE}/admin/integracion`;
+let inventarioData = null;
+
+async function obtenerInventarioData() {
+    if (inventarioData) return inventarioData;
+    const res = await fetch(`${API_INTEGRACION_URL}/inventario`, { headers: getAuthHeaders() });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+    inventarioData = data.data;
+    return inventarioData;
+}
+
+// Llena el selector con el inventario de DATA. Si la integración no está disponible,
+// el selector queda deshabilitado y el enlace existente no se modifica al guardar.
+async function prepararSelectInventario(selectId, valorActual) {
+    const sel = document.getElementById(selectId);
+    sel.disabled = true;
+    sel.dataset.listo = '';
+    sel.innerHTML = '<option value="">Cargando…</option>';
+    try {
+        const items = await obtenerInventarioData();
+        sel.innerHTML = '<option value="">Sin enlazar</option>' + items.map(i =>
+            `<option value="${i.id}">${escHtml(i.name)} · stock ${Number(i.stock)}</option>`
+        ).join('');
+        sel.value = valorActual ? String(valorActual) : '';
+        sel.disabled = false;
+        sel.dataset.listo = '1';
+    } catch (err) {
+        sel.innerHTML = '<option value="">Integración DATA no disponible</option>';
+    }
+}
+
+// Devuelve { inventario_id } solo si el selector cargó correctamente
+function valorEnlaceInventario(selectId) {
+    const sel = document.getElementById(selectId);
+    if (!sel || sel.dataset.listo !== '1') return {};
+    return { inventario_id: sel.value ? Number(sel.value) : null };
+}
+
+function badgeAgotado(item) {
+    return item.agotado ? ' <span title="Sin stock en DATA" style="color:#e74c3c;font-size:0.75rem;font-weight:600">AGOTADO</span>' : '';
+}
+
 // Estado Top 10
 let top10 = [];
 let productosDisponiblesTop10 = [];
@@ -264,7 +310,7 @@ async function cargarKits() {
     const tbody = document.getElementById('tbodyKits');
     tbody.innerHTML = `<tr><td colspan="7" class="loading-row"><i class="fas fa-spinner fa-spin"></i> Cargando kits...</td></tr>`;
     try {
-        const res = await fetch(API_KITS_URL);
+        const res = await fetch(API_KITS_URL, { headers: getAuthHeaders() });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
         kits = data.data;
@@ -302,7 +348,7 @@ function renderTablaKits() {
             <td data-label="Nombre"><strong>${escHtml(k.nombre)}</strong></td>
             <td data-label="Descripción">${escHtml(k.descripcion)}</td>
             <td data-label="Precio">${formatPrecio(k.precio)}</td>
-            <td data-label="Visible">${k.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
+            <td data-label="Visible">${k.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}${badgeAgotado(k)}</td>
             <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditarKit(${k.id})">
@@ -327,6 +373,7 @@ function abrirNuevoKit() {
     document.getElementById('modalTituloKit').textContent = 'Nuevo Kit';
     document.getElementById('kitId').value = '';
     document.getElementById('kitActivo').checked = true;
+    prepararSelectInventario('kitInventario', null);
     beneficiosKitTmp = [];
     renderBeneficiosKit();
     limpiarImagenKit();
@@ -344,6 +391,7 @@ function abrirEditarKit(id) {
     document.getElementById('kitPrecio').value = k.precio;
     document.getElementById('kitImagen').value = k.imagen || '';
     document.getElementById('kitActivo').checked = !!k.activo;
+    prepararSelectInventario('kitInventario', k.inventario_id);
     beneficiosKitTmp = Array.isArray(k.beneficios) ? [...k.beneficios] : [];
     renderBeneficiosKit();
     // Imagen preview
@@ -444,7 +492,7 @@ function registrarEventosKits() {
             }
             const imagenFinal = document.getElementById('kitImagen').value.trim();
             const activo = document.getElementById('kitActivo').checked ? 1 : 0;
-            const payload = { nombre, descripcion, precio, imagen: imagenFinal, beneficios: beneficiosKitTmp, activo };
+            const payload = { nombre, descripcion, precio, imagen: imagenFinal, beneficios: beneficiosKitTmp, activo, ...valorEnlaceInventario('kitInventario') };
             const method = id ? 'PUT' : 'POST';
             const url = id ? `${API_KITS_URL}/${id}` : API_KITS_URL;
             const res = await fetch(url, {
@@ -480,7 +528,7 @@ function registrarEventosKits() {
 async function cargarProductos() {
     mostrarCargando();
     try {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL, { headers: getAuthHeaders() });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);
         productos = data.data;
@@ -524,7 +572,7 @@ function renderTabla() {
             <td data-label="Precio">${formatPrecio(p.price)}</td>
             <td data-label="Rating">${p.rating || 0} <i class="fas fa-star" style="color: #f1c40f; font-size: 0.8rem;"></i></td>
             <td data-label="Tallas">${(p.sizes || []).join(', ') || '-'}</td>
-            <td data-label="Visible">${p.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}</td>
+            <td data-label="Visible">${p.activo ? '<i class="fas fa-eye" style="color: #27ae60"></i>' : '<i class="fas fa-eye-slash" style="color: #e74c3c"></i>'}${badgeAgotado(p)}</td>
             <td data-label="Acciones">
                 <div class="acciones">
                     <button class="btn-icon editar" title="Editar" onclick="abrirEditar(${p.id})">
@@ -552,6 +600,7 @@ function abrirNuevo() {
     modalTitulo.textContent = 'Nuevo Producto';
     document.getElementById('productoId').value = '';
     document.getElementById('inputActivo').checked = true;
+    prepararSelectInventario('inputInventario', null);
     abrirModal(modalProducto);
 }
 
@@ -574,6 +623,7 @@ function abrirEditar(id) {
     document.getElementById('inputRating').value      = p.rating;
     document.getElementById('inputImagen').value      = p.image || '';
     document.getElementById('inputActivo').checked    = !!p.activo;
+    prepararSelectInventario('inputInventario', p.inventario_id);
 
     // Mostrar imagen actual en el preview
     if (p.image) {
@@ -653,7 +703,7 @@ formProducto.addEventListener('submit', async (e) => {
         const res     = await fetch(url, {
             method,
             headers: getAuthHeaders(true),
-            body: JSON.stringify({ ...payload, image: imagenFinal, activo })
+            body: JSON.stringify({ ...payload, image: imagenFinal, activo, ...valorEnlaceInventario('inputInventario') })
         });
         const data = await res.json();
         if (!data.success) throw new Error(data.message);

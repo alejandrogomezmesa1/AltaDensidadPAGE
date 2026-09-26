@@ -1684,6 +1684,14 @@ body.ia-chat-open .whatsapp-flotante-wrapper {
   cursor: progress;
 }
 
+/* Producto o kit sin stock en inventario */
+.btn[aria-disabled="true"],
+.link[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .trust {
   display: flex;
   justify-content: space-between;

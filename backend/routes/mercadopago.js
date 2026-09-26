@@ -9,6 +9,15 @@ try {
   /* optional */
 }
 const crypto = require("crypto");
+const dataSync = require("../services/dataSync");
+
+// Refleja en DATA el nuevo estado de la orden (venta o anulación). Nunca bloquea la respuesta.
+function sincronizarConData(external_reference, preference_id) {
+  const tarea = external_reference
+    ? dataSync.sincronizarOrden(external_reference)
+    : dataSync.sincronizarPorPreferencia(preference_id);
+  tarea.catch((err) => console.error("[DATA] Error sincronizando orden:", err.message));
+}
 
 const WEBHOOK_SECRET =
   process.env.MP_WEBHOOK_SECRET || process.env.MP_WEBHOOK_SIGNATURE || null;
@@ -117,6 +126,19 @@ router.post("/create_preference", async (req, res) => {
         currency_id: "COP",
         unit_price: Number(prod.precio),
       });
+    }
+
+    // Verificar disponibilidad real en DATA antes de cobrar
+    try {
+      const sinStock = await dataSync.verificarDisponibilidad(pool, mpItems);
+      if (sinStock.length) {
+        return res.status(409).json({
+          success: false,
+          message: `Lo sentimos, ${sinStock.join(", ")} ${sinStock.length > 1 ? "están agotados" : "está agotado"} en este momento. Retíralo de tu bolsa para continuar.`,
+        });
+      }
+    } catch (stockErr) {
+      console.warn("[DATA] No se pudo verificar disponibilidad:", stockErr.message);
     }
 
     // Calcular total oficial basado exclusivamente en la base de datos
@@ -348,6 +370,8 @@ router.get("/verify_payment", async (req, res) => {
       }
     }
 
+    sincronizarConData(external_reference, payment.preference_id);
+
     // Devolver estado y datos del pago
     const [rows] = await pool.query(
       "SELECT * FROM Ordenes WHERE external_reference = ? OR preference_id = ? LIMIT 1",
@@ -449,6 +473,7 @@ router.put("/order/:external_reference", requireStaff, async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "Orden no encontrada" });
+    sincronizarConData(external_reference);
     const [rows] = await pool.query(
       "SELECT * FROM Ordenes WHERE external_reference = ? LIMIT 1",
       [external_reference],
@@ -605,6 +630,7 @@ router.all("/webhook", async (req, res) => {
         ],
       );
     }
+    sincronizarConData(external_reference, payment.preference_id);
     return res.status(200).send("OK");
   } catch (err) {
     console.error("[MP WEBHOOK] error procesando webhook:", err);

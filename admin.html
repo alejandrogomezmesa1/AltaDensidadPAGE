@@ -522,6 +522,11 @@
                         <input type="number" id="inputPrecio" min="0" step="1000" placeholder="0" required>
                     </div>
                     <div class="form-group">
+                        <label for="inputInventario">Inventario DATA</label>
+                        <select id="inputInventario" disabled><option value="">Cargando…</option></select>
+                        <small class="hint-data">Enlazado: el stock y precio se toman de DATA y las ventas web descuentan inventario.</small>
+                    </div>
+                    <div class="form-group">
                         <label for="inputRating">Rating (1–5)</label>
                         <select id="inputRating">
                             <option value="5">5 estrellas</option>
@@ -720,6 +725,11 @@
                     <div class="form-group">
                         <label for="kitPrecio">Precio (COP) *</label>
                         <input type="number" id="kitPrecio" min="0" step="1000" placeholder="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kitInventario">Inventario DATA</label>
+                        <select id="kitInventario" disabled><option value="">Cargando…</option></select>
+                        <small class="hint-data">Enlazado: el stock y precio se toman de DATA y las ventas web descuentan inventario.</small>
                     </div>
                     <div class="form-group full">
                         <label>Imagen del kit</label>

@@ -2271,7 +2271,8 @@
       sz: Array.isArray(item.sizes) ? item.sizes.filter(Boolean) : [],
       env: Array.isArray(item.bottleTypes) ? item.bottleTypes.filter(Boolean) : [],
       desc: item.description || item.descripcion || null,
-      img: normalizarImagen(item.image || item.imagen || (item.images && item.images[0]))
+      img: normalizarImagen(item.image || item.imagen || (item.images && item.images[0])),
+      ag: Number(item.agotado) === 1
     };
   }
 
@@ -2285,7 +2286,7 @@
       return adaptarProducto({
         id: n, name: t.nombre, price: t.precio, image: t.imagen,
         category: t.categoria, gender: t.genero, description: t.descripcion,
-        f: t.f, o: t.o, no: t.no
+        f: t.f, o: t.o, no: t.no, agotado: t.agotado
       }, n);
     }
     return null;
@@ -2513,7 +2514,9 @@
               <h3 data-open="${p.id}">${esc(p.n)}</h3>
               <span>${esc(p.f)} · ${fmt(pr(p))}</span>
             </div>
-            <button class="link up" data-add="${p.id}">Añadir</button>
+            ${p.ag
+              ? `<button class="link up" disabled aria-disabled="true">Agotado</button>`
+              : `<button class="link up" data-add="${p.id}">Añadir</button>`}
           </div>
         </article>
       `;
@@ -2760,7 +2763,9 @@
             <p class="kit-desc">${esc(texto)}</p>
             <div class="kit-footer">
               <span class="kit-price">${fmt(precio)}</span>
-              <button class="btn btn--line up" data-addkit="${k.id}">Añadir</button>
+              ${k.agotado
+                ? `<button class="btn btn--line up" disabled aria-disabled="true">Agotado</button>`
+                : `<button class="btn btn--line up" data-addkit="${k.id}">Añadir</button>`}
             </div>
           </div>
         </article>
@@ -2834,7 +2839,9 @@
         </div>
         <div class="buy" style="margin-top:var(--sp-4);">
           <b style="font:300 28px var(--f-display)">${fmt(precio)}</b>
-          <button class="btn up" data-addkit="${kit.id}">Añadir kit a la bolsa</button>
+          ${kit.agotado
+            ? `<button class="btn up" disabled aria-disabled="true">Agotado</button>`
+            : `<button class="btn up" data-addkit="${kit.id}">Añadir kit a la bolsa</button>`}
         </div>
       </div>
     `;
@@ -2843,7 +2850,7 @@
 
   function addKitToCart(kitId, q) {
     const kit = KITS.find(k => k.id === Number(kitId));
-    if (!kit) return;
+    if (!kit || kit.agotado) return;
     const cid = `kit_${kit.id}`;
     const item = cart.find(x => x.id === cid);
     if (item) {
@@ -2904,7 +2911,9 @@
             <span>${D.q}</span>
             <button data-dq="1" aria-label="Aumentar">+</button>
           </div>
-          <button class="btn up" data-adddet>Añadir a la bolsa</button>
+          ${p.ag
+            ? `<button class="btn up" disabled aria-disabled="true">Agotado</button>`
+            : `<button class="btn up" data-adddet>Añadir a la bolsa</button>`}
         </div>
         <a class="link up d-wa" href="https://wa.me/${WA}?text=${msgWa}" target="_blank" rel="noopener">Consultar con un asesor por WhatsApp</a>
       </div>
@@ -2978,6 +2987,8 @@
   // BOLSA (CARRITO)
   // ============================================================
   function addToCart(id, ml, env, q, silencioso) {
+    const prod = buscarProducto(id);
+    if (prod && prod.ag) return;
     const item = cart.find(x => x.id === id && (x.ml || "") === (ml || "") && (x.env || "") === (env || ""));
     if (item) {
       item.q += q;
@@ -3376,7 +3387,8 @@
             no: curado.no,
             descripcion: t.descripcion || t.description || "",
             precio: Number(t.precio || t.price || 75000),
-            rating: t.rating || 5
+            rating: t.rating || 5,
+            agotado: t.agotado ? 1 : 0
           };
         });
         renderRank();
@@ -3428,6 +3440,7 @@
           descripcion: k.descripcion || k.description || "",
           precio: Number(k.precio || k.price || 60000),
           activo: k.activo !== undefined ? k.activo : 1,
+          agotado: k.agotado ? 1 : 0,
           beneficios: k.beneficios || []
         }));
         renderKits();

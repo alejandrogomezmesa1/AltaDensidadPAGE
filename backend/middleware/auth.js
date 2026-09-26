@@ -112,4 +112,19 @@ async function optionalAuth(req, res, next) {
     next();
 }
 
-module.exports = { requireAuth, requireAdmin, requireStaff, optionalAuth };
+// Indica (sin bloquear) si la petición viene de personal autorizado.
+// Se usa para mostrar datos internos (p. ej. enlace con DATA) solo al panel.
+function esPeticionStaff(req) {
+    const adminKey = req.headers['x-admin-key'];
+    if (ADMIN_API_KEY && adminKey && adminKey === ADMIN_API_KEY) return true;
+    const token = extractBearer(req.headers['authorization']);
+    if (!token || !JWT_SECRET) return false;
+    try {
+        const rol = String(jwt.verify(token, JWT_SECRET).rol || '').toLowerCase();
+        return ['admin', 'superadmin', 'root', 'empleado'].includes(rol);
+    } catch (err) {
+        return false;
+    }
+}
+
+module.exports = { requireAuth, requireAdmin, requireStaff, optionalAuth, esPeticionStaff };

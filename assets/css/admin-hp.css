@@ -850,6 +850,12 @@ body.adm {
   grid-column: 1 / -1;
 }
 
+.form-group .hint-data {
+  font: 400 11px var(--f-ui);
+  color: var(--c-mute);
+  line-height: 1.4;
+}
+
 .form-group > label:not(.check-item) {
   font: 500 10px var(--f-ui);
   letter-spacing: 0.14em;

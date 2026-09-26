@@ -1,7 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const { getConnection } = require('../config/db');
-const { requireStaff, requireAdmin } = require('../middleware/auth');
+const { requireStaff, requireAdmin, esPeticionStaff } = require('../middleware/auth');
+const dataSync = require('../services/dataSync');
+
+// El enlace con el inventario de DATA solo se entrega al panel
+function limpiarKit(kit, staff) {
+    const { inventario_id, ...publico } = kit;
+    publico.agotado = kit.agotado ? 1 : 0;
+    return staff ? { ...publico, inventario_id: inventario_id || null } : publico;
+}
+
+// Enlaza (o desenlaza con null) un kit con un ítem del inventario de DATA
+async function guardarEnlaceData(conn, id, body) {
+    if (!dataSync.columnasListas() || !Object.prototype.hasOwnProperty.call(body, 'inventario_id')) return false;
+    const n = parseInt(body.inventario_id, 10);
+    const invId = Number.isInteger(n) && n > 0 ? n : null;
+    await conn.query('UPDATE Kits SET inventario_id = ?, agotado = IF(? IS NULL, 0, agotado) WHERE id = ?', [invId, invId, id]);
+    return true;
+}
 
 // GET todos los kits con beneficios
 router.get('/', async (req, res) => {
@@ -9,8 +26,9 @@ router.get('/', async (req, res) => {
         const pool = await getConnection();
         const [kits] = await pool.query('SELECT * FROM Kits ORDER BY id');
         const [beneficios] = await pool.query('SELECT * FROM KitBeneficios');
+        const staff = esPeticionStaff(req);
         const kitsConBeneficios = kits.map(kit => ({
-            ...kit,
+            ...limpiarKit(kit, staff),
             beneficios: beneficios.filter(b => b.kit_id === kit.id).map(b => b.beneficio)
         }));
         res.json({ success: true, data: kitsConBeneficios });
@@ -27,8 +45,9 @@ router.get('/:id', async (req, res) => {
         const [[kit]] = await pool.query('SELECT * FROM Kits WHERE id = ?', [id]);
         if (!kit) return res.status(404).json({ success: false, message: 'Kit no encontrado' });
         const [beneficios] = await pool.query('SELECT beneficio FROM KitBeneficios WHERE kit_id = ?', [id]);
-        kit.beneficios = beneficios.map(b => b.beneficio);
-        res.json({ success: true, data: kit });
+        const data = limpiarKit(kit, esPeticionStaff(req));
+        data.beneficios = beneficios.map(b => b.beneficio);
+        res.json({ success: true, data });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error al obtener kit', error: error.message });
     }
@@ -47,12 +66,14 @@ router.post('/', requireStaff, async (req, res) => {
             [nombre, imagen || '', descripcion || '', precio || 0, activo !== undefined ? activo : 1]
         );
         const kitId = result.insertId;
+        const enlazado = await guardarEnlaceData(conn, kitId, req.body);
         if (Array.isArray(beneficios)) {
             for (const b of beneficios) {
                 await conn.query('INSERT INTO KitBeneficios (kit_id, beneficio) VALUES (?, ?)', [kitId, b]);
             }
         }
         await conn.commit();
+        if (enlazado) dataSync.sincronizarCatalogo().catch(() => {});
         res.status(201).json({ success: true, message: 'Kit creado exitosamente', data: { id: kitId } });
     } catch (err) {
         await conn.rollback();
@@ -74,6 +95,7 @@ router.put('/:id', requireStaff, async (req, res) => {
             'UPDATE Kits SET nombre=?, imagen=?, descripcion=?, precio=?, activo=? WHERE id=?',
             [nombre, imagen, descripcion, precio, activo !== undefined ? activo : 1, id]
         );
+        const enlazado = await guardarEnlaceData(conn, id, req.body);
         await conn.query('DELETE FROM KitBeneficios WHERE kit_id=?', [id]);
         if (Array.isArray(beneficios)) {
             for (const b of beneficios) {
@@ -81,6 +103,7 @@ router.put('/:id', requireStaff, async (req, res) => {
             }
         }
         await conn.commit();
+        if (enlazado) dataSync.sincronizarCatalogo().catch(() => {});
         res.json({ success: true, message: 'Kit actualizado' });
     } catch (err) {
         await conn.rollback();
