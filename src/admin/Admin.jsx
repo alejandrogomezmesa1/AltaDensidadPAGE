@@ -11,6 +11,7 @@ import EnvasesAdmin from './EnvasesAdmin';
 import KitsAdmin from './KitsAdmin';
 import Top10Admin from './Top10Admin';
 import OrdenesAdmin from './OrdenesAdmin';
+import { PANEL_DATA } from '../config';
 
 const SECCIONES = {
   monitoreo: { titulo: 'Monitoreo', grupo: 'General', icono: 'fa-chart-line' },
@@ -151,6 +152,12 @@ function Panel({ usuario }) {
               ))}
             </div>
           ))}
+          <div className="adm-nav-group">
+            <span className="adm-nav-title up">Ecosistema</span>
+            <a className="adm-nav-item" href={PANEL_DATA} data-label="Panel DATA" title="Ir al panel DATA (inventario, ventas y caja)">
+              <i className="fas fa-warehouse" aria-hidden="true" /><span>Panel DATA</span>
+            </a>
+          </div>
         </nav>
 
         <div className="adm-side-foot">

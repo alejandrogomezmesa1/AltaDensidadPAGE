@@ -3,6 +3,8 @@ export const API = (import.meta.env.VITE_API_URL || 'https://altadensidadpage-pr
 
 export const WA = '573046477694';
 export const SITIO = 'https://alta-densidad-page.vercel.app';
+// Panel del sistema DATA (inventario, ventas, caja): enlazado desde el sidebar del admin
+export const PANEL_DATA = import.meta.env.VITE_DATA_PANEL_URL || 'https://alta-densidad-data.vercel.app';
 
 // Mensaje del botón flotante de WhatsApp
 export const WA_FLOTANTE = 'https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Vi%20su%20cat%C3%A1logo%20en%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20perfumes.%20%E2%9C%A8';

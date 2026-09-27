@@ -47,7 +47,9 @@ function HeroImagen() {
     <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias">
       <div className="hero-image-wrap" ref={envoltura}>
         <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
-          className="hero-signature-img" width="600" height="600" loading="eager" fetchPriority="high" />
+          className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
+        <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
+          className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
       </div>
     </div>
   );
