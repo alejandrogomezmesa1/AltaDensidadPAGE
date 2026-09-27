@@ -1,21 +1,50 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTienda } from '../tienda/TiendaContext';
 import { Coleccion, Ranking, Envases, Kits } from '../tienda/Secciones';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
 
-// Imagen del hero con inclinación 3D al pasar el cursor
+// Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en milisegundos
+const VUELTA_MS = 9000;
+const FLOTE_MS = 4500;
+const INCLINACION = 12; // grados por unidad de desplazamiento (igual que la inclinación con el cursor)
+
+// Frasco del hero flotando: se inclina como si un puntero le diera vueltas, recalculado en cada
+// fotograma para que el giro sea continuo. Se detiene fuera de pantalla y con movimiento reducido.
 function HeroImagen() {
   const envoltura = useRef(null);
-  const mover = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    envoltura.current.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) translateY(-4px)`;
-  };
+
+  useEffect(() => {
+    const el = envoltura.current;
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    let raf = 0;
+    let visible = true;
+    const inicio = performance.now();
+
+    const cuadro = (ahora) => {
+      const t = ahora - inicio;
+      const angulo = (t / VUELTA_MS) * 2 * Math.PI;
+      // Puntero virtual sobre un círculo de radio 0,5 (el borde del escenario)
+      const x = 0.5 * Math.cos(angulo);
+      const y = 0.5 * Math.sin(angulo);
+      const flote = -4 - 8 * (0.5 - 0.5 * Math.cos((t / FLOTE_MS) * 2 * Math.PI));
+      el.style.transform = `perspective(800px) rotateY(${(x * INCLINACION).toFixed(3)}deg) rotateX(${(-y * INCLINACION).toFixed(3)}deg) translateY(${flote.toFixed(2)}px)`;
+      if (visible) raf = requestAnimationFrame(cuadro);
+    };
+
+    const obs = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      cancelAnimationFrame(raf);
+      if (visible) raf = requestAnimationFrame(cuadro);
+    });
+    obs.observe(el);
+    raf = requestAnimationFrame(cuadro);
+    return () => { obs.disconnect(); cancelAnimationFrame(raf); };
+  }, []);
+
   return (
-    <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias" onMouseMove={mover} onMouseLeave={() => { envoltura.current.style.transform = ''; }}>
+    <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias">
       <div className="hero-image-wrap" ref={envoltura}>
         <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
           className="hero-signature-img" width="600" height="600" loading="eager" fetchPriority="high" />
