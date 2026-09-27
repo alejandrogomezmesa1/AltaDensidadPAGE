@@ -28,7 +28,8 @@ app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
         const isLocalhost = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-        const isVercel = /\.vercel\.app$/.test(origin);
+        // Solo el sitio de la tienda y sus vistas previas de Vercel (alta-densidad-page-…vercel.app)
+        const isVercel = /^https:\/\/alta-densidad-page(-[a-z0-9-]+)?\.vercel\.app$/.test(origin);
         const allowedExplicit = [
             'https://alta-densidad-page.vercel.app',
             process.env.FRONTEND_URL

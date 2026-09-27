@@ -153,6 +153,7 @@ router.get('/', async (req, res) => {
             FROM Productos p
             LEFT JOIN ProductoTallas ps ON ps.producto_id = p.id
             LEFT JOIN ProductoTiposEnvase pt ON pt.producto_id = p.id${joinsFicha()}
+            ${staff ? '' : 'WHERE p.activo = 1'}
             GROUP BY p.id${agrupar()}
             ORDER BY p.id DESC
         `);

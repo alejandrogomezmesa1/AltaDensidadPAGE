@@ -500,6 +500,25 @@ router.put("/order/:external_reference", requireStaff, async (req, res) => {
   }
 });
 
+// Verifica la cabecera x-signature de Mercado Pago (esquema oficial de Webhooks)
+function firmaMercadoPagoValida(req) {
+  const cabecera = String(req.headers["x-signature"] || "");
+  const partes = Object.fromEntries(cabecera.split(",").map((p) => p.trim().split("=").map((x) => x.trim())).filter((p) => p.length === 2));
+  const ts = partes.ts;
+  const v1 = partes.v1;
+  if (!ts || !v1 || !/^[0-9a-f]+$/i.test(v1)) return false;
+  let dataId = String(req.query["data.id"] || (req.body && req.body.data && req.body.data.id) || "");
+  if (/^[a-z0-9]+$/i.test(dataId)) dataId = dataId.toLowerCase();
+  const requestId = req.headers["x-request-id"];
+  let manifiesto = "";
+  if (dataId) manifiesto += `id:${dataId};`;
+  if (requestId) manifiesto += `request-id:${requestId};`;
+  manifiesto += `ts:${ts};`;
+  const esperada = crypto.createHmac("sha256", WEBHOOK_SECRET).update(manifiesto).digest();
+  const recibida = Buffer.from(v1, "hex");
+  return recibida.length === esperada.length && crypto.timingSafeEqual(recibida, esperada);
+}
+
 // Webhook endpoint — procesa notificaciones desde Mercado Pago y actualiza órdenes
 router.all("/webhook", async (req, res) => {
   try {
@@ -508,78 +527,15 @@ router.all("/webhook", async (req, res) => {
       query: req.query,
     });
 
-    // Verificación HMAC activa — requiere que MP_WEBHOOK_SECRET esté en el .env de Railway
-    if (WEBHOOK_SECRET) {
-      const headerCandidates = [
-        "x-mercadopago-signature",
-        "x-signature",
-        "x-hub-signature-256",
-        "x-mp-signature"
-      ];
-      let sigHeader = null;
-      for (const h of headerCandidates) {
-        if (req.headers[h]) {
-          sigHeader = req.headers[h];
-          break;
-        }
-      }
-
-      if (!sigHeader) {
-        console.warn("[MP WEBHOOK] signature header missing");
-        return res.status(401).send("Signature required");
-      }
-
-      // Extraer v1 si viene en formato ts=...,v1=...
-      let received = String(sigHeader);
-      if (received.includes("v1=")) {
-        const parts = received.split(",");
-        const v1Part = parts.find(p => p.trim().startsWith("v1="));
-        if (v1Part) received = v1Part.trim().substring(3);
-      } else {
-        const eqIdx = received.indexOf("=");
-        if (eqIdx !== -1) received = received.slice(eqIdx + 1);
-      }
-
-      const payloadBuf =
-        req.rawBody && req.rawBody.length
-          ? req.rawBody
-          : Buffer.from(JSON.stringify(req.body || {}));
-      
-      const expectedHex = crypto
-        .createHmac("sha256", WEBHOOK_SECRET)
-        .update(payloadBuf)
-        .digest("hex");
-      const expectedBase64 = crypto
-        .createHmac("sha256", WEBHOOK_SECRET)
-        .update(payloadBuf)
-        .digest("base64");
-
-      const recv = received.trim();
-      const isHex = /^[0-9a-fA-F]+$/.test(recv);
-      const isBase64 = /^[A-Za-z0-9+/=]+$/.test(recv);
-
-      let verified = false;
-      try {
-        if (isHex) {
-          const recvBuf = Buffer.from(recv, "hex");
-          const expBuf = Buffer.from(expectedHex, "hex");
-          if (recvBuf.length === expBuf.length && crypto.timingSafeEqual(recvBuf, expBuf)) verified = true;
-        } 
-        if (!verified && isBase64) {
-          const recvBuf = Buffer.from(recv, "base64");
-          const expBuf = Buffer.from(expectedBase64, "base64");
-          if (recvBuf.length === expBuf.length && crypto.timingSafeEqual(recvBuf, expBuf)) verified = true;
-        }
-      } catch (ex) {
-        console.error("[MP WEBHOOK] crypto error", ex.message);
-      }
-
-      if (!verified) {
-        console.warn("[MP WEBHOOK] signature mismatch");
-        return res.status(401).send("Invalid signature");
-      }
+    // Firma de Mercado Pago (MP_WEBHOOK_SECRET = "clave secreta" de la sección Webhooks del panel de MP).
+    // MP no firma el cuerpo: firma el texto "id:{data.id};request-id:{x-request-id};ts:{ts};"
+    // y lo envía en x-signature como "ts=…,v1=…". Aun sin firma, el estado del pago siempre se
+    // consulta a la API de MP con el token, así que una notificación falsa no puede aprobar nada.
+    if (WEBHOOK_SECRET && !firmaMercadoPagoValida(req)) {
+      console.warn("[MP WEBHOOK] firma inválida o ausente");
+      return res.status(401).send("Invalid signature");
     }
-    
+
     const paymentId =
       req.body?.data?.id ||
       req.query?.id ||
