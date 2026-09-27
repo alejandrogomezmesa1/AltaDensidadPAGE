@@ -12,15 +12,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
     "chart.js": "^4.5.0",
+    "postcss-prefix-selector": "^2.1.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.9.0",
-    "sweetalert2": "^11.22.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.1",
-    "postcss-prefix-selector": "^2.1.1",
+    "sweetalert2": "^11.22.0",
     "vite": "^8.0.10"
   }
 }
