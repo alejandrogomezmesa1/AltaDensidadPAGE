@@ -1,6 +1,13 @@
-import { forwardRef, useImperativeHandle, useRef, useState, useCallback } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { useTienda } from './TiendaContext';
+import { noDisponible } from '../lib/producto';
+
+gsap.registerPlugin(useGSAP);
+
+const MOVIL = '(max-width: 820px)';
+const REDUCIR = '(prefers-reduced-motion: reduce)';
 
 // SVG de la gota dorada de perfume puro de feromonas
 function GotaIcono() {
@@ -22,258 +29,147 @@ function GotaIcono() {
   );
 }
 
-const ExplosionHero = forwardRef(function ExplosionHero({ envolturaRef, heroRef, onEstadoAnimacion }, ref) {
-  const { P } = useTienda();
+const irAColeccion = () => document.getElementById('coleccion')?.scrollIntoView({ behavior: 'smooth' });
+
+// Explosión del frasco del hero en gotas de referencias (GSAP): una sola línea de tiempo con
+// etiquetas por fase, animaciones dentro de contextSafe para que se reviertan al desmontar.
+const ExplosionHero = forwardRef(function ExplosionHero({ envolturaRef, heroRef }, ref) {
+  const { P, abrirDetalle } = useTienda();
   const [animando, setAnimando] = useState(false);
+  const raizRef = useRef(null);
   const destelloRef = useRef(null);
   const ondaRef = useRef(null);
   const ondaSecundariaRef = useRef(null);
   const gotasRefs = useRef([]);
+  const tlRef = useRef(null);
 
-  // Tomamos hasta 20 referencias disponibles del catálogo para una nube rica y equilibrada
-  const referencias = (P && P.length > 0) ? P.slice(0, 20) : [];
+  // Hasta 20 referencias que se pueden comprar ahora mismo
+  const referencias = useMemo(() => P.filter((p) => !noDisponible(p)).slice(0, 20), [P]);
 
-  const dispararExplosion = useCallback(() => {
-    if (animando) return;
-    const elFrasco = envolturaRef?.current;
-    const heroEl = heroRef?.current;
-    if (!elFrasco || !heroEl) {
-      const coleccion = document.getElementById('coleccion');
-      if (coleccion) coleccion.scrollIntoView({ behavior: 'smooth' });
-      return;
-    }
+  const { contextSafe } = useGSAP({ scope: raizRef });
+
+  const disparar = contextSafe(() => {
+    // progress() y no isActive(): una línea recién creada aún no está "activa" hasta el siguiente tick
+    if (tlRef.current && tlRef.current.progress() < 1) return;
+    const frasco = envolturaRef?.current;
+    const hero = heroRef?.current;
+    if (!frasco || !hero || window.matchMedia(REDUCIR).matches) { irAColeccion(); return; }
+
+    const texto = hero.querySelector('.hero-t');
+    const movil = window.matchMedia(MOVIL).matches;
+    // En móvil caben menos etiquetas sin solaparse
+    const todas = gotasRefs.current.filter(Boolean);
+    const gotas = movil ? todas.slice(0, 12) : todas;
+    const tarjetas = gsap.utils.toArray('#coleccion .grid .card');
+
+    // Lecturas de geometría primero, escrituras después
+    const rFrasco = frasco.getBoundingClientRect();
+    const rHero = hero.getBoundingClientRect();
+    // Centro de la parte visible del hero (bajo la cabecera): en móvil el botón queda abajo y el
+    // hero suele estar desplazado, así la explosión ocurre donde el usuario está mirando
+    const techo = Math.max(rHero.top, document.querySelector('header')?.getBoundingClientRect().bottom || 0);
+    const piso = Math.min(rHero.bottom, window.innerHeight);
+    const cx = rHero.width / 2;
+    const cy = (piso > techo ? (techo + piso) / 2 : rHero.top + rHero.height / 2) - rHero.top;
+    const altoVisible = piso > techo ? piso - techo : rHero.height;
+    const dx = cx - (rFrasco.left + rFrasco.width / 2 - rHero.left);
+    const dy = cy - (rFrasco.top + rFrasco.height / 2 - rHero.top);
+    const escala = movil ? 2.4 : 3.0;
+
+    // Destino de cada gota: dos anillos concéntricos (elipse achatada) para que no se solapen,
+    // acotados al hero para que ninguna etiqueta quede cortada ni bajo la cabecera
+    const limiteX = gsap.utils.clamp(0, Math.max(0, cx - (movil ? 100 : 110)));
+    const limiteY = gsap.utils.clamp(0, Math.max(0, altoVisible / 2 - 45));
+    const destinos = gotas.map((_, i) => {
+      const angulo = (i / gotas.length) * 2 * Math.PI + ((i % 3) - 1) * 0.12;
+      const radio = Math.max(120, ((i % 2 === 0) ? (movil ? 140 : 260) : (movil ? 210 : 390)) + (i % 5) * 15 - 30);
+      const ox = Math.cos(angulo) * radio;
+      const oy = Math.sin(angulo) * radio * 0.75;
+      return { x: cx + Math.sign(ox) * limiteX(Math.abs(ox)), y: cy + Math.sign(oy) * limiteY(Math.abs(oy)) };
+    });
 
     setAnimando(true);
-    if (onEstadoAnimacion) onEstadoAnimacion(true);
-    elFrasco.dataset.animando = 'true';
-    elFrasco.style.transform = 'translate3d(0, 0, 0)';
-    heroEl.classList.add('en-explosion');
+    hero.classList.add('en-explosion');
+    gsap.set(todas, { x: cx, y: cy, xPercent: -50, yPercent: -50, scale: 0.05, autoAlpha: 0 });
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        // Restaurar estado base para permitir volver a interactuar
-        delete elFrasco.dataset.animando;
-        gsap.set(elFrasco, { clearProps: 'all' });
-        const heroTexto = heroEl.querySelector('.hero-t');
-        if (heroTexto) gsap.set(heroTexto, { clearProps: 'all' });
-        heroEl.classList.remove('en-explosion');
-        setAnimando(false);
-        if (onEstadoAnimacion) onEstadoAnimacion(false);
-      }
+    const restaurar = contextSafe(() => {
+      gsap.set([texto, frasco], { clearProps: 'all' });
+      hero.classList.remove('en-explosion');
+      gsap.from(frasco, { autoAlpha: 0, scale: 0.92, duration: 0.8, ease: 'power2.out' });
+      setAnimando(false);
     });
 
-    const heroTexto = heroEl.querySelector('.hero-t');
-    const gotas = gotasRefs.current.filter(Boolean);
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, onComplete: restaurar });
+    tlRef.current = tl;
 
-    // Dimensiones y centros
-    const frascoRect = elFrasco.getBoundingClientRect();
-    const heroRect = heroEl.getBoundingClientRect();
+    // Fase 1: el envase se traslada al centro y domina la sección; el texto se atenúa
+    tl.addLabel('expansion', 0)
+      .to(texto, { autoAlpha: 0.08, y: -30, scale: 0.96, filter: movil ? 'none' : 'blur(6px)', duration: 0.95, ease: 'power2.out' }, 'expansion')
+      .to(frasco, {
+        x: dx, y: dy, scale: escala,
+        // El resplandor con drop-shadow es costoso de pintar: solo en escritorio
+        filter: movil ? 'brightness(1.2)' : 'drop-shadow(0 0 65px rgba(212, 175, 55, 1)) brightness(1.2)',
+        duration: 1.25, ease: 'power3.inOut'
+      }, 'expansion')
+      .fromTo(destelloRef.current, { autoAlpha: 0, scale: 0.2, x: cx, y: cy },
+        { autoAlpha: 0.95, scale: 2.2, duration: 0.8, ease: 'power2.in' }, 'expansion+=0.45')
+      // Micro-vibración: presión acumulada antes del estallido (repeat impar → vuelve a dx)
+      .to(frasco, { x: dx + 3, duration: 0.04, repeat: 5, yoyo: true, ease: 'none' }, 'expansion+=1.05')
 
-    // Centro inicial del frasco dentro del sistema de coordenadas de heroEl
-    const frascoCentroX = frascoRect.left + frascoRect.width / 2 - heroRect.left;
-    const frascoCentroY = frascoRect.top + frascoRect.height / 2 - heroRect.top;
+      // Fase 2: el envase estalla con destello y dos ondas de choque
+      .addLabel('estallido', 1.3)
+      .to(frasco, { scale: escala * 1.45, autoAlpha: 0, filter: 'blur(45px) brightness(3)', duration: 0.35, ease: 'power4.out' }, 'estallido')
+      .to(destelloRef.current, { autoAlpha: 0, scale: 6, duration: 0.65 }, 'estallido')
+      .fromTo(ondaRef.current, { autoAlpha: 1, scale: 0.15, x: cx, y: cy },
+        { autoAlpha: 0, scale: 6.8, duration: 1.1 }, 'estallido+=0.02')
+      .fromTo(ondaSecundariaRef.current, { autoAlpha: 0.8, scale: 0.1, x: cx, y: cy },
+        { autoAlpha: 0, scale: 4.8, duration: 0.85, ease: 'power2.out' }, 'estallido+=0.1')
 
-    // Centro absoluto de toda la sección Hero
-    const heroCentroX = heroRect.width / 2;
-    const heroCentroY = heroRect.height / 2;
+      // Fase 3: cada gota sale disparada, flota y cae abriendo paso al catálogo
+      .to(gotas, {
+        x: (i) => destinos[i].x, y: (i) => destinos[i].y,
+        scale: movil ? 0.85 : 1, autoAlpha: 1, rotation: 'random(-12, 12)',
+        duration: 0.9, stagger: { amount: 0.08, from: 'random' }
+      }, 'estallido')
+      .to(gotas, { y: (i) => destinos[i].y + Math.sin(i) * 8, duration: 0.85, ease: 'sine.inOut' }, 'estallido+=0.9')
+      .addLabel('salida', 3.05)
+      .to(gotas, {
+        y: (i) => destinos[i].y + (movil ? 140 : 220), autoAlpha: 0, scale: 0.45,
+        duration: 0.95, ease: 'power2.in', stagger: { amount: 0.12, from: 'random' }
+      }, 'salida')
 
-    // Vector de traslación para centrar el envase en la sección completa
-    const deltaX = heroCentroX - frascoCentroX;
-    const deltaY = heroCentroY - frascoCentroY;
-
-    // Escala dinámica para que el envase domine la sección
-    const esMovil = window.innerWidth <= 820;
-    const escalaExpansion = esMovil ? 2.4 : 3.0;
-
-    // Colocar todas las gotas en el centro proyectado de la explosión
-    gsap.set(gotas, {
-      x: heroCentroX,
-      y: heroCentroY,
-      xPercent: -50,
-      yPercent: -50,
-      scale: 0.05,
-      autoAlpha: 0
-    });
-
-    // ==============================================================
-    // FASE 1.1: El envase se amplía de ocupar su espacio a tomar la sección completa
-    // ==============================================================
-    // Atenuación suave del texto del hero para dar todo el protagonismo al envase
-    if (heroTexto) {
-      tl.to(heroTexto, {
-        autoAlpha: 0.08,
-        y: -30,
-        scale: 0.96,
-        filter: 'blur(6px)',
-        duration: 0.95,
-        ease: 'power2.out'
-      }, 0);
+      // Fase 4: desplazamiento a la colección y revelado escalonado de sus tarjetas
+      .call(irAColeccion, null, 'salida+=0.2');
+    if (tarjetas.length) {
+      tl.fromTo(tarjetas, { autoAlpha: 0, y: 45, scale: 0.95 }, {
+        autoAlpha: 1, y: 0, scale: 1, duration: 0.65, ease: 'power2.out',
+        stagger: 0.045, clearProps: 'opacity,visibility,transform', immediateRender: false
+      }, 'salida+=0.52');
     }
+  });
 
-    // El envase se traslada al centro y se expande majestuosamente
-    tl.to(elFrasco, {
-      x: deltaX,
-      y: deltaY,
-      scale: escalaExpansion,
-      filter: 'drop-shadow(0 0 65px rgba(212, 175, 55, 1)) brightness(1.2)',
-      duration: 1.25,
-      ease: 'power3.inOut'
-    }, 0);
-
-    // Destello de energía que empieza a concentrarse en el centro del envase
-    tl.fromTo(destelloRef.current,
-      { autoAlpha: 0, scale: 0.2, x: heroCentroX, y: heroCentroY },
-      { autoAlpha: 0.95, scale: 2.2, duration: 0.8, ease: 'power2.in' },
-      0.45
-    );
-
-    // Micro-vibración previa al estallido (acumulación de presión de alta densidad)
-    tl.to(elFrasco, {
-      x: `${deltaX + 3}px`,
-      duration: 0.04,
-      repeat: 6,
-      yoyo: true,
-      ease: 'none'
-    }, 1.05);
-
-    // ==============================================================
-    // FASE 1.2: El envase EXPLOTA
-    // ==============================================================
-    // Estallido visual del frasco
-    tl.to(elFrasco, {
-      scale: escalaExpansion * 1.45,
-      autoAlpha: 0,
-      filter: 'blur(45px) brightness(3)',
-      duration: 0.35,
-      ease: 'power4.out'
-    }, 1.3);
-
-    // Gran destello cegador de luz dorada
-    tl.to(destelloRef.current, {
-      autoAlpha: 0,
-      scale: 6,
-      duration: 0.65,
-      ease: 'power3.out'
-    }, 1.3);
-
-    // Onda de choque principal
-    tl.fromTo(ondaRef.current,
-      { autoAlpha: 1, scale: 0.15, x: heroCentroX, y: heroCentroY },
-      { autoAlpha: 0, scale: 6.8, duration: 1.1, ease: 'power3.out' },
-      1.32
-    );
-
-    // Segunda onda de choque sutil
-    if (ondaSecundariaRef.current) {
-      tl.fromTo(ondaSecundariaRef.current,
-        { autoAlpha: 0.8, scale: 0.1, x: heroCentroX, y: heroCentroY },
-        { autoAlpha: 0, scale: 4.8, duration: 0.85, ease: 'power2.out' },
-        1.4
-      );
-    }
-
-    // ==============================================================
-    // FASE 1.3: Cada gota sale disparada como una referencia 1:1
-    // ==============================================================
-    gotas.forEach((gota, idx) => {
-      const total = gotas.length;
-      // Distribución angular completa de 360 grados
-      const anguloBase = (idx / total) * 2 * Math.PI;
-      const variacionAngulo = ((idx % 3) - 1) * 0.12;
-      const angulo = anguloBase + variacionAngulo;
-
-      // Dos anillos concéntricos de dispersión para evitar sobreposición
-      const radioBase = (idx % 2 === 0) ? (esMovil ? 140 : 260) : (esMovil ? 210 : 390);
-      const variacionRadio = ((idx % 5) * 15) - 30;
-      const distancia = Math.max(120, radioBase + variacionRadio);
-
-      const targetX = heroCentroX + Math.cos(angulo) * distancia;
-      const targetY = heroCentroY + Math.sin(angulo) * (distancia * 0.75);
-
-      // 1. Expulsión explosiva hacia afuera
-      tl.to(gota, {
-        x: targetX,
-        y: targetY,
-        scale: 1,
-        autoAlpha: 1,
-        rotation: (Math.random() - 0.5) * 24,
-        duration: 0.9,
-        ease: 'power3.out'
-      }, 1.3 + (idx % 5) * 0.02);
-
-      // Flotación suspendida en el aire (hover escénico)
-      tl.to(gota, {
-        y: targetY + (Math.sin(idx) * 8),
-        duration: 0.85,
-        ease: 'sine.inOut'
-      }, 2.2);
-
-      // 2. Descenso parabólico fluido abriendo paso al catálogo
-      tl.to(gota, {
-        y: targetY + (esMovil ? 140 : 220),
-        autoAlpha: 0,
-        scale: 0.45,
-        duration: 0.95,
-        ease: 'power2.in'
-      }, 3.05 + (idx % 4) * 0.04);
-    });
-
-    // ==============================================================
-    // FASE 1.4: Abrir paso a la sección de perfumes (scroll suave)
-    // ==============================================================
-    tl.add(() => {
-      const coleccion = document.getElementById('coleccion');
-      if (coleccion) {
-        coleccion.scrollIntoView({ behavior: 'smooth' });
-        // Revelado escalonado (stagger) de los perfumes 1.1 en la colección
-        setTimeout(() => {
-          gsap.fromTo('.card',
-            { opacity: 0, y: 45, scale: 0.95 },
-            { opacity: 1, y: 0, scale: 1, stagger: 0.045, duration: 0.65, ease: 'power2.out', clearProps: 'all' }
-          );
-        }, 320);
-      }
-    }, 3.25);
-
-  }, [animando, envolturaRef, heroRef, onEstadoAnimacion, referencias]);
-
-  useImperativeHandle(ref, () => ({
-    disparar: dispararExplosion,
-    animando
-  }), [dispararExplosion, animando]);
-
-  // Permitir al usuario saltar directamente a un perfume haciendo clic en una gota
-  const seleccionarPerfume = (id) => {
-    const el = document.getElementById(`p-${id}`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      gsap.fromTo(el, { scale: 1.05, filter: 'brightness(1.3)' }, { scale: 1, filter: 'none', duration: 0.8 });
-    }
-  };
+  useImperativeHandle(ref, () => ({ disparar }), [disparar]);
 
   return (
-    <div className={`explosion-overlay ${animando ? 'activo' : ''}`} aria-hidden={!animando}>
-      {/* Destello central de energía */}
+    <div className={`explosion-overlay ${animando ? 'activo' : ''}`} aria-hidden={!animando} ref={raizRef}>
       <div className="destello-explosivo" ref={destelloRef} />
-      
-      {/* Ondas de choque expansivas */}
       <div className="onda-choque" ref={ondaRef} />
       <div className="onda-choque onda-choque--secundaria" ref={ondaSecundariaRef} />
 
-      {/* Gotas de las referencias disponibles 1:1 */}
+      {/* Una gota por referencia: al tocarla abre su ficha */}
       {referencias.map((p, idx) => (
         <div
           key={p.id}
           className="gota-referencia"
           ref={(el) => { gotasRefs.current[idx] = el; }}
-          onClick={() => seleccionarPerfume(p.id)}
+          onClick={() => abrirDetalle(p.id)}
           title={`Ver referencia: ${p.n}`}
         >
           <div className="gota-visual">
             <GotaIcono />
             {p.img && (
               <div className="gota-thumb-wrap">
-                <img src={p.img} alt={p.n} className="gota-thumb-img" loading="lazy" />
+                <img src={p.img} alt="" className="gota-thumb-img" loading="lazy" />
               </div>
             )}
           </div>

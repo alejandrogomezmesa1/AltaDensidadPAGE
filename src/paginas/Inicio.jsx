@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
+import { gsap } from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { useTienda } from '../tienda/TiendaContext';
 import { Coleccion, Ranking, Envases, Kits } from '../tienda/Secciones';
 import { usePagina, JsonLd } from '../lib/hooks';
@@ -6,52 +8,48 @@ import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
 import ExplosionHero from '../tienda/ExplosionHero';
 
-// Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en milisegundos
-const VUELTA_MS = 9000;
-const FLOTE_MS = 4500;
-const INCLINACION = 12; // grados por unidad de desplazamiento (igual que la inclinación con el cursor)
+gsap.registerPlugin(useGSAP);
 
-// Frasco del hero flotando: se inclina como si un puntero le diera vueltas, recalculado en cada
-// fotograma para que el giro sea continuo. Se detiene durante la explosión GSAP y con movimiento reducido.
-function HeroImagen({ envolturaRef, onDisparar, animando }) {
-  useEffect(() => {
-    const el = envolturaRef.current;
-    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    if (animando) return undefined;
+// Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en segundos
+const VUELTA_S = 9;
+const FLOTE_S = 4.5;
+const GIRO_MAX = 6; // grados de inclinación máxima (puntero en el borde del escenario)
 
-    let raf = 0;
-    let visible = true;
-    const inicio = performance.now();
+// Frasco del hero flotando: se inclina como si un puntero le diera vueltas. El giro y la flotación
+// viven en un elemento interno para no competir con la explosión, que anima la envoltura.
+function HeroImagen({ envolturaRef, onDisparar }) {
+  const floteRef = useRef(null);
 
-    const cuadro = (ahora) => {
-      if (animando || el.dataset.animando === 'true') return;
-      const t = ahora - inicio;
-      const angulo = (t / VUELTA_MS) * 2 * Math.PI;
-      // Puntero virtual sobre un círculo de radio 0,5 (el borde del escenario)
-      const x = 0.5 * Math.cos(angulo);
-      const y = 0.5 * Math.sin(angulo);
-      const flote = -4 - 8 * (0.5 - 0.5 * Math.cos((t / FLOTE_MS) * 2 * Math.PI));
-      el.style.transform = `perspective(800px) rotateY(${(x * INCLINACION).toFixed(3)}deg) rotateX(${(-y * INCLINACION).toFixed(3)}deg) translateY(${flote.toFixed(2)}px)`;
-      if (visible && el.dataset.animando !== 'true') raf = requestAnimationFrame(cuadro);
-    };
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const el = floteRef.current;
+      gsap.set(el, { transformPerspective: 800 });
+      const girarY = gsap.quickSetter(el, 'rotationY', 'deg');
+      const girarX = gsap.quickSetter(el, 'rotationX', 'deg');
+      const puntero = { angulo: 0 };
+      const giro = gsap.to(puntero, {
+        angulo: 2 * Math.PI, duration: VUELTA_S, ease: 'none', repeat: -1,
+        onUpdate: () => { girarY(GIRO_MAX * Math.cos(puntero.angulo)); girarX(-GIRO_MAX * Math.sin(puntero.angulo)); }
+      });
+      const vaiven = gsap.fromTo(el, { y: -4 }, { y: -12, duration: FLOTE_S / 2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
-    const obs = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-      cancelAnimationFrame(raf);
-      if (visible && !animando && el.dataset.animando !== 'true') raf = requestAnimationFrame(cuadro);
+      // Fuera de pantalla no se gasta ni un fotograma
+      const obs = new IntersectionObserver(([e]) => [giro, vaiven].forEach((a) => (e.isIntersecting ? a.resume() : a.pause())));
+      obs.observe(el);
+      return () => obs.disconnect();
     });
-    obs.observe(el);
-    raf = requestAnimationFrame(cuadro);
-    return () => { obs.disconnect(); cancelAnimationFrame(raf); };
-  }, [envolturaRef, animando]);
+  }, { scope: floteRef });
 
   return (
     <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias" onClick={onDisparar} title="Haz clic para liberar la esencia">
       <div className="hero-image-wrap" ref={envolturaRef}>
-        <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
-          className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
-        <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
-          className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
+        <div className="hero-flote" ref={floteRef}>
+          <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
+            className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
+          <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
+            className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
+        </div>
       </div>
     </div>
   );
@@ -59,7 +57,6 @@ function HeroImagen({ envolturaRef, onDisparar, animando }) {
 
 export default function Inicio() {
   const { P } = useTienda();
-  const [enAnimacion, setEnAnimacion] = useState(false);
   const heroRef = useRef(null);
   const envolturaRef = useRef(null);
   const explosionRef = useRef(null);
@@ -107,13 +104,13 @@ export default function Inicio() {
           <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
           <div>
             <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); disparar(); }}>Explorar colección</a>
-            <span className="hero-hint-burst" onClick={disparar} style={{ cursor: 'pointer' }}>
-              <i className="fas fa-sparkles" /> Toca para liberar la esencia
-            </span>
+            <button type="button" className="hero-hint-burst" onClick={disparar}>
+              <i className="fas fa-sparkles" aria-hidden="true" /> Toca para liberar la esencia
+            </button>
           </div>
         </div>
-        <HeroImagen envolturaRef={envolturaRef} onDisparar={disparar} animando={enAnimacion} />
-        <ExplosionHero ref={explosionRef} envolturaRef={envolturaRef} heroRef={heroRef} onEstadoAnimacion={setEnAnimacion} />
+        <HeroImagen envolturaRef={envolturaRef} onDisparar={disparar} />
+        <ExplosionHero ref={explosionRef} envolturaRef={envolturaRef} heroRef={heroRef} />
       </section>
 
       <Coleccion />

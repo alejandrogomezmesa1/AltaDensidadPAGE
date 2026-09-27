@@ -596,11 +596,19 @@ header.haute-header nav {
   place-items: center;
   z-index: 1;
   padding: var(--sp-4);
-  /* Sin transición: el giro se calcula en cada fotograma (Inicio.jsx) y una transición lo retrasaría */
+  /* Sin transición: GSAP la anima en la explosión (ExplosionHero.jsx) */
   will-change: transform;
 }
 
-.hero-image-wrap > img {
+/* Capa interna que GSAP hace flotar y girar (Inicio.jsx) */
+.hero-flote {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  will-change: transform;
+}
+
+.hero-flote > img {
   grid-area: 1 / 1;
 }
 
@@ -830,12 +838,16 @@ html.modo-claro .hero .stage:hover .hero-signature-img {
   width: 34px;
   height: 46px;
   filter: drop-shadow(0 0 14px rgba(243, 194, 66, 0.95)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+}
+
+/* Pulso solo con transform y solo mientras las gotas están en escena */
+.explosion-overlay.activo .gota-svg {
   animation: pulsoGota 1.8s ease-in-out infinite alternate;
 }
 
 @keyframes pulsoGota {
-  from { transform: scale(0.96); filter: drop-shadow(0 0 10px rgba(243, 194, 66, 0.8)); }
-  to { transform: scale(1.05); filter: drop-shadow(0 0 18px rgba(255, 215, 0, 1)); }
+  from { transform: scale(0.96); }
+  to { transform: scale(1.05); }
 }
 
 .gota-etiqueta {
@@ -886,8 +898,17 @@ html.modo-claro .gota-nombre {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-top: var(--sp-2);
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
   opacity: 0.85;
   transition: opacity 0.3s ease;
+}
+
+.hero-hint-burst:hover,
+.hero-hint-burst:focus-visible {
+  opacity: 1;
 }
 
 .hero-hint-burst i {
