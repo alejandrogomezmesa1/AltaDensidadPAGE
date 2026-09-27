@@ -2,13 +2,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTienda } from './TiendaContext';
 import { Frasco, ImagenLogo, Paginacion } from './Frasco';
-import { fmt, pr, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles } from '../lib/producto';
+import { fmt, pr, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles, todasLasNotas, tieneNotas, noDisponible, motivoNoDisponible } from '../lib/producto';
 import { WA } from '../config';
 
 const PRODUCTOS_POR_PAGINA = 12;
 const KITS_POR_PAGINA = 6;
-const OCASIONES = ['Todos', 'Noche', 'Oficina', 'Verano'];
-const FILTROS_BASE = { search: '', occasion: 'Todos', family: 'Todos', gender: 'Todos', category: 'Todos', brand: 'Todos' };
+const FILTROS_BASE = { search: '', accord: 'Todos', note: 'Todos', family: 'Todos', gender: 'Todos', category: 'Todos', brand: 'Todos' };
+const CLAVES_FILTRO = ['accord', 'note', 'family', 'gender', 'category', 'brand'];
+
+// Valores presentes en el catálogo, del más usado al menos usado
+function frecuentes(lista) {
+  const conteo = new Map();
+  lista.forEach((v) => { if (v) conteo.set(v, (conteo.get(v) || 0) + 1); });
+  return [...conteo.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([v]) => v);
+}
+const alfabetico = (lista) => [...new Set(lista.filter(Boolean))].sort((a, b) => a.localeCompare(b));
 
 const irA = (id) => {
   const sec = document.getElementById(id);
@@ -19,11 +27,11 @@ function filtrarProductos(P, filters) {
   const term = normalizar(filters.search);
   return P.filter((p) => {
     if (term) {
-      const coincide = [p.n, p.b, p.f, p.o, p.desc].some((t) => t && normalizar(t).includes(term)) ||
-        (p.no && p.no.some((n) => normalizar(n).includes(term)));
+      const coincide = [p.n, p.b, p.orig, p.f, p.desc, ...p.ac, ...todasLasNotas(p)].some((t) => t && normalizar(t).includes(term));
       if (!coincide) return false;
     }
-    if (filters.occasion !== 'Todos' && p.o !== filters.occasion) return false;
+    if (filters.accord !== 'Todos' && !p.ac.includes(filters.accord)) return false;
+    if (filters.note !== 'Todos' && !todasLasNotas(p).includes(filters.note)) return false;
     if (filters.family !== 'Todos' && p.f !== filters.family) return false;
     if (filters.gender !== 'Todos' && p.g !== filters.gender) return false;
     if (filters.category !== 'Todos' && p.c !== filters.category) return false;
@@ -38,24 +46,25 @@ function ordenarProductos(lista, orden) {
     case 'precio-asc': return copia.sort((a, b) => pr(a) - pr(b));
     case 'precio-desc': return copia.sort((a, b) => pr(b) - pr(a));
     case 'nombre-asc': return copia.sort((a, b) => a.n.localeCompare(b.n));
-    // Recomendados: agrupados por marca y luego por nombre
-    default: return copia.sort((a, b) => a.b.localeCompare(b.b) || a.n.localeCompare(b.n));
+    // Recomendados: agrupados por marca (sin marca al final) y luego por nombre
+    default: return copia.sort((a, b) => (!a.b - !b.b) || (a.b || '').localeCompare(b.b || '') || a.n.localeCompare(b.n));
   }
 }
 
-const contarFiltros = (f) => ['occasion', 'family', 'gender', 'category', 'brand'].filter((k) => f[k] !== 'Todos').length + (f.search ? 1 : 0);
+const contarFiltros = (f) => CLAVES_FILTRO.filter((k) => f[k] !== 'Todos').length + (f.search ? 1 : 0);
 
 // ── Atelier de filtros (modal) ──
 function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
   const { capa, cerrarCapas } = useTienda();
+  // Solo se muestran los grupos que tienen datos cargados en las fichas
   const grupos = [
-    ['Colección', 'category', ['Todos', ...new Set(P.map((x) => x.c).filter(Boolean))], (v) => (v === 'Todos' ? v : etiquetaColeccion(v))],
-    ['Familia Olfativa', 'family', ['Todos', ...new Set(P.map((x) => x.f).filter(Boolean))]],
-    ['Ocasión de Uso', 'occasion', OCASIONES],
-    ['Estilo / Género', 'gender', ['Todos', 'Unisex', 'Masculino', 'Femenino']],
-    ['Marca', 'brand', ['Todos', ...[...new Set(P.map((x) => x.b))].sort((a, b) =>
-      (a === 'Otras marcas') - (b === 'Otras marcas') || a.localeCompare(b))]]
-  ];
+    ['Colección', 'category', alfabetico(P.map((x) => x.c)), etiquetaColeccion],
+    ['Familia olfativa', 'family', alfabetico(P.map((x) => x.f))],
+    ['Acorde principal', 'accord', frecuentes(P.flatMap((x) => x.ac))],
+    ['Nota', 'note', alfabetico(P.flatMap(todasLasNotas))],
+    ['Estilo / Género', 'gender', ['Unisex', 'Masculino', 'Femenino']],
+    ['Marca', 'brand', alfabetico(P.map((x) => x.b))]
+  ].filter(([, , valores]) => valores.length > 0).map(([t, k, v, e]) => [t, k, ['Todos', ...v], e && ((x) => (x === 'Todos' ? x : e(x)))]);
   return (
     <div
       className={`modal filter-modal ${capa === 'filtros' ? 'on' : ''}`} role="dialog" aria-modal="true" aria-label="Filtros avanzados de fragancias"
@@ -115,6 +124,7 @@ export function Coleccion() {
   const actual = pagina > totalPaginas ? 1 : pagina;
   const visibles = filtrados.slice((actual - 1) * PRODUCTOS_POR_PAGINA, actual * PRODUCTOS_POR_PAGINA);
   const activos = contarFiltros(filters);
+  const acordesPrincipales = useMemo(() => frecuentes(P.flatMap((x) => x.ac)).slice(0, 7), [P]);
 
   const reset = () => { setFilters(FILTROS_BASE); setBusqueda(''); };
   const cambiarPagina = (p) => { setPagina(p); irA('coleccion'); };
@@ -153,11 +163,13 @@ export function Coleccion() {
           </div>
         </div>
 
-        <div className="chips up">
-          {OCASIONES.map((x) => (
-            <button key={x} className={`chip up ${x === filters.occasion ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, occasion: x }))}>{x}</button>
-          ))}
-        </div>
+        {acordesPrincipales.length > 0 && (
+          <div className="chips up">
+            {['Todos', ...acordesPrincipales].map((x) => (
+              <button key={x} className={`chip up ${x === filters.accord ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, accord: x }))}>{x}</button>
+            ))}
+          </div>
+        )}
 
         <div className="filter-status mute" style={{ display: activos > 0 ? 'flex' : 'none' }}>
           <span>Mostrando <b>{filtrados.length}</b> de {P.length} fragancias</span>
@@ -178,16 +190,18 @@ export function Coleccion() {
               <div className="stage" onClick={() => abrirDetalle(p.id)}>
                 <span className="tag up">Extrait de Parfum</span>
                 <Frasco h={p.h} s={1} img={p.img} nombre={p.n} prioridad={actual === 1 && idx < 6} />
-                <div className="notes">{(p.no || []).join(' · ')}</div>
+                {(tieneNotas(p) || p.ac.length > 0) && (
+                  <div className="notes">{(tieneNotas(p) ? todasLasNotas(p) : p.ac).slice(0, 6).join(' · ')}</div>
+                )}
               </div>
               <div className="info">
                 <div>
-                  <small className="up card-brand">{p.b} · {etiquetaColeccion(p.c)}</small>
+                  <small className="up card-brand">{[p.b, etiquetaColeccion(p.c)].filter(Boolean).join(' · ')}</small>
                   <h3 onClick={() => abrirDetalle(p.id)}>{p.n}</h3>
-                  <span>{p.f} · {fmt(pr(p))}</span>
+                  <span>{[p.f, p.rev ? 'Precio en revisión' : fmt(pr(p))].filter(Boolean).join(' · ')}</span>
                 </div>
-                {p.ag
-                  ? <button className="link up" disabled aria-disabled="true">Agotado</button>
+                {noDisponible(p)
+                  ? <button className="link up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>
                   : <button className="link up" onClick={() => agregarRapido(p.id)}>Añadir</button>}
               </div>
             </article>
@@ -203,14 +217,16 @@ export function Coleccion() {
 
 // ── Top 10 ──
 export function Ranking() {
-  const { TOP10, abrirDetalle } = useTienda();
+  const { TOP10, abrirDetalle, buscarProducto } = useTienda();
   return (
     <div className="rank">
       {TOP10.map((p, i) => {
         const pId = p.producto_id || p.id;
         const nom = p.nombre || p.name || p.n;
-        const fam = p.f || p.categoria || p.category || 'Perfumería de Autor';
-        const notas = p.no ? p.no.join(' · ') : (p.genero || p.gender || 'Unisex');
+        // Familia y notas salen de la ficha del producto en el catálogo
+        const ficha = buscarProducto(pId);
+        const perfil = ficha && (tieneNotas(ficha) ? todasLasNotas(ficha) : ficha.ac).slice(0, 3).join(' · ');
+        const detalle = [ficha && ficha.f, perfil || (p.genero || p.gender || 'Unisex')].filter(Boolean).join(' · ');
         const rating = Number(p.rating) || 5;
         const carga = i < 4 ? { loading: 'eager', fetchPriority: 'high' } : { loading: 'lazy', decoding: 'async' };
         return (
@@ -221,10 +237,10 @@ export function Ranking() {
             </div>
             <div>
               <h3 onClick={() => abrirDetalle(pId)}>{nom}</h3>
-              <small>{fam} · {notas}</small>
+              <small>{detalle}</small>
               <small className="stars" aria-label={`${rating} de 5 estrellas`}>{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</small>
             </div>
-            <span className="pr">{fmt(Number(p.precio || p.price || p.p || 75000))}</span>
+            <span className="pr">{p.precio_revision ? 'En revisión' : fmt(Number(p.precio || p.price || p.p || 75000))}</span>
             <button className="link up" onClick={() => abrirDetalle(pId)}>Ver</button>
           </div>
         );
@@ -292,9 +308,9 @@ export function Kits() {
                 <h3 className="kit-title" onClick={() => abrirKit(k.id)}>{nom}</h3>
                 <p className="kit-desc">{k.descripcion || 'Kit especial de fragancias de alta densidad en estuche de regalo.'}</p>
                 <div className="kit-footer">
-                  <span className="kit-price">{fmt(Number(k.precio || 60000))}</span>
-                  {k.agotado
-                    ? <button className="btn btn--line up" disabled aria-disabled="true">Agotado</button>
+                  <span className="kit-price">{k.precio_revision ? 'En revisión' : fmt(Number(k.precio || 60000))}</span>
+                  {k.agotado || k.precio_revision
+                    ? <button className="btn btn--line up" disabled aria-disabled="true">{k.precio_revision ? 'Precio en revisión' : 'Agotado'}</button>
                     : <button className="btn btn--line up" onClick={() => { addKitToCart(k.id, 1); abrirBolsa(); }}>Añadir</button>}
                 </div>
               </div>

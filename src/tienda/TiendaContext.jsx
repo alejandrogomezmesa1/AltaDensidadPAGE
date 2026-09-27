@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
-import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, LOGO } from '../lib/producto';
+import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO } from '../lib/producto';
 
 const CART_KEY = 'ad_cart_v2';
 const LEGACY_CART_KEY = 'altadensidad_carrito';
@@ -23,14 +23,14 @@ function buscarEn(P, TOP10, id) {
     return adaptarProducto({
       id: n, name: t.nombre, price: t.precio, image: t.imagen,
       category: t.categoria, gender: t.genero, description: t.descripcion,
-      f: t.f, o: t.o, no: t.no, agotado: t.agotado
+      agotado: t.agotado, priceReview: t.precio_revision
     }, n);
   }
   return null;
 }
 
 function agregarLinea(cart, prod, id, ml, env, q) {
-  if (prod && prod.ag) return cart;
+  if (prod && noDisponible(prod)) return cart;
   const i = cart.findIndex((x) => x.id === id && (x.ml || '') === (ml || '') && (x.env || '') === (env || ''));
   if (i >= 0) return cart.map((x, j) => (j === i ? { ...x, q: x.q + q } : x));
   return [...cart, { id, ml: ml || '', env: env || '', q }];
@@ -95,7 +95,6 @@ export function TiendaProvider({ children }) {
     fetchConFallback('top10').then((data) => {
       if (!vivo || !data || !data.length) return;
       setTop10(data.map((t, idx) => {
-        const curado = DATOS_DUROS_TOP10.find((d) => d.producto_id === (t.producto_id || t.id)) || {};
         return {
           posicion: t.posicion || idx + 1,
           producto_id: t.producto_id || t.id,
@@ -104,13 +103,11 @@ export function TiendaProvider({ children }) {
           imagen: normalizarImagen(t.imagen || t.image),
           categoria: t.categoria || t.category || 'Perfumería',
           genero: t.genero || t.gender || 'Unisex',
-          f: curado.f || t.categoria || 'Perfumería de Autor',
-          o: curado.o,
-          no: curado.no,
           descripcion: t.descripcion || t.description || '',
           precio: Number(t.precio || t.price || 75000),
           rating: t.rating || 5,
-          agotado: t.agotado ? 1 : 0
+          agotado: t.agotado ? 1 : 0,
+          precio_revision: t.precio_revision ? 1 : 0
         };
       }));
     });
@@ -147,6 +144,7 @@ export function TiendaProvider({ children }) {
         precio: Number(k.precio || k.price || 60000),
         activo: k.activo !== undefined ? k.activo : 1,
         agotado: k.agotado ? 1 : 0,
+        precio_revision: k.precio_revision ? 1 : 0,
         beneficios: k.beneficios || []
       })));
     });
@@ -212,7 +210,7 @@ export function TiendaProvider({ children }) {
   const agregarRapido = useCallback((id) => {
     if (String(id).startsWith('kit_')) {
       const kit = KITS.find((k) => k.id === Number(String(id).replace('kit_', '')));
-      if (kit && !kit.agotado) setCart((c) => agregarKit(c, kit, 1));
+      if (kit && !kit.agotado && !kit.precio_revision) setCart((c) => agregarKit(c, kit, 1));
     } else {
       const p = buscarEn(P, TOP10, id);
       if (p) setCart((c) => agregarLinea(c, p, p.id, p.sz[0] || '', p.env[0] || '', 1));
@@ -222,7 +220,7 @@ export function TiendaProvider({ children }) {
 
   const addKitToCart = useCallback((kitId, q = 1) => {
     const kit = KITS.find((k) => k.id === Number(kitId));
-    if (!kit || kit.agotado) return;
+    if (!kit || kit.agotado || kit.precio_revision) return;
     setCart((c) => agregarKit(c, kit, q));
   }, [KITS]);
 

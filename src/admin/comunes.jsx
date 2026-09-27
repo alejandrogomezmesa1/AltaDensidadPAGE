@@ -187,3 +187,43 @@ export function SelectInventario({ id, valor, onCambiar, onListo }) {
     </select>
   );
 }
+
+// Lista de etiquetas (acordes, notas): Enter o coma agrega, × quita; sugiere valores existentes
+export function CampoEtiquetas({ id, valores, onCambiar, sugerencias = [], placeholder }) {
+  const [texto, setTexto] = useState('');
+  const listaId = `${id}-sugerencias`;
+  const agregar = (bruto) => {
+    const nombre = bruto.replace(/\s+/g, ' ').trim();
+    if (!nombre) return;
+    // Reutiliza la escritura existente ("vainilla" → "Vainilla") para no duplicar
+    const existente = sugerencias.find((s) => s.toLowerCase() === nombre.toLowerCase()) || nombre;
+    if (!valores.some((v) => v.toLowerCase() === existente.toLowerCase())) onCambiar([...valores, existente]);
+    setTexto('');
+  };
+  return (
+    <div className="campo-etiquetas">
+      {valores.map((v) => (
+        <span className="etiqueta" key={v}>
+          {v}
+          <button type="button" aria-label={`Quitar ${v}`} onClick={() => onCambiar(valores.filter((x) => x !== v))}><i className="fas fa-times" /></button>
+        </span>
+      ))}
+      <input
+        id={id} type="text" list={listaId} value={texto} placeholder={valores.length ? '' : placeholder}
+        onChange={(e) => {
+          const v = e.target.value;
+          if (v.endsWith(',')) agregar(v.slice(0, -1));
+          else setTexto(v);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') { e.preventDefault(); agregar(texto); }
+          else if (e.key === 'Backspace' && !texto && valores.length) onCambiar(valores.slice(0, -1));
+        }}
+        onBlur={() => agregar(texto)}
+      />
+      <datalist id={listaId}>
+        {sugerencias.filter((s) => !valores.includes(s)).map((s) => <option key={s} value={s} />)}
+      </datalist>
+    </div>
+  );
+}

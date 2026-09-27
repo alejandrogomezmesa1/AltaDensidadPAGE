@@ -1125,6 +1125,24 @@ footer.haute-footer {
   text-align: right;
 }
 
+/* Ficha: perfume original y acordes principales */
+.d-orig {
+  display: block;
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: var(--fs-3);
+  color: var(--c-accent);
+}
+
+.d-acordes {
+  flex-wrap: wrap;
+}
+
+.d-acordes .chip {
+  cursor: default;
+  font-size: var(--fs-1);
+}
+
 .specs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

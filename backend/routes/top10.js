@@ -3,13 +3,14 @@ const router = express.Router();
 const { getConnection } = require('../config/db');
 const { requireStaff } = require('../middleware/auth');
 const dataSync = require('../services/dataSync');
+const esquema = require('../services/esquema');
 
 // GET Top 10 productos (ordenados)
 router.get('/', async (req, res) => {
     try {
         const pool = await getConnection();
         const [rows] = await pool.query(`
-            SELECT t.posicion, t.producto_id, p.nombre, p.imagen, p.categoria, p.genero, p.descripcion, p.precio, p.rating${dataSync.columnasListas() ? ', p.agotado' : ''}
+            SELECT t.posicion, t.producto_id, p.nombre, p.imagen, p.categoria, p.genero, p.descripcion, p.precio, p.rating${dataSync.columnasListas() ? ', p.agotado' : ''}${esquema.clasificacion() ? ', p.precio_revision' : ''}
             FROM Top10 t
             JOIN Productos p ON t.producto_id = p.id
             ORDER BY t.posicion ASC

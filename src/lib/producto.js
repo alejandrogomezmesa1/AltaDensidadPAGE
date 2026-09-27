@@ -1,5 +1,4 @@
 // Modelo de producto de la tienda: marca, colección, perfil olfativo, precio e imagen.
-import { DATOS_DUROS_PRODUCTOS } from '../data/catalogo';
 
 export const LOGO = '/assets/img/Logo2026.png';
 
@@ -22,25 +21,6 @@ export function normalizarImagen(src) {
 
 export const urlAbsoluta = (img, sitio) => (img.startsWith('http') ? img : sitio + img);
 
-const MARCAS_RECONOCIDAS = [
-  'CAROLINA HERRERA', 'LATTAFA', 'PACO RABANNE', 'VERSACE', 'DIOR', 'CHANEL',
-  'HUGO BOSS', 'LACOSTE', 'ARMAF', 'LOUIS VUITTON', 'ORIENTICA', 'AFNAN',
-  'PERRY ELLIS', 'VICTORINOX', 'AL HARAMAIN', 'MONTALE', 'BHARARA', 'BOND N',
-  'VALENTINO', 'PARIS HILTON', 'ARIANA GRANDE', 'BVLGARI', 'XERJOFF', 'GIORGIO ARMANI',
-  'YVES SAINT LAURENT', 'CALVIN KLEIN', 'JEAN PAUL GAULTIER', 'DOLCE & GABBANA',
-  'CREED', 'TOM FORD', 'HERMES', 'ROJA DOVE', 'NISHANE', 'MANCERA', 'INITIO',
-  'MOSCHINO', 'MONTBLANC', 'LE LABO', 'ILMIN', 'AHLI', 'BURBERRY', 'AMOUAGE'
-];
-
-export function extraerMarca(nombre) {
-  if (!nombre) return 'Otras marcas';
-  const up = nombre.toUpperCase();
-  for (const marca of MARCAS_RECONOCIDAS) {
-    if (up.includes(marca)) return marca === 'BOND N' ? 'BOND NO. 9' : marca;
-  }
-  return 'Otras marcas';
-}
-
 export const etiquetaColeccion = (c) => (c === 'Arabe' ? 'Árabe' : (c || 'Diseñador'));
 
 export function normalizarGenero(g) {
@@ -49,54 +29,42 @@ export function normalizarGenero(g) {
   return 'Unisex';
 }
 
-// Familia, ocasión y tono del frasco deducidos de la descripción cuando no hay perfil curado
-function perfilOlfativo(item, idx) {
-  const nameLow = (item.name || '').toLowerCase();
-  const descLow = (item.description || '').toLowerCase();
-  const catLow = (item.category || '').toLowerCase();
-  let occ = 'Noche';
-  let fam = 'Amaderada';
-  let hue = (idx * 37) % 360;
+const NOTAS_VACIAS = { top: [], heart: [], base: [] };
 
-  if (descLow.includes('fresc') || descLow.includes('cítric') || descLow.includes('verano') || nameLow.includes('aqua') || nameLow.includes('blue')) {
-    occ = 'Verano'; fam = 'Cítrica / Fresca'; hue = 190;
-  } else if (descLow.includes('oficina') || descLow.includes('elegante') || descLow.includes('diario') || descLow.includes('versátil')) {
-    occ = 'Oficina'; fam = 'Aromática'; hue = 130;
-  } else if (descLow.includes('dulce') || descLow.includes('vainilla') || descLow.includes('gourmand') || descLow.includes('caramelo') || nameLow.includes('candy')) {
-    fam = 'Dulce / Gourmand'; hue = 24;
-  } else if (descLow.includes('floral') || nameLow.includes('rosa') || nameLow.includes('iris') || nameLow.includes('rose')) {
-    fam = 'Floral'; hue = 330;
-  } else if (descLow.includes('cuero') || nameLow.includes('cuero') || nameLow.includes('leather')) {
-    fam = 'Cuero'; hue = 16;
-  } else if (catLow.includes('arabe') || descLow.includes('oriental') || descLow.includes('especiad') || nameLow.includes('oud')) {
-    fam = 'Especiada / Árabe'; hue = 40;
-  }
-  return { f: fam, o: occ, h: hue };
-}
-
-// Convierte un producto con forma de API ({id, name, price, sizes, bottleTypes...}) al modelo interno
+// Convierte un producto de la API al modelo de la tienda. La ficha (marca, original, familia,
+// acordes y notas) viene de la base; si un dato no está cargado, simplemente no se muestra.
 export function adaptarProducto(item, idx) {
-  const curado = DATOS_DUROS_PRODUCTOS.find((d) => d.id === Number(item.id) && d.f) || item;
-  const base = perfilOlfativo(item, idx);
   const nombre = (item.name || item.nombre || 'Fragancia').trim();
+  const notas = item.notes || NOTAS_VACIAS;
   return {
     id: Number(item.id),
     n: nombre,
-    b: extraerMarca(nombre),
+    b: item.brand ? item.brand.name : null,
+    orig: item.originalName || null,
     c: item.category || item.categoria || 'Diseñador',
     g: normalizarGenero(item.gender || item.genero),
-    f: curado.f || base.f,
-    o: curado.o || base.o,
-    h: curado.h != null ? curado.h : base.h,
-    no: curado.no || ['Salida vibrante', 'Corazón de autor', 'Ámbar y feromonas'],
+    f: item.family ? item.family.name : null,
+    ac: Array.isArray(item.accords) ? item.accords : [],
+    no: { top: notas.top || [], heart: notas.heart || [], base: notas.base || [] },
+    // Tono del frasco dibujado cuando la foto no carga
+    h: (Number(item.id || idx) * 37) % 360,
     p: Number(item.price || item.precio) > 0 ? Number(item.price || item.precio) : 75000,
     sz: Array.isArray(item.sizes) ? item.sizes.filter(Boolean) : [],
     env: Array.isArray(item.bottleTypes) ? item.bottleTypes.filter(Boolean) : [],
     desc: item.description || item.descripcion || null,
     img: normalizarImagen(item.image || item.imagen || (item.images && item.images[0])),
-    ag: Number(item.agotado) === 1
+    ag: Number(item.agotado) === 1,
+    rev: Number(item.priceReview || item.precio_revision) === 1
   };
 }
+
+// Todas las notas de la pirámide en una lista (salida, corazón y fondo)
+export const todasLasNotas = (p) => [...p.no.top, ...p.no.heart, ...p.no.base];
+export const tieneNotas = (p) => todasLasNotas(p).length > 0;
+
+// No se puede vender: sin stock en DATA o precio en revisión (no cubre el costo)
+export const noDisponible = (p) => p.ag || p.rev;
+export const motivoNoDisponible = (p) => (p.rev ? 'Precio en revisión' : 'Agotado');
 
 export const pr = (p) => Number(p.p || p.precio || p.price || 75000);
 
@@ -107,9 +75,7 @@ export function etiquetaTalla(ml) {
 
 export function descripcion(p) {
   if (p.desc) return p.desc;
-  const f = (p.f || 'de autor').toLowerCase();
-  const no = p.no || ['Notas cítricas', 'Corazón aromático', 'Ámbar y feromonas'];
-  return `Una fragancia ${f} de alta densidad. Abre con ${no[0].toLowerCase()}, se asienta en ${no[1].toLowerCase()} y deja un fondo memorable de ${no[2].toLowerCase()}. Concentración pura Extrait de Parfum con base de feromonas.`;
+  return 'Concentración pura Extrait de Parfum con base de feromonas.';
 }
 
 export const normalizar = (txt) => (txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();

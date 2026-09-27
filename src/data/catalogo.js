@@ -386,15 +386,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689703/altadensidad/jot6z7ewz1dlkdr7mpst.jpg",
-    "description": "Yara de Lattafa es un perfume femenino dulce, floral y cremoso, ideal para quienes buscan un aroma juvenil y encantador con buena duración y versatilidad. Perfecto para uso diario, citas románticas y climas templados.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Heliotropo · Orquídea",
-      "Frutas tropicales",
-      "Vainilla · Sándalo"
-    ],
-    "h": 336
+    "description": "Yara de Lattafa es un perfume femenino dulce, floral y cremoso, ideal para quienes buscan un aroma juvenil y encantador con buena duración y versatilidad. Perfecto para uso diario, citas románticas y climas templados."
   },
   {
     "id": 90,
@@ -407,15 +399,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689605/altadensidad/focuwtyfmqechm1qcvyi.jpg",
-    "description": "212 VIP Black es un perfume masculino aromático y especiado con fondo cálido, ideal para hombres que buscan un aroma seductor y moderno que destaque en ambientes sociales nocturnos. Perfecto para fiestas, citas nocturnas y climas frescos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Cuero noble y feromonas"
-    ],
-    "h": 185
+    "description": "212 VIP Black es un perfume masculino aromático y especiado con fondo cálido, ideal para hombres que buscan un aroma seductor y moderno que destaque en ambientes sociales nocturnos. Perfecto para fiestas, citas nocturnas y climas frescos."
   },
   {
     "id": 89,
@@ -441,15 +425,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777689371/altadensidad/rwwrlq7dbdmqnjjuixqw.jpg",
-    "description": "Very Good Girl es una fragancia femenina frutal y floral con un fondo cálido, que transmite alegría y sofisticación. Es ideal para mujeres que buscan un perfume moderno, coqueto y versátil. Perfecto para uso diario, citas románticas y climas templados.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Almendra · Café",
-      "Jazmín sambac",
-      "Cacao · Haba tonka"
-    ],
-    "h": 111
+    "description": "Very Good Girl es una fragancia femenina frutal y floral con un fondo cálido, que transmite alegría y sofisticación. Es ideal para mujeres que buscan un perfume moderno, coqueto y versátil. Perfecto para uso diario, citas románticas y climas templados."
   },
   {
     "id": 87,
@@ -488,15 +464,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688885/altadensidad/krlcdii1znxkbf5y7c9r.jpg",
-    "description": "Toy 2 Bubble Gum es un perfume femenino dulce y juguetón, que combina notas frutales y especiadas con un fondo cálido. Es ideal para mujeres jóvenes que buscan un aroma alegre, coqueto y moderno, con un toque irreverente y divertido. Perfecto para uso diario, salidas sociales y climas calidos.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 47
+    "description": "Toy 2 Bubble Gum es un perfume femenino dulce y juguetón, que combina notas frutales y especiadas con un fondo cálido. Es ideal para mujeres jóvenes que buscan un aroma alegre, coqueto y moderno, con un toque irreverente y divertido. Perfecto para uso diario, salidas sociales y climas calidos."
   },
   {
     "id": 84,
@@ -509,15 +477,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777688373/altadensidad/eqygrstbnuqus47rwpuw.jpg",
-    "description": "Toy 2 Bubble Gum es un perfume femenino dulce y juguetón, que combina notas frutales y especiadas con un fondo cálido. Es ideal para mujeres jóvenes que buscan un aroma alegre por su aroma a chicle rosa, coqueto y moderno. Perfecto para uso diario, salidas sociales y climas cálidos.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 10
+    "description": "Toy 2 Bubble Gum es un perfume femenino dulce y juguetón, que combina notas frutales y especiadas con un fondo cálido. Es ideal para mujeres jóvenes que buscan un aroma alegre por su aroma a chicle rosa, coqueto y moderno. Perfecto para uso diario, salidas sociales y climas cálidos."
   },
   {
     "id": 83,
@@ -569,15 +529,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687920/altadensidad/rwqgam5alatla11kqnik.jpg",
-    "description": "Omnia Coral es una fragancia femenina fresca, frutal y floral, que transmite alegría y vitalidad mediterránea. Es ideal para mujeres que buscan un perfume juvenil y luminoso, perfecto para el día a día en primavera y verano. Perfecto para uso diario, salidas sociales y climas cálidos.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 127
+    "description": "Omnia Coral es una fragancia femenina fresca, frutal y floral, que transmite alegría y vitalidad mediterránea. Es ideal para mujeres que buscan un perfume juvenil y luminoso, perfecto para el día a día en primavera y verano. Perfecto para uso diario, salidas sociales y climas cálidos."
   },
   {
     "id": 79,
@@ -603,15 +555,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687662/altadensidad/hdadt2smcfd4ks0xdtr1.jpg",
-    "description": "Se distingue por su carácter fresco, especiado y amaderado, diseñada para hombres que buscan un perfume versátil y moderno con buena presencia. Ideal para uso diario, oficina, salidas sociales y climas templados.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 151
+    "description": "Se distingue por su carácter fresco, especiado y amaderado, diseñada para hombres que buscan un perfume versátil y moderno con buena presencia. Ideal para uso diario, oficina, salidas sociales y climas templados."
   },
   {
     "id": 77,
@@ -624,15 +568,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687480/altadensidad/cjlgczttyq1vqbbjsqow.jpg",
-    "description": "Se caracteriza por ser intensa, moderna y con un perfil fresco-amaderado, pensada para quienes buscan un perfume versátil pero con gran presencia. Ideal para uso diario, oficina, salidas sociales y climas templados.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 114
+    "description": "Se caracteriza por ser intensa, moderna y con un perfil fresco-amaderado, pensada para quienes buscan un perfume versátil pero con gran presencia. Ideal para uso diario, oficina, salidas sociales y climas templados."
   },
   {
     "id": 76,
@@ -658,15 +594,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687244/altadensidad/nmlrnf1mp5hnxbstq2sc.jpg",
-    "description": "Uso diario, salidas sociales, climas cálidos, ideal para mujeres jóvenes que buscan un perfume alegre y moderno, con un aire de “postre frutal” sofisticado.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 77
+    "description": "Uso diario, salidas sociales, climas cálidos, ideal para mujeres jóvenes que buscan un perfume alegre y moderno, con un aire de “postre frutal” sofisticado."
   },
   {
     "id": 74,
@@ -679,15 +607,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777687059/altadensidad/xpvyrmpj8wqxbkkm9fz8.jpg",
-    "description": "Perfil floral, dulce y elegante, con un aire sofisticado y versátil. Perfecto para uso diario, citas románticas y eventos sociales.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Limón · Grosella negra",
-      "Abedul · Jazmín",
-      "Almizcle · Ámbar gris"
-    ],
-    "h": 289
+    "description": "Perfil floral, dulce y elegante, con un aire sofisticado y versátil. Perfecto para uso diario, citas románticas y eventos sociales."
   },
   {
     "id": 73,
@@ -713,15 +633,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686760/altadensidad/ldpvogtjx0fwtdeuha3y.jpg",
-    "description": "A lo largo de los años ha tenido varias reinterpretaciones, pero siempre mantiene su esencia romántica, elegante y femenina. Perfecto para citas románticas, eventos especiales, cenas elegantes y uso diario si se aplica con moderación.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 144
+    "description": "A lo largo de los años ha tenido varias reinterpretaciones, pero siempre mantiene su esencia romántica, elegante y femenina. Perfecto para citas románticas, eventos especiales, cenas elegantes y uso diario si se aplica con moderación."
   },
   {
     "id": 71,
@@ -734,15 +646,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686641/altadensidad/fvqm0srxgcz9giislgjy.jpg",
-    "description": "Mayar Intense busca un perfil más elegante y duradero, con mayor presencia de notas cálidas y orientales. Ideal para citas románticas, eventos nocturnos y climas frescos, aunque sigue siendo versátil para uso diario.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 50
+    "description": "Mayar Intense busca un perfil más elegante y duradero, con mayor presencia de notas cálidas y orientales. Ideal para citas románticas, eventos nocturnos y climas frescos, aunque sigue siendo versátil para uso diario."
   },
   {
     "id": 70,
@@ -755,15 +659,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686571/altadensidad/xx7vocgptohl0mk8w0ye.jpg",
-    "description": "Es una fragancia femenina, juvenil y dulce, pensada para quienes disfrutan de aromas golosos con un toque sofisticado. Perfecto para uso diario, salidas sociales, citas románticas y climas cálidos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 124
+    "description": "Es una fragancia femenina, juvenil y dulce, pensada para quienes disfrutan de aromas golosos con un toque sofisticado. Perfecto para uso diario, salidas sociales, citas románticas y climas cálidos."
   },
   {
     "id": 69,
@@ -776,15 +672,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686502/altadensidad/v3ieh4zhh3ao3ojlfhqh.jpg",
-    "description": "Es parte de la línea moderna de Lattafa, pensada para quienes disfrutan de fragancias gourmand y alegres. Perfecto para uso diario, salidas sociales, citas románticas y climas cálidos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 87
+    "description": "Es parte de la línea moderna de Lattafa, pensada para quienes disfrutan de fragancias gourmand y alegres. Perfecto para uso diario, salidas sociales, citas románticas y climas cálidos."
   },
   {
     "id": 68,
@@ -849,15 +737,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777686014/altadensidad/ys8kzlde3ywccs5jntee.jpg",
-    "description": "Es una fragancia fresca, limpia y elegante, inspirada en la icónica camiseta polo blanca de Lacoste, símbolo de sencillez y sofisticación deportiva. Perfecto para uso diario, oficina, reuniones sociales y climas cálidos.",
-    "f": "Cítrica / Fresca",
-    "o": "Oficina",
-    "no": [
-      "Pomelo · Cardamomo",
-      "Ylang-ylang · Nardo",
-      "Cedro de Virginia · Gamuza"
-    ],
-    "h": 6
+    "description": "Es una fragancia fresca, limpia y elegante, inspirada en la icónica camiseta polo blanca de Lacoste, símbolo de sencillez y sofisticación deportiva. Perfecto para uso diario, oficina, reuniones sociales y climas cálidos."
   },
   {
     "id": 63,
@@ -870,15 +750,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777685921/altadensidad/cyfey3ctyid2mvtepg4r.jpg",
-    "description": "Es considerado por muchos como una alternativa accesible a fragancias nicho de estilo oriental.  Ideal para eventos nocturnos, climas fríos y ocasiones especiales.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Canela · Nuez moscada",
-      "Dátiles · Praliné",
-      "Vainilla bourbon · Haba tonka"
-    ],
-    "h": 346
+    "description": "Es considerado por muchos como una alternativa accesible a fragancias nicho de estilo oriental.  Ideal para eventos nocturnos, climas fríos y ocasiones especiales."
   },
   {
     "id": 62,
@@ -891,15 +763,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778549998/altadensidad/hgujlhm2xgd0mpmermb8.jpg",
-    "description": "Es un Eau de Parfum con un perfil tropical, refrescante y gourmand, que muchos describen como “jugoso” y parecido a un refresco frutal.  Perfecto para uso diario, actividades sociales y climas cálidos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 215
+    "description": "Es un Eau de Parfum con un perfil tropical, refrescante y gourmand, que muchos describen como “jugoso” y parecido a un refresco frutal.  Perfecto para uso diario, actividades sociales y climas cálidos."
   },
   {
     "id": 61,
@@ -912,15 +776,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777685235/altadensidad/ymclxiwbeszisggrurg5.jpg",
-    "description": "Es una fragancia fresca, deportiva y seductora, inspirada en la victoria y la energía triunfante. Ideal para uso diario, actividades sociales, gimnasio y climas cálidos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Toronja · Notas marinas",
-      "Hoja de laurel · Jazmín",
-      "Madera de gaiac · Ámbar gris"
-    ],
-    "h": 158
+    "description": "Es una fragancia fresca, deportiva y seductora, inspirada en la victoria y la energía triunfante. Ideal para uso diario, actividades sociales, gimnasio y climas cálidos."
   },
   {
     "id": 60,
@@ -959,15 +815,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684978/altadensidad/lj7xgvlxdpihwz5if0zc.jpg",
-    "description": "Es una fragancia de lujo, intensa y sofisticada, inspirada en los viajes y en la profundidad de los paisajes desérticos. Ideal para eventos nocturnos, climas fríos y ocasiones especiales.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 57
+    "description": "Es una fragancia de lujo, intensa y sofisticada, inspirada en los viajes y en la profundidad de los paisajes desérticos. Ideal para eventos nocturnos, climas fríos y ocasiones especiales."
   },
   {
     "id": 57,
@@ -980,15 +828,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684905/altadensidad/z1e7kekzlqbal7kik9ly.jpg",
-    "description": "Es un Eau de Parfum femenino que combina frescura floral con un toque moderno y delicado, pensado para mujeres que buscan un aroma elegante pero más suave y luminoso. Perfecto para uso diario, citas románticas y climas cálidos o templados.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Almendra · Café",
-      "Jazmín sambac",
-      "Cacao · Haba tonka"
-    ],
-    "h": 74
+    "description": "Es un Eau de Parfum femenino que combina frescura floral con un toque moderno y delicado, pensado para mujeres que buscan un aroma elegante pero más suave y luminoso. Perfecto para uso diario, citas románticas y climas cálidos o templados."
   },
   {
     "id": 56,
@@ -1001,15 +841,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684839/altadensidad/wmw39uy0tn6qgn3zeq60.jpg",
-    "description": "Es un Eau de Parfum que combina dualidad y contraste: la luz y la oscuridad, lo bueno y lo travieso, reflejando la complejidad de la mujer moderna.  Ideal para citas románticas, eventos nocturnos y climas frescos o fríos.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Almendra · Café",
-      "Jazmín sambac",
-      "Cacao · Haba tonka"
-    ],
-    "h": 37
+    "description": "Es un Eau de Parfum que combina dualidad y contraste: la luz y la oscuridad, lo bueno y lo travieso, reflejando la complejidad de la mujer moderna.  Ideal para citas románticas, eventos nocturnos y climas frescos o fríos."
   },
   {
     "id": 55,
@@ -1022,15 +854,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684651/altadensidad/kqn0mp9rkbxhtubreqof.jpg",
-    "description": "Se caracteriza por su perfil cítrico intenso y vibrante, pensado para transmitir frescura, dinamismo y energía mediterránea. Perfecto para uso diario, oficina, actividades al aire libre, viajes y climas cálidos.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Menta fresca · Manzana verde",
-      "Haba tonka · Geranio",
-      "Vainilla de Madagascar · Cedro"
-    ],
-    "h": 228
+    "description": "Se caracteriza por su perfil cítrico intenso y vibrante, pensado para transmitir frescura, dinamismo y energía mediterránea. Perfecto para uso diario, oficina, actividades al aire libre, viajes y climas cálidos."
   },
   {
     "id": 54,
@@ -1043,15 +867,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684593/altadensidad/vixara7umfctvro1wn1c.jpg",
-    "description": "Es una interpretación más cálida y apasionada del clásico Eros, diseñada para transmitir fuerza, amor y sensualidad con un perfil cítrico, especiado y ambarado. Ideal para citas románticas, eventos nocturnos y climas fríos o templados.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Menta fresca · Manzana verde",
-      "Haba tonka · Geranio",
-      "Vainilla de Madagascar · Cedro"
-    ],
-    "h": 265
+    "description": "Es una interpretación más cálida y apasionada del clásico Eros, diseñada para transmitir fuerza, amor y sensualidad con un perfil cítrico, especiado y ambarado. Ideal para citas románticas, eventos nocturnos y climas fríos o templados."
   },
   {
     "id": 53,
@@ -1077,15 +893,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1778549276/altadensidad/newxtcztyebvsp36m0yo.jpg",
-    "description": "Es una fragancia moderna, vibrante y sofisticada, reconocida por su carácter afrutado y almizclado, con gran duración y proyección. Perfecto para eventos nocturnos, climas templados o cálidos, y ocasiones especiales.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 282
+    "description": "Es una fragancia moderna, vibrante y sofisticada, reconocida por su carácter afrutado y almizclado, con gran duración y proyección. Perfecto para eventos nocturnos, climas templados o cálidos, y ocasiones especiales."
   },
   {
     "id": 51,
@@ -1124,15 +932,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684118/altadensidad/er2iapojes1ezuvwlbd2.jpg",
-    "description": "Es una fragancia elegante, delicada y sofisticada, inspirada en los matices de la amatista y los jardines de iris al amanecer. Ideal para uso diario, oficina, reuniones sociales y climas templados o frescos.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 201
+    "description": "Es una fragancia elegante, delicada y sofisticada, inspirada en los matices de la amatista y los jardines de iris al amanecer. Ideal para uso diario, oficina, reuniones sociales y climas templados o frescos."
   },
   {
     "id": 48,
@@ -1145,15 +945,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777684012/altadensidad/mehi5mmdeo7rrmqcup3u.jpg",
-    "description": "Es un Eau de Parfum con un carácter elegante, moderno y sofisticado, pensado para mujeres seguras y con estilo.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Naranja de Sicilia · Bergamota",
-      "Rosa de mayo · Jazmín",
-      "Pachulí de Indonesia · Vetiver"
-    ],
-    "h": 343
+    "description": "Es un Eau de Parfum con un carácter elegante, moderno y sofisticado, pensado para mujeres seguras y con estilo."
   },
   {
     "id": 47,
@@ -1166,15 +958,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777683896/altadensidad/ttmv9z8hnjci0ltt21nn.jpg",
-    "description": "Es un Eau de Parfum femenino con un perfil dulce, cremoso y gourmand, que transmite una sensación acogedora y romántica.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Oud ahumado y feromonas"
-    ],
-    "h": 242
+    "description": "Es un Eau de Parfum femenino con un perfil dulce, cremoso y gourmand, que transmite una sensación acogedora y romántica."
   },
   {
     "id": 46,
@@ -1187,15 +971,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777683787/altadensidad/imdqhqyohvxkises7tqe.jpg",
-    "description": "Es ideal para quienes disfrutan de fragancias azucaradas, juveniles y envolventes, con buena duración y proyección.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Heliotropo · Orquídea",
-      "Frutas tropicales",
-      "Vainilla · Sándalo"
-    ],
-    "h": 299
+    "description": "Es ideal para quienes disfrutan de fragancias azucaradas, juveniles y envolventes, con buena duración y proyección."
   },
   {
     "id": 45,
@@ -1286,15 +1062,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680941/altadensidad/qh5vyof9np4jw3grfpwm.jpg",
-    "description": "Bleu de Chanel es uno de los perfumes masculinos más icónicos y versátiles del mercado, con un perfil amaderado-aromático que transmite elegancia, libertad y sofisticación.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Limón · Menta fresca",
-      "Jengibre · Jazmín",
-      "Incienso · Cedro · Sándalo"
-    ],
-    "h": 20
+    "description": "Bleu de Chanel es uno de los perfumes masculinos más icónicos y versátiles del mercado, con un perfil amaderado-aromático que transmite elegancia, libertad y sofisticación."
   },
   {
     "id": 37,
@@ -1307,15 +1075,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680868/altadensidad/ngi1d015f76jvrmjkaso.jpg",
-    "description": "Bharara Rose es una fragancia femenina, reconocida por su carácter floral dulce y elegante, pensada para quienes buscan un perfume romántico y sofisticado.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 188
+    "description": "Bharara Rose es una fragancia femenina, reconocida por su carácter floral dulce y elegante, pensada para quienes buscan un perfume romántico y sofisticado."
   },
   {
     "id": 36,
@@ -1328,15 +1088,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680752/altadensidad/dvfjhwixbvtw22cz60nr.jpg",
-    "description": "Bharara Niche es una fragancia unisex y ligeramente gourmand, ideal para quienes buscan un perfume elegante pero versátil.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 262
+    "description": "Bharara Niche es una fragancia unisex y ligeramente gourmand, ideal para quienes buscan un perfume elegante pero versátil."
   },
   {
     "id": 35,
@@ -1349,15 +1101,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777680632/altadensidad/acmdnhq9mihvqyh8vbod.jpg",
-    "description": "Bharara King es un perfume masculino. Es reconocido por su carácter poderoso, desafiante y moderno.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Naranja · Bergamota",
-      "Tutti-frutti",
-      "Vainilla blanca · Ámbar"
-    ],
-    "h": 225
+    "description": "Bharara King es un perfume masculino. Es reconocido por su carácter poderoso, desafiante y moderno."
   },
   {
     "id": 34,
@@ -1409,15 +1153,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679909/altadensidad/pnghlzez7bshplpyxztb.jpg",
-    "description": "Reconocida por su carácter oriental especiado y gourmand, con una intensidad que la hace ideal para la noche y climas fríos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 356
+    "description": "Reconocida por su carácter oriental especiado y gourmand, con una intensidad que la hace ideal para la noche y climas fríos."
   },
   {
     "id": 30,
@@ -1443,15 +1179,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679479/altadensidad/b0u6msjw28hbpv5kmjhm.jpg",
-    "description": "Amber Rouge de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter sofisticado y envolvente.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Corazón floral de autor",
-      "Ámbar cálido y feromonas"
-    ],
-    "h": 60
+    "description": "Amber Rouge de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter sofisticado y envolvente."
   },
   {
     "id": 28,
@@ -1477,15 +1205,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777679070/altadensidad/scuvoy6yhf2fvmoyugxu.jpg",
-    "description": "El Amber Noir de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter fresco, amaderado y elegante.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 134
+    "description": "El Amber Noir de Orientica es una fragancia unisex de la colección Luxury, reconocida por su carácter fresco, amaderado y elegante."
   },
   {
     "id": 26,
@@ -1524,15 +1244,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777678488/altadensidad/kzpmx646qiv7f3ayulug.jpg",
-    "description": "Black XS L’Aphrodisiaque de Paco Rabanne es una fragancia masculina intensa, oscura y seductora. Se caracteriza por su mezcla de especias cálidas, miel y notas gourmand que evocan un estilo rockero y atrevido.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Notas cítricas vibrantes",
-      "Especias orientales",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 154
+    "description": "Black XS L’Aphrodisiaque de Paco Rabanne es una fragancia masculina intensa, oscura y seductora. Se caracteriza por su mezcla de especias cálidas, miel y notas gourmand que evocan un estilo rockero y atrevido."
   },
   {
     "id": 23,
@@ -1597,15 +1309,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777677433/altadensidad/orin0rwghlqqqhsghir1.jpg",
-    "description": "El perfume 9PM de Afnan es una fragancia masculina muy popular por su carácter dulce, cálido y seductor, ideal para la noche y climas frescos.",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Manzana silvestre · Canela",
-      "Flor de azahar",
-      "Vainilla · Haba tonka"
-    ],
-    "h": 326
+    "description": "El perfume 9PM de Afnan es una fragancia masculina muy popular por su carácter dulce, cálido y seductor, ideal para la noche y climas frescos."
   },
   {
     "id": 18,
@@ -1618,15 +1322,7 @@ export const DATOS_DUROS_PRODUCTOS = [
     ],
     "bottleTypes": [],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777677296/altadensidad/sbuhaxcnp1bntjjmsygn.jpg",
-    "description": "El perfume 212 VIP Rosé de Carolina Herrera es una fragancia femenina fresca, festiva y sofisticada, inspirada en el glamour urbano y la vida nocturna.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Champaña rosada",
-      "Flor de durazno",
-      "Madera reina · Feromonas"
-    ],
-    "h": 0
+    "description": "El perfume 212 VIP Rosé de Carolina Herrera es una fragancia femenina fresca, festiva y sofisticada, inspirada en el glamour urbano y la vida nocturna."
   },
   {
     "id": 17,
@@ -1642,15 +1338,7 @@ export const DATOS_DUROS_PRODUCTOS = [
       "Vidrio"
     ],
     "image": "https://res.cloudinary.com/dfgmxywkt/image/upload/v1777675965/altadensidad/ycyamcrucoi2jhwq77w5.jpg",
-    "description": "El perfume 212 Sexy de Carolina Herrera es una fragancia femenina de carácter dulce, misterioso y seductor, ideal para la noche y ocasiones especiales.",
-    "f": "Cítrica / Fresca",
-    "o": "Noche",
-    "no": [
-      "Frutas frescas y bayas",
-      "Corazón floral de autor",
-      "Fondo amaderado y feromonas"
-    ],
-    "h": 148
+    "description": "El perfume 212 Sexy de Carolina Herrera es una fragancia femenina de carácter dulce, misterioso y seductor, ideal para la noche y ocasiones especiales."
   }
 ];
 
@@ -1663,13 +1351,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/SANTAL_33.jpg",
     "categoria": "Diseñador",
     "genero": "Unisex",
-    "f": "Amaderada",
-    "o": "Oficina",
-    "no": [
-      "Cardamomo · Iris",
-      "Papiro · Violeta",
-      "Sándalo · Cedro · Cuero"
-    ],
     "descripcion": "Santal 33 es un perfume amaderado y especiado, con un aire ahumado y sofisticado que lo ha convertido en un clásico moderno de la perfumería nicho.",
     "precio": 75000,
     "rating": 5
@@ -1682,13 +1363,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/ligth_blue.jpg",
     "categoria": "Diseñador",
     "genero": "Femenino",
-    "f": "Cítrica / Fresca",
-    "o": "Verano",
-    "no": [
-      "Manzana verde · Limón",
-      "Bambú · Jazmín",
-      "Cedro · Ámbar"
-    ],
     "descripcion": "Es una fragancia fresca, mediterránea y muy versátil, que se ha convertido en un clásico para climas cálidos y uso diario.",
     "precio": 75000,
     "rating": 4
@@ -1701,13 +1375,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/LACOSTE_BLANCA.png",
     "categoria": "Diseñador",
     "genero": "Masculino",
-    "f": "Aromática",
-    "o": "Oficina",
-    "no": [
-      "Pomelo · Cardamomo",
-      "Ylang-ylang · Nardo",
-      "Cedro de Virginia · Gamuza"
-    ],
     "descripcion": "Es una fragancia fresca, limpia y elegante, inspirada en la icónica camiseta polo blanca de Lacoste.",
     "precio": 65000,
     "rating": 4
@@ -1720,13 +1387,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/BHARARAKING.webp",
     "categoria": "Arabe",
     "genero": "Masculino",
-    "f": "Dulce / Gourmand",
-    "o": "Noche",
-    "no": [
-      "Naranja · Bergamota",
-      "Tutti-frutti",
-      "Vainilla blanca · Ámbar"
-    ],
     "descripcion": "Bharara King es un perfume masculino reconocido por su carácter poderoso, desafiante y moderno.",
     "precio": 110000,
     "rating": 5
@@ -1739,13 +1399,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/creed_adventus.webp",
     "categoria": "Diseñador",
     "genero": "Masculino",
-    "f": "Amaderada",
-    "o": "Noche",
-    "no": [
-      "Piña ahumada · Grosella",
-      "Abedul · Jazmín",
-      "Almizcle · Musgo de roble"
-    ],
     "descripcion": "Una de las fragancias más emblemáticas de la casa Creed, homenaje al poder, la visión y el éxito.",
     "precio": 70000,
     "rating": 4
@@ -1758,13 +1411,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/AMBER_OUD_GOLD.jpeg",
     "categoria": "Arabe",
     "genero": "Unisex",
-    "f": "Dulce / Gourmand",
-    "o": "Noche",
-    "no": [
-      "Bergamota · Notas verdes",
-      "Melón · Piña dulce",
-      "Ámbar · Vainilla"
-    ],
     "descripcion": "El Amber Oud Gold Edition de Al Haramain es una fragancia unisex de estilo oriental gourmand, dulce, cálida y sofisticada.",
     "precio": 125000,
     "rating": 5
@@ -1777,13 +1423,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/ADEE_AL_OUD_SUBLIME.webp",
     "categoria": "Arabe",
     "genero": "Unisex",
-    "f": "Especiada / Árabe",
-    "o": "Noche",
-    "no": [
-      "Manzana · Ciruela · Lichi",
-      "Rosa · Jazmín",
-      "Vainilla · Cedro · Pachulí"
-    ],
     "descripcion": "Badee Al Oud Sublime de Lattafa es un perfume unisex con un perfil afrutado, amaderado y oriental.",
     "precio": 110000,
     "rating": 5
@@ -1796,13 +1435,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/DONNA_BORN_IN_ROMA.jpeg",
     "categoria": "Diseñador",
     "genero": "Femenino",
-    "f": "Floral",
-    "o": "Noche",
-    "no": [
-      "Grosella negra · Pimienta rosa",
-      "Jazmín grandiflorum",
-      "Vainilla bourbon · Madera"
-    ],
     "descripcion": "Valentino Donna Born in Roma es una fragancia moderna, sofisticada y con un toque rebelde, inspirada en Roma.",
     "precio": 85000,
     "rating": 5
@@ -1815,13 +1447,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/VIP_212_BLACK.jpg",
     "categoria": "Diseñador",
     "genero": "Masculino",
-    "f": "Aromática",
-    "o": "Noche",
-    "no": [
-      "Absenta · Anís",
-      "Lavanda francesa",
-      "Cuero negro · Vainilla"
-    ],
     "descripcion": "212 VIP Black es un perfume masculino aromático y especiado con fondo cálido, ideal para ambientes sociales nocturnos.",
     "precio": 70000,
     "rating": 5
@@ -1834,13 +1459,6 @@ export const DATOS_DUROS_TOP10 = [
     "imagen": "assets/img/YARA_LATTAFA2.jpg",
     "categoria": "Arabe",
     "genero": "Femenino",
-    "f": "Dulce / Gourmand",
-    "o": "Oficina",
-    "no": [
-      "Heliotropo · Orquídea",
-      "Frutas tropicales",
-      "Vainilla · Sándalo"
-    ],
     "descripcion": "Yara de Lattafa es un perfume femenino dulce, floral y cremoso, juvenil y encantador con gran duración y versatilidad.",
     "precio": 110000,
     "rating": 5

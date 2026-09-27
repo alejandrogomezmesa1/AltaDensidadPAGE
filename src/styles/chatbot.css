@@ -416,9 +416,17 @@
   transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-.ia-btn-add:hover {
+.ia-btn-add:hover:not(:disabled) {
   filter: brightness(1.15);
   transform: scale(1.03);
+}
+
+/* Agotado o precio en revisión: no se puede añadir */
+.ia-btn-add:disabled {
+  background: transparent;
+  color: var(--c-mute, #9A958A);
+  border: 1px solid var(--c-line, #2A2A2D);
+  cursor: not-allowed;
 }
 
 /* ── Indicador de "Escribiendo..." ───────────────────────────────────── */

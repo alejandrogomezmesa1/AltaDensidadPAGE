@@ -9,6 +9,7 @@
 // ============================================================
 const { getConnection } = require('../config/db');
 const bridge = require('./dataBridge');
+const esquema = require('./esquema');
 
 const INTERVALO_MS = Math.max(15000, parseInt(process.env.DATA_SYNC_INTERVAL_MS || '60000', 10));
 const SINCRONIZAR_PRECIOS = process.env.DATA_SYNC_PRECIOS !== '0';
@@ -28,14 +29,22 @@ async function sincronizarCatalogo() {
     const pool = await getConnection();
 
     for (const tabla of ['Productos', 'Kits']) {
-        const [filas] = await pool.query(`SELECT id, precio, agotado, inventario_id FROM ${tabla} WHERE inventario_id IS NOT NULL`);
+        // Precio en revisión: DATA avisa cuando el precio de venta no cubre el costo (la tienda no lo vende)
+        const conRevision = esquema.clasificacion();
+        const [filas] = await pool.query(`SELECT id, precio, agotado, inventario_id${conRevision ? ', precio_revision' : ''} FROM ${tabla} WHERE inventario_id IS NOT NULL`);
         for (const f of filas) {
             const inv = porId.get(Number(f.inventario_id));
             if (!inv) continue; // El ítem ya no existe en DATA: no se toca
             const agotado = inv.stock <= 0 ? 1 : 0;
             const precio = SINCRONIZAR_PRECIOS && inv.price > 0 ? inv.price : Number(f.precio);
-            if (agotado !== Number(f.agotado) || precio !== Number(f.precio)) {
-                await pool.query(`UPDATE ${tabla} SET agotado = ?, precio = ? WHERE id = ?`, [agotado, precio, f.id]);
+            const revision = inv.priceReview ? 1 : 0;
+            const cambioRevision = conRevision && revision !== Number(f.precio_revision);
+            if (agotado !== Number(f.agotado) || precio !== Number(f.precio) || cambioRevision) {
+                if (conRevision) {
+                    await pool.query(`UPDATE ${tabla} SET agotado = ?, precio = ?, precio_revision = ? WHERE id = ?`, [agotado, precio, revision, f.id]);
+                } else {
+                    await pool.query(`UPDATE ${tabla} SET agotado = ?, precio = ? WHERE id = ?`, [agotado, precio, f.id]);
+                }
             }
         }
     }

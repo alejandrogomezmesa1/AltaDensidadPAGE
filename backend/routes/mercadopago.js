@@ -10,6 +10,7 @@ try {
 }
 const crypto = require("crypto");
 const dataSync = require("../services/dataSync");
+const esquema = require("../services/esquema");
 
 // Refleja en DATA el nuevo estado de la orden (venta o anulación). Nunca bloquea la respuesta.
 function sincronizarConData(external_reference, preference_id) {
@@ -88,11 +89,14 @@ router.post("/create_preference", async (req, res) => {
         if (isNaN(kitId)) {
           return res.status(400).json({ success: false, message: "ID de kit inválido" });
         }
-        const [kRows] = await pool.query("SELECT id, nombre, precio, imagen, activo FROM Kits WHERE id = ?", [kitId]);
+        const [kRows] = await pool.query(`SELECT id, nombre, precio, imagen, activo${esquema.clasificacion() ? ", precio_revision" : ""} FROM Kits WHERE id = ?`, [kitId]);
         if (kRows.length === 0 || !kRows[0].activo) {
           return res.status(400).json({ success: false, message: `Kit no disponible o inactivo (ID: ${kitId})` });
         }
         const kit = kRows[0];
+        if (kit.precio_revision) {
+          return res.status(409).json({ success: false, message: `${kit.nombre} está en revisión de precio y no se puede comprar en este momento. Retíralo de tu bolsa o escríbenos por WhatsApp.` });
+        }
         mpItems.push({
           id: itemIdStr,
           title: kit.nombre,
@@ -111,11 +115,14 @@ router.post("/create_preference", async (req, res) => {
       if (isNaN(prodId)) {
         return res.status(400).json({ success: false, message: `ID de producto inválido: ${itemIdStr}` });
       }
-      const [pRows] = await pool.query("SELECT id, nombre, precio, imagen, activo FROM Productos WHERE id = ?", [prodId]);
+      const [pRows] = await pool.query(`SELECT id, nombre, precio, imagen, activo${esquema.clasificacion() ? ", precio_revision" : ""} FROM Productos WHERE id = ?`, [prodId]);
       if (pRows.length === 0 || !pRows[0].activo) {
         return res.status(400).json({ success: false, message: `Producto no disponible o inactivo (ID: ${prodId})` });
       }
       const prod = pRows[0];
+      if (prod.precio_revision) {
+        return res.status(409).json({ success: false, message: `${prod.nombre} está en revisión de precio y no se puede comprar en este momento. Retíralo de tu bolsa o escríbenos por WhatsApp.` });
+      }
       mpItems.push({
         id: String(prod.id),
         title: prod.nombre,

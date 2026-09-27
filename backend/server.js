@@ -16,6 +16,7 @@ const chatbotRouter = require('./routes/chatbot');
 const integracionRouter = require('./routes/integracion');
 const dataSync = require('./services/dataSync');
 const { ejecutarMigraciones } = require('./migrator');
+const esquema = require('./services/esquema');
 
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -149,6 +150,7 @@ if (process.env.VERCEL !== '1') {
             // Migraciones versionadas del esquema (ver backend/migrations).
             // Si alguna falla, el servidor arranca igual y la integración con DATA queda deshabilitada.
             const migraciones = await ejecutarMigraciones(pool);
+            esquema.fijar(migraciones.aplicadas);
             await dataSync.iniciar(pool, migraciones.aplicadas.has('004'));
 
             const server = app.listen(PORT, () => {

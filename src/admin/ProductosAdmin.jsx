@@ -2,12 +2,28 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
   formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, Visible, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas
 } from './comunes';
 
 const TALLAS = ['30ml', '50ml', '60ml', '100ml', '120ml', '200ml'];
 const ENVASES = ['Vidrio', 'Plástico', 'Aluminio', 'Recargable'];
-const VACIO = { id: '', nombre: '', descripcion: '', categoria: '', genero: '', precio: '', rating: '4', imagen: '', activo: true, sizes: [], bottleTypes: [], inventario_id: '' };
+const NOTAS_VACIAS = { top: [], heart: [], base: [] };
+const VACIO = {
+  id: '', nombre: '', descripcion: '', categoria: '', genero: '', precio: '', rating: '4', imagen: '', activo: true,
+  sizes: [], bottleTypes: [], inventario_id: '',
+  marca: '', original: '', familiaId: '', acordes: [], notas: NOTAS_VACIAS
+};
+
+// Cuántos bloques de la ficha están completos: marca, original, familia + acordes, pirámide
+function completitud(p) {
+  const n = p.notes || NOTAS_VACIAS;
+  return [
+    !!p.brand,
+    !!p.originalName,
+    !!p.family && (p.accords || []).length > 0,
+    n.top.length > 0 && n.heart.length > 0 && n.base.length > 0
+  ].filter(Boolean).length;
+}
 
 export default function ProductosAdmin({ alerta }) {
   const [productos, setProductos] = useState([]);
@@ -19,6 +35,7 @@ export default function ProductosAdmin({ alerta }) {
   const [invListo, setInvListo] = useState(false);
   const [invalidos, setInvalidos] = useState([]);
   const [guardando, setGuardando] = useState(false);
+  const [catalogos, setCatalogos] = useState({ brands: [], families: [], accords: [], notes: [] });
 
   const cargar = useCallback(async () => {
     setEstado('cargando');
@@ -34,15 +51,24 @@ export default function ProductosAdmin({ alerta }) {
 
   useEffect(() => { cargar(); }, [cargar]);
 
+  // Marcas, familias, acordes y notas existentes (sugerencias del formulario)
+  const cargarCatalogos = useCallback(() => {
+    apiJson('productos/clasificacion', { auth: false }).then((d) => setCatalogos(d.data)).catch(() => {});
+  }, []);
+  useEffect(() => { cargarCatalogos(); }, [cargarCatalogos]);
+  const nombres = (lista) => lista.map((x) => x.name);
+
   const q = busqueda.toLowerCase();
   const { pagina, filtrados, actual, totalPags, setPagina } = usePaginado(productos,
-    (p) => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || p.gender.toLowerCase().includes(q), 10);
+    (p) => [p.name, p.category, p.gender, p.brand && p.brand.name, p.originalName].some((t) => t && t.toLowerCase().includes(q)), 10);
 
   const abrir = (p) => {
     setForm(p ? {
       id: p.id, nombre: p.name, descripcion: p.description || '', categoria: p.category, genero: p.gender,
       precio: p.price, rating: String(p.rating ?? 4), imagen: p.image || '', activo: !!p.activo,
-      sizes: p.sizes || [], bottleTypes: p.bottleTypes || [], inventario_id: p.inventario_id || ''
+      sizes: p.sizes || [], bottleTypes: p.bottleTypes || [], inventario_id: p.inventario_id || '',
+      marca: p.brand ? p.brand.name : '', original: p.originalName || '', familiaId: p.family ? String(p.family.id) : '',
+      acordes: p.accords || [], notas: p.notes || NOTAS_VACIAS
     } : VACIO);
     setArchivo(null);
     setInvListo(false);
@@ -74,11 +100,17 @@ export default function ProductosAdmin({ alerta }) {
         name: nombre, description: form.descripcion.trim(), category: form.categoria, gender: form.genero,
         price: precio, rating: parseInt(form.rating, 10), image, sizes: form.sizes, bottleTypes: form.bottleTypes,
         activo: form.activo ? 1 : 0,
-        ...(invListo ? { inventario_id: form.inventario_id ? Number(form.inventario_id) : null } : {})
+        ...(invListo ? { inventario_id: form.inventario_id ? Number(form.inventario_id) : null } : {}),
+        brand: form.marca.trim() || null,
+        originalName: form.original.trim() || null,
+        familyId: form.familiaId ? Number(form.familiaId) : null,
+        accords: form.acordes,
+        notes: form.notas
       };
       await apiJson(form.id ? `productos/${form.id}` : 'productos', { method: form.id ? 'PUT' : 'POST', body: payload });
       setModal(false);
       await cargar();
+      cargarCatalogos();
       toastOk(form.id ? 'Producto actualizado' : 'Producto creado');
     } catch (err) {
       alerta('Error al guardar: ' + err.message, 'error');
@@ -124,21 +156,24 @@ export default function ProductosAdmin({ alerta }) {
       <div className="tabla-wrapper">
         <table className="tabla-productos">
           <thead>
-            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Categoría</th><th>Género</th><th>Precio</th><th>Rating</th><th>Tallas</th><th>Visible</th><th>Acciones</th></tr>
+            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Marca</th><th>Categoría</th><th>Género</th><th>Precio</th><th>Ficha</th><th>Tallas</th><th>Visible</th><th>Acciones</th></tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
-              <FilaEstado columnas={10} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
+              <FilaEstado columnas={11} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'} />
             ) : pagina.map((p) => (
               <tr key={p.id}>
                 <td data-label="#">{p.id}</td>
                 <td data-label="Imagen"><ImagenCelda src={p.image} /></td>
-                <td data-label="Nombre"><strong>{p.name}</strong></td>
+                <td data-label="Nombre"><strong>{p.name}</strong>{p.originalName && <><br /><small style={{ color: 'var(--c-mute)' }}>Inspirado en {p.originalName}</small></>}</td>
+                <td data-label="Marca">{p.brand ? p.brand.name : '—'}</td>
                 <td data-label="Categoría">{p.category}</td>
                 <td data-label="Género">{p.gender}</td>
-                <td data-label="Precio">{formatPrecio(p.price)}</td>
-                <td data-label="Rating">{p.rating || 0} <i className="fas fa-star" style={{ color: '#f1c40f', fontSize: '0.8rem' }} /></td>
+                <td data-label="Precio">{formatPrecio(p.price)}{p.priceReview ? <><br /><small style={{ color: 'var(--err)' }} title="El precio en DATA no cubre el costo: la tienda no lo vende">En revisión</small></> : null}</td>
+                <td data-label="Ficha" title="Marca · Original · Familia y acordes · Pirámide de notas">
+                  <span className={`ficha-estado ${completitud(p) === 4 ? 'completa' : ''}`}>{completitud(p)}/4</span>
+                </td>
                 <td data-label="Tallas">{(p.sizes || []).join(', ') || '-'}</td>
                 <td data-label="Visible"><Visible activo={p.activo} agotado={p.agotado} /></td>
                 <td data-label="Acciones">
@@ -175,10 +210,10 @@ export default function ProductosAdmin({ alerta }) {
               <input type="text" id="inputNombre" placeholder="Ej: One Million – Paco Rabanne" required {...campo('nombre')} />
             </div>
             <div className="form-group full">
-              <label htmlFor="inputDescripcion">Descripción & Pirámide Olfativa</label>
-              <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción y notas olfativas (Salida, Corazón, Fondo)..." {...campo('descripcion')} />
+              <label htmlFor="inputDescripcion">Descripción</label>
+              <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción de la fragancia..." {...campo('descripcion')} />
               <small className="hint-data">
-                💡 <em>Tip: Puedes copiar de Fragrantica las notas de Salida, Corazón y Fondo para tener una ficha técnica precisa.</em>
+                💡 <em>Las notas de salida, corazón y fondo que consultes en Fragrantica van en la sección Clasificación, abajo: así la tienda puede filtrar por ellas.</em>
               </small>
             </div>
             <div className="form-group">
@@ -230,6 +265,41 @@ export default function ProductosAdmin({ alerta }) {
               <label>Tipos de envase</label>
               <Casillas opciones={ENVASES} marcadas={form.bottleTypes} onCambiar={(bottleTypes) => setForm((f) => ({ ...f, bottleTypes }))} />
             </div>
+            <div className="form-seccion">
+              <h4>Clasificación</h4>
+              <small>Se usa en los filtros y en la ficha de la tienda</small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputMarca">Marca (casa original)</label>
+              <input id="inputMarca" type="text" list="dl-marcas" placeholder="Ej: Dior, Lattafa"
+                value={form.marca} onChange={(e) => setForm((f) => ({ ...f, marca: e.target.value }))} />
+              <datalist id="dl-marcas">{nombres(catalogos.brands).map((m) => <option key={m} value={m} />)}</datalist>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputOriginal">Perfume original</label>
+              <input id="inputOriginal" type="text" placeholder="Ej: Sauvage (sin la marca)"
+                value={form.original} onChange={(e) => setForm((f) => ({ ...f, original: e.target.value }))} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputFamilia">Familia olfativa</label>
+              <select id="inputFamilia" value={form.familiaId} onChange={(e) => setForm((f) => ({ ...f, familiaId: e.target.value }))}>
+                <option value="">-- Sin definir --</option>
+                {catalogos.families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+              </select>
+            </div>
+            <div className="form-group full">
+              <label htmlFor="inputAcordes">Acordes principales <small>(del más al menos dominante)</small></label>
+              <CampoEtiquetas id="inputAcordes" valores={form.acordes} sugerencias={nombres(catalogos.accords)}
+                placeholder="Escribe y pulsa Enter: Vainilla, Amaderado…" onCambiar={(acordes) => setForm((f) => ({ ...f, acordes }))} />
+            </div>
+            {[['top', 'Notas de salida', 'Bergamota, Pimienta…'], ['heart', 'Notas de corazón', 'Lavanda, Geranio…'], ['base', 'Notas de fondo', 'Ambroxan, Cedro…']].map(([nivel, titulo, ejemplo]) => (
+              <div className="form-group full" key={nivel}>
+                <label htmlFor={`inputNotas-${nivel}`}>{titulo}</label>
+                <CampoEtiquetas id={`inputNotas-${nivel}`} valores={form.notas[nivel]} sugerencias={nombres(catalogos.notes)}
+                  placeholder={`Escribe y pulsa Enter: ${ejemplo}`}
+                  onCambiar={(lista) => setForm((f) => ({ ...f, notas: { ...f.notas, [nivel]: lista } }))} />
+              </div>
+            ))}
             <div className="form-group">
               <label>Visibilidad</label>
               <label className="check-item">

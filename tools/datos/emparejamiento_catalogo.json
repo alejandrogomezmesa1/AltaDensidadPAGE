@@ -1,0 +1,303 @@
+{
+  "_descripcion": "Emparejamiento web ⇄ DATA (27-09-2026). web = id en Productos/Kits de la tienda; data = id en inventario de DATA. 'dudosa' = revisar antes de aplicar.",
+  "productos": [
+    {
+      "web": 90,
+      "data": 5
+    },
+    {
+      "web": 103,
+      "data": 32
+    },
+    {
+      "web": 18,
+      "data": 14
+    },
+    {
+      "web": 28,
+      "data": 34
+    },
+    {
+      "web": 29,
+      "data": 35
+    },
+    {
+      "web": 99,
+      "data": 31
+    },
+    {
+      "web": 34,
+      "data": 7,
+      "nota": "Lattafa Morada = Badee Al Oud Amethyst"
+    },
+    {
+      "web": 39,
+      "data": 64,
+      "nota": "Lattafa Rosada = Badee Al Oud Noble Blush"
+    },
+    {
+      "web": 23,
+      "data": 6,
+      "nota": "Lattafa Roja = Badee Al Oud Sublime"
+    },
+    {
+      "web": 35,
+      "data": 24
+    },
+    {
+      "web": 40,
+      "data": 68
+    },
+    {
+      "web": 47,
+      "data": 19
+    },
+    {
+      "web": 73,
+      "data": 21
+    },
+    {
+      "web": 48,
+      "data": 66
+    },
+    {
+      "web": 96,
+      "data": 16
+    },
+    {
+      "web": 95,
+      "data": 33
+    },
+    {
+      "web": 100,
+      "data": 28
+    },
+    {
+      "web": 52,
+      "data": 73
+    },
+    {
+      "web": 55,
+      "data": 75
+    },
+    {
+      "web": 54,
+      "data": 26
+    },
+    {
+      "web": 53,
+      "data": 25,
+      "nota": "Eros Azul = Eros Versace"
+    },
+    {
+      "web": 56,
+      "data": 69
+    },
+    {
+      "web": 87,
+      "data": 77
+    },
+    {
+      "web": 102,
+      "data": 76
+    },
+    {
+      "web": 62,
+      "data": 30
+    },
+    {
+      "web": 98,
+      "data": 63
+    },
+    {
+      "web": 63,
+      "data": 72
+    },
+    {
+      "web": 104,
+      "data": 29
+    },
+    {
+      "web": 64,
+      "data": 9
+    },
+    {
+      "web": 65,
+      "data": 10
+    },
+    {
+      "web": 68,
+      "data": 3
+    },
+    {
+      "web": 69,
+      "data": 65
+    },
+    {
+      "web": 72,
+      "data": 17
+    },
+    {
+      "web": 79,
+      "data": 20
+    },
+    {
+      "web": 58,
+      "data": 8
+    },
+    {
+      "web": 49,
+      "data": 13
+    },
+    {
+      "web": 80,
+      "data": 11
+    },
+    {
+      "web": 101,
+      "data": 12
+    },
+    {
+      "web": 81,
+      "data": 15
+    },
+    {
+      "web": 82,
+      "data": 1
+    },
+    {
+      "web": 51,
+      "data": 2
+    },
+    {
+      "web": 21,
+      "data": 44
+    },
+    {
+      "web": 83,
+      "data": 18
+    },
+    {
+      "web": 86,
+      "data": 4
+    },
+    {
+      "web": 43,
+      "data": 37
+    },
+    {
+      "web": 41,
+      "data": 71
+    },
+    {
+      "web": 97,
+      "data": 23
+    },
+    {
+      "web": 91,
+      "data": 22
+    },
+    {
+      "web": 92,
+      "data": 27
+    }
+  ],
+  "kits": [
+    {
+      "web": 10,
+      "data": 42
+    },
+    {
+      "web": 22,
+      "data": 55
+    },
+    {
+      "web": 18,
+      "data": 40
+    },
+    {
+      "web": 23,
+      "data": 39
+    },
+    {
+      "web": 14,
+      "data": 60
+    },
+    {
+      "web": 21,
+      "data": 47
+    },
+    {
+      "web": 20,
+      "data": 45
+    },
+    {
+      "web": 19,
+      "data": 49
+    }
+  ],
+  "crear_en_data": {
+    "_regla": "Perfumes y kits activos de la web sin pareja: se crean en DATA con el precio web, stock 0 y costo pendiente (0).",
+    "productos": "todos los que no estén emparejados",
+    "kits_activos": true
+  },
+  "crear_en_web": [
+    {
+      "data": 70,
+      "nombre": "212 MEN CAROLINA HERRERA",
+      "categoria": "Diseñador",
+      "genero": "Masculino",
+      "marca": "Carolina Herrera"
+    },
+    {
+      "data": 74,
+      "nombre": "EMEER",
+      "categoria": "Arabe",
+      "genero": "Unisex"
+    },
+    {
+      "data": 36,
+      "nombre": "LACOSTE ROSADA",
+      "categoria": "Diseñador",
+      "genero": "Femenino",
+      "marca": "Lacoste"
+    },
+    {
+      "data": 78,
+      "nombre": "POLO BLUE RALPH LAUREN",
+      "categoria": "Diseñador",
+      "genero": "Masculino",
+      "marca": "Ralph Lauren"
+    }
+  ],
+  "crear_kits_en_web": [
+    {
+      "data": 41,
+      "nombre": "KIT CLUB DE NUIT"
+    },
+    {
+      "data": 93,
+      "nombre": "KIT CREMA + LOCIÓN"
+    }
+  ],
+  "dudosas_sin_enlazar": {
+    "_decision": "27-09-2026: se dejan separadas; los perfumes web se crean nuevos en DATA. Para unirlos luego, pasarlos a \"productos\".",
+    "parejas": [
+      {
+        "web": 20,
+        "data": 80,
+        "dudosa": "Web: 360° Perry Ellis (femenino) · DATA: Perry Elish 360 Red (masculino)"
+      },
+      {
+        "web": 45,
+        "data": 67,
+        "dudosa": "Web: Can Can Paris Hilton · DATA: By Paris Hilton"
+      },
+      {
+        "web": 61,
+        "data": 38,
+        "dudosa": "Web: Invictus Paco Rabanne · DATA: Invictus Platinum"
+      }
+    ]
+  }
+}

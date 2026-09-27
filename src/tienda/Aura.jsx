@@ -258,6 +258,7 @@ function TarjetaProducto({ prod, onAgregar }) {
   const nombre = prodNombre(prod);
   // Los kits del API solo traen "nombre"; los perfumes traen "name"
   const esKit = !prod.name && !!prod.nombre;
+  const bloqueo = (prod.priceReview || prod.precio_revision) ? 'En revisión' : (Number(prod.agotado) === 1 ? 'Agotado' : null);
   return (
     <div className="ia-product-card">
       <img src={normalizarImagen(prodImagen(prod))} alt={nombre} className="ia-prod-img" onError={(e) => { e.currentTarget.src = LOGO; }} />
@@ -267,9 +268,13 @@ function TarjetaProducto({ prod, onAgregar }) {
         <div className="ia-prod-price">${prodPrecio(prod).toLocaleString('es-CO')} COP</div>
       </div>
       <div className="ia-prod-actions">
-        <button type="button" className="ia-btn-add" onClick={() => onAgregar((esKit ? 'kit_' : '') + String(prodId(prod)))}>
-          <i className="fas fa-cart-plus" /> Añadir
-        </button>
+        {bloqueo ? (
+          <button type="button" className="ia-btn-add" disabled aria-disabled="true">{bloqueo}</button>
+        ) : (
+          <button type="button" className="ia-btn-add" onClick={() => onAgregar((esKit ? 'kit_' : '') + String(prodId(prod)))}>
+            <i className="fas fa-cart-plus" /> Añadir
+          </button>
+        )}
       </div>
     </div>
   );
