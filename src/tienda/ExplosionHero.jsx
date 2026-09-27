@@ -1,13 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
+import { gsap, useGSAP, MQ, desplazarA } from '../lib/gsap';
 import { useTienda } from './TiendaContext';
 import { noDisponible } from '../lib/producto';
-
-gsap.registerPlugin(useGSAP);
-
-const MOVIL = '(max-width: 820px)';
-const REDUCIR = '(prefers-reduced-motion: reduce)';
 
 // SVG de la gota dorada de perfume puro de feromonas
 function GotaIcono() {
@@ -28,8 +22,6 @@ function GotaIcono() {
     </svg>
   );
 }
-
-const irAColeccion = () => document.getElementById('coleccion')?.scrollIntoView({ behavior: 'smooth' });
 
 // Explosión del frasco del hero en gotas de referencias (GSAP): una sola línea de tiempo con
 // etiquetas por fase, animaciones dentro de contextSafe para que se reviertan al desmontar.
@@ -53,18 +45,22 @@ const ExplosionHero = forwardRef(function ExplosionHero({ envolturaRef, heroRef 
     if (tlRef.current && tlRef.current.progress() < 1) return;
     const frasco = envolturaRef?.current;
     const hero = heroRef?.current;
-    if (!frasco || !hero || window.matchMedia(REDUCIR).matches) { irAColeccion(); return; }
+    if (!frasco || !hero || window.matchMedia(MQ.reducir).matches) { desplazarA('#coleccion'); return; }
 
     const texto = hero.querySelector('.hero-t');
-    const movil = window.matchMedia(MOVIL).matches;
+    const movil = window.matchMedia(MQ.movil).matches;
     // En móvil caben menos etiquetas sin solaparse
     const todas = gotasRefs.current.filter(Boolean);
     const gotas = movil ? todas.slice(0, 12) : todas;
     const tarjetas = gsap.utils.toArray('#coleccion .grid .card');
 
     // Lecturas de geometría primero, escrituras después
-    const rFrasco = frasco.getBoundingClientRect();
+    // El frasco visible (con flotación y parallax aplicados) no coincide con el centro de la
+    // envoltura: se escala desde el centro visible y se traslada ese mismo punto
+    const rEnvoltura = frasco.getBoundingClientRect();
+    const rFrasco = (frasco.querySelector('.hero-flote') || frasco).getBoundingClientRect();
     const rHero = hero.getBoundingClientRect();
+    const origen = `${rFrasco.left + rFrasco.width / 2 - rEnvoltura.left}px ${rFrasco.top + rFrasco.height / 2 - rEnvoltura.top}px`;
     // Centro de la parte visible del hero (bajo la cabecera): en móvil el botón queda abajo y el
     // hero suele estar desplazado, así la explosión ocurre donde el usuario está mirando
     const techo = Math.max(rHero.top, document.querySelector('header')?.getBoundingClientRect().bottom || 0);
@@ -90,6 +86,7 @@ const ExplosionHero = forwardRef(function ExplosionHero({ envolturaRef, heroRef 
 
     setAnimando(true);
     hero.classList.add('en-explosion');
+    gsap.set(frasco, { transformOrigin: origen });
     gsap.set(todas, { x: cx, y: cy, xPercent: -50, yPercent: -50, scale: 0.05, autoAlpha: 0 });
 
     const restaurar = contextSafe(() => {
@@ -138,8 +135,9 @@ const ExplosionHero = forwardRef(function ExplosionHero({ envolturaRef, heroRef 
         duration: 0.95, ease: 'power2.in', stagger: { amount: 0.12, from: 'random' }
       }, 'salida')
 
-      // Fase 4: desplazamiento a la colección y revelado escalonado de sus tarjetas
-      .call(irAColeccion, null, 'salida+=0.2');
+      // Fase 4: desplazamiento a la colección (ScrollToPlugin, dentro de la línea de tiempo)
+      // y revelado escalonado de sus tarjetas
+      .add(desplazarA('#coleccion', { duration: 1.2 }), 'salida+=0.2');
     if (tarjetas.length) {
       tl.fromTo(tarjetas, { autoAlpha: 0, y: 45, scale: 0.95 }, {
         autoAlpha: 1, y: 0, scale: 1, duration: 0.65, ease: 'power2.out',

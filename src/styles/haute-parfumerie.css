@@ -600,6 +600,47 @@ header.haute-header nav {
   will-change: transform;
 }
 
+/* Contenedor de la página de inicio: no altera el layout, solo delimita los efectos de scroll */
+.inicio {
+  display: contents;
+}
+
+/* Barra de progreso de lectura (efectosScroll.js) */
+.progreso-scroll {
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--c-accent) 55%, transparent), var(--c-accent));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  z-index: calc(var(--z-header) + 1);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Capa de parallax del frasco: GSAP la desplaza con el scroll (efectosScroll.js) */
+.hero-parallax {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  will-change: transform;
+}
+
+/* Líneas de SplitText: la máscara recorta la subida; un respiro para acentos, descendentes y
+   cursivas que el padding da y el margen negativo devuelve. El titular partido pasa a columna
+   flex porque en bloque los márgenes negativos de líneas vecinas colapsarían y lo alargarían. */
+:is(h1, h2):has(> .linea-mask) {
+  display: flex;
+  flex-direction: column;
+}
+
+.linea-mask {
+  padding: 0.1em 0.12em 0.1em 0;
+  margin: -0.1em -0.12em -0.1em 0;
+}
+
 /* Capa interna que GSAP hace flotar y girar (Inicio.jsx) */
 .hero-flote {
   display: grid;

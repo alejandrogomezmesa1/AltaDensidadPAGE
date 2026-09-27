@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { gsap } from 'gsap';
-import { useGSAP } from '@gsap/react';
+import { gsap, ScrollTrigger, useGSAP, MQ } from '../lib/gsap';
+import { useHeroScroll, useSeccionesScroll } from '../tienda/efectosScroll';
 import { useTienda } from '../tienda/TiendaContext';
 import { Coleccion, Ranking, Envases, Kits } from '../tienda/Secciones';
 import { usePagina, JsonLd } from '../lib/hooks';
@@ -8,21 +8,19 @@ import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
 import ExplosionHero from '../tienda/ExplosionHero';
 
-gsap.registerPlugin(useGSAP);
-
 // Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en segundos
 const VUELTA_S = 9;
 const FLOTE_S = 4.5;
 const GIRO_MAX = 6; // grados de inclinación máxima (puntero en el borde del escenario)
 
-// Frasco del hero flotando: se inclina como si un puntero le diera vueltas. El giro y la flotación
-// viven en un elemento interno para no competir con la explosión, que anima la envoltura.
+// Frasco del hero flotando: se inclina como si un puntero le diera vueltas. Cada movimiento tiene
+// su capa para no competir por transform: envoltura = explosión, parallax = scroll, flote = giro.
 function HeroImagen({ envolturaRef, onDisparar }) {
   const floteRef = useRef(null);
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
+    mm.add(MQ.animar, () => {
       const el = floteRef.current;
       gsap.set(el, { transformPerspective: 800 });
       const girarY = gsap.quickSetter(el, 'rotationY', 'deg');
@@ -35,20 +33,24 @@ function HeroImagen({ envolturaRef, onDisparar }) {
       const vaiven = gsap.fromTo(el, { y: -4 }, { y: -12, duration: FLOTE_S / 2, ease: 'sine.inOut', yoyo: true, repeat: -1 });
 
       // Fuera de pantalla no se gasta ni un fotograma
-      const obs = new IntersectionObserver(([e]) => [giro, vaiven].forEach((a) => (e.isIntersecting ? a.resume() : a.pause())));
-      obs.observe(el);
-      return () => obs.disconnect();
+      ScrollTrigger.create({
+        trigger: el, start: 'top bottom', end: 'bottom top',
+        onToggle: ({ isActive }) => [giro, vaiven].forEach((a) => (isActive ? a.resume() : a.pause()))
+      });
     });
+    return () => mm.revert();
   }, { scope: floteRef });
 
   return (
     <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias" onClick={onDisparar} title="Haz clic para liberar la esencia">
       <div className="hero-image-wrap" ref={envolturaRef}>
-        <div className="hero-flote" ref={floteRef}>
-          <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
-            className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
-          <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
-            className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
+        <div className="hero-parallax">
+          <div className="hero-flote" ref={floteRef}>
+            <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
+              className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
+            <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
+              className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
+          </div>
         </div>
       </div>
     </div>
@@ -56,10 +58,14 @@ function HeroImagen({ envolturaRef, onDisparar }) {
 }
 
 export default function Inicio() {
-  const { P } = useTienda();
+  const { P, TOP10, ENVASES, KITS } = useTienda();
+  const raizRef = useRef(null);
   const heroRef = useRef(null);
   const envolturaRef = useRef(null);
   const explosionRef = useRef(null);
+
+  useHeroScroll(heroRef);
+  useSeccionesScroll(raizRef, [P, TOP10, ENVASES, KITS]);
 
   const disparar = () => {
     explosionRef.current?.disparar();
@@ -94,19 +100,22 @@ export default function Inicio() {
   };
 
   return (
-    <>
+    <div className="inicio" ref={raizRef}>
       <JsonLd datos={schema} />
+      <div className="progreso-scroll" aria-hidden="true" />
 
       <section className="hero" ref={heroRef}>
         <div className="hero-t">
-          <span className="up eyebrow">Medellín · Perfumería de autor</span>
-          <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
-          <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
-          <div>
-            <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); disparar(); }}>Explorar colección</a>
-            <button type="button" className="hero-hint-burst" onClick={disparar}>
-              <i className="fas fa-sparkles" aria-hidden="true" /> Toca para liberar la esencia
-            </button>
+          <div className="hero-t-in">
+            <span className="up eyebrow">Medellín · Perfumería de autor</span>
+            <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
+            <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
+            <div>
+              <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); disparar(); }}>Explorar colección</a>
+              <button type="button" className="hero-hint-burst" onClick={disparar}>
+                <i className="fas fa-sparkles" aria-hidden="true" /> Toca para liberar la esencia
+              </button>
+            </div>
           </div>
         </div>
         <HeroImagen envolturaRef={envolturaRef} onDisparar={disparar} />
@@ -176,6 +185,6 @@ export default function Inicio() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
