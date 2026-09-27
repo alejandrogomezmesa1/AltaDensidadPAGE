@@ -18,36 +18,6 @@ let columnasListas = false;
 const estado = { ultimaSync: null, ultimoError: null };
 const enCurso = new Set();
 
-async function columnaExiste(pool, tabla, columna) {
-    const [rows] = await pool.query(
-        'SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?',
-        [tabla, columna]
-    );
-    return rows.length > 0;
-}
-
-// MySQL 8 no soporta ADD COLUMN IF NOT EXISTS: se valida en information_schema
-async function asegurarEsquema(pool) {
-    for (const tabla of ['Productos', 'Kits']) {
-        if (!(await columnaExiste(pool, tabla, 'inventario_id'))) {
-            await pool.query(`ALTER TABLE ${tabla} ADD COLUMN inventario_id INT NULL`);
-        }
-        if (!(await columnaExiste(pool, tabla, 'agotado'))) {
-            await pool.query(`ALTER TABLE ${tabla} ADD COLUMN agotado TINYINT(1) NOT NULL DEFAULT 0`);
-        }
-    }
-    if (!(await columnaExiste(pool, 'Ordenes', 'data_sync_estado'))) {
-        await pool.query(`ALTER TABLE Ordenes
-            ADD COLUMN data_sync_estado VARCHAR(20) NULL,
-            ADD COLUMN data_venta_id INT NULL,
-            ADD COLUMN data_sync_error VARCHAR(255) NULL,
-            ADD COLUMN data_sync_at DATETIME NULL`);
-        // Las órdenes aprobadas antes de la integración no se envían (evita duplicar ventas ya registradas a mano)
-        await pool.query("UPDATE Ordenes SET data_sync_estado = 'omitida' WHERE status = 'approved'");
-    }
-    columnasListas = true;
-}
-
 // ------------------------------------------------------------
 // DATA → Web: stock y precios
 // ------------------------------------------------------------
@@ -215,11 +185,11 @@ async function ciclo() {
     }
 }
 
-async function iniciar(pool) {
-    try {
-        await asegurarEsquema(pool);
-    } catch (err) {
-        console.error('[DATA] No se pudo preparar el esquema de integración:', err.message);
+// El esquema lo prepara la migración 004 (backend/migrations); aquí solo se arranca el ciclo
+async function iniciar(pool, esquemaListo) {
+    columnasListas = Boolean(esquemaListo);
+    if (!columnasListas) {
+        console.error('[DATA] Esquema de integración no disponible (revisa las migraciones): integración deshabilitada.');
         return;
     }
     if (!bridge.habilitado()) {

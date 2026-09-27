@@ -15,6 +15,7 @@ const monitoreoRouter = require('./routes/monitoreo');
 const chatbotRouter = require('./routes/chatbot');
 const integracionRouter = require('./routes/integracion');
 const dataSync = require('./services/dataSync');
+const { ejecutarMigraciones } = require('./migrator');
 
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -144,54 +145,11 @@ app.use((err, req, res, next) => {
 if (process.env.VERCEL !== '1') {
     async function iniciarServidor() {
         try {
-                        const pool = await getConnection();
-                        // Asegurarse de que la tabla Ordenes exista (migración mínima)
-                        const createOrdersSQL = `
-CREATE TABLE IF NOT EXISTS Ordenes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    external_reference VARCHAR(100) UNIQUE,
-    items JSON,
-    total DECIMAL(10,2) DEFAULT 0,
-    currency VARCHAR(10) DEFAULT 'COP',
-    status ENUM('pending','approved','cancelled','failed','refunded') DEFAULT 'pending',
-    preference_id VARCHAR(100),
-    payment_id VARCHAR(100),
-    payer_email VARCHAR(255),
-    payer_name VARCHAR(255),
-    envio_nombre VARCHAR(255),
-    envio_documento VARCHAR(50),
-    envio_celular VARCHAR(50),
-    envio_ciudad VARCHAR(100),
-    envio_direccion VARCHAR(255),
-    envio_piso VARCHAR(255),
-    envio_municipio VARCHAR(255),
-    envio_barrio VARCHAR(255),
-    envio_contacto_alt VARCHAR(255),
-    envio_referencia TEXT,
-    metadata JSON,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-                        `;
-                        try { 
-                            await pool.query(createOrdersSQL); 
-                            const columns = [
-                                'envio_nombre', 'envio_documento', 'envio_celular', 'envio_ciudad', 
-                                'envio_direccion', 'envio_piso', 'envio_municipio', 'envio_barrio', 
-                                'envio_contacto_alt', 'envio_referencia'
-                            ];
-                            for (const col of columns) {
-                                try {
-                                    await pool.query(`ALTER TABLE Ordenes ADD COLUMN IF NOT EXISTS ${col} VARCHAR(255)`);
-                                } catch (e) { /* ignore if already exists */ }
-                            }
-                        } catch (err) { 
-                            console.warn('No se pudo crear tabla Ordenes automáticamente:', err.message || err); 
-                        }
-
-                        // Integración privada con DATA (esquema + sincronización periódica)
-                        await dataSync.iniciar(pool);
-
+            const pool = await getConnection();
+            // Migraciones versionadas del esquema (ver backend/migrations).
+            // Si alguna falla, el servidor arranca igual y la integración con DATA queda deshabilitada.
+            const migraciones = await ejecutarMigraciones(pool);
+            await dataSync.iniciar(pool, migraciones.aplicadas.has('004'));
 
             const server = app.listen(PORT, () => {
                 console.log(`Servidor corriendo en http://localhost:${PORT}`);

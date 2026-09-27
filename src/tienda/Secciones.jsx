@@ -1,0 +1,309 @@
+// Secciones del catálogo reutilizadas entre páginas: colección, Top 10, envases y kits
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTienda } from './TiendaContext';
+import { Frasco, ImagenLogo, Paginacion } from './Frasco';
+import { fmt, pr, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles } from '../lib/producto';
+import { WA } from '../config';
+
+const PRODUCTOS_POR_PAGINA = 12;
+const KITS_POR_PAGINA = 6;
+const OCASIONES = ['Todos', 'Noche', 'Oficina', 'Verano'];
+const FILTROS_BASE = { search: '', occasion: 'Todos', family: 'Todos', gender: 'Todos', category: 'Todos', brand: 'Todos' };
+
+const irA = (id) => {
+  const sec = document.getElementById(id);
+  if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
+};
+
+function filtrarProductos(P, filters) {
+  const term = normalizar(filters.search);
+  return P.filter((p) => {
+    if (term) {
+      const coincide = [p.n, p.b, p.f, p.o, p.desc].some((t) => t && normalizar(t).includes(term)) ||
+        (p.no && p.no.some((n) => normalizar(n).includes(term)));
+      if (!coincide) return false;
+    }
+    if (filters.occasion !== 'Todos' && p.o !== filters.occasion) return false;
+    if (filters.family !== 'Todos' && p.f !== filters.family) return false;
+    if (filters.gender !== 'Todos' && p.g !== filters.gender) return false;
+    if (filters.category !== 'Todos' && p.c !== filters.category) return false;
+    if (filters.brand !== 'Todos' && p.b !== filters.brand) return false;
+    return true;
+  });
+}
+
+function ordenarProductos(lista, orden) {
+  const copia = lista.slice();
+  switch (orden) {
+    case 'precio-asc': return copia.sort((a, b) => pr(a) - pr(b));
+    case 'precio-desc': return copia.sort((a, b) => pr(b) - pr(a));
+    case 'nombre-asc': return copia.sort((a, b) => a.n.localeCompare(b.n));
+    // Recomendados: agrupados por marca y luego por nombre
+    default: return copia.sort((a, b) => a.b.localeCompare(b.b) || a.n.localeCompare(b.n));
+  }
+}
+
+const contarFiltros = (f) => ['occasion', 'family', 'gender', 'category', 'brand'].filter((k) => f[k] !== 'Todos').length + (f.search ? 1 : 0);
+
+// ── Atelier de filtros (modal) ──
+function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
+  const { capa, cerrarCapas } = useTienda();
+  const grupos = [
+    ['Colección', 'category', ['Todos', ...new Set(P.map((x) => x.c).filter(Boolean))], (v) => (v === 'Todos' ? v : etiquetaColeccion(v))],
+    ['Familia Olfativa', 'family', ['Todos', ...new Set(P.map((x) => x.f).filter(Boolean))]],
+    ['Ocasión de Uso', 'occasion', OCASIONES],
+    ['Estilo / Género', 'gender', ['Todos', 'Unisex', 'Masculino', 'Femenino']],
+    ['Marca', 'brand', ['Todos', ...[...new Set(P.map((x) => x.b))].sort((a, b) =>
+      (a === 'Otras marcas') - (b === 'Otras marcas') || a.localeCompare(b))]]
+  ];
+  return (
+    <div
+      className={`modal filter-modal ${capa === 'filtros' ? 'on' : ''}`} role="dialog" aria-modal="true" aria-label="Filtros avanzados de fragancias"
+      onClick={(e) => { if (e.target === e.currentTarget) cerrarCapas(); }}
+    >
+      <div className="sheet">
+        <div className="filter-sheet-h">
+          <div>
+            <span className="up eyebrow">Atelier de Selección</span>
+            <h3 className="disp" style={{ fontSize: 'var(--fs-4)' }}>Filtrar Colección</h3>
+          </div>
+          <button className="x up" onClick={cerrarCapas} aria-label="Cerrar filtros">✕ Cerrar</button>
+        </div>
+        <div className="filter-sheet-body">
+          {grupos.map(([titulo, tipo, valores, etiqueta]) => (
+            <div className="filter-group" key={tipo}>
+              <label className="up filter-label">{titulo}</label>
+              <div className="filter-pills">
+                {valores.map((v) => (
+                  <button key={v} className={`chip up ${filters[tipo] === v ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, [tipo]: v }))}>
+                    {etiqueta ? etiqueta(v) : v}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="filter-sheet-f">
+          <button className="link up" onClick={onReset}>Limpiar todo</button>
+          <button className="btn up" onClick={cerrarCapas}>Ver resultados ({coincidencias})</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Colección: búsqueda en vivo, chips de ocasión, atelier de filtros, orden y paginación ──
+export function Coleccion() {
+  const { P, setCapa, abrirDetalle, agregarRapido, pedirAura } = useTienda();
+  const [filters, setFilters] = useState(FILTROS_BASE);
+  const [busqueda, setBusqueda] = useState('');
+  const [orden, setOrden] = useState('destacados');
+  const [pagina, setPagina] = useState(1);
+  const inputRef = useRef(null);
+
+  // La búsqueda se aplica 150 ms después de dejar de escribir
+  useEffect(() => {
+    const t = setTimeout(() => setFilters((f) => ({ ...f, search: busqueda.trim() })), 150);
+    return () => clearTimeout(t);
+  }, [busqueda]);
+
+  // Cualquier cambio de filtro u orden vuelve a la primera página
+  useEffect(() => { setPagina(1); }, [filters, orden]);
+
+  const filtrados = useMemo(() => ordenarProductos(filtrarProductos(P, filters), orden), [P, filters, orden]);
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / PRODUCTOS_POR_PAGINA));
+  const actual = pagina > totalPaginas ? 1 : pagina;
+  const visibles = filtrados.slice((actual - 1) * PRODUCTOS_POR_PAGINA, actual * PRODUCTOS_POR_PAGINA);
+  const activos = contarFiltros(filters);
+
+  const reset = () => { setFilters(FILTROS_BASE); setBusqueda(''); };
+  const cambiarPagina = (p) => { setPagina(p); irA('coleccion'); };
+
+  return (
+    <section className="sec" id="coleccion">
+      <div className="wrap">
+        <div className="sec-h rv in">
+          <div>
+            <h2>La colección</h2>
+            <p className="mute" style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--fs-2)' }}>
+              {P.length} formulaciones · Extrait de Parfum · Base de feromonas
+            </p>
+          </div>
+          <div className="col-actions">
+            <div className="search-input-wrap">
+              <svg className="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+              <input ref={inputRef} type="text" className="search-input" placeholder="Buscar por nombre, nota o marca..." aria-label="Buscar fragancias"
+                value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+              <button className="search-clear" aria-label="Limpiar búsqueda" style={{ display: busqueda.trim() ? 'block' : 'none' }}
+                onClick={() => { setBusqueda(''); setFilters((f) => ({ ...f, search: '' })); inputRef.current?.focus(); }}>✕</button>
+            </div>
+            <button className="btn btn--line up btn-filter" aria-label="Abrir filtros de fragancias" onClick={() => setCapa('filtros')}>
+              <span>Filtros</span>
+              <span className="filter-badge" style={{ display: activos > 0 ? 'inline-block' : 'none' }}>{activos}</span>
+            </button>
+            <label className="sort-wrap">
+              <span className="sr-only">Ordenar por</span>
+              <select className="sort-select up" aria-label="Ordenar fragancias" value={orden} onChange={(e) => setOrden(e.target.value)}>
+                <option value="destacados">Recomendados</option>
+                <option value="precio-asc">Precio: menor a mayor</option>
+                <option value="precio-desc">Precio: mayor a menor</option>
+                <option value="nombre-asc">Nombre: A – Z</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div className="chips up">
+          {OCASIONES.map((x) => (
+            <button key={x} className={`chip up ${x === filters.occasion ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, occasion: x }))}>{x}</button>
+          ))}
+        </div>
+
+        <div className="filter-status mute" style={{ display: activos > 0 ? 'flex' : 'none' }}>
+          <span>Mostrando <b>{filtrados.length}</b> de {P.length} fragancias</span>
+          <button className="link up" style={{ fontSize: 'var(--fs-2)' }} onClick={reset}>Limpiar filtros</button>
+        </div>
+
+        <div className="grid">
+          {filtrados.length === 0 ? (
+            <div className="grid-empty">
+              <p className="mute">No encontramos ninguna fragancia que coincida con estos criterios.</p>
+              <div className="grid-empty-actions">
+                <button className="btn btn--line up" onClick={reset}>Ver toda la colección</button>
+                <button className="btn up" onClick={pedirAura}>Pedir recomendación a AURA</button>
+              </div>
+            </div>
+          ) : visibles.map((p, idx) => (
+            <article className="card" key={p.id}>
+              <div className="stage" onClick={() => abrirDetalle(p.id)}>
+                <span className="tag up">Extrait de Parfum</span>
+                <Frasco h={p.h} s={1} img={p.img} nombre={p.n} prioridad={actual === 1 && idx < 6} />
+                <div className="notes">{(p.no || []).join(' · ')}</div>
+              </div>
+              <div className="info">
+                <div>
+                  <small className="up card-brand">{p.b} · {etiquetaColeccion(p.c)}</small>
+                  <h3 onClick={() => abrirDetalle(p.id)}>{p.n}</h3>
+                  <span>{p.f} · {fmt(pr(p))}</span>
+                </div>
+                {p.ag
+                  ? <button className="link up" disabled aria-disabled="true">Agotado</button>
+                  : <button className="link up" onClick={() => agregarRapido(p.id)}>Añadir</button>}
+              </div>
+            </article>
+          ))}
+        </div>
+        <Paginacion actual={actual} total={filtrados.length ? totalPaginas : 0} paginas={paginasVisibles(actual, totalPaginas)} onCambiar={cambiarPagina} />
+      </div>
+
+      <FiltrosModal filters={filters} setFilters={setFilters} P={P} coincidencias={filtrarProductos(P, filters).length} onReset={reset} />
+    </section>
+  );
+}
+
+// ── Top 10 ──
+export function Ranking() {
+  const { TOP10, abrirDetalle } = useTienda();
+  return (
+    <div className="rank">
+      {TOP10.map((p, i) => {
+        const pId = p.producto_id || p.id;
+        const nom = p.nombre || p.name || p.n;
+        const fam = p.f || p.categoria || p.category || 'Perfumería de Autor';
+        const notas = p.no ? p.no.join(' · ') : (p.genero || p.gender || 'Unisex');
+        const rating = Number(p.rating) || 5;
+        const carga = i < 4 ? { loading: 'eager', fetchPriority: 'high' } : { loading: 'lazy', decoding: 'async' };
+        return (
+          <div className="row rv in" key={pId}>
+            <span className="n">{i < 9 ? '0' : ''}{i + 1}</span>
+            <div className="rank-thumb-wrap" onClick={() => abrirDetalle(pId)}>
+              <ImagenLogo src={normalizarImagen(p.imagen || p.image || p.img)} alt={nom} className="rank-thumb" width="60" height="60" {...carga} />
+            </div>
+            <div>
+              <h3 onClick={() => abrirDetalle(pId)}>{nom}</h3>
+              <small>{fam} · {notas}</small>
+              <small className="stars" aria-label={`${rating} de 5 estrellas`}>{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</small>
+            </div>
+            <span className="pr">{fmt(Number(p.precio || p.price || p.p || 75000))}</span>
+            <button className="link up" onClick={() => abrirDetalle(pId)}>Ver</button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Envases ──
+export function Envases() {
+  const { ENVASES } = useTienda();
+  return (
+    <div className="sizes">
+      {ENVASES.map((z, idx) => {
+        const nom = z.name || z.nombre;
+        const tallas = Array.isArray(z.sizes) && z.sizes.length ? z.sizes.join(' · ') : (z.talla || '30ml · 60ml');
+        const msgWa = encodeURIComponent('¡Hola! Me gustaría pedir mi perfume en el envase ' + nom + ' de Alta Densidad. ✨');
+        const carga = idx < 4 ? { loading: 'eager', fetchPriority: 'high' } : { loading: 'lazy', decoding: 'async' };
+        return (
+          <div className="size rv in" key={z.id || nom}>
+            <div className="stage" style={{ padding: 'var(--sp-2)' }}>
+              <ImagenLogo src={normalizarImagen(z.image || z.imagen)} alt={`Envase ${nom}`} className="stage-real-img" width="240" height="200" {...carga}
+                style={{ maxHeight: 200, width: 'auto', maxWidth: '85%', objectFit: 'contain' }} />
+            </div>
+            <b style={{ fontSize: 22, marginTop: 'var(--sp-1)', letterSpacing: '0.04em' }}>{nom}</b>
+            <span className="up eyebrow">{tallas} · {z.material || 'Vidrio'}</span>
+            <p className="mute" style={{ fontSize: 'var(--fs-2)', lineHeight: 1.45, maxWidth: '28ch', margin: 'var(--sp-1) 0 var(--sp-2)' }}>
+              {z.description || z.descripcion || 'Envase de vidrio premium.'}
+            </p>
+            <a className="btn btn--line up" style={{ fontSize: 11, padding: 'var(--sp-2) var(--sp-3)' }} href={`https://wa.me/${WA}?text=${msgWa}`} target="_blank" rel="noopener">Pedir en este envase</a>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Kits ──
+export function Kits() {
+  const { KITS, abrirKit, addKitToCart, abrirBolsa } = useTienda();
+  const [pagina, setPagina] = useState(1);
+  const activos = KITS.filter((k) => k.activo !== 0);
+  const totalPaginas = Math.max(1, Math.ceil(activos.length / KITS_POR_PAGINA));
+  const actual = pagina > totalPaginas ? 1 : pagina;
+  const visibles = activos.slice((actual - 1) * KITS_POR_PAGINA, actual * KITS_POR_PAGINA);
+  const cambiar = (p) => {
+    if (p < 1 || p > totalPaginas) return;
+    setPagina(p);
+    irA('kits');
+  };
+
+  return (
+    <>
+      <div className="kits-grid">
+        {visibles.map((k, idx) => {
+          const nom = k.nombre || k.name;
+          const carga = idx < 3 ? { loading: 'eager', fetchPriority: 'high' } : { loading: 'lazy', decoding: 'async' };
+          return (
+            <article className="kit-card rv in" key={k.id}>
+              <span className="tag-kit up">Set Exclusivo</span>
+              <div className="kit-stage" onClick={() => abrirKit(k.id)}>
+                <ImagenLogo src={normalizarImagen(k.imagen || k.image)} alt={`Kit ${nom}`} className="kit-img" width="280" height="280" {...carga} />
+              </div>
+              <div className="kit-info">
+                <h3 className="kit-title" onClick={() => abrirKit(k.id)}>{nom}</h3>
+                <p className="kit-desc">{k.descripcion || 'Kit especial de fragancias de alta densidad en estuche de regalo.'}</p>
+                <div className="kit-footer">
+                  <span className="kit-price">{fmt(Number(k.precio || 60000))}</span>
+                  {k.agotado
+                    ? <button className="btn btn--line up" disabled aria-disabled="true">Agotado</button>
+                    : <button className="btn btn--line up" onClick={() => { addKitToCart(k.id, 1); abrirBolsa(); }}>Añadir</button>}
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+      <Paginacion className="kits-paginacion paginacion" actual={actual} total={totalPaginas}
+        paginas={Array.from({ length: totalPaginas }, (_, i) => i + 1)} onCambiar={cambiar} />
+    </>
+  );
+}

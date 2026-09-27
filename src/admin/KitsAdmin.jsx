@@ -1,0 +1,215 @@
+import { useCallback, useEffect, useState } from 'react';
+import { apiJson } from '../lib/api';
+import {
+  formatPrecio, toastOk, subirImagen, ImagenCelda, Visible, FilaEstado,
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario
+} from './comunes';
+
+const VACIO = { id: '', nombre: '', descripcion: '', precio: '', imagen: '', activo: true, beneficios: [], inventario_id: '' };
+
+export default function KitsAdmin({ alerta }) {
+  const [kits, setKits] = useState([]);
+  const [estado, setEstado] = useState('cargando');
+  const [busqueda, setBusqueda] = useState('');
+  const [modal, setModal] = useState(false);
+  const [form, setForm] = useState(VACIO);
+  const [archivo, setArchivo] = useState(null);
+  const [nuevoBeneficio, setNuevoBeneficio] = useState('');
+  const [invListo, setInvListo] = useState(false);
+  const [invalidos, setInvalidos] = useState([]);
+  const [guardando, setGuardando] = useState(false);
+  const [aEliminar, setAEliminar] = useState(null);
+
+  const cargar = useCallback(async () => {
+    setEstado('cargando');
+    try {
+      const data = await apiJson('kits');
+      setKits(data.data);
+      setEstado('ok');
+    } catch (err) {
+      alerta('Error al cargar kits: ' + err.message, 'error');
+      setEstado('error');
+    }
+  }, [alerta]);
+
+  useEffect(() => { cargar(); }, [cargar]);
+
+  const q = busqueda.toLowerCase();
+  const { pagina, filtrados, actual, totalPags, setPagina } = usePaginado(kits,
+    (k) => k.nombre.toLowerCase().includes(q) || (k.descripcion || '').toLowerCase().includes(q), 10);
+
+  const abrir = (k) => {
+    setForm(k ? {
+      id: k.id, nombre: k.nombre, descripcion: k.descripcion || '', precio: k.precio, imagen: k.imagen || '',
+      activo: !!k.activo, beneficios: Array.isArray(k.beneficios) ? [...k.beneficios] : [], inventario_id: k.inventario_id || ''
+    } : VACIO);
+    setArchivo(null);
+    setNuevoBeneficio('');
+    setInvListo(false);
+    setInvalidos([]);
+    setModal(true);
+  };
+  const cerrar = useCallback(() => setModal(false), []);
+  const cerrarEliminar = useCallback(() => setAEliminar(null), []);
+  const campo = (k) => ({
+    value: form[k],
+    className: invalidos.includes(k) ? 'invalid' : undefined,
+    onChange: (e) => { setForm((f) => ({ ...f, [k]: e.target.value })); setInvalidos((l) => l.filter((x) => x !== k)); }
+  });
+
+  const agregarBeneficio = () => {
+    const val = nuevoBeneficio.trim();
+    if (!val) return;
+    setForm((f) => ({ ...f, beneficios: [...f.beneficios, val] }));
+    setNuevoBeneficio('');
+  };
+
+  async function guardar(e) {
+    e.preventDefault();
+    const nombre = form.nombre.trim();
+    const precio = parseFloat(form.precio);
+    if (!nombre) { setInvalidos(['nombre']); alerta('El nombre es obligatorio.', 'error'); return; }
+    if (Number.isNaN(precio)) { setInvalidos(['precio']); alerta('El precio es obligatorio.', 'error'); return; }
+    setGuardando(true);
+    try {
+      const imagen = archivo ? await subirImagen(archivo) : form.imagen.trim();
+      const payload = {
+        nombre, descripcion: form.descripcion.trim(), precio, imagen, beneficios: form.beneficios, activo: form.activo ? 1 : 0,
+        ...(invListo ? { inventario_id: form.inventario_id ? Number(form.inventario_id) : null } : {})
+      };
+      await apiJson(form.id ? `kits/${form.id}` : 'kits', { method: form.id ? 'PUT' : 'POST', body: payload });
+      setModal(false);
+      await cargar();
+      toastOk(form.id ? 'Kit actualizado' : 'Kit creado');
+    } catch (err) {
+      alerta('Error al guardar: ' + err.message, 'error');
+    } finally {
+      setGuardando(false);
+    }
+  }
+
+  async function eliminar() {
+    try {
+      await apiJson(`kits/${aEliminar.id}`, { method: 'DELETE' });
+      setAEliminar(null);
+      await cargar();
+      toastOk('Kit eliminado');
+    } catch (err) {
+      alerta('Error al eliminar: ' + err.message, 'error');
+    }
+  }
+
+  return (
+    <>
+      <div className="admin-toolbar">
+        <h2 className="section-title">Catálogo de Kits</h2>
+        <div className="admin-toolbar-actions">
+          <div className="search-box">
+            <i className="fas fa-search" />
+            <input type="text" placeholder="Buscar kits..." className="admin-search-input" value={busqueda}
+              onChange={(e) => { setBusqueda(e.target.value); setPagina(1); }} />
+          </div>
+          <button className="btn-primary" onClick={() => abrir(null)}><i className="fas fa-plus" /> Nuevo Kit</button>
+        </div>
+      </div>
+      <div className="tabla-wrapper">
+        <table className="tabla-productos">
+          <thead>
+            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Visible</th><th>Acciones</th></tr>
+          </thead>
+          <tbody>
+            {estado !== 'ok' || !filtrados.length ? (
+              <FilaEstado columnas={7} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
+                vacio={busqueda ? 'No se encontraron resultados.' : 'No hay kits registrados.'} />
+            ) : pagina.map((k) => (
+              <tr key={k.id}>
+                <td data-label="#">{k.id}</td>
+                <td data-label="Imagen"><ImagenCelda src={k.imagen} /></td>
+                <td data-label="Nombre"><strong>{k.nombre}</strong></td>
+                <td data-label="Descripción">{k.descripcion}</td>
+                <td data-label="Precio">{formatPrecio(k.precio)}</td>
+                <td data-label="Visible"><Visible activo={k.activo} agotado={k.agotado} /></td>
+                <td data-label="Acciones">
+                  <div className="acciones">
+                    <button className="btn-icon editar" title="Editar" onClick={() => abrir(k)}><i className="fas fa-edit" /></button>
+                    <button className="btn-icon eliminar" title="Eliminar" onClick={() => setAEliminar(k)}><i className="fas fa-trash" /></button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <PaginacionAdmin actual={actual} total={totalPags} onCambiar={setPagina} />
+
+      <ModalAdmin abierto={modal} titulo={form.id ? 'Editar Kit' : 'Nuevo Kit'} onCerrar={cerrar}>
+        <form className="modal-form" noValidate onSubmit={guardar}>
+          <div className="form-grid">
+            <div className="form-group full">
+              <label htmlFor="kitNombre">Nombre *</label>
+              <input type="text" id="kitNombre" placeholder="Ej: Kit Haya" required {...campo('nombre')} />
+            </div>
+            <div className="form-group full">
+              <label htmlFor="kitDescripcion">Descripción</label>
+              <textarea id="kitDescripcion" rows="3" placeholder="Descripción del kit..." {...campo('descripcion')} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="kitPrecio">Precio (COP) *</label>
+              <input type="number" id="kitPrecio" min="0" step="1000" placeholder="0" required {...campo('precio')} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="kitInventario">Inventario DATA</label>
+              {modal && <SelectInventario id="kitInventario" valor={form.inventario_id} onListo={setInvListo}
+                onCambiar={(v) => setForm((f) => ({ ...f, inventario_id: v }))} />}
+              <small className="hint-data">Enlazado: el stock y precio se toman de DATA y las ventas web descuentan inventario.</small>
+            </div>
+            <div className="form-group full">
+              <label>Imagen del kit</label>
+              <ZonaImagen imagen={form.imagen} archivo={archivo} onArchivo={setArchivo} />
+            </div>
+            <div className="form-group full">
+              <label>Beneficios</label>
+              <div className="checkboxes-grid" style={{ flexDirection: 'column', gap: 8 }}>
+                {form.beneficios.map((b, idx) => (
+                  <div key={`${b}-${idx}`} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span>{b}</span>
+                    <button type="button" className="btn-icon eliminar" title="Quitar"
+                      onClick={() => setForm((f) => ({ ...f, beneficios: f.beneficios.filter((_, j) => j !== idx) }))}>
+                      <i className="fas fa-times" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <input type="text" placeholder="Agregar beneficio..." style={{ flex: 1 }} value={nuevoBeneficio}
+                  onChange={(e) => setNuevoBeneficio(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); agregarBeneficio(); } }} />
+                <button type="button" className="btn-primary" onClick={agregarBeneficio}><i className="fas fa-plus" /> Agregar</button>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Visibilidad</label>
+              <label className="check-item">
+                <input type="checkbox" checked={form.activo} onChange={(e) => setForm((f) => ({ ...f, activo: e.target.checked }))} /> Mostrar en el catálogo
+              </label>
+            </div>
+          </div>
+          <div className="modal-actions">
+            <button type="button" className="btn-secondary" onClick={cerrar}>Cancelar</button>
+            <button type="submit" className="btn-primary" disabled={guardando}>
+              {guardando ? <><i className="fas fa-spinner fa-spin" /> Guardando...</> : <><i className="fas fa-save" /> Guardar</>}
+            </button>
+          </div>
+        </form>
+      </ModalAdmin>
+
+      <ModalAdmin abierto={!!aEliminar} titulo="Eliminar Kit" onCerrar={cerrarEliminar} confirmar>
+        <p className="confirm-msg">¿Estás seguro de que deseas eliminar <strong>{aEliminar?.nombre}</strong>? Esta acción no se puede deshacer.</p>
+        <div className="modal-actions">
+          <button className="btn-secondary" onClick={cerrarEliminar}>Cancelar</button>
+          <button className="btn-danger" onClick={eliminar}><i className="fas fa-trash" /> Eliminar</button>
+        </div>
+      </ModalAdmin>
+    </>
+  );
+}

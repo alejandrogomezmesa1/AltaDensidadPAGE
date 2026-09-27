@@ -1,6 +1,6 @@
 # Alta Densidad — Documentación Técnica
 
-Tienda de perfumería de alta gama. Proyecto full-stack con frontend en HTML/CSS/JS vanilla y backend en Node.js + Express conectado a MySQL 8.0.
+Tienda de perfumería de alta gama. Proyecto full-stack con frontend en React 19 + Vite (SPA) y backend en Node.js + Express conectado a MySQL 8.0.
 
 ---
 
@@ -10,17 +10,14 @@ Tienda de perfumería de alta gama. Proyecto full-stack con frontend en HTML/CSS
 2. [Stack Tecnológico](#stack-tecnológico)
 3. [Base de Datos](#base-de-datos)
 4. [Backend](#backend)
-5. [Frontend](#frontend)
-6. [Paginación](#paginación)
-7. [Carrito de Compras](#carrito-de-compras)
-8. [SweetAlert2](#sweetalert2)
-9. [Kits de Fragancias Exclusivas](#kits-de-fragancias-exclusivas)
-10. [Integración WhatsApp](#integración-whatsapp)
-11. [Autenticación](#autenticación)
-12. [API REST](#api-rest)
-13. [Scripts de Datos](#scripts-de-datos)
-14. [Variables de Entorno](#variables-de-entorno)
-15. [Cómo Ejecutar](#cómo-ejecutar)
+5. [Frontend (React)](#frontend-react)
+6. [Kits de Fragancias Exclusivas](#kits-de-fragancias-exclusivas)
+7. [Integración WhatsApp](#integración-whatsapp)
+8. [Autenticación](#autenticación)
+9. [API REST](#api-rest)
+10. [Scripts de Datos](#scripts-de-datos)
+11. [Variables de Entorno](#variables-de-entorno)
+12. [Cómo Ejecutar](#cómo-ejecutar)
 
 ---
 
@@ -28,47 +25,23 @@ Tienda de perfumería de alta gama. Proyecto full-stack con frontend en HTML/CSS
 
 ```
 AltaDensidadPAGE/
-├── index.html          # Página principal (catálogo de lociones)
-├── index.css
-├── index.js
-├── envases.html        # Catálogo de envases
-├── envases.css
-├── envases.js
-├── top10.html          # Top 10 productos
-├── top10.css
-├── top10.js
-├── nosotros.html       # Página "Quiénes somos"
-├── nosotros.css
-├── login.html          # Login y registro de usuarios
-├── login.css
-├── login.js
-├── admin.html          # Panel de administración (protegido)
-├── admin.css
-├── admin.js
-├── nav-sesion.js       # Script compartido de sesión en navbar
-├── api.js              # Cliente API reutilizable
-├── carrito.js          # Lógica del carrito de compras (sessionStorage)
-├── tema.js             # Toggle modo oscuro/claro (localStorage)
-├── tema.css            # Estilos para modo claro/oscuro
-├── img/
-│   ├── logo2025.png    # Logo del sitio (favicon + navbar)
-│   └── ...             # Imágenes de productos, envases y kits
+├── index.html              # Entrada de Vite: SEO base, fuentes, Font Awesome, tema sin destello
+├── vite.config.js          # React + encapsulado de acceso.css / admin-hp.css (ver Frontend)
+├── vercel.json             # Build de Vite, SPA y redirecciones de las URLs .html antiguas
+├── package.json            # Dependencias del front (React, React Router, Chart.js, SweetAlert2)
+├── public/
+│   ├── assets/img/         # Imágenes locales (las rutas "assets/img/…" de la base siguen válidas)
+│   ├── robots.txt
+│   └── sitemap.xml
+├── src/                    # Frontend React (detalle en la sección Frontend)
+├── plataforma-capacitacion/  # Sitio estático aparte; se copia a dist/ al compilar
+├── Fragancias de Alta Densidad.html  # Prototipo del sistema de diseño Haute Parfumerie
+├── README_CAMBIO_DISENO.md # Manifiesto del sistema de diseño (tokens, capas, tipografía)
 ├── database/
 │   ├── schema.sql          # Esquema original (SQL Server)
 │   └── schema_mysql.sql    # Esquema activo (MySQL 8.0)
-└── backend/
-    ├── server.js
-    ├── .env
-    ├── package.json
-    ├── config/
-    │   └── db.js           # Pool de conexión MySQL
-    ├── routes/
-    │   ├── productos.js    # CRUD productos
-    │   ├── envases.js      # CRUD envases
-    │   └── auth.js         # Login y registro
-    ├── seed-productos.js   # Siembra 95 productos vía API
-    ├── seed-envases.js     # Siembra 11 envases vía API
-    └── seed-admin.js       # Crea el superusuario admin
+├── tools/                  # Utilidades (copiar_base.sh, copiar_capacitacion.js, …)
+└── backend/                # API Express (Railway): rutas, servicios, migraciones
 ```
 
 ---
@@ -77,16 +50,17 @@ AltaDensidadPAGE/
 
 | Capa | Tecnología |
 |---|---|
-| Frontend | HTML5, CSS3, JavaScript — sin frameworks, puro vanilla |
+| Frontend | React 19 + React Router 7, empaquetado con Vite |
 | Backend | Node.js v22, Express 4.x — servidor HTTP y API REST |
 | Base de datos | MySQL 8.0 — motor relacional, gestionado con MySQL Workbench |
 | Autenticación | JWT (`jsonwebtoken`) + bcryptjs — tokens de sesión + hash de contraseñas |
 | Driver DB | `mysql2/promise` — cliente MySQL para Node con soporte async/await |
 | Variables de entorno | `dotenv` — carga credenciales desde `.env` sin exponerlas en el código |
-| CORS | `cors` — permite que el frontend (puerto 5500) llame al backend (puerto 3000) |
-| Dev server frontend | Live Server (VS Code, puerto 5500) — recarga automática al guardar |
+| CORS | `cors` — permite localhost (cualquier puerto), `*.vercel.app` y `FRONTEND_URL` |
+| Dev server frontend | Vite (`npm run dev`, puerto 5173) — recarga en caliente |
 | Dev server backend | `nodemon` — reinicia el servidor automáticamente al guardar cambios |
 | Alertas UI | SweetAlert2 v11 — diálogos de confirmación y toasts en el panel admin |
+| Gráficos | Chart.js 4 — monitoreo del panel admin |
 
 ---
 
@@ -230,226 +204,62 @@ Las queries usan `GROUP_CONCAT` para devolver tallas y tipos de envase como un s
 
 ---
 
-## Frontend
+## Frontend (React)
 
-### Páginas
+La tienda, las páginas de acceso y el panel son una sola SPA. El diseño es el sistema **Haute Parfumerie**
+(`README_CAMBIO_DISENO.md`): tokens `--c-*`, Cormorant Garamond + Jost, filetes de 1 px, radio 0, modo
+oscuro por defecto y claro con `html.modo-claro` / `data-theme`.
 
-| Archivo | Descripción |
+### Rutas
+
+| Ruta | Página |
 |---|---|
-| Archivo | Descripción |
-|---|---|
-| `index.html` | Catálogo principal de lociones/perfumes con paginación, filtros y carrito |
-| `envases.html` | Catálogo de envases disponibles |
-| `top10.html` | Top 10 productos destacados (datos hardcodeados en `top10.js`) |
-| `nosotros.html` | Información de la empresa: misión, visión, compromiso y FAQs |
-| `login.html` | Tabs de Login / Registro |
-| `admin.html` | Panel CRUD con tabs Productos/Envases, paginación y SweetAlert2 (solo admin) |
+| `/` | Hero, colección (búsqueda, filtros, orden, paginación), Top 10, envases, kits, nosotros |
+| `/top10`, `/envases`, `/nosotros` | Páginas dedicadas |
+| `/login`, `/reset` | Acceso y recuperación de contraseña |
+| `/success`, `/pending`, `/failure` | Retorno de Mercado Pago (verifican el pago con `?payment_id=`) |
+| `/admin` | Panel (solo rol `admin`): monitoreo, productos, envases, kits, Top 10, órdenes |
 
-### Diseño
+Las URLs antiguas (`/top10.html`, `/success.html?…`, etc.) redirigen a las nuevas conservando la query,
+en `vercel.json` y también dentro de la app.
 
-- **Fondo:** `#0a0a0a` (negro)
-- **Acento:** `#D4AF37` (dorado)
-- **Tipografía:** serif elegante
-- Totalmente responsive
-
-### `nav-sesion.js`
-
-Script incluido en todas las páginas (excepto `login.html` y `admin.html`). Lee `localStorage` y:
-- Si hay sesión activa → muestra nombre del usuario con dropdown (cerrar sesión, panel admin si es admin)
-- Si no hay sesión → muestra botón "Ingresar"
-
-```html
-<!-- Incluir antes de </body> en cada página -->
-<script src="nav-sesion.js"></script>
-```
-
-### `api.js`
-
-Cliente HTTP centralizado para llamadas al backend. Todas las peticiones apuntan a `http://localhost:3000/api`.
-
-### `carrito.js`
-
-Lógica completa del carrito de compras. Usa `sessionStorage` (se borra al cerrar la pestaña). Incluir en las páginas que muestren productos.
-
-| Función | Descripción |
-|---|---|
-| `agregarAlCarrito(producto)` | Agrega un ítem o incrementa su cantidad |
-| `cambiarCantidad(id, delta)` | Sube/baja la cantidad de un ítem; si llega a 0 lo elimina |
-| `vaciarCarrito()` | Limpia todo el carrito |
-| `obtenerCarrito()` | Retorna el array de ítems desde `sessionStorage` |
-| `actualizarBadge()` | Actualiza el contador visual en el ícono del navbar |
-| `renderCarrito()` | Re-dibuja el panel lateral del carrito |
-
-```html
-<!-- Incluir antes de </body> en páginas con carrito -->
-<script src="carrito.js"></script>
-```
-
-### `tema.js` / `tema.css`
-
-Toggle de modo oscuro/claro con persistencia en `localStorage` (clave `altadensidad_tema`).
-
-- **Modo oscuro** → predeterminado (sin clase en `<html>`)
-- **Modo claro** → activa la clase `html.modo-claro` que `tema.css` usa para sobreescribir variables CSS
-- El script se incluye en `<head>` para aplicar el tema **antes** de que el DOM se pinte y evitar el flash de modo incorrecto
-- Inyecta automáticamente un botón (sol/luna) en el navbar junto al elemento `#navSesion`
-
-```html
-<!-- Incluir en <head> de cada página -->
-<link rel="stylesheet" href="tema.css">
-<script src="tema.js"></script>
-```
-
-### Fetch de datos
-
-Tanto `index.js` como `envases.js` usan `fetch` al iniciar (`DOMContentLoaded`) para cargar los datos desde la API en lugar de un array hardcodeado.
-
-> `top10.js` es la excepción: usa un array estático de 10 productos hardcodeados directamente en el archivo (no consume la API).
-
-### Auto-hide header en scroll
-
-`envases.js` implementa un listener de scroll que oculta el header al bajar y lo muestra al subir, usando la clase CSS `.header--hidden`. Permite aprovechar todo el viewport al navegar el catálogo.
-
----
-
-## Paginación
-
-### Catálogo público (`index.js`)
-
-- **12 ítems por página** (`ITEMS_POR_PAGINA = 12`)
-- Botones anterior/siguiente con íconos chevron, deshabilitados en los extremos
-- Números de página con elipsis inteligente para listas grandes (ej: `1 … 4 5 6 … 20`)
-- Al cambiar de página hace scroll suave al inicio del grid
-- `window.cambiarPagina(n)` expuesta globalmente para los `onclick` en el HTML
-- El contador `#productCount` actualiza el total de resultados filtrados
+### Código (`src/`)
 
 ```
-paginasVisibles(actual, total):
-  total ≤ 7  →  [1, 2, 3, 4, 5, 6, 7]
-  actual ≤ 4 →  [1, 2, 3, 4, 5, '...', total]
-  actual cerca del final → [1, '...', total-4 … total]
-  cualquier otro → [1, '...', actual-1, actual, actual+1, '...', total]
+src/
+├── main.jsx, App.jsx        # Entrada y rutas (el admin carga aparte: Chart.js/SweetAlert2 solo ahí)
+├── config.js                # API (VITE_API_URL), WhatsApp, tarifas de envío
+├── styles/                  # haute-parfumerie.css, chatbot.css, acceso.css, admin-hp.css
+├── data/catalogo.js         # Catálogo de respaldo: se pinta al instante y la API lo reemplaza
+├── lib/                     # api.js (fetch), producto.js (modelo, marcas, perfil olfativo), hooks.jsx (tema, SEO, clases de body)
+├── tienda/                  # TiendaContext (catálogo + bolsa + capas), Marco (header/footer), Secciones,
+│                            # Capas (detalle y kit), Bolsa (checkout Mercado Pago), Aura (asistente IA)
+├── paginas/                 # Inicio, Top10, EnvasesPagina, Nosotros
+├── acceso/                  # AccesoLayout, Login, Reset, ResultadoPago
+└── admin/                   # Admin (shell), Monitoreo, *Admin por sección, comunes (tablas, modales, imágenes, DATA)
 ```
 
-### Panel Admin (`admin.js`)
+### Estado que se guarda en el navegador
 
-- **10 ítems por página** para la tabla de productos y la de envases por separado
-- Función reutilizable `renderPag(contenedorId, actual, total, onChange)` que genera los controles y llama el callback `onChange(nuevaPagina)` al hacer clic
-- Misma lógica de elipsis con `pagRango(actual, total)`
-
----
-
-## Carrito de Compras
-
-### Almacenamiento
-
-Usa `sessionStorage` con la clave `altadensidad_carrito`. El carrito se borra al cerrar la pestaña o el navegador.
-
-### Estructura de un ítem
-
-```json
-{ "id": 5, "name": "LIGHT BLUE", "image": "img/...", "price": 35000, "cantidad": 2 }
-```
-
-### Drawer lateral
-
-El carrito se muestra como un panel deslizable desde la derecha (`#carritoPanel`) con un overlay de fondo (`#carritoOverlay`). Se abre/cierra con `abrirCarrito()` / `cerrarCarrito()`, que también bloquean el scroll del body.
-
-### Flujo de uso
-
-```
-Usuario hace clic en "Agregar" en una tarjeta de producto
-  → agregarAlCarrito(producto)  — agrega o incrementa cantidad en sessionStorage
-  → actualizarBadge()           — actualiza el contador numérico sobre el ícono del carrito
-  → mostrarToastCarrito(nombre) — muestra notificación emergente por 2.5 s
-  → renderCarrito()             — re-dibuja el contenido del drawer
-
-Usuario hace clic en el ícono del carrito (navbar)
-  → abrirCarrito()              — abre el panel lateral
-```
-
-### Checkout por WhatsApp
-
-Al hacer clic en "Pedir por WhatsApp" se genera dinámicamente un enlace `wa.me` que incluye:
-- Lista de productos con cantidades y precios
-- Subtotal total en COP
-
-```
-https://wa.me/3046477694?text=Hola, quiero pedir:%0A• 2x Light Blue ($35.000)%0A%0ATotal: $70.000 COP
-```
-
-### Markup HTML requerido
-
-Pegar antes de `</body>` en cada página que use el carrito:
-
-```html
-<!-- Overlay y panel drawer -->
-<div id="carritoOverlay" class="carrito-overlay"></div>
-<aside id="carritoPanel" class="carrito-panel">
-    <div class="carrito-header">
-        <h3><i class="fas fa-shopping-cart"></i> Mi Carrito</h3>
-        <button id="btnCerrarCarrito" class="carrito-cerrar"><i class="fas fa-times"></i></button>
-    </div>
-    <div id="carritoLista" class="carrito-lista"></div>
-    <div id="carritoFooter" class="carrito-footer"></div>
-</aside>
-<!-- Toast de confirmación -->
-<div id="carritoToast" class="carrito-toast"></div>
-
-<script src="carrito.js"></script>
-```
-
-El botón del carrito en el navbar debe tener `id="btnCarrito"` y el badge `id="carritoBadge"`.
-
----
-
-## SweetAlert2
-
-Usado exclusivamente en `admin.html` / `admin.js`. Cargado desde CDN:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-```
-
-### Cuándo se dispara
-
-| Acción | Tipo | Descripción |
+| Clave | Dónde | Uso |
 |---|---|---|
-| Eliminar producto | Diálogo de confirmación | `icon: 'warning'`, botones Sí/Cancelar, dark theme |
-| Eliminar envase | Diálogo de confirmación | Mismo estilo |
-| Crear/editar producto | Toast | `position: 'top-end'`, 3 s, fondo `#1a1a1a`, texto dorado |
-| Crear/editar envase | Toast | Mismo estilo |
+| `ad_cart_v2` | localStorage | Bolsa (la de la web anterior, `altadensidad_carrito`, se migra sola) |
+| `altadensidad_tema` | localStorage | `claro` / `oscuro` |
+| `token`, `usuario` | localStorage | Sesión (JWT + `{ nombre, email, rol }`) |
+| `admin_active_tab`, `admin_sidebar` | localStorage | Sección y sidebar compacto del panel |
+| `ad_chat_history_v2`, `ad_ai_session_id` | sessionStorage | Conversación con AURA |
 
-### Tema de los diálogos
+### CSS encapsulado
 
-```js
-Swal.fire({
-    background: '#1a1a1a',   // fondo oscuro del modal
-    color: '#fff',           // texto principal blanco
-    confirmButtonColor: '#c0392b',  // rojo para eliminar
-    cancelButtonColor: '#444'
-});
-```
-
-### Tema de los toasts
-
-```js
-Swal.fire({
-    toast: true,
-    position: 'top-end',
-    icon: 'success',
-    timer: 3000,
-    showConfirmButton: false,
-    background: '#1a1a1a',
-    color: '#D4AF37'   // acento dorado del sitio
-});
-```
+`acceso.css` y `admin-hp.css` definen clases genéricas con estilos distintos (`.alerta`, `.form-group`,
+`.hidden`). Antes cada página cargaba solo su hoja; en la SPA conviven, así que `vite.config.js` las encierra
+al compilar bajo la clase que su layout pone en `<body>` (`.acc-body` y `.adm`). Los archivos fuente no se tocan.
 
 ---
 
 ## Kits de Fragancias Exclusivas
 
-Sección dinámica en `index.html` que muestra colecciones de fragancias premium.
+Sección dinámica del inicio (`/#kits`) que muestra colecciones de fragancias premium.
 
 | Kit | Marca | Precio |
 |---|---|---|
@@ -472,7 +282,7 @@ El sitio usa WhatsApp como canal de venta y contacto en tres puntos:
 |---|---|---|
 | Botón "🛒 Comprar" | Navbar de todas las páginas | `3046477694` |
 | Checkout del carrito | Panel lateral de carrito | `3046477694` |
-| Botón de cada Kit | Sección Kits en `index.html` | `3046477694` |
+| Botón de cada Kit | Sección Kits del inicio | `3046477694` |
 
 ---
 
@@ -499,8 +309,8 @@ Frontend guarda en localStorage:
 
 ### Redirección post-login
 
-- `rol === 'admin'` → `admin.html`
-- `rol === 'cliente'` → `index.html`
+- `rol === 'admin'` → `/admin`
+- `rol === 'cliente'` → `/`
 
 ### Credenciales admin por defecto
 
@@ -627,7 +437,6 @@ NODE_ENV=development
 
 - Node.js 
 - MySQL 8.0 corriendo en puerto 3306
-- Live Server (VS Code) 
 
 ### Primera vez
 
@@ -647,7 +456,10 @@ node seed-productos.js
 node seed-envases.js
 node seed-admin.js
 
-# 5. Abrir el frontend con Live Server en VS Code (puerto 5500)
+# 5. En la raíz del repo — frontend
+cd C:\AltaDensidadPAGE
+npm install
+npm run dev      # http://localhost:5173
 ```
 
 ### Uso diario
@@ -663,7 +475,10 @@ Start-Service MYSQL80
 cd C:\AltaDensidadPAGE\backend
 node server.js
 
-# Abrir index.html con Live Server
+# Frontend (otra terminal, raíz del repo)
+npm run dev
+# Para usar el backend local en vez del de Railway: crear .env.local con
+# VITE_API_URL=http://localhost:3000/api
 ```
 
 ### Si el puerto 3000 ya está en uso
@@ -731,7 +546,9 @@ Recomendación: desplegar el backend en una plataforma con soporte para Node.js 
 
 2) Vercel (frontend)
 
-- Conecta el repositorio y configura el proyecto como sitio estático.
+- Conecta el repositorio (raíz del repo). `vercel.json` ya define el build: `npm run build` → `dist/` (Vite),
+  la reescritura SPA y las redirecciones de las URLs `.html` antiguas.
+- Opcional: `VITE_API_URL` si el backend cambia de dominio (se incrusta al compilar).
 - Asegúrate de que `FRONTEND_URL` en Railway apunte a la URL pública de Vercel.
 
 3) Notas y comprobaciones

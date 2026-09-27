@@ -62,24 +62,6 @@ function enmascarar(key) {
 }
 
 // ---------- Configuración (BD con respaldo en variables de entorno) ----------
-let tablaLista = false;
-async function asegurarTabla(pool) {
-    if (tablaLista) return;
-    await pool.query(`
-        CREATE TABLE IF NOT EXISTS ConfigChatbot (
-            id TINYINT PRIMARY KEY,
-            url VARCHAR(500) NULL,
-            api_key_cifrada TEXT NULL,
-            modo VARCHAR(20) NOT NULL DEFAULT 'nativo',
-            modelo VARCHAR(120) NULL,
-            activo TINYINT(1) NOT NULL DEFAULT 1,
-            actualizado_en DATETIME NULL,
-            actualizado_por VARCHAR(120) NULL
-        )
-    `);
-    tablaLista = true;
-}
-
 let cacheConfig = null;
 let cacheConfigEn = 0;
 
@@ -110,7 +92,6 @@ async function obtenerConfig(forzar) {
     let cfg = entorno;
     try {
         const pool = await getConnection();
-        await asegurarTabla(pool);
         const [rows] = await pool.query('SELECT * FROM ConfigChatbot WHERE id = 1');
         if (rows.length) {
             const r = rows[0];
@@ -449,7 +430,6 @@ router.put('/config', requireAdmin, async (req, res) => {
 
     try {
         const pool = await getConnection();
-        await asegurarTabla(pool);
         const actual = await obtenerConfig(true);
         const fila = {
             url: actual.url || null,

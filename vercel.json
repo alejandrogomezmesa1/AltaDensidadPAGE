@@ -1,29 +1,26 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "robots.txt", "use": "@vercel/static" },
-    { "src": "sitemap.xml", "use": "@vercel/static" },
-    { "src": "assets/**/*", "use": "@vercel/static" },
-    { "src": "plataforma-capacitacion/**/*", "use": "@vercel/static" }
+  "framework": "vite",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/top10.html", "destination": "/top10", "permanent": true },
+    { "source": "/envases.html", "destination": "/envases", "permanent": true },
+    { "source": "/nosotros.html", "destination": "/nosotros", "permanent": true },
+    { "source": "/login.html", "destination": "/login", "permanent": true },
+    { "source": "/reset.html", "destination": "/reset", "permanent": true },
+    { "source": "/admin.html", "destination": "/admin", "permanent": true },
+    { "source": "/success.html", "destination": "/success", "permanent": false },
+    { "source": "/failure.html", "destination": "/failure", "permanent": false },
+    { "source": "/pending.html", "destination": "/pending", "permanent": false }
   ],
-  "routes": [
-    { "src": "/robots.txt", "dest": "/robots.txt" },
-    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
-    { "src": "/assets/img/(.*)", "dest": "/assets/img/$1" },
-    { "src": "/img/(.*)", "dest": "/assets/img/$1" },
-    { "src": "/assets/(.*\\.(css|js|avif|png|jpg|jpeg|gif|webp|svg|ico|woff2?))", "dest": "/assets/$1" },
-    { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/login", "dest": "/login.html" },
-    { "src": "/nosotros", "dest": "/nosotros.html" },
-    { "src": "/top10", "dest": "/top10.html" },
-    { "src": "/envases", "dest": "/envases.html" },
-    { "src": "/reset", "dest": "/reset.html" },
-    { "src": "/capacitacion", "dest": "/plataforma-capacitacion/index.html" },
-    { "src": "/capacitacion/(.*)", "dest": "/plataforma-capacitacion/$1" },
-    { "src": "/induccion", "dest": "/plataforma-capacitacion/index.html" },
-    { "src": "/induccion/(.*)", "dest": "/plataforma-capacitacion/$1" },
-    { "src": "/(.*)\\.html", "dest": "/$1.html" },
-    { "src": "/", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/img/:path*", "destination": "/assets/img/:path*" },
+    { "source": "/capacitacion", "destination": "/plataforma-capacitacion/index.html" },
+    { "source": "/capacitacion/:path*", "destination": "/plataforma-capacitacion/:path*" },
+    { "source": "/induccion", "destination": "/plataforma-capacitacion/index.html" },
+    { "source": "/induccion/:path*", "destination": "/plataforma-capacitacion/:path*" },
+    { "source": "/((?!assets/|plataforma-capacitacion/).*)", "destination": "/index.html" }
   ]
 }

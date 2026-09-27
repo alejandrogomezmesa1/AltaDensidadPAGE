@@ -1,5 +1,23 @@
 {
+  "name": "alta-densidad-page",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node tools/copiar_capacitacion.js",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "nodemailer": "^8.0.5"
+    "chart.js": "^4.5.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.9.0",
+    "sweetalert2": "^11.22.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "postcss-prefix-selector": "^2.1.1",
+    "vite": "^8.0.10"
   }
 }

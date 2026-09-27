@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <link rel="icon" href="assets/img/Logo2026.png" type="image/png">
-    <link rel="apple-touch-icon" href="assets/img/Logo2026.png">
-    
-    <!-- Metadatos SEO Principales -->
+    <link rel="icon" href="/assets/img/Logo2026.png" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/img/Logo2026.png">
+
+    <!-- Metadatos SEO (cada página los ajusta con usePagina) -->
     <title>Fragancias de Alta Densidad | Extrait de Parfum & Perfumería de Autor en Medellín</title>
     <meta name="description" content="Exclusiva concentración Extrait de Parfum con base de feromonas. Alta perfumería inspirada en fragancias nicho con más de doce horas de fijación en Medellín, Colombia.">
     <meta name="keywords" content="perfumes alta densidad, perfumeria de autor medellin, extrait de parfum, fijacion prolongada, feromonas, fragancias nicho colombia">
@@ -22,6 +22,8 @@
     <meta property="og:image" content="https://alta-densidad-page.vercel.app/assets/img/Logo2026.png">
     <meta property="og:site_name" content="Fragancias de Alta Densidad">
     <meta property="og:locale" content="es_CO">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://alta-densidad-page.vercel.app/assets/img/Logo2026.png">
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
@@ -42,268 +44,30 @@
     }
     </script>
 
-    <!-- Preconnect y Tipografía Google Fonts Oficial -->
+    <!-- Tipografía oficial: Cormorant Garamond (display) + Jost (UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Oficial -->
+    <link rel="preconnect" href="https://altadensidadpage-production.up.railway.app" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    
-    <!-- Hoja de Estilos Haute Parfumerie & Asistente IA AURA -->
-    <link rel="stylesheet" href="assets/css/haute-parfumerie.css">
-    <link rel="stylesheet" href="assets/css/chatbot.css">
 
-    <!-- Script inicial para persistencia de tema (evita destellos de color) -->
+    <!-- #root no genera caja: header/main/footer son hijos directos del flex de body.acc-body -->
+    <style>#root { display: contents; }</style>
+
+    <!-- Tema persistido antes de pintar (evita destellos de color) -->
     <script>
       (function() {
-        var tema = localStorage.getItem("altadensidad_tema");
-        if (tema === "claro") {
-          document.documentElement.classList.add("modo-claro");
-          document.documentElement.setAttribute("data-theme", "light");
-        } else {
-          document.documentElement.classList.remove("modo-claro");
-          document.documentElement.setAttribute("data-theme", "dark");
-        }
+        try {
+          var claro = localStorage.getItem("altadensidad_tema") === "claro";
+          document.documentElement.classList.toggle("modo-claro", claro);
+          document.documentElement.setAttribute("data-theme", claro ? "light" : "dark");
+          if (localStorage.getItem("admin_sidebar") === "compacto") document.documentElement.classList.add("adm-compacto");
+        } catch (e) {}
       })();
     </script>
 </head>
 <body>
-
-    <!-- 1 · HEADER DE AUTOR -->
-    <header class="haute-header">
-        <nav class="up nav-l">
-            <a href="#coleccion">Colección</a>
-            <a href="#top">Top 10</a>
-            <a href="#envases">Envases</a>
-            <a href="#kits">Kits</a>
-            <a href="#nosotros">Nosotros</a>
-        </nav>
-        <a class="logo" href="#">Alta Densidad<small>Fragancias</small></a>
-        <nav class="up nav-r">
-            <button id="toggleTema" class="nav-ico" aria-label="Cambiar a modo claro" title="Cambiar a modo claro"><i class="fa-solid fa-sun" aria-hidden="true"></i></button>
-            <div class="acct">
-                <a id="navSesion" class="nav-ico" href="login.html" aria-label="Ingresar a tu cuenta" title="Ingresar"><i class="fa-regular fa-user" aria-hidden="true"></i></a>
-                <div class="acct-menu" id="acctMenu" hidden></div>
-            </div>
-            <a href="#" class="nav-bag" data-cart="open">Bolsa (<span id="cnt">0</span>)</a>
-        </nav>
-    </header>
-
-    <!-- 2 · HERO SECTION -->
-    <section class="hero">
-        <div class="hero-t">
-            <span class="up eyebrow">Medellín · Perfumería de autor</span>
-            <h1 class="disp">Pura intensidad.<br><em>Extrait de Parfum.</em></h1>
-            <p class="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
-            <div><a class="btn up" href="#coleccion">Explorar colección</a></div>
-        </div>
-        <div class="stage" aria-label="Frasco insignia de Alta Densidad Fragancias">
-            <div class="hero-image-wrap">
-                <img src="assets/img/hero-alta-densidad.jpg" 
-                     alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas" 
-                     class="hero-signature-img"
-                     width="600" 
-                     height="600"
-                     loading="eager" 
-                     fetchpriority="high">
-            </div>
-        </div>
-    </section>
-
-    <!-- 3 · COLECCIÓN & FILTROS -->
-    <section class="sec" id="coleccion">
-        <div class="wrap">
-            <div class="sec-h rv">
-                <div>
-                    <h2>La colección</h2>
-                    <p class="mute" id="coleccionMeta" style="margin-top:var(--sp-1);font-size:var(--fs-2)">Puro Extrait de Parfum · Base de feromonas</p>
-                </div>
-                <div class="col-actions">
-                    <div class="search-input-wrap">
-                        <svg class="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="liveSearch" class="search-input" placeholder="Buscar por nombre, nota o marca..." aria-label="Buscar fragancias">
-                        <button id="clearSearch" class="search-clear" aria-label="Limpiar búsqueda" style="display:none">✕</button>
-                    </div>
-                    <button class="btn btn--line up btn-filter" id="btnFilterModal" aria-label="Abrir filtros de fragancias">
-                        <span>Filtros</span>
-                        <span class="filter-badge" id="filterCountBadge" style="display:none">0</span>
-                    </button>
-                    <label class="sort-wrap">
-                        <span class="sr-only">Ordenar por</span>
-                        <select id="sortSelect" class="sort-select up" aria-label="Ordenar fragancias">
-                            <option value="destacados">Recomendados</option>
-                            <option value="precio-asc">Precio: menor a mayor</option>
-                            <option value="precio-desc">Precio: mayor a menor</option>
-                            <option value="nombre-asc">Nombre: A – Z</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div class="chips up" id="chips"></div>
-            <div class="filter-status mute" id="filterStatus" style="display:none"></div>
-            <div class="grid" id="grid"></div>
-            <div id="paginacion" class="paginacion"></div>
-        </div>
-    </section>
-
-    <!-- 4 · TOP 10 MÁS PEDIDOS -->
-    <section class="sec sec--alt" id="top">
-        <div class="wrap">
-            <div class="sec-h rv">
-                <h2>Top 10<br>más pedidos</h2>
-                <p class="mute" style="max-width:32ch">Las diez fragancias que más se llevan nuestros clientes este mes.</p>
-            </div>
-            <div class="rank" id="rank"></div>
-        </div>
-    </section>
-
-    <!-- 5 · PRESENTACIONES & ENVASES -->
-    <section class="sec" id="envases">
-        <div class="wrap">
-            <div class="sec-h rv">
-                <h2>Envases</h2>
-                <p class="mute" style="max-width:44ch">Colección exclusiva de frascos en cristal tallado para vestir tu fragancia de alta densidad.</p>
-            </div>
-            <div class="sizes" id="sizes"></div>
-        </div>
-    </section>
-
-    <!-- 6 · KITS DE REGALO Y COLECCIÓN -->
-    <section class="sec sec--alt" id="kits" aria-label="Kits especiales de fragancias">
-        <div class="wrap">
-            <div class="sec-h rv">
-                <div>
-                    <span class="up eyebrow">Sets Exclusivos</span>
-                    <h2>Kits de Fragancias</h2>
-                    <p class="mute" style="max-width:48ch;margin-top:var(--sp-1)">Selecciones premium diseñadas para regalar o coleccionar con estuche de lujo y combinaciones selectas.</p>
-                </div>
-            </div>
-            <div class="kits-grid" id="kitsGrid"></div>
-            <div id="kitsPaginacion" class="kits-paginacion paginacion"></div>
-        </div>
-    </section>
-
-    <!-- 7 · NOSOTROS & FILOSOFÍA -->
-    <section class="sec" id="nosotros">
-        <div class="wrap split">
-            <div class="rv">
-                <span class="up eyebrow">Nosotros</span>
-                <h2 class="disp" style="font-size:var(--fs-5);margin-top:var(--sp-3)">Inspirados en los nichos. Concentrados para durar.</h2>
-                <p>Somos una casa de perfumería de Medellín. Interpretamos el espíritu de las grandes fragancias de nicho y de diseñador con una concentración superior, para quienes entienden el aroma como la primera forma de presencia.</p>
-                <div class="stats up">
-                    <div><b>Extrait</b>de Parfum</div>
-                    <div><b>12h+</b>Fijación</div>
-                    <div><b>+</b>Feromonas</div>
-                </div>
-            </div>
-            <div class="rv" style="align-self:center">
-                <div class="pill">
-                    <h3 class="up">Concentración</h3>
-                    <p class="mute" style="margin:0">Exclusiva formulación en Extrait de Parfum. Menos alcohol, máxima pureza y fijación.</p>
-                </div>
-                <div class="pill">
-                    <h3 class="up">Feromonas</h3>
-                    <p class="mute" style="margin:0">Una base pensada para acompañar la piel y dejar estela en cada encuentro.</p>
-                </div>
-                <div class="pill">
-                    <h3 class="up">Accesibilidad</h3>
-                    <p class="mute" style="margin:0">El lujo de un aroma de autor, sin el precio de la etiqueta comercial.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 8 · FOOTER HAUTE PARFUMERIE -->
-    <footer class="haute-footer" id="contacto">
-        <div class="wrap foot-grid">
-            <div class="foot-col">
-                <a class="logo foot-logo" href="#">Alta Densidad<small>Fragancias</small></a>
-                <p class="mute">Casa de perfumería de autor en Medellín. Concentración pura Extrait de Parfum y base de feromonas.</p>
-                <div class="foot-social">
-                    <a href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href="https://www.tiktok.com/@fragancias_altadensidad" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
-                    <a href="https://wa.me/573046477694" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                </div>
-            </div>
-            <div class="foot-col">
-                <h4 class="up">Contacto</h4>
-                <a href="https://wa.me/573046477694" target="_blank" rel="noopener noreferrer">+57 304 647 7694</a>
-                <a href="mailto:perfumesaltadensidad@gmail.com">perfumesaltadensidad@gmail.com</a>
-            </div>
-            <div class="foot-col">
-                <h4 class="up">Ubicación</h4>
-                <a href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn" target="_blank" rel="noopener noreferrer">Calle 77c # 91b - 74<br>Medellín, Antioquia</a>
-                <a class="foot-map" href="https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn" target="_blank" rel="noopener noreferrer">
-                    <img src="assets/img/ubicacion.png" alt="Mapa de ubicación de la tienda Alta Densidad en Medellín" width="200" height="110" loading="lazy" decoding="async">
-                </a>
-            </div>
-            <div class="foot-col">
-                <h4 class="up">Información</h4>
-                <a href="nosotros.html#faq">Preguntas frecuentes</a>
-                <a href="nosotros.html#envios">Envíos y devoluciones</a>
-                <a href="nosotros.html#privacidad">Política de privacidad</a>
-                <a href="login.html">Mi cuenta</a>
-            </div>
-        </div>
-        <div class="wrap foot-bottom up">
-            <span>© 2026 Fragancias de Alta Densidad</span>
-            <span>Envíos a toda Colombia · Pago seguro con Mercado Pago</span>
-        </div>
-    </footer>
-
-    <!-- 9 · BOLSA, CHECKOUT Y DETALLE: se inyectan desde haute-parfumerie.js (asegurarCapas) -->
-
-    <!-- 10.1 · MODAL ATELIER OLFATIVO (FILTROS AVANZADOS) -->
-    <div class="modal filter-modal" id="filterModal" role="dialog" aria-modal="true" aria-label="Filtros avanzados de fragancias">
-        <div class="sheet">
-            <div class="filter-sheet-h">
-                <div>
-                    <span class="up eyebrow">Atelier de Selección</span>
-                    <h3 class="disp" style="font-size:var(--fs-4)">Filtrar Colección</h3>
-                </div>
-                <button class="x up" data-close-filters aria-label="Cerrar filtros">✕ Cerrar</button>
-            </div>
-            <div class="filter-sheet-body">
-                <div class="filter-group">
-                    <label class="up filter-label">Colección</label>
-                    <div class="filter-pills" id="fpCategories"></div>
-                </div>
-                <div class="filter-group">
-                    <label class="up filter-label">Familia Olfativa</label>
-                    <div class="filter-pills" id="fpFamilies"></div>
-                </div>
-                <div class="filter-group">
-                    <label class="up filter-label">Ocasión de Uso</label>
-                    <div class="filter-pills" id="fpOccasions"></div>
-                </div>
-                <div class="filter-group">
-                    <label class="up filter-label">Estilo / Género</label>
-                    <div class="filter-pills" id="fpGenders"></div>
-                </div>
-                <div class="filter-group">
-                    <label class="up filter-label">Marca</label>
-                    <div class="filter-pills" id="fpBrands"></div>
-                </div>
-            </div>
-            <div class="filter-sheet-f">
-                <button class="link up" id="btnResetFilters">Limpiar todo</button>
-                <button class="btn up" id="btnApplyFilters">Ver resultados (<span id="filterMatchingCount">0</span>)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 11 · BOTÓN FLOTANTE WHATSAPP CON PULSO Y ANILLOS -->
-    <div class="whatsapp-flotante-wrapper" aria-label="Contacto directo por WhatsApp">
-        <div class="whatsapp-ripple-ring ring-1"></div>
-        <div class="whatsapp-ripple-ring ring-2"></div>
-        <a class="btn-whatsapp-flotante" href="https://wa.me/3046477694?text=%C2%A1Hola%21%20%F0%9F%91%8B%20Vi%20su%20cat%C3%A1logo%20en%20la%20web%20y%20me%20gustar%C3%ADa%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20perfumes.%20%E2%9C%A8" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
-            <i class="fab fa-whatsapp" aria-hidden="true"></i>
-        </a>
-    </div>
-
-    <!-- Scripts Oficiales: Haute Parfumerie & Chatbot IA AURA -->
-    <script src="assets/js/haute-parfumerie.js"></script>
-    <script src="assets/js/chatbot.js" defer></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>

@@ -15,3 +15,10 @@ img/[0-9]*_*.png
 img/[0-9]*_*.webp
 img/[0-9]*_*.avif
 img/[0-9]*_*.gif
+
+# Respaldos de base de datos (contienen datos personales)
+respaldo_*.sql
+*.sql.gz
+
+# Build del front (Vite)
+dist/
