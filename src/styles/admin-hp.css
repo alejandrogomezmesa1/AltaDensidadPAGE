@@ -1486,6 +1486,30 @@ body.adm {
   color: var(--c-inv-ink) !important;
 }
 
+.link-fragrantica {
+  font: 500 11px var(--f-ui);
+  color: var(--c-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--c-accent) 12%, transparent);
+  border: var(--bw) solid color-mix(in srgb, var(--c-accent) 30%, transparent);
+  transition: all 0.2s ease;
+  line-height: 1.3;
+}
+
+.link-fragrantica:hover {
+  background: color-mix(in srgb, var(--c-accent) 24%, transparent);
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--c-accent) 20%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .adm-side,
   .adm-shell,

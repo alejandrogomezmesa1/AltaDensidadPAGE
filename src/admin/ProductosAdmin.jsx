@@ -108,6 +108,16 @@ export default function ProductosAdmin({ alerta }) {
             <input type="text" placeholder="Buscar productos..." className="admin-search-input" value={busqueda}
               onChange={(e) => { setBusqueda(e.target.value); setPagina(1); }} />
           </div>
+          <a
+            href="https://www.fragrantica.es"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary"
+            title="Abrir Fragrantica para consultar notas y pirámides olfativas"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}
+          >
+            <i className="fas fa-flask" style={{ color: 'var(--c-accent)' }} /> Guía Fragrantica ↗
+          </a>
           <button className="btn-primary" onClick={() => abrir(null)}><i className="fas fa-plus" /> Nuevo Producto</button>
         </div>
       </div>
@@ -148,12 +158,28 @@ export default function ProductosAdmin({ alerta }) {
         <form className="modal-form" noValidate onSubmit={guardar}>
           <div className="form-grid">
             <div className="form-group full">
-              <label htmlFor="inputNombre">Nombre *</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                <label htmlFor="inputNombre">Nombre *</label>
+                <a
+                  href={form.nombre.trim()
+                    ? `https://www.fragrantica.es/search/?query=${encodeURIComponent(form.nombre.trim())}`
+                    : 'https://www.fragrantica.es'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-fragrantica"
+                  title="Abrir búsqueda en Fragrantica para consultar notas"
+                >
+                  <i className="fas fa-flask" /> {form.nombre.trim() ? `Consultar notas de "${form.nombre.trim()}" en Fragrantica ↗` : 'Guía Fragrantica de Notas ↗'}
+                </a>
+              </div>
               <input type="text" id="inputNombre" placeholder="Ej: One Million – Paco Rabanne" required {...campo('nombre')} />
             </div>
             <div className="form-group full">
-              <label htmlFor="inputDescripcion">Descripción</label>
-              <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción de la fragancia..." {...campo('descripcion')} />
+              <label htmlFor="inputDescripcion">Descripción & Pirámide Olfativa</label>
+              <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción y notas olfativas (Salida, Corazón, Fondo)..." {...campo('descripcion')} />
+              <small className="hint-data">
+                💡 <em>Tip: Puedes copiar de Fragrantica las notas de Salida, Corazón y Fondo para tener una ficha técnica precisa.</em>
+              </small>
             </div>
             <div className="form-group">
               <label htmlFor="inputCategoria">Categoría *</label>
