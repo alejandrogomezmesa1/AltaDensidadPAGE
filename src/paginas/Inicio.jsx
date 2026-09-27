@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTienda } from '../tienda/TiendaContext';
 import { Coleccion, Ranking, Envases, Kits } from '../tienda/Secciones';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
+import ExplosionHero from '../tienda/ExplosionHero';
 
 // Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en milisegundos
 const VUELTA_MS = 9000;
@@ -11,18 +12,19 @@ const FLOTE_MS = 4500;
 const INCLINACION = 12; // grados por unidad de desplazamiento (igual que la inclinación con el cursor)
 
 // Frasco del hero flotando: se inclina como si un puntero le diera vueltas, recalculado en cada
-// fotograma para que el giro sea continuo. Se detiene fuera de pantalla y con movimiento reducido.
-function HeroImagen() {
-  const envoltura = useRef(null);
-
+// fotograma para que el giro sea continuo. Se detiene durante la explosión GSAP y con movimiento reducido.
+function HeroImagen({ envolturaRef, onDisparar, animando }) {
   useEffect(() => {
-    const el = envoltura.current;
+    const el = envolturaRef.current;
     if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    if (animando) return undefined;
+
     let raf = 0;
     let visible = true;
     const inicio = performance.now();
 
     const cuadro = (ahora) => {
+      if (animando || el.dataset.animando === 'true') return;
       const t = ahora - inicio;
       const angulo = (t / VUELTA_MS) * 2 * Math.PI;
       // Puntero virtual sobre un círculo de radio 0,5 (el borde del escenario)
@@ -30,22 +32,22 @@ function HeroImagen() {
       const y = 0.5 * Math.sin(angulo);
       const flote = -4 - 8 * (0.5 - 0.5 * Math.cos((t / FLOTE_MS) * 2 * Math.PI));
       el.style.transform = `perspective(800px) rotateY(${(x * INCLINACION).toFixed(3)}deg) rotateX(${(-y * INCLINACION).toFixed(3)}deg) translateY(${flote.toFixed(2)}px)`;
-      if (visible) raf = requestAnimationFrame(cuadro);
+      if (visible && el.dataset.animando !== 'true') raf = requestAnimationFrame(cuadro);
     };
 
     const obs = new IntersectionObserver(([e]) => {
       visible = e.isIntersecting;
       cancelAnimationFrame(raf);
-      if (visible) raf = requestAnimationFrame(cuadro);
+      if (visible && !animando && el.dataset.animando !== 'true') raf = requestAnimationFrame(cuadro);
     });
     obs.observe(el);
     raf = requestAnimationFrame(cuadro);
     return () => { obs.disconnect(); cancelAnimationFrame(raf); };
-  }, []);
+  }, [envolturaRef, animando]);
 
   return (
-    <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias">
-      <div className="hero-image-wrap" ref={envoltura}>
+    <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias" onClick={onDisparar} title="Haz clic para liberar la esencia">
+      <div className="hero-image-wrap" ref={envolturaRef}>
         <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
           className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
         <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
@@ -57,6 +59,15 @@ function HeroImagen() {
 
 export default function Inicio() {
   const { P } = useTienda();
+  const [enAnimacion, setEnAnimacion] = useState(false);
+  const heroRef = useRef(null);
+  const envolturaRef = useRef(null);
+  const explosionRef = useRef(null);
+
+  const disparar = () => {
+    explosionRef.current?.disparar();
+  };
+
   usePagina({
     titulo: 'Fragancias de Alta Densidad | Extrait de Parfum & Perfumería de Autor en Medellín',
     descripcion: 'Exclusiva concentración Extrait de Parfum con base de feromonas. Alta perfumería inspirada en fragancias nicho con más de doce horas de fijación en Medellín, Colombia.',
@@ -89,14 +100,20 @@ export default function Inicio() {
     <>
       <JsonLd datos={schema} />
 
-      <section className="hero">
+      <section className="hero" ref={heroRef}>
         <div className="hero-t">
           <span className="up eyebrow">Medellín · Perfumería de autor</span>
           <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
           <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
-          <div><a className="btn up" href="#coleccion">Explorar colección</a></div>
+          <div>
+            <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); disparar(); }}>Explorar colección</a>
+            <span className="hero-hint-burst" onClick={disparar} style={{ cursor: 'pointer' }}>
+              <i className="fas fa-sparkles" /> Toca para liberar la esencia
+            </span>
+          </div>
         </div>
-        <HeroImagen />
+        <HeroImagen envolturaRef={envolturaRef} onDisparar={disparar} animando={enAnimacion} />
+        <ExplosionHero ref={explosionRef} envolturaRef={envolturaRef} heroRef={heroRef} onEstadoAnimacion={setEnAnimacion} />
       </section>
 
       <Coleccion />
