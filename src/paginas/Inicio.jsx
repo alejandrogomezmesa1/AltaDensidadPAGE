@@ -16,7 +16,7 @@ const GIRO_MAX = 6; // grados de inclinación máxima (puntero en el borde del e
 // Frasco del hero flotando: se inclina como si un puntero le diera vueltas. Cada movimiento tiene
 // su capa para no competir por transform: envoltura = resplandor de la esencia, flote = giro,
 // marco = recorte de la foto, parallax = la foto se desliza dentro del marco con el scroll.
-function HeroImagen({ envolturaRef, onDisparar }) {
+function HeroImagen({ envolturaRef }) {
   const floteRef = useRef(null);
 
   useGSAP(() => {
@@ -43,7 +43,7 @@ function HeroImagen({ envolturaRef, onDisparar }) {
   }, { scope: floteRef });
 
   return (
-    <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias" onClick={onDisparar} title="Haz clic para liberar la esencia">
+    <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias">
       <div className="hero-image-wrap" ref={envolturaRef}>
         <div className="hero-flote" ref={floteRef}>
           <div className="hero-marco">
@@ -113,15 +113,32 @@ export default function Inicio() {
             <span className="up eyebrow">Medellín · Perfumería de autor</span>
             <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
             <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
-            <div>
+            <div className="hero-actions">
               <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); desplazarA('#coleccion'); }}>Explorar colección</a>
-              <button type="button" className="hero-hint-burst" onClick={disparar}>
-                <i className="fas fa-sparkles" aria-hidden="true" /> Toca para liberar la esencia
+              <button
+                type="button"
+                className="hero-detonador-scroll"
+                onClick={() => desplazarA('#coleccion', { duration: 1.3, ease: 'power2.inOut' })}
+                aria-label="Deslizar para liberar la esencia"
+              >
+                <span className="detonador-capsula" aria-hidden="true">
+                  <span className="detonador-filamento">
+                    <span className="detonador-gota" />
+                  </span>
+                </span>
+                <span className="detonador-texto-wrap">
+                  <span className="detonador-etiqueta up">Scroll para detonar</span>
+                  <span className="detonador-titulo">Liberar la esencia</span>
+                </span>
+                <svg className="detonador-flecha" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <polyline points="19 12 12 19 5 12" />
+                </svg>
               </button>
             </div>
           </div>
         </div>
-        <HeroImagen envolturaRef={envolturaRef} onDisparar={disparar} />
+        <HeroImagen envolturaRef={envolturaRef} />
         <EsenciaHero ref={esenciaRef} envolturaRef={envolturaRef} heroRef={heroRef} />
       </section>
 

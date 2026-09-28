@@ -614,7 +614,7 @@ header.haute-header nav {
   position: relative;
   overflow: hidden;
   background: radial-gradient(circle at center, rgba(32, 28, 20, 0.6) 0%, var(--c-surface) 75%);
-  cursor: pointer;
+  cursor: default;
 }
 
 .hero-image-wrap {
@@ -829,49 +829,171 @@ html.modo-claro .hero .stage:hover .hero-marco {
   background: radial-gradient(circle, #fffaf0 0%, #f6d98a 30%, rgba(212, 175, 55, 0.35) 50%, rgba(212, 175, 55, 0) 70%);
 }
 
-/* En claro "screen" no se vería sobre el fondo marfil: oro más profundo con mezcla normal */
+.esencia-particula--bruma {
+  background: radial-gradient(circle, rgba(255, 236, 190, 0.55) 0%, rgba(212, 175, 55, 0.18) 40%, rgba(212, 175, 55, 0) 70%);
+}
+
+/* En claro "screen" no se vería sobre el fondo marfil: la bruma es blanca y los destellos,
+   puntos finos de oro profundo, con mezcla normal */
 html.modo-claro .esencia-halo,
 html.modo-claro .esencia-particula {
   mix-blend-mode: normal;
 }
 
 html.modo-claro .esencia-halo {
-  background: radial-gradient(circle, rgba(184, 150, 12, 0.22) 0%, rgba(184, 150, 12, 0.08) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 252, 244, 0.7) 0%, rgba(255, 250, 238, 0.25) 40%, transparent 70%);
 }
 
 html.modo-claro .esencia-particula {
-  background: radial-gradient(circle, #d9b44a 0%, #b8960c 40%, rgba(184, 150, 12, 0) 70%);
+  background: radial-gradient(circle, rgba(150, 118, 18, 0.9) 0%, rgba(184, 150, 12, 0.3) 30%, rgba(184, 150, 12, 0) 55%);
 }
 
-.hero-hint-burst {
+html.modo-claro .esencia-particula--bruma {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 252, 244, 0.35) 40%, rgba(255, 255, 255, 0) 70%);
+}
+
+/* ---- Detonador de Scroll de Alta Perfumería ---- */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+
+.hero-detonador-scroll {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font: 500 11px var(--f-ui);
-  color: var(--c-accent);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: var(--sp-2);
-  padding: 0;
-  background: none;
-  border: 0;
+  gap: 12px;
+  padding: 8px 18px 8px 10px;
+  background: rgba(21, 21, 23, 0.55);
+  border: var(--bw) solid var(--c-line);
+  color: var(--c-ink);
   cursor: pointer;
-  opacity: 0.85;
-  transition: opacity 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--t-2) var(--ease);
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-hint-burst:hover,
-.hero-hint-burst:focus-visible {
+.hero-detonador-scroll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--t-2) var(--ease);
+}
+
+.hero-detonador-scroll:hover {
+  border-color: var(--c-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(201, 169, 97, 0.15);
+}
+
+.hero-detonador-scroll:hover::before {
   opacity: 1;
 }
 
-.hero-hint-burst i {
-  animation: bounceHint 2s infinite ease-in-out;
+html.modo-claro .hero-detonador-scroll {
+  background: rgba(244, 241, 234, 0.75);
+  border-color: var(--c-line);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-@keyframes bounceHint {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(3px); }
+html.modo-claro .hero-detonador-scroll:hover {
+  border-color: var(--c-accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 16px rgba(184, 150, 12, 0.15);
+}
+
+/* Cápsula con filamento y gota deslizante */
+.detonador-capsula {
+  width: 18px;
+  height: 28px;
+  border: var(--bw) solid var(--c-line);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3px 0;
+  background: rgba(0, 0, 0, 0.2);
+  transition: border-color var(--t-1) var(--ease);
+  flex-shrink: 0;
+}
+
+.hero-detonador-scroll:hover .detonador-capsula {
+  border-color: var(--c-accent);
+}
+
+html.modo-claro .detonador-capsula {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.detonador-filamento {
+  width: 2px;
+  height: 100%;
+  position: relative;
+  display: block;
+}
+
+.detonador-gota {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  box-shadow: 0 0 6px var(--c-accent);
+  animation: gotaDescenso 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes gotaDescenso {
+  0% { transform: translateY(0); opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 0.9; }
+  100% { transform: translateY(14px); opacity: 0; }
+}
+
+/* Textos editoriales dentro del detonador */
+.detonador-texto-wrap {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.detonador-etiqueta {
+  font: 600 9.5px var(--f-ui);
+  letter-spacing: 0.22em;
+  color: var(--c-accent);
+  text-transform: uppercase;
+}
+
+.detonador-titulo {
+  font: 300 12.5px var(--f-display);
+  font-style: italic;
+  color: var(--c-mute);
+  letter-spacing: 0.03em;
+  transition: color var(--t-1) var(--ease);
+}
+
+.hero-detonador-scroll:hover .detonador-titulo {
+  color: var(--c-ink);
+}
+
+/* Icono flecha sutil */
+.detonador-flecha {
+  color: var(--c-accent);
+  margin-left: 2px;
+  transition: transform var(--t-1) var(--ease);
+  flex-shrink: 0;
+}
+
+.hero-detonador-scroll:hover .detonador-flecha {
+  transform: translateY(3px);
 }
 
 /* Secciones Generales */
