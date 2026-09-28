@@ -1,12 +1,12 @@
 import { useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP, MQ } from '../lib/gsap';
+import { gsap, ScrollTrigger, useGSAP, MQ, desplazarA } from '../lib/gsap';
 import { useHeroScroll, useSeccionesScroll } from '../tienda/efectosScroll';
 import { useTienda } from '../tienda/TiendaContext';
 import { Coleccion, Ranking, Envases, Kits } from '../tienda/Secciones';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
-import ExplosionHero from '../tienda/ExplosionHero';
+import EsenciaHero from '../tienda/EsenciaHero';
 
 // Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en segundos
 const VUELTA_S = 9;
@@ -14,7 +14,8 @@ const FLOTE_S = 4.5;
 const GIRO_MAX = 6; // grados de inclinación máxima (puntero en el borde del escenario)
 
 // Frasco del hero flotando: se inclina como si un puntero le diera vueltas. Cada movimiento tiene
-// su capa para no competir por transform: envoltura = explosión, parallax = scroll, flote = giro.
+// su capa para no competir por transform: envoltura = resplandor de la esencia, flote = giro,
+// marco = recorte de la foto, parallax = la foto se desliza dentro del marco con el scroll.
 function HeroImagen({ envolturaRef, onDisparar }) {
   const floteRef = useRef(null);
 
@@ -44,12 +45,14 @@ function HeroImagen({ envolturaRef, onDisparar }) {
   return (
     <div className="stage" aria-label="Frasco insignia de Alta Densidad Fragancias" onClick={onDisparar} title="Haz clic para liberar la esencia">
       <div className="hero-image-wrap" ref={envolturaRef}>
-        <div className="hero-parallax">
-          <div className="hero-flote" ref={floteRef}>
-            <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
-              className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
-            <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
-              className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
+        <div className="hero-flote" ref={floteRef}>
+          <div className="hero-marco">
+            <div className="hero-parallax">
+              <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Extrait de Parfum y Feromonas"
+                className="hero-signature-img hero-signature-img--dark" width="600" height="600" loading="eager" fetchPriority="high" />
+              <img src="/assets/img/hero-alta-densidad-light.jpg" alt="Frasco insignia de Alta Densidad Fragancias — Modo Claro"
+                className="hero-signature-img hero-signature-img--light" width="600" height="600" loading="eager" fetchPriority="high" />
+            </div>
           </div>
         </div>
       </div>
@@ -62,13 +65,13 @@ export default function Inicio() {
   const raizRef = useRef(null);
   const heroRef = useRef(null);
   const envolturaRef = useRef(null);
-  const explosionRef = useRef(null);
+  const esenciaRef = useRef(null);
 
   useHeroScroll(heroRef);
   useSeccionesScroll(raizRef, [P, TOP10, ENVASES, KITS]);
 
   const disparar = () => {
-    explosionRef.current?.disparar();
+    esenciaRef.current?.disparar();
   };
 
   usePagina({
@@ -111,7 +114,7 @@ export default function Inicio() {
             <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
             <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
             <div>
-              <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); disparar(); }}>Explorar colección</a>
+              <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); desplazarA('#coleccion'); }}>Explorar colección</a>
               <button type="button" className="hero-hint-burst" onClick={disparar}>
                 <i className="fas fa-sparkles" aria-hidden="true" /> Toca para liberar la esencia
               </button>
@@ -119,7 +122,7 @@ export default function Inicio() {
           </div>
         </div>
         <HeroImagen envolturaRef={envolturaRef} onDisparar={disparar} />
-        <ExplosionHero ref={explosionRef} envolturaRef={envolturaRef} heroRef={heroRef} />
+        <EsenciaHero ref={esenciaRef} envolturaRef={envolturaRef} heroRef={heroRef} />
       </section>
 
       <Coleccion />

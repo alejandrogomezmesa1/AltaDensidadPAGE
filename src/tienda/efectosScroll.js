@@ -11,26 +11,25 @@ function lineasEnmascaradas(el, vars) {
   });
 }
 
-// Hero: entrada al cargar + parallax por capas mientras se sale de él
+// Hero: entrada al cargar y parallax editorial: el texto no se mueve; solo la foto del frasco
+// se desliza unos píxeles dentro de su marco, que la recorta
 export function useHeroScroll(heroRef) {
   useGSAP(() => {
     const mm = gsap.matchMedia();
-    mm.add({ movil: MQ.movil, animar: MQ.animar }, ({ conditions: { movil, animar } }) => {
-      if (!animar) return;
+    mm.add(MQ.animar, () => {
       const q = gsap.utils.selector(heroRef);
 
-      // Entrada: titular por líneas, luego el resto del texto, y el frasco aparece desde la niebla
+      // Entrada: titular por líneas, luego el resto del texto; el frasco aparece sin prisa
       lineasEnmascaradas(q('h1'), { delay: 0.15 });
       gsap.from(q('.hero-t-in > :not(h1)'), { autoAlpha: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.45 });
-      gsap.from(q('.hero-parallax'), { autoAlpha: 0, scale: 0.9, duration: 1.4, ease: 'power3.out' });
+      gsap.from(q('.hero-flote'), { autoAlpha: 0, scale: 0.96, duration: 1.6, ease: 'power2.out' });
 
-      // Parallax: el texto se va más rápido que el scroll y el frasco más lento (profundidad)
-      gsap.timeline({
-        defaults: { ease: 'none' },
-        scrollTrigger: { trigger: heroRef.current, start: 0, end: 'bottom top', scrub: movil ? true : 0.6 }
-      })
-        .to(q('.hero-t-in'), { yPercent: movil ? -12 : -35, autoAlpha: 0.15 }, 0)
-        .to(q('.hero-parallax'), { yPercent: movil ? 10 : 22 }, 0);
+      // La foto va ampliada un 8 % para tener margen dentro del marco y se desliza hasta un 3,5 %
+      gsap.set(q('.hero-parallax'), { scale: 1.08 });
+      gsap.to(q('.hero-parallax'), {
+        yPercent: 3.5, ease: 'none',
+        scrollTrigger: { trigger: heroRef.current, start: 0, end: 'bottom top', scrub: 0.8 }
+      });
     });
     return () => mm.revert();
   });
@@ -96,7 +95,7 @@ export function useSeccionesScroll(raizRef, datos) {
     let pendiente;
     const ro = new ResizeObserver(() => {
       pendiente?.kill();
-      pendiente = gsap.delayedCall(0.2, () => ScrollTrigger.refresh());
+      pendiente = gsap.delayedCall(0.6, () => ScrollTrigger.refresh());
     });
     ro.observe(document.body);
     return () => { ro.disconnect(); pendiente?.kill(); mm.revert(); };

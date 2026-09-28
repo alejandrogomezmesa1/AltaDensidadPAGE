@@ -25,13 +25,17 @@ export function ImagenLogo({ src, ...props }) {
 // Controles de paginación de la tienda (← 1 2 … n →)
 export function Paginacion({ actual, total, paginas, onCambiar, className = 'paginacion' }) {
   if (total <= 1) return <div className={className} />;
+  const handleCambio = (e, p) => {
+    e.currentTarget.blur();
+    onCambiar(p);
+  };
   return (
     <div className={className}>
-      <button className="pag-btn" disabled={actual === 1} aria-label="Página anterior" onClick={() => onCambiar(actual - 1)}>←</button>
+      <button className="pag-btn" disabled={actual === 1} aria-label="Página anterior" onClick={(e) => handleCambio(e, actual - 1)}>←</button>
       {paginas.map((p, i) => (p === '...'
         ? <span key={`e${i}`} className="pag-ellipsis">…</span>
-        : <button key={p} className={`pag-btn ${p === actual ? 'pag-active' : ''}`} aria-label={`Página ${p}`} onClick={() => onCambiar(p)}>{p}</button>))}
-      <button className="pag-btn" disabled={actual === total} aria-label="Página siguiente" onClick={() => onCambiar(actual + 1)}>→</button>
+        : <button key={p} className={`pag-btn ${p === actual ? 'pag-active' : ''}`} aria-label={`Página ${p}`} onClick={(e) => handleCambio(e, p)}>{p}</button>))}
+      <button className="pag-btn" disabled={actual === total} aria-label="Página siguiente" onClick={(e) => handleCambio(e, actual + 1)}>→</button>
     </div>
   );
 }

@@ -18,9 +18,29 @@ function frecuentes(lista) {
 }
 const alfabetico = (lista) => [...new Set(lista.filter(Boolean))].sort((a, b) => a.localeCompare(b));
 
-const irA = (id) => {
-  const sec = document.getElementById(id);
-  if (sec) window.scrollTo({ top: sec.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
+export const irA = (id) => {
+  const sec = typeof id === 'string' ? document.getElementById(id) : id;
+  if (!sec) return;
+  const header = document.querySelector('header.haute-header') || document.querySelector('header');
+  const headerH = header ? header.getBoundingClientRect().height : 64;
+  const rect = sec.getBoundingClientRect();
+  const currentY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  const targetY = Math.max(0, Math.round(rect.top + currentY - headerH - 12));
+
+  if (Math.abs(currentY - targetY) < 6) return;
+
+  const html = document.documentElement;
+  const prevBehavior = html.style.scrollBehavior;
+  html.style.scrollBehavior = 'auto';
+
+  window.scrollTo({
+    top: targetY,
+    behavior: 'smooth'
+  });
+
+  setTimeout(() => {
+    html.style.scrollBehavior = prevBehavior;
+  }, 600);
 };
 
 function filtrarProductos(P, filters) {
@@ -127,7 +147,16 @@ export function Coleccion() {
   const acordesPrincipales = useMemo(() => frecuentes(P.flatMap((x) => x.ac)).slice(0, 7), [P]);
 
   const reset = () => { setFilters(FILTROS_BASE); setBusqueda(''); };
-  const cambiarPagina = (p) => { setPagina(p); irA('coleccion'); };
+  const cambiarPagina = (p) => {
+    if (p === actual) {
+      irA('coleccion');
+      return;
+    }
+    setPagina(p);
+    requestAnimationFrame(() => {
+      irA('coleccion');
+    });
+  };
 
   return (
     <section className="sec" id="coleccion">
@@ -288,8 +317,14 @@ export function Kits() {
   const visibles = activos.slice((actual - 1) * KITS_POR_PAGINA, actual * KITS_POR_PAGINA);
   const cambiar = (p) => {
     if (p < 1 || p > totalPaginas) return;
+    if (p === actual) {
+      irA('kits');
+      return;
+    }
     setPagina(p);
-    irA('kits');
+    requestAnimationFrame(() => {
+      irA('kits');
+    });
   };
 
   return (
