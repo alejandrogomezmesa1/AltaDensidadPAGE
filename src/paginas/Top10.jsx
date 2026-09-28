@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTienda } from '../tienda/TiendaContext';
-import { Ranking } from '../tienda/Secciones';
+import RuedaTop10 from '../tienda/RuedaTop10';
 import { Pastillas, Pastilla } from '../tienda/TiendaLayout';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { normalizarImagen, urlAbsoluta } from '../lib/producto';
@@ -57,7 +57,7 @@ export default function Top10() {
             </div>
             <p className="mute" style={{ maxWidth: '38ch' }}>Las diez fragancias que más se llevan nuestros clientes este mes. Toca una para ver su pirámide olfativa y añadirla a tu bolsa.</p>
           </div>
-          <Ranking />
+          <RuedaTop10 />
         </div>
       </section>
       <Pastillas>

@@ -62,7 +62,7 @@ export function useSeccionesScroll(raizRef, datos) {
 
       // Listas: entran por lotes con escalonado, una sola vez. La transition de CSS (.rv, hover de
       // .kit-card) se apaga mientras GSAP anima, o retrasaría cada fotograma; al terminar se devuelve.
-      ['.sec-h p', '.rank .row', '.sizes .size', '.kits-grid .kit-card', '#nosotros .stats > div', '#nosotros .pill'].forEach((sel) => {
+      ['.sec-h p', '.sizes .size', '.kits-grid .kit-card', '#nosotros .stats > div', '#nosotros .pill'].forEach((sel) => {
         const els = q(sel).filter((el) => !el.closest('#coleccion'));
         if (!els.length) return;
         gsap.set(els, { autoAlpha: 0, y: 40, transition: 'none' });

@@ -2,7 +2,8 @@ import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP, MQ, desplazarA } from '../lib/gsap';
 import { useHeroScroll, useSeccionesScroll } from '../tienda/efectosScroll';
 import { useTienda } from '../tienda/TiendaContext';
-import { Coleccion, Ranking, Envases, Kits } from '../tienda/Secciones';
+import { Coleccion, Envases, Kits } from '../tienda/Secciones';
+import RuedaTop10 from '../tienda/RuedaTop10';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
@@ -215,9 +216,9 @@ export default function Inicio() {
         <div className="wrap">
           <div className="sec-h rv in">
             <h2>Top 10<br />más pedidos</h2>
-            <p className="mute" style={{ maxWidth: '32ch' }}>Las diez fragancias que más se llevan nuestros clientes este mes.</p>
+            <p className="mute" style={{ maxWidth: '32ch' }}>Las diez fragancias que más se llevan nuestros clientes este mes. Recorre la rueda del nº 10 al nº 1.</p>
           </div>
-          <Ranking />
+          <RuedaTop10 />
         </div>
       </section>
 

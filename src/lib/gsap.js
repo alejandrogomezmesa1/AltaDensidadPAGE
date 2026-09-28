@@ -5,9 +5,10 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { SplitText } from 'gsap/SplitText';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+import { Observer } from 'gsap/Observer';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin, MotionPathPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin, MotionPathPlugin, Observer);
 
 export const MQ = {
   movil: '(max-width: 820px)',
@@ -22,15 +23,16 @@ const alturaCabecera = () => document.querySelector('header')?.getBoundingClient
 // GSAP mueve el scroll: si no, el navegador suavizaría cada fotograma y el recorrido daría tirones.
 // autoKill: si el usuario desplaza a mano, el recorrido se detiene y le devuelve el control.
 // destino: selector, elemento o posición en px (con cabecera: false no se descuenta la cabecera).
-export function desplazarA(destino, { duration = 1.1, ease = 'power3.inOut', cabecera = true } = {}) {
+// alTerminar: se llama al acabar o interrumpirse el recorrido.
+export function desplazarA(destino, { duration = 1.1, ease = 'power3.inOut', cabecera = true, alTerminar } = {}) {
   const html = document.documentElement;
-  const soltar = () => { html.style.scrollBehavior = ''; };
+  const soltar = () => { html.style.scrollBehavior = ''; alTerminar?.(); };
   // Con movimiento reducido, salto directo (ScrollToPlugin con duración 0 no desplaza)
   if (window.matchMedia(MQ.reducir).matches) {
-    if (typeof destino === 'number') { window.scrollTo({ top: destino, behavior: 'instant' }); return gsap.delayedCall(0, () => {}); }
+    if (typeof destino === 'number') { window.scrollTo({ top: destino, behavior: 'instant' }); return gsap.delayedCall(0, () => alTerminar?.()); }
     const el = typeof destino === 'string' ? document.querySelector(destino) : destino;
     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - alturaCabecera(), behavior: 'instant' });
-    return gsap.delayedCall(0, () => {});
+    return gsap.delayedCall(0, () => alTerminar?.());
   }
   return gsap.to(window, {
     scrollTo: { y: destino, offsetY: cabecera ? alturaCabecera : 0, autoKill: true },
@@ -42,4 +44,4 @@ export function desplazarA(destino, { duration = 1.1, ease = 'power3.inOut', cab
   });
 }
 
-export { gsap, ScrollTrigger, SplitText, useGSAP };
+export { gsap, ScrollTrigger, SplitText, Observer, useGSAP };
