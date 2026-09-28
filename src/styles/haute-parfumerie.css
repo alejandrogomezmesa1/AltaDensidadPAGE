@@ -594,10 +594,11 @@ header.haute-header nav {
 .actos {
   position: absolute;
   inset: 0 var(--gutter);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: var(--sp-5);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-content: center;
+  align-items: center;
+  column-gap: var(--sp-5);
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
@@ -620,15 +621,15 @@ header.haute-header nav {
   display: block;
   font: 500 11px/1 var(--f-ui);
   letter-spacing: 0.22em;
-  color: var(--c-accent);
+  color: var(--c-mute);
 }
 
 /* .hero .acto-*: deben ganarle a la regla .hero p del párrafo del hero */
 .hero .acto-titulo {
-  margin: var(--sp-3) 0;
+  margin: var(--sp-3) 0 var(--sp-2);
   font-family: var(--f-display);
   font-weight: 300;
-  font-size: clamp(44px, 6vw, 96px);
+  font-size: clamp(40px, 5vw, 80px);
   line-height: 1.02;
   color: var(--c-ink);
   text-wrap: balance;
@@ -639,6 +640,23 @@ header.haute-header nav {
   color: var(--c-accent);
 }
 
+/* Subtítulo: la frase del acto, que se escribe letra a letra (SplitText, máscara por palabra) */
+.hero .acto-sub {
+  max-width: none;
+  margin: 0 0 var(--sp-3);
+  font-family: var(--f-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 2.3vw, 34px);
+  line-height: 1.2;
+  color: var(--c-accent);
+}
+
+.hero .acto-sub > div {
+  padding: 0.1em 0.08em 0.16em 0;
+  margin: -0.1em -0.08em -0.16em 0;
+}
+
 .hero .acto-texto {
   max-width: 32ch;
   margin: 0;
@@ -647,34 +665,105 @@ header.haute-header nav {
   color: var(--c-mute);
 }
 
-.actos-progreso {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
+/* Recorrido de la escena: camino con tres estaciones (vertical en escritorio, horizontal en móvil) */
+.ruta {
+  pointer-events: auto;
 }
 
-.actos-num {
+.ruta svg {
+  display: block;
+  overflow: visible;
+}
+
+.ruta-base,
+.ruta-trazo {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.ruta-base {
+  stroke: var(--c-line);
+  stroke-width: 1;
+}
+
+.ruta-trazo {
+  stroke: var(--c-accent);
+  stroke-width: 1.6;
+}
+
+.ruta-punto {
+  fill: var(--c-bg);
+  stroke: var(--c-accent);
+  stroke-width: 1.5;
+}
+
+.ruta-viajero {
+  fill: var(--c-accent);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c-accent) 80%, transparent));
+}
+
+.ruta-estaciones {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ruta-estacion {
+  padding: 4px 0;
+  background: none;
+  border: 0;
   font: 500 11px/1 var(--f-ui);
   letter-spacing: 0.2em;
+  color: var(--c-ink);
+  opacity: 0.35;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ruta-estacion:focus-visible {
+  outline: 1px solid var(--c-accent);
+  outline-offset: 4px;
+}
+
+.ruta-num {
   color: var(--c-accent);
-  opacity: 0.3;
-  font-variant-numeric: tabular-nums;
+  margin-right: 6px;
 }
 
-.actos-linea {
-  position: relative;
-  flex: 0 0 140px;
-  height: 1px;
-  overflow: hidden;
-  background: var(--c-line);
+.ruta--v {
+  display: grid;
+  grid-template-columns: 40px auto;
+  column-gap: var(--sp-2);
+  height: 300px;
 }
 
-.actos-barra {
-  position: absolute;
-  inset: 0;
-  background: var(--c-accent);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
+.ruta--v svg {
+  width: 40px;
+  height: 300px;
+}
+
+.ruta--v .ruta-estaciones {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-block: 0;
+}
+
+.ruta--h {
+  display: none;
+}
+
+.ruta--h svg {
+  width: 100%;
+  max-width: 300px;
+  height: 40px;
+}
+
+.ruta--h .ruta-estaciones {
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px;
+  margin-top: var(--sp-1);
 }
 
 /* ---- Manifiesto: palabras que se encienden con el scroll (efectosScroll.js) ---- */
@@ -911,11 +1000,25 @@ html.modo-claro .hero .stage:hover .hero-marco {
     padding: var(--sp-5) var(--gutter);
   }
   .actos {
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
+    gap: var(--sp-4);
     padding-top: var(--sp-5);
+  }
+  .ruta--v {
+    display: none;
+  }
+  /* Arriba del narrador: abajo lo taparían los botones flotantes (WhatsApp, AURA) */
+  .ruta--h {
+    display: block;
+    order: -1;
   }
   .hero .acto-titulo {
     font-size: clamp(34px, 10vw, 46px);
+  }
+  .hero .acto-sub {
+    font-size: clamp(20px, 6vw, 26px);
   }
 }
 
@@ -963,23 +1066,23 @@ html.modo-claro .hero .stage:hover .hero-marco {
   background: radial-gradient(circle, rgba(255, 236, 190, 0.55) 0%, rgba(212, 175, 55, 0.18) 40%, rgba(212, 175, 55, 0) 70%);
 }
 
-/* En claro "screen" no se vería sobre el fondo marfil: la bruma es blanca y los destellos,
-   puntos finos de oro profundo, con mezcla normal */
+/* En claro "screen" aclararía sobre el marfil y el vapor desaparecería: se usa "multiply" con
+   ámbar, que tiñe la foto clara igual que el oro ilumina la oscura */
 html.modo-claro .esencia-halo,
 html.modo-claro .esencia-particula {
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply;
 }
 
 html.modo-claro .esencia-halo {
-  background: radial-gradient(circle, rgba(255, 252, 244, 0.7) 0%, rgba(255, 250, 238, 0.25) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(222, 176, 72, 0.5) 0%, rgba(222, 176, 72, 0.18) 40%, transparent 70%);
 }
 
 html.modo-claro .esencia-particula {
-  background: radial-gradient(circle, rgba(150, 118, 18, 0.9) 0%, rgba(184, 150, 12, 0.3) 30%, rgba(184, 150, 12, 0) 55%);
+  background: radial-gradient(circle, rgba(128, 88, 6, 1) 0%, rgba(168, 122, 18, 0.7) 30%, rgba(184, 150, 12, 0) 60%);
 }
 
 html.modo-claro .esencia-particula--bruma {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 252, 244, 0.35) 40%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(196, 146, 52, 0.6) 0%, rgba(214, 176, 96, 0.25) 40%, rgba(214, 176, 96, 0) 70%);
 }
 
 /* ---- Detonador de Scroll de Alta Perfumería ---- */

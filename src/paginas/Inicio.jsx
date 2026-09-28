@@ -8,12 +8,43 @@ import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
 import EsenciaHero from '../tienda/EsenciaHero';
 
-// Los tres actos de la escena del hero: la pirámide olfativa contada mientras sube el vapor
+// Los tres actos de la escena del hero: la pirámide olfativa contada mientras sube el vapor.
+// El título es la nota (orienta); la frase es el subtítulo que se escribe letra a letra.
 const ACTOS = [
-  { n: 'I', nota: 'Notas de salida', titulo: <>El primer <em>destello</em></>, texto: 'Luminosas y fugaces: la primera impresión, la que abre el camino.' },
-  { n: 'II', nota: 'Notas de corazón', titulo: <>La esencia <em>se abre</em></>, texto: 'El carácter del perfume florece al contacto con la piel.' },
-  { n: 'III', nota: 'Notas de fondo', titulo: <>Lo que <em>permanece</em></>, texto: 'Concentrado en Extrait de Parfum para acompañarte más de doce horas.' }
+  { n: 'I', id: 'salida', nota: 'salida', sub: 'El primer destello', texto: 'Luminosas y fugaces: la primera impresión, la que abre el camino.' },
+  { n: 'II', id: 'corazon', nota: 'corazón', sub: 'La esencia se abre', texto: 'El carácter del perfume florece al contacto con la piel.' },
+  { n: 'III', id: 'fondo', nota: 'fondo', sub: 'Lo que permanece', texto: 'Concentrado en Extrait de Parfum para acompañarte más de doce horas.' }
 ];
+
+// Recorrido de la escena: un camino con una estación por acto. EsenciaHero lo dibuja (DrawSVG)
+// y hace viajar un punto por él (MotionPath) con el scroll; cada estación lleva a su acto.
+const RUTAS = {
+  v: { caja: '0 0 40 300', d: 'M20 12 C 36 60, 4 102, 20 150 S 36 240, 20 288', puntos: [[20, 12], [20, 150], [20, 288]] },
+  h: { caja: '0 0 300 40', d: 'M12 20 C 60 4, 102 36, 150 20 S 240 4, 288 20', puntos: [[12, 20], [150, 20], [288, 20]] }
+};
+
+function Ruta({ orientacion }) {
+  const { caja, d, puntos } = RUTAS[orientacion];
+  return (
+    <nav className={`ruta ruta--${orientacion}`} aria-label="Recorrido por la pirámide olfativa">
+      <svg viewBox={caja} aria-hidden="true" focusable="false">
+        <path className="ruta-base" d={d} />
+        <path className="ruta-trazo" d={d} />
+        {puntos.map(([x, y], i) => <circle key={ACTOS[i].id} className="ruta-punto" cx={x} cy={y} r="3.5" />)}
+        <circle className="ruta-viajero" cx="0" cy="0" r="5" />
+      </svg>
+      <ol className="ruta-estaciones">
+        {ACTOS.map((a) => (
+          <li key={a.id}>
+            <button type="button" className="ruta-estacion up" data-acto={a.id} aria-label={`Ir a las notas de ${a.nota}`}>
+              <span className="ruta-num">{a.n}</span> {a.nota}
+            </button>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
 
 // Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en segundos
 const VUELTA_S = 9;
@@ -146,20 +177,19 @@ export default function Inicio() {
           </div>
 
           {/* Narrador de la escena: visible solo mientras el scroll la recorre (EsenciaHero) */}
-          <div className="actos" aria-hidden="true">
+          <div className="actos">
+            <Ruta orientacion="v" />
             <div className="actos-escena">
               {ACTOS.map((a) => (
-                <div className="acto" key={a.n}>
-                  <span className="acto-nota up">{a.n} · {a.nota}</span>
-                  <p className="acto-titulo">{a.titulo}</p>
+                <div className="acto" key={a.id}>
+                  <span className="acto-nota up">{a.n} · Pirámide olfativa</span>
+                  <p className="acto-titulo">Notas de <em>{a.nota}</em></p>
+                  <p className="acto-sub">{a.sub}</p>
                   <p className="acto-texto">{a.texto}</p>
                 </div>
               ))}
             </div>
-            <div className="actos-progreso">
-              {ACTOS.map((a) => <span className="actos-num up" key={a.n}>{a.n}</span>)}
-              <span className="actos-linea"><span className="actos-barra" /></span>
-            </div>
+            <Ruta orientacion="h" />
           </div>
         </div>
         <HeroImagen envolturaRef={envolturaRef} />

@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP, MQ, desplazarA } from '../lib/gsap';
+import { gsap, ScrollTrigger, SplitText, useGSAP, MQ, desplazarA } from '../lib/gsap';
 
 // Partículas de vapor: las primeras son bruma (grandes, tenues), el resto destellos finos
 const PARTICULAS = 60;
@@ -38,88 +38,128 @@ const EsenciaHero = forwardRef(function EsenciaHero(_props, ref) {
 
     const mm = gsap.matchMedia();
     mm.add({ animar: MQ.animar, movil: MQ.movil }, ({ conditions: { animar, movil } }) => {
-      if (!animar) return;
+      if (!animar) return undefined;
       const particulas = particulasRef.current.filter(Boolean).slice(0, movil ? PARTICULAS_MOVIL : PARTICULAS);
       const detonador = hero.querySelector('.hero-detonador-scroll');
       const textoHero = hero.querySelector('.hero-t-in');
       const foto = hero.querySelector('.hero-parallax');
-      const actos = gsap.utils.toArray('.acto', hero);
       const narrador = hero.querySelector('.actos');
-      const barra = hero.querySelector('.actos-barra');
-      const numeros = gsap.utils.toArray('.actos-num', hero);
+      const actos = gsap.utils.toArray('.acto', hero);
+      const ruta = hero.querySelector(movil ? '.ruta--h' : '.ruta--v');
       const alturaCabecera = () => document.querySelector('header')?.offsetHeight || 0;
       const r = gsap.utils.random;
       const subida = movil ? 0.6 : 0.75;
 
-      // Escena fijada en tres actos, como la pirámide olfativa: salida, corazón y fondo.
-      // El hero queda quieto bajo la cabecera y el scroll hace avanzar la escena; al soltar el
-      // scroll se asienta en el acto más cercano (snap a etiquetas) para poder apreciarlo.
-      // Solo se animan hijos del hero, nunca el elemento fijado.
+      // Guion de la escena (en unidades de la línea de tiempo). Cada acto ocupa un tramo largo y
+      // casi todo es "sostén": las transiciones son breves para que cada nota se lea con calma.
+      //   prólogo 0–0.3 · I 0.3–1.3 · II 1.3–2.3 · III 2.3–3.3 · epílogo 3.3–3.6
+      const TRAMOS = [[0.3, 1.1], [1.3, 2.1], [2.3, 3.2]]; // [entra, sale]
+      const IDS = ['salida', 'corazon', 'fondo'];
+      const FIN = 3.6;
+
+      // Escena fijada: el hero queda quieto bajo la cabecera y el scroll la recorre (≈ una pantalla
+      // por acto). Al soltar el scroll se asienta en el acto más cercano; sin inercia, para que un
+      // gesto rápido no se salte actos. Solo se animan hijos del hero, nunca el elemento fijado.
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: hero,
           start: () => `top ${alturaCabecera()}`,
-          end: movil ? '+=180%' : '+=250%',
+          end: movil ? '+=320%' : '+=400%',
           pin: true,
-          scrub: 1.2,
+          scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          snap: { snapTo: 'labelsDirectional', duration: { min: 0.5, max: 1.2 }, delay: 0.2, ease: 'power2.inOut', inertia: false }
+          snap: { snapTo: 'labelsDirectional', duration: { min: 0.4, max: 1 }, delay: 0.15, ease: 'power2.inOut', inertia: false }
         }
       });
       tl.addLabel('inicio', 0);
 
       // Toda la escena: la foto baja dentro de su marco (parallax)
-      if (foto) tl.fromTo(foto, { scale: 1.18, yPercent: 0 }, { yPercent: 8, duration: 3 }, 0);
+      if (foto) tl.fromTo(foto, { scale: 1.18, yPercent: 0 }, { yPercent: 8, duration: FIN }, 0);
 
       // Prólogo: el detonador y el texto del hero ceden el sitio al narrador
       if (detonador) tl.to(detonador, { autoAlpha: 0, y: 16, duration: 0.15, ease: 'power2.in' }, 0);
-      if (textoHero) tl.to(textoHero, { autoAlpha: 0, y: -30, duration: 0.3, ease: 'power2.in' }, 0.05);
-      if (narrador) tl.fromTo(narrador, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 0.25);
-      if (barra) tl.fromTo(barra, { scaleX: 0 }, { scaleX: 1, duration: 2.4 }, 0.3);
+      if (textoHero) tl.to(textoHero, { autoAlpha: 0, y: -30, duration: 0.25, ease: 'power2.in' }, 0.05);
+      if (narrador) tl.fromTo(narrador, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15 }, 0.2);
 
-      // Cada acto entra, se sostiene (ahí se asienta el snap) y sale; su numeral se enciende
-      const tramos = [[0.3, 1.05], [1.25, 2.0], [2.2, 2.75]];
-      const nombres = ['salida', 'corazon', 'fondo'];
+      // Actos: nota (título) y línea superior entran; el subtítulo se escribe letra a letra
+      // (SplitText, máscara por palabra); luego el texto. Al salir, todo sube y se desvanece.
       actos.forEach((acto, i) => {
-        const [entra, sale] = tramos[i];
-        const partes = acto.children;
-        tl.fromTo(partes, { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.25, stagger: 0.05, ease: 'power3.out' }, entra)
-          .addLabel(nombres[i], (entra + sale) / 2 + 0.12);
-        if (numeros[i]) tl.fromTo(numeros[i], { opacity: 0.3 }, { opacity: 1, duration: 0.15 }, entra);
+        const [entra, sale] = TRAMOS[i];
+        const [nota, titulo, sub, texto] = acto.children;
+        const letras = SplitText.create(sub, { type: 'words,chars', mask: 'words', charsClass: 'letra' }).chars;
+        tl.fromTo([nota, titulo], { autoAlpha: 0, y: 34 }, { autoAlpha: 1, y: 0, duration: 0.2, stagger: 0.05, ease: 'power3.out' }, entra)
+          .set(sub, { autoAlpha: 1 }, entra)
+          .fromTo(letras, { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.12, stagger: 0.012, ease: 'power3.out' }, entra + 0.12)
+          .fromTo(texto, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.15, ease: 'power2.out' }, entra + 0.3)
+          .addLabel(IDS[i], (entra + 0.45 + sale) / 2);
         if (i < actos.length - 1) {
-          tl.to(partes, { autoAlpha: 0, y: -24, duration: 0.2, stagger: 0.03, ease: 'power2.in' }, sale);
-          if (numeros[i]) tl.to(numeros[i], { opacity: 0.3, duration: 0.15 }, sale);
+          tl.to([nota, titulo, sub, texto], { autoAlpha: 0, y: -24, duration: 0.15, stagger: 0.03, ease: 'power2.in' }, sale);
         }
       });
 
+      // Recorrido: el camino se dibuja (DrawSVG) y un punto viaja por él (MotionPath) al pasar
+      // de un acto a otro; la estación del acto en curso se agranda y su etiqueta se enciende
+      let quitarClics;
+      if (ruta) {
+        const trazo = ruta.querySelector('.ruta-trazo');
+        const viajero = ruta.querySelector('.ruta-viajero');
+        const puntos = ruta.querySelectorAll('.ruta-punto');
+        const etiquetas = ruta.querySelectorAll('.ruta-estacion');
+        const camino = { path: trazo, align: trazo, alignOrigin: [0.5, 0.5] };
+        // Tramos del viaje (inicio y fin en la línea de tiempo, y fracción del camino): el primero
+        // pinta su estado inicial al crearse (camino sin dibujar, punto en la estación I)
+        [[TRAMOS[0][1], TRAMOS[1][0], 0, 0.5], [TRAMOS[1][1], TRAMOS[2][0], 0.5, 1]].forEach(([desde, hasta, a, b], k) => {
+          const duration = hasta + 0.1 - desde;
+          tl.fromTo(trazo, { drawSVG: `0% ${a * 100}%` }, { drawSVG: `0% ${b * 100}%`, duration, ease: 'power2.inOut', immediateRender: k === 0 }, desde)
+            .fromTo(viajero, { motionPath: { ...camino, start: a, end: a } },
+              { motionPath: { ...camino, start: a, end: b }, duration, ease: 'power2.inOut', immediateRender: k === 0 }, desde);
+        });
+        TRAMOS.forEach(([entra, sale], i) => {
+          tl.fromTo(puntos[i], { attr: { r: 3.5 } }, { attr: { r: 6 }, duration: 0.15, ease: 'back.out(3)' }, entra)
+            .fromTo(etiquetas[i], { opacity: 0.35 }, { opacity: 1, duration: 0.15 }, entra);
+          if (i < TRAMOS.length - 1) {
+            tl.to(puntos[i], { attr: { r: 3.5 }, duration: 0.15 }, sale)
+              .to(etiquetas[i], { opacity: 0.35, duration: 0.15 }, sale);
+          }
+        });
+
+        // Cada estación lleva a su acto
+        const irAlActo = (e) => {
+          const id = e.currentTarget.dataset.acto;
+          desplazarA(tl.scrollTrigger.labelToScroll(id), { duration: 1.2, ease: 'power2.inOut', cabecera: false });
+        };
+        etiquetas.forEach((b) => b.addEventListener('click', irAlActo));
+        quitarClics = () => etiquetas.forEach((b) => b.removeEventListener('click', irAlActo));
+      }
+
       // El frasco respira con cada acto y el halo cambia: luz clara (salida), pleno (corazón)
       // y un ámbar bajo que se asienta hacia la base (fondo)
-      tl.to(envoltura, { scale: movil ? 1.02 : 1.03, duration: 0.8, ease: 'sine.inOut' }, 0.2)
-        .to(envoltura, { scale: movil ? 1.035 : 1.055, duration: 0.6, ease: 'sine.inOut' }, 1.2)
+      tl.to(envoltura, { scale: movil ? 1.02 : 1.03, duration: 0.8, ease: 'sine.inOut' }, 0.3)
+        .to(envoltura, { scale: movil ? 1.035 : 1.055, duration: 0.6, ease: 'sine.inOut' }, 1.3)
         .fromTo(haloRef.current,
           { x: () => g.cx, y: () => g.cy + g.alto * 0.1, scale: 0.4, autoAlpha: 0 },
-          { scale: 0.9, autoAlpha: 0.6, duration: 0.7, ease: 'sine.out' }, 0.2)
-        .to(haloRef.current, { scale: 1.35, autoAlpha: 1, duration: 0.6, ease: 'sine.inOut' }, 1.2)
-        .to(haloRef.current, { y: () => g.cy + g.alto * 0.45, scale: 1.6, autoAlpha: 0.75, duration: 0.5, ease: 'sine.inOut' }, 2.1);
+          { scale: 0.9, autoAlpha: 0.6, duration: 0.7, ease: 'sine.out' }, 0.3)
+        .to(haloRef.current, { scale: 1.35, autoAlpha: 1, duration: 0.6, ease: 'sine.inOut' }, 1.3)
+        .to(haloRef.current, { y: () => g.cy + g.alto * 0.45, scale: 1.6, autoAlpha: 0.75, duration: 0.6, ease: 'sine.inOut' }, 2.3);
 
-      // Vapor por actos: cada partícula pertenece a uno (i % 3)
+      // Vapor por actos: cada partícula pertenece a uno (i % 3) y brota durante su tramo
       //   salida: destellos finos y rápidos que suben alto
       //   corazón: bruma cálida y densa, abierta a los lados
       //   fondo: bruma pesada que nace del cuerpo del frasco, sube poco y se queda
       particulas.forEach((p, i) => {
         const acto = i % 3;
         const bruma = i < BRUMA;
-        const [desde, hasta] = [[0.3, 0.85], [1.25, 1.75], [2.2, 2.45]][acto];
-        const inicio = r(desde, hasta);
-        const dur = acto === 0 ? r(0.35, 0.5) : r(0.5, 0.7);
+        const [entra, sale] = TRAMOS[acto];
+        const inicio = r(entra + 0.1, sale - 0.35);
+        const dur = acto === 0 ? r(0.3, 0.45) : r(0.45, 0.6);
         const escala = acto === 2 ? r(3, 6) : bruma ? r(3.5, 6.5) : r(0.5, 1.2);
         const origenX = r(-1, 1) * (acto === 1 ? 0.18 : 0.12);
         const origenY = acto === 2 ? r(0.2, 0.35) : r(-1, 1) * 0.06;
         const deltaX = acto === 2 ? r(-160, 160) : r(-120, 120);
         const deltaY = (acto === 0 ? r(170, 280) : acto === 1 ? r(110, 230) : r(30, 90)) * subida;
-        const pico = acto === 2 ? 0.3 : bruma ? 0.4 : r(0.8, 1);
+        const pico = acto === 2 ? 0.35 : bruma ? 0.45 : r(0.8, 1);
 
         tl.fromTo(p,
           { x: () => g.cx + origenX * g.ancho, y: () => g.cy + origenY * g.alto, scale: escala },
@@ -131,12 +171,14 @@ const EsenciaHero = forwardRef(function EsenciaHero(_props, ref) {
       });
 
       // Epílogo: el halo se disuelve, el frasco vuelve, el narrador se retira y regresa el hero
-      tl.to(haloRef.current, { autoAlpha: 0, scale: 1.8, duration: 0.3, ease: 'power2.in' }, 2.7)
-        .to(envoltura, { scale: 1, duration: 0.3, ease: 'sine.inOut' }, 2.7);
-      if (narrador) tl.to(narrador, { autoAlpha: 0, y: -20, duration: 0.2, ease: 'power2.in' }, 2.75);
-      if (textoHero) tl.to(textoHero, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power2.out' }, 2.75);
-      if (detonador) tl.to(detonador, { autoAlpha: 1, y: 0, duration: 0.2 }, 2.8);
-      tl.addLabel('fin', 3);
+      tl.to(haloRef.current, { autoAlpha: 0, scale: 1.8, duration: 0.3, ease: 'power2.in' }, 3.25)
+        .to(envoltura, { scale: 1, duration: 0.3, ease: 'sine.inOut' }, 3.25);
+      if (narrador) tl.to(narrador, { autoAlpha: 0, y: -20, duration: 0.2, ease: 'power2.in' }, 3.3);
+      if (textoHero) tl.to(textoHero, { autoAlpha: 1, y: 0, duration: 0.25, ease: 'power2.out' }, 3.35);
+      if (detonador) tl.to(detonador, { autoAlpha: 1, y: 0, duration: 0.2 }, 3.4);
+      tl.addLabel('fin', FIN);
+
+      return () => quitarClics?.();
     });
 
     return () => { ScrollTrigger.removeEventListener('refreshInit', medir); mm.revert(); };
