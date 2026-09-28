@@ -41,6 +41,20 @@ export function useSeccionesScroll(raizRef, datos) {
     mm.add({ escritorio: MQ.escritorio, animar: MQ.animar }, ({ conditions: { escritorio, animar } }) => {
       if (!animar) return;
 
+      // Manifiesto: cada palabra pasa de apagada a encendida al ritmo del scroll
+      const manifiesto = q('.manifiesto-texto')[0];
+      if (manifiesto) {
+        const palabras = SplitText.create(manifiesto, { type: 'words', wordsClass: 'palabra' }).words;
+        gsap.fromTo(palabras, { opacity: 0.14 }, {
+          opacity: 1, ease: 'none', stagger: 0.1,
+          scrollTrigger: { trigger: manifiesto, start: 'top 78%', end: 'bottom 42%', scrub: 0.5 }
+        });
+        gsap.from(q('.manifiesto .eyebrow, .manifiesto-firma'), {
+          autoAlpha: 0, y: 20, duration: 0.9, ease: 'power3.out', stagger: 0.2,
+          scrollTrigger: { trigger: manifiesto, start: 'clamp(top 85%)', once: true }
+        });
+      }
+
       // Titulares de sección
       q('.sec-h h2, #nosotros h2.disp').forEach((h) => {
         lineasEnmascaradas(h, { duration: 1, stagger: 0.1, scrollTrigger: { trigger: h, start: 'clamp(top 88%)', once: true } });

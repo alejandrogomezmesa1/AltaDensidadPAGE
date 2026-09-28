@@ -8,6 +8,13 @@ import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
 import EsenciaHero from '../tienda/EsenciaHero';
 
+// Los tres actos de la escena del hero: la pirámide olfativa contada mientras sube el vapor
+const ACTOS = [
+  { n: 'I', nota: 'Notas de salida', titulo: <>El primer <em>destello</em></>, texto: 'Luminosas y fugaces: la primera impresión, la que abre el camino.' },
+  { n: 'II', nota: 'Notas de corazón', titulo: <>La esencia <em>se abre</em></>, texto: 'El carácter del perfume florece al contacto con la piel.' },
+  { n: 'III', nota: 'Notas de fondo', titulo: <>Lo que <em>permanece</em></>, texto: 'Concentrado en Extrait de Parfum para acompañarte más de doce horas.' }
+];
+
 // Una vuelta del "puntero virtual" alrededor del frasco y un ciclo de flotación, en segundos
 const VUELTA_S = 9;
 const FLOTE_S = 4.5;
@@ -137,9 +144,39 @@ export default function Inicio() {
               </button>
             </div>
           </div>
+
+          {/* Narrador de la escena: visible solo mientras el scroll la recorre (EsenciaHero) */}
+          <div className="actos" aria-hidden="true">
+            <div className="actos-escena">
+              {ACTOS.map((a) => (
+                <div className="acto" key={a.n}>
+                  <span className="acto-nota up">{a.n} · {a.nota}</span>
+                  <p className="acto-titulo">{a.titulo}</p>
+                  <p className="acto-texto">{a.texto}</p>
+                </div>
+              ))}
+            </div>
+            <div className="actos-progreso">
+              {ACTOS.map((a) => <span className="actos-num up" key={a.n}>{a.n}</span>)}
+              <span className="actos-linea"><span className="actos-barra" /></span>
+            </div>
+          </div>
         </div>
         <HeroImagen envolturaRef={envolturaRef} />
         <EsenciaHero ref={esenciaRef} envolturaRef={envolturaRef} heroRef={heroRef} />
+      </section>
+
+      {/* Manifiesto: sus palabras se encienden una a una con el scroll (efectosScroll.js) */}
+      <section className="sec manifiesto" aria-labelledby="manifiesto-texto">
+        <div className="wrap">
+          <span className="up eyebrow">Manifiesto</span>
+          <p className="manifiesto-texto" id="manifiesto-texto">
+            Un perfume no se lleva: se <em>revela</em>. Primero el destello de la <em>salida</em>, después
+            un <em>corazón</em> que se abre en la piel y, al final, un <em>fondo</em> que permanece más de
+            doce horas. Lo concentramos en Extrait de Parfum para que cada gota diga más con menos.
+          </p>
+          <span className="manifiesto-firma up">Alta Densidad · Perfumería de autor · Medellín</span>
+        </div>
       </section>
 
       <Coleccion />
