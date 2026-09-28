@@ -11,8 +11,7 @@ function lineasEnmascaradas(el, vars) {
   });
 }
 
-// Hero: entrada al cargar y parallax editorial: el texto no se mueve; solo la foto del frasco
-// se desliza unos píxeles dentro de su marco, que la recorta
+// Hero: entrada al cargar. El parallax de la foto y el vapor viven en la escena fijada de EsenciaHero
 export function useHeroScroll(heroRef) {
   useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -23,13 +22,6 @@ export function useHeroScroll(heroRef) {
       lineasEnmascaradas(q('h1'), { delay: 0.15 });
       gsap.from(q('.hero-t-in > :not(h1)'), { autoAlpha: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.1, delay: 0.45 });
       gsap.from(q('.hero-flote'), { autoAlpha: 0, scale: 0.96, duration: 1.6, ease: 'power2.out' });
-
-      // La foto va ampliada un 8 % para tener margen dentro del marco y se desliza hasta un 3,5 %
-      gsap.set(q('.hero-parallax'), { scale: 1.08 });
-      gsap.to(q('.hero-parallax'), {
-        yPercent: 3.5, ease: 'none',
-        scrollTrigger: { trigger: heroRef.current, start: 0, end: 'bottom top', scrub: 0.8 }
-      });
     });
     return () => mm.revert();
   });
