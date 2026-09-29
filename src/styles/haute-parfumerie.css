@@ -2520,14 +2520,10 @@ body.ad-layer-open .ia-chat-launcher {
 }
 
 /* ============================================================
-   TOP 10 · RUEDA OLFATIVA (RuedaTop10.jsx)
-   Sin movimiento: lista de paradas. Con .en-escena (GSAP): la rueda a un lado y una parada a la
-   vez al otro, recorridas con el scroll del nº 10 al nº 1.
+   TOP 10 · DESFILE (DesfileTop10.jsx)
+   Sin movimiento: lista de piezas. Con .en-escena (GSAP): una fila horizontal a pantalla completa
+   que el scroll desliza del nº 10 al nº 1; la pieza del centro se enciende y las vecinas asoman.
    ============================================================ */
-.top-mapa {
-  display: none;
-}
-
 .top-paradas {
   display: grid;
   margin: 0;
@@ -2553,12 +2549,13 @@ body.ad-layer-open .ia-chat-launcher {
 .top-foto img {
   display: block;
   width: 100%;
-  height: auto; /* sin esto, el atributo height="480" anula el aspect-ratio */
+  height: auto; /* sin esto, el atributo height anula el aspect-ratio */
   aspect-ratio: 4 / 5;
   object-fit: cover;
 }
 
-.top-info {
+.top-info,
+.top-info-cuerpo {
   display: flex;
   flex-direction: column;
   gap: var(--sp-1);
@@ -2662,105 +2659,164 @@ body.ad-layer-open .ia-chat-launcher {
   color: var(--c-mute);
 }
 
-/* Rueda olfativa */
-.rueda svg {
-  display: block;
-  width: 100%;
+.desfile-riel {
+  display: none;
+}
+
+/* Modo escena */
+.sec:has(> .wrap > .desfile.en-escena) {
+  overflow-x: clip;
+}
+
+.desfile.en-escena {
+  --foto-alto: min(58svh, 540px);
+  --pieza-ancho: min(78vw, 900px);
+}
+
+.desfile.en-escena .desfile-escena {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  width: 100vw;
+  height: calc(100svh - var(--alto-cabecera, 64px));
+  margin-left: calc(50% - 50vw);
+  padding-block: var(--sp-4) var(--sp-5);
+  overflow: hidden;
+}
+
+.desfile.en-escena .top-paradas {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 5vw, 96px);
+  justify-self: start;
+  width: max-content;
+  will-change: transform;
+}
+
+.desfile.en-escena .top-parada {
+  position: relative;
+  flex: none;
+  grid-template-columns: calc(var(--foto-alto) * 0.8) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+  width: var(--pieza-ancho);
+  padding: 0;
+  border: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+.desfile.en-escena .top-foto {
+  position: relative;
+  height: var(--foto-alto);
+  box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--tinta) 55%, transparent);
+}
+
+.desfile.en-escena .top-foto img {
   height: 100%;
-  overflow: visible;
+  aspect-ratio: auto;
+  scale: 1.12; /* margen para el paralaje horizontal */
+  transition: scale 1.2s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
-.rueda-anillo {
-  fill: none;
-  stroke: var(--c-line);
+.desfile.en-escena .top-foto:hover img {
+  scale: 1.16;
 }
 
-.rueda-radio {
-  stroke: var(--c-line);
-  opacity: 0.6;
-}
-
-.rueda-familia {
-  font: 500 10px var(--f-ui);
-  letter-spacing: 0.25em;
-  fill: var(--c-mute);
-}
-
-.rueda-estela-base,
-.rueda-estela {
-  fill: none;
-  stroke-linecap: round;
-}
-
-.rueda-estela-base {
-  stroke: var(--c-line);
-  stroke-width: 1.2;
-  stroke-dasharray: 2 6;
-}
-
-.rueda-estela {
-  stroke: var(--c-accent);
-  stroke-width: 2;
-}
-
-.rueda-punto {
-  fill: var(--c-surface);
-  stroke: var(--c-accent);
-  stroke-width: 1.5;
-}
-
-.rueda-num {
-  font: 400 17px var(--f-display);
-  fill: var(--c-ink);
-  opacity: 0.4;
-}
-
-.rueda-viajero {
-  fill: var(--c-accent);
-  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--c-accent) 85%, transparent));
-}
-
-.top-atajo {
+/* El gran número: en contorno, sobre el filo entre foto y texto, con su propio ritmo */
+.desfile.en-escena .top-num {
   position: absolute;
+  z-index: 1;
+  top: calc(50% - var(--foto-alto) / 2 - 0.42em);
+  left: calc(var(--foto-alto) * 0.8 - 0.55em);
+  font-size: clamp(96px, 13vw, 200px);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--c-accent);
+  pointer-events: none;
+}
+
+.desfile.en-escena .top-num small {
+  display: none;
+}
+
+.desfile.en-escena .top-info-cuerpo {
+  padding-top: clamp(40px, 7vw, 110px);
+}
+
+/* Riel de avance: del nº 10 al nº 1 */
+.desfile.en-escena .desfile-riel {
+  display: block;
+  width: min(100% - 2 * var(--gutter), 720px);
+  margin: 0 auto;
+  padding-block: var(--sp-4) var(--sp-4);
+}
+
+.desfile-linea {
+  position: relative;
+  height: var(--bw);
+  background: var(--c-line);
+}
+
+.desfile-riel-lleno {
+  position: absolute;
+  inset: 0;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.desfile-marca {
+  position: absolute;
+  top: 0;
   width: 44px;
   height: 44px;
   margin: -22px 0 0 -22px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   background: transparent;
+  color: var(--c-mute);
   cursor: pointer;
 }
 
-.top-atajo:focus-visible {
+.desfile-marca::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--c-surface);
+  box-shadow: 0 0 0 1px var(--c-line);
+  transition: transform 0.4s, background-color 0.4s, box-shadow 0.4s;
+}
+
+.desfile-marca span {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  translate: -50% 0;
+  font: 400 15px/1 var(--f-display);
+  font-variant-numeric: lining-nums;
+  transition: color 0.4s;
+}
+
+.desfile-marca:hover span,
+.desfile-marca.es-actual span {
+  color: var(--c-ink);
+}
+
+.desfile-marca.es-actual::before {
+  background: var(--c-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 22%, transparent);
+  transform: scale(1.6);
+}
+
+.desfile-marca:focus-visible {
   outline: 1px solid var(--c-accent);
-  outline-offset: -6px;
-}
-
-/* Modo escena */
-.top-rueda.en-escena .top-escena {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  align-items: center;
-  gap: var(--sp-5);
-  height: calc(100svh - var(--alto-cabecera, 64px));
-  padding-block: var(--sp-4);
-}
-
-.top-rueda.en-escena .top-mapa {
-  display: block;
-  position: relative;
-  justify-self: center;
-  width: min(100%, calc(100svh - var(--alto-cabecera, 64px) - var(--sp-6)));
-  aspect-ratio: 1;
-}
-
-.top-rueda.en-escena .top-parada {
-  grid-area: 1 / 1;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-  align-items: center;
-  padding: 0;
-  border: 0;
+  outline-offset: -8px;
 }
 
 @media (max-width: 820px) {
@@ -2768,30 +2824,53 @@ body.ad-layer-open .ia-chat-launcher {
     grid-template-columns: 110px 1fr;
     gap: var(--sp-3);
   }
-  .top-rueda.en-escena .top-escena {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    align-items: start;
-    gap: var(--sp-3);
-    padding-block: var(--sp-2);
-  }
-  .top-rueda.en-escena .top-mapa {
-    width: min(78vw, 36svh);
-  }
-  .top-rueda.en-escena .top-parada {
-    grid-template-columns: 96px 1fr;
-    align-items: start;
-  }
   .top-num {
     font-size: 48px;
   }
   .top-nombre {
     font-size: 24px;
   }
-  .top-rueda.en-escena .top-desc {
-    -webkit-line-clamp: 2;
+  .desfile.en-escena {
+    --foto-alto: min(34svh, 300px);
+    --pieza-ancho: 76vw;
+  }
+  .desfile.en-escena .desfile-escena {
+    grid-template-rows: auto minmax(0, 1fr);
+    padding-block: var(--sp-2) var(--sp-3);
+  }
+  /* En móvil el riel va arriba: abajo lo tapan los botones flotantes */
+  .desfile.en-escena .desfile-riel {
+    order: -1;
+    padding-block: var(--sp-2) var(--sp-5);
+  }
+  .desfile.en-escena .top-parada {
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+    align-items: start;
+  }
+  .desfile.en-escena .top-foto {
+    width: calc(var(--foto-alto) * 0.8);
+  }
+  .desfile.en-escena .top-num {
+    top: calc(var(--foto-alto) - 0.6em);
+    left: calc(var(--foto-alto) * 0.8 - 0.4em);
+    font-size: 88px;
+  }
+  .desfile.en-escena .top-info-cuerpo {
+    padding-top: 0;
+  }
+  .desfile.en-escena .top-desc,
+  .desfile.en-escena .opiniones-pronto {
+    display: none;
+  }
+  .desfile.en-escena .opiniones {
+    margin-top: var(--sp-2);
+  }
+  .desfile-marca span {
+    font-size: 13px;
   }
 }
+
 
 /* Ranking: estrellas */
 .row small.stars {
