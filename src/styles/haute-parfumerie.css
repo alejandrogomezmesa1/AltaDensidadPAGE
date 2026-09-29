@@ -3035,3 +3035,668 @@ body.ad-layer-open .ia-chat-launcher {
     gap: var(--sp-5);
   }
 }
+
+/* ============================================================
+   CATÁLOGO UNIFICADO (Catalogo.jsx, Secciones.jsx · PortadaCatalogo)
+   Portada en la landing, pestañas del catálogo, armador "Crea tu perfume" e insumos.
+   ============================================================ */
+
+/* Portada: cinco accesos en rejilla editorial */
+.portada-cat {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--bw);
+  background: var(--c-line);
+  border: var(--bw) solid var(--c-line);
+}
+
+.portada-acceso {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  grid-column: span 2;
+  min-height: 260px;
+  padding: var(--sp-4);
+  overflow: hidden;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  text-decoration: none;
+  isolation: isolate;
+}
+
+.portada-acceso.es-grande {
+  grid-column: span 3;
+  min-height: clamp(340px, 42vw, 520px);
+}
+
+.portada-img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.portada-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s;
+}
+
+.portada-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--c-bg) 12%, color-mix(in srgb, var(--c-bg) 30%, transparent) 70%);
+}
+
+.portada-acceso:hover .portada-img img {
+  transform: scale(1.05);
+  opacity: 0.75;
+}
+
+.portada-n {
+  position: absolute;
+  top: var(--sp-3);
+  left: var(--sp-4);
+  font: 300 clamp(40px, 5vw, 72px)/1 var(--f-display);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--c-accent);
+}
+
+.portada-txt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  max-width: 34ch;
+}
+
+.portada-txt small {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--c-accent);
+}
+
+.portada-txt b {
+  font: 400 clamp(26px, 2.8vw, 40px)/1.05 var(--f-display);
+}
+
+.portada-txt .mute {
+  font-size: var(--fs-2);
+  line-height: var(--lh-body);
+}
+
+.portada-ir {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--c-mute);
+  transition: color 0.3s, transform 0.3s;
+}
+
+.portada-acceso:hover .portada-ir {
+  color: var(--c-accent);
+  transform: translateX(4px);
+}
+
+/* "Crea tu perfume" destaca con un filete dorado */
+.portada-acceso.es-crear {
+  box-shadow: inset 0 0 0 var(--bw) var(--c-accent);
+}
+
+.portada-acceso:focus-visible {
+  outline: 1px solid var(--c-accent);
+  outline-offset: -6px;
+}
+
+/* Cabecera y pestañas del catálogo */
+.cat-cabecera {
+  padding-top: var(--sp-6);
+  padding-bottom: var(--sp-5);
+}
+
+/* Dentro del catálogo, cada pestaña arranca cerca de la barra */
+#catalogo-contenido > .sec {
+  padding-top: var(--sp-5);
+}
+
+.cat-pestanas {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 20;
+  padding-inline: var(--gutter);
+  background: color-mix(in srgb, var(--c-bg) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border-block: var(--bw) solid var(--c-line);
+}
+
+.cat-pestanas .wrap {
+  display: flex;
+  gap: var(--sp-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cat-pestanas .wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-pestana {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--sp-1);
+  padding: var(--sp-3) 0;
+  border: 0;
+  background: none;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--c-mute);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.cat-pestana-n {
+  font: 400 13px var(--f-display);
+  letter-spacing: 0;
+  color: var(--c-accent);
+  opacity: 0.7;
+}
+
+.cat-pestana sup {
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: var(--c-mute);
+}
+
+.cat-pestana::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cat-pestana:hover,
+.cat-pestana.on {
+  color: var(--c-ink);
+}
+
+.cat-pestana.on::after {
+  transform: scaleX(1);
+}
+
+.cat-pestana.es-crear:not(.on) {
+  color: var(--c-accent);
+}
+
+.cat-pestana:focus-visible {
+  outline: 1px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.cat-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-5) 0;
+  border-top: var(--bw) solid var(--c-line);
+}
+
+.arm-cargando {
+  padding: var(--sp-5) 0;
+}
+
+/* Armador */
+.armador {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+
+.arm-pasos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+  min-width: 0;
+}
+
+.arm-paso {
+  padding-top: var(--sp-4);
+  border-top: var(--bw) solid var(--c-line);
+}
+
+.arm-paso-h {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.arm-paso-n {
+  font: 300 36px/1 var(--f-display);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--c-accent);
+  transition: color 0.4s;
+}
+
+.arm-paso.es-listo .arm-paso-n {
+  color: var(--c-accent);
+}
+
+.arm-paso-h h3 {
+  margin: 0;
+  font: 400 clamp(22px, 2.2vw, 30px)/1.1 var(--f-display);
+}
+
+.arm-paso-h p {
+  margin: 2px 0 0;
+  font-size: var(--fs-2);
+}
+
+.arm-envases {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: var(--sp-2);
+}
+
+.arm-envase,
+.arm-opcion,
+.arm-fragancia {
+  border: var(--bw) solid var(--c-line);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s, transform 0.25s;
+}
+
+.arm-envase:hover,
+.arm-opcion:hover,
+.arm-fragancia:hover {
+  border-color: var(--c-mute);
+}
+
+.arm-envase.on,
+.arm-opcion.on,
+.arm-fragancia.on {
+  border-color: var(--c-accent);
+  box-shadow: inset 0 0 0 var(--bw) var(--c-accent);
+}
+
+.arm-envase:focus-visible,
+.arm-opcion:focus-visible,
+.arm-fragancia:focus-visible {
+  outline: 1px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.arm-envase {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-2) var(--sp-2) var(--sp-3);
+}
+
+.arm-envase-img {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  margin-bottom: var(--sp-1);
+  overflow: hidden;
+  background: var(--c-bg);
+}
+
+.arm-envase-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.arm-envase:hover .arm-envase-img img,
+.arm-envase.on .arm-envase-img img {
+  transform: scale(1.06);
+}
+
+.arm-envase b {
+  font: 400 18px/1.1 var(--f-display);
+  letter-spacing: 0.04em;
+}
+
+.arm-envase small {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--c-mute);
+}
+
+.arm-opciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-2);
+}
+
+.arm-opcion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-3);
+}
+
+.arm-opcion b {
+  font: 400 22px/1 var(--f-display);
+}
+
+.arm-opcion b small {
+  font: 500 11px var(--f-ui);
+  letter-spacing: 0.14em;
+}
+
+.arm-opcion .mute {
+  font-size: var(--fs-2);
+}
+
+.arm-paso:has(.arm-opciones:empty) .arm-opciones::before {
+  content: "—";
+  color: var(--c-mute);
+}
+
+.arm-buscador {
+  display: grid;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.arm-buscador .search-input {
+  width: 100%;
+  padding-left: 14px;
+}
+
+.arm-buscador .chips {
+  margin: 0;
+}
+
+.arm-fragancias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-2);
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+.arm-fragancia {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2);
+}
+
+.arm-fragancia img {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  background: var(--c-bg);
+}
+
+.arm-fragancia span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.arm-fragancia b {
+  overflow: hidden;
+  font: 400 16px/1.2 var(--f-display);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arm-fragancia small {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.arm-mas {
+  margin-top: var(--sp-2);
+}
+
+/* Resumen fijo */
+.arm-resumen {
+  position: sticky;
+  top: calc(var(--nav-h) + 72px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border: var(--bw) solid var(--c-line);
+  background: var(--c-surface);
+}
+
+.arm-resumen-img {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--c-bg);
+  font-size: var(--fs-2);
+}
+
+.arm-resumen-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.arm-resumen-t {
+  margin: var(--sp-1) 0 0;
+  font: 400 26px/1.1 var(--f-display);
+  text-wrap: balance;
+}
+
+.arm-desglose {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: var(--sp-2) 0;
+  border-block: var(--bw) dashed var(--c-line);
+  font-size: var(--fs-2);
+}
+
+.arm-desglose div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.arm-desglose dt {
+  color: var(--c-mute);
+}
+
+.arm-desglose dd {
+  margin: 0;
+  text-align: right;
+}
+
+.arm-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--sp-1);
+}
+
+.arm-total span {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--c-mute);
+}
+
+.arm-total b {
+  font: 300 32px/1 var(--f-display);
+  color: var(--c-accent);
+}
+
+/* Esencias e insumos */
+.ins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-4);
+}
+
+.ins-card {
+  display: flex;
+  flex-direction: column;
+  border: var(--bw) solid var(--c-line);
+  background: var(--c-surface);
+}
+
+.ins-img {
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--c-bg);
+}
+
+.ins-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ins-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-3);
+}
+
+.ins-info h3 {
+  margin: 0;
+  font: 400 22px/1.1 var(--f-display);
+}
+
+.ins-info p {
+  margin: 0;
+  font-size: var(--fs-2);
+}
+
+.ins-compra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+}
+
+.ins-compra b {
+  font: 400 20px var(--f-display);
+}
+
+.d-crear {
+  display: inline-block;
+  margin-top: var(--sp-3);
+  color: var(--c-accent);
+}
+
+@media (max-width: 1024px) {
+  .armador {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Los botones flotantes suben para no tapar la barra del total */
+  body:has(.arm-resumen) .whatsapp-flotante-wrapper,
+  body:has(.arm-resumen) .ia-chat-launcher {
+    translate: 0 -72px;
+  }
+  /* En pantallas angostas el resumen es una barra inferior con total y botón */
+  .arm-resumen {
+    position: sticky;
+    bottom: 0;
+    top: auto;
+    z-index: 15;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--sp-1) var(--sp-3);
+    margin-inline: calc(-1 * var(--gutter));
+    padding: var(--sp-2) var(--gutter);
+    border-width: var(--bw) 0 0;
+    box-shadow: 0 -12px 30px -18px color-mix(in srgb, var(--tinta) 70%, transparent);
+  }
+  .arm-resumen > .eyebrow,
+  .arm-resumen-img,
+  .arm-desglose {
+    display: none;
+  }
+  .arm-resumen-t {
+    grid-column: 1;
+    margin: 0;
+    overflow: hidden;
+    font-size: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .arm-total {
+    grid-column: 1;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: var(--sp-2);
+    margin: 0;
+  }
+  .arm-total b {
+    font-size: 22px;
+  }
+  .arm-resumen .btn {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    width: auto;
+  }
+}
+
+@media (max-width: 820px) {
+  .portada-cat {
+    grid-template-columns: 1fr 1fr;
+  }
+  .portada-acceso,
+  .portada-acceso.es-grande {
+    grid-column: span 2;
+    min-height: 220px;
+  }
+  .portada-acceso:not(.es-grande) {
+    grid-column: span 1;
+    min-height: 200px;
+    padding: var(--sp-3);
+  }
+  .portada-acceso:not(.es-grande) .portada-n {
+    left: var(--sp-3);
+  }
+  .portada-acceso:not(.es-grande) .portada-ir {
+    display: none;
+  }
+  .portada-acceso:not(.es-grande) .portada-txt .mute {
+    display: none;
+  }
+  /* El tercero (Kits) ocupa todo el ancho para que queden 2 + 2 */
+  .portada-acceso:nth-child(3) {
+    grid-column: span 2;
+  }
+  .arm-envases {
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  }
+  .arm-fragancias {
+    grid-template-columns: 1fr;
+    max-height: 420px;
+  }
+}

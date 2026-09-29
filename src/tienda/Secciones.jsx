@@ -1,5 +1,6 @@
 // Secciones del catálogo reutilizadas entre páginas: colección, Top 10, envases y kits
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTienda } from './TiendaContext';
 import { Frasco, ImagenLogo, Paginacion } from './Frasco';
 import { fmt, pr, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles, todasLasNotas, tieneNotas, noDisponible, motivoNoDisponible } from '../lib/producto';
@@ -104,7 +105,7 @@ function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
 }
 
 // ── Colección: búsqueda en vivo, chips de ocasión, atelier de filtros, orden y paginación ──
-export function Coleccion() {
+export function Coleccion({ titulo = 'La colección' }) {
   const { P, setCapa, abrirDetalle, agregarRapido, pedirAura } = useTienda();
   const [filters, setFilters] = useState(FILTROS_BASE);
   const [busqueda, setBusqueda] = useState('');
@@ -145,7 +146,7 @@ export function Coleccion() {
       <div className="wrap">
         <div className="sec-h rv in">
           <div>
-            <h2>La colección</h2>
+            <h2>{titulo}</h2>
             <p className="mute" style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--fs-2)' }}>
               {P.length} formulaciones · Extrait de Parfum · Base de feromonas
             </p>
@@ -223,6 +224,37 @@ export function Coleccion() {
 
       <FiltrosModal filters={filters} setFilters={setFilters} P={P} coincidencias={filtrarProductos(P, filters).length} onReset={reset} />
     </section>
+  );
+}
+
+// ── Portada del catálogo (landing): un acceso por cada parte del catálogo ──
+export function PortadaCatalogo() {
+  const { P, KITS, ENVASES, TOP10 } = useTienda();
+  const kits = KITS.filter((k) => k.activo !== 0);
+  const envase = ENVASES.find((e) => /cartier/i.test(e.name || '')) || ENVASES[0];
+  const perfume = TOP10[0] ? normalizarImagen(TOP10[0].imagen || TOP10[0].image) : (P[0] && P[0].img);
+  const accesos = [
+    { ver: 'perfumes', n: '01', t: 'Perfumes 1.1', d: 'Extrait de Parfum con feromonas, listos para llevar.', dato: `${P.length} fragancias`, img: perfume, clase: 'es-grande' },
+    { ver: 'crear', n: '02', t: 'Crea tu perfume', d: 'Tu envase, tu tamaño, tu esencia. Con o sin feromonas.', dato: `${ENVASES.length} envases`, img: envase && normalizarImagen(envase.image), clase: 'es-grande es-crear' },
+    { ver: 'kits', n: '03', t: 'Kits', d: 'Sets para regalar o coleccionar.', dato: `${kits.length} kits`, img: kits[0] && normalizarImagen(kits[0].imagen) },
+    { ver: 'esencias', n: '04', t: 'Esencias', d: 'Esencias puras por mililitro.', dato: 'Por ml' },
+    { ver: 'insumos', n: '05', t: 'Insumos', d: 'Envases vacíos, feromonas y accesorios.', dato: 'Para crear' }
+  ];
+  return (
+    <div className="portada-cat">
+      {accesos.map((a) => (
+        <Link key={a.ver} to={a.ver === 'perfumes' ? '/catalogo' : `/catalogo?ver=${a.ver}`} className={`portada-acceso rv in ${a.clase || ''} ${a.img ? 'con-img' : ''}`}>
+          {a.img && <span className="portada-img"><ImagenLogo src={a.img} alt="" width="480" height="480" loading="lazy" decoding="async" /></span>}
+          <span className="portada-n" aria-hidden="true">{a.n}</span>
+          <span className="portada-txt">
+            <small className="up">{a.dato}</small>
+            <b>{a.t}</b>
+            <span className="mute">{a.d}</span>
+          </span>
+          <span className="portada-ir up" aria-hidden="true">Ver →</span>
+        </Link>
+      ))}
+    </div>
   );
 }
 

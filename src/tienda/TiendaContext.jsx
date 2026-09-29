@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
 import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO } from '../lib/producto';
+import { leerArmado, precioArmado, leerInsumo, precioInsumo, ETIQUETA_TIPO } from '../lib/catalogo';
 
 const CART_KEY = 'ad_cart_v2';
 const LEGACY_CART_KEY = 'altadensidad_carrito';
@@ -34,6 +35,12 @@ function agregarLinea(cart, prod, id, ml, env, q) {
   const i = cart.findIndex((x) => x.id === id && (x.ml || '') === (ml || '') && (x.env || '') === (env || ''));
   if (i >= 0) return cart.map((x, j) => (j === i ? { ...x, q: x.q + q } : x));
   return [...cart, { id, ml: ml || '', env: env || '', q }];
+}
+
+// Perfume armado (arm_…) o insumo (ins_…): el id ya describe la línea completa
+function agregarPorId(cart, id, q) {
+  if (cart.some((x) => x.id === id)) return cart.map((x) => (x.id === id ? { ...x, q: x.q + q } : x));
+  return [...cart, { id, q }];
 }
 
 function agregarKit(cart, kit, q) {
@@ -75,6 +82,9 @@ export function TiendaProvider({ children }) {
   const [TOP10, setTop10] = useState(DATOS_DUROS_TOP10);
   const [ENVASES, setEnvases] = useState(DATOS_DUROS_ENVASES);
   const [KITS, setKits] = useState(DATOS_DUROS_KITS);
+  // Armador (envases, precios de esencia y feromonas) e insumos de DATA; null = aún sin cargar
+  const [ARMADOR, setArmador] = useState(null);
+  const [INSUMOS, setInsumos] = useState(null);
   const [cart, setCart] = useState(cargarBolsa);
 
   // Capa abierta: 'bolsa' | 'detalle' | 'kit' | 'filtros' | null
@@ -148,6 +158,12 @@ export function TiendaProvider({ children }) {
         beneficios: k.beneficios || []
       })));
     });
+    fetchConFallback('catalogo/armador', 6000).then((data) => {
+      if (vivo) setArmador(data && Array.isArray(data.envases) ? data : { envases: [], esencia: {}, tamanos: [], recargoFeromonas: null, presentaciones: [] });
+    });
+    fetchConFallback('catalogo/insumos', 6000).then((data) => {
+      if (vivo) setInsumos(Array.isArray(data) ? data : []);
+    });
     return () => { vivo = false; };
   }, []);
 
@@ -188,6 +204,30 @@ export function TiendaProvider({ children }) {
         sub: 'Kit Exclusivo'
       };
     }
+    const armado = leerArmado(l.id);
+    if (armado) {
+      const p = buscarEn(P, TOP10, armado.productoId);
+      const envase = ARMADOR && ARMADOR.envases.find((e) => e.id === armado.envaseId);
+      const precio = ARMADOR && p ? precioArmado(ARMADOR, { categoria: p.c, ml: armado.ml, envaseId: armado.envaseId, feromonas: armado.feromonas }) : null;
+      return {
+        apiId: l.id,
+        nom: p ? p.n : 'Perfume preparado',
+        img: envase ? normalizarImagen(envase.image) : (p ? p.img : LOGO),
+        u: precio ? precio.total : 0,
+        sub: ['Preparado', envase && envase.name, `${armado.ml} ml`, armado.feromonas ? 'con feromonas' : 'sin feromonas'].filter(Boolean).join(' · ')
+      };
+    }
+    const insumo = leerInsumo(l.id);
+    if (insumo) {
+      const i = INSUMOS && INSUMOS.find((x) => x.id === insumo.id);
+      return {
+        apiId: l.id,
+        nom: i ? i.name : 'Insumo',
+        img: i ? normalizarImagen(i.image) : LOGO,
+        u: i ? precioInsumo(i, insumo.ml) : 0,
+        sub: [i ? ETIQUETA_TIPO[i.type] : 'Insumo', insumo.ml && `${insumo.ml} ml`].filter(Boolean).join(' · ')
+      };
+    }
     const p = buscarEn(P, TOP10, l.id);
     return {
       apiId: String(l.id),
@@ -196,7 +236,7 @@ export function TiendaProvider({ children }) {
       u: p ? pr(p) : 75000,
       sub: [etiquetaTalla(l.ml), l.env].filter(Boolean).join(' · ') || 'Fragancia'
     };
-  }, [P, TOP10, KITS]);
+  }, [P, TOP10, KITS, ARMADOR, INSUMOS]);
 
   const abrirBolsa = useCallback(() => { setPaso('bag'); setCapa('bolsa'); }, []);
   const cerrarCapas = useCallback(() => setCapa(null), []);
@@ -224,6 +264,12 @@ export function TiendaProvider({ children }) {
     setCart((c) => agregarKit(c, kit, q));
   }, [KITS]);
 
+  // Perfume armado o insumo: la línea se identifica solo por su id (arm_… / ins_…)
+  const agregarPorCodigo = useCallback((id, q = 1) => {
+    setCart((c) => agregarPorId(c, id, q));
+    abrirBolsa();
+  }, [abrirBolsa]);
+
   const cambiarCantidad = useCallback((i, delta) => {
     setCart((c) => c.map((x, j) => (j === i ? { ...x, q: x.q + delta } : x)).filter((x) => x.q >= 1));
   }, []);
@@ -247,11 +293,11 @@ export function TiendaProvider({ children }) {
   const pedirAura = useCallback(() => { setCapa(null); setAuraAbierta(true); }, []);
 
   const valor = useMemo(() => ({
-    P, TOP10, ENVASES, KITS, cart,
+    P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, cart, agregarPorCodigo,
     capa, setCapa, paso, setPaso, detalle, setDetalle, kitAbierto, auraAbierta, setAuraAbierta,
     buscarProducto, resolverLinea, abrirBolsa, cerrarCapas, addToCart, agregarRapido, addKitToCart,
     cambiarCantidad, quitarLinea, vaciarBolsa, abrirDetalle, abrirKit, pedirAura
-  }), [P, TOP10, ENVASES, KITS, cart, capa, paso, detalle, kitAbierto, auraAbierta,
+  }), [P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, cart, agregarPorCodigo, capa, paso, detalle, kitAbierto, auraAbierta,
     buscarProducto, resolverLinea, abrirBolsa, cerrarCapas, addToCart, agregarRapido, addKitToCart,
     cambiarCantidad, quitarLinea, vaciarBolsa, abrirDetalle, abrirKit, pedirAura]);
 

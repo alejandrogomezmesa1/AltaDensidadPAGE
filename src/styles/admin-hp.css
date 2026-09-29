@@ -1598,3 +1598,52 @@ body.adm {
 .ficha-estado.completa {
   color: var(--ok);
 }
+
+/* ---------- Crea tu perfume (ArmadorAdmin) y Esencias e insumos (InsumosAdmin) ---------- */
+.armador-ayuda {
+  max-width: 90ch;
+  margin: 0 0 var(--sp-4);
+  color: var(--c-mute);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.armador-aviso {
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 2px solid var(--warn);
+  color: var(--c-ink);
+}
+
+.armador-sub {
+  margin: var(--sp-5) 0 var(--sp-2);
+  font: 400 20px var(--f-display);
+}
+
+.armador-tabla td,
+.armador-tabla th {
+  white-space: nowrap;
+}
+
+.armador-precio {
+  width: 110px;
+  padding: 6px 8px;
+  border: 1px solid var(--c-line);
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font: 400 13px var(--f-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.armador-precio:focus {
+  outline: none;
+  border-color: var(--c-accent);
+}
+
+.armador-na {
+  color: var(--c-mute);
+  font-size: 12px;
+}
+
+.armador-param {
+  margin-top: var(--sp-5);
+}

@@ -11,6 +11,7 @@ try {
 const crypto = require("crypto");
 const dataSync = require("../services/dataSync");
 const esquema = require("../services/esquema");
+const precios = require("../services/precios");
 
 // Refleja en DATA el nuevo estado de la orden (venta o anulación). Nunca bloquea la respuesta.
 function sincronizarConData(external_reference, preference_id) {
@@ -110,7 +111,46 @@ router.post("/create_preference", async (req, res) => {
         continue;
       }
 
-      // 3. Validar Perfume / Producto general
+      // 3. Perfume armado ("Crea tu perfume"): arm_<productoId>_<ml>_<envaseId>_<0|1 feromonas>
+      if (itemIdStr.startsWith("arm_")) {
+        const [productoId, ml, envaseId, feromonas] = itemIdStr.slice(4).split("_").map((x) => parseInt(x, 10));
+        if (![productoId, ml, envaseId].every((x) => x > 0) || ![0, 1].includes(feromonas)) {
+          return res.status(400).json({ success: false, message: "Perfume armado inválido" });
+        }
+        try {
+          const a = await precios.precioArmado(pool, { productoId, ml, envaseId, feromonas: feromonas === 1 });
+          mpItems.push({
+            id: itemIdStr, title: a.title, description: a.description, picture_url: a.picture_url,
+            category_id: "fragancias", quantity: qty, currency_id: "COP", unit_price: a.unit_price,
+          });
+        } catch (e) {
+          if (e instanceof precios.ErrorPrecio) return res.status(e.status).json({ success: false, message: e.message });
+          throw e;
+        }
+        continue;
+      }
+
+      // 4. Insumo de DATA: ins_<inventarioId> o ins_<inventarioId>_<ml> (se vende por presentación)
+      if (itemIdStr.startsWith("ins_")) {
+        const [inventarioId, ml] = itemIdStr.slice(4).split("_").map((x) => parseInt(x, 10));
+        if (!(inventarioId > 0)) return res.status(400).json({ success: false, message: "Insumo inválido" });
+        try {
+          const i = await precios.precioInsumo(pool, { inventarioId, ml });
+          mpItems.push({
+            id: itemIdStr, title: i.title, description: i.description, picture_url: i.picture_url,
+            category_id: "insumos", quantity: qty, currency_id: "COP", unit_price: i.unit_price,
+            // Solo para DATA (no viajan a Mercado Pago): cantidad y precio en la unidad del inventario
+            inventario_id: i.inventario_id,
+            ...(i.data_por_unidad ? { data_cantidad: qty * i.data_por_unidad, data_precio: i.data_precio } : {}),
+          });
+        } catch (e) {
+          if (e instanceof precios.ErrorPrecio) return res.status(e.status).json({ success: false, message: e.message });
+          throw e;
+        }
+        continue;
+      }
+
+      // 5. Validar Perfume / Producto general
       const prodId = parseInt(itemIdStr, 10);
       if (isNaN(prodId)) {
         return res.status(400).json({ success: false, message: `ID de producto inválido: ${itemIdStr}` });
@@ -210,7 +250,8 @@ router.post("/create_preference", async (req, res) => {
     }
 
     const preference = {
-      items: mpItems,
+      // Los campos internos para DATA no viajan a Mercado Pago
+      items: mpItems.map(({ inventario_id, data_cantidad, data_precio, ...it }) => it),
       payer: mpPayer || undefined,
       external_reference,
       back_urls: {

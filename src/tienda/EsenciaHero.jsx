@@ -186,7 +186,7 @@ const EsenciaHero = forwardRef(function EsenciaHero(_props, ref) {
 
   // Disparo manual compatible (ej. links o botones auxiliares)
   const disparar = () => {
-    desplazarA('#coleccion', { duration: 1.3, ease: 'power2.inOut' });
+    desplazarA('#catalogo', { duration: 1.3, ease: 'power2.inOut' });
   };
 
   useImperativeHandle(ref, () => ({ disparar }), []);

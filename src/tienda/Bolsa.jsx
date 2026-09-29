@@ -112,7 +112,7 @@ export default function Bolsa() {
           )) : (
             <div className="empty">
               <p>Tu bolsa está vacía.</p>
-              <p style={{ marginTop: 'var(--sp-3)' }}><Link className="link up" to="/#coleccion" onClick={cerrarCapas}>Ver colección</Link></p>
+              <p style={{ marginTop: 'var(--sp-3)' }}><Link className="link up" to="/catalogo" onClick={cerrarCapas}>Ver catálogo</Link></p>
             </div>
           )}
         </div>

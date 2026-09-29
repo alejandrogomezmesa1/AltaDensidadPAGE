@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { gsap, ScrollTrigger, useGSAP, MQ, desplazarA } from '../lib/gsap';
 import { useHeroScroll, useSeccionesScroll } from '../tienda/efectosScroll';
 import { useTienda } from '../tienda/TiendaContext';
-import { Coleccion, Envases, Kits } from '../tienda/Secciones';
+import { PortadaCatalogo } from '../tienda/Secciones';
 import DesfileTop10 from '../tienda/DesfileTop10';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { etiquetaColeccion, pr, urlAbsoluta } from '../lib/producto';
@@ -153,11 +153,11 @@ export default function Inicio() {
             <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
             <p className="mute">Exclusivamente en concentración Extrait de Parfum con feromonas. Una fijación superior que dura más de doce horas en piel, a una fracción del costo del perfume comercial.</p>
             <div className="hero-actions">
-              <a className="btn up" href="#coleccion" onClick={(e) => { e.preventDefault(); desplazarA('#coleccion'); }}>Explorar colección</a>
+              <a className="btn up" href="#catalogo" onClick={(e) => { e.preventDefault(); desplazarA('#catalogo'); }}>Explorar catálogo</a>
               <button
                 type="button"
                 className="hero-detonador-scroll"
-                onClick={() => desplazarA('#coleccion', { duration: 1.3, ease: 'power2.inOut' })}
+                onClick={() => desplazarA('#catalogo', { duration: 1.3, ease: 'power2.inOut' })}
                 aria-label="Deslizar para liberar la esencia"
               >
                 <span className="detonador-capsula" aria-hidden="true">
@@ -210,7 +210,18 @@ export default function Inicio() {
         </div>
       </section>
 
-      <Coleccion />
+      <section className="sec" id="catalogo" aria-labelledby="catalogo-t">
+        <div className="wrap">
+          <div className="sec-h rv in">
+            <div>
+              <span className="up eyebrow">Catálogo</span>
+              <h2 id="catalogo-t">Todo lo que<br />creamos</h2>
+            </div>
+            <p className="mute" style={{ maxWidth: '40ch' }}>Perfumes 1.1 listos para llevar, tu propio perfume preparado a la medida, kits, esencias e insumos.</p>
+          </div>
+          <PortadaCatalogo />
+        </div>
+      </section>
 
       <section className="sec sec--alt" id="top">
         <div className="wrap">
@@ -219,29 +230,6 @@ export default function Inicio() {
             <p className="mute" style={{ maxWidth: '32ch' }}>Las diez fragancias que más se llevan nuestros clientes este mes. Desliza del nº 10 al nº 1.</p>
           </div>
           <DesfileTop10 />
-        </div>
-      </section>
-
-      <section className="sec" id="envases">
-        <div className="wrap">
-          <div className="sec-h rv in">
-            <h2>Envases</h2>
-            <p className="mute" style={{ maxWidth: '44ch' }}>Colección exclusiva de frascos en cristal tallado para vestir tu fragancia de alta densidad.</p>
-          </div>
-          <Envases />
-        </div>
-      </section>
-
-      <section className="sec sec--alt" id="kits" aria-label="Kits especiales de fragancias">
-        <div className="wrap">
-          <div className="sec-h rv in">
-            <div>
-              <span className="up eyebrow">Sets Exclusivos</span>
-              <h2>Kits de Fragancias</h2>
-              <p className="mute" style={{ maxWidth: '48ch', marginTop: 'var(--sp-1)' }}>Selecciones premium diseñadas para regalar o coleccionar con estuche de lujo y combinaciones selectas.</p>
-            </div>
-          </div>
-          <Kits />
         </div>
       </section>
 

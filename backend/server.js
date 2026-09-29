@@ -14,6 +14,7 @@ const mercadopagoRouter = require('./routes/mercadopago');
 const monitoreoRouter = require('./routes/monitoreo');
 const chatbotRouter = require('./routes/chatbot');
 const integracionRouter = require('./routes/integracion');
+const catalogoRouter = require('./routes/catalogo');
 const dataSync = require('./services/dataSync');
 const { ejecutarMigraciones } = require('./migrator');
 const esquema = require('./services/esquema');
@@ -114,6 +115,7 @@ app.use((req, res, next) => {
 app.use('/api/productos', productosRouter);
 app.use('/api/envases', envasesRouter);
 app.use('/api/kits', kitsRouter);
+app.use('/api/catalogo', catalogoRouter);
 app.use('/api/top10', top10Router);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);

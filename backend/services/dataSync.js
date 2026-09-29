@@ -58,12 +58,13 @@ async function sincronizarCatalogo() {
 async function mapearInventario(pool, items) {
     const prodIds = [];
     const kitIds = [];
+    const mapa = new Map();
     for (const it of items) {
         const id = String(it.id || '');
-        if (id.startsWith('kit_')) kitIds.push(parseInt(id.slice(4), 10));
+        if (id.startsWith('ins_') && it.inventario_id) mapa.set(id, Number(it.inventario_id));
+        else if (id.startsWith('kit_')) kitIds.push(parseInt(id.slice(4), 10));
         else if (/^\d+$/.test(id)) prodIds.push(parseInt(id, 10));
     }
-    const mapa = new Map();
     if (prodIds.length) {
         const [rows] = await pool.query('SELECT id, inventario_id FROM Productos WHERE id IN (?)', [prodIds]);
         rows.forEach(r => r.inventario_id && mapa.set(String(r.id), r.inventario_id));
@@ -85,7 +86,7 @@ async function verificarDisponibilidad(pool, mpItems) {
 
     if (bridge.habilitado()) {
         try {
-            const r = await bridge.verificarStock(vinculados.map(it => ({ inventoryId: mapa.get(String(it.id)), quantity: it.quantity })));
+            const r = await bridge.verificarStock(vinculados.map(it => ({ inventoryId: mapa.get(String(it.id)), quantity: it.data_cantidad || it.quantity })));
             const faltan = new Set((r.faltantes || []).map(f => Number(f.inventoryId)));
             return vinculados.filter(it => faltan.has(Number(mapa.get(String(it.id))))).map(it => it.title);
         } catch (err) {
@@ -93,7 +94,8 @@ async function verificarDisponibilidad(pool, mpItems) {
         }
     }
 
-    const prodIds = vinculados.filter(it => !String(it.id).startsWith('kit_')).map(it => parseInt(it.id, 10));
+    // Sin DATA en vivo, los insumos no tienen estado guardado en la web: se dejan pasar
+    const prodIds = vinculados.filter(it => /^\d+$/.test(String(it.id))).map(it => parseInt(it.id, 10));
     const kitIds = vinculados.filter(it => String(it.id).startsWith('kit_')).map(it => parseInt(String(it.id).slice(4), 10));
     const agotados = new Set();
     if (prodIds.length) {
@@ -144,8 +146,9 @@ async function sincronizarOrden(ref) {
                 },
                 items: items.map(it => ({
                     inventoryId: mapa.get(String(it.id)) || null,
-                    quantity: it.quantity,
-                    unitPrice: it.unit_price,
+                    // Insumos por ml: DATA descuenta ml y cobra por ml
+                    quantity: it.data_cantidad || it.quantity,
+                    unitPrice: it.data_precio ?? it.unit_price,
                     description: it.title
                 }))
             });

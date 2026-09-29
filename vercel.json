@@ -6,7 +6,8 @@
   "redirects": [
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/top10.html", "destination": "/top10", "permanent": true },
-    { "source": "/envases.html", "destination": "/envases", "permanent": true },
+    { "source": "/envases.html", "destination": "/catalogo?ver=crear", "permanent": true },
+    { "source": "/envases", "destination": "/catalogo?ver=crear", "permanent": true },
     { "source": "/nosotros.html", "destination": "/nosotros", "permanent": true },
     { "source": "/login.html", "destination": "/login", "permanent": true },
     { "source": "/reset.html", "destination": "/reset", "permanent": true },

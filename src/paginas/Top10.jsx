@@ -66,7 +66,7 @@ export default function Top10() {
         </Pastilla>
         <Pastilla titulo="Variedad de envases">
           <p className="mute">Cilindro, Cartier, Swarovski y más, en distintos tamaños y colores.</p>
-          <Link className="link up" to="/envases">Ver envases disponibles</Link>
+          <Link className="link up" to="/catalogo?ver=crear">Crea tu perfume en tu envase</Link>
         </Pastilla>
         <Pastilla titulo="Feromonas">
           <p className="mute">Diseñadas para intensificar la atracción y lograr una absorción óptima en la piel.</p>

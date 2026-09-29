@@ -6,7 +6,7 @@ import TiendaLayout from './tienda/TiendaLayout';
 import { DesplazarAlCambiar } from './tienda/Marco';
 import Inicio from './paginas/Inicio';
 import Top10 from './paginas/Top10';
-import EnvasesPagina from './paginas/EnvasesPagina';
+import Catalogo from './paginas/Catalogo';
 import Nosotros from './paginas/Nosotros';
 import Login from './acceso/Login';
 import Reset from './acceso/Reset';
@@ -26,13 +26,14 @@ function Tienda() {
 
 // Rutas de la web anterior (.html) que puedan llegar desde enlaces viejos
 const LEGADO = [
-  ['index', '/'], ['top10', '/top10'], ['envases', '/envases'], ['nosotros', '/nosotros'],
+  ['index', '/'], ['top10', '/top10'], ['envases', '/catalogo?ver=crear'], ['nosotros', '/nosotros'],
   ['login', '/login'], ['reset', '/reset'], ['admin', '/admin'],
   ['success', '/success'], ['failure', '/failure'], ['pending', '/pending']
 ];
 
 function RedirigirConQuery({ a }) {
-  return <Navigate to={{ pathname: a, search: window.location.search, hash: window.location.hash }} replace />;
+  const [pathname, query] = a.split('?');
+  return <Navigate to={{ pathname, search: window.location.search || (query ? `?${query}` : ''), hash: window.location.hash }} replace />;
 }
 
 export default function App() {
@@ -44,7 +45,9 @@ export default function App() {
           <Route element={<Tienda />}>
             <Route index element={<Inicio />} />
             <Route path="top10" element={<Top10 />} />
-            <Route path="envases" element={<EnvasesPagina />} />
+            <Route path="catalogo" element={<Catalogo />} />
+            {/* Los envases se eligen ahora en "Crea tu perfume" */}
+            <Route path="envases" element={<Navigate to="/catalogo?ver=crear" replace />} />
             <Route path="nosotros" element={<Nosotros />} />
           </Route>
           <Route path="login" element={<Login />} />

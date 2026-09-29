@@ -1,5 +1,6 @@
 // Capas compartidas por todas las páginas públicas: velo, bolsa y modal de detalle (perfume o kit)
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useTienda } from './TiendaContext';
 import Bolsa, { Cantidad } from './Bolsa';
 import { Frasco, ImagenLogo } from './Frasco';
@@ -68,6 +69,7 @@ function DetalleProducto() {
             ? <button className="btn up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>
             : <button className="btn up" onClick={() => { addToCart(D.id, D.ml, D.env, D.q); abrirBolsa(); }}>Añadir a la bolsa</button>}
         </div>
+        <Link className="link up d-crear" to={`/catalogo?ver=crear&fragancia=${p.id}`} onClick={cerrarCapas}>Prepararla en el envase y tamaño que quieras →</Link>
         <a className="link up d-wa" href={`https://wa.me/${WA}?text=${msgWa}`} target="_blank" rel="noopener">Consultar con un asesor por WhatsApp</a>
       </div>
     </>

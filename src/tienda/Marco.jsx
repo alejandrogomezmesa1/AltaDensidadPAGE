@@ -71,8 +71,9 @@ function Cuenta() {
 }
 
 export function Encabezado() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const { cart, abrirBolsa } = useTienda();
+  const enCrear = pathname === '/catalogo' && new URLSearchParams(search).get('ver') === 'crear';
   const enInicio = pathname === '/';
   const cantidad = cart.reduce((s, l) => s + l.q, 0);
   const actual = (ruta) => (pathname === ruta ? 'page' : undefined);
@@ -80,23 +81,10 @@ export function Encabezado() {
   return (
     <header className="haute-header">
       <nav className="up nav-l">
-        {enInicio ? (
-          <>
-            <a href="#coleccion">Colección</a>
-            <a href="#top">Top 10</a>
-            <a href="#envases">Envases</a>
-            <a href="#kits">Kits</a>
-            <a href="#nosotros">Nosotros</a>
-          </>
-        ) : (
-          <>
-            <Link to="/#coleccion">Colección</Link>
-            <Link to="/top10" aria-current={actual('/top10')}>Top 10</Link>
-            <Link to="/envases" aria-current={actual('/envases')}>Envases</Link>
-            <Link to="/#kits">Kits</Link>
-            <Link to="/nosotros" aria-current={actual('/nosotros')}>Nosotros</Link>
-          </>
-        )}
+        <Link to="/catalogo" aria-current={pathname === '/catalogo' && !enCrear ? 'page' : undefined}>Catálogo</Link>
+        <Link to="/catalogo?ver=crear" aria-current={enCrear ? 'page' : undefined}>Crea tu perfume</Link>
+        {enInicio ? <a href="#top">Top 10</a> : <Link to="/top10" aria-current={actual('/top10')}>Top 10</Link>}
+        {enInicio ? <a href="#nosotros">Nosotros</a> : <Link to="/nosotros" aria-current={actual('/nosotros')}>Nosotros</Link>}
       </nav>
       <Link className="logo" to="/" onClick={() => enInicio && window.scrollTo({ top: 0, behavior: 'smooth' })}>
         Alta Densidad<small>Fragancias</small>
