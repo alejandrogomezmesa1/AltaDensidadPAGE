@@ -18,29 +18,11 @@ function frecuentes(lista) {
 }
 const alfabetico = (lista) => [...new Set(lista.filter(Boolean))].sort((a, b) => a.localeCompare(b));
 
-export const irA = (id) => {
-  const sec = typeof id === 'string' ? document.getElementById(id) : id;
-  if (!sec) return;
-  const header = document.querySelector('header.haute-header') || document.querySelector('header');
-  const headerH = header ? header.getBoundingClientRect().height : 64;
-  const rect = sec.getBoundingClientRect();
-  const currentY = window.pageYOffset || document.documentElement.scrollTop || 0;
-  const targetY = Math.max(0, Math.round(rect.top + currentY - headerH - 12));
+import { desplazarA } from '../lib/gsap';
 
-  if (Math.abs(currentY - targetY) < 6) return;
-
-  const html = document.documentElement;
-  const prevBehavior = html.style.scrollBehavior;
-  html.style.scrollBehavior = 'auto';
-
-  window.scrollTo({
-    top: targetY,
-    behavior: 'smooth'
-  });
-
-  setTimeout(() => {
-    html.style.scrollBehavior = prevBehavior;
-  }, 600);
+export const irA = (id, opciones = {}) => {
+  const destino = typeof id === 'string' && !id.startsWith('#') ? `#${id}` : id;
+  return desplazarA(destino, { duration: 0.8, ease: 'power2.inOut', cabecera: true, ...opciones });
 };
 
 function filtrarProductos(P, filters) {
