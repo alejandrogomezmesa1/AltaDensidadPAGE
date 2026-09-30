@@ -59,7 +59,7 @@ export default function DesfileTop10() {
           const suave = lejos * lejos * (3 - 2 * lejos); // smoothstep
           a.pieza({ scale: 1 - 0.14 * suave, opacity: 1 - 0.62 * suave, zIndex: lejos < 0.5 ? 2 : 1 });
           a.foto({ xPercent: gsap.utils.clamp(-1.5, 1.5, d) * -7 });
-          a.num({ xPercent: gsap.utils.clamp(-1.5, 1.5, d) * 35, opacity: 1 - suave });
+          a.num({ opacity: 1 - suave, y: suave * 16 });
           a.info({ opacity: 1 - suave, y: suave * 24 });
         });
         riel.style.transform = `scaleX(${avance})`;
@@ -130,7 +130,7 @@ export default function DesfileTop10() {
                   <ImagenLogo src={normalizarImagen(p.imagen || p.image || p.img)} alt={nom} width="480" height="600" loading={p.pos >= 8 ? 'eager' : 'lazy'} decoding="async" />
                 </div>
                 <div className="top-info">
-                  <span className="top-num" aria-label={`Número ${p.pos}`}><small>Nº</small>{p.pos}</span>
+                  <span className="top-num" aria-label={`Número ${p.pos}`}><small>Nº</small>{p.pos < 10 ? `0${p.pos}` : p.pos}</span>
                   <div className="top-info-cuerpo">
                     {meta && <small className="up top-meta">{meta}</small>}
                     <h3 className="top-nombre">{nom}</h3>

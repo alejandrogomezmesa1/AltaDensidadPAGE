@@ -2724,24 +2724,38 @@ body.ad-layer-open .ia-chat-launcher {
   scale: 1.16;
 }
 
-/* El gran número: en contorno, sobre el filo entre foto y texto, con su propio ritmo */
+/* Número editorial del Top 10: nítido, prominente y en armonía con la ficha del perfume */
 .desfile.en-escena .top-num {
-  position: absolute;
+  position: relative;
   z-index: 1;
-  top: calc(50% - var(--foto-alto) / 2 - 0.42em);
-  left: calc(var(--foto-alto) * 0.8 - 0.55em);
-  font-size: clamp(96px, 13vw, 200px);
-  color: transparent;
-  -webkit-text-stroke: 1px var(--c-accent);
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: clamp(48px, 5.2vw, 80px);
+  line-height: 0.95;
+  color: var(--c-accent);
+  font-variant-numeric: lining-nums;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sp-2);
+  text-shadow: 0 2px 20px color-mix(in srgb, var(--c-accent) 22%, transparent);
   pointer-events: none;
 }
 
 .desfile.en-escena .top-num small {
-  display: none;
+  display: inline-block;
+  font-family: var(--f-ui);
+  font-size: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--c-mute);
+  vertical-align: 0.75em;
+  margin-right: 0.18em;
 }
 
 .desfile.en-escena .top-info-cuerpo {
-  padding-top: clamp(40px, 7vw, 110px);
+  padding-top: 0;
 }
 
 /* Riel de avance: del nº 10 al nº 1 */
@@ -2852,9 +2866,8 @@ body.ad-layer-open .ia-chat-launcher {
     width: calc(var(--foto-alto) * 0.8);
   }
   .desfile.en-escena .top-num {
-    top: calc(var(--foto-alto) - 0.6em);
-    left: calc(var(--foto-alto) * 0.8 - 0.4em);
-    font-size: 88px;
+    font-size: 40px;
+    margin-bottom: var(--sp-1);
   }
   .desfile.en-escena .top-info-cuerpo {
     padding-top: 0;
