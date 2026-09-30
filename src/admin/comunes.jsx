@@ -278,3 +278,26 @@ export function BotonSinStockTodos({ tabla, lista, onCambio, alerta }) {
     </button>
   );
 }
+
+// "Solo preparado": la fragancia solo está en esencia; no se vende como 1.1, sí en "Crea tu perfume"
+export function InterruptorSoloPreparado({ item, onCambio, alerta }) {
+  const [guardando, setGuardando] = useState(false);
+  const activo = Boolean(item.soloPreparado);
+  const cambiar = async () => {
+    setGuardando(true);
+    try {
+      await apiJson('catalogo/solo-preparado', { method: 'PUT', body: { id: item.id, valor: !activo } });
+      onCambio(item.id, !activo);
+    } catch (err) {
+      alerta('No se pudo guardar: ' + err.message, 'error');
+    } finally {
+      setGuardando(false);
+    }
+  };
+  return (
+    <label className="check-item" title="Solo en esencia: sale de Perfumes 1.1 y queda en «Crea tu perfume»">
+      <input type="checkbox" checked={activo} disabled={guardando} onChange={cambiar} />
+      {activo ? ' Sí' : ' No'}
+    </label>
+  );
+}

@@ -63,13 +63,16 @@ function DetalleProducto() {
           </div>
         )}
         <div className="buy">
-          <b style={{ font: '300 28px var(--f-display)' }}>{p.rev ? 'Precio en revisión' : fmt(pr(p) * D.q)}</b>
-          <Cantidad valor={D.q} onMenos={() => fijar({ q: Math.max(1, D.q - 1) })} onMas={() => fijar({ q: D.q + 1 })} />
-          {noDisponible(p)
-            ? <button className="btn up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>
-            : <button className="btn up" onClick={() => { addToCart(D.id, D.ml, D.env, D.q); abrirBolsa(); }}>Añadir a la bolsa</button>}
+          {!p.sp && <b style={{ font: '300 28px var(--f-display)' }}>{p.rev ? 'Precio en revisión' : fmt(pr(p) * D.q)}</b>}
+          {!p.sp && <Cantidad valor={D.q} onMenos={() => fijar({ q: Math.max(1, D.q - 1) })} onMas={() => fijar({ q: D.q + 1 })} />}
+          {p.sp
+            ? <Link className="btn up" to={`/catalogo?ver=crear&fragancia=${p.id}`} onClick={cerrarCapas}>Prepararla a tu medida</Link>
+            : noDisponible(p)
+              ? <button className="btn up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>
+              : <button className="btn up" onClick={() => { addToCart(D.id, D.ml, D.env, D.q); abrirBolsa(); }}>Añadir a la bolsa</button>}
         </div>
-        <Link className="link up d-crear" to={`/catalogo?ver=crear&fragancia=${p.id}`} onClick={cerrarCapas}>Prepararla en el envase y tamaño que quieras →</Link>
+        {p.sp && <p className="mute d-solo-prep">Esta fragancia la tenemos en esencia: se prepara en el envase y tamaño que elijas.</p>}
+        {!p.sp && <Link className="link up d-crear" to={`/catalogo?ver=crear&fragancia=${p.id}`} onClick={cerrarCapas}>Prepararla en el envase y tamaño que quieras →</Link>}
         <a className="link up d-wa" href={`https://wa.me/${WA}?text=${msgWa}`} target="_blank" rel="noopener">Consultar con un asesor por WhatsApp</a>
       </div>
     </>

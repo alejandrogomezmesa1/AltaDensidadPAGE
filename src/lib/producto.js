@@ -54,7 +54,9 @@ export function adaptarProducto(item, idx) {
     desc: item.description || item.descripcion || null,
     img: normalizarImagen(item.image || item.imagen || (item.images && item.images[0])),
     ag: Number(item.agotado) === 1,
-    rev: Number(item.priceReview || item.precio_revision) === 1
+    rev: Number(item.priceReview || item.precio_revision) === 1,
+    // Solo en esencia: no se vende como 1.1, sí en "Crea tu perfume"
+    sp: Number(item.soloPreparado) === 1
   };
 }
 
@@ -65,6 +67,9 @@ export const tieneNotas = (p) => todasLasNotas(p).length > 0;
 // No se puede vender: sin stock en DATA o precio en revisión (no cubre el costo)
 export const noDisponible = (p) => p.ag || p.rev;
 export const motivoNoDisponible = (p) => (p.rev ? 'Precio en revisión' : 'Agotado');
+
+// Perfumes que se venden como 1.1 (sin los que solo se preparan)
+export const perfumes11 = (P) => P.filter((p) => !p.sp);
 
 export const pr = (p) => Number(p.p || p.precio || p.price || 75000);
 

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTienda } from './TiendaContext';
 import { Frasco, ImagenLogo, Paginacion } from './Frasco';
-import { fmt, pr, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles, todasLasNotas, tieneNotas, noDisponible, motivoNoDisponible } from '../lib/producto';
+import { fmt, pr, perfumes11, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles, todasLasNotas, tieneNotas, noDisponible, motivoNoDisponible } from '../lib/producto';
 import { WA } from '../config';
 
 const PRODUCTOS_POR_PAGINA = 12;
@@ -106,7 +106,8 @@ function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
 
 // ── Colección: búsqueda en vivo, chips de ocasión, atelier de filtros, orden y paginación ──
 export function Coleccion({ titulo = 'La colección' }) {
-  const { P, setCapa, abrirDetalle, agregarRapido, pedirAura } = useTienda();
+  const { P: todos, setCapa, abrirDetalle, agregarRapido, pedirAura } = useTienda();
+  const P = useMemo(() => perfumes11(todos), [todos]);
   const [filters, setFilters] = useState(FILTROS_BASE);
   const [busqueda, setBusqueda] = useState('');
   const [orden, setOrden] = useState('destacados');
@@ -229,7 +230,8 @@ export function Coleccion({ titulo = 'La colección' }) {
 
 // ── Portada del catálogo (landing): un acceso por cada parte del catálogo ──
 export function PortadaCatalogo() {
-  const { P, KITS, ENVASES, TOP10 } = useTienda();
+  const { P: todos, KITS, ENVASES, TOP10 } = useTienda();
+  const P = perfumes11(todos);
   const kits = KITS.filter((k) => k.activo !== 0);
   const envase = ENVASES.find((e) => /cartier/i.test(e.name || '')) || ENVASES[0];
   const perfume = TOP10[0] ? normalizarImagen(TOP10[0].imagen || TOP10[0].image) : (P[0] && P[0].img);

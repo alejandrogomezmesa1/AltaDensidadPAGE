@@ -7,6 +7,7 @@ import { Coleccion, Kits } from '../tienda/Secciones';
 import Armador from '../tienda/Armador';
 import Insumos from '../tienda/Insumos';
 import { usePagina } from '../lib/hooks';
+import { perfumes11 } from '../lib/producto';
 import { desplazarA } from '../lib/gsap';
 
 export const PESTANAS = [
@@ -41,7 +42,7 @@ export default function Catalogo() {
     }
   };
 
-  const cuenta = { perfumes: P.length, kits: KITS.filter((k) => k.activo !== 0).length };
+  const cuenta = { perfumes: perfumes11(P).length, kits: KITS.filter((k) => k.activo !== 0).length };
 
   return (
     <main className="catalogo">

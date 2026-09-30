@@ -8,6 +8,9 @@ const esquema = require('../services/esquema');
 // Columnas de la integración con DATA (existen tras la migración de arranque)
 const columnasData = () => (dataSync.columnasListas() ? `, p.agotado, p.inventario_id${esquema.sinStock() ? ', p.vender_sin_stock' : ''}` : '');
 
+// Solo preparado (migración 008): no se vende como 1.1, sí en "Crea tu perfume"
+const columnasPreparado = () => (esquema.soloPreparado() ? ', p.solo_preparado' : '');
+
 // inventario_id solo se entrega al panel; el público solo ve si está agotado.
 // Con "vender sin existencias" la tienda no lo muestra agotado aunque DATA no tenga stock.
 function camposData(p, staff) {
@@ -149,7 +152,7 @@ router.get('/', async (req, res) => {
         const [rows] = await pool.query(`
             SELECT 
                 p.id, p.nombre, p.rating, p.imagen,
-                p.categoria, p.genero, p.descripcion, p.precio, p.activo${columnasData()}${columnasFicha()},
+                p.categoria, p.genero, p.descripcion, p.precio, p.activo${columnasData()}${columnasPreparado()}${columnasFicha()},
                 GROUP_CONCAT(DISTINCT ps.talla ORDER BY ps.talla SEPARATOR ',') AS tallas,
                 GROUP_CONCAT(DISTINCT pt.tipo_envase ORDER BY pt.tipo_envase SEPARATOR ',') AS tipos_envase
             FROM Productos p
@@ -174,6 +177,7 @@ router.get('/', async (req, res) => {
             sizes: p.tallas ? p.tallas.split(',') : [],
             bottleTypes: p.tipos_envase ? p.tipos_envase.split(',') : [],
             ...camposData(p, staff),
+            ...(esquema.soloPreparado() ? { soloPreparado: p.solo_preparado ? 1 : 0 } : {}),
             ...camposFicha(p, listas)
         }));
 
@@ -192,7 +196,7 @@ router.get('/:id', async (req, res) => {
         const [rows] = await pool.query(`
             SELECT 
                 p.id, p.nombre, p.rating, p.imagen,
-                p.categoria, p.genero, p.descripcion, p.precio, p.activo${columnasData()}${columnasFicha()},
+                p.categoria, p.genero, p.descripcion, p.precio, p.activo${columnasData()}${columnasPreparado()}${columnasFicha()},
                 GROUP_CONCAT(DISTINCT ps.talla ORDER BY ps.talla SEPARATOR ',') AS tallas,
                 GROUP_CONCAT(DISTINCT pt.tipo_envase ORDER BY pt.tipo_envase SEPARATOR ',') AS tipos_envase
             FROM Productos p
@@ -217,6 +221,7 @@ router.get('/:id', async (req, res) => {
                 sizes: p.tallas ? p.tallas.split(',') : [],
                 bottleTypes: p.tipos_envase ? p.tipos_envase.split(',') : [],
                 ...camposData(p, esPeticionStaff(req)),
+                ...(esquema.soloPreparado() ? { soloPreparado: p.solo_preparado ? 1 : 0 } : {}),
                 ...camposFicha(p, listas)
             }
         });

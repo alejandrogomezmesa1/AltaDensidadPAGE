@@ -3700,3 +3700,8 @@ body.ad-layer-open .ia-chat-launcher {
     max-height: 420px;
   }
 }
+
+.d-solo-prep {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-2);
+}

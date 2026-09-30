@@ -133,4 +133,19 @@ router.put('/sin-stock', requireStaff, async (req, res) => {
     }
 });
 
+// PUT /api/catalogo/solo-preparado — { id, valor }: la fragancia solo se vende preparada
+router.put('/solo-preparado', requireStaff, async (req, res) => {
+    if (!esquema.soloPreparado()) return res.status(503).json({ success: false, message: 'Función no disponible (migración 008 pendiente).' });
+    const id = parseInt((req.body || {}).id, 10);
+    if (!(id > 0)) return res.status(400).json({ success: false, message: 'ID inválido' });
+    try {
+        const pool = await getConnection();
+        const [r] = await pool.query('UPDATE Productos SET solo_preparado = ? WHERE id = ?', [req.body.valor ? 1 : 0, id]);
+        res.json({ success: true, cambiados: r.affectedRows });
+    } catch (err) {
+        console.error('Error en solo preparado:', err);
+        res.status(500).json({ success: false, message: 'No se pudo guardar' });
+    }
+});
+
 module.exports = router;

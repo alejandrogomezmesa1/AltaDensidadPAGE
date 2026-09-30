@@ -31,7 +31,7 @@ function buscarEn(P, TOP10, id) {
 }
 
 function agregarLinea(cart, prod, id, ml, env, q) {
-  if (prod && noDisponible(prod)) return cart;
+  if (prod && (noDisponible(prod) || prod.sp)) return cart;
   const i = cart.findIndex((x) => x.id === id && (x.ml || '') === (ml || '') && (x.env || '') === (env || ''));
   if (i >= 0) return cart.map((x, j) => (j === i ? { ...x, q: x.q + q } : x));
   return [...cart, { id, ml: ml || '', env: env || '', q }];

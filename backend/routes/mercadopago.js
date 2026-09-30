@@ -155,11 +155,14 @@ router.post("/create_preference", async (req, res) => {
       if (isNaN(prodId)) {
         return res.status(400).json({ success: false, message: `ID de producto inválido: ${itemIdStr}` });
       }
-      const [pRows] = await pool.query(`SELECT id, nombre, precio, imagen, activo${esquema.clasificacion() ? ", precio_revision" : ""} FROM Productos WHERE id = ?`, [prodId]);
+      const [pRows] = await pool.query(`SELECT id, nombre, precio, imagen, activo${esquema.clasificacion() ? ", precio_revision" : ""}${esquema.soloPreparado() ? ", solo_preparado" : ""} FROM Productos WHERE id = ?`, [prodId]);
       if (pRows.length === 0 || !pRows[0].activo) {
         return res.status(400).json({ success: false, message: `Producto no disponible o inactivo (ID: ${prodId})` });
       }
       const prod = pRows[0];
+      if (prod.solo_preparado) {
+        return res.status(409).json({ success: false, message: `${prod.nombre} solo se vende preparado: créalo en "Crea tu perfume" eligiendo envase y tamaño.` });
+      }
       if (prod.precio_revision) {
         return res.status(409).json({ success: false, message: `${prod.nombre} está en revisión de precio y no se puede comprar en este momento. Retíralo de tu bolsa o escríbenos por WhatsApp.` });
       }

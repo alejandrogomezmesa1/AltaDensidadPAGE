@@ -310,7 +310,7 @@ export default function Aura() {
     if (!catalogo.current.cargado) {
       catalogo.current.cargado = true;
       fetch(`${API}/productos`).then((r) => r.json()).then((d) => {
-        if (d.success) catalogo.current.productos = d.data.filter((p) => p.activo !== 0);
+        if (d.success) catalogo.current.productos = d.data.filter((p) => p.activo !== 0 && !p.soloPreparado);
       }).catch(() => {});
       fetch(`${API}/kits`).then((r) => r.json()).then((d) => {
         if (d.success) catalogo.current.kits = d.data.filter((k) => k.activo !== 0);

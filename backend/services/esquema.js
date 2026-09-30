@@ -9,5 +9,7 @@ module.exports = {
     // 006: precios del armador y ficha web de los insumos de DATA
     armador: () => aplicadas.has('006'),
     // 007: vender sin existencias (por producto y kit)
-    sinStock: () => aplicadas.has('007')
+    sinStock: () => aplicadas.has('007'),
+    // 008: fragancias solo preparadas (no se venden como 1.1)
+    soloPreparado: () => aplicadas.has('008')
 };
