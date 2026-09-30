@@ -86,8 +86,8 @@
       "destination": "/api/sitemap"
     },
     {
-      "source": "/:tipo(perfume|kit)/:slug",
-      "destination": "/api/ficha?tipo=:tipo&slug=:slug"
+      "source": "/:tipo(perfume|kit)/:ruta*",
+      "destination": "/api/ficha?tipo=:tipo&ruta=:ruta*"
     },
     {
       "source": "/:ruta(catalogo|top10|nosotros|login|reset|admin|success|failure|pending)",

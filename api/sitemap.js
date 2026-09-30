@@ -1,6 +1,6 @@
 // /sitemap.xml en vivo: páginas principales + un enlace por perfume y por kit activos.
 // Si la API no responde, se entregan al menos las páginas principales.
-import { perfumes, kits, SITIO } from './_catalogo.js';
+import { perfumes, kits, SITIO, direccionPerfume, direccionKit } from './_catalogo.js';
 
 const PAGINAS = [
   ['/', 'weekly', '1.0'],
@@ -18,8 +18,8 @@ export default async function handler(req, res) {
   const urls = PAGINAS.map(([ruta, frecuencia, prioridad]) => ({ ruta, frecuencia, prioridad }));
   try {
     const [p, k] = await Promise.all([perfumes(), kits()]);
-    p.lista.forEach((x) => urls.push({ ruta: `/perfume/${p.slugs.porId.get(x.id)}`, frecuencia: 'weekly', prioridad: '0.7' }));
-    k.lista.forEach((x) => urls.push({ ruta: `/kit/${k.slugs.porId.get(x.id)}`, frecuencia: 'weekly', prioridad: '0.6' }));
+    p.lista.forEach((x) => urls.push({ ruta: direccionPerfume(x), frecuencia: 'weekly', prioridad: '0.7' }));
+    k.lista.forEach((x) => urls.push({ ruta: direccionKit(x), frecuencia: 'weekly', prioridad: '0.6' }));
   } catch (err) {
     console.error('[sitemap] sin catálogo:', err.message);
   }

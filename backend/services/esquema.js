@@ -11,5 +11,7 @@ module.exports = {
     // 007: vender sin existencias (por producto y kit)
     sinStock: () => aplicadas.has('007'),
     // 008: fragancias solo preparadas (no se venden como 1.1)
-    soloPreparado: () => aplicadas.has('008')
+    soloPreparado: () => aplicadas.has('008'),
+    // 009: ruta fija de cada perfume y referencia en Fragrantica
+    enlaces: () => aplicadas.has('009')
 };

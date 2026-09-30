@@ -1,7 +1,7 @@
 // Datos compartidos por las funciones de Vercel (los archivos con "_" no son rutas).
 // Usan las mismas reglas de enlaces que la tienda (src/lib/producto.js), así un enlace
 // /perfume/<slug> resuelve igual en el servidor y en el navegador.
-import { adaptarProducto, mapaSlugs, normalizarImagen } from '../src/lib/producto.js';
+import { adaptarProducto, mapaSlugs, normalizarImagen, direccionPerfume, direccionKit, idDesdeRuta } from '../src/lib/producto.js';
 
 export const SITIO = 'https://alta-densidad-page.vercel.app';
 const API = (process.env.API_URL || 'https://altadensidadpage-production.up.railway.app/api').replace(/\/$/, '');
@@ -39,6 +39,13 @@ export async function kits() {
   }));
   return { lista, slugs: mapaSlugs(lista, (k) => k.nombre) };
 }
+
+// Producto a partir de la dirección (formato nuevo con id o enlace viejo por nombre)
+export function buscar(datos, ruta) {
+  const id = idDesdeRuta(ruta, datos.slugs, (x) => datos.lista.some((i) => i.id === x));
+  return id ? datos.lista.find((i) => i.id === id) : null;
+}
+export { direccionPerfume, direccionKit };
 
 export const imagenAbsoluta = (src) => {
   const n = normalizarImagen(src);

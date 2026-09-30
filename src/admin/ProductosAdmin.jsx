@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
+import { normalizarRuta, desdeFragrantica, rutaPorDefecto } from '../lib/producto';
 import {
   formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, Visible, FilaEstado,
   PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas, InterruptorSinStock, BotonSinStockTodos, InterruptorSoloPreparado, useSemaforo, CeldaStock
@@ -11,7 +12,8 @@ const NOTAS_VACIAS = { top: [], heart: [], base: [] };
 const VACIO = {
   id: '', nombre: '', descripcion: '', categoria: '', genero: '', precio: '', rating: '4', imagen: '', activo: true,
   sizes: [], bottleTypes: [], inventario_id: '',
-  marca: '', original: '', familiaId: '', acordes: [], notas: NOTAS_VACIAS
+  marca: '', original: '', familiaId: '', acordes: [], notas: NOTAS_VACIAS,
+  fref: '', ruta: ''
 };
 
 // Cuántos bloques de la ficha están completos: marca, original, familia + acordes, pirámide
@@ -23,6 +25,53 @@ function completitud(p) {
     !!p.family && (p.accords || []).length > 0,
     n.top.length > 0 && n.heart.length > 0 && n.base.length > 0
   ].filter(Boolean).length;
+}
+
+// Referencia en Fragrantica y dirección del perfume en la tienda (/perfume/<ruta>-<id>).
+// Al pegar el enlace de Fragrantica se propone la dirección con su marca y nombre; se puede editar.
+function EnlacesProducto({ form, setForm }) {
+  const ref = form.fref.trim() ? desdeFragrantica(form.fref) : null;
+  const propuesta = rutaPorDefecto(form.nombre, form.marca);
+  const ruta = normalizarRuta(form.ruta);
+  const busqueda = [form.original || form.nombre, form.marca].filter(Boolean).join(' ').trim();
+  const cambiarRef = (valor) => {
+    const r = valor.trim() ? desdeFragrantica(valor) : null;
+    // Si la dirección estaba vacía o era la propuesta automática, se toma la de Fragrantica
+    setForm((f) => ({ ...f, fref: valor, ...(r && (!f.ruta.trim() || normalizarRuta(f.ruta) === rutaPorDefecto(f.nombre, f.marca)) ? { ruta: r.ruta } : {}) }));
+  };
+  return (
+    <div className="form-group full enlaces-producto">
+      <div className="enlaces-cab">
+        <label htmlFor="inputFragrantica">Referencia en Fragrantica</label>
+        <a className="link-fragrantica" target="_blank" rel="noopener noreferrer"
+          href={busqueda ? `https://www.fragrantica.es/search/?query=${encodeURIComponent(busqueda)}` : 'https://www.fragrantica.es'}>
+          <i className="fas fa-search" /> Buscar{busqueda ? ` "${busqueda}"` : ''} en Fragrantica ↗
+        </a>
+      </div>
+      <input type="url" id="inputFragrantica" placeholder="https://www.fragrantica.es/perfume/Marca/Nombre-1234.html"
+        value={form.fref} onChange={(e) => cambiarRef(e.target.value)} className={form.fref.trim() && !ref ? 'invalid' : undefined} />
+      <small className="hint-data">
+        {form.fref.trim()
+          ? (ref ? <>✓ {ref.marca} · {ref.nombre}</> : 'No parece un enlace de perfume de Fragrantica (…/perfume/Marca/Nombre-1234.html).')
+          : 'Búscalo, abre el perfume correcto y pega aquí su dirección.'}
+      </small>
+
+      <label htmlFor="inputRuta" style={{ marginTop: 'var(--sp-3)' }}>Dirección en la tienda</label>
+      <div className="ruta-campo">
+        <span>/perfume/</span>
+        <input type="text" id="inputRuta" placeholder={propuesta} value={form.ruta}
+          onChange={(e) => setForm((f) => ({ ...f, ruta: e.target.value }))} />
+        <span>-{form.id || 'id'}</span>
+      </div>
+      <div className="ruta-acciones">
+        {ref && ruta !== ref.ruta && <button type="button" className="btn-secondary" onClick={() => setForm((f) => ({ ...f, ruta: ref.ruta }))}>Usar la de Fragrantica</button>}
+        {ruta !== propuesta && <button type="button" className="btn-secondary" onClick={() => setForm((f) => ({ ...f, ruta: propuesta }))}>Proponer desde marca y nombre</button>}
+      </div>
+      <small className="hint-data">
+        Quedará: <b>/perfume/{ruta || propuesta}-{form.id || 'id'}</b>. No cambia aunque edites el nombre; el número del final hace que los enlaces viejos sigan llegando aquí.
+      </small>
+    </div>
+  );
 }
 
 export default function ProductosAdmin({ alerta }) {
@@ -71,8 +120,12 @@ export default function ProductosAdmin({ alerta }) {
   const nombres = (lista) => lista.map((x) => x.name);
 
   const q = busqueda.toLowerCase();
+  // "Pendientes Fragrantica": productos que aún no tienen su referencia
+  const [soloPendientes, setSoloPendientes] = useState(false);
+  const pendientes = productos.filter((p) => !p.fragranticaUrl).length;
   const { pagina, filtrados, actual, totalPags, setPagina } = usePaginado(productos,
-    (p) => [p.name, p.category, p.gender, p.brand && p.brand.name, p.originalName].some((t) => t && t.toLowerCase().includes(q)), 10);
+    (p) => (!soloPendientes || !p.fragranticaUrl)
+      && [p.name, p.category, p.gender, p.brand && p.brand.name, p.originalName].some((t) => t && t.toLowerCase().includes(q)), 10);
 
   const abrir = (p) => {
     setForm(p ? {
@@ -80,7 +133,8 @@ export default function ProductosAdmin({ alerta }) {
       precio: p.price, rating: String(p.rating ?? 4), imagen: p.image || '', activo: !!p.activo,
       sizes: p.sizes || [], bottleTypes: p.bottleTypes || [], inventario_id: p.inventario_id || '',
       marca: p.brand ? p.brand.name : '', original: p.originalName || '', familiaId: p.family ? String(p.family.id) : '',
-      acordes: p.accords || [], notas: p.notes || NOTAS_VACIAS
+      acordes: p.accords || [], notas: p.notes || NOTAS_VACIAS,
+      fref: p.fragranticaUrl || '', ruta: p.ruta || ''
     } : VACIO);
     setArchivo(null);
     setInvListo(false);
@@ -117,7 +171,9 @@ export default function ProductosAdmin({ alerta }) {
         originalName: form.original.trim() || null,
         familyId: form.familiaId ? Number(form.familiaId) : null,
         accords: form.acordes,
-        notes: form.notas
+        notes: form.notas,
+        fragranticaUrl: form.fref.trim() || null,
+        ruta: normalizarRuta(form.ruta) || null
       };
       await apiJson(form.id ? `productos/${form.id}` : 'productos', { method: form.id ? 'PUT' : 'POST', body: payload });
       setModal(false);
@@ -163,6 +219,10 @@ export default function ProductosAdmin({ alerta }) {
             <i className="fas fa-flask" style={{ color: 'var(--c-accent)' }} /> Guía Fragrantica ↗
           </a>
           <BotonSinStockTodos tabla="productos" lista={productos} onCambio={marcarSinStock} alerta={alerta} />
+          <button type="button" className={soloPendientes ? 'btn-primary' : 'btn-secondary'} onClick={() => { setSoloPendientes((v) => !v); setPagina(1); }}
+            title="Productos sin referencia de Fragrantica" style={{ whiteSpace: 'nowrap' }}>
+            <i className="fas fa-link" /> Pendientes Fragrantica ({pendientes})
+          </button>
           <button className="btn-primary" onClick={() => abrir(null)}><i className="fas fa-plus" /> Nuevo Producto</button>
         </div>
       </div>
@@ -179,7 +239,13 @@ export default function ProductosAdmin({ alerta }) {
               <tr key={p.id}>
                 <td data-label="#">{p.id}</td>
                 <td data-label="Imagen"><ImagenCelda src={p.image} /></td>
-                <td data-label="Nombre"><strong>{p.name}</strong>{p.originalName && <><br /><small style={{ color: 'var(--c-mute)' }}>Inspirado en {p.originalName}</small></>}</td>
+                <td data-label="Nombre">
+                  <strong>{p.name}</strong>{p.originalName && <><br /><small style={{ color: 'var(--c-mute)' }}>Inspirado en {p.originalName}</small></>}
+                  <br />
+                  {p.fragranticaUrl
+                    ? <a className="ref-fragrantica" href={p.fragranticaUrl} target="_blank" rel="noopener noreferrer" title={p.fragranticaUrl}><i className="fas fa-check" /> Fragrantica</a>
+                    : <small className="ref-pendiente">Sin referencia Fragrantica</small>}
+                </td>
                 <td data-label="Marca">{p.brand ? p.brand.name : '—'}</td>
                 <td data-label="Categoría">{p.category}</td>
                 <td data-label="Género">{p.gender}</td>
@@ -225,6 +291,7 @@ export default function ProductosAdmin({ alerta }) {
               </div>
               <input type="text" id="inputNombre" placeholder="Ej: One Million – Paco Rabanne" required {...campo('nombre')} />
             </div>
+            <EnlacesProducto form={form} setForm={setForm} />
             <div className="form-group full">
               <label htmlFor="inputDescripcion">Descripción</label>
               <textarea id="inputDescripcion" rows="3" placeholder="Breve descripción de la fragancia..." {...campo('descripcion')} />

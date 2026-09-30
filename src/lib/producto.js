@@ -56,7 +56,10 @@ export function adaptarProducto(item, idx) {
     ag: Number(item.agotado) === 1,
     rev: Number(item.priceReview || item.precio_revision) === 1,
     // Solo en esencia: no se vende como 1.1, sí en "Crea tu perfume"
-    sp: Number(item.soloPreparado) === 1
+    sp: Number(item.soloPreparado) === 1,
+    // Dirección fija en la tienda (marca/nombre) y referencia en Fragrantica
+    ruta: item.ruta || null,
+    fref: item.fragranticaUrl || null
   };
 }
 
@@ -118,4 +121,46 @@ export function resolverSlug(mapa, s) {
   const id = /(?:^|-)(\d+)$/.exec(limpio);
   if (id && mapa.porId.has(Number(id[1]))) return Number(id[1]);
   return null;
+}
+
+// ── Direcciones al estilo Fragrantica: /perfume/<marca>/<nombre>-<id> ──
+// La ruta (marca/nombre) viene guardada del panel; si falta, se arma igual que en el servidor
+// (backend/services/enlaces.js). El id del final es lo que identifica al producto.
+export function rutaPorDefecto(nombre, marca) {
+  const m = slug(marca);
+  let n = slug(nombre);
+  // La marca se quita del nombre solo como palabras completas ("le-labo" sí, "le-laboo" no)
+  if (m) n = `-${n}-`.replace(`-${m}-`, '-').replace(/^-+|-+$/g, '') || n;
+  return [m, n].filter(Boolean).join('/') || 'perfume';
+}
+
+export const direccionPerfume = (p) => `/perfume/${p.ruta || rutaPorDefecto(p.n, p.b)}-${p.id}`;
+export const direccionKit = (k) => `/kit/${slug(k.nombre) || 'kit'}-${k.id}`;
+
+// Id a partir de la dirección. Primero los enlaces del formato anterior (/perfume/<nombre>,
+// sin id), después el número del final. existe(id) evita tomar un número que no es un producto.
+export function idDesdeRuta(ruta, legado, existe) {
+  const limpio = decodeURIComponent(String(ruta || '')).toLowerCase().replace(/\/+$/, '');
+  if (!limpio.includes('/') && legado && legado.porSlug.has(limpio)) return legado.porSlug.get(limpio);
+  const m = /(?:^|[-/])(\d+)$/.exec(limpio);
+  if (m && existe(Number(m[1]))) return Number(m[1]);
+  return null;
+}
+
+// Lo que se escribe en el panel: hasta dos tramos (marca/nombre), cada uno como slug
+export function normalizarRuta(texto) {
+  const tramos = String(texto || '').split('/').map(slug).filter(Boolean);
+  return tramos.slice(-2).join('/');
+}
+
+// https://www.fragrantica.es/perfume/Ralph-Lauren/Polo-Blue-1198.html → { marca, nombre, ruta, url }
+export function desdeFragrantica(url) {
+  let u;
+  try { u = new URL(String(url).trim()); } catch { return null; }
+  if (!/(^|\.)fragrantica\.[a-z.]+$/i.test(u.hostname)) return null;
+  const m = /^\/(?:perfume|perfumes)\/([^/]+)\/(.+?)-(\d+)\.html$/i.exec(decodeURIComponent(u.pathname));
+  if (!m) return null;
+  const marca = m[1].replace(/-/g, ' ').trim();
+  const nombre = m[2].replace(/-/g, ' ').trim();
+  return { marca, nombre, ruta: normalizarRuta(`${marca}/${nombre}`), url: `${u.origin}${u.pathname}` };
 }

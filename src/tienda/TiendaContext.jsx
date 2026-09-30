@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUbicacionReal } from '../lib/ubicacion';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
-import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO, mapaSlugs, resolverSlug } from '../lib/producto';
+import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO, mapaSlugs, direccionPerfume, direccionKit, idDesdeRuta } from '../lib/producto';
 import { leerArmado, precioArmado, leerInsumo, precioInsumo, ETIQUETA_TIPO } from '../lib/catalogo';
 
 const CART_KEY = 'ad_cart_v2';
@@ -254,11 +254,20 @@ export function TiendaProvider({ children }) {
   // directo por el enlace (sin fondo) muestra la ficha como página (FichaPagina).
   const slugsP = useMemo(() => mapaSlugs(P, (p) => p.n), [P]);
   const slugsK = useMemo(() => mapaSlugs(KITS.filter((k) => k.activo !== 0), (k) => k.nombre), [KITS]);
-  const rutaPerfume = useCallback((id) => `/perfume/${slugsP.porId.get(Number(id)) || id}`, [slugsP]);
-  const rutaKit = useCallback((id) => `/kit/${slugsK.porId.get(Number(id)) || id}`, [slugsK]);
-  const idPorSlug = useCallback((tipo, s) => resolverSlug(tipo === 'kit' ? slugsK : slugsP, s), [slugsP, slugsK]);
+  // slugsP/slugsK: enlaces del formato anterior (/perfume/<nombre>), que siguen funcionando
+  const rutaPerfume = useCallback((id) => {
+    const p = buscarEn(P, TOP10, id);
+    return p ? direccionPerfume(p) : `/perfume/${id}`;
+  }, [P, TOP10]);
+  const rutaKit = useCallback((id) => {
+    const k = KITS.find((x) => x.id === Number(id));
+    return k ? direccionKit(k) : `/kit/${id}`;
+  }, [KITS]);
+  const idPorSlug = useCallback((tipo, ruta) => (tipo === 'kit'
+    ? idDesdeRuta(ruta, slugsK, (id) => KITS.some((k) => k.id === id && k.activo !== 0))
+    : idDesdeRuta(ruta, slugsP, (id) => Boolean(buscarEn(P, TOP10, id)))), [slugsP, slugsK, P, TOP10, KITS]);
   const fondo = location.state && location.state.fondo;
-  const enFicha = /^\/(perfume|kit)\/[^/]+\/?$/.test(location.pathname);
+  const enFicha = /^\/(perfume|kit)\/.+/.test(location.pathname);
 
   const cerrarCapas = useCallback(() => {
     if (fondo && enFicha) navigate(-1);
@@ -316,7 +325,7 @@ export function TiendaProvider({ children }) {
 
   // La URL manda: con fondo, la ficha se abre como ventana; al salir de la ficha, se cierra
   useEffect(() => {
-    const m = /^\/(perfume|kit)\/([^/]+)\/?$/.exec(location.pathname);
+    const m = /^\/(perfume|kit)\/(.+?)\/?$/.exec(location.pathname);
     if (m && fondo) {
       const id = idPorSlug(m[1], m[2]);
       if (!id) return;

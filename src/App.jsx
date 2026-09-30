@@ -55,7 +55,7 @@ function Rutas() {
           <Route path="envases" element={<Navigate to="/catalogo?ver=crear" replace />} />
           <Route path="nosotros" element={<Nosotros />} />
           {/* Enlace directo a cada perfume y kit; abiertos desde la tienda se ven como ventana */}
-          <Route path="perfume/:slug" element={<FichaPagina tipo="perfume" />} />
+          <Route path="perfume/*" element={<FichaPagina tipo="perfume" />} />
           <Route path="kit/:slug" element={<FichaPagina tipo="kit" />} />
           <Route path="*" element={<NoEncontrado />} />
         </Route>

@@ -3,8 +3,8 @@
 // leen solo ese HTML (no ejecutan la página). Aquí se entrega el index.html con el título, la
 // descripción, la foto y el precio del producto, y con el código correcto: 200 si existe,
 // 404 si no (la página igual se abre y muestra "no encontrado" con sugerencias).
-import { perfumes, kits, imagenAbsoluta, SITIO } from './_catalogo.js';
-import { resolverSlug, descripcion } from '../src/lib/producto.js';
+import { perfumes, kits, imagenAbsoluta, SITIO, buscar, direccionPerfume, direccionKit } from './_catalogo.js';
+import { descripcion } from '../src/lib/producto.js';
 
 let plantilla = null;
 
@@ -58,7 +58,8 @@ export default async function handler(req, res) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const origen = host ? `${proto}://${host}` : SITIO;
-  const { tipo, slug } = req.query || {};
+  const { tipo } = req.query || {};
+  const ruta = [].concat(req.query.ruta || req.query.slug || []).join('/');
 
   let html;
   try {
@@ -75,16 +76,22 @@ export default async function handler(req, res) {
   try {
     if (tipo === 'perfume' || tipo === 'kit') {
       const datos = tipo === 'kit' ? await kits() : await perfumes();
-      const id = resolverSlug(datos.slugs, slug);
-      const item = id ? datos.lista.find((x) => x.id === id) : null;
+      const item = buscar(datos, ruta);
       if (item) {
-        const ruta = `/${tipo}/${datos.slugs.porId.get(item.id)}`;
+        const oficial = tipo === 'kit' ? direccionKit(item) : direccionPerfume(item);
+        // Enlace viejo o con otro texto: redirección permanente a la dirección oficial
+        if (decodeURIComponent(`/${tipo}/${ruta}`).toLowerCase() !== oficial.toLowerCase()) {
+          res.statusCode = 301;
+          res.setHeader('Location', encodeURI(oficial));
+          res.setHeader('Cache-Control', 'public, s-maxage=300');
+          return res.end();
+        }
         const nombre = tipo === 'kit' ? item.nombre : item.n;
         const precio = tipo === 'kit' ? item.precio : item.p;
         meta = {
           titulo: `${nombre} | Fragancias de Alta Densidad`,
           descripcion: recortar(tipo === 'kit' ? (item.descripcion || `Kit ${nombre} de Alta Densidad.`) : descripcion(item)),
-          url: SITIO + ruta,
+          url: SITIO + oficial,
           imagen: imagenAbsoluta(tipo === 'kit' ? item.imagen : item.img),
           precio: precio > 0 ? Math.round(precio) : null,
           tipo: 'product',

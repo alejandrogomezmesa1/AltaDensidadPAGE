@@ -4,12 +4,14 @@ const { getConnection } = require('../config/db');
 const { requireStaff, requireAdmin, esPeticionStaff } = require('../middleware/auth');
 const dataSync = require('../services/dataSync');
 const esquema = require('../services/esquema');
+const enlaces = require('../services/enlaces');
 
 // Columnas de la integración con DATA (existen tras la migración de arranque)
 const columnasData = () => (dataSync.columnasListas() ? `, p.agotado, p.inventario_id${esquema.sinStock() ? ', p.vender_sin_stock' : ''}` : '');
 
 // Solo preparado (migración 008): no se vende como 1.1, sí en "Crea tu perfume"
-const columnasPreparado = () => (esquema.soloPreparado() ? ', p.solo_preparado' : '');
+const columnasPreparado = () => (esquema.soloPreparado() ? ', p.solo_preparado' : '')
+    + (esquema.enlaces() ? ', p.ruta, p.fragrantica_url' : '');
 
 // inventario_id solo se entrega al panel; el público solo ve si está agotado.
 // Con "vender sin existencias" la tienda no lo muestra agotado aunque DATA no tenga stock.
@@ -125,6 +127,32 @@ async function guardarFicha(conn, id, body) {
     }
 }
 
+// Dirección en la tienda y referencia en Fragrantica (migración 009). Sin ruta escrita, se
+// propone desde la marca y el nombre; una vez guardada no cambia aunque se edite el nombre.
+async function guardarEnlaces(conn, id, body, { nuevo = false } = {}) {
+    if (!esquema.enlaces()) return;
+    if (tiene(body, 'fragranticaUrl')) {
+        const texto = String(body.fragranticaUrl || '').trim();
+        const ref = texto ? enlaces.desdeFragrantica(texto) : null;
+        if (texto && !ref) {
+            const err = new Error('El enlace de Fragrantica no es válido: debe ser como https://www.fragrantica.es/perfume/Marca/Nombre-1234.html');
+            err.status = 400;
+            throw err;
+        }
+        await conn.query('UPDATE Productos SET fragrantica_url = ? WHERE id = ?', [ref ? ref.url : null, id]);
+    }
+    if (tiene(body, 'ruta') || nuevo) {
+        let ruta = enlaces.normalizarRuta(body.ruta);
+        if (!ruta) {
+            const [[f]] = await conn.query(esquema.clasificacion()
+                ? 'SELECT p.nombre, m.nombre AS marca FROM Productos p LEFT JOIN marcas m ON m.id = p.marca_id WHERE p.id = ?'
+                : 'SELECT nombre, NULL AS marca FROM Productos WHERE id = ?', [id]);
+            ruta = enlaces.rutaPorDefecto(f.nombre, f.marca);
+        }
+        await conn.query('UPDATE Productos SET ruta = ? WHERE id = ?', [ruta, id]);
+    }
+}
+
 // GET catálogos de clasificación (filtros de la tienda y sugerencias del panel)
 router.get('/clasificacion', async (req, res) => {
     if (!esquema.clasificacion()) return res.json({ success: true, data: { brands: [], families: [], accords: [], notes: [] } });
@@ -178,6 +206,7 @@ router.get('/', async (req, res) => {
             bottleTypes: p.tipos_envase ? p.tipos_envase.split(',') : [],
             ...camposData(p, staff),
             ...(esquema.soloPreparado() ? { soloPreparado: p.solo_preparado ? 1 : 0 } : {}),
+            ...(esquema.enlaces() ? { ruta: p.ruta || null, fragranticaUrl: p.fragrantica_url || null } : {}),
             ...camposFicha(p, listas)
         }));
 
@@ -222,6 +251,7 @@ router.get('/:id', async (req, res) => {
                 bottleTypes: p.tipos_envase ? p.tipos_envase.split(',') : [],
                 ...camposData(p, esPeticionStaff(req)),
                 ...(esquema.soloPreparado() ? { soloPreparado: p.solo_preparado ? 1 : 0 } : {}),
+            ...(esquema.enlaces() ? { ruta: p.ruta || null, fragranticaUrl: p.fragrantica_url || null } : {}),
                 ...camposFicha(p, listas)
             }
         });
@@ -248,6 +278,7 @@ router.post('/', requireStaff, async (req, res) => {
         const nuevoId = result.insertId;
         const enlazado = await guardarEnlaceData(conn, nuevoId, req.body);
         await guardarFicha(conn, nuevoId, req.body);
+        await guardarEnlaces(conn, nuevoId, req.body, { nuevo: true });
         if (Array.isArray(sizes)) {
             for (const t of sizes) await conn.query('INSERT INTO ProductoTallas (producto_id, talla) VALUES (?, ?)', [nuevoId, t]);
         }
@@ -259,6 +290,7 @@ router.post('/', requireStaff, async (req, res) => {
         res.status(201).json({ success: true, message: 'Producto creado exitosamente', data: { id: nuevoId } });
     } catch (err) {
         await conn.rollback();
+        if (err.status === 400) return res.status(400).json({ success: false, message: err.message });
         console.error('Error al crear producto:', err);
         res.status(500).json({ success: false, message: 'Error al crear producto', error: err.message });
     } finally {
@@ -284,6 +316,7 @@ router.put('/:id', requireStaff, async (req, res) => {
         }
         const enlazado = await guardarEnlaceData(conn, id, req.body);
         await guardarFicha(conn, id, req.body);
+        await guardarEnlaces(conn, id, req.body);
         await conn.query('DELETE FROM ProductoTallas WHERE producto_id = ?', [id]);
         await conn.query('DELETE FROM ProductoTiposEnvase WHERE producto_id = ?', [id]);
         if (Array.isArray(sizes)) {
@@ -297,6 +330,7 @@ router.put('/:id', requireStaff, async (req, res) => {
         res.json({ success: true, message: 'Producto actualizado exitosamente' });
     } catch (err) {
         await conn.rollback();
+        if (err.status === 400) return res.status(400).json({ success: false, message: err.message });
         console.error('Error al actualizar producto:', err);
         res.status(500).json({ success: false, message: 'Error al actualizar producto', error: err.message });
     } finally {

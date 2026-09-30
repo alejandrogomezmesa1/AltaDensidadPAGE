@@ -1733,3 +1733,63 @@ body.adm {
 .semaforo i {
   background: currentColor;
 }
+
+/* ---------- Enlaces del producto (Fragrantica y dirección en la tienda) ---------- */
+.enlaces-cab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.ruta-campo {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--c-line);
+}
+
+.ruta-campo span {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: var(--c-mute);
+  font-size: 13px;
+  background: var(--c-surface);
+  white-space: nowrap;
+}
+
+.ruta-campo input {
+  flex: 1;
+  min-width: 0;
+  border: 0 !important;
+}
+
+.ruta-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ruta-acciones:empty {
+  display: none;
+}
+
+.ruta-acciones .btn-secondary {
+  padding: 6px 12px;
+  font-size: 11px;
+}
+
+.ref-fragrantica,
+.ref-pendiente {
+  font-size: 11px;
+}
+
+.ref-fragrantica {
+  color: var(--ok);
+}
+
+.ref-pendiente {
+  color: var(--c-mute);
+}

@@ -1,7 +1,8 @@
-// Enlace directo a un perfume (/perfume/<slug>) o a un kit (/kit/<slug>): la misma ficha de la
-// ventana de detalle, como página. Si el enlace no corresponde a nada, "no encontrado" con sugerencias.
+// Enlace directo a un perfume (/perfume/<marca>/<nombre>-<id>) o a un kit (/kit/<nombre>-<id>): la
+// misma ficha de la ventana de detalle, como página. Un enlace viejo o con otro texto se lleva a la
+// dirección oficial; si no corresponde a nada, "no encontrado" con sugerencias.
 import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { useTienda } from '../tienda/TiendaContext';
 import { DetalleProducto, DetalleKit } from '../tienda/Capas';
 import NoEncontrado from './NoEncontrado';
@@ -10,7 +11,8 @@ import { pr, descripcion, etiquetaColeccion, normalizarImagen, urlAbsoluta, noDi
 import { SITIO } from '../config';
 
 export default function FichaPagina({ tipo }) {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = tipo === 'kit' ? params.slug : params['*'];
   const { idPorSlug, buscarProducto, KITS, detalle, setDetalle, kitAbierto, setKitAbierto,
     catalogoListo, kitsListos, rutaPerfume, rutaKit } = useTienda();
   const esKit = tipo === 'kit';
@@ -58,6 +60,8 @@ export default function FichaPagina({ tipo }) {
     }
   };
   const abierto = esKit ? kitAbierto === kit.id : detalle.id === perfume.id;
+  // Dirección oficial: los enlaces viejos o mal escritos que encontraron el producto se corrigen
+  if (decodeURIComponent(window.location.pathname) !== decodeURIComponent(ruta)) return <Navigate to={ruta} replace />;
 
   return (
     <main className="sec ficha-pagina">
