@@ -76,12 +76,30 @@ async function mapearInventario(pool, items) {
     return mapa;
 }
 
+// Perfumes y kits marcados en el panel para vender sin existencias (no se verifica su stock)
+async function ventaSinStock(pool, items) {
+    const ids = new Set();
+    if (!esquema.sinStock()) return ids;
+    const prodIds = items.map(it => String(it.id)).filter(id => /^\d+$/.test(id)).map(Number);
+    const kitIds = items.map(it => String(it.id)).filter(id => id.startsWith('kit_')).map(id => parseInt(id.slice(4), 10));
+    if (prodIds.length) {
+        const [rows] = await pool.query('SELECT id FROM Productos WHERE vender_sin_stock = 1 AND id IN (?)', [prodIds]);
+        rows.forEach(r => ids.add(String(r.id)));
+    }
+    if (kitIds.length) {
+        const [rows] = await pool.query('SELECT id FROM Kits WHERE vender_sin_stock = 1 AND id IN (?)', [kitIds]);
+        rows.forEach(r => ids.add(`kit_${r.id}`));
+    }
+    return ids;
+}
+
 // Verificación antes de cobrar. Devuelve los títulos sin stock suficiente.
 // Si DATA no responde, se usa el último estado sincronizado (columna agotado).
 async function verificarDisponibilidad(pool, mpItems) {
     if (!columnasListas) return [];
     const mapa = await mapearInventario(pool, mpItems);
-    const vinculados = mpItems.filter(it => mapa.has(String(it.id)));
+    const sinStock = await ventaSinStock(pool, mpItems);
+    const vinculados = mpItems.filter(it => mapa.has(String(it.id)) && !sinStock.has(String(it.id)));
     if (!vinculados.length) return [];
 
     if (bridge.habilitado()) {

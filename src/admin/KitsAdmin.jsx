@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
   formatPrecio, toastOk, subirImagen, ImagenCelda, Visible, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario
-} from './comunes';
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario, InterruptorSinStock, BotonSinStockTodos } from './comunes';
 
 const VACIO = { id: '', nombre: '', descripcion: '', precio: '', imagen: '', activo: true, beneficios: [], inventario_id: '' };
 
@@ -19,6 +18,12 @@ export default function KitsAdmin({ alerta }) {
   const [invalidos, setInvalidos] = useState([]);
   const [guardando, setGuardando] = useState(false);
   const [aEliminar, setAEliminar] = useState(null);
+
+  // "Vender sin existencias": id = null cambia todos
+  const marcarSinStock = useCallback((id, valor) => {
+    setKits((l) => l.map((k) => (id === null || k.id === id
+      ? { ...k, vender_sin_stock: valor ? 1 : 0, agotado: valor ? 0 : (k.agotado_data || 0) } : k)));
+  }, []);
 
   const cargar = useCallback(async () => {
     setEstado('cargando');
@@ -109,17 +114,18 @@ export default function KitsAdmin({ alerta }) {
             <input type="text" placeholder="Buscar kits..." className="admin-search-input" value={busqueda}
               onChange={(e) => { setBusqueda(e.target.value); setPagina(1); }} />
           </div>
+          <BotonSinStockTodos tabla="kits" lista={kits} onCambio={marcarSinStock} alerta={alerta} />
           <button className="btn-primary" onClick={() => abrir(null)}><i className="fas fa-plus" /> Nuevo Kit</button>
         </div>
       </div>
       <div className="tabla-wrapper">
         <table className="tabla-productos">
           <thead>
-            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Visible</th><th>Acciones</th></tr>
+            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Visible</th><th title="Vender aunque DATA no tenga existencias">Sin existencias</th><th>Acciones</th></tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
-              <FilaEstado columnas={7} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
+              <FilaEstado columnas={8} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay kits registrados.'} />
             ) : pagina.map((k) => (
               <tr key={k.id}>
@@ -129,6 +135,7 @@ export default function KitsAdmin({ alerta }) {
                 <td data-label="Descripción">{k.descripcion}</td>
                 <td data-label="Precio">{formatPrecio(k.precio)}</td>
                 <td data-label="Visible"><Visible activo={k.activo} agotado={k.agotado} /></td>
+                <td data-label="Sin existencias"><InterruptorSinStock tabla="kits" item={k} onCambio={marcarSinStock} alerta={alerta} /></td>
                 <td data-label="Acciones">
                   <div className="acciones">
                     <button className="btn-icon editar" title="Editar" onClick={() => abrir(k)}><i className="fas fa-edit" /></button>

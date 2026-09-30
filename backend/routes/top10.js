@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     try {
         const pool = await getConnection();
         const [rows] = await pool.query(`
-            SELECT t.posicion, t.producto_id, p.nombre, p.imagen, p.categoria, p.genero, p.descripcion, p.precio, p.rating${dataSync.columnasListas() ? ', p.agotado' : ''}${esquema.clasificacion() ? ', p.precio_revision' : ''}
+            SELECT t.posicion, t.producto_id, p.nombre, p.imagen, p.categoria, p.genero, p.descripcion, p.precio, p.rating${dataSync.columnasListas() ? (esquema.sinStock() ? ', (p.agotado AND NOT p.vender_sin_stock) AS agotado' : ', p.agotado') : ''}${esquema.clasificacion() ? ', p.precio_revision' : ''}
             FROM Top10 t
             JOIN Productos p ON t.producto_id = p.id
             ORDER BY t.posicion ASC

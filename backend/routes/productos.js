@@ -6,12 +6,14 @@ const dataSync = require('../services/dataSync');
 const esquema = require('../services/esquema');
 
 // Columnas de la integración con DATA (existen tras la migración de arranque)
-const columnasData = () => (dataSync.columnasListas() ? ', p.agotado, p.inventario_id' : '');
+const columnasData = () => (dataSync.columnasListas() ? `, p.agotado, p.inventario_id${esquema.sinStock() ? ', p.vender_sin_stock' : ''}` : '');
 
-// inventario_id solo se entrega al panel; el público solo ve si está agotado
+// inventario_id solo se entrega al panel; el público solo ve si está agotado.
+// Con "vender sin existencias" la tienda no lo muestra agotado aunque DATA no tenga stock.
 function camposData(p, staff) {
-    const extra = { agotado: p.agotado ? 1 : 0 };
-    if (staff) extra.inventario_id = p.inventario_id || null;
+    const sinStock = Boolean(p.vender_sin_stock);
+    const extra = { agotado: p.agotado && !sinStock ? 1 : 0 };
+    if (staff) Object.assign(extra, { inventario_id: p.inventario_id || null, agotado_data: p.agotado ? 1 : 0, vender_sin_stock: sinStock ? 1 : 0 });
     return extra;
 }
 

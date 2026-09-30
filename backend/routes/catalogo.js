@@ -112,4 +112,25 @@ router.put('/insumos/:id', requireStaff, async (req, res) => {
     }
 });
 
+// PUT /api/catalogo/sin-stock — "vender sin existencias"
+// body: { tabla: 'productos' | 'kits', valor: bool, id?: number }  (sin id = todos los de la tabla)
+router.put('/sin-stock', requireStaff, async (req, res) => {
+    if (!esquema.sinStock()) return res.status(503).json({ success: false, message: 'Función no disponible (migración 007 pendiente).' });
+    const { tabla, valor, id } = req.body || {};
+    const nombre = { productos: 'Productos', kits: 'Kits' }[tabla];
+    if (!nombre) return res.status(400).json({ success: false, message: 'Tabla inválida' });
+    const n = id === undefined || id === null ? null : parseInt(id, 10);
+    if (n !== null && !(n > 0)) return res.status(400).json({ success: false, message: 'ID inválido' });
+    try {
+        const pool = await getConnection();
+        const [r] = n
+            ? await pool.query(`UPDATE ${nombre} SET vender_sin_stock = ? WHERE id = ?`, [valor ? 1 : 0, n])
+            : await pool.query(`UPDATE ${nombre} SET vender_sin_stock = ?`, [valor ? 1 : 0]);
+        res.json({ success: true, cambiados: r.affectedRows });
+    } catch (err) {
+        console.error('Error en vender sin existencias:', err);
+        res.status(500).json({ success: false, message: 'No se pudo guardar' });
+    }
+});
+
 module.exports = router;

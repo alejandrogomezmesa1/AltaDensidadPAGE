@@ -1647,3 +1647,8 @@ body.adm {
 .armador-param {
   margin-top: var(--sp-5);
 }
+
+.sin-stock small {
+  color: var(--c-mute);
+  font-size: 11px;
+}

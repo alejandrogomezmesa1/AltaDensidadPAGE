@@ -227,3 +227,54 @@ export function CampoEtiquetas({ id, valores, onCambiar, sugerencias = [], place
     </div>
   );
 }
+
+// "Vender sin existencias": la tienda deja comprar el perfume o kit aunque DATA no tenga stock
+export function InterruptorSinStock({ tabla, item, onCambio, alerta }) {
+  const [guardando, setGuardando] = useState(false);
+  const activo = Boolean(item.vender_sin_stock);
+  const cambiar = async () => {
+    setGuardando(true);
+    try {
+      await apiJson('catalogo/sin-stock', { method: 'PUT', body: { tabla, id: item.id, valor: !activo } });
+      onCambio(item.id, !activo);
+    } catch (err) {
+      alerta('No se pudo guardar: ' + err.message, 'error');
+    } finally {
+      setGuardando(false);
+    }
+  };
+  return (
+    <label className="check-item sin-stock" title="Se puede comprar en la tienda aunque DATA no tenga existencias">
+      <input type="checkbox" checked={activo} disabled={guardando} onChange={cambiar} />
+      {activo ? ' Sí' : ' No'}
+      {activo && item.agotado_data ? <small> · sin stock en DATA</small> : null}
+    </label>
+  );
+}
+
+export function BotonSinStockTodos({ tabla, lista, onCambio, alerta }) {
+  const todos = lista.length > 0 && lista.every((x) => x.vender_sin_stock);
+  const cambiar = async () => {
+    const r = await Swal.fire({
+      title: todos ? '¿Desactivar para todos?' : '¿Vender todo sin existencias?',
+      html: todos
+        ? 'Los productos sin stock en DATA volverán a mostrarse <strong>agotados</strong> en la tienda.'
+        : 'Todos se podrán comprar en la tienda <strong>aunque DATA no tenga existencias</strong>. El precio en revisión sigue bloqueando la venta.',
+      icon: 'question', showCancelButton: true, confirmButtonText: todos ? 'Desactivar todos' : 'Activar todos', cancelButtonText: 'Cancelar',
+      background: '#1a1a1a', color: '#fff', confirmButtonColor: '#9A7B3F', cancelButtonColor: '#444'
+    });
+    if (!r.isConfirmed) return;
+    try {
+      await apiJson('catalogo/sin-stock', { method: 'PUT', body: { tabla, valor: !todos } });
+      onCambio(null, !todos);
+      toastOk(todos ? 'Desactivado para todos' : 'Activado para todos');
+    } catch (err) {
+      alerta('No se pudo guardar: ' + err.message, 'error');
+    }
+  };
+  return (
+    <button type="button" className="btn-secondary" onClick={cambiar} title="Vender sin existencias en todos" style={{ whiteSpace: 'nowrap' }}>
+      <i className="fas fa-box-open" /> {todos ? 'Sin existencias: desactivar todos' : 'Vender sin existencias: todos'}
+    </button>
+  );
+}

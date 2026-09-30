@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
   formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, Visible, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas, InterruptorSinStock, BotonSinStockTodos
 } from './comunes';
 
 const TALLAS = ['30ml', '50ml', '60ml', '100ml', '120ml', '200ml'];
@@ -36,6 +36,12 @@ export default function ProductosAdmin({ alerta }) {
   const [invalidos, setInvalidos] = useState([]);
   const [guardando, setGuardando] = useState(false);
   const [catalogos, setCatalogos] = useState({ brands: [], families: [], accords: [], notes: [] });
+
+  // "Vender sin existencias": id = null cambia todos
+  const marcarSinStock = useCallback((id, valor) => {
+    setProductos((l) => l.map((p) => (id === null || p.id === id
+      ? { ...p, vender_sin_stock: valor ? 1 : 0, agotado: valor ? 0 : (p.agotado_data || 0) } : p)));
+  }, []);
 
   const cargar = useCallback(async () => {
     setEstado('cargando');
@@ -150,17 +156,18 @@ export default function ProductosAdmin({ alerta }) {
           >
             <i className="fas fa-flask" style={{ color: 'var(--c-accent)' }} /> Guía Fragrantica ↗
           </a>
+          <BotonSinStockTodos tabla="productos" lista={productos} onCambio={marcarSinStock} alerta={alerta} />
           <button className="btn-primary" onClick={() => abrir(null)}><i className="fas fa-plus" /> Nuevo Producto</button>
         </div>
       </div>
       <div className="tabla-wrapper">
         <table className="tabla-productos">
           <thead>
-            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Marca</th><th>Categoría</th><th>Género</th><th>Precio</th><th>Ficha</th><th>Tallas</th><th>Visible</th><th>Acciones</th></tr>
+            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Marca</th><th>Categoría</th><th>Género</th><th>Precio</th><th>Ficha</th><th>Tallas</th><th>Visible</th><th title="Vender aunque DATA no tenga existencias">Sin existencias</th><th>Acciones</th></tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
-              <FilaEstado columnas={11} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
+              <FilaEstado columnas={12} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'} />
             ) : pagina.map((p) => (
               <tr key={p.id}>
@@ -176,6 +183,7 @@ export default function ProductosAdmin({ alerta }) {
                 </td>
                 <td data-label="Tallas">{(p.sizes || []).join(', ') || '-'}</td>
                 <td data-label="Visible"><Visible activo={p.activo} agotado={p.agotado} /></td>
+                <td data-label="Sin existencias"><InterruptorSinStock tabla="productos" item={p} onCambio={marcarSinStock} alerta={alerta} /></td>
                 <td data-label="Acciones">
                   <div className="acciones">
                     <button className="btn-icon editar" title="Editar" onClick={() => abrir(p)}><i className="fas fa-edit" /></button>

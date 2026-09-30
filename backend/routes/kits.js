@@ -5,10 +5,13 @@ const { requireStaff, requireAdmin, esPeticionStaff } = require('../middleware/a
 const dataSync = require('../services/dataSync');
 
 // El enlace con el inventario de DATA solo se entrega al panel
+// Con "vender sin existencias" la tienda no lo muestra agotado aunque DATA no tenga stock
 function limpiarKit(kit, staff) {
-    const { inventario_id, ...publico } = kit;
-    publico.agotado = kit.agotado ? 1 : 0;
-    return staff ? { ...publico, inventario_id: inventario_id || null } : publico;
+    const { inventario_id, vender_sin_stock, ...publico } = kit;
+    publico.agotado = kit.agotado && !vender_sin_stock ? 1 : 0;
+    return staff
+        ? { ...publico, inventario_id: inventario_id || null, agotado_data: kit.agotado ? 1 : 0, vender_sin_stock: vender_sin_stock ? 1 : 0 }
+        : publico;
 }
 
 // Enlaza (o desenlaza con null) un kit con un ítem del inventario de DATA
