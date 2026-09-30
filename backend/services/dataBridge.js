@@ -81,4 +81,13 @@ async function anularVenta(externalReference) {
     return r;
 }
 
-module.exports = { habilitado, obtenerInventario, verificarStock, registrarVenta, anularVenta };
+// Configuraciones que DATA comparte con la tienda: { definiciones, valores }
+async function obtenerConfiguraciones() {
+    return llamar('GET', '/settings');
+}
+
+async function guardarConfiguraciones(valores) {
+    return llamar('PUT', '/settings', { valores });
+}
+
+module.exports = { habilitado, obtenerInventario, verificarStock, registrarVenta, anularVenta, obtenerConfiguraciones, guardarConfiguraciones };

@@ -301,3 +301,54 @@ export function InterruptorSoloPreparado({ item, onCambio, alerta }) {
     </label>
   );
 }
+
+// ── Semáforo de stock (Configuraciones de DATA) ──
+// Rojo = agotado · Amarillo = advertencia (en el límite o por debajo) · Verde = disponible.
+// El límite es el stock mínimo del ítem en DATA si lo tiene; si no, el de Configuraciones.
+const CONFIG_DEFECTO = { stock_advertencia_und: 1, stock_advertencia_ml: 30 };
+export const NIVELES_STOCK = {
+  agotado: { etiqueta: 'Agotado', color: 'var(--err)' },
+  advertencia: { etiqueta: 'Advertencia', color: 'var(--warn)' },
+  disponible: { etiqueta: 'Disponible', color: 'var(--ok)' }
+};
+
+export function nivelStock(item, config = CONFIG_DEFECTO) {
+  const stock = Number(item.stock) || 0;
+  if (stock <= 0) return 'agotado';
+  const c = { ...CONFIG_DEFECTO, ...config };
+  const limite = Number(item.minStock) > 0 ? Number(item.minStock) : (item.unit === 'ml' ? c.stock_advertencia_ml : c.stock_advertencia_und);
+  return stock <= Number(limite) ? 'advertencia' : 'disponible';
+}
+
+// Stock de DATA por inventario_id y límites del semáforo (una carga compartida por las tablas)
+let cargaSemaforo = null;
+export function recargarSemaforo() { cargaSemaforo = null; }
+export function useSemaforo() {
+  const [datos, setDatos] = useState({ porId: new Map(), config: CONFIG_DEFECTO, listo: false });
+  useEffect(() => {
+    let vivo = true;
+    if (!cargaSemaforo) {
+      cargaSemaforo = Promise.all([
+        apiJson('admin/integracion/inventario').then((r) => r.data).catch(() => []),
+        apiJson('admin/configuraciones').then((r) => r.data.valores).catch(() => ({}))
+      ]);
+    }
+    cargaSemaforo.then(([inv, config]) => {
+      if (vivo) setDatos({ porId: new Map(inv.map((i) => [Number(i.id), i])), config: { ...CONFIG_DEFECTO, ...config }, listo: true });
+    });
+    return () => { vivo = false; };
+  }, []);
+  return datos;
+}
+
+export function CeldaStock({ inventarioId, semaforo }) {
+  if (!inventarioId) return <span style={{ color: 'var(--c-mute)' }} title="No está enlazado con DATA">—</span>;
+  const item = semaforo.porId.get(Number(inventarioId));
+  if (!item) return <span style={{ color: 'var(--c-mute)' }}>{semaforo.listo ? 'Sin dato' : '…'}</span>;
+  const nivel = NIVELES_STOCK[nivelStock(item, semaforo.config)];
+  return (
+    <span className="semaforo" style={{ color: nivel.color }} title={nivel.etiqueta}>
+      <i /> {Number(item.stock).toLocaleString('es-CO', { maximumFractionDigits: 2 })}{item.unit === 'ml' ? ' ml' : ''}
+    </span>
+  );
+}

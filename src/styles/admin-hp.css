@@ -1652,3 +1652,84 @@ body.adm {
   color: var(--c-mute);
   font-size: 11px;
 }
+
+/* ---------- Configuraciones (ConfiguracionesAdmin) y semáforo de stock ---------- */
+.cfg-grupo {
+  margin-bottom: var(--sp-5);
+}
+
+.cfg-campo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3) var(--sp-5);
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--c-line);
+}
+
+.cfg-texto {
+  flex: 1 1 320px;
+}
+
+.cfg-texto label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cfg-texto p {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--c-mute);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.cfg-control {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--c-mute);
+}
+
+.cfg-semaforo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-5);
+  margin-bottom: var(--sp-2);
+  padding: var(--sp-3);
+  border: 1px dashed var(--c-line);
+}
+
+.cfg-nivel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.cfg-nivel i,
+.semaforo i {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.cfg-nivel small {
+  color: var(--c-mute);
+}
+
+.semaforo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.semaforo i {
+  background: currentColor;
+}

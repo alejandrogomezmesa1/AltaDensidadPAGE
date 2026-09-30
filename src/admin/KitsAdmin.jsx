@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
   formatPrecio, toastOk, subirImagen, ImagenCelda, Visible, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario, InterruptorSinStock, BotonSinStockTodos } from './comunes';
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario, InterruptorSinStock, BotonSinStockTodos, useSemaforo, CeldaStock } from './comunes';
 
 const VACIO = { id: '', nombre: '', descripcion: '', precio: '', imagen: '', activo: true, beneficios: [], inventario_id: '' };
 
@@ -18,6 +18,8 @@ export default function KitsAdmin({ alerta }) {
   const [invalidos, setInvalidos] = useState([]);
   const [guardando, setGuardando] = useState(false);
   const [aEliminar, setAEliminar] = useState(null);
+
+  const semaforo = useSemaforo();
 
   // "Vender sin existencias": id = null cambia todos
   const marcarSinStock = useCallback((id, valor) => {
@@ -121,11 +123,11 @@ export default function KitsAdmin({ alerta }) {
       <div className="tabla-wrapper">
         <table className="tabla-productos">
           <thead>
-            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Visible</th><th title="Vender aunque DATA no tenga existencias">Sin existencias</th><th>Acciones</th></tr>
+            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th title="Stock en DATA con el semáforo de Configuraciones">Stock</th><th>Visible</th><th title="Vender aunque DATA no tenga existencias">Sin existencias</th><th>Acciones</th></tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
-              <FilaEstado columnas={8} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
+              <FilaEstado columnas={9} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay kits registrados.'} />
             ) : pagina.map((k) => (
               <tr key={k.id}>
@@ -134,6 +136,7 @@ export default function KitsAdmin({ alerta }) {
                 <td data-label="Nombre"><strong>{k.nombre}</strong></td>
                 <td data-label="Descripción">{k.descripcion}</td>
                 <td data-label="Precio">{formatPrecio(k.precio)}</td>
+                <td data-label="Stock"><CeldaStock inventarioId={k.inventario_id} semaforo={semaforo} /></td>
                 <td data-label="Visible"><Visible activo={k.activo} agotado={k.agotado} /></td>
                 <td data-label="Sin existencias"><InterruptorSinStock tabla="kits" item={k} onCambio={marcarSinStock} alerta={alerta} /></td>
                 <td data-label="Acciones">
