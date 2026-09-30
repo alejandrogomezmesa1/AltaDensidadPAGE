@@ -91,3 +91,31 @@ export function paginasVisibles(actual, total) {
   if (actual >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
   return [1, '...', actual - 1, actual, actual + 1, '...', total];
 }
+
+// ── Enlaces directos: /perfume/<slug> y /kit/<slug> ──
+// El slug sale del nombre ("KHAMRAH LATTAFA" → "khamrah-lattafa"). Si dos nombres dan el mismo,
+// al segundo se le agrega su id. Un enlace viejo que termine en -<id> o sea solo el id también resuelve.
+export const slug = (texto) => normalizar(texto)
+  .replace(/&/g, ' y ')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
+export function mapaSlugs(lista, nombreDe) {
+  const porSlug = new Map();
+  const porId = new Map();
+  for (const x of lista) {
+    let s = slug(nombreDe(x)) || String(x.id);
+    if (porSlug.has(s)) s = `${s}-${x.id}`;
+    porSlug.set(s, x.id);
+    porId.set(x.id, s);
+  }
+  return { porSlug, porId };
+}
+
+export function resolverSlug(mapa, s) {
+  const limpio = slug(decodeURIComponent(String(s || '')));
+  if (mapa.porSlug.has(limpio)) return mapa.porSlug.get(limpio);
+  const id = /(?:^|-)(\d+)$/.exec(limpio);
+  if (id && mapa.porId.has(Number(id[1]))) return Number(id[1]);
+  return null;
+}

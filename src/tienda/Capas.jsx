@@ -17,7 +17,8 @@ function Specs({ style }) {
   );
 }
 
-function DetalleProducto() {
+// enPagina: la misma ficha como página (enlace directo /perfume/<slug>), sin botón de cerrar
+export function DetalleProducto({ enPagina = false }) {
   const { detalle: D, setDetalle, buscarProducto, cerrarCapas, addToCart, abrirBolsa } = useTienda();
   const p = buscarProducto(D.id);
   if (!p) return null;
@@ -27,7 +28,7 @@ function DetalleProducto() {
 
   return (
     <>
-      <button className="x up" onClick={cerrarCapas} aria-label="Cerrar detalle">✕ Cerrar</button>
+      {!enPagina && <button className="x up" onClick={cerrarCapas} aria-label="Cerrar detalle">✕ Cerrar</button>}
       <div className="stage"><Frasco h={p.h || 32} s={2} img={p.img} nombre={p.n} prioridad /></div>
       <div className="d-info">
         <span className="up eyebrow">{[p.b, etiquetaColeccion(p.c)].filter(Boolean).join(' · ')}</span>
@@ -66,20 +67,20 @@ function DetalleProducto() {
           {!p.sp && <b style={{ font: '300 28px var(--f-display)' }}>{p.rev ? 'Precio en revisión' : fmt(pr(p) * D.q)}</b>}
           {!p.sp && <Cantidad valor={D.q} onMenos={() => fijar({ q: Math.max(1, D.q - 1) })} onMas={() => fijar({ q: D.q + 1 })} />}
           {p.sp
-            ? <Link className="btn up" to={`/catalogo?ver=crear&fragancia=${p.id}`} onClick={cerrarCapas}>Prepararla a tu medida</Link>
+            ? <Link className="btn up" to={`/catalogo?ver=crear&fragancia=${p.id}`}>Prepararla a tu medida</Link>
             : noDisponible(p)
               ? <button className="btn up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>
               : <button className="btn up" onClick={() => { addToCart(D.id, D.ml, D.env, D.q); abrirBolsa(); }}>Añadir a la bolsa</button>}
         </div>
         {p.sp && <p className="mute d-solo-prep">Esta fragancia la tenemos en esencia: se prepara en el envase y tamaño que elijas.</p>}
-        {!p.sp && <Link className="link up d-crear" to={`/catalogo?ver=crear&fragancia=${p.id}`} onClick={cerrarCapas}>Prepararla en el envase y tamaño que quieras →</Link>}
+        {!p.sp && <Link className="link up d-crear" to={`/catalogo?ver=crear&fragancia=${p.id}`}>Prepararla en el envase y tamaño que quieras →</Link>}
         <a className="link up d-wa" href={`https://wa.me/${WA}?text=${msgWa}`} target="_blank" rel="noopener">Consultar con un asesor por WhatsApp</a>
       </div>
     </>
   );
 }
 
-function DetalleKit() {
+export function DetalleKit({ enPagina = false }) {
   const { KITS, kitAbierto, cerrarCapas, addKitToCart, abrirBolsa } = useTienda();
   const kit = KITS.find((k) => k.id === kitAbierto);
   if (!kit) return null;
@@ -88,7 +89,7 @@ function DetalleKit() {
 
   return (
     <>
-      <button className="x up" onClick={cerrarCapas} aria-label="Cerrar detalle">✕ Cerrar</button>
+      {!enPagina && <button className="x up" onClick={cerrarCapas} aria-label="Cerrar detalle">✕ Cerrar</button>}
       <div className="stage" style={{ padding: 'var(--sp-4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <ImagenLogo src={normalizarImagen(kit.imagen || kit.img)} alt={nom} style={{ maxHeight: 360, maxWidth: '90%', objectFit: 'contain' }} />
       </div>

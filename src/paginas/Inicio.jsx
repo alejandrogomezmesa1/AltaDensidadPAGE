@@ -100,7 +100,7 @@ function HeroImagen({ envolturaRef }) {
 }
 
 export default function Inicio() {
-  const { P, TOP10, ENVASES, KITS } = useTienda();
+  const { P, TOP10, ENVASES, KITS, rutaPerfume } = useTienda();
   const raizRef = useRef(null);
   const heroRef = useRef(null);
   const envolturaRef = useRef(null);
@@ -136,7 +136,7 @@ export default function Inicio() {
         description: p.desc || `Perfume ${p.n} en concentración pura Extrait de Parfum y fijación prolongada.`,
         category: etiquetaColeccion(p.c),
         brand: { '@type': 'Brand', name: 'Alta Densidad' },
-        offers: { '@type': 'Offer', priceCurrency: 'COP', price: pr(p), availability: 'https://schema.org/InStock', url: SITIO + '/' }
+        offers: { '@type': 'Offer', priceCurrency: 'COP', price: pr(p), availability: 'https://schema.org/InStock', url: SITIO + rutaPerfume(p.id) }
       }
     }))
   };

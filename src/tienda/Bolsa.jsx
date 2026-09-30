@@ -21,7 +21,7 @@ function Cantidad({ valor, onMenos, onMas }) {
 export { Cantidad };
 
 export default function Bolsa() {
-  const { cart, capa, paso, setPaso, cerrarCapas, resolverLinea, cambiarCantidad, quitarLinea, vaciarBolsa } = useTienda();
+  const { cart, capa, setCapa, paso, setPaso, cerrarCapas, resolverLinea, cambiarCantidad, quitarLinea, vaciarBolsa } = useTienda();
   const [envio, setEnvio] = useState(ENVIO_VACIO);
   const [error, setError] = useState('');
   const [pagando, setPagando] = useState(false);
@@ -112,7 +112,7 @@ export default function Bolsa() {
           )) : (
             <div className="empty">
               <p>Tu bolsa está vacía.</p>
-              <p style={{ marginTop: 'var(--sp-3)' }}><Link className="link up" to="/catalogo" onClick={cerrarCapas}>Ver catálogo</Link></p>
+              <p style={{ marginTop: 'var(--sp-3)' }}><Link className="link up" to="/catalogo" onClick={() => setCapa(null)}>Ver catálogo</Link></p>
             </div>
           )}
         </div>

@@ -157,8 +157,16 @@ export function WhatsappFlotante() {
 
 // Al cambiar de página: ir al ancla (/#kits, /nosotros#faq) o al inicio
 export function DesplazarAlCambiar() {
-  const { pathname, hash } = useLocation();
+  const location = useLocation();
+  const { pathname, hash } = location;
+  // Abrir una ficha como ventana (state.fondo) o cerrarla volviendo a su fondo no mueve la página
+  const fondo = location.state && location.state.fondo;
+  const conFondo = Boolean(fondo);
+  const fondoAnterior = useRef(null);
   useEffect(() => {
+    const volvioAlFondo = fondoAnterior.current === pathname + location.search;
+    fondoAnterior.current = fondo ? fondo.pathname + (fondo.search || '') : null;
+    if (conFondo || volvioAlFondo) return undefined;
     if (!hash) {
       window.scrollTo({ top: 0 });
       return undefined;
@@ -168,6 +176,6 @@ export function DesplazarAlCambiar() {
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 60);
     return () => clearTimeout(t);
-  }, [pathname, hash]);
+  }, [pathname, hash, conFondo]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 }

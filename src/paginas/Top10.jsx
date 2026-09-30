@@ -7,7 +7,7 @@ import { normalizarImagen, urlAbsoluta } from '../lib/producto';
 import { SITIO } from '../config';
 
 export default function Top10() {
-  const { TOP10 } = useTienda();
+  const { TOP10, rutaPerfume } = useTienda();
   usePagina({
     titulo: 'Top 10 Perfumes Más Vendidos | Fragancias de Alta Densidad',
     descripcion: 'Descubre el ranking oficial de los 10 perfumes más vendidos y mejor valorados de Alta Densidad. Fragancias de alta concentración para hombre y mujer en Colombia.',
@@ -39,7 +39,8 @@ export default function Top10() {
         description: t.descripcion || t.nombre || t.name,
         brand: { '@type': 'Brand', name: 'Alta Densidad' }
       };
-      if (precio) item.offers = { '@type': 'Offer', priceCurrency: 'COP', price: precio, availability: 'https://schema.org/InStock', url };
+      item.url = SITIO + rutaPerfume(t.producto_id || t.id);
+      if (precio) item.offers = { '@type': 'Offer', priceCurrency: 'COP', price: precio, availability: 'https://schema.org/InStock', url: item.url };
       return { '@type': 'ListItem', position: idx + 1, item };
     })
   };

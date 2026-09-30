@@ -3607,6 +3607,8 @@ body.ad-layer-open .ia-chat-launcher {
 
 .d-crear {
   display: inline-block;
+  max-width: 100%;
+  white-space: normal; /* en móvil el texto largo pasa a dos líneas */
   margin-top: var(--sp-3);
   color: var(--c-accent);
 }
@@ -3704,4 +3706,67 @@ body.ad-layer-open .ia-chat-launcher {
 .d-solo-prep {
   margin-top: var(--sp-2);
   font-size: var(--fs-2);
+}
+
+/* ============================================================
+   ENLACES DIRECTOS: ficha como página (FichaPagina.jsx) y "no encontrado"
+   ============================================================ */
+.ficha-migas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-2);
+  margin-bottom: var(--sp-4);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--c-mute);
+}
+
+.ficha-migas a {
+  color: inherit;
+}
+
+.ficha-migas a:hover {
+  color: var(--c-accent);
+}
+
+.ficha-migas [aria-current] {
+  color: var(--c-ink);
+}
+
+.ficha-sheet {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0 auto;
+  overflow: visible;
+  transform: none;
+}
+
+@media (max-width: 720px) {
+  .ficha-sheet {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.no-encontrado-t {
+  margin: var(--sp-5) 0 var(--sp-2);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--c-mute);
+}
+
+.no-encontrado-lista {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.no-encontrado-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
 }

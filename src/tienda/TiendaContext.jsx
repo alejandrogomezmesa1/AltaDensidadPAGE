@@ -1,9 +1,11 @@
 // Estado de la tienda compartido por todas las páginas públicas:
 // catálogo (datos duros → API), bolsa persistida y capas abiertas (bolsa, detalle, kit, filtros, AURA).
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUbicacionReal } from '../lib/ubicacion';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
-import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO } from '../lib/producto';
+import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO, mapaSlugs, resolverSlug } from '../lib/producto';
 import { leerArmado, precioArmado, leerInsumo, precioInsumo, ETIQUETA_TIPO } from '../lib/catalogo';
 
 const CART_KEY = 'ad_cart_v2';
@@ -89,6 +91,11 @@ export function TiendaProvider({ children }) {
 
   // Capa abierta: 'bolsa' | 'detalle' | 'kit' | 'filtros' | null
   const [capa, setCapa] = useState(null);
+  // El catálogo de la API ya respondió (con o sin datos): antes, un enlace directo no se da por perdido
+  const [catalogoListo, setCatalogoListo] = useState(false);
+  const [kitsListos, setKitsListos] = useState(false);
+  const navigate = useNavigate();
+  const location = useUbicacionReal();
   const [paso, setPaso] = useState('bag');
   const [detalle, setDetalle] = useState({ id: null, ml: '', env: '', q: 1 });
   const [kitAbierto, setKitAbierto] = useState(null);
@@ -98,6 +105,7 @@ export function TiendaProvider({ children }) {
   useEffect(() => {
     let vivo = true;
     fetchConFallback('productos').then((data) => {
+      if (vivo) setCatalogoListo(true);
       if (!vivo || !data || !data.length) return;
       const nuevos = data.filter((x) => x.activo !== 0).map(adaptarProducto);
       if (nuevos.length) setP(nuevos);
@@ -145,6 +153,7 @@ export function TiendaProvider({ children }) {
       }));
     });
     fetchConFallback('kits').then((data) => {
+      if (vivo) setKitsListos(true);
       if (!vivo || !data || !data.length) return;
       setKits(data.map((k, idx) => ({
         id: k.id || idx + 1,
@@ -184,7 +193,7 @@ export function TiendaProvider({ children }) {
   }, [capa]);
 
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') setCapa(null); };
+    const onKey = (e) => { if (e.key === 'Escape') cerrarRef.current(); };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
@@ -239,7 +248,24 @@ export function TiendaProvider({ children }) {
   }, [P, TOP10, KITS, ARMADOR, INSUMOS]);
 
   const abrirBolsa = useCallback(() => { setPaso('bag'); setCapa('bolsa'); }, []);
-  const cerrarCapas = useCallback(() => setCapa(null), []);
+  // ── Enlaces directos de perfumes y kits ──
+  // Abrir una ficha desde la tienda navega a /perfume/<slug> guardando la página de fondo
+  // (state.fondo): la ficha se ve como ventana sobre esa página y "atrás" la cierra. Entrar
+  // directo por el enlace (sin fondo) muestra la ficha como página (FichaPagina).
+  const slugsP = useMemo(() => mapaSlugs(P, (p) => p.n), [P]);
+  const slugsK = useMemo(() => mapaSlugs(KITS.filter((k) => k.activo !== 0), (k) => k.nombre), [KITS]);
+  const rutaPerfume = useCallback((id) => `/perfume/${slugsP.porId.get(Number(id)) || id}`, [slugsP]);
+  const rutaKit = useCallback((id) => `/kit/${slugsK.porId.get(Number(id)) || id}`, [slugsK]);
+  const idPorSlug = useCallback((tipo, s) => resolverSlug(tipo === 'kit' ? slugsK : slugsP, s), [slugsP, slugsK]);
+  const fondo = location.state && location.state.fondo;
+  const enFicha = /^\/(perfume|kit)\/[^/]+\/?$/.test(location.pathname);
+
+  const cerrarCapas = useCallback(() => {
+    if (fondo && enFicha) navigate(-1);
+    else setCapa(null);
+  }, [fondo, enFicha, navigate]);
+  const cerrarRef = useRef(cerrarCapas);
+  cerrarRef.current = cerrarCapas;
 
   const addToCart = useCallback((id, ml, env, q = 1) => {
     const prod = buscarEn(P, TOP10, id);
@@ -279,25 +305,45 @@ export function TiendaProvider({ children }) {
   const abrirDetalle = useCallback((id) => {
     const p = buscarEn(P, TOP10, id);
     if (!p) return;
-    setDetalle({ id: p.id, ml: p.sz[0] || '', env: p.env[0] || '', q: 1 });
-    setCapa('detalle');
-  }, [P, TOP10]);
+    navigate(rutaPerfume(p.id), { state: { fondo: fondo || location }, replace: Boolean(fondo) });
+  }, [P, TOP10, navigate, rutaPerfume, fondo, location]);
 
   const abrirKit = useCallback((kitId) => {
     const kit = KITS.find((k) => k.id === Number(kitId) || `kit_${k.id}` === String(kitId));
     if (!kit) return;
-    setKitAbierto(kit.id);
-    setCapa('kit');
-  }, [KITS]);
+    navigate(rutaKit(kit.id), { state: { fondo: fondo || location }, replace: Boolean(fondo) });
+  }, [KITS, navigate, rutaKit, fondo, location]);
+
+  // La URL manda: con fondo, la ficha se abre como ventana; al salir de la ficha, se cierra
+  useEffect(() => {
+    const m = /^\/(perfume|kit)\/([^/]+)\/?$/.exec(location.pathname);
+    if (m && fondo) {
+      const id = idPorSlug(m[1], m[2]);
+      if (!id) return;
+      if (m[1] === 'perfume') {
+        const p = buscarEn(P, TOP10, id);
+        if (!p) return;
+        setDetalle((d) => (d.id === p.id ? d : { id: p.id, ml: p.sz[0] || '', env: p.env[0] || '', q: 1 }));
+        setCapa('detalle');
+      } else {
+        setKitAbierto(id);
+        setCapa('kit');
+      }
+    } else {
+      setCapa((c) => (c === 'detalle' || c === 'kit' ? null : c));
+    }
+  }, [location, fondo, idPorSlug, P, TOP10]);
 
   const pedirAura = useCallback(() => { setCapa(null); setAuraAbierta(true); }, []);
 
   const valor = useMemo(() => ({
     P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, cart, agregarPorCodigo,
-    capa, setCapa, paso, setPaso, detalle, setDetalle, kitAbierto, auraAbierta, setAuraAbierta,
+    capa, setCapa, paso, setPaso, detalle, setDetalle, kitAbierto, setKitAbierto, auraAbierta, setAuraAbierta,
+    catalogoListo, kitsListos, rutaPerfume, rutaKit, idPorSlug,
     buscarProducto, resolverLinea, abrirBolsa, cerrarCapas, addToCart, agregarRapido, addKitToCart,
     cambiarCantidad, quitarLinea, vaciarBolsa, abrirDetalle, abrirKit, pedirAura
   }), [P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, cart, agregarPorCodigo, capa, paso, detalle, kitAbierto, auraAbierta,
+    catalogoListo, kitsListos, rutaPerfume, rutaKit, idPorSlug,
     buscarProducto, resolverLinea, abrirBolsa, cerrarCapas, addToCart, agregarRapido, addKitToCart,
     cambiarCantidad, quitarLinea, vaciarBolsa, abrirDetalle, abrirKit, pedirAura]);
 
