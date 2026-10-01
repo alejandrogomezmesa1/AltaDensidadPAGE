@@ -27,13 +27,21 @@ function completitud(p) {
   ].filter(Boolean).length;
 }
 
+// Búsqueda en Fragrantica con el perfume original (si se conoce) o el nombre, y su marca
+const busquedaFragrantica = (nombre, marca) => {
+  const n = String(nombre || '').trim();
+  const conMarca = marca && !n.toLowerCase().includes(String(marca).toLowerCase());
+  const q = [n, conMarca ? marca : ''].filter(Boolean).join(' ').trim();
+  return q ? `https://www.fragrantica.es/search/?query=${encodeURIComponent(q)}` : 'https://www.fragrantica.es';
+};
+
 // Referencia en Fragrantica y dirección del perfume en la tienda (/perfume/<ruta>-<id>).
 // Al pegar el enlace de Fragrantica se propone la dirección con su marca y nombre; se puede editar.
 function EnlacesProducto({ form, setForm }) {
   const ref = form.fref.trim() ? desdeFragrantica(form.fref) : null;
   const propuesta = rutaPorDefecto(form.nombre, form.marca);
   const ruta = normalizarRuta(form.ruta);
-  const busqueda = [form.original || form.nombre, form.marca].filter(Boolean).join(' ').trim();
+  const busqueda = decodeURIComponent(busquedaFragrantica(form.original || form.nombre, form.marca).split('query=')[1] || '');
   const cambiarRef = (valor) => {
     const r = valor.trim() ? desdeFragrantica(valor) : null;
     // Si la dirección estaba vacía o era la propuesta automática, se toma la de Fragrantica
@@ -43,12 +51,18 @@ function EnlacesProducto({ form, setForm }) {
     <div className="form-group full enlaces-producto">
       <div className="enlaces-cab">
         <label htmlFor="inputFragrantica">Referencia en Fragrantica</label>
-        <a className="link-fragrantica" target="_blank" rel="noopener noreferrer"
-          href={busqueda ? `https://www.fragrantica.es/search/?query=${encodeURIComponent(busqueda)}` : 'https://www.fragrantica.es'}>
-          <i className="fas fa-search" /> Buscar{busqueda ? ` "${busqueda}"` : ''} en Fragrantica ↗
-        </a>
+        <span className="enlaces-botones">
+          {ref && (
+            <a className="btn-secondary" target="_blank" rel="noopener noreferrer" href={ref.url} title="Notas, acordes, longevidad, estela y demás detalles técnicos">
+              <i className="fas fa-flask" /> Abrir ficha técnica ↗
+            </a>
+          )}
+          <a className="link-fragrantica" target="_blank" rel="noopener noreferrer" href={busquedaFragrantica(form.original || form.nombre, form.marca)}>
+            <i className="fas fa-search" /> Buscar{busqueda ? ` "${busqueda}"` : ''} ↗
+          </a>
+        </span>
       </div>
-      <input type="url" id="inputFragrantica" placeholder="https://www.fragrantica.es/perfume/Marca/Nombre-1234.html"
+      <input type="text" inputMode="url" id="inputFragrantica" placeholder="https://www.fragrantica.es/perfume/Marca/Nombre-1234.html"
         value={form.fref} onChange={(e) => cambiarRef(e.target.value)} className={form.fref.trim() && !ref ? 'invalid' : undefined} />
       <small className="hint-data">
         {form.fref.trim()
@@ -260,6 +274,10 @@ export default function ProductosAdmin({ alerta }) {
                 <td data-label="Solo preparado"><InterruptorSoloPreparado item={p} onCambio={marcarPreparado} alerta={alerta} /></td>
                 <td data-label="Acciones">
                   <div className="acciones">
+                    {p.fragranticaUrl
+                      ? <a className="btn-icon fragrantica" href={p.fragranticaUrl} target="_blank" rel="noopener noreferrer" title="Ver ficha técnica en Fragrantica"><i className="fas fa-flask" /></a>
+                      : <a className="btn-icon fragrantica sin-ref" href={busquedaFragrantica(p.originalName || p.name, p.brand && p.brand.name)} target="_blank" rel="noopener noreferrer"
+                        title="Sin referencia: buscar en Fragrantica"><i className="fas fa-search" /></a>}
                     <button className="btn-icon editar" title="Editar" onClick={() => abrir(p)}><i className="fas fa-edit" /></button>
                     <button className="btn-icon eliminar" title="Eliminar" onClick={() => eliminar(p)}><i className="fas fa-trash" /></button>
                   </div>
@@ -277,17 +295,13 @@ export default function ProductosAdmin({ alerta }) {
             <div className="form-group full">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
                 <label htmlFor="inputNombre">Nombre *</label>
-                <a
-                  href={form.nombre.trim()
-                    ? `https://www.fragrantica.es/search/?query=${encodeURIComponent(form.nombre.trim())}`
-                    : 'https://www.fragrantica.es'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-fragrantica"
-                  title="Abrir búsqueda en Fragrantica para consultar notas"
-                >
-                  <i className="fas fa-flask" /> {form.nombre.trim() ? `Consultar notas de "${form.nombre.trim()}" en Fragrantica ↗` : 'Guía Fragrantica de Notas ↗'}
-                </a>
+                {desdeFragrantica(form.fref)
+                  ? <a href={desdeFragrantica(form.fref).url} target="_blank" rel="noopener noreferrer" className="link-fragrantica" title="Notas, acordes, longevidad, estela y demás detalles técnicos">
+                      <i className="fas fa-flask" /> Ver ficha técnica en Fragrantica ↗
+                    </a>
+                  : <a href={busquedaFragrantica(form.original || form.nombre, form.marca)} target="_blank" rel="noopener noreferrer" className="link-fragrantica" title="Buscar este perfume en Fragrantica">
+                      <i className="fas fa-search" /> {form.nombre.trim() ? `Buscar "${form.nombre.trim()}" en Fragrantica ↗` : 'Guía Fragrantica ↗'}
+                    </a>}
               </div>
               <input type="text" id="inputNombre" placeholder="Ej: One Million – Paco Rabanne" required {...campo('nombre')} />
             </div>

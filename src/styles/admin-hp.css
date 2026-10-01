@@ -1793,3 +1793,28 @@ body.adm {
 .ref-pendiente {
   color: var(--c-mute);
 }
+
+/* Acceso directo a la ficha técnica en Fragrantica */
+.btn-icon.fragrantica {
+  display: inline-grid;
+  place-items: center;
+  color: var(--c-accent);
+  text-decoration: none;
+}
+
+.btn-icon.fragrantica.sin-ref {
+  color: var(--c-mute);
+}
+
+.enlaces-botones {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.enlaces-botones .btn-secondary {
+  padding: 5px 10px;
+  font-size: 11px;
+  text-decoration: none;
+}

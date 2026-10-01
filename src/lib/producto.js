@@ -158,7 +158,7 @@ export function desdeFragrantica(url) {
   let u;
   try { u = new URL(String(url).trim()); } catch { return null; }
   if (!/(^|\.)fragrantica\.[a-z.]+$/i.test(u.hostname)) return null;
-  const m = /^\/(?:perfume|perfumes)\/([^/]+)\/(.+?)-(\d+)\.html$/i.exec(decodeURIComponent(u.pathname));
+  const m = /^\/(?:perfume|perfumes)\/([^/]+)\/([^/]+?)-(\d+)\.html$/i.exec(decodeURIComponent(u.pathname));
   if (!m) return null;
   const marca = m[1].replace(/-/g, ' ').trim();
   const nombre = m[2].replace(/-/g, ' ').trim();
