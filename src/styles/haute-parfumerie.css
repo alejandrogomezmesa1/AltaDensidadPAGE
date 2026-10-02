@@ -3783,3 +3783,49 @@ body.ad-layer-open .ia-chat-launcher {
   gap: var(--sp-2);
   margin-top: var(--sp-5);
 }
+
+/* ============================================================
+   TARJETAS DE LA COLECCIÓN: marco de foto uniforme
+   Cada foto llena un mismo marco (object-fit: cover) en lugar de conservar su proporción:
+   todas las tarjetas se ven iguales sin importar cómo se tomó la foto. El nombre ocupa
+   siempre dos líneas para que marca, precio y "Añadir" queden alineados en la fila.
+   ============================================================ */
+.card .stage .bottle-wrap {
+  position: absolute;
+  inset: 0;
+}
+
+.card .stage img.stage-real-img {
+  position: absolute;
+  top: 16%;
+  left: 9%;
+  /* Las imágenes no se estiran por sus bordes: medidas explícitas del marco */
+  width: 82%;
+  height: 77%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  box-shadow: 0 18px 34px -20px rgba(0, 0, 0, 0.6);
+}
+
+.card .info h3 {
+  display: -webkit-box;
+  min-height: 2.8em;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.4;
+}
+
+/* En pantallas táctiles las notas van fijas bajo la foto: misma altura en todas */
+@media (hover: none) {
+  .card .notes {
+    display: -webkit-box;
+    min-height: calc(2 * 1.5em + var(--sp-2));
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.5;
+  }
+}
