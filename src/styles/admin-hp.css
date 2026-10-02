@@ -1834,3 +1834,41 @@ body.adm {
   background: var(--c-accent);
   color: var(--c-bg);
 }
+
+/* Familias olfativas: varias, en orden (ProductosAdmin) */
+.familias-opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.familia-opcion {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1px solid var(--c-line);
+  background: transparent;
+  color: var(--c-ink);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.familia-opcion:hover {
+  border-color: var(--c-mute);
+}
+
+.familia-opcion.on {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+.familia-orden {
+  padding: 1px 6px;
+  background: var(--c-accent);
+  color: var(--c-bg);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

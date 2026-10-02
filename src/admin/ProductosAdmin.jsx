@@ -13,7 +13,7 @@ const NOTAS_VACIAS = { top: [], heart: [], base: [] };
 const VACIO = {
   id: '', nombre: '', descripcion: '', categoria: '', genero: '', precio: '', rating: '4', imagen: '', activo: true,
   sizes: [], bottleTypes: [], inventario_id: '',
-  marca: '', original: '', familiaId: '', acordes: [], notas: NOTAS_VACIAS,
+  marca: '', original: '', familias: [], acordes: [], notas: NOTAS_VACIAS,
   fref: '', ruta: ''
 };
 
@@ -23,7 +23,7 @@ function completitud(p) {
   return [
     !!p.brand,
     !!p.originalName,
-    !!p.family && (p.accords || []).length > 0,
+    ((p.families || []).length > 0 || !!p.family) && (p.accords || []).length > 0,
     n.top.length > 0 && n.heart.length > 0 && n.base.length > 0
   ].filter(Boolean).length;
 }
@@ -159,7 +159,7 @@ export default function ProductosAdmin({ alerta }) {
       id: p.id, nombre: p.name, descripcion: p.description || '', categoria: p.category, genero: p.gender,
       precio: p.price, rating: String(p.rating ?? 4), imagen: p.image || '', activo: !!p.activo,
       sizes: p.sizes || [], bottleTypes: p.bottleTypes || [], inventario_id: p.inventario_id || '',
-      marca: p.brand ? p.brand.name : '', original: p.originalName || '', familiaId: p.family ? String(p.family.id) : '',
+      marca: p.brand ? p.brand.name : '', original: p.originalName || '', familias: (p.families && p.families.length ? p.families : (p.family ? [p.family] : [])).map((x) => String(x.id)),
       acordes: p.accords || [], notas: p.notes || NOTAS_VACIAS,
       fref: p.fragranticaUrl || '', ruta: p.ruta || ''
     } : VACIO;
@@ -211,7 +211,7 @@ export default function ProductosAdmin({ alerta }) {
         ...(invListo ? { inventario_id: form.inventario_id ? Number(form.inventario_id) : null } : {}),
         brand: form.marca.trim() || null,
         originalName: form.original.trim() || null,
-        familyId: form.familiaId ? Number(form.familiaId) : null,
+        familyIds: form.familias.map(Number),
         accords: form.acordes,
         notes: form.notas,
         fragranticaUrl: form.fref.trim() || null,
@@ -407,12 +407,20 @@ export default function ProductosAdmin({ alerta }) {
               <input id="inputOriginal" type="text" placeholder="Ej: Sauvage (sin la marca)"
                 value={form.original} onChange={(e) => setForm((f) => ({ ...f, original: e.target.value }))} />
             </div>
-            <div className="form-group">
-              <label htmlFor="inputFamilia">Familia olfativa</label>
-              <select id="inputFamilia" value={form.familiaId} onChange={(e) => setForm((f) => ({ ...f, familiaId: e.target.value }))}>
-                <option value="">-- Sin definir --</option>
-                {catalogos.families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
-              </select>
+            <div className="form-group full">
+              <label>Familias olfativas <small>(la primera que marques es la principal)</small></label>
+              <div className="familias-opciones" role="group" aria-label="Familias olfativas">
+                {catalogos.families.map((fam) => {
+                  const pos = form.familias.indexOf(String(fam.id));
+                  return (
+                    <button type="button" key={fam.id} className={`familia-opcion ${pos >= 0 ? 'on' : ''}`} aria-pressed={pos >= 0}
+                      onClick={() => setForm((f) => ({ ...f, familias: pos >= 0 ? f.familias.filter((x) => x !== String(fam.id)) : [...f.familias, String(fam.id)] }))}>
+                      {pos >= 0 && <span className="familia-orden">{pos === 0 ? 'Principal' : pos + 1}</span>}
+                      {fam.name}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             <div className="form-group full">
               <label htmlFor="inputAcordes">Acordes principales <small>(del más al menos dominante)</small></label>

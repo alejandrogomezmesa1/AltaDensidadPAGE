@@ -34,7 +34,7 @@ export function DetalleProducto({ enPagina = false }) {
         <span className="up eyebrow">{[p.b, etiquetaColeccion(p.c)].filter(Boolean).join(' · ')}</span>
         <h2>{p.n}</h2>
         {p.orig && <small className="mute d-orig">Inspirado en {p.orig}{p.b ? ` de ${p.b}` : ''}</small>}
-        <small className="up mute">{[p.f, p.g].filter(Boolean).join(' · ')}</small>
+        <small className="up mute">{[...p.fs, p.g].filter(Boolean).join(' · ')}</small>
         <p className="mute">{descripcion(p)}</p>
         {p.ac.length > 0 && (
           <div className="pick up d-acordes" aria-label="Acordes principales">

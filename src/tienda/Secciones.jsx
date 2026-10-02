@@ -30,12 +30,12 @@ function filtrarProductos(P, filters) {
   const term = normalizar(filters.search);
   return P.filter((p) => {
     if (term) {
-      const coincide = [p.n, p.b, p.orig, p.f, p.desc, ...p.ac, ...todasLasNotas(p)].some((t) => t && normalizar(t).includes(term));
+      const coincide = [p.n, p.b, p.orig, ...p.fs, p.desc, ...p.ac, ...todasLasNotas(p)].some((t) => t && normalizar(t).includes(term));
       if (!coincide) return false;
     }
     if (filters.accord !== 'Todos' && !p.ac.includes(filters.accord)) return false;
     if (filters.note !== 'Todos' && !todasLasNotas(p).includes(filters.note)) return false;
-    if (filters.family !== 'Todos' && p.f !== filters.family) return false;
+    if (filters.family !== 'Todos' && !p.fs.includes(filters.family)) return false;
     if (filters.gender !== 'Todos' && p.g !== filters.gender) return false;
     if (filters.category !== 'Todos' && p.c !== filters.category) return false;
     if (filters.brand !== 'Todos' && p.b !== filters.brand) return false;
@@ -62,7 +62,7 @@ function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
   // Solo se muestran los grupos que tienen datos cargados en las fichas
   const grupos = [
     ['Colección', 'category', alfabetico(P.map((x) => x.c)), etiquetaColeccion],
-    ['Familia olfativa', 'family', alfabetico(P.map((x) => x.f))],
+    ['Familia olfativa', 'family', alfabetico(P.flatMap((x) => x.fs))],
     ['Acorde principal', 'accord', frecuentes(P.flatMap((x) => x.ac))],
     ['Nota', 'note', alfabetico(P.flatMap(todasLasNotas))],
     ['Estilo / Género', 'gender', ['Unisex', 'Masculino', 'Femenino']],

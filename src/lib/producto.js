@@ -43,7 +43,9 @@ export function adaptarProducto(item, idx) {
     orig: item.originalName || null,
     c: item.category || item.categoria || 'Diseñador',
     g: normalizarGenero(item.gender || item.genero),
-    f: item.family ? item.family.name : null,
+    // Familias olfativas en orden (la primera es la principal); f = la principal
+    fs: Array.isArray(item.families) && item.families.length ? item.families.map((x) => x.name) : (item.family ? [item.family.name] : []),
+    f: Array.isArray(item.families) && item.families.length ? item.families[0].name : (item.family ? item.family.name : null),
     ac: Array.isArray(item.accords) ? item.accords : [],
     no: { top: notas.top || [], heart: notas.heart || [], base: notas.base || [] },
     // Tono del frasco dibujado cuando la foto no carga

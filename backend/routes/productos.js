@@ -47,11 +47,17 @@ const joinsFicha = () => (esquema.clasificacion()
     : '');
 const agrupar = () => (esquema.clasificacion() ? ', m.id, f.id' : '');
 
-// Acordes y notas de varios productos en dos consultas
+// Acordes, notas y familias de varios productos en pocas consultas
 async function cargarListas(pool, ids) {
     const acordes = new Map();
     const notas = new Map();
-    if (!esquema.clasificacion() || !ids.length) return { acordes, notas };
+    const familias = new Map();
+    if (!esquema.clasificacion() || !ids.length) return { acordes, notas, familias };
+    if (esquema.familias()) {
+        const [fm] = await pool.query(
+            'SELECT pf.producto_id, f.id, f.nombre FROM producto_familias pf JOIN familias_olfativas f ON f.id = pf.familia_id WHERE pf.producto_id IN (?) ORDER BY pf.orden, f.nombre', [ids]);
+        fm.forEach(r => { if (!familias.has(r.producto_id)) familias.set(r.producto_id, []); familias.get(r.producto_id).push({ id: r.id, name: r.nombre }); });
+    }
     const [ac] = await pool.query(
         'SELECT pa.producto_id, a.nombre FROM producto_acordes pa JOIN acordes a ON a.id = pa.acorde_id WHERE pa.producto_id IN (?) ORDER BY pa.orden, a.nombre', [ids]);
     ac.forEach(r => { if (!acordes.has(r.producto_id)) acordes.set(r.producto_id, []); acordes.get(r.producto_id).push(r.nombre); });
@@ -61,7 +67,7 @@ async function cargarListas(pool, ids) {
         if (!notas.has(r.producto_id)) notas.set(r.producto_id, { top: [], heart: [], base: [] });
         notas.get(r.producto_id)[NIVELES[r.nivel]].push(r.nombre);
     });
-    return { acordes, notas };
+    return { acordes, notas, familias };
 }
 
 function camposFicha(p, listas) {
@@ -70,6 +76,8 @@ function camposFicha(p, listas) {
         brand: p.marca_id ? { id: p.marca_id, name: p.marca } : null,
         originalName: p.nombre_original || null,
         family: p.familia_id ? { id: p.familia_id, name: p.familia } : null,
+        // Todas las familias en orden (la primera es la principal)
+        families: listas.familias && listas.familias.get(p.id) ? listas.familias.get(p.id) : (p.familia_id ? [{ id: p.familia_id, name: p.familia }] : []),
         accords: listas.acordes.get(p.id) || [],
         notes: listas.notas.get(p.id) || { top: [], heart: [], base: [] },
         priceReview: p.precio_revision ? 1 : 0
@@ -105,9 +113,17 @@ async function guardarFicha(conn, id, body) {
     if (tiene(body, 'originalName')) {
         await conn.query('UPDATE Productos SET nombre_original = ? WHERE id = ?', [limpiarNombre(body.originalName, 160) || null, id]);
     }
-    if (tiene(body, 'familyId')) {
-        const familia = parseInt(body.familyId, 10);
-        await conn.query('UPDATE Productos SET familia_id = ? WHERE id = ?', [Number.isInteger(familia) && familia > 0 ? familia : null, id]);
+    // familyIds: varias familias en orden (la primera es la principal); familyId: una sola (anterior)
+    if (tiene(body, 'familyIds') || tiene(body, 'familyId')) {
+        const lista = tiene(body, 'familyIds') ? (Array.isArray(body.familyIds) ? body.familyIds : []) : [body.familyId];
+        const ids = [...new Set(lista.map((x) => parseInt(x, 10)).filter((x) => Number.isInteger(x) && x > 0))];
+        await conn.query('UPDATE Productos SET familia_id = ? WHERE id = ?', [ids[0] || null, id]);
+        if (esquema.familias()) {
+            await conn.query('DELETE FROM producto_familias WHERE producto_id = ?', [id]);
+            for (const [i, familiaId] of ids.entries()) {
+                await conn.query('INSERT INTO producto_familias (producto_id, familia_id, orden) VALUES (?, ?, ?)', [id, familiaId, i]);
+            }
+        }
     }
     if (tiene(body, 'accords')) {
         const ids = await idsDeNombres(conn, 'acordes', body.accords, 60);
@@ -161,7 +177,9 @@ router.get('/clasificacion', async (req, res) => {
         const consulta = (sql) => pool.query(sql).then(([r]) => r.map(x => ({ id: x.id, name: x.nombre, count: Number(x.n) })));
         const [brands, families, accords, notes] = await Promise.all([
             consulta('SELECT m.id, m.nombre, COUNT(p.id) n FROM marcas m LEFT JOIN Productos p ON p.marca_id = m.id GROUP BY m.id ORDER BY m.nombre'),
-            consulta('SELECT f.id, f.nombre, COUNT(p.id) n FROM familias_olfativas f LEFT JOIN Productos p ON p.familia_id = f.id GROUP BY f.id ORDER BY f.nombre'),
+            consulta(esquema.familias()
+                ? 'SELECT f.id, f.nombre, COUNT(pf.producto_id) n FROM familias_olfativas f LEFT JOIN producto_familias pf ON pf.familia_id = f.id GROUP BY f.id ORDER BY f.nombre'
+                : 'SELECT f.id, f.nombre, COUNT(p.id) n FROM familias_olfativas f LEFT JOIN Productos p ON p.familia_id = f.id GROUP BY f.id ORDER BY f.nombre'),
             consulta('SELECT a.id, a.nombre, COUNT(pa.producto_id) n FROM acordes a LEFT JOIN producto_acordes pa ON pa.acorde_id = a.id GROUP BY a.id ORDER BY a.nombre'),
             consulta('SELECT n.id, n.nombre, COUNT(DISTINCT pn.producto_id) n FROM notas n LEFT JOIN producto_notas pn ON pn.nota_id = n.id GROUP BY n.id ORDER BY n.nombre')
         ]);

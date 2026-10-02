@@ -13,5 +13,7 @@ module.exports = {
     // 008: fragancias solo preparadas (no se venden como 1.1)
     soloPreparado: () => aplicadas.has('008'),
     // 009: ruta fija de cada perfume y referencia en Fragrantica
-    enlaces: () => aplicadas.has('009')
+    enlaces: () => aplicadas.has('009'),
+    // 010: varias familias olfativas por perfume
+    familias: () => aplicadas.has('010')
 };

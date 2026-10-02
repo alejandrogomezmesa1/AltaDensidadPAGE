@@ -52,7 +52,7 @@ export default function Armador({ fraganciaInicial }) {
   const fragancias = useMemo(() => {
     const t = normalizar(busqueda);
     return P.filter((p) => (categoria === 'Todas' || categoriaPrecio(p.c) === categoria)
-      && (!t || [p.n, p.b, p.orig, p.f, ...p.ac, ...todasLasNotas(p)].some((x) => x && normalizar(x).includes(t))))
+      && (!t || [p.n, p.b, p.orig, ...p.fs, ...p.ac, ...todasLasNotas(p)].some((x) => x && normalizar(x).includes(t))))
       .sort((a, b) => a.n.localeCompare(b.n));
   }, [P, busqueda, categoria]);
   useEffect(() => { setCuantas(FRAGANCIAS_VISIBLES); }, [busqueda, categoria]);
