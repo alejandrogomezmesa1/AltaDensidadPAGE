@@ -2,7 +2,7 @@
 // misma ficha de la ventana de detalle, como página. Un enlace viejo o con otro texto se lleva a la
 // dirección oficial; si no corresponde a nada, "no encontrado" con sugerencias.
 import { useEffect } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTienda } from '../tienda/TiendaContext';
 import { DetalleProducto, DetalleKit } from '../tienda/Capas';
 import NoEncontrado from './NoEncontrado';
@@ -12,6 +12,9 @@ import { SITIO } from '../config';
 
 export default function FichaPagina({ tipo }) {
   const params = useParams();
+  const navigate = useNavigate();
+  // "Volver": a la página anterior de la tienda si se llegó desde ella; si no (enlace directo), al catálogo
+  const desdeLaTienda = typeof window !== 'undefined' && window.history.state && window.history.state.idx > 0;
   const slug = tipo === 'kit' ? params.slug : params['*'];
   const { idPorSlug, buscarProducto, KITS, detalle, setDetalle, kitAbierto, setKitAbierto,
     catalogoListo, kitsListos, rutaPerfume, rutaKit } = useTienda();
@@ -68,6 +71,7 @@ export default function FichaPagina({ tipo }) {
       <JsonLd datos={datos} />
       <div className="wrap">
         <nav className="ficha-migas up" aria-label="Ruta">
+          <button type="button" className="ficha-volver" onClick={() => (desdeLaTienda ? navigate(-1) : navigate(esKit ? '/catalogo?ver=kits' : '/catalogo'))}>← Volver</button>
           <Link to="/">Inicio</Link><span aria-hidden="true">/</span>
           <Link to={esKit ? '/catalogo?ver=kits' : '/catalogo'}>{esKit ? 'Kits' : 'Catálogo'}</Link><span aria-hidden="true">/</span>
           <span aria-current="page">{nombre}</span>

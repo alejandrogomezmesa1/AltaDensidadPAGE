@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { TemaProvider } from './lib/hooks';
-import { UbicacionReal } from './lib/ubicacion';
 import { TiendaProvider } from './tienda/TiendaContext';
 import TiendaLayout from './tienda/TiendaLayout';
 import { DesplazarAlCambiar } from './tienda/Marco';
@@ -39,35 +38,30 @@ function RedirigirConQuery({ a }) {
   return <Navigate to={{ pathname, search: window.location.search || (query ? `?${query}` : ''), hash: window.location.hash }} replace />;
 }
 
-// Con state.fondo (ficha abierta desde la tienda) se sigue pintando la página de fondo y la ficha
-// va encima como ventana; sin fondo (enlace directo) la ruta /perfume/<slug> es una página.
+// Rutas de la tienda y del panel. Cada perfume y kit tiene su página (/perfume/…, /kit/…).
 function Rutas() {
-  const location = useLocation();
-  const fondo = location.state && location.state.fondo;
   return (
-    <UbicacionReal.Provider value={location}>
-      <Routes location={fondo || location}>
-        <Route element={<Tienda />}>
-          <Route index element={<Inicio />} />
-          <Route path="top10" element={<Top10 />} />
-          <Route path="catalogo" element={<Catalogo />} />
-          {/* Los envases se eligen ahora en "Crea tu perfume" */}
-          <Route path="envases" element={<Navigate to="/catalogo?ver=crear" replace />} />
-          <Route path="nosotros" element={<Nosotros />} />
-          {/* Enlace directo a cada perfume y kit; abiertos desde la tienda se ven como ventana */}
-          <Route path="perfume/*" element={<FichaPagina tipo="perfume" />} />
-          <Route path="kit/:slug" element={<FichaPagina tipo="kit" />} />
-          <Route path="*" element={<NoEncontrado />} />
-        </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="reset" element={<Reset />} />
-        <Route path="success" element={<ResultadoPago tipo="success" />} />
-        <Route path="pending" element={<ResultadoPago tipo="pending" />} />
-        <Route path="failure" element={<ResultadoPago tipo="failure" />} />
-        <Route path="admin" element={<Suspense fallback={null}><Admin /></Suspense>} />
-        {LEGADO.map(([viejo, nuevo]) => <Route key={viejo} path={`${viejo}.html`} element={<RedirigirConQuery a={nuevo} />} />)}
-      </Routes>
-    </UbicacionReal.Provider>
+    <Routes>
+      <Route element={<Tienda />}>
+        <Route index element={<Inicio />} />
+        <Route path="top10" element={<Top10 />} />
+        <Route path="catalogo" element={<Catalogo />} />
+        {/* Los envases se eligen ahora en "Crea tu perfume" */}
+        <Route path="envases" element={<Navigate to="/catalogo?ver=crear" replace />} />
+        <Route path="nosotros" element={<Nosotros />} />
+        {/* Página propia de cada perfume y kit (también al abrirlos desde la tienda) */}
+        <Route path="perfume/*" element={<FichaPagina tipo="perfume" />} />
+        <Route path="kit/:slug" element={<FichaPagina tipo="kit" />} />
+        <Route path="*" element={<NoEncontrado />} />
+      </Route>
+      <Route path="login" element={<Login />} />
+      <Route path="reset" element={<Reset />} />
+      <Route path="success" element={<ResultadoPago tipo="success" />} />
+      <Route path="pending" element={<ResultadoPago tipo="pending" />} />
+      <Route path="failure" element={<ResultadoPago tipo="failure" />} />
+      <Route path="admin" element={<Suspense fallback={null}><Admin /></Suspense>} />
+      {LEGADO.map(([viejo, nuevo]) => <Route key={viejo} path={`${viejo}.html`} element={<RedirigirConQuery a={nuevo} />} />)}
+    </Routes>
   );
 }
 

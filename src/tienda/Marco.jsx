@@ -1,6 +1,6 @@
 // Marco común de las páginas públicas: encabezado, pie, WhatsApp flotante y desplazamiento a anclas
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigationType } from 'react-router-dom';
 import { BotonTema } from '../lib/hooks';
 import { useTienda } from './TiendaContext';
 import { WA_FLOTANTE } from '../config';
@@ -155,20 +155,66 @@ export function WhatsappFlotante() {
   );
 }
 
-// Al cambiar de página: ir al ancla (/#kits, /nosotros#faq) o al inicio
+// Al cambiar de página: arriba, o al ancla (/#kits, /nosotros#faq). Al volver con "atrás" o
+// "adelante" se recupera la posición en la que estaba esa página (p. ej. la lista del catálogo
+// después de ver un perfume). Las posiciones se guardan por entrada del historial.
+const CLAVE_POSICIONES = 'ad_scroll';
+function leerPosiciones() {
+  try { return JSON.parse(sessionStorage.getItem(CLAVE_POSICIONES) || '{}'); } catch { return {}; }
+}
+function irA(y) {
+  const suave = window.__scrollSuave;
+  if (suave) {
+    // Lenis guarda las medidas de la página anterior: sin recalcular, recortaría el destino
+    suave.resize();
+    suave.scrollTo(y, { immediate: true, force: true });
+  } else {
+    window.scrollTo(0, y);
+  }
+}
+
 export function DesplazarAlCambiar() {
   const location = useLocation();
-  const { pathname, hash } = location;
-  // Abrir una ficha como ventana (state.fondo) o cerrarla volviendo a su fondo no mueve la página
-  const fondo = location.state && location.state.fondo;
-  const conFondo = Boolean(fondo);
-  const fondoAnterior = useRef(null);
+  const tipo = useNavigationType();
+  const { pathname, hash, key } = location;
+
+  // Guardar la posición de la página actual mientras se desplaza
   useEffect(() => {
-    const volvioAlFondo = fondoAnterior.current === pathname + location.search;
-    fondoAnterior.current = fondo ? fondo.pathname + (fondo.search || '') : null;
-    if (conFondo || volvioAlFondo) return undefined;
+    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+    let pendiente = 0;
+    // Al navegar, la página nueva acorta el documento y el navegador mueve el scroll: ese
+    // movimiento ya no es de esta página y no se guarda (la dirección ya cambió)
+    const direccion = window.location.pathname + window.location.search;
+    const guardar = () => {
+      pendiente = 0;
+      if (window.location.pathname + window.location.search !== direccion) return;
+      const pos = leerPosiciones();
+      pos[key] = Math.round(window.scrollY);
+      const claves = Object.keys(pos);
+      if (claves.length > 60) delete pos[claves[0]];
+      try { sessionStorage.setItem(CLAVE_POSICIONES, JSON.stringify(pos)); } catch { /* sin almacenamiento */ }
+    };
+    const alDesplazar = () => { if (!pendiente) pendiente = requestAnimationFrame(guardar); };
+    window.addEventListener('scroll', alDesplazar, { passive: true });
+    return () => { window.removeEventListener('scroll', alDesplazar); if (pendiente) cancelAnimationFrame(pendiente); };
+  }, [key]);
+
+  useEffect(() => {
+    // Atrás / adelante: volver a donde estaba (cuando la página ya tiene altura suficiente)
+    const guardada = tipo === 'POP' ? leerPosiciones()[key] : undefined;
+    if (guardada > 0) {
+      let intentos = 0;
+      let t;
+      const probar = () => {
+        if (document.documentElement.scrollHeight >= guardada + window.innerHeight || intentos > 30) { irA(guardada); return; }
+        intentos += 1;
+        t = setTimeout(probar, 50);
+      };
+      probar();
+      return () => clearTimeout(t);
+    }
     if (!hash) {
-      window.scrollTo({ top: 0 });
+      irA(0);
       return undefined;
     }
     const t = setTimeout(() => {
@@ -176,6 +222,6 @@ export function DesplazarAlCambiar() {
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 60);
     return () => clearTimeout(t);
-  }, [pathname, hash, conFondo]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pathname, hash]); // eslint-disable-line react-hooks/exhaustive-deps
   return null;
 }

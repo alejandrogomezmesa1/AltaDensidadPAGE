@@ -3941,3 +3941,33 @@ body.ad-layer-open .ia-chat-launcher {
     will-change: transform;
   }
 }
+
+/* Armador: esencia ya elegida (p. ej. desde la ficha del perfume) */
+.arm-elegida {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.arm-elegida .arm-fragancia {
+  flex: 1 1 280px;
+  cursor: default;
+}
+
+.arm-elegida .btn {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: 11px;
+}
+
+.ficha-volver {
+  margin-right: var(--sp-3);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-accent);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}

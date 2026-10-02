@@ -1,5 +1,5 @@
-// Capas compartidas por todas las páginas públicas: velo, bolsa y modal de detalle (perfume o kit)
-import { useRef } from 'react';
+// Capas compartidas por todas las páginas públicas (velo y bolsa) y la ficha de perfume o kit,
+// que se muestra en su página propia (FichaPagina).
 import { Link } from 'react-router-dom';
 import { useTienda } from './TiendaContext';
 import Bolsa, { Cantidad } from './Bolsa';
@@ -116,25 +116,13 @@ export function DetalleKit({ enPagina = false }) {
   );
 }
 
+// Capas compartidas: velo y bolsa. La ficha de perfumes y kits ya no es ventana: tiene su página.
 export default function Capas() {
   const { capa, cerrarCapas } = useTienda();
-  const modalAbierto = capa === 'detalle' || capa === 'kit';
-  // El contenido se conserva al cerrar para que la animación de salida no muestre la hoja vacía
-  const ultimo = useRef(null);
-  if (modalAbierto) ultimo.current = capa;
   return (
     <>
       <div className={`scrim ${capa ? 'on' : ''}`} onClick={cerrarCapas} />
       <Bolsa />
-      <div
-        className={`modal ${modalAbierto ? 'on' : ''}`} role="dialog" aria-modal="true" aria-label="Detalle del producto"
-        onClick={(e) => { if (e.target === e.currentTarget) cerrarCapas(); }}
-      >
-        <div className="sheet">
-          {ultimo.current === 'detalle' && <DetalleProducto />}
-          {ultimo.current === 'kit' && <DetalleKit />}
-        </div>
-      </div>
     </>
   );
 }

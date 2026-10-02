@@ -105,23 +105,41 @@ function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
 }
 
 // ── Colección: búsqueda en vivo, chips de ocasión, atelier de filtros, orden y paginación ──
+// Búsqueda, filtros, orden y página de la colección se recuerdan durante la visita: al volver de la
+// página de un perfume la lista está como se dejó
+const CLAVE_COLECCION = 'ad_coleccion';
+function estadoGuardado() {
+  try { return JSON.parse(sessionStorage.getItem(CLAVE_COLECCION) || 'null') || {}; } catch { return {}; }
+}
+
 export function Coleccion({ titulo = 'La colección' }) {
   const { P: todos, setCapa, abrirDetalle, agregarRapido, pedirAura } = useTienda();
   const P = useMemo(() => perfumes11(todos), [todos]);
-  const [filters, setFilters] = useState(FILTROS_BASE);
-  const [busqueda, setBusqueda] = useState('');
-  const [orden, setOrden] = useState('destacados');
-  const [pagina, setPagina] = useState(1);
+  const [guardado] = useState(estadoGuardado);
+  const [filters, setFilters] = useState({ ...FILTROS_BASE, ...(guardado.filters || {}) });
+  const [busqueda, setBusqueda] = useState(guardado.busqueda || '');
+  const [orden, setOrden] = useState(guardado.orden || 'destacados');
+  const [pagina, setPagina] = useState(guardado.pagina || 1);
   const inputRef = useRef(null);
 
   // La búsqueda se aplica 150 ms después de dejar de escribir
   useEffect(() => {
-    const t = setTimeout(() => setFilters((f) => ({ ...f, search: busqueda.trim() })), 150);
+    const t = setTimeout(() => setFilters((f) => (f.search === busqueda.trim() ? f : { ...f, search: busqueda.trim() })), 150);
     return () => clearTimeout(t);
   }, [busqueda]);
 
-  // Cualquier cambio de filtro u orden vuelve a la primera página
-  useEffect(() => { setPagina(1); }, [filters, orden]);
+  // Cualquier cambio de filtro u orden vuelve a la primera página (no al montar: se respeta la guardada)
+  const criterio = useRef(JSON.stringify([filters, orden]));
+  useEffect(() => {
+    const ahora = JSON.stringify([filters, orden]);
+    if (ahora === criterio.current) return;
+    criterio.current = ahora;
+    setPagina(1);
+  }, [filters, orden]);
+
+  useEffect(() => {
+    try { sessionStorage.setItem(CLAVE_COLECCION, JSON.stringify({ filters, busqueda, orden, pagina })); } catch { /* sin almacenamiento */ }
+  }, [filters, busqueda, orden, pagina]);
 
   const filtrados = useMemo(() => ordenarProductos(filtrarProductos(P, filters), orden), [P, filters, orden]);
   const totalPaginas = Math.max(1, Math.ceil(filtrados.length / PRODUCTOS_POR_PAGINA));
@@ -326,7 +344,9 @@ export function Envases() {
 // ── Kits ──
 export function Kits() {
   const { KITS, abrirKit, addKitToCart, abrirBolsa } = useTienda();
-  const [pagina, setPagina] = useState(1);
+  // La página de kits también se recuerda al volver de la página de un kit
+  const [pagina, setPagina] = useState(() => { try { return Number(sessionStorage.getItem('ad_kits_pagina')) || 1; } catch { return 1; } });
+  useEffect(() => { try { sessionStorage.setItem('ad_kits_pagina', String(pagina)); } catch { /* sin almacenamiento */ } }, [pagina]);
   const activos = KITS.filter((k) => k.activo !== 0);
   const totalPaginas = Math.max(1, Math.ceil(activos.length / KITS_POR_PAGINA));
   const actual = pagina > totalPaginas ? 1 : pagina;

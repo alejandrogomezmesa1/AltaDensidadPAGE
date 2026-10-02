@@ -36,8 +36,14 @@ export default function Armador({ fraganciaInicial }) {
   const [busqueda, setBusqueda] = useState('');
   const [categoria, setCategoria] = useState('Todas');
   const [cuantas, setCuantas] = useState(FRAGANCIAS_VISIBLES);
+  // Con una esencia ya elegida (p. ej. desde la ficha del perfume) la lista se pliega y se ve la elegida
+  const [cambiando, setCambiando] = useState(!fraganciaInicial);
 
-  useEffect(() => { if (fraganciaInicial) setProductoId(fraganciaInicial); }, [fraganciaInicial]);
+  useEffect(() => {
+    if (!fraganciaInicial) return;
+    setProductoId(fraganciaInicial);
+    setCambiando(false);
+  }, [fraganciaInicial]);
 
   const envases = useMemo(() => (ARMADOR ? ARMADOR.envases.filter((e) => e.sizes.length) : []), [ARMADOR]);
   const envase = envases.find((e) => e.id === envaseId) || null;
@@ -53,8 +59,8 @@ export default function Armador({ fraganciaInicial }) {
     const t = normalizar(busqueda);
     return P.filter((p) => (categoria === 'Todas' || categoriaPrecio(p.c) === categoria)
       && (!t || [p.n, p.b, p.orig, ...p.fs, ...p.ac, ...todasLasNotas(p)].some((x) => x && normalizar(x).includes(t))))
-      .sort((a, b) => a.n.localeCompare(b.n));
-  }, [P, busqueda, categoria]);
+      .sort((a, b) => (b.id === productoId) - (a.id === productoId) || a.n.localeCompare(b.n));
+  }, [P, busqueda, categoria, productoId]);
   useEffect(() => { setCuantas(FRAGANCIAS_VISIBLES); }, [busqueda, categoria]);
 
   const esenciaDe = (cat) => (ml && ARMADOR ? (ARMADOR.esencia[categoriaPrecio(cat)] || {})[ml] ?? null : null);
@@ -103,7 +109,19 @@ export default function Armador({ fraganciaInicial }) {
           </div>
         </Paso>
 
-        <Paso n={3} titulo="Elige la esencia" ayuda="La fragancia que llevará tu perfume, en concentración Extrait." listo={!!producto}>
+        <Paso n={3} titulo={producto && !cambiando ? 'Tu esencia' : 'Elige la esencia'} ayuda="La fragancia que llevará tu perfume, en concentración Extrait." listo={!!producto}>
+          {producto && !cambiando ? (
+            <div className="arm-elegida">
+              <div className="arm-fragancia on" aria-current="true">
+                <ImagenLogo src={producto.img} alt="" width="56" height="56" />
+                <span>
+                  <b>{producto.n}</b>
+                  <small className="up mute">{[producto.b, etiquetaColeccion(producto.c), ml ? `Esencia ${precioTexto(esenciaDe(producto.c))}` : null].filter(Boolean).join(' · ')}</small>
+                </span>
+              </div>
+              <button type="button" className="btn btn--line up" onClick={() => setCambiando(true)}>Cambiar esencia</button>
+            </div>
+          ) : (<>
           <div className="arm-buscador">
             <input type="search" className="search-input" placeholder="Buscar por nombre, marca o nota…" aria-label="Buscar fragancia"
               value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
@@ -118,7 +136,7 @@ export default function Armador({ fraganciaInicial }) {
           <div className="arm-fragancias" role="radiogroup" aria-label="Fragancia">
             {fragancias.slice(0, cuantas).map((p) => (
               <button key={p.id} type="button" role="radio" aria-checked={p.id === productoId}
-                className={`arm-fragancia ${p.id === productoId ? 'on' : ''}`} onClick={() => setProductoId(p.id)}>
+                className={`arm-fragancia ${p.id === productoId ? 'on' : ''}`} onClick={() => { setProductoId(p.id); setCambiando(false); }}>
                 <ImagenLogo src={p.img} alt="" width="56" height="56" loading="lazy" decoding="async" />
                 <span>
                   <b>{p.n}</b>
@@ -133,6 +151,7 @@ export default function Armador({ fraganciaInicial }) {
               Ver más fragancias ({fragancias.length - cuantas})
             </button>
           )}
+          </>)}
         </Paso>
 
         <Paso n={4} titulo="¿Con feromonas?" ayuda="Una dosis fija que intensifica la atracción y la fijación en la piel." listo>

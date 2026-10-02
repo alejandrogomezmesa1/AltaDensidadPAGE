@@ -37,6 +37,7 @@ export function desplazarA(destino, { duration = 1.1, ease = 'power3.inOut', cab
       if (!el) return gsap.delayedCall(0, () => alTerminar?.());
       y = el.getBoundingClientRect().top + window.scrollY - (cabecera ? alturaCabecera() : 0);
     }
+    suave.resize(); // medidas de la página actual (pudo cambiar de ruta hace un instante)
     suave.scrollTo(Math.max(0, y), { duration, easing: (t) => curva(t), force: true, onComplete: () => alTerminar?.() });
     return gsap.delayedCall(duration, () => {});
   }

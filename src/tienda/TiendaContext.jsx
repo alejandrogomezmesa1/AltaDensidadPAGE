@@ -1,8 +1,7 @@
 // Estado de la tienda compartido por todas las páginas públicas:
 // catálogo (datos duros → API), bolsa persistida y capas abiertas (bolsa, detalle, kit, filtros, AURA).
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUbicacionReal } from '../lib/ubicacion';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { pausarScrollSuave } from '../lib/scrollSuave';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
@@ -96,7 +95,7 @@ export function TiendaProvider({ children }) {
   const [catalogoListo, setCatalogoListo] = useState(false);
   const [kitsListos, setKitsListos] = useState(false);
   const navigate = useNavigate();
-  const location = useUbicacionReal();
+  const location = useLocation();
   const [paso, setPaso] = useState('bag');
   const [detalle, setDetalle] = useState({ id: null, ml: '', env: '', q: 1 });
   const [kitAbierto, setKitAbierto] = useState(null);
@@ -196,7 +195,7 @@ export function TiendaProvider({ children }) {
   }, [capa]);
 
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') cerrarRef.current(); };
+    const onKey = (e) => { if (e.key === 'Escape') setCapa(null); };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
@@ -252,9 +251,9 @@ export function TiendaProvider({ children }) {
 
   const abrirBolsa = useCallback(() => { setPaso('bag'); setCapa('bolsa'); }, []);
   // ── Enlaces directos de perfumes y kits ──
-  // Abrir una ficha desde la tienda navega a /perfume/<slug> guardando la página de fondo
-  // (state.fondo): la ficha se ve como ventana sobre esa página y "atrás" la cierra. Entrar
-  // directo por el enlace (sin fondo) muestra la ficha como página (FichaPagina).
+  // Cada perfume y kit tiene su página (/perfume/<marca>/<nombre>-<id>, /kit/<nombre>-<id>):
+  // abrir una ficha desde la tienda navega a ella (FichaPagina); "atrás" vuelve a la lista
+  // donde estaba (DesplazarAlCambiar restaura la posición).
   const slugsP = useMemo(() => mapaSlugs(P, (p) => p.n), [P]);
   const slugsK = useMemo(() => mapaSlugs(KITS.filter((k) => k.activo !== 0), (k) => k.nombre), [KITS]);
   // slugsP/slugsK: enlaces del formato anterior (/perfume/<nombre>), que siguen funcionando
@@ -269,15 +268,7 @@ export function TiendaProvider({ children }) {
   const idPorSlug = useCallback((tipo, ruta) => (tipo === 'kit'
     ? idDesdeRuta(ruta, slugsK, (id) => KITS.some((k) => k.id === id && k.activo !== 0))
     : idDesdeRuta(ruta, slugsP, (id) => Boolean(buscarEn(P, TOP10, id)))), [slugsP, slugsK, P, TOP10, KITS]);
-  const fondo = location.state && location.state.fondo;
-  const enFicha = /^\/(perfume|kit)\/.+/.test(location.pathname);
-
-  const cerrarCapas = useCallback(() => {
-    if (fondo && enFicha) navigate(-1);
-    else setCapa(null);
-  }, [fondo, enFicha, navigate]);
-  const cerrarRef = useRef(cerrarCapas);
-  cerrarRef.current = cerrarCapas;
+  const cerrarCapas = useCallback(() => setCapa(null), []);
 
   const addToCart = useCallback((id, ml, env, q = 1) => {
     const prod = buscarEn(P, TOP10, id);
@@ -317,34 +308,19 @@ export function TiendaProvider({ children }) {
   const abrirDetalle = useCallback((id) => {
     const p = buscarEn(P, TOP10, id);
     if (!p) return;
-    navigate(rutaPerfume(p.id), { state: { fondo: fondo || location }, replace: Boolean(fondo) });
-  }, [P, TOP10, navigate, rutaPerfume, fondo, location]);
+    setCapa(null);
+    navigate(rutaPerfume(p.id));
+  }, [P, TOP10, navigate, rutaPerfume]);
 
   const abrirKit = useCallback((kitId) => {
     const kit = KITS.find((k) => k.id === Number(kitId) || `kit_${k.id}` === String(kitId));
     if (!kit) return;
-    navigate(rutaKit(kit.id), { state: { fondo: fondo || location }, replace: Boolean(fondo) });
-  }, [KITS, navigate, rutaKit, fondo, location]);
+    setCapa(null);
+    navigate(rutaKit(kit.id));
+  }, [KITS, navigate, rutaKit]);
 
-  // La URL manda: con fondo, la ficha se abre como ventana; al salir de la ficha, se cierra
-  useEffect(() => {
-    const m = /^\/(perfume|kit)\/(.+?)\/?$/.exec(location.pathname);
-    if (m && fondo) {
-      const id = idPorSlug(m[1], m[2]);
-      if (!id) return;
-      if (m[1] === 'perfume') {
-        const p = buscarEn(P, TOP10, id);
-        if (!p) return;
-        setDetalle((d) => (d.id === p.id ? d : { id: p.id, ml: p.sz[0] || '', env: p.env[0] || '', q: 1 }));
-        setCapa('detalle');
-      } else {
-        setKitAbierto(id);
-        setCapa('kit');
-      }
-    } else {
-      setCapa((c) => (c === 'detalle' || c === 'kit' ? null : c));
-    }
-  }, [location, fondo, idPorSlug, P, TOP10]);
+  // Al cambiar de página se cierra cualquier capa abierta (bolsa, filtros)
+  useEffect(() => { setCapa(null); }, [location.pathname]);
 
   const pedirAura = useCallback(() => { setCapa(null); setAuraAbierta(true); }, []);
 
