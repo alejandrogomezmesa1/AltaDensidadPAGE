@@ -3829,3 +3829,115 @@ body.ad-layer-open .ia-chat-launcher {
     line-height: 1.5;
   }
 }
+
+/* ============================================================
+   RESPONSIVE EN CELULARES (revisión 01-10)
+   ============================================================ */
+
+/* Cabecera compacta (logo arriba, menú en su propia línea) también en celulares acostados y
+   tablets: entre 821 y 1080 px los cuatro enlaces no caben junto al logo centrado */
+@media (min-width: 821px) and (max-width: 1080px) {
+  :root {
+    --nav-h: 84px;
+  }
+  header.haute-header {
+    grid-template-columns: 1fr auto;
+    padding: 10px var(--gutter);
+    gap: 8px;
+  }
+  .logo {
+    text-align: left;
+    grid-row: 1;
+  }
+  .nav-r {
+    grid-row: 1;
+    grid-column: 2;
+    gap: 2px;
+  }
+  .nav-l {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    overflow-x: auto;
+    padding-bottom: var(--sp-2);
+    white-space: nowrap;
+    gap: var(--sp-3);
+  }
+}
+
+/* Celulares angostos (320–380 px): todo cabe en la cabecera sin cortar "Bolsa (0)" */
+@media (max-width: 380px) {
+  .logo {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+  }
+  .logo small {
+    letter-spacing: 0.36em;
+  }
+  .nav-ico {
+    width: 30px;
+    height: 30px;
+  }
+  .nav-bag {
+    margin-left: 2px;
+    padding-left: var(--sp-2);
+    letter-spacing: 0.12em;
+  }
+  .nav-l {
+    gap: var(--sp-2) 14px;
+  }
+  .nav-l a {
+    letter-spacing: 0.14em;
+  }
+}
+
+/* El menú de enlaces se desliza de lado si no cabe: un desvanecido lo insinúa */
+@media (max-width: 1080px) {
+  .nav-l {
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 88%, transparent);
+    mask-image: linear-gradient(to right, #000 88%, transparent);
+  }
+  .nav-l::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Pantallas bajas (celular acostado) o muy angostas: los botones flotantes no tapan el contenido */
+@media (max-height: 500px) and (orientation: landscape), (max-width: 380px) {
+  body .ia-chat-launcher {
+    bottom: 12px;
+    right: 12px;
+    padding: 8px;
+  }
+  body .ia-chat-launcher .ia-launcher-text {
+    display: none;
+  }
+  .whatsapp-flotante-wrapper {
+    bottom: 70px;
+    right: 15px;
+  }
+}
+
+/* Cifras de "Nosotros" (Extrait · 12h+ · Feromonas): las tres columnas caben en 320 px */
+.stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 420px) {
+  .stats div {
+    padding: var(--sp-3) var(--sp-1);
+    letter-spacing: 0.12em;
+    font-size: 10px;
+  }
+  .stats b {
+    font-size: clamp(20px, 6.4vw, 28px);
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Columnas de "Nosotros" con parallax: capa propia para que se muevan sin repintar */
+@media (min-width: 821px) {
+  #nosotros .split > * {
+    will-change: transform;
+  }
+}

@@ -26,6 +26,20 @@ const alturaCabecera = () => document.querySelector('header')?.getBoundingClient
 // alTerminar: se llama al acabar o interrumpirse el recorrido.
 export function desplazarA(destino, { duration = 1.1, ease = 'power3.inOut', cabecera = true, alTerminar } = {}) {
   const html = document.documentElement;
+  // Con scroll suave (Lenis) el recorrido lo hace Lenis, para que no compitan dos animaciones
+  const suave = typeof window !== 'undefined' && window.__scrollSuave;
+  if (suave && !window.matchMedia(MQ.reducir).matches) {
+    const curva = gsap.parseEase(ease);
+    // Posición exacta: con un elemento, Lenis sumaría además el scroll-margin del CSS
+    let y = destino;
+    if (typeof destino !== 'number') {
+      const el = typeof destino === 'string' ? document.querySelector(destino) : destino;
+      if (!el) return gsap.delayedCall(0, () => alTerminar?.());
+      y = el.getBoundingClientRect().top + window.scrollY - (cabecera ? alturaCabecera() : 0);
+    }
+    suave.scrollTo(Math.max(0, y), { duration, easing: (t) => curva(t), force: true, onComplete: () => alTerminar?.() });
+    return gsap.delayedCall(duration, () => {});
+  }
   const soltar = () => { html.style.scrollBehavior = ''; alTerminar?.(); };
   // Con movimiento reducido, salto directo (ScrollToPlugin con duración 0 no desplaza)
   if (window.matchMedia(MQ.reducir).matches) {

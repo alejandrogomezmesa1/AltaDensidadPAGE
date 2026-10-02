@@ -1,10 +1,18 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
+import { iniciarScrollSuave, detenerScrollSuave } from '../lib/scrollSuave';
 import { Encabezado, Pie, WhatsappFlotante } from './Marco';
 import Capas from './Capas';
 import Aura from './Aura';
 
 // Páginas públicas: encabezado, contenido, pie y capas (bolsa, detalle, AURA)
 export default function TiendaLayout() {
+  // Scroll suave en toda la tienda (el panel de administración no lo usa)
+  useEffect(() => {
+    iniciarScrollSuave();
+    return () => detenerScrollSuave();
+  }, []);
+
   return (
     <>
       <Encabezado />

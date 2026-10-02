@@ -76,7 +76,7 @@ export function useSeccionesScroll(raizRef, datos) {
       // Nosotros: las dos columnas se desplazan a distinta velocidad
       if (escritorio) {
         const [izq, der] = q('#nosotros .split > *');
-        const scrollTrigger = { trigger: q('#nosotros')[0], start: 'top bottom', end: 'bottom top', scrub: 0.8 };
+        const scrollTrigger = { trigger: q('#nosotros')[0], start: 'top bottom', end: 'bottom top', scrub: 0.5 };
         if (izq) gsap.fromTo(izq, { yPercent: 6 }, { yPercent: -6, ease: 'none', scrollTrigger });
         if (der) gsap.fromTo(der, { yPercent: -4 }, { yPercent: 8, ease: 'none', scrollTrigger: { ...scrollTrigger } });
       }

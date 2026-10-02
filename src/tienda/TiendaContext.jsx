@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUbicacionReal } from '../lib/ubicacion';
+import { pausarScrollSuave } from '../lib/scrollSuave';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
 import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO, mapaSlugs, direccionPerfume, direccionKit, idDesdeRuta } from '../lib/producto';
@@ -184,10 +185,12 @@ export function TiendaProvider({ children }) {
   // Capas abiertas: bloquea el scroll y oculta los botones flotantes (body.ad-layer-open)
   useEffect(() => {
     if (!capa) return undefined;
+    pausarScrollSuave(true);
     document.body.style.overflow = 'hidden';
     document.body.classList.add('ad-layer-open');
     return () => {
       document.body.style.overflow = '';
+      pausarScrollSuave(false);
       document.body.classList.remove('ad-layer-open');
     };
   }, [capa]);

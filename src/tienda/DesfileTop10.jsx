@@ -77,7 +77,7 @@ export default function DesfileTop10() {
           start: () => `top ${cabecera()}`,
           end: () => `+=${(n - 1) * window.innerHeight * (movil ? 0.55 : 0.7)}`,
           pin: true,
-          scrub: 0.9,
+          scrub: 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           // Al detenerse, se asienta suave en la pieza más cercana en la dirección del gesto

@@ -67,7 +67,7 @@ const EsenciaHero = forwardRef(function EsenciaHero(_props, ref) {
           start: () => `top ${alturaCabecera()}`,
           end: movil ? '+=320%' : '+=400%',
           pin: true,
-          scrub: 1,
+          scrub: 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           snap: { snapTo: 'labelsDirectional', duration: { min: 0.4, max: 1 }, delay: 0.15, ease: 'power2.inOut', inertia: false }
