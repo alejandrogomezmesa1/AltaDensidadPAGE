@@ -1872,3 +1872,188 @@ body.adm {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* ============================================================
+   TABLAS COMPACTAS (Productos, Kits, Órdenes)
+   Pocas columnas que agrupan lo relacionado: nada de desplazarse de lado para editar.
+   ============================================================ */
+.tabla-compacta td {
+  vertical-align: top;
+}
+
+.tabla-compacta th:not(:first-child),
+.tabla-compacta td:not(:first-child) {
+  white-space: nowrap;
+}
+
+/* Producto: foto + nombre + datos; toda la celda abre el editor */
+.celda-producto {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.celda-producto:hover strong {
+  color: var(--c-accent);
+}
+
+.celda-producto:focus-visible {
+  outline: 1px solid var(--c-accent);
+  outline-offset: 4px;
+}
+
+.celda-producto .tabla-img,
+.celda-producto .sin-imagen {
+  flex: none;
+}
+
+.celda-producto-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.celda-producto-texto strong {
+  line-height: 1.35;
+  transition: color 0.2s;
+}
+
+.celda-meta {
+  color: var(--c-mute);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.celda-bloque {
+  display: block;
+  margin-top: 4px;
+}
+
+.celda-id {
+  color: var(--c-mute);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.celda-recorte {
+  display: -webkit-box;
+  max-width: 52ch;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+
+.col-producto .ref-fragrantica,
+.col-producto .ref-pendiente {
+  display: inline-block;
+  margin: 6px 0 0 56px;
+}
+
+.celda-precio {
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.celda-alerta {
+  display: block;
+  margin-top: 2px;
+  color: var(--err);
+  font-size: 11px;
+}
+
+/* Estado: visible + interruptores apilados */
+.col-estado {
+  min-width: 170px;
+}
+
+.col-estado > * {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.col-estado > * + * {
+  margin-top: 6px;
+}
+
+.estado-visible {
+  color: var(--ok);
+  font-size: 12px;
+}
+
+.estado-visible.oculto {
+  color: var(--err);
+}
+
+.badge-agotado {
+  margin-left: 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--err);
+  color: var(--err);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.interruptor-etiquetado {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-ink);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Acciones siempre a la vista: la última columna queda fija a la derecha en todas las tablas */
+@media (min-width: 769px) {
+  .tabla-productos thead th:last-child,
+  .tabla-productos tbody td:last-child {
+    position: sticky;
+    right: 0;
+    z-index: 1;
+    background: var(--c-bg);
+    box-shadow: -10px 0 12px -10px rgba(0, 0, 0, 0.55);
+  }
+  .tabla-productos thead th:last-child {
+    z-index: 2;
+    background: var(--c-surface);
+  }
+  .tabla-productos tbody tr:hover td:last-child {
+    background: color-mix(in srgb, var(--c-accent) 5%, var(--c-bg));
+  }
+  .tabla-productos td.loading-row,
+  .tabla-productos td.empty-row {
+    position: static;
+    box-shadow: none;
+  }
+}
+
+/* En tarjetas (móvil) las celdas agrupadas se leen alineadas a la izquierda */
+@media (max-width: 768px) {
+  .tabla-compacta td.col-producto,
+  .tabla-compacta td.col-estado {
+    display: block;
+    text-align: left;
+  }
+  .tabla-compacta td.col-producto::before,
+  .tabla-compacta td.col-estado::before {
+    display: block;
+    margin-bottom: 6px;
+  }
+  .col-estado > * {
+    justify-content: flex-start;
+  }
+  .tabla-compacta td:not(:first-child) {
+    white-space: normal;
+  }
+}

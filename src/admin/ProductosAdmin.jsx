@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import { normalizarRuta, desdeFragrantica, rutaPorDefecto } from '../lib/producto';
 import {
-  formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, Visible, FilaEstado,
+  formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, FilaEstado,
   PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas, InterruptorSinStock, BotonSinStockTodos, InterruptorSoloPreparado, useSemaforo, CeldaStock,
   useProteccionCambios, confirmarDescartar, leerBorrador, guardarBorrador, borrarBorrador, ofrecerBorrador
 } from './comunes';
@@ -271,38 +271,53 @@ export default function ProductosAdmin({ alerta }) {
         </div>
       </div>
       <div className="tabla-wrapper">
-        <table className="tabla-productos">
+        <table className="tabla-productos tabla-compacta">
           <thead>
-            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Marca</th><th>Categoría</th><th>Género</th><th>Precio</th><th>Ficha</th><th>Tallas</th><th title="Stock en DATA con el semáforo de Configuraciones">Stock</th><th>Visible</th><th title="Vender aunque DATA no tenga existencias">Sin existencias</th><th title="Solo en esencia: no se vende como 1.1">Solo preparado</th><th>Acciones</th></tr>
+            <tr>
+              <th>Producto</th>
+              <th title="Marca · Original · Familias y acordes · Pirámide de notas">Ficha</th>
+              <th title="Precio en la tienda y stock en DATA con el semáforo de Configuraciones">Precio y stock</th>
+              <th>Estado</th>
+              <th className="col-acciones">Acciones</th>
+            </tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
-              <FilaEstado columnas={14} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
+              <FilaEstado columnas={5} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'} />
             ) : pagina.map((p) => (
               <tr key={p.id}>
-                <td data-label="#">{p.id}</td>
-                <td data-label="Imagen"><ImagenCelda src={p.image} /></td>
-                <td data-label="Nombre">
-                  <strong>{p.name}</strong>{p.originalName && <><br /><small style={{ color: 'var(--c-mute)' }}>Inspirado en {p.originalName}</small></>}
-                  <br />
+                <td data-label="Producto" className="col-producto">
+                  <button type="button" className="celda-producto" onClick={() => abrir(p)} title="Editar producto">
+                    <ImagenCelda src={p.image} />
+                    <span className="celda-producto-texto">
+                      <strong>{p.name}</strong>
+                      <small className="celda-meta">{[p.brand && p.brand.name, p.category, p.gender].filter(Boolean).join(' · ')} <span className="celda-id">#{p.id}</span></small>
+                      {p.originalName && <small className="celda-meta">Inspirado en {p.originalName}</small>}
+                    </span>
+                  </button>
                   {p.fragranticaUrl
                     ? <a className="ref-fragrantica" href={p.fragranticaUrl} target="_blank" rel="noopener noreferrer" title={p.fragranticaUrl}><i className="fas fa-check" /> Fragrantica</a>
                     : <small className="ref-pendiente">Sin referencia Fragrantica</small>}
                 </td>
-                <td data-label="Marca">{p.brand ? p.brand.name : '—'}</td>
-                <td data-label="Categoría">{p.category}</td>
-                <td data-label="Género">{p.gender}</td>
-                <td data-label="Precio">{formatPrecio(p.price)}{p.priceReview ? <><br /><small style={{ color: 'var(--err)' }} title="El precio en DATA no cubre el costo: la tienda no lo vende">En revisión</small></> : null}</td>
-                <td data-label="Ficha" title="Marca · Original · Familia y acordes · Pirámide de notas">
+                <td data-label="Ficha">
                   <span className={`ficha-estado ${completitud(p) === 4 ? 'completa' : ''}`}>{completitud(p)}/4</span>
+                  <small className="celda-meta celda-bloque">{(p.sizes || []).join(' · ') || 'Sin tallas'}</small>
                 </td>
-                <td data-label="Tallas">{(p.sizes || []).join(', ') || '-'}</td>
-                <td data-label="Stock"><CeldaStock inventarioId={p.inventario_id} semaforo={semaforo} /></td>
-                <td data-label="Visible"><Visible activo={p.activo} agotado={p.agotado} /></td>
-                <td data-label="Sin existencias"><InterruptorSinStock tabla="productos" item={p} onCambio={marcarSinStock} alerta={alerta} /></td>
-                <td data-label="Solo preparado"><InterruptorSoloPreparado item={p} onCambio={marcarPreparado} alerta={alerta} /></td>
-                <td data-label="Acciones">
+                <td data-label="Precio y stock">
+                  <strong className="celda-precio">{formatPrecio(p.price)}</strong>
+                  {p.priceReview ? <small className="celda-alerta" title="El precio en DATA no cubre el costo: la tienda no lo vende">En revisión</small> : null}
+                  <span className="celda-bloque"><CeldaStock inventarioId={p.inventario_id} semaforo={semaforo} /></span>
+                </td>
+                <td data-label="Estado" className="col-estado">
+                  <span className={`estado-visible ${p.activo ? '' : 'oculto'}`}>
+                    <i className={`fas ${p.activo ? 'fa-eye' : 'fa-eye-slash'}`} /> {p.activo ? 'Visible' : 'Oculto'}
+                    {p.agotado ? <span className="badge-agotado" title="Sin stock en DATA">Agotado</span> : null}
+                  </span>
+                  <InterruptorSinStock tabla="productos" item={p} onCambio={marcarSinStock} alerta={alerta} etiqueta="Sin existencias" />
+                  <InterruptorSoloPreparado item={p} onCambio={marcarPreparado} alerta={alerta} etiqueta="Solo preparado" />
+                </td>
+                <td data-label="Acciones" className="col-acciones">
                   <div className="acciones">
                     {p.fragranticaUrl
                       ? <a className="btn-icon fragrantica" href={p.fragranticaUrl} target="_blank" rel="noopener noreferrer" title="Ver ficha técnica en Fragrantica"><i className="fas fa-flask" /></a>

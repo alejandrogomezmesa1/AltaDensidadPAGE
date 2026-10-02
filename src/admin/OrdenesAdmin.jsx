@@ -222,27 +222,34 @@ export default function OrdenesAdmin({ alerta, sesionInvalida }) {
       <div className="tabla-wrapper">
         <table className="tabla-productos">
           <thead>
-            <tr><th>#</th><th>Ref. Interna</th><th>Preferencia MP</th><th>Pago ID</th><th>Comprador</th><th>Total</th><th>Moneda</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr>
+            <tr><th>Orden</th><th>Comprador</th><th>Total</th><th>Estado</th><th className="col-acciones">Acciones</th></tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtradas.length ? (
-              <FilaEstado columnas={10} cargando={estado === 'cargando' && 'Cargando órdenes...'} error={estado === 'error'}
+              <FilaEstado columnas={5} cargando={estado === 'cargando' && 'Cargando órdenes...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay órdenes registradas.'} />
             ) : filtradas.map((o, idx) => {
               const nombre = o.envio_nombre || o.payer_name || '';
               const correo = o.payer_email || '';
               return (
                 <tr key={o.external_reference || idx}>
-                  <td data-label="#">{(((meta.page || 1) - 1) * POR_PAGINA) + idx + 1}</td>
-                  <td data-label="Ref. Interna">{o.external_reference}</td>
-                  <td data-label="Preferencia MP">{o.preference_id || ''}</td>
-                  <td data-label="Pago ID">{o.payment_id || ''}</td>
-                  <td data-label="Comprador">{nombre || correo ? <>{nombre}<br /><small style={{ color: '#888' }}>{correo}</small></> : 'N/A'}</td>
-                  <td data-label="Total">{formatPrecio(o.total)}</td>
-                  <td data-label="Moneda">{o.currency || 'COP'}</td>
+                  <td data-label="Orden" className="col-producto">
+                    <button type="button" className="celda-producto celda-orden" onClick={() => abrirDetalle(o.external_reference)} title="Ver detalle">
+                      <span className="celda-producto-texto">
+                        <strong>{o.external_reference} <span className="celda-id">#{(((meta.page || 1) - 1) * POR_PAGINA) + idx + 1}</span></strong>
+                        <small className="celda-meta">{o.created_at ? new Date(o.created_at).toLocaleString('es-CO', { dateStyle: 'medium', timeStyle: 'short' }) : ''}</small>
+                        {(o.payment_id || o.preference_id) && (
+                          <small className="celda-meta celda-recorte" title={`Preferencia: ${o.preference_id || '—'} · Pago: ${o.payment_id || '—'}`}>
+                            MP {o.payment_id ? `pago ${o.payment_id}` : `pref. ${o.preference_id}`}
+                          </small>
+                        )}
+                      </span>
+                    </button>
+                  </td>
+                  <td data-label="Comprador">{nombre || correo ? <><strong>{nombre}</strong><small className="celda-meta celda-bloque">{correo}</small></> : 'N/A'}</td>
+                  <td data-label="Total"><strong className="celda-precio">{formatPrecio(o.total)}</strong>{o.currency && o.currency !== 'COP' ? <small className="celda-meta"> {o.currency}</small> : null}</td>
                   <td data-label="Estado"><strong style={{ color: colorEstado(o.status) }}>{ESTADOS[o.status] || o.status || ''}</strong></td>
-                  <td data-label="Fecha">{o.created_at ? new Date(o.created_at).toLocaleString() : ''}</td>
-                  <td data-label="Acciones">
+                  <td data-label="Acciones" className="col-acciones">
                     <div className="acciones">
                       <button className="btn-icon" title="Ver" onClick={() => abrirDetalle(o.external_reference)}><i className="fas fa-eye" /></button>
                     </div>

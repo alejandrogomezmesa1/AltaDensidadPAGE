@@ -307,7 +307,7 @@ export function CampoEtiquetas({ id, valores, onCambiar, sugerencias = [], place
 }
 
 // "Vender sin existencias": la tienda deja comprar el perfume o kit aunque DATA no tenga stock
-export function InterruptorSinStock({ tabla, item, onCambio, alerta }) {
+export function InterruptorSinStock({ tabla, item, onCambio, alerta, etiqueta }) {
   const [guardando, setGuardando] = useState(false);
   const activo = Boolean(item.vender_sin_stock);
   const cambiar = async () => {
@@ -322,9 +322,9 @@ export function InterruptorSinStock({ tabla, item, onCambio, alerta }) {
     }
   };
   return (
-    <label className="check-item sin-stock" title="Se puede comprar en la tienda aunque DATA no tenga existencias">
+    <label className={`check-item sin-stock ${etiqueta ? 'interruptor-etiquetado' : ''}`} title="Se puede comprar en la tienda aunque DATA no tenga existencias">
       <input type="checkbox" checked={activo} disabled={guardando} onChange={cambiar} />
-      {activo ? ' Sí' : ' No'}
+      {etiqueta ? ` ${etiqueta}` : (activo ? ' Sí' : ' No')}
       {activo && item.agotado_data ? <small> · sin stock en DATA</small> : null}
     </label>
   );
@@ -358,7 +358,7 @@ export function BotonSinStockTodos({ tabla, lista, onCambio, alerta }) {
 }
 
 // "Solo preparado": la fragancia solo está en esencia; no se vende como 1.1, sí en "Crea tu perfume"
-export function InterruptorSoloPreparado({ item, onCambio, alerta }) {
+export function InterruptorSoloPreparado({ item, onCambio, alerta, etiqueta }) {
   const [guardando, setGuardando] = useState(false);
   const activo = Boolean(item.soloPreparado);
   const cambiar = async () => {
@@ -373,9 +373,9 @@ export function InterruptorSoloPreparado({ item, onCambio, alerta }) {
     }
   };
   return (
-    <label className="check-item" title="Solo en esencia: sale de Perfumes 1.1 y queda en «Crea tu perfume»">
+    <label className={`check-item ${etiqueta ? 'interruptor-etiquetado' : ''}`} title="Solo en esencia: sale de Perfumes 1.1 y queda en «Crea tu perfume»">
       <input type="checkbox" checked={activo} disabled={guardando} onChange={cambiar} />
-      {activo ? ' Sí' : ' No'}
+      {etiqueta ? ` ${etiqueta}` : (activo ? ' Sí' : ' No')}
     </label>
   );
 }

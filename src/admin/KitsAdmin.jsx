@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
-  formatPrecio, toastOk, subirImagen, ImagenCelda, Visible, FilaEstado,
+  formatPrecio, toastOk, subirImagen, ImagenCelda, FilaEstado,
   PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario, InterruptorSinStock, BotonSinStockTodos, useSemaforo, CeldaStock } from './comunes';
 
 const VACIO = { id: '', nombre: '', descripcion: '', precio: '', imagen: '', activo: true, beneficios: [], inventario_id: '' };
@@ -121,25 +121,42 @@ export default function KitsAdmin({ alerta }) {
         </div>
       </div>
       <div className="tabla-wrapper">
-        <table className="tabla-productos">
+        <table className="tabla-productos tabla-compacta">
           <thead>
-            <tr><th>#</th><th>Imagen</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th title="Stock en DATA con el semáforo de Configuraciones">Stock</th><th>Visible</th><th title="Vender aunque DATA no tenga existencias">Sin existencias</th><th>Acciones</th></tr>
+            <tr>
+              <th>Kit</th>
+              <th title="Precio en la tienda y stock en DATA con el semáforo de Configuraciones">Precio y stock</th>
+              <th>Estado</th>
+              <th className="col-acciones">Acciones</th>
+            </tr>
           </thead>
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
-              <FilaEstado columnas={9} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
+              <FilaEstado columnas={4} cargando={estado === 'cargando' && 'Cargando kits...'} error={estado === 'error'}
                 vacio={busqueda ? 'No se encontraron resultados.' : 'No hay kits registrados.'} />
             ) : pagina.map((k) => (
               <tr key={k.id}>
-                <td data-label="#">{k.id}</td>
-                <td data-label="Imagen"><ImagenCelda src={k.imagen} /></td>
-                <td data-label="Nombre"><strong>{k.nombre}</strong></td>
-                <td data-label="Descripción">{k.descripcion}</td>
-                <td data-label="Precio">{formatPrecio(k.precio)}</td>
-                <td data-label="Stock"><CeldaStock inventarioId={k.inventario_id} semaforo={semaforo} /></td>
-                <td data-label="Visible"><Visible activo={k.activo} agotado={k.agotado} /></td>
-                <td data-label="Sin existencias"><InterruptorSinStock tabla="kits" item={k} onCambio={marcarSinStock} alerta={alerta} /></td>
-                <td data-label="Acciones">
+                <td data-label="Kit" className="col-producto">
+                  <button type="button" className="celda-producto" onClick={() => abrir(k)} title="Editar kit">
+                    <ImagenCelda src={k.imagen} />
+                    <span className="celda-producto-texto">
+                      <strong>{k.nombre} <span className="celda-id">#{k.id}</span></strong>
+                      {k.descripcion && <small className="celda-meta celda-recorte">{k.descripcion}</small>}
+                    </span>
+                  </button>
+                </td>
+                <td data-label="Precio y stock">
+                  <strong className="celda-precio">{formatPrecio(k.precio)}</strong>
+                  <span className="celda-bloque"><CeldaStock inventarioId={k.inventario_id} semaforo={semaforo} /></span>
+                </td>
+                <td data-label="Estado" className="col-estado">
+                  <span className={`estado-visible ${k.activo ? '' : 'oculto'}`}>
+                    <i className={`fas ${k.activo ? 'fa-eye' : 'fa-eye-slash'}`} /> {k.activo ? 'Visible' : 'Oculto'}
+                    {k.agotado ? <span className="badge-agotado" title="Sin stock en DATA">Agotado</span> : null}
+                  </span>
+                  <InterruptorSinStock tabla="kits" item={k} onCambio={marcarSinStock} alerta={alerta} etiqueta="Sin existencias" />
+                </td>
+                <td data-label="Acciones" className="col-acciones">
                   <div className="acciones">
                     <button className="btn-icon editar" title="Editar" onClick={() => abrir(k)}><i className="fas fa-edit" /></button>
                     <button className="btn-icon eliminar" title="Eliminar" onClick={() => setAEliminar(k)}><i className="fas fa-trash" /></button>
