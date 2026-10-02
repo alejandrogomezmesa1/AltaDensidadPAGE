@@ -430,3 +430,67 @@ export function CeldaStock({ inventarioId, semaforo }) {
     </span>
   );
 }
+
+// ── Protección de formularios con cambios sin guardar ──
+// Mientras haya cambios: el navegador pide confirmar antes de cerrar o recargar la pestaña, y el
+// gesto o botón "atrás" no saca del panel (se queda y avisa). Se usa junto con el borrador.
+export function useProteccionCambios(activo) {
+  useEffect(() => {
+    if (!activo) return undefined;
+    const antesDeSalir = (e) => { e.preventDefault(); e.returnValue = ''; };
+    // Una entrada extra en el historial: "atrás" la consume y se vuelve a poner, sin salir
+    const marca = { ...(window.history.state || {}), formularioAbierto: true };
+    window.history.pushState(marca, '');
+    const alVolver = () => {
+      window.history.pushState(marca, '');
+      Swal.fire({
+        toast: true, position: 'top', icon: 'warning', showConfirmButton: false, timer: 4500,
+        title: 'Tienes cambios sin guardar', text: 'Guarda o cierra el formulario antes de salir.',
+        background: '#1a1a1a', color: '#fff'
+      });
+    };
+    window.addEventListener('beforeunload', antesDeSalir);
+    window.addEventListener('popstate', alVolver);
+    return () => {
+      window.removeEventListener('beforeunload', antesDeSalir);
+      window.removeEventListener('popstate', alVolver);
+      if (window.history.state && window.history.state.formularioAbierto) window.history.back();
+    };
+  }, [activo]);
+}
+
+export async function confirmarDescartar() {
+  const r = await Swal.fire({
+    title: '¿Descartar los cambios?',
+    html: 'Lo que escribiste en este formulario no se ha guardado.',
+    icon: 'warning', showCancelButton: true, reverseButtons: true,
+    confirmButtonText: 'Descartar', cancelButtonText: 'Seguir editando',
+    confirmButtonColor: '#c0392b', cancelButtonColor: '#444', background: '#1a1a1a', color: '#fff'
+  });
+  return r.isConfirmed;
+}
+
+// Borrador en el navegador: si la página se cierra o se pierde, se puede recuperar al volver a abrir
+const CLAVE_BORRADOR = (clave) => `ad_borrador_${clave}`;
+export function leerBorrador(clave) {
+  try { return JSON.parse(localStorage.getItem(CLAVE_BORRADOR(clave)) || 'null'); } catch { return null; }
+}
+export function guardarBorrador(clave, datos) {
+  try { localStorage.setItem(CLAVE_BORRADOR(clave), JSON.stringify({ datos, fecha: Date.now() })); } catch { /* sin almacenamiento */ }
+}
+export function borrarBorrador(clave) {
+  try { localStorage.removeItem(CLAVE_BORRADOR(clave)); } catch { /* sin almacenamiento */ }
+}
+
+export async function ofrecerBorrador(borrador, nombre) {
+  const hace = Math.max(1, Math.round((Date.now() - borrador.fecha) / 60000));
+  const cuando = hace < 60 ? `hace ${hace} min` : new Date(borrador.fecha).toLocaleString('es-CO', { dateStyle: 'short', timeStyle: 'short' });
+  const r = await Swal.fire({
+    title: 'Hay un borrador sin guardar',
+    html: `Encontramos cambios de <strong>${String(nombre || 'este formulario').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))}</strong> que no se guardaron (${cuando}).<br>¿Quieres recuperarlos? Si habías elegido una imagen nueva, hay que volver a seleccionarla.`,
+    icon: 'question', showCancelButton: true, reverseButtons: true,
+    confirmButtonText: 'Recuperar borrador', cancelButtonText: 'Empezar de nuevo',
+    confirmButtonColor: '#9A7B3F', cancelButtonColor: '#444', background: '#1a1a1a', color: '#fff'
+  });
+  return r.isConfirmed;
+}

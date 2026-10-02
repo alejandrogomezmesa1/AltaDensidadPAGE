@@ -61,6 +61,15 @@ function Panel({ usuario }) {
   const meta = SECCIONES[seccion];
 
   useClaseBody('adm', movilAbierto && 'adm-side-open');
+  // En el panel, deslizar con dos dedos (Mac) no hace "atrás": se perdía lo escrito en un formulario.
+  // Chrome, Edge y Firefox lo respetan; en Safari actúan el aviso y el borrador de los formularios.
+  useEffect(() => {
+    const raiz = document.documentElement;
+    const antes = raiz.style.overscrollBehaviorX;
+    raiz.style.overscrollBehaviorX = 'none';
+    document.body.style.overscrollBehaviorX = 'none';
+    return () => { raiz.style.overscrollBehaviorX = antes; document.body.style.overscrollBehaviorX = ''; };
+  }, []);
   usePagina({ titulo: `${meta.titulo} · Panel | Fragancias de Alta Densidad`, descripcion: 'Panel de gestión de Fragancias de Alta Densidad.', ruta: '/admin', indexar: false });
 
   const mostrarAlerta = useCallback((msg, tipo) => {

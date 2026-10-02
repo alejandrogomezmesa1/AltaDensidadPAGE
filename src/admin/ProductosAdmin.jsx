@@ -3,7 +3,8 @@ import { apiJson } from '../lib/api';
 import { normalizarRuta, desdeFragrantica, rutaPorDefecto } from '../lib/producto';
 import {
   formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, Visible, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas, InterruptorSinStock, BotonSinStockTodos, InterruptorSoloPreparado, useSemaforo, CeldaStock
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas, InterruptorSinStock, BotonSinStockTodos, InterruptorSoloPreparado, useSemaforo, CeldaStock,
+  useProteccionCambios, confirmarDescartar, leerBorrador, guardarBorrador, borrarBorrador, ofrecerBorrador
 } from './comunes';
 
 const TALLAS = ['30ml', '50ml', '60ml', '100ml', '120ml', '200ml'];
@@ -141,21 +142,48 @@ export default function ProductosAdmin({ alerta }) {
     (p) => (!soloPendientes || !p.fragranticaUrl)
       && [p.name, p.category, p.gender, p.brand && p.brand.name, p.originalName].some((t) => t && t.toLowerCase().includes(q)), 10);
 
-  const abrir = (p) => {
-    setForm(p ? {
+  // ── Cambios sin guardar: aviso al salir, confirmación al cerrar y borrador automático ──
+  const [inicial, setInicial] = useState(VACIO);
+  const huella = (f) => JSON.stringify({ ...f, inventario_id: String(f.inventario_id || ''), precio: String(f.precio ?? '') });
+  const sucio = modal && (huella(form) !== huella(inicial) || Boolean(archivo));
+  const claveBorrador = `producto_${form.id || 'nuevo'}`;
+  useProteccionCambios(sucio);
+  useEffect(() => {
+    if (!sucio) return undefined;
+    const t = setTimeout(() => guardarBorrador(claveBorrador, form), 400);
+    return () => clearTimeout(t);
+  }, [sucio, form, claveBorrador]);
+
+  const abrir = async (p) => {
+    const base = p ? {
       id: p.id, nombre: p.name, descripcion: p.description || '', categoria: p.category, genero: p.gender,
       precio: p.price, rating: String(p.rating ?? 4), imagen: p.image || '', activo: !!p.activo,
       sizes: p.sizes || [], bottleTypes: p.bottleTypes || [], inventario_id: p.inventario_id || '',
       marca: p.brand ? p.brand.name : '', original: p.originalName || '', familiaId: p.family ? String(p.family.id) : '',
       acordes: p.accords || [], notas: p.notes || NOTAS_VACIAS,
       fref: p.fragranticaUrl || '', ruta: p.ruta || ''
-    } : VACIO);
+    } : VACIO;
+    // Borrador pendiente de este producto (o de "nuevo"): se ofrece recuperarlo
+    const clave = `producto_${base.id || 'nuevo'}`;
+    const borrador = leerBorrador(clave);
+    let datos = base;
+    if (borrador && huella({ ...base, ...borrador.datos }) !== huella(base)) {
+      if (await ofrecerBorrador(borrador, base.nombre || 'un producto nuevo')) datos = { ...base, ...borrador.datos };
+      else borrarBorrador(clave);
+    }
+    setInicial(base);
+    setForm(datos);
     setArchivo(null);
     setInvListo(false);
     setInvalidos([]);
     setModal(true);
   };
-  const cerrar = useCallback(() => setModal(false), []);
+  // Cerrar con cambios (X, Escape, clic fuera, Cancelar) pide confirmación; descartar borra el borrador
+  const cerrar = useCallback(async () => {
+    if (sucio && !(await confirmarDescartar())) return;
+    borrarBorrador(claveBorrador);
+    setModal(false);
+  }, [sucio, claveBorrador]);
   const campo = (k) => ({
     value: form[k],
     className: invalidos.includes(k) ? 'invalid' : undefined,
@@ -190,6 +218,8 @@ export default function ProductosAdmin({ alerta }) {
         ruta: normalizarRuta(form.ruta) || null
       };
       await apiJson(form.id ? `productos/${form.id}` : 'productos', { method: form.id ? 'PUT' : 'POST', body: payload });
+      borrarBorrador(claveBorrador);
+      setInicial(form);
       setModal(false);
       await cargar();
       cargarCatalogos();
