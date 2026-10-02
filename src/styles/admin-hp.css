@@ -1818,3 +1818,19 @@ body.adm {
   font-size: 11px;
   text-decoration: none;
 }
+
+/* Botón "Separar" en etiquetas pegadas juntas (CampoEtiquetas) */
+.etiqueta .etiqueta-separar {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--c-accent);
+  color: var(--c-accent);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.etiqueta .etiqueta-separar:hover {
+  background: var(--c-accent);
+  color: var(--c-bg);
+}

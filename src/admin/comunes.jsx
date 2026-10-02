@@ -189,22 +189,91 @@ export function SelectInventario({ id, valor, onCambiar, onListo }) {
 }
 
 // Lista de etiquetas (acordes, notas): Enter o coma agrega, × quita; sugiere valores existentes
+// ── Separar acordes y notas pegados de golpe (p. ej. copiados de Fragrantica) ──
+const sinAcentos = (t) => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+
+// Un renglón por etiqueta; también comas, punto y coma, viñetas o barras. Se quitan porcentajes sueltos.
+function partirTexto(texto) {
+  return String(texto || '')
+    .split(/[\r\n\t,;•·|]+/)
+    .map((t) => t.replace(/\d+([.,]\d+)?\s*%/g, '').replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
+// Frases de varias palabras frecuentes en Fragrantica (español) que no deben partirse aunque aún
+// no estén en el catálogo. Las unidas con "de" (algodón de azúcar, flor de naranjo) se detectan solas.
+const FRASES_COMUNES = [
+  'floral blanco', 'especiado suave', 'especiado cálido', 'especiado fresco', 'notas verdes', 'notas marinas',
+  'notas acuáticas', 'frutas tropicales', 'frutos rojos', 'frutos secos', 'pimienta rosa', 'pimienta negra',
+  'almizcle blanco', 'ámbar gris', 'haba tonka', 'té verde', 'té negro', 'sal marina', 'manzana verde',
+  'grosella negra', 'grosellas negras', 'almendra amarga', 'azúcar moreno', 'caramelo salado',
+  'jazmín sambac', 'ylang ylang', 'vainilla bourbon', 'sándalo australiano', 'cedro de virginia'
+];
+
+// Corta un texto de varias palabras usando los nombres que ya existen y las frases comunes (la más
+// larga primero): "dulce floral blanco amaderado" → dulce · floral blanco · amaderado. Una palabra
+// que no coincide con nada va sola, salvo que la siga "de" / "del" (algodón de azúcar).
+function segmentar(texto, conocidos) {
+  const dic = new Map([...FRASES_COMUNES, ...conocidos].map((c) => [sinAcentos(c), c]));
+  const palabras = texto.replace(/\s+/g, ' ').trim().split(' ');
+  const out = [];
+  for (let i = 0; i < palabras.length;) {
+    let hallado = null;
+    for (let n = Math.min(4, palabras.length - i); n >= 1; n--) {
+      const frase = palabras.slice(i, i + n).join(' ');
+      if (dic.has(sinAcentos(frase))) { hallado = { texto: conocidos.find((c) => sinAcentos(c) === sinAcentos(frase)) || frase, n }; break; }
+    }
+    if (hallado) {
+      out.push(hallado.texto);
+      i += hallado.n;
+      continue;
+    }
+    // "X de Y" / "X de la Y" / "X del Y"
+    const sig = sinAcentos(palabras[i + 1] || '');
+    if ((sig === 'de' || sig === 'del') && palabras[i + 2]) {
+      const conLa = sig === 'de' && ['la', 'los', 'las'].includes(sinAcentos(palabras[i + 2])) && palabras[i + 3];
+      const n = conLa ? 4 : 3;
+      out.push(palabras.slice(i, i + n).join(' '));
+      i += n;
+      continue;
+    }
+    out.push(palabras[i]);
+    i += 1;
+  }
+  return out;
+}
+
 export function CampoEtiquetas({ id, valores, onCambiar, sugerencias = [], placeholder }) {
   const [texto, setTexto] = useState('');
   const listaId = `${id}-sugerencias`;
-  const agregar = (bruto) => {
-    const nombre = bruto.replace(/\s+/g, ' ').trim();
-    if (!nombre) return;
-    // Reutiliza la escritura existente ("vainilla" → "Vainilla") para no duplicar
-    const existente = sugerencias.find((s) => s.toLowerCase() === nombre.toLowerCase()) || nombre;
-    if (!valores.some((v) => v.toLowerCase() === existente.toLowerCase())) onCambiar([...valores, existente]);
+  // Reutiliza la escritura existente ("vainilla" → "Vainilla") y no repite etiquetas
+  const agregarVarios = (lista) => {
+    const nuevos = [...valores];
+    for (const bruto of lista) {
+      const nombre = bruto.replace(/\s+/g, ' ').trim();
+      if (!nombre) continue;
+      const existente = sugerencias.find((s) => sinAcentos(s) === sinAcentos(nombre)) || nombre;
+      if (!nuevos.some((v) => sinAcentos(v) === sinAcentos(existente))) nuevos.push(existente);
+    }
+    if (nuevos.length !== valores.length) onCambiar(nuevos);
     setTexto('');
+  };
+  const agregar = (bruto) => agregarVarios(partirTexto(bruto));
+  const separar = (v) => {
+    const partes = segmentar(v, sugerencias);
+    const i = valores.indexOf(v);
+    const resto = valores.filter((x) => x !== v);
+    const nuevos = partes.filter((p) => !resto.some((x) => sinAcentos(x) === sinAcentos(p)));
+    onCambiar([...resto.slice(0, i), ...nuevos, ...resto.slice(i)]);
   };
   return (
     <div className="campo-etiquetas">
       {valores.map((v) => (
         <span className="etiqueta" key={v}>
           {v}
+          {v.trim().split(/\s+/).length >= 3 && segmentar(v, sugerencias).length > 1 && (
+            <button type="button" className="etiqueta-separar" title="Separar en varias etiquetas" onClick={() => separar(v)}>Separar</button>
+          )}
           <button type="button" aria-label={`Quitar ${v}`} onClick={() => onCambiar(valores.filter((x) => x !== v))}><i className="fas fa-times" /></button>
         </span>
       ))}
@@ -214,6 +283,15 @@ export function CampoEtiquetas({ id, valores, onCambiar, sugerencias = [], place
           const v = e.target.value;
           if (v.endsWith(',')) agregar(v.slice(0, -1));
           else setTexto(v);
+        }}
+        // Al pegar, el campo convertiría los saltos de línea en espacios: se leen antes, del portapapeles
+        onPaste={(e) => {
+          const pegado = e.clipboardData.getData('text');
+          const partes = partirTexto(pegado);
+          if (partes.length > 1) {
+            e.preventDefault();
+            agregarVarios(texto.trim() ? [texto, ...partes] : partes);
+          }
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') { e.preventDefault(); agregar(texto); }
