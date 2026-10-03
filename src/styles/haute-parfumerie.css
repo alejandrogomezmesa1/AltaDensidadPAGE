@@ -2193,6 +2193,65 @@ body.ia-chat-open .whatsapp-flotante-wrapper {
   flex-wrap: wrap;
 }
 
+/* Cierre de la última fila incompleta (colección y kits): una invitación en lugar de huecos */
+.grid-relleno {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6) var(--sp-4);
+  background:
+    radial-gradient(120% 90% at 100% 100%, color-mix(in srgb, var(--c-accent) 10%, transparent), transparent 60%),
+    var(--c-bg);
+  overflow: hidden;
+}
+
+.grid-relleno::before {
+  content: '';
+  position: absolute;
+  inset: var(--sp-3);
+  border: var(--bw) solid color-mix(in srgb, var(--c-accent) 28%, transparent);
+  pointer-events: none;
+}
+
+.grid-relleno-in {
+  position: relative;
+  max-width: 420px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.grid-relleno h3 {
+  font: 300 clamp(24px, 2.4vw, 34px)/1.1 var(--f-display);
+  margin: 0;
+}
+
+.grid-relleno p {
+  font-size: var(--fs-2);
+  line-height: 1.6;
+  margin: 0 0 var(--sp-2);
+}
+
+.grid-relleno-acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.grid-relleno.es-ancho .grid-relleno-in {
+  max-width: 520px;
+}
+
+.grid-relleno.es-ancho .grid-relleno-acciones {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 /* Detalle: presentación y envase */
 .opt {
   display: flex;

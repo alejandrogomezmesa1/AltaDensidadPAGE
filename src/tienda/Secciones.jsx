@@ -5,9 +5,27 @@ import { useTienda } from './TiendaContext';
 import { Frasco, ImagenLogo, Paginacion } from './Frasco';
 import { fmt, pr, perfumes11, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles, todasLasNotas, tieneNotas, noDisponible, motivoNoDisponible } from '../lib/producto';
 import { WA } from '../config';
+import { useColumnas } from '../lib/hooks';
 
-const PRODUCTOS_POR_PAGINA = 12;
-const KITS_POR_PAGINA = 6;
+// Cada página llena filas completas según las columnas que caben: pocas filas en pantallas anchas,
+// más filas cuando hay una o dos columnas
+const productosPorPagina = (c) => c * (c >= 4 ? 3 : c === 3 ? 4 : c === 2 ? 6 : 8);
+const kitsPorPagina = (c) => c * (c >= 3 ? 2 : c === 2 ? 3 : 6);
+const celdasLibres = (n, columnas) => (columnas > 1 && n % columnas ? columnas - n % columnas : 0);
+
+// Cierre de la última fila incompleta: ocupa las celdas que sobran con una invitación, no con huecos
+function RellenoFila({ span, eyebrow, titulo, texto, children }) {
+  return (
+    <aside className={`grid-relleno ${span > 1 ? 'es-ancho' : ''}`} style={{ gridColumn: `span ${span}` }}>
+      <div className="grid-relleno-in">
+        <span className="up eyebrow">{eyebrow}</span>
+        <h3>{titulo}</h3>
+        <p className="mute">{texto}</p>
+        <div className="grid-relleno-acciones">{children}</div>
+      </div>
+    </aside>
+  );
+}
 const FILTROS_BASE = { search: '', accord: 'Todos', note: 'Todos', family: 'Todos', gender: 'Todos', category: 'Todos', brand: 'Todos' };
 const CLAVES_FILTRO = ['accord', 'note', 'family', 'gender', 'category', 'brand'];
 
@@ -119,8 +137,13 @@ export function Coleccion({ titulo = 'La colección' }) {
   const [filters, setFilters] = useState({ ...FILTROS_BASE, ...(guardado.filters || {}) });
   const [busqueda, setBusqueda] = useState(guardado.busqueda || '');
   const [orden, setOrden] = useState(guardado.orden || 'destacados');
-  const [pagina, setPagina] = useState(guardado.pagina || 1);
+  // Se recuerda el primer perfume visible (no el número de página): al cambiar el ancho cambian
+  // los perfumes por página y la página que se muestra es la que lo contiene
+  const [inicio, setInicio] = useState(guardado.inicio ?? ((guardado.pagina || 1) - 1) * 12);
   const inputRef = useRef(null);
+  const gridRef = useRef(null);
+  const columnas = useColumnas(gridRef);
+  const porPagina = productosPorPagina(columnas);
 
   // La búsqueda se aplica 150 ms después de dejar de escribir
   useEffect(() => {
@@ -134,17 +157,18 @@ export function Coleccion({ titulo = 'La colección' }) {
     const ahora = JSON.stringify([filters, orden]);
     if (ahora === criterio.current) return;
     criterio.current = ahora;
-    setPagina(1);
+    setInicio(0);
   }, [filters, orden]);
 
   useEffect(() => {
-    try { sessionStorage.setItem(CLAVE_COLECCION, JSON.stringify({ filters, busqueda, orden, pagina })); } catch { /* sin almacenamiento */ }
-  }, [filters, busqueda, orden, pagina]);
+    try { sessionStorage.setItem(CLAVE_COLECCION, JSON.stringify({ filters, busqueda, orden, inicio })); } catch { /* sin almacenamiento */ }
+  }, [filters, busqueda, orden, inicio]);
 
   const filtrados = useMemo(() => ordenarProductos(filtrarProductos(P, filters), orden), [P, filters, orden]);
-  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / PRODUCTOS_POR_PAGINA));
-  const actual = pagina > totalPaginas ? 1 : pagina;
-  const visibles = filtrados.slice((actual - 1) * PRODUCTOS_POR_PAGINA, actual * PRODUCTOS_POR_PAGINA);
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / porPagina));
+  const actual = inicio >= filtrados.length ? 1 : Math.floor(inicio / porPagina) + 1;
+  const visibles = filtrados.slice((actual - 1) * porPagina, actual * porPagina);
+  const libres = celdasLibres(visibles.length, columnas);
   const activos = contarFiltros(filters);
   const acordesPrincipales = useMemo(() => frecuentes(P.flatMap((x) => x.ac)).slice(0, 7), [P]);
 
@@ -154,7 +178,7 @@ export function Coleccion({ titulo = 'La colección' }) {
       irA('coleccion');
       return;
     }
-    setPagina(p);
+    setInicio((p - 1) * porPagina);
     requestAnimationFrame(() => {
       irA('coleccion');
     });
@@ -207,7 +231,7 @@ export function Coleccion({ titulo = 'La colección' }) {
           <button className="link up" style={{ fontSize: 'var(--fs-2)' }} onClick={reset}>Limpiar filtros</button>
         </div>
 
-        <div className="grid">
+        <div className="grid" ref={gridRef}>
           {filtrados.length === 0 ? (
             <div className="grid-empty">
               <p className="mute">No encontramos ninguna fragancia que coincida con estos criterios.</p>
@@ -237,6 +261,13 @@ export function Coleccion({ titulo = 'La colección' }) {
               </div>
             </article>
           ))}
+          {libres > 0 && (
+            <RellenoFila span={libres} eyebrow="¿No está la que buscas?" titulo="Crea tu perfume"
+              texto="Elige la esencia, el envase y el tamaño. Lo preparamos para ti, con o sin feromonas.">
+              <Link className="btn up" to="/catalogo?ver=crear">Crear mi perfume</Link>
+              <button type="button" className="link up" onClick={pedirAura}>Pedir recomendación a AURA</button>
+            </RellenoFila>
+          )}
         </div>
         <Paginacion actual={actual} total={filtrados.length ? totalPaginas : 0} paginas={paginasVisibles(actual, totalPaginas)} onCambiar={cambiarPagina} />
       </div>
@@ -345,19 +376,24 @@ export function Envases() {
 export function Kits() {
   const { KITS, abrirKit, addKitToCart, abrirBolsa } = useTienda();
   // La página de kits también se recuerda al volver de la página de un kit
-  const [pagina, setPagina] = useState(() => { try { return Number(sessionStorage.getItem('ad_kits_pagina')) || 1; } catch { return 1; } });
-  useEffect(() => { try { sessionStorage.setItem('ad_kits_pagina', String(pagina)); } catch { /* sin almacenamiento */ } }, [pagina]);
+  // (como en la colección, se guarda el primer kit visible)
+  const [inicio, setInicio] = useState(() => { try { return Number(sessionStorage.getItem('ad_kits_inicio')) || 0; } catch { return 0; } });
+  useEffect(() => { try { sessionStorage.setItem('ad_kits_inicio', String(inicio)); } catch { /* sin almacenamiento */ } }, [inicio]);
+  const gridRef = useRef(null);
+  const columnas = useColumnas(gridRef);
+  const porPagina = kitsPorPagina(columnas);
   const activos = KITS.filter((k) => k.activo !== 0);
-  const totalPaginas = Math.max(1, Math.ceil(activos.length / KITS_POR_PAGINA));
-  const actual = pagina > totalPaginas ? 1 : pagina;
-  const visibles = activos.slice((actual - 1) * KITS_POR_PAGINA, actual * KITS_POR_PAGINA);
+  const totalPaginas = Math.max(1, Math.ceil(activos.length / porPagina));
+  const actual = inicio >= activos.length ? 1 : Math.floor(inicio / porPagina) + 1;
+  const visibles = activos.slice((actual - 1) * porPagina, actual * porPagina);
+  const libres = celdasLibres(visibles.length, columnas);
   const cambiar = (p) => {
     if (p < 1 || p > totalPaginas) return;
     if (p === actual) {
       irA('kits');
       return;
     }
-    setPagina(p);
+    setInicio((p - 1) * porPagina);
     requestAnimationFrame(() => {
       irA('kits');
     });
@@ -365,7 +401,7 @@ export function Kits() {
 
   return (
     <>
-      <div className="kits-grid">
+      <div className="kits-grid" ref={gridRef}>
         {visibles.map((k, idx) => {
           const nom = k.nombre || k.name;
           const carga = idx < 3 ? { loading: 'eager', fetchPriority: 'high' } : { loading: 'lazy', decoding: 'async' };
@@ -388,6 +424,13 @@ export function Kits() {
             </article>
           );
         })}
+        {libres > 0 && (
+          <RellenoFila span={libres} eyebrow="Un regalo a tu medida" titulo="Crea tu propio perfume"
+            texto="Elige la esencia, el envase y el tamaño. O escríbenos y te ayudamos a elegir el regalo ideal.">
+            <Link className="btn up" to="/catalogo?ver=crear">Crear mi perfume</Link>
+            <a className="link up" href={`https://wa.me/${WA}?text=${encodeURIComponent('¡Hola! Quiero ayuda para elegir un regalo. ✨')}`} target="_blank" rel="noopener">Escribir por WhatsApp</a>
+          </RellenoFila>
+        )}
       </div>
       <Paginacion className="kits-paginacion paginacion" actual={actual} total={totalPaginas}
         paginas={Array.from({ length: totalPaginas }, (_, i) => i + 1)} onCambiar={cambiar} />

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { SITIO } from '../config';
 
 // ── Tema claro/oscuro: html.modo-claro + data-theme, persistido en localStorage ──
@@ -67,4 +67,22 @@ export function useClaseBody(...clases) {
 export function JsonLd({ datos }) {
   if (!datos) return null;
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datos).replace(/</g, '\\u003c') }} />;
+}
+
+// ── Columnas reales de una rejilla (grid con auto-fill): se miden antes de pintar y al cambiar de ancho ──
+export function useColumnas(ref, inicial = 3) {
+  const [columnas, setColumnas] = useState(inicial);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const medir = () => {
+      const n = getComputedStyle(el).gridTemplateColumns.split(' ').filter(Boolean).length;
+      if (n) setColumnas(n);
+    };
+    medir();
+    const ro = new ResizeObserver(medir);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [ref]);
+  return columnas;
 }
