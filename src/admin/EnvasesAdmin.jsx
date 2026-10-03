@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
   formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, Visible, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, enfocarInvalido
 } from './comunes';
 
 const TALLAS = ['30ml', '50ml', '60ml', '100ml', '120ml', '200ml'];
@@ -55,8 +55,20 @@ export default function EnvasesAdmin({ alerta }) {
   async function guardar(ev) {
     ev.preventDefault();
     const nombre = form.nombre.trim();
-    if (!nombre) { setInvalidos(['nombre']); alerta('El nombre es obligatorio.', 'error'); return; }
-    if (!form.material) { setInvalidos(['material']); alerta('El material es obligatorio.', 'error'); return; }
+    const precio = String(form.precio ?? '').trim() === '' ? 0 : parseFloat(form.precio);
+    const faltan = [
+      !nombre && ['nombre', 'nombre'],
+      !form.material && ['material', 'material'],
+      // Sin tallas el envase no aparece en "Crea tu perfume"
+      !form.sizes.length && ['sizes', 'al menos una talla'],
+      !(precio >= 0) && ['precio', 'un precio válido']
+    ].filter(Boolean);
+    if (faltan.length) {
+      setInvalidos(faltan.map(([k]) => k));
+      alerta(`Completa los campos obligatorios: ${faltan.map(([, t]) => t).join(', ')}.`, 'error');
+      enfocarInvalido();
+      return;
+    }
     setGuardando(true);
     try {
       const image = archivo ? await subirImagen(archivo) : form.imagen.trim();
@@ -64,7 +76,7 @@ export default function EnvasesAdmin({ alerta }) {
         method: form.id ? 'PUT' : 'POST',
         body: {
           name: nombre, description: form.descripcion.trim(), material: form.material,
-          price: parseFloat(form.precio), image, sizes: form.sizes, activo: form.activo ? 1 : 0
+          price: precio, image, sizes: form.sizes, activo: form.activo ? 1 : 0
         }
       });
       setModal(false);
@@ -151,16 +163,19 @@ export default function EnvasesAdmin({ alerta }) {
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="envasePrecio">Precio (COP) *</label>
-              <input type="number" id="envasePrecio" min="0" step="1000" placeholder="0" required {...campo('precio')} />
+              <label htmlFor="envasePrecio">Precio de referencia (COP)</label>
+              <input type="number" id="envasePrecio" min="0" step="1000" placeholder="0" {...campo('precio')} />
+              <small className="hint-data">No se cobra: lo que paga el cliente por el envase se define en «Armador», por tamaño.</small>
             </div>
             <div className="form-group full">
               <label>Imagen del envase</label>
               <ZonaImagen imagen={form.imagen} archivo={archivo} onArchivo={setArchivo} />
             </div>
             <div className="form-group full">
-              <label>Tallas disponibles</label>
-              <Casillas opciones={TALLAS} marcadas={form.sizes} onCambiar={(sizes) => setForm((f) => ({ ...f, sizes }))} />
+              <label>Tallas disponibles *</label>
+              <div className={invalidos.includes('sizes') ? 'invalid grupo-invalido' : undefined} tabIndex={-1}>
+                <Casillas opciones={TALLAS} marcadas={form.sizes} onCambiar={(sizes) => { setForm((f) => ({ ...f, sizes })); setInvalidos((l) => l.filter((x) => x !== 'sizes')); }} />
+              </div>
             </div>
             <div className="form-group">
               <label>Visibilidad</label>

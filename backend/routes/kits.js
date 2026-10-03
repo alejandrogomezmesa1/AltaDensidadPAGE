@@ -59,7 +59,8 @@ router.get('/:id', async (req, res) => {
 // POST crear kit
 router.post('/', requireStaff, async (req, res) => {
     const { nombre, imagen, descripcion, precio, beneficios, activo } = req.body;
-    if (!nombre) return res.status(400).json({ success: false, message: 'Nombre es requerido' });
+    if (!nombre || !String(nombre).trim()) return res.status(400).json({ success: false, message: 'Nombre es requerido' });
+    if (!(Number(precio) > 0)) return res.status(400).json({ success: false, message: 'El precio debe ser mayor que 0' });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {
@@ -90,6 +91,8 @@ router.post('/', requireStaff, async (req, res) => {
 router.put('/:id', requireStaff, async (req, res) => {
     const { id } = req.params;
     const { nombre, imagen, descripcion, precio, beneficios, activo } = req.body;
+    if (!nombre || !String(nombre).trim()) return res.status(400).json({ success: false, message: 'Nombre es requerido' });
+    if (!(Number(precio) > 0)) return res.status(400).json({ success: false, message: 'El precio debe ser mayor que 0' });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {

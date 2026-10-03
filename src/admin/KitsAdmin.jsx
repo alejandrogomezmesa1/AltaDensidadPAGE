@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiJson } from '../lib/api';
 import {
   formatPrecio, toastOk, subirImagen, ImagenCelda, FilaEstado,
-  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario, InterruptorSinStock, BotonSinStockTodos, useSemaforo, CeldaStock } from './comunes';
+  PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, SelectInventario, InterruptorSinStock, BotonSinStockTodos, useSemaforo, CeldaStock,
+  PRECIO_SOSPECHOSO, confirmarPrecioBajo, enfocarInvalido } from './comunes';
 
 const VACIO = { id: '', nombre: '', descripcion: '', precio: '', imagen: '', activo: true, beneficios: [], inventario_id: '' };
 
@@ -75,8 +76,10 @@ export default function KitsAdmin({ alerta }) {
     e.preventDefault();
     const nombre = form.nombre.trim();
     const precio = parseFloat(form.precio);
-    if (!nombre) { setInvalidos(['nombre']); alerta('El nombre es obligatorio.', 'error'); return; }
-    if (Number.isNaN(precio)) { setInvalidos(['precio']); alerta('El precio es obligatorio.', 'error'); return; }
+    if (!nombre) { setInvalidos(['nombre']); alerta('El nombre es obligatorio.', 'error'); enfocarInvalido(); return; }
+    // Sin precio el kit se vendería en $0
+    if (!(precio > 0)) { setInvalidos(['precio']); alerta('El precio es obligatorio y debe ser mayor que 0.', 'error'); enfocarInvalido(); return; }
+    if (precio < PRECIO_SOSPECHOSO && !(await confirmarPrecioBajo(precio))) { setInvalidos(['precio']); enfocarInvalido(); return; }
     setGuardando(true);
     try {
       const imagen = archivo ? await subirImagen(archivo) : form.imagen.trim();
@@ -182,7 +185,7 @@ export default function KitsAdmin({ alerta }) {
             </div>
             <div className="form-group">
               <label htmlFor="kitPrecio">Precio (COP) *</label>
-              <input type="number" id="kitPrecio" min="0" step="1000" placeholder="0" required {...campo('precio')} />
+              <input type="number" id="kitPrecio" min="1" step="1000" placeholder="Ej: 120000" required {...campo('precio')} />
             </div>
             <div className="form-group">
               <label htmlFor="kitInventario">Inventario DATA</label>

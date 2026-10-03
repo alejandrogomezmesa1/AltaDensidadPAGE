@@ -26,6 +26,10 @@ router.put('/armador', requireStaff, async (req, res) => {
     if (!esquema.armador()) return sinEsquema(res);
     const { esencia = [], envases = [], recargoFeromonas, presentaciones } = req.body || {};
     const valido = (v) => v === null || (Number.isInteger(v) && v >= 0 && v <= 10000000);
+    // Esencia y envase: vacío = "Consultar"; en 0 se cobraría gratis
+    const enCero = [...(Array.isArray(esencia) ? esencia : []), ...(Array.isArray(envases) ? envases : [])]
+        .filter((f) => precios.numeroONulo(f.precio) === 0).length;
+    if (enCero) return res.status(400).json({ success: false, message: 'Hay precios en 0: escribe el precio o deja la casilla vacía para "Consultar".' });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {

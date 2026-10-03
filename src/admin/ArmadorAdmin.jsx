@@ -42,6 +42,13 @@ export default function ArmadorAdmin({ alerta }) {
 
   async function guardar(ev) {
     ev.preventDefault();
+    // Una casilla en 0 cobraría esa parte gratis: vacía significa "Consultar"
+    const enCero = [...Object.values(esencia), ...Object.values(envases)].filter((t) => valor(t) === 0).length;
+    if (enCero) {
+      alerta(`${enCero === 1 ? 'Hay un precio' : `Hay ${enCero} precios`} en 0: se cobraría gratis. Escribe el precio o deja la casilla vacía para que la tienda muestre «Consultar».`, 'error');
+      requestAnimationFrame(() => document.querySelector('.armador-precio.en-cero')?.focus());
+      return;
+    }
     setGuardando(true);
     try {
       const data = await apiJson('catalogo/armador', {
@@ -63,7 +70,7 @@ export default function ArmadorAdmin({ alerta }) {
   }
 
   const celda = (estado, fijar, clave, etiqueta) => (
-    <input type="text" inputMode="numeric" className="armador-precio" aria-label={etiqueta} placeholder="—"
+    <input type="text" inputMode="numeric" className={`armador-precio ${valor(estado[clave] ?? '') === 0 ? 'en-cero invalid' : ''}`} aria-label={etiqueta} placeholder="—"
       value={estado[clave] ?? ''} onChange={(e) => fijar((s) => ({ ...s, [clave]: e.target.value }))} />
   );
 

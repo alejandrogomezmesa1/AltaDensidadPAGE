@@ -80,6 +80,7 @@ router.post('/', requireStaff, async (req, res) => {
 router.put('/:id', requireStaff, async (req, res) => {
     const { id } = req.params;
     const { name, image, material, description, price, sizes } = req.body;
+    if (!name || !material) return res.status(400).json({ success: false, message: 'Nombre y material son requeridos' });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {

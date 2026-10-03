@@ -898,6 +898,16 @@ body.adm {
   border-color: var(--err) !important;
 }
 
+/* Grupo de casillas obligatorio sin marcar (tallas) */
+.grupo-invalido {
+  outline: 1px solid var(--err);
+  outline-offset: 6px;
+}
+
+.armador-precio.invalid {
+  box-shadow: 0 0 0 1px var(--err);
+}
+
 .checkboxes-grid {
   display: flex;
   flex-wrap: wrap;

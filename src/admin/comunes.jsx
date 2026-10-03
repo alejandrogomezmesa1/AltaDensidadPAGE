@@ -463,6 +463,29 @@ export function useProteccionCambios(activo) {
   }, [activo]);
 }
 
+// Precio de venta: obligatorio y mayor que 0. Uno muy bajo (p. ej. 75 en vez de 75.000) pide confirmación.
+export const PRECIO_SOSPECHOSO = 10000;
+export async function confirmarPrecioBajo(precio) {
+  const r = await Swal.fire({
+    title: `¿El precio es $${Math.round(precio).toLocaleString('es-CO')}?`,
+    html: 'Es un precio muy bajo para la tienda. Revisa que no falten ceros antes de guardar.',
+    icon: 'warning', showCancelButton: true, reverseButtons: true,
+    confirmButtonText: 'Sí, es correcto', cancelButtonText: 'Corregir',
+    confirmButtonColor: '#c9a961', cancelButtonColor: '#444', background: '#1a1a1a', color: '#fff'
+  });
+  return r.isConfirmed;
+}
+
+// Lleva la vista al primer campo marcado como inválido del formulario abierto
+export function enfocarInvalido() {
+  requestAnimationFrame(() => {
+    const el = document.querySelector('.modal-form .invalid');
+    if (!el) return;
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    if (typeof el.focus === 'function') el.focus({ preventScroll: true });
+  });
+}
+
 export async function confirmarDescartar() {
   const r = await Swal.fire({
     title: '¿Descartar los cambios?',

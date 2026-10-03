@@ -4,7 +4,8 @@ import { normalizarRuta, desdeFragrantica, rutaPorDefecto } from '../lib/product
 import {
   formatPrecio, toastOk, confirmarEliminar, subirImagen, ImagenCelda, FilaEstado,
   PaginacionAdmin, usePaginado, ModalAdmin, ZonaImagen, Casillas, SelectInventario, CampoEtiquetas, InterruptorSinStock, BotonSinStockTodos, InterruptorSoloPreparado, useSemaforo, CeldaStock,
-  useProteccionCambios, confirmarDescartar, leerBorrador, guardarBorrador, borrarBorrador, ofrecerBorrador
+  useProteccionCambios, confirmarDescartar, leerBorrador, guardarBorrador, borrarBorrador, ofrecerBorrador,
+  PRECIO_SOSPECHOSO, confirmarPrecioBajo, enfocarInvalido
 } from './comunes';
 
 const TALLAS = ['30ml', '50ml', '60ml', '100ml', '120ml', '200ml'];
@@ -194,12 +195,25 @@ export default function ProductosAdmin({ alerta }) {
     e.preventDefault();
     const nombre = form.nombre.trim();
     const precio = parseFloat(form.precio);
-    const faltan = [];
-    if (!nombre) faltan.push('nombre');
-    if (!form.categoria) faltan.push('categoria');
-    if (!form.genero) faltan.push('genero');
-    if (Number.isNaN(precio)) faltan.push('precio');
-    if (faltan.length) { setInvalidos(faltan); alerta('Completa los campos obligatorios.', 'error'); return; }
+    // Obligatorios: sin precio el producto se vendería en $0; sin talla el pedido no dice qué entregar
+    const faltan = [
+      !nombre && ['nombre', 'nombre'],
+      !form.categoria && ['categoria', 'categoría'],
+      !form.genero && ['genero', 'género'],
+      !(precio > 0) && ['precio', 'precio mayor que 0'],
+      !form.sizes.length && ['sizes', 'al menos una talla']
+    ].filter(Boolean);
+    if (faltan.length) {
+      setInvalidos(faltan.map(([k]) => k));
+      alerta(`Completa los campos obligatorios: ${faltan.map(([, t]) => t).join(', ')}.`, 'error');
+      enfocarInvalido();
+      return;
+    }
+    if (precio < PRECIO_SOSPECHOSO && !(await confirmarPrecioBajo(precio))) {
+      setInvalidos(['precio']);
+      enfocarInvalido();
+      return;
+    }
 
     setGuardando(true);
     try {
@@ -377,7 +391,7 @@ export default function ProductosAdmin({ alerta }) {
             </div>
             <div className="form-group">
               <label htmlFor="inputPrecio">Precio (COP) *</label>
-              <input type="number" id="inputPrecio" min="0" step="1000" placeholder="0" required {...campo('precio')} />
+              <input type="number" id="inputPrecio" min="1" step="1000" placeholder="Ej: 75000" required {...campo('precio')} />
             </div>
             <div className="form-group">
               <label htmlFor="inputInventario">Inventario DATA</label>
@@ -400,8 +414,10 @@ export default function ProductosAdmin({ alerta }) {
               <ZonaImagen imagen={form.imagen} archivo={archivo} onArchivo={setArchivo} />
             </div>
             <div className="form-group full">
-              <label>Tallas disponibles</label>
-              <Casillas opciones={TALLAS} marcadas={form.sizes} onCambiar={(sizes) => setForm((f) => ({ ...f, sizes }))} />
+              <label>Tallas disponibles *</label>
+              <div className={invalidos.includes('sizes') ? 'invalid grupo-invalido' : undefined} tabIndex={-1}>
+                <Casillas opciones={TALLAS} marcadas={form.sizes} onCambiar={(sizes) => { setForm((f) => ({ ...f, sizes })); setInvalidos((l) => l.filter((x) => x !== 'sizes')); }} />
+              </div>
             </div>
             <div className="form-group full">
               <label>Tipos de envase</label>

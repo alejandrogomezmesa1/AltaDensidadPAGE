@@ -178,6 +178,15 @@ router.post("/create_preference", async (req, res) => {
       });
     }
 
+    // Nada se cobra en $0: un precio vacío o en 0 en el panel no puede convertirse en un regalo
+    const sinPrecio = mpItems.filter((it) => it.category_id !== "shipping" && !(Number(it.unit_price) > 0));
+    if (sinPrecio.length) {
+      return res.status(409).json({
+        success: false,
+        message: `${sinPrecio.map((it) => it.title).join(", ")} aún no tiene precio en línea. Retíralo de tu bolsa o escríbenos por WhatsApp.`,
+      });
+    }
+
     // Verificar disponibilidad real en DATA antes de cobrar
     try {
       const sinStock = await dataSync.verificarDisponibilidad(pool, mpItems);

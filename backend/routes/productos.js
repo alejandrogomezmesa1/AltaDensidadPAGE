@@ -279,12 +279,18 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Datos mínimos de un producto: sin precio se vendería en $0 y sin talla el pedido no dice qué entregar
+function errorProducto(b) {
+    if (!b.name || !String(b.name).trim() || !b.category || !b.gender) return 'Nombre, categoria y genero son requeridos';
+    if (!(Number(b.price) > 0)) return 'El precio debe ser mayor que 0';
+    if (!Array.isArray(b.sizes) || !b.sizes.length) return 'Elige al menos una talla';
+    return null;
+}
+
 // POST crear producto
 router.post('/', requireStaff, async (req, res) => {
     const { name, rating, image, category, gender, description, price, sizes, bottleTypes, activo } = req.body;
-    if (!name || !category || !gender) {
-        return res.status(400).json({ success: false, message: 'Nombre, categoria y genero son requeridos' });
-    }
+    if (errorProducto(req.body)) return res.status(400).json({ success: false, message: errorProducto(req.body) });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {
@@ -320,6 +326,7 @@ router.post('/', requireStaff, async (req, res) => {
 router.put('/:id', requireStaff, async (req, res) => {
     const { id } = req.params;
     const { name, rating, image, category, gender, description, price, sizes, bottleTypes, activo } = req.body;
+    if (errorProducto(req.body)) return res.status(400).json({ success: false, message: errorProducto(req.body) });
     const pool = await getConnection();
     const conn = await pool.getConnection();
     try {
