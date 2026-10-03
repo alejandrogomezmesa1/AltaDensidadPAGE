@@ -122,13 +122,16 @@ export function ModalAdmin({ abierto, titulo, onCerrar, confirmar, children }) {
 export function ZonaImagen({ imagen, archivo, onArchivo }) {
   const [preview, setPreview] = useState('');
   const inputRef = useRef(null);
+  // HEIC (iPhone): Chrome no lo puede mostrar antes de subirlo; se convierte a JPG al guardar
+  const heic = Boolean(archivo && (/^image\/hei[cf]/i.test(archivo.type) || /\.hei[cf]$/i.test(archivo.name)));
   useEffect(() => {
     if (!archivo) { setPreview(''); if (inputRef.current) inputRef.current.value = ''; return undefined; }
+    if (heic) { setPreview(''); return undefined; }
     const url = URL.createObjectURL(archivo);
     setPreview(url);
     return () => URL.revokeObjectURL(url);
-  }, [archivo]);
-  const src = preview || (imagen ? rutaImagen(imagen) : '');
+  }, [archivo, heic]);
+  const src = preview || (!heic && imagen ? rutaImagen(imagen) : '');
   const nombre = archivo ? archivo.name : (imagen ? imagen.split('/').pop() : 'Sin imagen seleccionada');
   return (
     <div className="img-upload-zone">
@@ -138,8 +141,9 @@ export function ZonaImagen({ imagen, archivo, onArchivo }) {
           <i className="fas fa-upload" /> Seleccionar imagen
         </label>
         <span className="img-filename">{nombre}</span>
+        {heic && <small className="img-nota">Foto HEIC del iPhone: se convierte a JPG al guardar (la vista previa aparece después).</small>}
       </div>
-      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" style={{ display: 'none' }}
+      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/heic,image/heif,.heic,.heif" style={{ display: 'none' }}
         onChange={(e) => onArchivo(e.target.files[0] || null)} />
     </div>
   );

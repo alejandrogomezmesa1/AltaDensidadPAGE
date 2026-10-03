@@ -2057,3 +2057,10 @@ body.adm {
     white-space: normal;
   }
 }
+
+.img-nota {
+  display: block;
+  margin-top: 4px;
+  color: var(--c-accent);
+  font-size: 12px;
+}

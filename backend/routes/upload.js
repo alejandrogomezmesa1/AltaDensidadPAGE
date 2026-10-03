@@ -5,6 +5,10 @@ const path    = require('path');
 const fs      = require('fs');
 const { requireStaff } = require('../middleware/auth');
 
+// HEIC/HEIF (fotos del iPhone): casi ningún navegador las muestra, así que en Cloudinary se
+// convierten a JPG al subirlas. El sistema operativo a veces no informa el tipo: se mira la extensión.
+const esHeic = (file) => /^image\/hei[cf]/i.test(file.mimetype || '') || /\.hei[cf]$/i.test(file.originalname || '');
+
 // ── En producción (Vercel) usa Cloudinary; en local usa disco ──────────────
 let storage;
 
@@ -21,11 +25,13 @@ if (process.env.CLOUDINARY_CLOUD_NAME) {
 
     storage = new CloudinaryStorage({
         cloudinary,
-        params: {
+        params: async (req, file) => ({
             folder: 'altadensidad',
-            allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
-            transformation: [{ quality: 'auto', fetch_format: 'auto' }]
-        }
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'heic', 'heif'],
+            transformation: [{ quality: 'auto', fetch_format: 'auto' }],
+            // HEIC → JPG al guardar: la URL resultante termina en .jpg y la ven todos los navegadores
+            ...(esHeic(file) ? { format: 'jpg' } : {})
+        })
     });
 } else {
     // Local: almacenamiento en disco
@@ -46,17 +52,22 @@ if (process.env.CLOUDINARY_CLOUD_NAME) {
 
 const ALLOWED_MIME = [
     'image/jpeg', 'image/jpg', 'image/png',
-    'image/webp', 'image/avif', 'image/gif'
+    'image/webp', 'image/avif', 'image/gif',
+    'image/heic', 'image/heif'
 ];
 
 const upload = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+    limits: { fileSize: 12 * 1024 * 1024 }, // 12 MB (las fotos del iPhone pesan más)
     fileFilter: (req, file, cb) => {
-        if (ALLOWED_MIME.includes(file.mimetype)) {
+        if (ALLOWED_MIME.includes(file.mimetype) || esHeic(file)) {
+            // Sin Cloudinary (local) no hay quién convierta el HEIC: se rechaza para no guardar algo que no se ve
+            if (esHeic(file) && !process.env.CLOUDINARY_CLOUD_NAME) {
+                return cb(new Error('Las fotos HEIC solo se pueden subir en producción (se convierten en Cloudinary). En local usa JPG o PNG.'));
+            }
             cb(null, true);
         } else {
-            cb(new Error('Formato no permitido. Use JPG, PNG, WEBP o AVIF.'));
+            cb(new Error('Formato no permitido. Use JPG, PNG, WEBP, AVIF o HEIC.'));
         }
     }
 });
