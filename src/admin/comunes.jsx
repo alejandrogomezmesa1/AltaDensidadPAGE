@@ -196,12 +196,16 @@ export function SelectInventario({ id, valor, onCambiar, onListo }) {
 // ── Separar acordes y notas pegados de golpe (p. ej. copiados de Fragrantica) ──
 const sinAcentos = (t) => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
 
-// Un renglón por etiqueta; también comas, punto y coma, viñetas o barras. Se quitan porcentajes sueltos.
+// Conjunciones que unen el último elemento de una lista ("almizcle, ciprés y vetiver"): separan, no son etiquetas
+const CONJUNCIONES = new Set(['y', 'e', 'and', '&']);
+
+// Un renglón por etiqueta; también comas, punto y coma, viñetas, barras y la "y" / "e" / "and" / "&"
+// entre palabras. Se quitan porcentajes sueltos.
 function partirTexto(texto) {
   return String(texto || '')
-    .split(/[\r\n\t,;•·|]+/)
+    .split(/[\r\n\t,;•·|]+|\s+(?:y|e|and|&)\s+/i)
     .map((t) => t.replace(/\d+([.,]\d+)?\s*%/g, '').replace(/\s+/g, ' ').trim())
-    .filter(Boolean);
+    .filter((t) => t && !CONJUNCIONES.has(sinAcentos(t)));
 }
 
 // Frases de varias palabras frecuentes en Fragrantica (español) que no deben partirse aunque aún
@@ -219,7 +223,7 @@ const FRASES_COMUNES = [
 // que no coincide con nada va sola, salvo que la siga "de" / "del" (algodón de azúcar).
 function segmentar(texto, conocidos) {
   const dic = new Map([...FRASES_COMUNES, ...conocidos].map((c) => [sinAcentos(c), c]));
-  const palabras = texto.replace(/\s+/g, ' ').trim().split(' ');
+  const palabras = texto.replace(/\s+/g, ' ').trim().split(' ').filter((w) => !CONJUNCIONES.has(sinAcentos(w)));
   const out = [];
   for (let i = 0; i < palabras.length;) {
     let hallado = null;
