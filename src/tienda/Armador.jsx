@@ -59,7 +59,7 @@ export default function Armador({ fraganciaInicial }) {
     const t = normalizar(busqueda);
     return P.filter((p) => (categoria === 'Todas' || categoriaPrecio(p.c) === categoria)
       && (!t || [p.n, p.b, p.orig, ...p.fs, ...p.ac, ...todasLasNotas(p)].some((x) => x && normalizar(x).includes(t))))
-      .sort((a, b) => (b.id === productoId) - (a.id === productoId) || a.n.localeCompare(b.n));
+      .sort((a, b) => (b.id === productoId) - (a.id === productoId) || (!a.b - !b.b) || (a.b || '').localeCompare(b.b || '') || a.n.localeCompare(b.n));
   }, [P, busqueda, categoria, productoId]);
   useEffect(() => { setCuantas(FRAGANCIAS_VISIBLES); }, [busqueda, categoria]);
 

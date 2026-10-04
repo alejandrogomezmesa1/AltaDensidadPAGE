@@ -126,7 +126,7 @@ export default function Top10Admin({ alerta }) {
               value={buscadorAgregar} onChange={(e) => setBuscadorAgregar(e.target.value)} />
             <select id="selectProductoTop10" className="top10-agregar-select" style={{ flex: 2, minWidth: 180 }} value={seleccion} onChange={(e) => setSeleccion(e.target.value)}>
               <option value="">-- Seleccionar producto --</option>
-              {disponibles.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              {disponibles.map((p) => <option key={p.id} value={p.id}>{p.brand ? `${p.brand.name} · ${p.name}` : p.name}</option>)}
             </select>
             <button className="btn-primary" type="submit"><i className="fas fa-plus" /> Agregar</button>
           </div>

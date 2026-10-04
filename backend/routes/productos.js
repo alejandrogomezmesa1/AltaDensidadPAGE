@@ -45,6 +45,8 @@ const columnasFicha = () => (esquema.clasificacion()
 const joinsFicha = () => (esquema.clasificacion()
     ? ' LEFT JOIN marcas m ON m.id = p.marca_id LEFT JOIN familias_olfativas f ON f.id = p.familia_id'
     : '');
+// Listados por marca (sin marca al final) y, dentro de cada marca, por nombre
+const ordenMarca = () => (esquema.clasificacion() ? 'ORDER BY m.nombre IS NULL, m.nombre, p.nombre' : 'ORDER BY p.nombre');
 const agrupar = () => (esquema.clasificacion() ? ', m.id, f.id' : '');
 
 // Acordes, notas y familias de varios productos en pocas consultas
@@ -206,7 +208,7 @@ router.get('/', async (req, res) => {
             LEFT JOIN ProductoTiposEnvase pt ON pt.producto_id = p.id${joinsFicha()}
             ${staff ? '' : 'WHERE p.activo = 1'}
             GROUP BY p.id${agrupar()}
-            ORDER BY p.id DESC
+            ${ordenMarca()}
         `);
 
         const listas = await cargarListas(pool, rows.map(p => p.id));
