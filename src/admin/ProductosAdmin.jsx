@@ -7,27 +7,18 @@ import {
   useProteccionCambios, confirmarDescartar, leerBorrador, guardarBorrador, borrarBorrador, ofrecerBorrador,
   PRECIO_SOSPECHOSO, confirmarPrecioBajo, enfocarInvalido
 } from './comunes';
+import {
+  NOTAS_VACIAS, FILTROS_VACIOS, completitud, filtrosGuardados, guardarFiltros, useFiltrosProductos, sinFiltro, ModalFiltros
+} from './FiltrosProductos';
 
 const TALLAS = ['30ml', '50ml', '60ml', '100ml', '120ml', '200ml'];
 const ENVASES = ['Vidrio', 'Plástico', 'Aluminio', 'Recargable'];
-const NOTAS_VACIAS = { top: [], heart: [], base: [] };
 const VACIO = {
   id: '', nombre: '', descripcion: '', categoria: '', genero: '', precio: '', rating: '4', imagen: '', activo: true,
   sizes: [], bottleTypes: [], inventario_id: '',
   marca: '', original: '', familias: [], acordes: [], notas: NOTAS_VACIAS,
   fref: '', ruta: ''
 };
-
-// Cuántos bloques de la ficha están completos: marca, original, familia + acordes, pirámide
-function completitud(p) {
-  const n = p.notes || NOTAS_VACIAS;
-  return [
-    !!p.brand,
-    !!p.originalName,
-    ((p.families || []).length > 0 || !!p.family) && (p.accords || []).length > 0,
-    n.top.length > 0 && n.heart.length > 0 && n.base.length > 0
-  ].filter(Boolean).length;
-}
 
 // Búsqueda en Fragrantica con el perfume original (si se conoce) o el nombre, y su marca
 const busquedaFragrantica = (nombre, marca) => {
@@ -135,13 +126,16 @@ export default function ProductosAdmin({ alerta }) {
   useEffect(() => { cargarCatalogos(); }, [cargarCatalogos]);
   const nombres = (lista) => lista.map((x) => x.name);
 
-  const q = busqueda.toLowerCase();
-  // "Pendientes Fragrantica": productos que aún no tienen su referencia
-  const [soloPendientes, setSoloPendientes] = useState(false);
-  const pendientes = productos.filter((p) => !p.fragranticaUrl).length;
-  const { pagina, filtrados, actual, totalPags, setPagina } = usePaginado(productos,
-    (p) => (!soloPendientes || !p.fragranticaUrl)
-      && [p.name, p.category, p.gender, p.brand && p.brand.name, p.originalName].some((t) => t && t.toLowerCase().includes(q)), 10);
+  // Filtros (modal) + búsqueda; se recuerdan durante la sesión
+  const [filtros, setFiltrosBase] = useState(filtrosGuardados);
+  const [verFiltros, setVerFiltros] = useState(false);
+  const { lista, grupos, conteos, activos } = useFiltrosProductos(productos, filtros, busqueda, semaforo);
+  const { pagina, filtrados, actual, totalPags, setPagina } = usePaginado(lista, () => true, 10);
+  const setFiltros = useCallback((cambio) => {
+    setFiltrosBase((f) => { const n = typeof cambio === 'function' ? cambio(f) : cambio; guardarFiltros(n); return n; });
+    setPagina(1);
+  }, [setPagina]);
+  const cerrarFiltros = useCallback(() => setVerFiltros(false), []);
 
   // ── Cambios sin guardar: aviso al salir, confirmación al cerrar y borrador automático ──
   const [inicial, setInicial] = useState(VACIO);
@@ -277,12 +271,20 @@ export default function ProductosAdmin({ alerta }) {
             <i className="fas fa-flask" style={{ color: 'var(--c-accent)' }} /> Guía Fragrantica ↗
           </a>
           <BotonSinStockTodos tabla="productos" lista={productos} onCambio={marcarSinStock} alerta={alerta} />
-          <button type="button" className={soloPendientes ? 'btn-primary' : 'btn-secondary'} onClick={() => { setSoloPendientes((v) => !v); setPagina(1); }}
-            title="Productos sin referencia de Fragrantica" style={{ whiteSpace: 'nowrap' }}>
-            <i className="fas fa-link" /> Pendientes Fragrantica ({pendientes})
+          <button type="button" className={activos.length ? 'btn-primary' : 'btn-secondary'} onClick={() => setVerFiltros(true)} style={{ whiteSpace: 'nowrap' }}>
+            <i className="fas fa-sliders-h" /> Filtros{activos.length ? ` (${activos.length})` : ''}
           </button>
           <button className="btn-primary" onClick={() => abrir(null)}><i className="fas fa-plus" /> Nuevo Producto</button>
         </div>
+      </div>
+      <div className="filtros-activos" aria-live="polite">
+        <span className="filtros-total">{filtrados.length} de {productos.length} productos</span>
+        {activos.map(([k, t]) => (
+          <button type="button" className="filtro-chip" key={k} onClick={() => setFiltros((f) => sinFiltro(f, k))} title="Quitar filtro">
+            {t} <i className="fas fa-times" />
+          </button>
+        ))}
+        {activos.length > 0 && <button type="button" className="link-limpiar" onClick={() => setFiltros((f) => ({ ...FILTROS_VACIOS, orden: f.orden }))}>Limpiar todo</button>}
       </div>
       <div className="tabla-wrapper">
         <table className="tabla-productos tabla-compacta">
@@ -298,7 +300,7 @@ export default function ProductosAdmin({ alerta }) {
           <tbody>
             {estado !== 'ok' || !filtrados.length ? (
               <FilaEstado columnas={5} cargando={estado === 'cargando' && 'Cargando productos...'} error={estado === 'error'}
-                vacio={busqueda ? 'No se encontraron resultados.' : 'No hay productos en el catálogo.'} />
+                vacio={busqueda || activos.length ? 'Ningún producto coincide con la búsqueda y los filtros.' : 'No hay productos en el catálogo.'} />
             ) : pagina.map((p) => (
               <tr key={p.id}>
                 <td data-label="Producto" className="col-producto">
@@ -347,6 +349,8 @@ export default function ProductosAdmin({ alerta }) {
         </table>
       </div>
       <PaginacionAdmin actual={actual} total={totalPags} onCambiar={setPagina} />
+      <ModalFiltros abierto={verFiltros} onCerrar={cerrarFiltros} filtros={filtros} setFiltros={setFiltros}
+        grupos={grupos} conteos={conteos} total={filtrados.length} />
 
       <ModalAdmin abierto={modal} titulo={form.id ? 'Editar Producto' : 'Nuevo Producto'} onCerrar={cerrar}>
         <form className="modal-form" noValidate onSubmit={guardar}>

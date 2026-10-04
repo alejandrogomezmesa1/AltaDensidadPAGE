@@ -2074,3 +2074,97 @@ body.adm {
   color: var(--c-accent);
   font-size: 12px;
 }
+
+/* Filtros del catálogo (panel): chips de filtros activos y modal de filtros */
+.filtros-activos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  min-height: 28px;
+}
+
+.filtros-total {
+  font-size: 12px;
+  color: var(--c-mute);
+  margin-right: 4px;
+}
+
+.filtro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--c-ink);
+  background: color-mix(in srgb, var(--c-accent) 12%, transparent);
+  border: var(--bw) solid color-mix(in srgb, var(--c-accent) 45%, transparent);
+  cursor: pointer;
+}
+
+.filtro-chip:hover {
+  border-color: var(--c-accent);
+}
+
+.filtro-chip i {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.link-limpiar {
+  background: none;
+  border: 0;
+  padding: 4px 6px;
+  font-size: 12px;
+  color: var(--c-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.filtros-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.filtros-grupo {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.filtros-grupo legend {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-mute);
+  margin-bottom: 8px;
+}
+
+.filtros-grupo .familia-opcion:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.filtro-n {
+  margin-left: 4px;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.filtros-precio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtros-precio input {
+  flex: 1;
+  min-width: 0;
+}
+
+.filtros-grupo select {
+  width: 100%;
+}
