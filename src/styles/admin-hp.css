@@ -2217,3 +2217,54 @@ body.adm {
   font-size: 13px;
   color: var(--c-mute);
 }
+
+.reventa-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reventa-logo img,
+.reventa-logo-vacio {
+  width: 120px;
+  height: 64px;
+  object-fit: contain;
+  border: var(--bw) dashed var(--c-line);
+  background: repeating-conic-gradient(rgba(127, 127, 127, 0.12) 0% 25%, transparent 0% 50%) 50% / 12px 12px;
+}
+
+.reventa-logo-vacio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--c-mute);
+}
+
+.reventa-logo .btn-secondary {
+  cursor: pointer;
+}
+
+.reventa-colores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.reventa-colores label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.reventa-colores input[type="color"] {
+  width: 34px;
+  height: 26px;
+  padding: 0;
+  border: var(--bw) solid var(--c-line);
+  background: none;
+  cursor: pointer;
+}
