@@ -69,7 +69,44 @@ export default function Armador({ fraganciaInicial }) {
     : null;
   const completo = Boolean(envase && ml && producto);
 
-  const mensajeWa = encodeURIComponent(`¡Hola! Quiero crear mi perfume:\n• Fragancia: ${producto ? producto.n : '—'}\n• Envase: ${envase ? envase.name : '—'}\n• Tamaño: ${ml ? ml + ' ml' : '—'}\n• Feromonas: ${feromonas ? 'Sí' : 'No'}\n¿Me cotizan? ✨`);
+  // ── Cotización en vivo ──
+  // Precio de la esencia para un tamaño: el de la categoría de la fragancia elegida o, sin fragancia,
+  // el más bajo de las categorías ("desde")
+  const esenciaPara = (m, cat) => {
+    if (!ARMADOR) return null;
+    if (cat) return (ARMADOR.esencia[categoriaPrecio(cat)] || {})[m] ?? null;
+    const valores = Object.values(ARMADOR.esencia).map((t) => t[m]).filter((v) => v != null);
+    return valores.length ? Math.min(...valores) : null;
+  };
+  const recargo = feromonas ? (ARMADOR ? ARMADOR.recargoFeromonas : null) : 0;
+  // Total de un envase en un tamaño (null si a alguna parte le falta precio)
+  const totalDe = (e, s) => {
+    const es = esenciaPara(s.ml, producto && producto.c);
+    return es != null && s.price != null && recargo != null ? es + s.price + recargo : null;
+  };
+  const desdeEnvase = (e) => {
+    const t = e.sizes.map((s) => totalDe(e, s)).filter((v) => v != null);
+    return t.length ? Math.min(...t) : null;
+  };
+  // Mientras falten pasos: el menor total posible con lo elegido hasta ahora
+  const desde = useMemo(() => {
+    if (!ARMADOR) return null;
+    const candidatos = (envase ? [envase] : envases).flatMap((e) => e.sizes.filter((s) => !ml || s.ml === ml).map((s) => totalDe(e, s)));
+    const t = candidatos.filter((v) => v != null);
+    return t.length ? Math.min(...t) : null;
+  }, [ARMADOR, envase, envases, ml, producto, feromonas]); // eslint-disable-line react-hooks/exhaustive-deps
+  const precioTotal = precio && precio.total != null ? precio.total : null;
+  const lineaWa = (t, v) => `• ${t}: ${v}`;
+  const mensajeWa = encodeURIComponent([
+    '¡Hola! Quiero pedir este perfume preparado:',
+    lineaWa('Fragancia', producto ? `${producto.n}${producto.b ? ` (${producto.b})` : ''}` : '—'),
+    lineaWa('Envase', envase ? `${envase.name}${ml ? ` · ${ml} ml` : ''}` : '—'),
+    precio ? lineaWa('Esencia', precioTexto(precio.esencia)) : null,
+    precio ? lineaWa('Frasco', precioTexto(precio.envase)) : null,
+    lineaWa('Feromonas', feromonas ? `Sí${precio ? ` (${precioTexto(precio.feromonas)})` : ''}` : 'No'),
+    precioTotal != null ? `Total: ${fmt(precioTotal)}` : 'Total: por confirmar (alguna parte aún no tiene precio en línea)',
+    '¿Me confirman disponibilidad y el envío? ✨'
+  ].filter(Boolean).join('\n'));
 
   if (!ARMADOR) return <p className="mute arm-cargando">Cargando envases y precios…</p>;
   if (!envases.length) {
@@ -92,6 +129,7 @@ export default function Armador({ fraganciaInicial }) {
                 <span className="arm-envase-img"><ImagenLogo src={normalizarImagen(e.image)} alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
                 <b>{e.name}</b>
                 <small className="up">{e.sizes.map((s) => `${s.ml} ml`).join(' · ')}</small>
+                <span className="arm-precio-opcion">{desdeEnvase(e) != null ? <>Desde <b>{fmt(desdeEnvase(e))}</b></> : 'Consultar'}</span>
               </button>
             ))}
           </div>
@@ -103,7 +141,8 @@ export default function Armador({ fraganciaInicial }) {
               <button key={s.ml} type="button" role="radio" aria-checked={s.ml === ml}
                 className={`arm-opcion ${s.ml === ml ? 'on' : ''}`} onClick={() => setMl(s.ml)}>
                 <b>{s.ml} <small>ml</small></b>
-                <span className="mute">Envase {precioTexto(s.price)}</span>
+                <span className="arm-precio-opcion">{totalDe(envase, s) != null ? <>{producto ? '' : 'Desde '}<b>{fmt(totalDe(envase, s))}</b></> : 'Consultar'}</span>
+                <span className="mute">Esencia {precioTexto(esenciaPara(s.ml, producto && producto.c))} + frasco {precioTexto(s.price)}{feromonas && recargo ? ` + feromonas ${fmt(recargo)}` : ''}</span>
               </button>
             ))}
           </div>
@@ -185,15 +224,30 @@ export default function Armador({ fraganciaInicial }) {
         </dl>
         <div className="arm-total">
           <span className="up">Total</span>
-          <b>{precio && precio.total != null ? fmt(precio.total) : (completo ? 'A cotizar' : '—')}</b>
+          <b>{precioTotal != null ? fmt(precioTotal) : (desde != null ? <><small>Desde</small> {fmt(desde)}</> : 'Por confirmar')}</b>
         </div>
-        {completo && precio && precio.total != null ? (
-          <button type="button" className="btn up btn--full"
-            onClick={() => agregarPorCodigo(codigoArmado({ productoId: producto.id, ml, envaseId: envase.id, feromonas }))}>
-            Añadir a la bolsa
-          </button>
-        ) : completo ? (
-          <a className="btn up btn--full" href={`https://wa.me/${WA}?text=${mensajeWa}`} target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+        {completo && envase.sizes.length > 1 && (
+          <div className="arm-comparar" aria-label="Comparar tamaños">
+            <span className="up">Compara tamaños</span>
+            {envase.sizes.map((s) => (
+              <button type="button" key={s.ml} className={s.ml === ml ? 'on' : ''} onClick={() => setMl(s.ml)}>
+                <span>{s.ml} ml</span><b>{totalDe(envase, s) != null ? fmt(totalDe(envase, s)) : 'Consultar'}</b>
+              </button>
+            ))}
+          </div>
+        )}
+        {completo ? (
+          <div className="arm-acciones">
+            <a className="btn up btn--full" href={`https://wa.me/${WA}?text=${mensajeWa}`} target="_blank" rel="noopener">
+              <i className="fab fa-whatsapp" aria-hidden="true" /> Pedir por WhatsApp
+            </a>
+            {precioTotal != null && (
+              <button type="button" className="btn btn--line up btn--full"
+                onClick={() => agregarPorCodigo(codigoArmado({ productoId: producto.id, ml, envaseId: envase.id, feromonas }))}>
+                Añadir a la bolsa y pagar en línea
+              </button>
+            )}
+          </div>
         ) : (
           <button type="button" className="btn up btn--full" disabled>
             {!envase ? 'Elige un envase' : !ml ? 'Elige un tamaño' : 'Elige una esencia'}
