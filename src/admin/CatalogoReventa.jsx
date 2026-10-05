@@ -183,8 +183,9 @@ async function generarPdf(lista, cfg, alAvanzar) {
     });
   }
   const archivo = `Catalogo ${nombre}`.replace(/[\\/:*?"<>|]+/g, '').trim();
-  doc.save(`${archivo}.pdf`);
-  return pagina;
+  // Se devuelve el archivo: la descarga la dispara un clic (Safari bloquea descargas que llegan
+  // muchos segundos después del clic original)
+  return { paginas: pagina, url: URL.createObjectURL(doc.output('blob')), nombre: `${archivo}.pdf` };
 }
 
 export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }) {
@@ -206,14 +207,29 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
     return { promBase, promVenta, ejemplos };
   }, [lista, cfg]);
 
+  const [listo, setListo] = useState(null);
+  // Un PDF ya generado deja de servir si cambia la configuración
+  useEffect(() => () => { if (listo) URL.revokeObjectURL(listo.url); }, [listo]);
+  useEffect(() => { setListo(null); }, [cfg, productos]);
+
+  const descargar = (pdf) => {
+    const a = document.createElement('a');
+    a.href = pdf.url; a.download = pdf.nombre; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
   const generar = async () => {
     if (!lista.length) { alerta('No hay perfumes que cumplan esta configuración.', 'error'); return; }
+    setListo(null);
     setProgreso({ hechas: 0, total: lista.length });
     try {
-      const paginas = await generarPdf(lista, cfg, (hechas, total) => setProgreso({ hechas, total }));
-      alerta(`Catálogo generado: ${lista.length} perfumes en ${paginas} páginas.`, 'success');
+      const pdf = await generarPdf(lista, cfg, (hechas, total) => setProgreso({ hechas, total }));
+      setListo(pdf);
+      descargar(pdf);
+      alerta(`Catálogo listo: ${lista.length} perfumes en ${pdf.paginas} páginas. Si no se descargó solo, usa «Descargar PDF».`, 'success');
     } catch (e) {
-      alerta('No se pudo generar el PDF: ' + e.message, 'error');
+      console.error('Catálogo revendedor:', e);
+      alerta('No se pudo generar el PDF: ' + (e && e.message ? e.message : String(e)), 'error');
     } finally {
       setProgreso(null);
     }
@@ -318,10 +334,15 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
       </div>
       <div className="modal-actions">
         <button type="button" className="btn-secondary" onClick={onCerrar} disabled={!!progreso}>Cerrar</button>
-        <button type="button" className="btn-primary" onClick={generar} disabled={!!progreso || !lista.length}>
+        {listo && !progreso && (
+          <button type="button" className="btn-primary" onClick={() => descargar(listo)}>
+            <i className="fas fa-download" /> Descargar PDF
+          </button>
+        )}
+        <button type="button" className={listo ? 'btn-secondary' : 'btn-primary'} onClick={generar} disabled={!!progreso || !lista.length}>
           {progreso
             ? <><i className="fas fa-spinner fa-spin" /> Preparando fotos {progreso.hechas}/{progreso.total}…</>
-            : <><i className="fas fa-file-pdf" /> Generar PDF</>}
+            : <><i className="fas fa-file-pdf" /> {listo ? 'Generar de nuevo' : 'Generar PDF'}</>}
         </button>
       </div>
     </ModalAdmin>
