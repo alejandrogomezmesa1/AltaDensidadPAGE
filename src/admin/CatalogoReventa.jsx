@@ -8,13 +8,14 @@ import { LOGO, normalizarImagen } from '../lib/producto';
 const CLAVE = 'ad_catalogo_reventa';
 const BASE = {
   perfumeria: '', contacto: '', ganancia: 30, redondeo: 'mil',
-  disponibilidad: 'existencias', ocultos: false, categoria: 'todas',
+  disponibilidad: 'existencias', categoria: 'todas',
   generos: ['Masculino', 'Femenino', 'Unisex'], notas: true, columnas: 3, orden: 'marca'
 };
 const SECCIONES = [['Masculino', 'Para él'], ['Femenino', 'Para ella'], ['Unisex', 'Unisex']];
 const REDONDEOS = [['ninguno', 'Sin redondear'], ['mil', 'Al millar (hacia arriba)'], ['cincomil', 'A 5.000 (hacia arriba)']];
 
-const leer = () => { try { return { ...BASE, ...(JSON.parse(localStorage.getItem(CLAVE) || 'null') || {}) }; } catch { return BASE; } };
+// (una configuración guardada antes con «ocultos» se ignora)
+const leer = () => { try { const { ocultos, ...c } = JSON.parse(localStorage.getItem(CLAVE) || 'null') || {}; void ocultos; return { ...BASE, ...c }; } catch { return BASE; } };
 const pesos = (v) => `$${Math.round(v).toLocaleString('es-CO')}`;
 
 export function precioReventa(base, cfg) {
@@ -34,7 +35,8 @@ function seleccionar(productos, cfg) {
   }[cfg.orden];
   return productos
     .filter((p) => !p.soloPreparado && !p.priceReview && Number(p.price) > 0)
-    .filter((p) => cfg.ocultos || p.activo)
+    // Regla: lo que está oculto en la tienda nunca sale en el catálogo
+    .filter((p) => !!p.activo)
     .filter((p) => cfg.disponibilidad === 'todos' || !p.agotado)
     .filter((p) => cfg.categoria === 'todas' || p.category === cfg.categoria)
     .filter((p) => cfg.generos.includes(p.gender))
@@ -257,7 +259,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
             </div>
           )}
 
-          <div className="form-seccion"><h4>Qué perfumes incluir</h4><small>Solo perfumes 1.1 con precio (no entran los «solo preparado» ni los que están en revisión)</small></div>
+          <div className="form-seccion"><h4>Qué perfumes incluir</h4><small>Solo perfumes 1.1 visibles en la tienda y con precio (no entran los ocultos, los «solo preparado» ni los que están en revisión)</small></div>
           <div className="form-group">
             <label htmlFor="revDisp">Disponibilidad</label>
             <select id="revDisp" value={cfg.disponibilidad} onChange={(e) => fijar('disponibilidad', e.target.value)}>
@@ -299,7 +301,6 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
           </div>
           <div className="form-group full">
             <label className="check-item"><input type="checkbox" checked={cfg.notas} onChange={(e) => fijar('notas', e.target.checked)} /> Mostrar las notas (salida, corazón y fondo)</label>
-            <label className="check-item"><input type="checkbox" checked={cfg.ocultos} onChange={(e) => fijar('ocultos', e.target.checked)} /> Incluir productos ocultos en la tienda</label>
           </div>
         </div>
         <p className="reventa-resumen">
