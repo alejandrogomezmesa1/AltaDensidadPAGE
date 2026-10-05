@@ -25,6 +25,11 @@ export function precioReventa(base, cfg) {
   return Math.round(bruto);
 }
 
+const tieneFicha = (p) => {
+  const n = p.notes || {};
+  return !!p.brand && ['top', 'heart', 'base'].every((k) => (n[k] || []).length > 0);
+};
+
 // Perfumes 1.1 que entran al catálogo con la configuración dada
 function seleccionar(productos, cfg) {
   const marca = (p) => (p.brand ? p.brand.name : '');
@@ -35,8 +40,10 @@ function seleccionar(productos, cfg) {
   }[cfg.orden];
   return productos
     .filter((p) => !p.soloPreparado && !p.priceReview && Number(p.price) > 0)
-    // Regla: lo que está oculto en la tienda nunca sale en el catálogo
+    // Reglas: solo productos de la tienda (lo que existe solo en DATA nunca llega aquí), visibles y
+    // con ficha técnica: marca y pirámide completa (salida, corazón y fondo)
     .filter((p) => !!p.activo)
+    .filter(tieneFicha)
     .filter((p) => cfg.disponibilidad === 'todos' || !p.agotado)
     .filter((p) => cfg.categoria === 'todas' || p.category === cfg.categoria)
     .filter((p) => cfg.generos.includes(p.gender))
@@ -259,7 +266,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
             </div>
           )}
 
-          <div className="form-seccion"><h4>Qué perfumes incluir</h4><small>Solo perfumes 1.1 visibles en la tienda y con precio (no entran los ocultos, los «solo preparado» ni los que están en revisión)</small></div>
+          <div className="form-seccion"><h4>Qué perfumes incluir</h4><small>Solo perfumes 1.1 de la tienda, visibles, con ficha técnica (marca y notas de salida, corazón y fondo) y con precio (no entran los ocultos, los que solo están en DATA, los «solo preparado» ni los que están en revisión)</small></div>
           <div className="form-group">
             <label htmlFor="revDisp">Disponibilidad</label>
             <select id="revDisp" value={cfg.disponibilidad} onChange={(e) => fijar('disponibilidad', e.target.value)}>
