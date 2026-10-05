@@ -2168,3 +2168,52 @@ body.adm {
 .filtros-grupo select {
   width: 100%;
 }
+
+/* Catálogo para revendedores */
+.reventa-ganancia {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reventa-ganancia input[type="range"] {
+  flex: 1;
+  accent-color: var(--c-accent);
+}
+
+.reventa-ganancia input[type="number"] {
+  width: 80px;
+}
+
+.reventa-calculo table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.reventa-calculo th,
+.reventa-calculo td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: var(--bw) solid var(--c-line);
+}
+
+.reventa-calculo th {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-mute);
+  font-weight: 500;
+}
+
+.reventa-calculo small {
+  color: var(--c-mute);
+  line-height: 1.5;
+}
+
+.reventa-resumen {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--c-mute);
+}
