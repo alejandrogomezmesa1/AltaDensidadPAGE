@@ -100,9 +100,10 @@ export function Encabezado() {
   );
 }
 
-const MAPA = 'https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn';
-// Mapa embebido sin clave de API; se carga en diferido para no pesar en cada página
-const MAPA_EMBED = 'https://www.google.com/maps?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn,+Antioquia&z=16&output=embed';
+// Ficha del negocio en Google Maps (fotos, horario, reseñas): el cid es el identificador fijo del local
+const MAPA = 'https://maps.google.com/?cid=12164475778803221520';
+// Mapa embebido sin clave de API, buscando el negocio por nombre y dirección; carga en diferido
+const MAPA_EMBED = 'https://www.google.com/maps?q=Fragancias+Alta+Densidad,+Cl+77C+%2391b-74,+Medell%C3%ADn&z=16&output=embed&hl=es';
 
 export function Pie() {
   return (
