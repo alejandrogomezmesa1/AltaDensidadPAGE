@@ -101,6 +101,8 @@ export function Encabezado() {
 }
 
 const MAPA = 'https://maps.google.com/?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn';
+// Mapa embebido sin clave de API; se carga en diferido para no pesar en cada página
+const MAPA_EMBED = 'https://www.google.com/maps?q=calle+77c+%23+91b+-+74,+Medell%C3%ADn,+Antioquia&z=16&output=embed';
 
 export function Pie() {
   return (
@@ -123,9 +125,10 @@ export function Pie() {
         <div className="foot-col">
           <h4 className="up">Ubicación</h4>
           <a href={MAPA} target="_blank" rel="noopener noreferrer">Calle 77c # 91b - 74<br />Medellín, Antioquia</a>
-          <a className="foot-map" href={MAPA} target="_blank" rel="noopener noreferrer">
-            <img src="/assets/img/ubicacion.png" alt="Mapa de ubicación de la tienda Alta Densidad en Medellín" width="200" height="110" loading="lazy" decoding="async" />
-          </a>
+          <div className="foot-map">
+            <iframe src={MAPA_EMBED} title="Mapa de ubicación de la tienda Alta Densidad en Medellín" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+          </div>
+          <a className="foot-map-link" href={MAPA} target="_blank" rel="noopener noreferrer"><i className="fas fa-location-arrow" aria-hidden="true" /> Cómo llegar</a>
         </div>
         <div className="foot-col">
           <h4 className="up">Información</h4>
