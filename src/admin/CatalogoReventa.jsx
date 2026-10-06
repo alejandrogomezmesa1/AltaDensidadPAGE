@@ -1,11 +1,12 @@
 // Catálogo para revendedores: PDF con los perfumes 1.1 en tarjetas (foto, marca, nombre, notas y
 // precio con la ganancia del revendedor), separados por sexo y con la marca del revendedor: logo,
 // redes sociales con enlace, colores por sección, portada con índice navegable y tarjetas que
-// abren WhatsApp con el perfume ya escrito. La configuración se recuerda en este navegador;
-// jsPDF se carga solo al generar.
+// abren WhatsApp con el perfume ya escrito. Al final, los kits que se escojan uno a uno.
+// La configuración se recuerda en este navegador; jsPDF se carga solo al generar.
 import { useEffect, useMemo, useState } from 'react';
 import { ModalAdmin } from './comunes';
 import { LOGO, normalizarImagen } from '../lib/producto';
+import { apiJson } from '../lib/api';
 
 const CLAVE = 'ad_catalogo_reventa';
 const CLAVE_LOGO = 'ad_catalogo_reventa_logo';
@@ -15,9 +16,9 @@ const BASE = {
   ganancia: 30, redondeo: 'mil', mostrarPrecios: true,
   disponibilidad: 'existencias', categoria: 'todas',
   generos: ['Masculino', 'Femenino', 'Unisex'], notas: true, columnas: 3, orden: 'marca',
-  portada: true, enlaceTarjeta: 'whatsapp',
+  portada: true, enlaceTarjeta: 'whatsapp', kits: [],
   colorMarca: '#b08d48',
-  colores: { Masculino: '#1f3b5c', Femenino: '#b4466e', Unisex: '#8a6d3b' }
+  colores: { Masculino: '#1f3b5c', Femenino: '#b4466e', Unisex: '#8a6d3b', Kits: '#3f5e45' }
 };
 const SECCIONES = [['Masculino', 'Para él'], ['Femenino', 'Para ella'], ['Unisex', 'Unisex']];
 const REDONDEOS = [['ninguno', 'Sin redondear'], ['mil', 'Al millar (hacia arriba)'], ['cincomil', 'A 5.000 (hacia arriba)']];
@@ -79,6 +80,16 @@ function seleccionar(productos, cfg) {
     .sort(comparar);
 }
 
+// Kits que se pueden ofrecer: visibles en la tienda, con precio y fuera de revisión
+const kitElegible = (k) => !!Number(k.activo) && Number(k.precio) > 0 && !Number(k.precio_revision);
+const kitAgotado = (k) => !!Number(k.agotado);
+function seleccionarKits(kits, cfg) {
+  return kits
+    .filter((k) => kitElegible(k) && cfg.kits.includes(k.id))
+    .filter((k) => cfg.disponibilidad === 'todos' || !kitAgotado(k))
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+}
+
 // ── Imágenes ──
 function urlMiniatura(src) {
   const url = normalizarImagen(src);
@@ -107,16 +118,17 @@ function cargarImagen(src) {
     img.src = src;
   });
 }
-async function cargarTodas(lista, alAvanzar) {
+// entradas: [clave, url de la foto]; sin foto (o si falla) queda el logo de la tienda
+async function cargarTodas(entradas, alAvanzar) {
   const fotos = new Map();
   let hechas = 0;
   const logo = await cargarImagen(LOGO);
-  const cola = [...lista];
+  const cola = [...entradas];
   const trabajador = async () => {
     while (cola.length) {
-      const p = cola.shift();
-      fotos.set(p.id, (p.image && await cargarImagen(urlMiniatura(p.image))) || logo);
-      alAvanzar(++hechas, lista.length);
+      const [clave, src] = cola.shift();
+      fotos.set(clave, (src && await cargarImagen(urlMiniatura(src))) || logo);
+      alAvanzar(++hechas, entradas.length);
     }
   };
   await Promise.all(Array.from({ length: 6 }, trabajador));
@@ -171,9 +183,9 @@ function textoNotas(p) {
 }
 
 // ── PDF ──
-async function generarPdf(lista, cfg, logoCliente, alAvanzar) {
+async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
   const { jsPDF } = await import('jspdf');
-  const fotos = await cargarTodas(lista, alAvanzar);
+  const fotos = await cargarTodas([...lista.map((p) => [`p${p.id}`, p.image]), ...kits.map((k) => [`k${k.id}`, k.imagen])], alAvanzar);
   const redes = REDES.filter(([k]) => String(cfg[k] || '').trim())
     .map(([k, , , glifo, familia, , enlace, texto]) => ({ k, glifo, familia, url: enlace(cfg[k]), texto: texto(cfg[k]) }));
   for (const r of redes) r.img = await icono(r.glifo, r.familia, cfg.colorMarca);
@@ -189,10 +201,11 @@ async function generarPdf(lista, cfg, logoCliente, alAvanzar) {
   const nombre = cfg.perfumeria.trim() || 'Catálogo de fragancias';
   const fecha = new Date().toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
   const wa = soloDigitos(cfg.whatsapp) ? numeroWa(cfg.whatsapp) : '';
-  const enlaceDe = (p) => {
+  // que: «el perfume X de Y» o «el kit X»
+  const enlaceDe = (que, base) => {
     if (cfg.enlaceTarjeta === 'whatsapp' && wa) {
-      const precio = cfg.mostrarPrecios ? ` (${pesos(precioReventa(Number(p.price), cfg))})` : '';
-      return `https://wa.me/${wa}?text=${encodeURIComponent(`¡Hola! Me interesa el perfume ${p.name}${p.brand ? ` de ${p.brand.name}` : ''}${precio}. ¿Está disponible?`)}`;
+      const precio = cfg.mostrarPrecios ? ` (${pesos(precioReventa(base, cfg))})` : '';
+      return `https://wa.me/${wa}?text=${encodeURIComponent(`¡Hola! Me interesa ${que}${precio}. ¿Está disponible?`)}`;
     }
     if (cfg.enlaceTarjeta === 'web' && cfg.web.trim()) return urlWeb(cfg.web);
     return null;
@@ -245,39 +258,43 @@ async function generarPdf(lista, cfg, logoCliente, alAvanzar) {
     }
     return M + 17;
   };
-  const banda = (y, titulo, n, color) => {
+  const cuantos = (n, kit) => (kit ? `${n} kit${n === 1 ? '' : 's'}` : `${n} fragancia${n === 1 ? '' : 's'}`);
+  const banda = (y, titulo, n, color, kit) => {
     doc.setFillColor(...rgb(color)); doc.roundedRect(M, y, AN - 2 * M, 10, 1.5, 1.5, 'F');
     doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
     doc.text(titulo.toUpperCase(), M + 5, y + 6.6, { charSpace: 1 });
     doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-    doc.text(`${n} fragancia${n === 1 ? '' : 's'}`, AN - M - 5, y + 6.6, { align: 'right' });
+    doc.text(cuantos(n, kit), AN - M - 5, y + 6.6, { align: 'right' });
     return y + 14;
   };
-  const tarjeta = (p, x, y, color) => {
+  // t: { clave, eyebrow, nombre, detalle, base, url } — sirve igual para perfumes y kits
+  const tarjeta = (t, x, y, color) => {
     const c = rgb(color);
+    const { url } = t;
     doc.setDrawColor(...LINEA); doc.setLineWidth(0.3); doc.roundedRect(x, y, W, H, 2, 2, 'S');
     doc.setFillColor(...c); doc.rect(x + 6, y, W - 12, 1.2, 'F');
-    const img = fotos.get(p.id);
+    const img = fotos.get(t.clave);
     if (img) doc.addImage(img, 'JPEG', x + (W - foto) / 2, y + 4, foto, foto);
     let ty = y + foto + 9;
     doc.setTextColor(...c); doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
-    doc.text((p.brand ? p.brand.name : '').toUpperCase(), x + W / 2, ty, { align: 'center', charSpace: 0.4, maxWidth: W - 6 });
+    doc.text(t.eyebrow.toUpperCase(), x + W / 2, ty, { align: 'center', charSpace: 0.4, maxWidth: W - 6 });
     ty += 4.5;
     doc.setTextColor(...TINTA); doc.setFontSize(9.5);
-    const lineasNombre = doc.splitTextToSize(p.name, W - 6).slice(0, 2);
+    const lineasNombre = doc.splitTextToSize(t.nombre, W - 6).slice(0, 2);
     doc.text(lineasNombre, x + W / 2, ty, { align: 'center', lineHeightFactor: 1.1 });
     ty += lineasNombre.length * 4;
-    const url = enlaceDe(p);
-    if (cfg.notas) {
+    if (t.detalle) {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(6.2); doc.setTextColor(...GRIS);
-      let lineas = doc.splitTextToSize(textoNotas(p), W - 6);
-      const max = cols === 3 ? (url && cfg.mostrarPrecios ? 2 : 3) : 4;
+      let lineas = doc.splitTextToSize(t.detalle, W - 6);
+      // Cuantas líneas quepan sobre el precio (un nombre de 2 líneas deja menos espacio)
+      const tope = y + H - (url ? 7.5 : 4.5) - (cfg.mostrarPrecios ? 5 : 0);
+      const max = Math.max(1, Math.min(cols === 3 ? (url && cfg.mostrarPrecios ? 2 : 3) : 4, Math.floor((tope - ty) / 2.75)));
       if (lineas.length > max) { lineas = lineas.slice(0, max); lineas[max - 1] = lineas[max - 1].replace(/\s*\S*$/, '…'); }
       doc.text(lineas, x + W / 2, ty + 0.5, { align: 'center', lineHeightFactor: 1.25 });
     }
     if (cfg.mostrarPrecios) {
       doc.setTextColor(...TINTA); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
-      doc.text(pesos(precioReventa(Number(p.price), cfg)), x + W / 2, y + H - (url ? 7.5 : 4.5), { align: 'center' });
+      doc.text(pesos(precioReventa(t.base, cfg)), x + W / 2, y + H - (url ? 7.5 : 4.5), { align: 'center' });
     }
     if (url) {
       doc.setFont('helvetica', 'bold'); doc.setFontSize(6); doc.setTextColor(...c);
@@ -285,22 +302,38 @@ async function generarPdf(lista, cfg, logoCliente, alAvanzar) {
       doc.link(x, y, W, H, { url });
     }
   };
+  const tarjetaPerfume = (p) => ({
+    clave: `p${p.id}`, eyebrow: p.brand ? p.brand.name : '', nombre: p.name,
+    detalle: cfg.notas ? textoNotas(p) : '', base: Number(p.price),
+    url: enlaceDe(`el perfume ${p.name}${p.brand ? ` de ${p.brand.name}` : ''}`, Number(p.price))
+  });
+  const tarjetaKit = (k) => ({
+    clave: `k${k.id}`, eyebrow: 'Kit', nombre: k.nombre,
+    detalle: (k.beneficios && k.beneficios.length ? k.beneficios.join('  ·  ') : String(k.descripcion || '').trim()),
+    base: Number(k.precio),
+    url: enlaceDe(`el kit ${k.nombre}`, Number(k.precio))
+  });
 
   // jsPDF empieza con una página: con portada esa es la portada (se dibuja al final, cuando ya se
   // sabe en qué página empieza cada sección); sin portada la usa la primera sección
   const inicios = [];
-  for (const [genero, titulo] of SECCIONES) {
-    const grupo = lista.filter((p) => p.gender === genero);
-    if (!grupo.length) continue;
+  const secciones = [
+    ...SECCIONES.map(([genero, titulo]) => ({
+      titulo, color: cfg.colores[genero], kit: false,
+      tarjetas: lista.filter((p) => p.gender === genero).map(tarjetaPerfume)
+    })),
+    { titulo: 'Kits', color: cfg.colores.Kits, kit: true, tarjetas: kits.map(tarjetaKit) }
+  ];
+  for (const { titulo, color, kit, tarjetas } of secciones) {
+    if (!tarjetas.length) continue;
     if (inicios.length || cfg.portada) doc.addPage();
-    const color = cfg.colores[genero];
-    inicios.push({ titulo, n: grupo.length, color, pagina: doc.getNumberOfPages() });
-    let y = banda(cabecera(), titulo, grupo.length, color);
-    grupo.forEach((p, i) => {
+    inicios.push({ titulo, n: tarjetas.length, color, kit, pagina: doc.getNumberOfPages() });
+    let y = banda(cabecera(), titulo, tarjetas.length, color, kit);
+    tarjetas.forEach((t, i) => {
       const col = i % cols;
       if (i > 0 && col === 0) y += H + G;
       if (y + H > AL - 15) { doc.addPage(); y = cabecera(); }
-      tarjeta(p, M + col * (W + G), y, color);
+      tarjeta(t, M + col * (W + G), y, color);
     });
   }
   if (cfg.portada) {
@@ -326,14 +359,14 @@ async function generarPdf(lista, cfg, logoCliente, alAvanzar) {
       doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
       doc.text(s.titulo.toUpperCase(), x + 6, y + 8.3, { charSpace: 0.8 });
       doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
-      doc.text(`${s.n} fragancias  ·  pág. ${s.pagina}  >`, x + 94, y + 8.3, { align: 'right' });
+      doc.text(`${cuantos(s.n, s.kit)}  ·  pág. ${s.pagina}  >`, x + 94, y + 8.3, { align: 'right' });
       doc.link(x, y, 100, 13, { pageNumber: s.pagina });
       y += 16;
     });
     if (redes.length) filaRedes(AN / 2, AL - 36, 7, true, true);
     if (wa && cfg.enlaceTarjeta === 'whatsapp') {
       doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...GRIS);
-      doc.text('Toca cualquier perfume para pedirlo por WhatsApp.', AN / 2, AL - 20, { align: 'center' });
+      doc.text(`Toca cualquier ${kits.length ? 'perfume o kit' : 'perfume'} para pedirlo por WhatsApp.`, AN / 2, AL - 20, { align: 'center' });
     }
   }
   const archivo = `Catalogo ${nombre}`.replace(/[\\/:*?"<>|]+/g, '').trim();
@@ -351,6 +384,20 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
   const fijarColor = (g, v) => setCfg((c) => ({ ...c, colores: { ...c.colores, [g]: v } }));
 
   const lista = useMemo(() => seleccionar(productos, cfg), [productos, cfg]);
+  // Kits: se cargan al abrir; el usuario escoge cuáles entran (por defecto ninguno)
+  const [kitsTienda, setKitsTienda] = useState(null);
+  useEffect(() => {
+    if (!abierto) return undefined;
+    let vivo = true;
+    apiJson('kits')
+      .then((r) => { if (vivo) setKitsTienda(r.data || []); })
+      .catch((e) => { if (vivo) { setKitsTienda([]); alerta('No se pudieron cargar los kits: ' + e.message, 'error'); } });
+    return () => { vivo = false; };
+  }, [abierto, alerta]);
+  const kitsOpciones = useMemo(() => (kitsTienda || []).filter(kitElegible).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')), [kitsTienda]);
+  const kitsLista = useMemo(() => seleccionarKits(kitsTienda || [], cfg), [kitsTienda, cfg]);
+  const kitActivo = (id) => cfg.kits.includes(id);
+  const alternarKit = (id) => fijar('kits', kitActivo(id) ? cfg.kits.filter((x) => x !== id) : [...cfg.kits, id]);
   const porSexo = SECCIONES.map(([g, t]) => [t, lista.filter((p) => p.gender === g).length]).filter(([, n]) => n);
   const resumen = useMemo(() => {
     if (!lista.length) return null;
@@ -363,7 +410,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
   }, [lista, cfg]);
 
   // Un PDF ya generado solo se ofrece mientras la configuración sea la misma con la que se hizo
-  const firma = useMemo(() => JSON.stringify([cfg, lista.map((p) => [p.id, p.price]), logo ? logo.length : 0]), [cfg, lista, logo]);
+  const firma = useMemo(() => JSON.stringify([cfg, lista.map((p) => [p.id, p.price]), kitsLista.map((k) => [k.id, k.precio]), logo ? logo.length : 0]), [cfg, lista, kitsLista, logo]);
   const vigente = listo && listo.firma === firma ? listo : null;
   useEffect(() => () => { if (listo) URL.revokeObjectURL(listo.url); }, [listo]);
 
@@ -379,16 +426,17 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
     document.body.appendChild(a); a.click(); a.remove();
   };
   const generar = async () => {
-    if (!lista.length) { alerta('No hay perfumes que cumplan esta configuración.', 'error'); return; }
+    if (!lista.length && !kitsLista.length) { alerta('No hay perfumes ni kits que cumplan esta configuración.', 'error'); return; }
     if (cfg.enlaceTarjeta === 'whatsapp' && !soloDigitos(cfg.whatsapp)) { alerta('Para que las tarjetas abran WhatsApp escribe el número de WhatsApp, o elige otra acción al tocar una tarjeta.', 'error'); return; }
     if (cfg.enlaceTarjeta === 'web' && !cfg.web.trim()) { alerta('Para que las tarjetas abran la página web escribe la dirección, o elige otra acción al tocar una tarjeta.', 'error'); return; }
     setListo(null);
-    setProgreso({ hechas: 0, total: lista.length });
+    setProgreso({ hechas: 0, total: lista.length + kitsLista.length });
     try {
-      const pdf = await generarPdf(lista, cfg, logo, (hechas, total) => setProgreso({ hechas, total }));
+      const pdf = await generarPdf(lista, kitsLista, cfg, logo, (hechas, total) => setProgreso({ hechas, total }));
       setListo({ ...pdf, firma });
       descargar(pdf);
-      alerta(`Catálogo listo: ${lista.length} perfumes en ${pdf.paginas} páginas. Si no se descargó solo, usa «Descargar PDF».`, 'success');
+      const kitsTxt = kitsLista.length ? ` y ${kitsLista.length} kit${kitsLista.length === 1 ? '' : 's'}` : '';
+      alerta(`Catálogo listo: ${lista.length} perfumes${kitsTxt} en ${pdf.paginas} páginas. Si no se descargó solo, usa «Descargar PDF».`, 'success');
     } catch (e) {
       console.error('Catálogo revendedor:', e);
       alerta('No se pudo generar el PDF: ' + (e && e.message ? e.message : String(e)), 'error');
@@ -438,7 +486,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
           <div className="form-group full">
             <div className="reventa-colores">
               <label><input type="color" value={cfg.colorMarca} onChange={(e) => fijar('colorMarca', e.target.value)} /> Marca</label>
-              {SECCIONES.map(([g, t]) => (
+              {[...SECCIONES, ['Kits', 'Kits']].map(([g, t]) => (
                 <label key={g}><input type="color" value={cfg.colores[g]} onChange={(e) => fijarColor(g, e.target.value)} /> {t}</label>
               ))}
               <button type="button" className="link-limpiar" onClick={() => setCfg((c) => ({ ...c, colorMarca: BASE.colorMarca, colores: BASE.colores }))}>Restaurar colores</button>
@@ -532,11 +580,41 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
               <option value="precio">Por precio</option>
             </select>
           </div>
+
+          <div className="form-seccion">
+            <h4>Kits</h4>
+            <small>Escoge cuáles van al final del catálogo, en su propia sección. Solo aparecen los kits visibles en la tienda, con precio y fuera de revisión.</small>
+          </div>
+          <div className="form-group full">
+            {kitsTienda === null ? <small className="hint-data"><i className="fas fa-spinner fa-spin" /> Cargando kits…</small>
+              : !kitsOpciones.length ? <small className="hint-data">No hay kits disponibles para ofrecer.</small>
+                : (
+                  <>
+                    <div className="reventa-kits-acciones">
+                      <button type="button" className="link-limpiar" onClick={() => fijar('kits', kitsOpciones.map((k) => k.id))}>Todos</button>
+                      <button type="button" className="link-limpiar" onClick={() => fijar('kits', [])}>Ninguno</button>
+                    </div>
+                    <div className="reventa-kits">
+                      {kitsOpciones.map((k) => {
+                        const fuera = kitAgotado(k) && cfg.disponibilidad !== 'todos';
+                        return (
+                          <label key={k.id} className={`check-item ${fuera ? 'fuera' : ''}`} title={fuera ? 'Agotado: no entra con «Solo con existencias»' : undefined}>
+                            <input type="checkbox" checked={kitActivo(k.id)} onChange={() => alternarKit(k.id)} />
+                            <span className="reventa-kit-nombre">{k.nombre}{kitAgotado(k) && <em> · agotado</em>}</span>
+                            <span className="reventa-kit-precio">{pesos(precioReventa(Number(k.precio), cfg))}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+          </div>
         </div>
         <p className="reventa-resumen">
-          {lista.length
-            ? <>Se incluirán <b>{lista.length}</b> perfumes: {porSexo.map(([t, n]) => `${t.toLowerCase()} ${n}`).join(' · ')}.</>
-            : 'Ningún perfume cumple esta configuración.'}
+          {lista.length || kitsLista.length
+            ? <>Se incluirán <b>{lista.length}</b> perfumes{porSexo.length ? `: ${porSexo.map(([t, n]) => `${t.toLowerCase()} ${n}`).join(' · ')}` : ''}
+              {' '}y <b>{kitsLista.length}</b> kit{kitsLista.length === 1 ? '' : 's'}.</>
+            : 'Ningún perfume ni kit cumple esta configuración.'}
         </p>
       </div>
       <div className="modal-actions">
@@ -546,7 +624,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
             <i className="fas fa-download" /> Descargar PDF
           </button>
         )}
-        <button type="button" className={vigente ? 'btn-secondary' : 'btn-primary'} onClick={generar} disabled={!!progreso || !lista.length}>
+        <button type="button" className={vigente ? 'btn-secondary' : 'btn-primary'} onClick={generar} disabled={!!progreso || (!lista.length && !kitsLista.length)}>
           {progreso
             ? <><i className="fas fa-spinner fa-spin" /> Preparando fotos {progreso.hechas}/{progreso.total}…</>
             : <><i className="fas fa-file-pdf" /> {vigente ? 'Generar de nuevo' : 'Generar PDF'}</>}
