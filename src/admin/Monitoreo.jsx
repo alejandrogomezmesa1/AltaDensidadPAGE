@@ -120,6 +120,108 @@ function GraficoEstados({ desglose }) {
   return <canvas ref={canvas} />;
 }
 
+// Mensajes de clientes al asistente por hora (barras) y tiempo de respuesta promedio (línea)
+function GraficoAsistente({ horas }) {
+  const canvas = useGrafico(() => ({
+    type: 'bar',
+    data: {
+      labels: horas.map((h) => h.hora.slice(11, 16)),
+      datasets: [
+        { type: 'bar', label: 'Respondidos', data: horas.map((h) => h.mensajes - h.errores), backgroundColor: 'rgba(212, 175, 55, 0.75)', stack: 'm', yAxisID: 'y' },
+        { type: 'bar', label: 'Con error', data: horas.map((h) => h.errores), backgroundColor: 'rgba(239, 68, 68, 0.85)', stack: 'm', yAxisID: 'y' },
+        {
+          type: 'line', label: 'Tiempo de respuesta (s)', data: horas.map((h) => (h.latenciaMs == null ? null : h.latenciaMs / 1000)),
+          borderColor: '#3B82F6', backgroundColor: '#3B82F6', borderWidth: 2, pointRadius: 2, tension: 0.3, spanGaps: true, yAxisID: 'y2'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#d1d5db', font: { size: 11 }, boxWidth: 12, padding: 12 } },
+        tooltip: { backgroundColor: '#121214', titleColor: '#F3E5AB', bodyColor: '#fff', borderColor: 'rgba(212,175,55,0.3)', borderWidth: 1, padding: 10 }
+      },
+      scales: {
+        x: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af', font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 12 } },
+        y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af', font: { size: 11 }, precision: 0 }, title: { display: true, text: 'Mensajes', color: '#9ca3af' } },
+        y2: { position: 'right', beginAtZero: true, grid: { drawOnChartArea: false }, ticks: { color: '#93c5fd', font: { size: 11 } }, title: { display: true, text: 'Segundos', color: '#93c5fd' } }
+      }
+    }
+  }), [horas]);
+  return <canvas ref={canvas} />;
+}
+
+function AsistenteAura({ aura, error, probando, onProbar }) {
+  const cfg = aura?.config || {};
+  const estado = cfg.estado || {};
+  const tot = aura?.totales;
+  const conectado = !!estado.disponible;
+  return (
+    <div className="monitoreo-charts-grid">
+      <div className="monitoreo-chart-card chart-large">
+        <div className="chart-card-header">
+          <div>
+            <h3 className="chart-title"><i className="fas fa-robot" /> Asistente AURA (últimas 24 h)</h3>
+            <span className="chart-subtitle">
+              {tot ? `${tot.mensajes} mensajes de clientes · ${tot.errores} con error · ${tot.latenciaMs != null ? (tot.latenciaMs / 1000).toFixed(1) + ' s' : '--'} de respuesta promedio · ${tot.eliminados} productos inventados borrados`
+                : 'Mensajes atendidos, errores y tiempo de respuesta por hora'}
+            </span>
+          </div>
+        </div>
+        <div className="chart-canvas-wrapper">
+          {aura?.registro === false
+            ? <div className="feed-empty"><i className="fas fa-database" /> El registro de métricas se activa al reiniciar el backend (migración 011).</div>
+            : aura?.horas && <GraficoAsistente horas={aura.horas} />}
+        </div>
+      </div>
+      <div className="monitoreo-card">
+        <div className="card-header-styled">
+          <h3 className="card-title-styled"><i className="fas fa-plug" /> Conexión con el modelo</h3>
+          <button className="btn-primary" onClick={onProbar} disabled={probando} title="Envía una pregunta real al modelo">
+            <i className={`fas ${probando ? 'fa-spinner fa-spin' : 'fa-vial'}`} /> {probando ? 'Probando...' : 'Probar ahora'}
+          </button>
+        </div>
+        <div className="server-metrics-list">
+          <div className="server-metric-item">
+            <span className="metric-label">Estado:</span>
+            {error
+              ? <span className="metric-val text-danger">🔴 {error}</span>
+              : !aura ? <span className="metric-val">Consultando...</span>
+                : <span className={`metric-val ${conectado ? 'text-green' : 'text-danger'}`}>{conectado ? '🟢' : '🔴'} {estado.detalle || (conectado ? 'En línea' : 'Sin conexión')}</span>}
+          </div>
+          <div className="server-metric-item">
+            <span className="metric-label">URL del modelo:</span>
+            <span className="metric-val" style={{ wordBreak: 'break-all' }}>{cfg.url || '--'}</span>
+          </div>
+          <div className="server-metric-item">
+            <span className="metric-label">Modo:</span>
+            <span className={`metric-val ${cfg.modo === 'openai' ? 'text-danger' : ''}`}>
+              {cfg.modo || '--'}{cfg.modo === 'openai' ? ' (la API propia de AURA requiere modo nativo)' : ''}
+            </span>
+          </div>
+          <div className="server-metric-item">
+            <span className="metric-label">Asistente:</span>
+            <span className="metric-val">{aura ? (cfg.activo ? 'Activo' : 'Desactivado') : '--'}</span>
+          </div>
+          <div className="server-metric-item">
+            <span className="metric-label">Última prueba:</span>
+            <span className="metric-val">
+              {aura?.ultimaPrueba
+                ? `${aura.ultimaPrueba.ok ? '✅' : '❌'} ${formatFechaEvento(aura.ultimaPrueba.fecha)} · ${aura.ultimaPrueba.ok ? (aura.ultimaPrueba.latenciaMs / 1000).toFixed(1) + ' s' : aura.ultimaPrueba.error}`
+                : 'Sin pruebas'}
+            </span>
+          </div>
+          <div className="server-metric-item">
+            <span className="metric-label">Último error:</span>
+            <span className="metric-val">{aura?.ultimoError ? `${formatFechaEvento(aura.ultimoError.fecha)} · ${aura.ultimoError.error}` : 'Ninguno'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Kpi({ titulo, icono, color, valor, sub, estiloValor, onClick }) {
   return (
     <div className={`monitoreo-kpi-card ${onClick ? 'clickable' : ''}`} onClick={onClick} title={onClick ? 'Ver catálogo de productos' : undefined}>
@@ -201,9 +303,22 @@ export default function Monitoreo({ activo, irA }) {
   const [modo, setModo] = useState('ingresos');
   const [midiendo, setMidiendo] = useState(false);
   const [latenciaPing, setLatenciaPing] = useState(null);
+  const [aura, setAura] = useState(null);
+  const [errorAura, setErrorAura] = useState(null);
+  const [probando, setProbando] = useState(false);
+
+  const cargarAura = useCallback(async () => {
+    try {
+      setAura(await apiJson('chatbot/metricas'));
+      setErrorAura(null);
+    } catch (err) {
+      setErrorAura(err.message);
+    }
+  }, []);
 
   const cargar = useCallback(async () => {
     setCargando(true);
+    cargarAura(); // independiente: si falla el asistente, el resto del panel sigue
     try {
       const data = await apiJson('admin/monitoreo/resumen');
       setDatos(data);
@@ -215,7 +330,32 @@ export default function Monitoreo({ activo, irA }) {
     } finally {
       setCargando(false);
     }
-  }, []);
+  }, [cargarAura]);
+
+  async function probarAura() {
+    setProbando(true);
+    try {
+      const r = await apiJson('chatbot/probar', { method: 'POST', body: {} });
+      const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      Swal.fire(r.ok ? {
+        icon: 'success',
+        title: 'AURA respondió',
+        html: `<div style="text-align:left;font-size:0.95rem;"><p style="color:#9ca3af;margin:0 0 6px;">Pregunta: ${esc(r.pregunta)}</p>`
+          + `<div style="white-space:pre-wrap;color:#e5e7eb;background:#0b0b0c;border:1px solid rgba(212,175,55,0.3);padding:10px;">${esc(r.respuesta)}</div>`
+          + `<p style="color:#D4AF37;font-weight:700;margin:10px 0 0;">Tiempo de respuesta: ${(r.latenciaMs / 1000).toFixed(1)} s</p>`
+          + (r.eliminados?.length ? `<p style="color:#f59e0b;margin:6px 0 0;">Se borraron productos inexistentes: ${esc(r.eliminados.join(', '))}</p>` : '')
+          + '</div>',
+        background: '#161618', color: '#fff', confirmButtonColor: '#D4AF37'
+      } : {
+        icon: 'error', title: 'AURA no respondió', text: r.detalle, background: '#161618', color: '#fff', confirmButtonColor: '#e74c3c'
+      });
+    } catch (err) {
+      Swal.fire({ icon: 'error', title: 'No se pudo probar', text: err.message, background: '#161618', color: '#fff', confirmButtonColor: '#e74c3c' });
+    } finally {
+      setProbando(false);
+      cargarAura();
+    }
+  }
 
   // Se carga al entrar a la sección y se refresca solo mientras está visible
   useEffect(() => { if (activo) cargar(); }, [activo, cargar]);
@@ -342,6 +482,8 @@ export default function Monitoreo({ activo, irA }) {
           </div>
         </div>
       </div>
+
+      <AsistenteAura aura={aura} error={errorAura} probando={probando} onProbar={probarAura} />
 
       <div className="monitoreo-bottom-grid">
         <div className="monitoreo-card server-info-card">

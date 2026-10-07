@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const { getConnection } = require('../config/db');
 const { requireAdmin } = require('../middleware/auth');
+const esquema = require('../services/esquema');
 
 // ============================================================
 // PROXY DEL ASISTENTE AURA
@@ -202,11 +203,39 @@ function verificarRespuesta(texto, catalogo) {
 
 // ---------- Llamada al proveedor ----------
 const SISTEMA = `Eres AURA, asesora olfativa de Fragancias de Alta Densidad (Medellín, Colombia).
-Perfumes en concentración pura Extrait de Parfum y base de feromonas, fijación de 12 horas o más en piel.
+Perfumes en concentración pura Extrait de Parfum y base de feromonas, fijación de 8 a 12 horas en piel.
 Envíos: Medellín $15.000, Área Metropolitana $20.000, resto de Colombia $22.000.
 Pagos: Mercado Pago (PSE, Nequi, tarjetas) o por WhatsApp. WhatsApp: +57 304 647 7694.
 Responde en español, breve y cálido. SOLO recomienda productos del catálogo que se te entrega,
 con su precio exacto, en líneas con el formato "- **NOMBRE**: $precio COP". Si no está en el catálogo, dilo.`;
+
+// Si la IA está detrás de un túnel gratuito de ngrok, evita su página de aviso
+const CABECERAS_TUNEL = { 'ngrok-skip-browser-warning': '1' };
+
+// ---------- Métricas para el monitoreo (sin texto de las conversaciones) ----------
+function describirError(err) {
+    if (err.name === 'AbortError') return 'Tiempo de espera agotado';
+    if (err.status === 401 || err.status === 403) return 'El proveedor rechazó la API key';
+    if (err.status) return `El proveedor respondió ${err.status}`;
+    return 'No se pudo contactar al proveedor';
+}
+
+async function registrarMetrica({ origen = 'cliente', ok, latenciaMs, eliminados = 0, error = null }) {
+    if (!esquema.metricasChatbot()) return;
+    try {
+        const pool = await getConnection();
+        await pool.query(
+            'INSERT INTO ChatbotMetricas (origen, ok, latencia_ms, productos_eliminados, error) VALUES (?, ?, ?, ?, ?)',
+            [origen, ok ? 1 : 0, Math.round(latenciaMs), eliminados, error ? String(error).slice(0, 160) : null]
+        );
+        // Purga ocasional: solo se conservan 30 días
+        if (Math.random() < 0.01) {
+            await pool.query('DELETE FROM ChatbotMetricas WHERE fecha < DATE_SUB(NOW(), INTERVAL 30 DAY)');
+        }
+    } catch (e) {
+        console.error('[chatbot] No se pudo registrar la métrica:', e.message);
+    }
+}
 
 // Historial corto por sesión para proveedores sin memoria propia (modo openai)
 const historiales = new Map();
@@ -224,7 +253,7 @@ function guardarHistorial(sessionId, msgs) {
 async function llamarProveedor(cfg, mensaje, sessionId) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-    const headers = { 'Content-Type': 'application/json' };
+    const headers = { 'Content-Type': 'application/json', ...CABECERAS_TUNEL };
     if (cfg.apiKey) headers.Authorization = `Bearer ${cfg.apiKey}`;
 
     try {
@@ -285,7 +314,7 @@ async function comprobarProveedor(cfg, forzar) {
         const timer = setTimeout(() => controller.abort(), 6000);
         try {
             const ruta = cfg.modo === 'openai' ? '/v1/models' : '/health';
-            const headers = cfg.apiKey ? { Authorization: `Bearer ${cfg.apiKey}` } : {};
+            const headers = cfg.apiKey ? { Authorization: `Bearer ${cfg.apiKey}`, ...CABECERAS_TUNEL } : { ...CABECERAS_TUNEL };
             const r = await fetch(cfg.url + ruta, { headers, signal: controller.signal });
             disponible = r.ok;
             detalle = r.ok ? 'En línea' : `El proveedor respondió ${r.status}`;
@@ -335,14 +364,7 @@ router.post('/', limiteChat, async (req, res) => {
     }
 
     try {
-        const { texto, sessionId: sid } = await llamarProveedor(cfg, mensaje, sessionId);
-        const catalogo = await obtenerCatalogo();
-        const verificado = verificarRespuesta(texto, catalogo);
-        if (verificado.eliminados.length) {
-            console.warn('[chatbot] Productos inexistentes eliminados de la respuesta:', verificado.eliminados.join(', '));
-        }
-        cacheEstado = { disponible: true, detalle: 'En línea', en: Date.now() };
-        fallaAutenticacion = false;
+        const { verificado, sessionId: sid } = await atenderMensaje(cfg, mensaje, sessionId, 'cliente');
         res.json({
             success: true,
             session_id: sid,
@@ -350,14 +372,6 @@ router.post('/', limiteChat, async (req, res) => {
             productos: verificado.productos.map(({ clave, ...p }) => p)
         });
     } catch (err) {
-        cacheEstado = { disponible: false, detalle: err.message, en: Date.now() };
-        if (err.status === 401 || err.status === 403) {
-            fallaAutenticacion = true;
-            cacheEstado = { disponible: false, detalle: 'El proveedor rechazó la API key', en: Date.now() };
-            console.error('[chatbot] El proveedor rechazó la API key. Actualízala con PUT /api/chatbot/config');
-        } else {
-            console.error('[chatbot] Error del proveedor:', err.name === 'AbortError' ? 'timeout' : err.message);
-        }
         res.status(err.name === 'AbortError' ? 504 : 502).json({
             success: false,
             disponible: false,
@@ -365,6 +379,36 @@ router.post('/', limiteChat, async (req, res) => {
         });
     }
 });
+
+// Llama al proveedor, verifica la respuesta contra el catálogo, actualiza el estado y registra la métrica.
+// Lanza el error del proveedor (ya registrado) si falla.
+async function atenderMensaje(cfg, mensaje, sessionId, origen) {
+    const t0 = Date.now();
+    try {
+        const { texto, sessionId: sid } = await llamarProveedor(cfg, mensaje, sessionId);
+        const latenciaMs = Date.now() - t0;
+        const catalogo = await obtenerCatalogo();
+        const verificado = verificarRespuesta(texto, catalogo);
+        if (verificado.eliminados.length) {
+            console.warn('[chatbot] Productos inexistentes eliminados de la respuesta:', verificado.eliminados.join(', '));
+        }
+        cacheEstado = { disponible: true, detalle: 'En línea', en: Date.now() };
+        fallaAutenticacion = false;
+        registrarMetrica({ origen, ok: true, latenciaMs, eliminados: verificado.eliminados.length });
+        return { verificado, sessionId: sid, latenciaMs };
+    } catch (err) {
+        const detalle = describirError(err);
+        cacheEstado = { disponible: false, detalle, en: Date.now() };
+        if (err.status === 401 || err.status === 403) {
+            fallaAutenticacion = true;
+            console.error('[chatbot] El proveedor rechazó la API key. Actualízala con PUT /api/chatbot/config');
+        } else {
+            console.error('[chatbot] Error del proveedor:', err.name === 'AbortError' ? 'timeout' : err.message);
+        }
+        registrarMetrica({ origen, ok: false, latenciaMs: Date.now() - t0, error: detalle });
+        throw err;
+    }
+}
 
 // ============================================================
 // RUTAS DE ADMINISTRACIÓN (JWT de admin o cabecera x-admin-key)
@@ -460,6 +504,83 @@ router.put('/config', requireAdmin, async (req, res) => {
     } catch (e) {
         console.error('[chatbot] Error guardando configuración:', e.message);
         res.status(500).json({ success: false, message: 'No se pudo guardar la configuración.' });
+    }
+});
+
+// GET /api/chatbot/metricas -> estado de la conexión + mensajes de clientes de las últimas 24 h por hora
+router.get('/metricas', requireAdmin, async (req, res) => {
+    const cfg = await obtenerConfig();
+    const estado = await comprobarProveedor(cfg);
+    const respuesta = { success: true, config: vistaConfig(cfg, estado), registro: esquema.metricasChatbot() };
+    if (!respuesta.registro) {
+        return res.json({ ...respuesta, horas: [], totales: null, ultimoError: null, ultimaPrueba: null });
+    }
+    try {
+        const pool = await getConnection();
+        const [[{ ahora }]] = await pool.query("SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:00:00') AS ahora");
+        const [filas] = await pool.query(
+            `SELECT DATE_FORMAT(fecha, '%Y-%m-%d %H:00:00') AS hora, COUNT(*) AS mensajes,
+                    SUM(ok = 0) AS errores, AVG(CASE WHEN ok = 1 THEN latencia_ms END) AS latencia,
+                    SUM(productos_eliminados) AS eliminados
+             FROM ChatbotMetricas
+             WHERE origen = 'cliente' AND fecha >= DATE_SUB(?, INTERVAL 23 HOUR)
+             GROUP BY hora`, [ahora]);
+        const porHora = new Map(filas.map(f => [f.hora, f]));
+        // 24 casillas consecutivas aunque no haya mensajes (la hora es la del servidor de base de datos)
+        const base = new Date(ahora.replace(' ', 'T') + 'Z');
+        const horas = [];
+        for (let i = 23; i >= 0; i--) {
+            const clave = new Date(base.getTime() - i * 3600 * 1000).toISOString().slice(0, 13).replace('T', ' ') + ':00:00';
+            const f = porHora.get(clave);
+            horas.push({
+                hora: clave,
+                mensajes: f ? Number(f.mensajes) : 0,
+                errores: f ? Number(f.errores) : 0,
+                latenciaMs: f && f.latencia != null ? Math.round(Number(f.latencia)) : null,
+                eliminados: f ? Number(f.eliminados) : 0
+            });
+        }
+        const sumar = (k) => horas.reduce((a, h) => a + h[k], 0);
+        const conLatencia = filas.filter(f => f.latencia != null);
+        const [[ultimoError]] = await pool.query(
+            "SELECT fecha, error FROM ChatbotMetricas WHERE ok = 0 ORDER BY id DESC LIMIT 1");
+        const [[ultimaPrueba]] = await pool.query(
+            "SELECT fecha, ok, latencia_ms AS latenciaMs, error FROM ChatbotMetricas WHERE origen = 'prueba' ORDER BY id DESC LIMIT 1");
+        res.json({
+            ...respuesta,
+            horas,
+            totales: {
+                mensajes: sumar('mensajes'),
+                errores: sumar('errores'),
+                eliminados: sumar('eliminados'),
+                latenciaMs: conLatencia.length
+                    ? Math.round(conLatencia.reduce((a, f) => a + Number(f.latencia) * Number(f.mensajes - f.errores), 0) /
+                        Math.max(1, conLatencia.reduce((a, f) => a + Number(f.mensajes - f.errores), 0)))
+                    : null
+            },
+            ultimoError: ultimoError || null,
+            ultimaPrueba: ultimaPrueba ? { ...ultimaPrueba, ok: !!ultimaPrueba.ok } : null
+        });
+    } catch (e) {
+        console.error('[chatbot] Error leyendo métricas:', e.message);
+        res.status(500).json({ success: false, message: 'No se pudieron leer las métricas del asistente.' });
+    }
+});
+
+// POST /api/chatbot/probar -> envía una pregunta de prueba real al modelo y devuelve respuesta y tiempo
+router.post('/probar', requireAdmin, async (req, res) => {
+    const cfg = await obtenerConfig(true);
+    if (!cfg.activo || !cfg.url) {
+        return res.json({ success: true, ok: false, detalle: cfg.activo ? 'Proveedor sin configurar' : 'Asistente desactivado' });
+    }
+    const pregunta = typeof (req.body || {}).pregunta === 'string' && req.body.pregunta.trim()
+        ? req.body.pregunta.trim().slice(0, MAX_MENSAJE)
+        : '¿Cuánto cuesta el envío a Medellín?';
+    try {
+        const { verificado, latenciaMs } = await atenderMensaje(cfg, pregunta, `panel-prueba-${Date.now()}`, 'prueba');
+        res.json({ success: true, ok: true, pregunta, respuesta: verificado.texto, latenciaMs, eliminados: verificado.eliminados });
+    } catch (err) {
+        res.json({ success: true, ok: false, pregunta, detalle: describirError(err) });
     }
 });
 

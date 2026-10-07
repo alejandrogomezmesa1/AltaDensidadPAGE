@@ -15,5 +15,7 @@ module.exports = {
     // 009: ruta fija de cada perfume y referencia en Fragrantica
     enlaces: () => aplicadas.has('009'),
     // 010: varias familias olfativas por perfume
-    familias: () => aplicadas.has('010')
+    familias: () => aplicadas.has('010'),
+    // 011: métricas del asistente AURA (monitoreo)
+    metricasChatbot: () => aplicadas.has('011')
 };
