@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * configurar_ia.js — Reconfigura el proveedor de IA de AURA sin redesplegar.
+ * configurar_ia.cjs — Reconfigura el proveedor de IA de AURA sin redesplegar.
  *
  * Requiere la clave de administración del backend (la misma de ADMIN_API_KEY en Railway):
  *   export AD_ADMIN_KEY="..."
@@ -9,11 +9,11 @@
  *   export IA_API_KEY="pk-..."   (evita escribir la key en el historial de la terminal)
  *
  * Uso:
- *   node tools/configurar_ia.js estado
- *   node tools/configurar_ia.js set --url https://mi-ia.ejemplo.com [--key pk-...] [--modo nativo|openai] [--modelo nombre]
- *   node tools/configurar_ia.js set --key pk-nueva            (solo rotar la API key)
- *   node tools/configurar_ia.js activar | desactivar
- *   node tools/configurar_ia.js tunel --puerto 8000 [--key pk-...]
+ *   node tools/configurar_ia.cjs estado
+ *   node tools/configurar_ia.cjs set --url https://mi-ia.ejemplo.com [--key pk-...] [--modo nativo|openai] [--modelo nombre]
+ *   node tools/configurar_ia.cjs set --key pk-nueva            (solo rotar la API key)
+ *   node tools/configurar_ia.cjs activar | desactivar
+ *   node tools/configurar_ia.cjs tunel --puerto 8000 [--key pk-...]
  *        Levanta "cloudflared tunnel --url http://localhost:8000", detecta la URL
  *        *.trycloudflare.com y la registra en el backend. Si el túnel se cae, lo
  *        reinicia y registra la URL nueva automáticamente. Ctrl+C para salir.

@@ -25,21 +25,21 @@ Navegador (chatbot.js) ──► Backend Railway /api/chatbot ──► Proveedo
    ```bash
    export AD_ADMIN_KEY="<el ADMIN_API_KEY de Railway>"
    export IA_API_KEY="pk-..."          # la API key nueva del modelo
-   node tools/configurar_ia.js set --url https://xxxx.trycloudflare.com
-   node tools/configurar_ia.js estado   # debe decir ✔ en línea
+   node tools/configurar_ia.cjs set --url https://xxxx.trycloudflare.com
+   node tools/configurar_ia.cjs estado   # debe decir ✔ en línea
    ```
 
 ## Tareas frecuentes
 
 | Situación | Comando |
 |---|---|
-| Ver cómo está configurado y si responde | `node tools/configurar_ia.js estado` |
-| Rotar la API key | `IA_API_KEY=pk-nueva node tools/configurar_ia.js set` |
-| Cambió la URL del túnel | `node tools/configurar_ia.js set --url https://nueva.trycloudflare.com` |
-| Levantar el túnel y registrarlo solo (se re-registra si se cae) | `node tools/configurar_ia.js tunel --puerto 8000` |
-| Cambiar a un proveedor compatible con OpenAI | `node tools/configurar_ia.js set --url https://api.proveedor.com --modo openai --modelo nombre-del-modelo --key sk-...` |
-| Volver a la API propia | `node tools/configurar_ia.js set --url https://... --modo nativo` |
-| Apagar la IA (el chat queda en modo básico) | `node tools/configurar_ia.js desactivar` |
+| Ver cómo está configurado y si responde | `node tools/configurar_ia.cjs estado` |
+| Rotar la API key | `IA_API_KEY=pk-nueva node tools/configurar_ia.cjs set` |
+| Cambió la URL del túnel | `node tools/configurar_ia.cjs set --url https://nueva.trycloudflare.com` |
+| Levantar el túnel y registrarlo solo (se re-registra si se cae) | `node tools/configurar_ia.cjs tunel --puerto 8000` |
+| Cambiar a un proveedor compatible con OpenAI | `node tools/configurar_ia.cjs set --url https://api.proveedor.com --modo openai --modelo nombre-del-modelo --key sk-...` |
+| Volver a la API propia | `node tools/configurar_ia.cjs set --url https://... --modo nativo` |
+| Apagar la IA (el chat queda en modo básico) | `node tools/configurar_ia.cjs desactivar` |
 
 El modo `tunel` requiere `cloudflared` (`brew install cloudflared` o el instalador de Windows) y se ejecuta **en el equipo que tiene la GPU**. Deja esa ventana abierta mientras la IA esté en servicio.
 
@@ -53,4 +53,4 @@ El modo `tunel` requiere `cloudflared` (`brew install cloudflared` o el instalad
 ## Si cambias `JWT_SECRET` o `CHATBOT_CONFIG_SECRET`
 
 La API key guardada se cifra con ese secreto. Si lo cambias, vuelve a registrarla:
-`IA_API_KEY=pk-... node tools/configurar_ia.js set`
+`IA_API_KEY=pk-... node tools/configurar_ia.cjs set`
