@@ -3264,7 +3264,8 @@ body.ad-layer-open .ia-chat-launcher {
 .cat-pestanas {
   position: sticky;
   top: var(--nav-h);
-  z-index: 20;
+  /* Por debajo del encabezado: si no, tapa el menú de la cuenta que se despliega desde él */
+  z-index: calc(var(--z-header) - 1);
   padding-inline: var(--gutter);
   background: color-mix(in srgb, var(--c-bg) 92%, transparent);
   backdrop-filter: blur(12px);
