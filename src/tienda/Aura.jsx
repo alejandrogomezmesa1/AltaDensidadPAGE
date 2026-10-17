@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTienda } from './TiendaContext';
 import { useClaseBody } from '../lib/hooks';
 import { LOGO, normalizarImagen } from '../lib/producto';
+import { Destello } from './Marca';
 import { API } from '../config';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_KITS } from '../data/catalogo';
 
@@ -400,7 +401,7 @@ export default function Aura() {
         onClick={() => setAuraAbierta(!abierta)}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setAuraAbierta(!abierta); } }}>
         <div className="ia-launcher-avatar">
-          <i className="fas fa-magic" />
+          <Destello size={18} />
           <div className="ia-pulse-dot" />
         </div>
         <div className="ia-launcher-text">
@@ -412,7 +413,7 @@ export default function Aura() {
       <div className={`ia-chat-widget ${abierta ? 'active' : ''}`} aria-live="polite">
         <div className="ia-chat-header">
           <div className="ia-header-brand">
-            <div className="ia-header-avatar"><i className="fas fa-crown" /></div>
+            <div className="ia-header-avatar"><Destello size={18} /></div>
             <div className="ia-header-info">
               <span className="ia-header-name">AURA <span className="ia-header-badge">IA Asesor</span></span>
               <span className={`ia-header-status ${iaDisponible === false ? 'is-basic' : ''}`} title={estadoTitulo}>

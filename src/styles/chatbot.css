@@ -14,19 +14,19 @@
   gap: 10px;
   padding: 14px 20px 14px 14px;
   background: linear-gradient(135deg, #161618 0%, #0a0a0a 100%);
-  border: 1.5px solid rgba(212, 175, 55, 0.55);
+  border: 1.5px solid rgba(201, 169, 97, 0.55);
   border-radius: var(--radius-pill, 9999px);
   color: var(--color-text, #F8F9F9);
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(201, 169, 97, 0.3);
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   user-select: none;
 }
 
 .ia-chat-launcher:hover {
   transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 24px rgba(212, 175, 55, 0.45);
-  border-color: var(--color-gold, #D4AF37);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 24px rgba(201, 169, 97, 0.45);
+  border-color: var(--oro-claro);
 }
 
 .ia-chat-launcher:active {
@@ -38,13 +38,13 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #D4AF37 0%, #AA8B22 100%);
+  background: linear-gradient(135deg, var(--oro-claro) 0%, var(--oro) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #000;
   font-size: 1.1rem;
-  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 2px 10px rgba(201, 169, 97, 0.4);
 }
 
 .ia-pulse-dot {
@@ -53,16 +53,16 @@
   right: -1px;
   width: 10px;
   height: 10px;
-  background: #00ffd2;
+  background: #8FA58A;
   border-radius: 50%;
   border: 2px solid #161618;
   animation: iaPulseGlow 2s infinite;
 }
 
 @keyframes iaPulseGlow {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 210, 0.7); }
-  70% { transform: scale(1.15); box-shadow: 0 0 0 7px rgba(0, 255, 210, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 210, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(143, 165, 138, 0.7); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 7px rgba(143, 165, 138, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(143, 165, 138, 0); }
 }
 
 .ia-launcher-text {
@@ -75,7 +75,7 @@
   font-family: var(--font-display, 'Playfair Display', serif);
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-gold, #D4AF37);
+  color: var(--oro-claro);
   letter-spacing: 0.3px;
   line-height: 1.2;
 }
@@ -96,9 +96,9 @@
   height: 560px;
   max-height: calc(100vh - 120px);
   background: #121214;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(201, 169, 97, 0.3);
   border-radius: var(--radius-xl, 20px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(201, 169, 97, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -124,7 +124,7 @@
   justify-content: space-between;
   padding: 16px 18px;
   background: linear-gradient(180deg, #1c1c20 0%, #141416 100%);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  border-bottom: 1px solid rgba(201, 169, 97, 0.2);
 }
 
 .ia-header-brand {
@@ -137,7 +137,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #D4AF37 0%, #8A6D00 100%);
+  background: linear-gradient(135deg, var(--oro-claro) 0%, var(--oro) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,7 +154,7 @@
   font-family: var(--font-display, 'Playfair Display', serif);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--color-gold, #D4AF37);
+  color: var(--oro-claro);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -165,8 +165,8 @@
   font-size: 0.65rem;
   font-weight: 600;
   padding: 2px 6px;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(201, 169, 97, 0.15);
+  border: 1px solid rgba(201, 169, 97, 0.3);
   border-radius: var(--radius-md, 10px);
   color: #F3E5AB;
   text-transform: uppercase;
@@ -175,7 +175,7 @@
 
 .ia-header-status {
   font-size: 0.75rem;
-  color: #00ffd2;
+  color: #8FA58A;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -185,7 +185,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00ffd2;
+  background: #8FA58A;
 }
 
 .ia-header-actions {
@@ -252,7 +252,7 @@
 }
 
 .ia-chat-messages::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.2);
+  background: rgba(201, 169, 97, 0.2);
   border-radius: var(--radius-xs, 4px);
 }
 
@@ -288,16 +288,16 @@
 .ia-msg.bot .ia-bubble {
   background: #1c1c20;
   color: #F8F9F9;
-  border: 1px solid rgba(212, 175, 55, 0.18);
+  border: 1px solid rgba(201, 169, 97, 0.18);
   border-bottom-left-radius: var(--radius-xs, 4px);
 }
 
 .ia-msg.user .ia-bubble {
-  background: linear-gradient(135deg, #B8960C 0%, #8A6D00 100%);
+  background: linear-gradient(135deg, var(--oro-claro) 0%, var(--oro) 100%);
   color: #ffffff;
   border-bottom-right-radius: var(--radius-xs, 4px);
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(184, 150, 12, 0.25);
+  box-shadow: 0 2px 8px rgba(154, 123, 63, 0.25);
 }
 
 .ia-msg-time {
@@ -320,8 +320,8 @@
 }
 
 .ia-chip {
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(201, 169, 97, 0.08);
+  border: 1px solid rgba(201, 169, 97, 0.3);
   color: #F3E5AB;
   padding: 7px 12px;
   border-radius: var(--radius-xl, 20px);
@@ -335,10 +335,10 @@
 }
 
 .ia-chip:hover {
-  background: rgba(212, 175, 55, 0.22);
-  border-color: #D4AF37;
+  background: rgba(201, 169, 97, 0.22);
+  border-color: var(--oro-claro);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 2px 8px rgba(201, 169, 97, 0.2);
 }
 
 /* ── Tarjetas de Producto Recomendado en Chat ────────────────────────── */
@@ -346,7 +346,7 @@
   display: flex;
   gap: 12px;
   background: #18181c;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(201, 169, 97, 0.3);
   border-radius: var(--radius-lg, 14px);
   padding: 10px;
   margin-top: 8px;
@@ -355,7 +355,7 @@
 }
 
 .ia-product-card:hover {
-  border-color: #D4AF37;
+  border-color: var(--oro-claro);
   background: #202024;
 }
 
@@ -365,7 +365,7 @@
   border-radius: var(--radius-sm, 6px);
   object-fit: cover;
   background: #000;
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(201, 169, 97, 0.15);
   flex-shrink: 0;
 }
 
@@ -385,14 +385,14 @@
 
 .ia-prod-tag {
   font-size: 0.7rem;
-  color: var(--color-gold, #D4AF37);
+  color: var(--oro-claro);
   margin-bottom: 2px;
 }
 
 .ia-prod-price {
   font-size: 0.82rem;
   font-weight: 700;
-  color: #00ffd2;
+  color: var(--oro-claro);
 }
 
 .ia-prod-actions {
@@ -402,7 +402,7 @@
 }
 
 .ia-btn-add {
-  background: linear-gradient(135deg, #D4AF37 0%, #AA8B22 100%);
+  background: linear-gradient(135deg, var(--oro-claro) 0%, var(--oro) 100%);
   color: #000;
   border: none;
   padding: 6px 10px;
@@ -438,13 +438,13 @@
   background: #1c1c20;
   border-radius: var(--radius-lg, 14px);
   width: fit-content;
-  border: 1px solid rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(201, 169, 97, 0.15);
 }
 
 .ia-typing-dot {
   width: 6px;
   height: 6px;
-  background: #D4AF37;
+  background: var(--oro-claro);
   border-radius: 50%;
   animation: iaBounce 1.4s infinite ease-in-out both;
 }
@@ -461,7 +461,7 @@
 .ia-chat-footer {
   padding: 12px 14px;
   background: #16161a;
-  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  border-top: 1px solid rgba(201, 169, 97, 0.2);
 }
 
 .ia-chat-form {
@@ -473,7 +473,7 @@
 .ia-chat-input {
   flex: 1;
   background: #0f0f11;
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(201, 169, 97, 0.25);
   border-radius: var(--radius-pill, 9999px);
   padding: 10px 16px;
   color: #F8F9F9;
@@ -484,8 +484,8 @@
 }
 
 .ia-chat-input:focus {
-  border-color: #D4AF37;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+  border-color: var(--oro-claro);
+  box-shadow: 0 0 10px rgba(201, 169, 97, 0.25);
 }
 
 .ia-chat-input::placeholder {
@@ -496,7 +496,7 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #D4AF37 0%, #AA8B22 100%);
+  background: linear-gradient(135deg, var(--oro-claro) 0%, var(--oro) 100%);
   border: none;
   color: #000;
   display: flex;
@@ -520,31 +520,31 @@
 /* ── Adaptación Modo Claro ───────────────────────────────────────────── */
 html.modo-claro .ia-chat-launcher {
   background: linear-gradient(135deg, #ffffff 0%, #f0ede8 100%);
-  border-color: rgba(184, 150, 12, 0.5);
+  border-color: rgba(154, 123, 63, 0.5);
   color: #1a1a1a;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 16px rgba(184, 150, 12, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 16px rgba(154, 123, 63, 0.2);
 }
 
 html.modo-claro .ia-chat-widget {
   background: #ffffff;
-  border-color: rgba(184, 150, 12, 0.35);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25), 0 0 30px rgba(184, 150, 12, 0.15);
+  border-color: rgba(154, 123, 63, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25), 0 0 30px rgba(154, 123, 63, 0.15);
 }
 
 html.modo-claro .ia-chat-header {
   background: #f8f6f2;
-  border-bottom-color: rgba(184, 150, 12, 0.2);
+  border-bottom-color: rgba(154, 123, 63, 0.2);
 }
 
 html.modo-claro .ia-msg.bot .ia-bubble {
   background: #f3f0ea;
   color: #1a1a1a;
-  border-color: rgba(184, 150, 12, 0.2);
+  border-color: rgba(154, 123, 63, 0.2);
 }
 
 html.modo-claro .ia-product-card {
   background: #faf8f5;
-  border-color: rgba(184, 150, 12, 0.25);
+  border-color: rgba(154, 123, 63, 0.25);
 }
 
 html.modo-claro .ia-prod-title {
@@ -556,9 +556,9 @@ html.modo-claro .ia-prod-price {
 }
 
 html.modo-claro .ia-chip {
-  background: rgba(184, 150, 12, 0.1);
+  background: rgba(154, 123, 63, 0.1);
   color: #6d5402;
-  border-color: rgba(184, 150, 12, 0.35);
+  border-color: rgba(154, 123, 63, 0.35);
 }
 
 html.modo-claro .ia-chat-footer {
@@ -568,7 +568,7 @@ html.modo-claro .ia-chat-footer {
 html.modo-claro .ia-chat-input {
   background: #ffffff;
   color: #1a1a1a;
-  border-color: rgba(184, 150, 12, 0.3);
+  border-color: rgba(154, 123, 63, 0.3);
 }
 
 /* ── Ocultar Botón Flotante de WhatsApp mientras el Chatbot esté Abierto ── */

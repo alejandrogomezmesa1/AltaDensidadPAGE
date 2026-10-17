@@ -97,11 +97,11 @@ export default function Nosotros() {
           </div>
           <div className="rv in tab-panels">
             <div id="tab-mision" role="tabpanel" hidden={pestana !== 'mision'}>
-              <p>Ofrecer fragancias de alta calidad a precios competitivos, brindando una experiencia de compra agradable y cercana. Buscamos que cada aroma te haga sentir cómodo, seguro y confiado, acompañándote en tu día a día.</p>
-              <p>En 2028, Fragancias de Alta Densidad busca convertirse en una marca referente en Colombia, con presencia estratégica reconocida por su calidad, accesibilidad y experiencia personalizada.</p>
+              <p>Ofrecer fragancias de alta calidad a precios competitivos, con una experiencia de compra cercana, agradable y confiable. Buscamos que cada aroma te haga sentir cómodo, seguro y auténtico, acompañándote en los distintos momentos de tu día.</p>
             </div>
             <div id="tab-vision" role="tabpanel" hidden={pestana !== 'vision'}>
-              <p>Trabajamos día a día para ser confiables y accesibles, proporcionando perfumes de alta calidad. Nuestro fin es brindar fragancias únicas y exclusivas, incluyendo creaciones propias, con precios justos para que todos puedan disfrutar del arte de los perfumes.</p>
+              <p>Para 2028, Fragancias de Alta Densidad busca consolidarse como una marca referente en el mercado colombiano de fragancias, reconocida por su calidad, sus precios accesibles y la atención personalizada.</p>
+              <p>Queremos llegar a más regiones del país y seguir innovando, con creaciones propias, para ofrecer experiencias únicas a cada cliente.</p>
             </div>
             <div id="tab-compromiso" role="tabpanel" hidden={pestana !== 'compromiso'}>
               <p>Mantener intactos nuestros valores: calidad, servicio y accesibilidad. Siendo auténticos y escuchando siempre las sugerencias de nuestros usuarios, pues el compromiso más grande siempre será con cada uno de nuestros clientes.</p>

@@ -530,19 +530,46 @@ header.haute-header nav {
 
 .logo {
   text-decoration: none;
-  font-size: 13px;
-  letter-spacing: var(--ls-logo);
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.3;
   color: var(--c-ink);
+  display: inline-flex;
+  justify-self: center;
 }
 
-.logo small {
-  display: block;
+/* Imagotipo horizontal del brand book: símbolo (gota tallada) + ALTA DENSIDAD + descriptor */
+.logotipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logotipo-simbolo {
+  color: var(--c-accent);
+  flex: none;
+}
+
+.logotipo-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+.logotipo-nombre {
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-right: -0.3em;
+}
+
+.logotipo-desc {
+  font-family: var(--f-ui);
   font-size: 8px;
-  letter-spacing: 0.5em;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
   color: var(--c-mute);
+  margin-top: 6px;
 }
 
 @media(max-width: 820px) {
@@ -555,7 +582,7 @@ header.haute-header nav {
     gap: 8px;
   }
   .logo {
-    text-align: left;
+    justify-self: start;
     grid-row: 1;
   }
   .nav-r {
@@ -572,231 +599,23 @@ header.haute-header nav {
   }
 }
 
-/* Hero */
+/* ── Portada (brand book v3): calma editorial, un solo parallax (el frasco) ── */
+.inicio {
+  display: contents;
+}
+
 .hero {
-  min-height: 84vh;
+  min-height: calc(92vh - var(--nav-h));
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.05fr 0.95fr;
   border-bottom: var(--bw) solid var(--c-line);
 }
 
 .hero-t {
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: var(--gutter);
-}
-
-/* ---- Narrador de la escena del hero: los tres actos de la pirámide olfativa (EsenciaHero) ----
-   Oculto en reposo: solo existe mientras el scroll recorre la escena. Sin transform en CSS
-   porque GSAP anima su y. */
-.actos {
-  position: absolute;
-  inset: 0 var(--gutter);
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-content: center;
-  align-items: center;
-  column-gap: var(--sp-5);
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-}
-
-.actos-escena {
-  display: grid;
-}
-
-.acto {
-  grid-area: 1 / 1;
-}
-
-.acto > * {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.acto-nota {
-  display: block;
-  font: 500 11px/1 var(--f-ui);
-  letter-spacing: 0.22em;
-  color: var(--c-mute);
-}
-
-/* .hero .acto-*: deben ganarle a la regla .hero p del párrafo del hero */
-.hero .acto-titulo {
-  margin: var(--sp-3) 0 var(--sp-2);
-  font-family: var(--f-display);
-  font-weight: 300;
-  font-size: clamp(40px, 5vw, 80px);
-  line-height: 1.02;
-  color: var(--c-ink);
-  text-wrap: balance;
-}
-
-.hero .acto-titulo em {
-  font-style: italic;
-  color: var(--c-accent);
-}
-
-/* Subtítulo: la frase del acto, que se escribe letra a letra (SplitText, máscara por palabra) */
-.hero .acto-sub {
-  max-width: none;
-  margin: 0 0 var(--sp-3);
-  font-family: var(--f-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(22px, 2.3vw, 34px);
-  line-height: 1.2;
-  color: var(--c-accent);
-}
-
-.hero .acto-sub > div {
-  padding: 0.1em 0.08em 0.16em 0;
-  margin: -0.1em -0.08em -0.16em 0;
-}
-
-.hero .acto-texto {
-  max-width: 32ch;
-  margin: 0;
-  font-size: var(--fs-3);
-  line-height: var(--lh-body);
-  color: var(--c-mute);
-}
-
-/* Recorrido de la escena: camino con tres estaciones (vertical en escritorio, horizontal en móvil) */
-.ruta {
-  pointer-events: auto;
-}
-
-.ruta svg {
-  display: block;
-  overflow: visible;
-}
-
-.ruta-base,
-.ruta-trazo {
-  fill: none;
-  stroke-linecap: round;
-}
-
-.ruta-base {
-  stroke: var(--c-line);
-  stroke-width: 1;
-}
-
-.ruta-trazo {
-  stroke: var(--c-accent);
-  stroke-width: 1.6;
-}
-
-.ruta-punto {
-  fill: var(--c-bg);
-  stroke: var(--c-accent);
-  stroke-width: 1.5;
-}
-
-.ruta-viajero {
-  fill: var(--c-accent);
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c-accent) 80%, transparent));
-}
-
-.ruta-estaciones {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.ruta-estacion {
-  padding: 4px 0;
-  background: none;
-  border: 0;
-  font: 500 11px/1 var(--f-ui);
-  letter-spacing: 0.2em;
-  color: var(--c-ink);
-  opacity: 0.35;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.ruta-estacion:focus-visible {
-  outline: 1px solid var(--c-accent);
-  outline-offset: 4px;
-}
-
-.ruta-num {
-  color: var(--c-accent);
-  margin-right: 6px;
-}
-
-.ruta--v {
-  display: grid;
-  grid-template-columns: 40px auto;
-  column-gap: var(--sp-2);
-  height: 300px;
-}
-
-.ruta--v svg {
-  width: 40px;
-  height: 300px;
-}
-
-.ruta--v .ruta-estaciones {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-block: 0;
-}
-
-.ruta--h {
-  display: none;
-}
-
-.ruta--h svg {
-  width: 100%;
-  max-width: 300px;
-  height: 40px;
-}
-
-.ruta--h .ruta-estaciones {
-  display: flex;
-  justify-content: space-between;
-  max-width: 300px;
-  margin-top: var(--sp-1);
-}
-
-/* ---- Manifiesto: palabras que se encienden con el scroll (efectosScroll.js) ---- */
-.manifiesto {
-  padding-block: calc(var(--sec) * 1.4);
-  border-bottom: var(--bw) solid var(--c-line);
-}
-
-.manifiesto .wrap {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-}
-
-.manifiesto-texto {
-  max-width: 24ch;
-  margin: 0;
-  font-family: var(--f-display);
-  font-weight: 300;
-  font-size: clamp(32px, 4.6vw, 68px);
-  line-height: 1.14;
-  color: var(--c-ink);
-}
-
-.manifiesto-texto em {
-  font-style: italic;
-  color: var(--c-accent);
-}
-
-.manifiesto-firma {
-  font: 500 11px/1 var(--f-ui);
-  letter-spacing: 0.22em;
-  color: var(--c-mute);
+  justify-content: center;
+  padding: var(--sec) var(--gutter);
 }
 
 .hero h1 {
@@ -813,167 +632,249 @@ header.haute-header nav {
 }
 
 .hero p {
-  max-width: 34ch;
+  max-width: 38ch;
   margin-bottom: var(--sp-5);
   font-size: var(--fs-3);
 }
 
-.hero .stage {
-  perspective: 900px;
+.hero-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: radial-gradient(circle at center, rgba(32, 28, 20, 0.6) 0%, var(--c-surface) 75%);
-  cursor: default;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
 }
 
-.hero-image-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
+/* Escenario del frasco: superficie con un halo cálido fijo (sin animación) */
+.hero-escenario {
   display: grid;
   place-items: center;
-  z-index: 1;
-  padding: var(--sp-4);
-  /* Sin transición: GSAP la anima en la explosión (ExplosionHero.jsx) */
-  will-change: transform;
+  padding: var(--sp-6) var(--gutter);
+  background: radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--c-accent) 14%, transparent) 0%, transparent 62%), var(--c-surface);
+  border-left: var(--bw) solid var(--c-line);
 }
 
-/* Contenedor de la página de inicio: no altera el layout, solo delimita los efectos de scroll */
-.inicio {
-  display: contents;
-}
-
-/* Barra de progreso de lectura (efectosScroll.js) */
-.progreso-scroll {
-  position: fixed;
-  top: env(safe-area-inset-top, 0px);
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--c-accent) 55%, transparent), var(--c-accent));
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  z-index: calc(var(--z-header) + 1);
-  pointer-events: none;
-  will-change: transform;
-}
-
-
-/* Líneas de SplitText: la máscara recorta la subida; un respiro para acentos, descendentes y
-   cursivas que el padding da y el margen negativo devuelve. El titular partido pasa a columna
-   flex porque en bloque los márgenes negativos de líneas vecinas colapsarían y lo alargarían. */
-:is(h1, h2):has(> .linea-mask) {
-  display: flex;
-  flex-direction: column;
-}
-
-.linea-mask {
-  padding: 0.1em 0.12em 0.1em 0;
-  margin: -0.1em -0.12em -0.1em 0;
-}
-
-/* Capa interna que GSAP hace flotar y girar (Inicio.jsx) */
-.hero-flote {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  will-change: transform;
-}
-
-/* Marco de la foto: borde, sombra y recorte. La foto se desliza dentro con el scroll */
-.hero-marco {
+/* Marco ventana (B5.1): arco superior y doble filete oro; la foto se desliza dentro (parallax) */
+.hero-ventana {
   position: relative;
-  width: 100%;
+  width: min(100%, 420px);
+  aspect-ratio: 4 / 5.2;
   overflow: hidden;
-  border-radius: 20px;
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(212, 175, 55, 0.22);
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  border-radius: 999px 999px 0 0;
+  border: var(--bw) solid var(--c-accent);
 }
 
-/* Capa de parallax de la foto (efectosScroll.js) */
-.hero-parallax {
-  display: grid;
-  will-change: transform;
-}
-
-.hero-parallax > img {
-  grid-area: 1 / 1;
-}
-
-.hero-signature-img {
-  display: block;
-  width: 100%;
-  max-height: 70vh;
-  object-fit: cover;
-  transition: opacity 0.4s ease;
-  user-select: none;
-}
-
-.hero-signature-img--dark {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.hero-signature-img--light {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.hero .stage:hover .hero-marco {
-  transform: translateY(-6px);
-  box-shadow: 0 32px 70px rgba(0, 0, 0, 0.95), 0 0 55px rgba(212, 175, 55, 0.38);
-  border-color: rgba(212, 175, 55, 0.65);
-}
-
-.hero .stage .bottle {
-  transition: transform 0.15s ease-out;
-}
-
-.hero .stage::after {
+.hero-ventana::after {
   content: "";
   position: absolute;
-  width: 75%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--c-accent) 32%, transparent), transparent 70%);
-  animation: mist 7s ease-in-out infinite alternate;
+  inset: 8px;
+  border-radius: 999px 999px 0 0;
+  border: var(--bw) solid color-mix(in srgb, var(--c-accent) 55%, transparent);
   pointer-events: none;
-  z-index: 0;
 }
 
-@keyframes mist {
-  to {
-    transform: translateY(-8%) scale(1.18);
-    opacity: 0.65;
-  }
+.hero-foto {
+  position: absolute;
+  inset: -8% 0;
+  display: grid;
+  will-change: transform;
 }
 
-html.modo-claro .hero .stage {
-  background: radial-gradient(circle at center, rgba(242, 237, 227, 0.9) 0%, var(--c-surface) 75%);
+.hero-img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--t-2) ease;
 }
 
-html.modo-claro .hero-signature-img--dark {
+.hero-img--clara {
   opacity: 0;
-  pointer-events: none;
 }
 
-html.modo-claro .hero-signature-img--light {
+html.modo-claro .hero-img--oscura {
+  opacity: 0;
+}
+
+html.modo-claro .hero-img--clara {
   opacity: 1;
-  pointer-events: auto;
 }
 
-html.modo-claro .hero-marco {
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1), 0 0 25px rgba(184, 150, 12, 0.18);
-  border-color: rgba(184, 150, 12, 0.35);
+/* Manifiesto: frase y pirámide olfativa en tres actos */
+.manifiesto .wrap {
+  text-align: center;
 }
 
-html.modo-claro .hero .stage:hover .hero-marco {
-  box-shadow: 0 26px 55px rgba(0, 0, 0, 0.16), 0 0 35px rgba(184, 150, 12, 0.28);
-  border-color: rgba(184, 150, 12, 0.55);
+.manifiesto-texto {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: var(--fs-5);
+  line-height: 1.1;
+  margin: var(--sp-3) auto var(--sp-6);
+  max-width: 22ch;
+}
+
+.manifiesto-texto em {
+  font-style: italic;
+  color: var(--c-accent);
+}
+
+.actos {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: var(--bw) solid var(--c-line);
+  text-align: left;
+}
+
+.acto {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-5) var(--sp-4) var(--sp-5) 0;
+}
+
+.acto + .acto {
+  padding-left: var(--sp-4);
+  border-left: var(--bw) solid var(--c-line);
+}
+
+.acto-num {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 44px;
+  line-height: 1;
+  color: var(--c-accent);
+}
+
+.acto-nota {
+  font-size: var(--fs-1);
+  letter-spacing: var(--ls-ui);
+  color: var(--c-accent);
+}
+
+.acto-sub {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: var(--fs-4);
+}
+
+.acto-texto {
+  font-size: var(--fs-2);
+  max-width: 32ch;
+}
+
+.manifiesto-firma {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  font-size: var(--fs-1);
+  letter-spacing: var(--ls-ui);
+  color: var(--c-mute);
+}
+
+.manifiesto-firma svg {
+  color: var(--c-accent);
+}
+
+/* Top 10 · vista previa quieta (el desfile completo vive en /top10) */
+.top-preview {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-4);
+}
+
+.top-preview-item {
+  display: grid;
+  gap: var(--sp-2);
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.top-preview-foto {
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--c-surface);
+  border: var(--bw) solid var(--c-line);
+}
+
+.top-preview-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-3) var(--ease);
+}
+
+.top-preview-item:hover .top-preview-foto img,
+.top-preview-item:focus-visible .top-preview-foto img {
+  transform: scale(1.03);
+}
+
+.top-preview-num {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--c-accent);
+  margin-top: var(--sp-2);
+}
+
+.top-preview-nombre {
+  font-family: var(--f-display);
+  font-size: var(--fs-4);
+}
+
+.top-preview-precio {
+  font-size: var(--fs-1);
+  letter-spacing: var(--ls-ui);
+  color: var(--c-mute);
+}
+
+/* La casa: tres pilares con iconografía de línea fina */
+.pilares {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: var(--bw) solid var(--c-line);
+}
+
+.pilar {
+  display: grid;
+  gap: var(--sp-3);
+  align-content: start;
+  padding: var(--sp-5) var(--sp-4) var(--sp-4) 0;
+}
+
+.pilar + .pilar {
+  padding-left: var(--sp-4);
+  border-left: var(--bw) solid var(--c-line);
+}
+
+.pilar-icono {
+  color: var(--c-accent);
+}
+
+.pilar h3 {
+  font-size: var(--fs-2);
+  letter-spacing: var(--ls-ui);
+  font-weight: 500;
+}
+
+.pilar p {
+  font-size: var(--fs-2);
+  max-width: 34ch;
+}
+
+.sec-h h2 em {
+  font-style: italic;
+  color: var(--c-accent);
 }
 
 @media(max-width: 820px) {
@@ -981,252 +882,37 @@ html.modo-claro .hero .stage:hover .hero-marco {
     grid-template-columns: 1fr;
     min-height: auto;
   }
-  .hero .stage {
-    min-height: 44vh;
-    padding: var(--sp-4) var(--gutter);
+  .hero-escenario {
     order: -1;
+    padding: var(--sp-5) var(--gutter);
+    border-left: 0;
+    border-bottom: var(--bw) solid var(--c-line);
   }
-  .hero-image-wrap {
-    max-width: 340px;
-    padding: var(--sp-2);
-  }
-  .hero-signature-img {
-    max-height: 38vh;
-  }
-  .hero-marco {
-    border-radius: 16px;
+  .hero-ventana {
+    width: min(72%, 320px);
   }
   .hero-t {
-    padding: var(--sp-5) var(--gutter);
+    padding: var(--sp-5) var(--gutter) var(--sp-6);
   }
-  .actos {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: var(--sp-4);
-    padding-top: var(--sp-5);
+  .actos,
+  .pilares {
+    grid-template-columns: 1fr;
   }
-  .ruta--v {
-    display: none;
+  .acto,
+  .acto + .acto,
+  .pilar,
+  .pilar + .pilar {
+    padding: var(--sp-4) 0;
+    border-left: 0;
   }
-  /* Arriba del narrador: abajo lo taparían los botones flotantes (WhatsApp, AURA) */
-  .ruta--h {
-    display: block;
-    order: -1;
+  .acto + .acto,
+  .pilar + .pilar {
+    border-top: var(--bw) solid var(--c-line);
   }
-  .hero .acto-titulo {
-    font-size: clamp(34px, 10vw, 46px);
+  .top-preview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-4) var(--sp-3);
   }
-  .hero .acto-sub {
-    font-size: clamp(20px, 6vw, 26px);
-  }
-}
-
-/* ---- Liberar la esencia: vapor dorado que sube del frasco (EsenciaHero.jsx) ---- */
-.hero {
-  position: relative;
-  overflow: hidden;
-}
-
-.esencia {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.esencia-halo,
-.esencia-particula {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 50%;
-  opacity: 0;
-  visibility: hidden;
-  mix-blend-mode: screen;
-  will-change: transform, opacity;
-}
-
-.esencia-halo {
-  width: 520px;
-  height: 520px;
-  margin: -260px 0 0 -260px;
-  background: radial-gradient(circle, rgba(255, 226, 150, 0.5) 0%, rgba(212, 175, 55, 0.2) 35%, transparent 70%);
-}
-
-.esencia-particula {
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
-  background: radial-gradient(circle, #fffaf0 0%, #f6d98a 30%, rgba(212, 175, 55, 0.35) 50%, rgba(212, 175, 55, 0) 70%);
-}
-
-.esencia-particula--bruma {
-  background: radial-gradient(circle, rgba(255, 236, 190, 0.55) 0%, rgba(212, 175, 55, 0.18) 40%, rgba(212, 175, 55, 0) 70%);
-}
-
-/* En claro "screen" aclararía sobre el marfil y el vapor desaparecería: se usa "multiply" con
-   ámbar, que tiñe la foto clara igual que el oro ilumina la oscura */
-html.modo-claro .esencia-halo,
-html.modo-claro .esencia-particula {
-  mix-blend-mode: multiply;
-}
-
-html.modo-claro .esencia-halo {
-  background: radial-gradient(circle, rgba(222, 176, 72, 0.5) 0%, rgba(222, 176, 72, 0.18) 40%, transparent 70%);
-}
-
-html.modo-claro .esencia-particula {
-  background: radial-gradient(circle, rgba(128, 88, 6, 1) 0%, rgba(168, 122, 18, 0.7) 30%, rgba(184, 150, 12, 0) 60%);
-}
-
-html.modo-claro .esencia-particula--bruma {
-  background: radial-gradient(circle, rgba(196, 146, 52, 0.6) 0%, rgba(214, 176, 96, 0.25) 40%, rgba(214, 176, 96, 0) 70%);
-}
-
-/* ---- Detonador de Scroll de Alta Perfumería ---- */
-.hero-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--sp-3);
-  margin-top: var(--sp-3);
-}
-
-.hero-detonador-scroll {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 18px 8px 10px;
-  background: rgba(21, 21, 23, 0.55);
-  border: var(--bw) solid var(--c-line);
-  color: var(--c-ink);
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all var(--t-2) var(--ease);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-detonador-scroll::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.12), transparent 70%);
-  opacity: 0;
-  transition: opacity var(--t-2) var(--ease);
-}
-
-.hero-detonador-scroll:hover {
-  border-color: var(--c-accent);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(201, 169, 97, 0.15);
-}
-
-.hero-detonador-scroll:hover::before {
-  opacity: 1;
-}
-
-html.modo-claro .hero-detonador-scroll {
-  background: rgba(244, 241, 234, 0.75);
-  border-color: var(--c-line);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-}
-
-html.modo-claro .hero-detonador-scroll:hover {
-  border-color: var(--c-accent);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 16px rgba(184, 150, 12, 0.15);
-}
-
-/* Cápsula con filamento y gota deslizante */
-.detonador-capsula {
-  width: 18px;
-  height: 28px;
-  border: var(--bw) solid var(--c-line);
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 3px 0;
-  background: rgba(0, 0, 0, 0.2);
-  transition: border-color var(--t-1) var(--ease);
-  flex-shrink: 0;
-}
-
-.hero-detonador-scroll:hover .detonador-capsula {
-  border-color: var(--c-accent);
-}
-
-html.modo-claro .detonador-capsula {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.detonador-filamento {
-  width: 2px;
-  height: 100%;
-  position: relative;
-  display: block;
-}
-
-.detonador-gota {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 4px;
-  height: 4px;
-  margin-left: -2px;
-  border-radius: 50%;
-  background: var(--c-accent);
-  box-shadow: 0 0 6px var(--c-accent);
-  animation: gotaDescenso 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes gotaDescenso {
-  0% { transform: translateY(0); opacity: 0; }
-  25% { opacity: 1; }
-  75% { opacity: 0.9; }
-  100% { transform: translateY(14px); opacity: 0; }
-}
-
-/* Textos editoriales dentro del detonador */
-.detonador-texto-wrap {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  line-height: 1.25;
-}
-
-.detonador-etiqueta {
-  font: 600 9.5px var(--f-ui);
-  letter-spacing: 0.22em;
-  color: var(--c-accent);
-  text-transform: uppercase;
-}
-
-.detonador-titulo {
-  font: 300 12.5px var(--f-display);
-  font-style: italic;
-  color: var(--c-mute);
-  letter-spacing: 0.03em;
-  transition: color var(--t-1) var(--ease);
-}
-
-.hero-detonador-scroll:hover .detonador-titulo {
-  color: var(--c-ink);
-}
-
-/* Icono flecha sutil */
-.detonador-flecha {
-  color: var(--c-accent);
-  margin-left: 2px;
-  transition: transform var(--t-1) var(--ease);
-  flex-shrink: 0;
-}
-
-.hero-detonador-scroll:hover .detonador-flecha {
-  transform: translateY(3px);
 }
 
 /* Secciones Generales */
@@ -2467,8 +2153,12 @@ footer.haute-footer {
 }
 
 .foot-logo {
-  text-align: left;
-  margin-bottom: var(--sp-1);
+  justify-self: start;
+  margin-bottom: var(--sp-2);
+}
+
+.foot-logo .logotipo-nombre {
+  font-size: 20px;
 }
 
 .foot-col p {
@@ -4020,7 +3710,7 @@ body.ad-layer-open .ia-chat-launcher {
     gap: 8px;
   }
   .logo {
-    text-align: left;
+    justify-self: start;
     grid-row: 1;
   }
   .nav-r {
@@ -4040,12 +3730,15 @@ body.ad-layer-open .ia-chat-launcher {
 
 /* Celulares angostos (320–380 px): todo cabe en la cabecera sin cortar "Bolsa (0)" */
 @media (max-width: 380px) {
-  .logo {
-    font-size: 11px;
-    letter-spacing: 0.28em;
+  .logotipo {
+    gap: 8px;
   }
-  .logo small {
-    letter-spacing: 0.36em;
+  .logotipo-nombre {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+  }
+  .logotipo-desc {
+    letter-spacing: 0.4em;
   }
   .nav-ico {
     width: 30px;

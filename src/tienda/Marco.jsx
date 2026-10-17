@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigationType } from 'react-router-dom';
 import { BotonTema } from '../lib/hooks';
 import { useTienda } from './TiendaContext';
 import { WA_FLOTANTE } from '../config';
+import { Logotipo } from './Marca';
 
 function leerSesion() {
   try {
@@ -86,8 +87,8 @@ export function Encabezado() {
         {enInicio ? <a href="#top">Top 10</a> : <Link to="/top10" aria-current={actual('/top10')}>Top 10</Link>}
         {enInicio ? <a href="#nosotros">Nosotros</a> : <Link to="/nosotros" aria-current={actual('/nosotros')}>Nosotros</Link>}
       </nav>
-      <Link className="logo" to="/" onClick={() => enInicio && window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        Alta Densidad<small>Fragancias</small>
+      <Link className="logo" to="/" aria-label="Fragancias de Alta Densidad · Inicio" onClick={() => enInicio && window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <Logotipo simbolo={26} />
       </Link>
       <nav className="up nav-r">
         <BotonTema />
@@ -110,7 +111,7 @@ export function Pie() {
     <footer className="haute-footer" id="contacto">
       <div className="wrap foot-grid">
         <div className="foot-col">
-          <Link className="logo foot-logo" to="/">Alta Densidad<small>Fragancias</small></Link>
+          <Link className="logo foot-logo" to="/" aria-label="Fragancias de Alta Densidad · Inicio"><Logotipo simbolo={38} /></Link>
           <p className="mute">Casa de perfumería de autor en Medellín. Concentración pura Extrait de Parfum y base de feromonas.</p>
           <div className="foot-social">
             <a href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i className="fab fa-instagram" aria-hidden="true" /></a>

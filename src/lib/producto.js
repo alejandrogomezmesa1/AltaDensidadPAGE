@@ -1,6 +1,7 @@
 // Modelo de producto de la tienda: marca, colección, perfil olfativo, precio e imagen.
 
-export const LOGO = '/assets/img/Logo2026.png';
+// Respaldo cuando un producto no tiene foto: el símbolo de la casa (gota tallada) sobre grafito
+export const LOGO = '/assets/marca/simbolo-respaldo.png';
 
 export const fmt = (n) => '$' + Number(n).toLocaleString('es-CO');
 
