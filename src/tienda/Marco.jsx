@@ -112,7 +112,7 @@ export function Pie() {
       <div className="wrap foot-grid">
         <div className="foot-col">
           <Link className="logo foot-logo" to="/" aria-label="Fragancias de Alta Densidad · Inicio"><Logotipo simbolo={38} /></Link>
-          <p className="mute">Casa de perfumería de autor en Medellín. Concentración pura Extrait de Parfum y base de feromonas.</p>
+          <p className="mute">Casa de fragancias en Medellín. Alta concentración con base de feromonas.</p>
           <div className="foot-social">
             <a href="https://www.instagram.com/fragancias_alta_densidad/?hl=es" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i className="fab fa-instagram" aria-hidden="true" /></a>
             <a href="https://www.tiktok.com/@fragancias_altadensidad" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i className="fab fa-tiktok" aria-hidden="true" /></a>
@@ -151,8 +151,6 @@ export function Pie() {
 export function WhatsappFlotante() {
   return (
     <div className="whatsapp-flotante-wrapper" aria-label="Contacto directo por WhatsApp">
-      <div className="whatsapp-ripple-ring ring-1" />
-      <div className="whatsapp-ripple-ring ring-2" />
       <a className="btn-whatsapp-flotante" href={WA_FLOTANTE} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
         <i className="fab fa-whatsapp" aria-hidden="true" />
       </a>

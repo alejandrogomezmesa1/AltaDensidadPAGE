@@ -148,7 +148,7 @@ export default function Armador({ fraganciaInicial }) {
           </div>
         </Paso>
 
-        <Paso n={3} titulo={producto && !cambiando ? 'Tu esencia' : 'Elige la esencia'} ayuda="La fragancia que llevará tu perfume, en concentración Extrait." listo={!!producto}>
+        <Paso n={3} titulo={producto && !cambiando ? 'Tu esencia' : 'Elige la esencia'} ayuda="La fragancia que llevará tu perfume, en alta concentración." listo={!!producto}>
           {producto && !cambiando ? (
             <div className="arm-elegida">
               <div className="arm-fragancia on" aria-current="true">

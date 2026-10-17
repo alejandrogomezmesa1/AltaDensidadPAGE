@@ -620,3 +620,59 @@ body.ia-chat-open .whatsapp-flotante-wrapper {
   margin-top: 6px;
   font-style: italic;
 }
+
+/* ── Lanzador de AURA (brand book): círculo de 44 px igual al de WhatsApp ──
+   Tinta con filete oro y el destello; el nombre queda solo para lectores de pantalla. */
+.ia-chat-launcher,
+html.modo-claro .ia-chat-launcher {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+  background: var(--c-bg);
+  border: var(--bw) solid color-mix(in srgb, var(--c-accent) 45%, transparent);
+  box-shadow: none;
+  transition: border-color var(--t-1) ease;
+}
+
+.ia-chat-launcher:hover,
+.ia-chat-launcher:active,
+html.modo-claro .ia-chat-launcher:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--c-accent);
+}
+
+.ia-launcher-avatar,
+html.modo-claro .ia-launcher-avatar {
+  width: auto;
+  height: auto;
+  background: none;
+  box-shadow: none;
+  color: var(--c-accent);
+}
+
+.ia-pulse-dot {
+  width: 7px;
+  height: 7px;
+  top: -6px;
+  right: -8px;
+  border: 0;
+  animation: none;
+}
+
+.ia-launcher-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .ia-chat-launcher {
+    padding: 0;
+  }
+}

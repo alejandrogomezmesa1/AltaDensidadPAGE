@@ -10,7 +10,7 @@ import { WA } from '../config';
 function Specs({ style }) {
   return (
     <div className="specs up" style={style}>
-      <div><b>Extrait</b>de Parfum</div>
+      <div><b>Alta</b>concentración</div>
       <div><b>12h+</b>Fijación</div>
       <div><b>+</b>Feromonas</div>
     </div>

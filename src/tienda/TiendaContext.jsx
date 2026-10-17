@@ -148,7 +148,7 @@ export function TiendaProvider({ children }) {
           image: normalizarImagen(item.image || item.imagen),
           material: item.material || 'Vidrio',
           sizes: tallas,
-          description: item.description || item.descripcion || (coincidencia ? coincidencia.description : 'Envase de autor.')
+          description: item.description || item.descripcion || (coincidencia ? coincidencia.description : 'Envase de la casa Alta Densidad.')
         };
       }));
     });

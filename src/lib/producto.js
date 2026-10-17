@@ -86,7 +86,7 @@ export function etiquetaTalla(ml) {
 
 export function descripcion(p) {
   if (p.desc) return p.desc;
-  return 'Concentración pura Extrait de Parfum con base de feromonas.';
+  return 'Alta concentración con base de feromonas.';
 }
 
 export const normalizar = (txt) => (txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();

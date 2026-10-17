@@ -15,12 +15,12 @@ import { SITIO } from '../config';
 const ACTOS = [
   { n: 'I', nota: 'Salida', sub: 'El primer destello', texto: 'Luminosas y fugaces: la primera impresión, la que abre el camino.' },
   { n: 'II', nota: 'Corazón', sub: 'La esencia se abre', texto: 'El carácter del perfume florece al contacto con la piel.' },
-  { n: 'III', nota: 'Fondo', sub: 'Lo que permanece', texto: 'Concentrado en Extrait de Parfum para acompañarte todo el día.' }
+  { n: 'III', nota: 'Fondo', sub: 'Lo que permanece', texto: 'Lo más concentrado de la fragancia: te acompaña todo el día.' }
 ];
 
 // Los pilares de la casa, con la iconografía de línea fina del brand book
 const PILARES = [
-  { t: 'Concentración', d: 'Extrait de Parfum: la concentración más alta. Más fijación con menos atomizaciones.',
+  { t: 'Concentración', d: 'Alta concentración de esencia: más fijación con menos atomizaciones.',
     icono: <path d="M12,3 C14,8 18,10.5 18,15 A6,6 0 1 1 6,15 C6,10.5 10,8 12,3 Z" /> },
   { t: 'Feromonas', d: 'Una base inodora que acompaña la piel y suma presencia a la estela.',
     icono: <><path d="M3,9 C6,6 9,12 12,9 S18,6 21,9" /><path d="M3,13 C6,10 9,16 12,13 S18,10 21,13" /><path d="M3,17 C6,14 9,20 12,17 S18,14 21,17" /></> },
@@ -53,10 +53,10 @@ function HeroFrasco({ heroRef }) {
     <div className="hero-escenario" aria-label="Frasco insignia de Fragancias de Alta Densidad">
       <div className="hero-ventana">
         <div className="hero-foto" ref={fotoRef}>
-          <img src="/assets/img/hero-alta-densidad.jpg" alt="Frasco insignia de Alta Densidad, Extrait de Parfum"
-            className="hero-img hero-img--oscura" width="600" height="600" loading="eager" fetchPriority="high" />
-          <img src="/assets/img/hero-alta-densidad-light.jpg" alt=""
-            className="hero-img hero-img--clara" width="600" height="600" loading="eager" />
+          <img src="/assets/marca/hero-frasco-oscuro.svg" alt="Frasco insignia de Fragancias de Alta Densidad sobre un pedestal"
+            className="hero-img hero-img--oscura" width="840" height="1092" loading="eager" fetchPriority="high" />
+          <img src="/assets/marca/hero-frasco-claro.svg" alt=""
+            className="hero-img hero-img--clara" width="840" height="1092" loading="eager" />
         </div>
       </div>
     </div>
@@ -98,10 +98,10 @@ export default function Inicio() {
   const heroRef = useRef(null);
 
   usePagina({
-    titulo: 'Fragancias de Alta Densidad | Extrait de Parfum & Perfumería de Autor en Medellín',
-    descripcion: 'Perfumería de autor en Medellín. Fragancias inspiradas en los grandes nichos y diseñadores, en concentración Extrait de Parfum con feromonas.',
-    ogTitulo: 'Fragancias de Alta Densidad | Pura intensidad. Extrait de Parfum.',
-    ogDescripcion: 'Perfumería de autor en Medellín: Extrait de Parfum con feromonas, envíos a toda Colombia.'
+    titulo: 'Fragancias de Alta Densidad | Lo que permanece · Medellín',
+    descripcion: 'Fragancias inspiradas en los grandes nichos y diseñadores, en alta concentración y con feromonas. Hechas en Medellín, con envíos a toda Colombia.',
+    ogTitulo: 'Fragancias de Alta Densidad | Lo que permanece.',
+    ogDescripcion: 'Fragancias en alta concentración con feromonas, hechas en Medellín. Envíos a toda Colombia.'
   });
 
   // Datos estructurados del catálogo completo para buscadores
@@ -117,7 +117,7 @@ export default function Inicio() {
         '@type': 'Product',
         name: p.n,
         image: urlAbsoluta(p.img, SITIO),
-        description: p.desc || `Perfume ${p.n} en concentración Extrait de Parfum.`,
+        description: p.desc || `Perfume ${p.n} en alta concentración con feromonas.`,
         category: etiquetaColeccion(p.c),
         brand: { '@type': 'Brand', name: 'Alta Densidad' },
         offers: { '@type': 'Offer', priceCurrency: 'COP', price: pr(p), availability: 'https://schema.org/InStock', url: SITIO + rutaPerfume(p.id) }
@@ -131,9 +131,9 @@ export default function Inicio() {
 
       <section className="hero" ref={heroRef}>
         <div className="hero-t">
-          <span className="up eyebrow">Perfumería de autor · Medellín</span>
-          <h1 className="disp">Pura intensidad.<br /><em>Extrait de Parfum.</em></h1>
-          <p className="mute">Fragancias inspiradas en los grandes nichos y diseñadores, concentradas en Extrait de Parfum y con feromonas.</p>
+          <span className="up eyebrow">Fragancias de Alta Densidad · Medellín</span>
+          <h1 className="disp">Lo que<br /><em>permanece.</em></h1>
+          <p className="mute">Fragancias inspiradas en los grandes nichos y diseñadores, en alta concentración y con feromonas.</p>
           <div className="hero-actions">
             <a className="btn up" href="#catalogo" onClick={(e) => { e.preventDefault(); desplazarA('#catalogo'); }}>Explorar catálogo</a>
             <Link className="link up" to="/catalogo?ver=crear">Crea tu perfume</Link>
@@ -158,7 +158,7 @@ export default function Inicio() {
               </li>
             ))}
           </ol>
-          <p className="manifiesto-firma up"><Simbolo size={18} /> Alta Densidad · Perfumería de autor · Medellín</p>
+          <p className="manifiesto-firma up"><Simbolo size={18} /> Fragancias de Alta Densidad · Medellín</p>
         </div>
       </section>
 

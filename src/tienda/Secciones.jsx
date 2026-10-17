@@ -191,7 +191,7 @@ export function Coleccion({ titulo = 'La colección' }) {
           <div>
             <h2>{titulo}</h2>
             <p className="mute" style={{ marginTop: 'var(--sp-1)', fontSize: 'var(--fs-2)' }}>
-              {P.length} formulaciones · Extrait de Parfum · Base de feromonas
+              {P.length} formulaciones · Alta concentración · Base de feromonas
             </p>
           </div>
           <div className="col-actions">
@@ -243,7 +243,7 @@ export function Coleccion({ titulo = 'La colección' }) {
           ) : visibles.map((p, idx) => (
             <article className="card" key={p.id}>
               <div className="stage" onClick={() => abrirDetalle(p.id)}>
-                <span className="tag up">Extrait de Parfum</span>
+                <span className="tag up">Alta concentración</span>
                 <Frasco h={p.h} s={1} img={p.img} nombre={p.n} prioridad={actual === 1 && idx < 6} />
                 {(tieneNotas(p) || p.ac.length > 0) && (
                   <div className="notes">{(tieneNotas(p) ? todasLasNotas(p) : p.ac).slice(0, 6).join(' · ')}</div>
@@ -285,7 +285,7 @@ export function PortadaCatalogo() {
   const envase = ENVASES.find((e) => /cartier/i.test(e.name || '')) || ENVASES[0];
   const perfume = TOP10[0] ? normalizarImagen(TOP10[0].imagen || TOP10[0].image) : (P[0] && P[0].img);
   const accesos = [
-    { ver: 'perfumes', n: '01', t: 'Perfumes 1.1', d: 'Extrait de Parfum con feromonas, listos para llevar.', dato: `${P.length} fragancias`, img: perfume, clase: 'es-grande' },
+    { ver: 'perfumes', n: '01', t: 'Perfumes 1.1', d: 'Alta concentración con feromonas, listos para llevar.', dato: `${P.length} fragancias`, img: perfume, clase: 'es-grande' },
     { ver: 'crear', n: '02', t: 'Crea tu perfume', d: 'Tu envase, tu tamaño, tu esencia. Con o sin feromonas.', dato: `${ENVASES.length} envases`, img: envase && normalizarImagen(envase.image), clase: 'es-grande es-crear' },
     { ver: 'kits', n: '03', t: 'Kits', d: 'Sets para regalar o coleccionar.', dato: `${kits.length} kits`, img: kits[0] && normalizarImagen(kits[0].imagen) },
     { ver: 'esencias', n: '04', t: 'Esencias', d: 'Esencias puras por mililitro.', dato: 'Por ml' },

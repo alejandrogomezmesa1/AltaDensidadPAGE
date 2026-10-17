@@ -30,13 +30,13 @@ function sanitizar(texto) {
 const KNOWLEDGE_BASE = {
   feromonas: {
     keywords: ['feromona', 'afrodisiaco'],
-    respuesta: `✨ <strong>Nuestra Fórmula con Feromonas & Concentración Extrait de Parfum</strong>:<br><br>
-Todas nuestras fragancias están elaboradas exclusivamente en concentración <em>Extrait de Parfum</em> (la más alta y pura de la perfumería internacional) e integran microcápsulas de feromonas sintéticas de alta afinidad que reaccionan con el calor de tu piel, potenciando la proyección y el atractivo magnético.`
+    respuesta: `✨ <strong>Feromonas y alta concentración</strong>:<br><br>
+Todas nuestras fragancias se preparan en alta concentración y llevan feromonas sintéticas. Son inodoras, así que no cambian el aroma: se suman como complemento a la estela. Su efecto varía en cada persona; lo que sí notarás es un aroma intenso y de gran fijación.`
   },
   duracion: {
     keywords: ['duracion', 'duración', 'cuanto dura', 'cuánto dura', 'fijacion', 'fijación', 'longevidad', 'desvanece'],
-    respuesta: `⏳ <strong>Fijación Superior Garantizada (+12 Horas)</strong>:<br><br>
-Gracias a nuestra formulación pura en <em>Extrait de Parfum</em>, nuestras fragancias duran más de <strong>12 a 16 horas en piel</strong> y permanecen varios días en prendas de vestir. No usamos alcoholes industriales ni diluciones ligeras.`
+    respuesta: `⏳ <strong>Fijación de 12 horas o más</strong>:<br><br>
+Al ser fragancias en alta concentración, duran 12 horas o más en piel y varios días en la ropa. La duración exacta depende de tu tipo de piel: aplicarlas sobre piel hidratada ayuda mucho.`
   },
   envios: {
     keywords: ['envio', 'envío', 'envios', 'envíos', 'domicilio', 'tiempo de entrega', 'cuanto se demora', 'cuánto se demora', 'despacho', 'flete'],
@@ -178,7 +178,7 @@ El regalo perfecto: combinaciones de fragancias de lujo + envase premium a un pr
   }
 
   return {
-    texto: 'Puedo ayudarte a encontrar tu fragancia ideal en concentración pura Extrait de Parfum y feromonas. ¿Te gustaría ver opciones para <strong>Dama</strong>, <strong>Caballero</strong> o nuestra colección <strong>Árabe</strong>?',
+    texto: 'Puedo ayudarte a encontrar tu fragancia ideal, en alta concentración y con feromonas. ¿Te gustaría ver opciones para <strong>Dama</strong>, <strong>Caballero</strong> o nuestra colección <strong>Árabe</strong>?',
     chips: [
       { label: '👑 Perfumes de Mujer', query: 'recomendar perfumes de mujer' },
       { label: '🪵 Perfumes de Hombre', query: 'recomendar perfumes de hombre' },

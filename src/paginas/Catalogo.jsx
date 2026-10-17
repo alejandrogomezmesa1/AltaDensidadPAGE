@@ -11,7 +11,7 @@ import { perfumes11 } from '../lib/producto';
 import { desplazarA } from '../lib/gsap';
 
 export const PESTANAS = [
-  { clave: 'perfumes', titulo: 'Perfumes 1.1', lema: 'Réplicas 1.1 en Extrait de Parfum con feromonas, listas para llevar.' },
+  { clave: 'perfumes', titulo: 'Perfumes 1.1', lema: 'Réplicas 1.1 en alta concentración con feromonas, listas para llevar.' },
   { clave: 'crear', titulo: 'Crea tu perfume', lema: 'Elige el envase, el tamaño, la esencia y si lleva feromonas. Lo preparamos para ti.' },
   { clave: 'kits', titulo: 'Kits', lema: 'Sets para regalar o coleccionar, con estuche y combinaciones selectas.' },
   { clave: 'esencias', titulo: 'Esencias', lema: 'Esencias puras por mililitro para preparar tus propias fragancias.' },
