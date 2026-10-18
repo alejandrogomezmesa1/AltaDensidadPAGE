@@ -6,6 +6,7 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTienda } from '../tienda/TiendaContext';
 import { DetalleProducto, DetalleKit } from '../tienda/Capas';
 import NoEncontrado from './NoEncontrado';
+import Afines from '../tienda/Afines';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { pr, descripcion, etiquetaColeccion, normalizarImagen, urlAbsoluta, noDisponible } from '../lib/producto';
 import { SITIO } from '../config';
@@ -77,6 +78,7 @@ export default function FichaPagina({ tipo }) {
           <span aria-current="page">{nombre}</span>
         </nav>
         {abierto && <div className="sheet ficha-sheet">{esKit ? <DetalleKit enPagina /> : <DetalleProducto enPagina />}</div>}
+        {abierto && !esKit && <Afines producto={perfume} />}
       </div>
     </main>
   );
