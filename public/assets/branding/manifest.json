@@ -1,0 +1,904 @@
+{
+ "version": 3,
+ "secciones": [
+  {
+   "id": "00_exploracion",
+   "titulo": "Exploración del símbolo (v3)"
+  },
+  {
+   "id": "01_logo",
+   "titulo": "B1 · Logotipo"
+  },
+  {
+   "id": "02_tipografia",
+   "titulo": "B2 · Tipografía"
+  },
+  {
+   "id": "03_color",
+   "titulo": "B3 · Color"
+  },
+  {
+   "id": "04_sistema_grafico",
+   "titulo": "B5 · Sistema gráfico"
+  },
+  {
+   "id": "05_fotografia",
+   "titulo": "B6 · Fotografía (dirección de arte)"
+  },
+  {
+   "id": "06_instagram",
+   "titulo": "B7 · Instagram y redes"
+  },
+  {
+   "id": "07_whatsapp",
+   "titulo": "B7.6 · Stickers de WhatsApp"
+  },
+  {
+   "id": "08_empaque",
+   "titulo": "B8 · Empaque"
+  },
+  {
+   "id": "09_unboxing",
+   "titulo": "B9 · Unboxing"
+  },
+  {
+   "id": "10_papeleria",
+   "titulo": "B10.3 · Papelería"
+  },
+  {
+   "id": "11_punto_de_venta",
+   "titulo": "B10.1–2 · Punto de venta y equipo"
+  },
+  {
+   "id": "12_digital",
+   "titulo": "B10.6 · Digital"
+  }
+ ],
+ "piezas": [
+  {
+   "id": "00_exploracion/01-comparativa-de-simbolos.svg",
+   "seccion": "00_exploracion",
+   "archivo": "01-comparativa-de-simbolos.svg",
+   "titulo": "Comparativa de símbolos (4 propuestas + monograma descartado)",
+   "descripcion": "El símbolo elegido es la gota tallada; las demás quedan como alternativas.",
+   "ancho": 2000,
+   "alto": 1500,
+   "mm": null
+  },
+  {
+   "id": "00_exploracion/02-significado-del-simbolo.svg",
+   "seccion": "00_exploracion",
+   "archivo": "02-significado-del-simbolo.svg",
+   "titulo": "Significado del símbolo: esencia, valor, densidad y pirámide",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 1000,
+   "mm": null
+  },
+  {
+   "id": "01_logo/01-imagotipo-vertical-oro-sobre-tinta.svg",
+   "seccion": "01_logo",
+   "archivo": "01-imagotipo-vertical-oro-sobre-tinta.svg",
+   "titulo": "Imagotipo vertical · oro sobre tinta (principal)",
+   "descripcion": "Uso preferente: portadas, caja, bolsa, fachada.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "01_logo/02-imagotipo-vertical-tinta-sobre-hueso.svg",
+   "seccion": "01_logo",
+   "archivo": "02-imagotipo-vertical-tinta-sobre-hueso.svg",
+   "titulo": "Imagotipo vertical · tinta sobre hueso",
+   "descripcion": "Uso preferente: portadas, caja, bolsa, fachada.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "01_logo/03-imagotipo-horizontal-oro-sobre-tinta.svg",
+   "seccion": "01_logo",
+   "archivo": "03-imagotipo-horizontal-oro-sobre-tinta.svg",
+   "titulo": "Imagotipo horizontal · oro sobre tinta",
+   "descripcion": "Encabezado web, correo, factura, PDF de revendedor.",
+   "ancho": 1600,
+   "alto": 520,
+   "mm": null
+  },
+  {
+   "id": "01_logo/04-imagotipo-horizontal-tinta-sobre-hueso.svg",
+   "seccion": "01_logo",
+   "archivo": "04-imagotipo-horizontal-tinta-sobre-hueso.svg",
+   "titulo": "Imagotipo horizontal · tinta sobre hueso",
+   "descripcion": "Encabezado web, correo, factura, PDF de revendedor.",
+   "ancho": 1600,
+   "alto": 520,
+   "mm": null
+  },
+  {
+   "id": "01_logo/05-logotipo.svg",
+   "seccion": "01_logo",
+   "archivo": "05-logotipo.svg",
+   "titulo": "Logotipo · ALTA DENSIDAD + descriptor FRAGANCIAS",
+   "descripcion": "Cormorant Garamond Medium, espaciado 0,30 em; descriptor en Jost.",
+   "ancho": 1400,
+   "alto": 460,
+   "mm": null
+  },
+  {
+   "id": "01_logo/06-isotipo-oro-sobre-tinta.svg",
+   "seccion": "01_logo",
+   "archivo": "06-isotipo-oro-sobre-tinta.svg",
+   "titulo": "Isotipo · gota tallada",
+   "descripcion": "Una gota de esencia tallada como un diamante: esencia, valor y densidad en un solo dibujo.",
+   "ancho": 800,
+   "alto": 800,
+   "mm": null
+  },
+  {
+   "id": "01_logo/07-isotipo-una-tinta-negra.svg",
+   "seccion": "01_logo",
+   "archivo": "07-isotipo-una-tinta-negra.svg",
+   "titulo": "Isotipo · una tinta negra (fondo transparente)",
+   "descripcion": "Grabado láser, sello de goma, serigrafía.",
+   "ancho": 800,
+   "alto": 800,
+   "mm": null
+  },
+  {
+   "id": "01_logo/08-isotipo-una-tinta-blanca.svg",
+   "seccion": "01_logo",
+   "archivo": "08-isotipo-una-tinta-blanca.svg",
+   "titulo": "Isotipo · una tinta blanca",
+   "descripcion": "Sobre fondos oscuros y fotografía.",
+   "ancho": 800,
+   "alto": 800,
+   "mm": null
+  },
+  {
+   "id": "01_logo/09-sello-circular.svg",
+   "seccion": "01_logo",
+   "archivo": "09-sello-circular.svg",
+   "titulo": "Sello circular",
+   "descripcion": "Sello de garantía, lacre, tarjeta, bordado, sello de goma.",
+   "ancho": 800,
+   "alto": 800,
+   "mm": null
+  },
+  {
+   "id": "01_logo/10-construccion-y-area-de-proteccion.svg",
+   "seccion": "01_logo",
+   "archivo": "10-construccion-y-area-de-proteccion.svg",
+   "titulo": "Construcción (1x) y área de protección",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 1000,
+   "mm": null
+  },
+  {
+   "id": "01_logo/11-tamanos-minimos.svg",
+   "seccion": "01_logo",
+   "archivo": "11-tamanos-minimos.svg",
+   "titulo": "Tamaños mínimos de reproducción",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 760,
+   "mm": null
+  },
+  {
+   "id": "01_logo/12-versiones-de-acabado.svg",
+   "seccion": "01_logo",
+   "archivo": "12-versiones-de-acabado.svg",
+   "titulo": "Versiones de acabado: foil, gofrado, grabado, bordado",
+   "descripcion": "Simulaciones para orientar a la imprenta.",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "01_logo/13-usos-incorrectos.svg",
+   "seccion": "01_logo",
+   "archivo": "13-usos-incorrectos.svg",
+   "titulo": "Usos incorrectos del logo",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "01_logo/14-fondos-corporativos.svg",
+   "seccion": "01_logo",
+   "archivo": "14-fondos-corporativos.svg",
+   "titulo": "Fondos corporativos permitidos",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 760,
+   "mm": null
+  },
+  {
+   "id": "02_tipografia/01-especimen.svg",
+   "seccion": "02_tipografia",
+   "archivo": "01-especimen.svg",
+   "titulo": "Espécimen tipográfico: Cormorant Garamond + Jost",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 1000,
+   "mm": null
+  },
+  {
+   "id": "02_tipografia/02-jerarquia.svg",
+   "seccion": "02_tipografia",
+   "archivo": "02-jerarquia.svg",
+   "titulo": "Jerarquía tipográfica aplicada",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 1000,
+   "mm": null
+  },
+  {
+   "id": "03_color/01-paleta.svg",
+   "seccion": "03_color",
+   "archivo": "01-paleta.svg",
+   "titulo": "Paleta institucional, secundaria y neutra",
+   "descripcion": "CMYK calculado y Pantone aproximado: validar con prueba de color de imprenta.",
+   "ancho": 1600,
+   "alto": 1240,
+   "mm": null
+  },
+  {
+   "id": "03_color/02-proporcion-y-combinaciones.svg",
+   "seccion": "03_color",
+   "archivo": "02-proporcion-y-combinaciones.svg",
+   "titulo": "Proporción 70·20·10 y combinaciones permitidas",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "03_color/03-familias-olfativas.svg",
+   "seccion": "03_color",
+   "archivo": "03-familias-olfativas.svg",
+   "titulo": "Colores por familia olfativa (solo filetes y detalles)",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 640,
+   "mm": null
+  },
+  {
+   "id": "04_sistema_grafico/01-elementos-de-marca.svg",
+   "seccion": "04_sistema_grafico",
+   "archivo": "01-elementos-de-marca.svg",
+   "titulo": "Elementos de marca: filetes, marco ventana, pirámide, monograma, destello, numeración, medallón",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 1100,
+   "mm": null
+  },
+  {
+   "id": "04_sistema_grafico/02-iconografia.svg",
+   "seccion": "04_sistema_grafico",
+   "archivo": "02-iconografia.svg",
+   "titulo": "Iconografía de línea fina (21 íconos)",
+   "descripcion": "Trazo uniforme, un solo color, sin rellenos.",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "04_sistema_grafico/03-patron-simbolo-tinta.svg",
+   "seccion": "04_sistema_grafico",
+   "archivo": "03-patron-simbolo-tinta.svg",
+   "titulo": "Patrón del símbolo · tinta (tono sobre tono)",
+   "descripcion": "Interior de caja, fondos de historias.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "04_sistema_grafico/04-patron-simbolo-hueso.svg",
+   "seccion": "04_sistema_grafico",
+   "archivo": "04-patron-simbolo-hueso.svg",
+   "titulo": "Patrón del símbolo · hueso (papel seda)",
+   "descripcion": "",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "04_sistema_grafico/05-medallones.svg",
+   "seccion": "04_sistema_grafico",
+   "archivo": "05-medallones.svg",
+   "titulo": "Medallones (equivalente del sticker de promoción)",
+   "descripcion": "Uno por pieza, rotado −8°.",
+   "ancho": 1600,
+   "alto": 640,
+   "mm": null
+  },
+  {
+   "id": "05_fotografia/01-escenario-noche.svg",
+   "seccion": "05_fotografia",
+   "archivo": "01-escenario-noche.svg",
+   "titulo": "Escenario Noche (firma)",
+   "descripcion": "Claroscuro, humo y partículas doradas, mármol negro.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "05_fotografia/02-escenario-dia.svg",
+   "seccion": "05_fotografia",
+   "archivo": "02-escenario-dia.svg",
+   "titulo": "Escenario Día",
+   "descripcion": "Luz suave, mármol blanco con veta dorada.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "05_fotografia/03-escenario-ingredientes.svg",
+   "seccion": "05_fotografia",
+   "archivo": "03-escenario-ingredientes.svg",
+   "titulo": "Ingredientes de la pirámide como utilería",
+   "descripcion": "Cítrico, vainilla y pétalos cuentan las notas sin texto.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/01-perfil-y-grilla.svg",
+   "seccion": "06_instagram",
+   "archivo": "01-perfil-y-grilla.svg",
+   "titulo": "Perfil de Instagram: bio, destacados y grilla curada",
+   "descripcion": "Ritmo de 3 columnas: producto · frase · detalle / ritual · producto · educativo / kit · detalle · prueba social.",
+   "ancho": 900,
+   "alto": 2070.0,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/02-foto-de-perfil.svg",
+   "seccion": "06_instagram",
+   "archivo": "02-foto-de-perfil.svg",
+   "titulo": "Foto de perfil (Instagram, TikTok, WhatsApp)",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1080,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/03-destacados.svg",
+   "seccion": "06_instagram",
+   "archivo": "03-destacados.svg",
+   "titulo": "Portadas de historias destacadas (8)",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 520,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/04-post-lanzamiento.svg",
+   "seccion": "06_instagram",
+   "archivo": "04-post-lanzamiento.svg",
+   "titulo": "Post · lanzamiento (escenario Noche + medallón)",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/05-post-manifiesto.svg",
+   "seccion": "06_instagram",
+   "archivo": "05-post-manifiesto.svg",
+   "titulo": "Post · manifiesto / frase",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/06-carrusel-ficha-olfativa.svg",
+   "seccion": "06_instagram",
+   "archivo": "06-carrusel-ficha-olfativa.svg",
+   "titulo": "Carrusel · ficha olfativa (5 láminas)",
+   "descripcion": "Portada → I Salida → II Corazón → III Fondo → para quién y precio.",
+   "ancho": 5480,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/07-post-top10.svg",
+   "seccion": "06_instagram",
+   "archivo": "07-post-top10.svg",
+   "titulo": "Post · Top 10",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/08-post-educativo.svg",
+   "seccion": "06_instagram",
+   "archivo": "08-post-educativo.svg",
+   "titulo": "Post · educativo (ritual de aplicación)",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/09-post-prueba-social.svg",
+   "seccion": "06_instagram",
+   "archivo": "09-post-prueba-social.svg",
+   "titulo": "Post · prueba social (#LoQuePermanece)",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/10-post-temporada.svg",
+   "seccion": "06_instagram",
+   "archivo": "10-post-temporada.svg",
+   "titulo": "Post · temporada (Tinta + Vino + Oro)",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/11-historia-con-zonas-seguras.svg",
+   "seccion": "06_instagram",
+   "archivo": "11-historia-con-zonas-seguras.svg",
+   "titulo": "Historia 1080×1920 con zonas seguras marcadas",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06_instagram/12-marco-de-revision.svg",
+   "seccion": "06_instagram",
+   "archivo": "12-marco-de-revision.svg",
+   "titulo": "Revisión dentro del marco de Instagram (como La Coca §5.4)",
+   "descripcion": "",
+   "ancho": 1080,
+   "alto": 1640,
+   "mm": null
+  },
+  {
+   "id": "07_whatsapp/01-gracias.svg",
+   "seccion": "07_whatsapp",
+   "archivo": "01-gracias.svg",
+   "titulo": "Sticker WhatsApp · gracias",
+   "descripcion": "Exportar a WEBP 512×512 transparente.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "07_whatsapp/02-va-en-camino.svg",
+   "seccion": "07_whatsapp",
+   "archivo": "02-va-en-camino.svg",
+   "titulo": "Sticker WhatsApp · va en camino",
+   "descripcion": "Exportar a WEBP 512×512 transparente.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "07_whatsapp/03-gota-tallada.svg",
+   "seccion": "07_whatsapp",
+   "archivo": "03-gota-tallada.svg",
+   "titulo": "Sticker WhatsApp · gota tallada",
+   "descripcion": "Exportar a WEBP 512×512 transparente.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "07_whatsapp/04-sello-ad.svg",
+   "seccion": "07_whatsapp",
+   "archivo": "04-sello-ad.svg",
+   "titulo": "Sticker WhatsApp · sello ad",
+   "descripcion": "Exportar a WEBP 512×512 transparente.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "07_whatsapp/05-lo-que-permanece.svg",
+   "seccion": "07_whatsapp",
+   "archivo": "05-lo-que-permanece.svg",
+   "titulo": "Sticker WhatsApp · lo que permanece",
+   "descripcion": "Exportar a WEBP 512×512 transparente.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "07_whatsapp/06-pedido-listo.svg",
+   "seccion": "07_whatsapp",
+   "archivo": "06-pedido-listo.svg",
+   "titulo": "Sticker WhatsApp · pedido listo",
+   "descripcion": "Exportar a WEBP 512×512 transparente.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/01-frasco-insignia.svg",
+   "seccion": "08_empaque",
+   "archivo": "01-frasco-insignia.svg",
+   "titulo": "Frasco insignia (concepto)",
+   "descripcion": "Vidrio facetado, tapa dorada grabada, placa frontal en foil.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/02-etiqueta-frontal.svg",
+   "seccion": "08_empaque",
+   "archivo": "02-etiqueta-frontal.svg",
+   "titulo": "Etiqueta frontal · placa foil 30×19 mm",
+   "descripcion": "",
+   "ancho": 300,
+   "alto": 190,
+   "mm": [
+    30,
+    19
+   ]
+  },
+  {
+   "id": "08_empaque/03-etiqueta-posterior.svg",
+   "seccion": "08_empaque",
+   "archivo": "03-etiqueta-posterior.svg",
+   "titulo": "Etiqueta posterior 40×60 mm (validar con asesor regulatorio / INVIMA)",
+   "descripcion": "",
+   "ancho": 400,
+   "alto": 600,
+   "mm": [
+    40,
+    60
+   ]
+  },
+  {
+   "id": "08_empaque/04-etiqueta-circular-frascos-actuales.svg",
+   "seccion": "08_empaque",
+   "archivo": "04-etiqueta-circular-frascos-actuales.svg",
+   "titulo": "Etiqueta circular 40 mm para los frascos 1.1 y Crea tu perfume",
+   "descripcion": "",
+   "ancho": 400,
+   "alto": 400,
+   "mm": [
+    40,
+    40
+   ]
+  },
+  {
+   "id": "08_empaque/05-sello-de-garantia.svg",
+   "seccion": "08_empaque",
+   "archivo": "05-sello-de-garantia.svg",
+   "titulo": "Sello de garantía (precinto tapa–caja) 70×15 mm",
+   "descripcion": "",
+   "ancho": 700,
+   "alto": 150,
+   "mm": [
+    70,
+    15
+   ]
+  },
+  {
+   "id": "08_empaque/06-caja-individual.svg",
+   "seccion": "08_empaque",
+   "archivo": "06-caja-individual.svg",
+   "titulo": "Caja individual tipo cajón: exterior e interior",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/07-estuche-de-kit.svg",
+   "seccion": "08_empaque",
+   "archivo": "07-estuche-de-kit.svg",
+   "titulo": "Estuche de kit con faja vino",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/08-bolsa-de-mano.svg",
+   "seccion": "08_empaque",
+   "archivo": "08-bolsa-de-mano.svg",
+   "titulo": "Bolsa de mano (local y domicilio)",
+   "descripcion": "",
+   "ancho": 1000,
+   "alto": 1100,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/09-caja-de-envio.svg",
+   "seccion": "08_empaque",
+   "archivo": "09-caja-de-envio.svg",
+   "titulo": "Caja de envío: exterior e interior de tapa",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/10-cinta-adhesiva.svg",
+   "seccion": "08_empaque",
+   "archivo": "10-cinta-adhesiva.svg",
+   "titulo": "Cinta adhesiva negra con logotipo en oro (repetición)",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 140,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/11-papel-seda.svg",
+   "seccion": "08_empaque",
+   "archivo": "11-papel-seda.svg",
+   "titulo": "Papel seda hueso con patrón del símbolo",
+   "descripcion": "",
+   "ancho": 1400,
+   "alto": 1000,
+   "mm": null
+  },
+  {
+   "id": "08_empaque/12-sticker-de-cierre.svg",
+   "seccion": "08_empaque",
+   "archivo": "12-sticker-de-cierre.svg",
+   "titulo": "Sticker de cierre dorado 40 mm",
+   "descripcion": "",
+   "ancho": 400,
+   "alto": 400,
+   "mm": [
+    40,
+    40
+   ]
+  },
+  {
+   "id": "08_empaque/13-bolsa-de-tela.svg",
+   "seccion": "08_empaque",
+   "archivo": "13-bolsa-de-tela.svg",
+   "titulo": "Bolsa de tela reutilizable",
+   "descripcion": "",
+   "ancho": 1000,
+   "alto": 1100,
+   "mm": null
+  },
+  {
+   "id": "09_unboxing/01-secuencia-de-apertura.svg",
+   "seccion": "09_unboxing",
+   "archivo": "01-secuencia-de-apertura.svg",
+   "titulo": "Secuencia de unboxing en 8 capas",
+   "descripcion": "",
+   "ancho": 1800,
+   "alto": 900,
+   "mm": null
+  },
+  {
+   "id": "09_unboxing/02-tarjeta-de-agradecimiento.svg",
+   "seccion": "09_unboxing",
+   "archivo": "02-tarjeta-de-agradecimiento.svg",
+   "titulo": "Tarjeta de agradecimiento 148×105 mm (escrita a mano)",
+   "descripcion": "",
+   "ancho": 1480,
+   "alto": 1050,
+   "mm": [
+    148,
+    105
+   ]
+  },
+  {
+   "id": "09_unboxing/03-ficha-olfativa.svg",
+   "seccion": "09_unboxing",
+   "archivo": "03-ficha-olfativa.svg",
+   "titulo": "Ficha olfativa 100×150 mm (una por perfume)",
+   "descripcion": "",
+   "ancho": 1000,
+   "alto": 1500,
+   "mm": [
+    100,
+    150
+   ]
+  },
+  {
+   "id": "09_unboxing/04-tira-olfativa.svg",
+   "seccion": "09_unboxing",
+   "archivo": "04-tira-olfativa.svg",
+   "titulo": "Tira olfativa (mouillette) 16×150 mm",
+   "descripcion": "",
+   "ancho": 160,
+   "alto": 1500,
+   "mm": [
+    16,
+    150
+   ]
+  },
+  {
+   "id": "09_unboxing/05-tarjeta-de-cuidado.svg",
+   "seccion": "09_unboxing",
+   "archivo": "05-tarjeta-de-cuidado.svg",
+   "titulo": "Tarjeta de cuidado con QR · 85×55 mm (frente y reverso)",
+   "descripcion": "",
+   "ancho": 1780,
+   "alto": 550,
+   "mm": [
+    178,
+    55
+   ]
+  },
+  {
+   "id": "09_unboxing/06-etiqueta-de-muestra.svg",
+   "seccion": "09_unboxing",
+   "archivo": "06-etiqueta-de-muestra.svg",
+   "titulo": "Etiqueta de muestra 50×15 mm",
+   "descripcion": "",
+   "ancho": 500,
+   "alto": 150,
+   "mm": [
+    50,
+    15
+   ]
+  },
+  {
+   "id": "10_papeleria/01-tarjeta-de-presentacion.svg",
+   "seccion": "10_papeleria",
+   "archivo": "01-tarjeta-de-presentacion.svg",
+   "titulo": "Tarjeta de presentación 85×55 mm (reverso con foil · frente)",
+   "descripcion": "",
+   "ancho": 1780,
+   "alto": 550,
+   "mm": [
+    178,
+    55
+   ]
+  },
+  {
+   "id": "10_papeleria/02-hoja-membrete.svg",
+   "seccion": "10_papeleria",
+   "archivo": "02-hoja-membrete.svg",
+   "titulo": "Hoja membrete A4",
+   "descripcion": "",
+   "ancho": 2100,
+   "alto": 2970,
+   "mm": [
+    210,
+    297
+   ]
+  },
+  {
+   "id": "10_papeleria/03-tarjeta-de-regalo.svg",
+   "seccion": "10_papeleria",
+   "archivo": "03-tarjeta-de-regalo.svg",
+   "titulo": "Tarjeta de regalo 85×55 mm (frente y reverso)",
+   "descripcion": "",
+   "ancho": 1780,
+   "alto": 550,
+   "mm": [
+    178,
+    55
+   ]
+  },
+  {
+   "id": "10_papeleria/04-firma-de-correo.svg",
+   "seccion": "10_papeleria",
+   "archivo": "04-firma-de-correo.svg",
+   "titulo": "Firma de correo (exportar a PNG de 600 px)",
+   "descripcion": "",
+   "ancho": 1200,
+   "alto": 320,
+   "mm": null
+  },
+  {
+   "id": "10_papeleria/05-sobre.svg",
+   "seccion": "10_papeleria",
+   "archivo": "05-sobre.svg",
+   "titulo": "Sobre DL 220×110 mm con sello",
+   "descripcion": "",
+   "ancho": 2200,
+   "alto": 1100,
+   "mm": [
+    220,
+    110
+   ]
+  },
+  {
+   "id": "11_punto_de_venta/01-fachada-y-vitrina.svg",
+   "seccion": "11_punto_de_venta",
+   "archivo": "01-fachada-y-vitrina.svg",
+   "titulo": "Fachada: letras doradas sobre negro mate, vitrina con vinilo y exhibidores",
+   "descripcion": "Iluminación cálida 2700–3000 K.",
+   "ancho": 1800,
+   "alto": 1100,
+   "mm": null
+  },
+  {
+   "id": "11_punto_de_venta/02-senalizacion.svg",
+   "seccion": "11_punto_de_venta",
+   "archivo": "02-senalizacion.svg",
+   "titulo": "Placas de señalización (negro + filete oro)",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 700,
+   "mm": null
+  },
+  {
+   "id": "11_punto_de_venta/03-escarapela.svg",
+   "seccion": "11_punto_de_venta",
+   "archivo": "03-escarapela.svg",
+   "titulo": "Escarapela (placa dorada con nombre) 70×22 mm",
+   "descripcion": "",
+   "ancho": 700,
+   "alto": 220,
+   "mm": [
+    70,
+    22
+   ]
+  },
+  {
+   "id": "11_punto_de_venta/04-uniforme.svg",
+   "seccion": "11_punto_de_venta",
+   "archivo": "04-uniforme.svg",
+   "titulo": "Uniforme: polo y delantal con bordado una tinta",
+   "descripcion": "",
+   "ancho": 1600,
+   "alto": 1000,
+   "mm": null
+  },
+  {
+   "id": "12_digital/01-favicon.svg",
+   "seccion": "12_digital",
+   "archivo": "01-favicon.svg",
+   "titulo": "Favicon 32 px (isotipo simplificado)",
+   "descripcion": "",
+   "ancho": 32,
+   "alto": 32,
+   "mm": null
+  },
+  {
+   "id": "12_digital/02-imagen-para-compartir-og.svg",
+   "seccion": "12_digital",
+   "archivo": "02-imagen-para-compartir-og.svg",
+   "titulo": "Imagen para compartir en redes (og:image) 1200×630",
+   "descripcion": "",
+   "ancho": 1200,
+   "alto": 630,
+   "mm": null
+  },
+  {
+   "id": "12_digital/03-avatar-aura.svg",
+   "seccion": "12_digital",
+   "archivo": "03-avatar-aura.svg",
+   "titulo": "Avatar de AURA (destello)",
+   "descripcion": "Reemplaza el turquesa y el oro #D4AF37 del chat.",
+   "ancho": 512,
+   "alto": 512,
+   "mm": null
+  },
+  {
+   "id": "12_digital/04-qr-con-marca.svg",
+   "seccion": "12_digital",
+   "archivo": "04-qr-con-marca.svg",
+   "titulo": "Código QR con isotipo (maqueta, no escaneable)",
+   "descripcion": "",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null
+  },
+  {
+   "id": "12_digital/05-portada-catalogo-revendedor.svg",
+   "seccion": "12_digital",
+   "archivo": "05-portada-catalogo-revendedor.svg",
+   "titulo": "Portada del catálogo para revendedores (A4)",
+   "descripcion": "Secciones en tinta, hueso, grafito y vino: sin azul ni rosa por género.",
+   "ancho": 2100,
+   "alto": 2970,
+   "mm": null
+  }
+ ]
+}

@@ -14,6 +14,7 @@ import OrdenesAdmin from './OrdenesAdmin';
 import ArmadorAdmin from './ArmadorAdmin';
 import InsumosAdmin from './InsumosAdmin';
 import ConfiguracionesAdmin from './ConfiguracionesAdmin';
+import MarcaAdmin from './marca/MarcaAdmin';
 import { PANEL_DATA } from '../config';
 
 const SECCIONES = {
@@ -25,9 +26,10 @@ const SECCIONES = {
   insumos: { titulo: 'Esencias e insumos', grupo: 'Catálogo', icono: 'fa-vial' },
   top10: { titulo: 'Top 10', grupo: 'Catálogo', icono: 'fa-crown' },
   ordenes: { titulo: 'Órdenes', grupo: 'Ventas', icono: 'fa-receipt' },
+  marca: { titulo: 'Marca', grupo: 'Identidad', icono: 'fa-gem' },
   configuraciones: { titulo: 'Configuraciones', grupo: 'Sistema', icono: 'fa-sliders-h' }
 };
-const GRUPOS = ['General', 'Catálogo', 'Ventas', 'Sistema'];
+const GRUPOS = ['General', 'Catálogo', 'Ventas', 'Identidad', 'Sistema'];
 const ESCRITORIO = '(min-width: 1024px)';
 
 function leerUsuario() {
@@ -218,6 +220,7 @@ function Panel({ usuario }) {
           <div className={seccion === 'insumos' ? '' : 'hidden'}>{seccion === 'insumos' && <InsumosAdmin alerta={mostrarAlerta} />}</div>
           <div className={seccion === 'top10' ? '' : 'hidden'}><Top10Admin alerta={mostrarAlerta} /></div>
           <div className={seccion === 'configuraciones' ? '' : 'hidden'}>{seccion === 'configuraciones' && <ConfiguracionesAdmin alerta={mostrarAlerta} />}</div>
+          <div className={seccion === 'marca' ? '' : 'hidden'}>{seccion === 'marca' && <MarcaAdmin alerta={mostrarAlerta} activo />}</div>
           <div className={seccion === 'ordenes' ? '' : 'hidden'}><OrdenesAdmin alerta={mostrarAlerta} sesionInvalida={sesionInvalida} /></div>
         </main>
       </div>
