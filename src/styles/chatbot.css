@@ -676,3 +676,16 @@ html.modo-claro .ia-launcher-avatar {
     padding: 0;
   }
 }
+
+/* Pantallas táctiles: botones del chat de 40–44 px */
+@media (pointer: coarse) {
+  .ia-header-wa-btn,
+  .ia-chat-close-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .ia-chat-send-btn {
+    width: 44px;
+    height: 44px;
+  }
+}

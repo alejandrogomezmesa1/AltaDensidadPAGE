@@ -1099,12 +1099,24 @@ html.modo-claro .hero-img--clara {
   transform: none;
 }
 
-@media(hover: none) {
-  .notes {
-    transform: none;
-    position: static;
-    background: transparent;
-    padding: 0 var(--sp-3) var(--sp-2);
+/* Notas bajo el nombre: solo en pantallas táctiles (en computador salen sobre la foto con el mouse) */
+.card-notas {
+  display: none;
+}
+
+@media (hover: none) {
+  .card .notes {
+    display: none;
+  }
+  .card-notas {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin-top: var(--sp-1);
+    font-size: var(--fs-1);
+    line-height: 1.5;
+    color: var(--c-mute);
   }
 }
 
@@ -1379,7 +1391,7 @@ footer.haute-footer {
 
 .specs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   background: var(--c-line);
   border: var(--bw) solid var(--c-line);
@@ -3659,17 +3671,7 @@ body.ad-layer-open .ia-chat-launcher {
   line-height: 1.4;
 }
 
-/* En pantallas táctiles las notas van fijas bajo la foto: misma altura en todas */
-@media (hover: none) {
-  .card .notes {
-    display: -webkit-box;
-    min-height: calc(2 * 1.5em + var(--sp-2));
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-height: 1.5;
-  }
-}
+
 
 /* ============================================================
    RESPONSIVE EN CELULARES (revisión 01-10)
@@ -3812,4 +3814,121 @@ body.ad-layer-open .ia-chat-launcher {
   letter-spacing: inherit;
   text-transform: inherit;
   cursor: pointer;
+}
+
+/* ============================================================
+   PANTALLAS TÁCTILES (iPhone, iPad, Android) · revisión 17-10
+   ============================================================ */
+
+/* iOS hace zoom al enfocar un campo con letra menor a 16 px y la página queda descuadrada */
+@media (hover: none), (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: max(16px, 1em) !important;
+  }
+}
+
+@media (pointer: coarse) {
+  /* Zona táctil de ~44 px alrededor de los enlaces de texto, sin cambiar cómo se ven */
+  .link,
+  header.haute-header nav a,
+  .nav-bag,
+  .foot-col a,
+  .ficha-migas a,
+  .ficha-volver,
+  .acct-menu a,
+  .acct-menu button,
+  .drawer-h button,
+  button.x,
+  .acc-back,
+  .acc-body form a {
+    position: relative;
+  }
+  .pag-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .link::before,
+  header.haute-header nav a::before,
+  .nav-bag::before,
+  .foot-col a::before,
+  .ficha-migas a::before,
+  .ficha-volver::before,
+  .drawer-h button::before,
+  button.x::before,
+  .acc-back::before,
+  .acc-body form a::before {
+    content: "";
+    position: absolute;
+    inset: -12px -6px;
+  }
+  .foot-col a {
+    padding-block: 4px;
+  }
+  /* El menú de celular tiene scroll horizontal (recorta lo que sobresale): relleno real */
+  .nav-l a {
+    padding-block: 12px;
+  }
+  .nav-l {
+    padding-bottom: 0;
+  }
+  .nav-ico {
+    width: 40px;
+    height: 40px;
+  }
+  .foot-social a {
+    width: 44px;
+    height: 44px;
+  }
+  .qty button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .acct-menu a,
+  .acct-menu button {
+    min-height: 44px;
+  }
+}
+
+/* Barra del catálogo en celular: buscador en su propia fila; Filtros y Ordenar comparten la segunda */
+@media (max-width: 640px) {
+  .col-actions {
+    width: 100%;
+  }
+  .search-input-wrap {
+    flex: 1 1 100%;
+  }
+  .search-input {
+    width: 100%;
+  }
+  .btn-filter {
+    flex: 0 0 auto;
+    justify-content: center;
+    min-height: 44px;
+  }
+  .sort-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+  .sort-select {
+    min-height: 44px;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    padding-left: 12px;
+    padding-right: 30px;
+  }
+}
+
+/* Cifras de la ficha (Alta concentración · 12h+ · Feromonas): caben en 320 px */
+@media (max-width: 480px) {
+  .specs div {
+    padding: var(--sp-2) 4px;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    overflow-wrap: anywhere;
+  }
+  .specs b {
+    font-size: 19px;
+  }
 }

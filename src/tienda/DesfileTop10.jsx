@@ -2,7 +2,7 @@
 // perfumes del nº 10 al nº 1. El movimiento sigue al scroll de forma continua (sin saltos): cada
 // pieza se enciende, crece y enfoca según lo cerca que esté del centro, y el gran número y la foto
 // se desplazan a distinto ritmo (paralaje). Un riel abajo marca el avance y lleva a cada posición.
-// Sin movimiento (prefers-reduced-motion), es una lista.
+// Sin movimiento (prefers-reduced-motion) o en pantallas de hasta 820 px, es una lista.
 import { useMemo, useRef } from 'react';
 import { useTienda } from './TiendaContext';
 import { ImagenLogo } from './Frasco';
@@ -24,7 +24,8 @@ export default function DesfileTop10() {
     const mm = gsap.matchMedia();
     mm.add({ animar: MQ.animar, movil: MQ.movil }, ({ conditions: { animar, movil } }) => {
       const n = paradas.length;
-      if (!animar || n < 2) return undefined;
+      // En celulares y tablets verticales el desfile horizontal no cabe: queda como lista
+      if (!animar || movil || n < 2) return undefined;
       const escena = raiz.querySelector('.desfile-escena');
       const pista = raiz.querySelector('.top-paradas');
       const piezas = gsap.utils.toArray('.top-parada', raiz);
@@ -75,7 +76,7 @@ export default function DesfileTop10() {
         scrollTrigger: {
           trigger: escena,
           start: () => `top ${cabecera()}`,
-          end: () => `+=${(n - 1) * window.innerHeight * (movil ? 0.55 : 0.7)}`,
+          end: () => `+=${(n - 1) * window.innerHeight * 0.7}`,
           pin: true,
           scrub: 0.6,
           anticipatePin: 1,

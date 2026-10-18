@@ -254,6 +254,9 @@ export function Coleccion({ titulo = 'La colección' }) {
                   <small className="up card-brand">{[p.b, etiquetaColeccion(p.c)].filter(Boolean).join(' · ')}</small>
                   <h3 onClick={() => abrirDetalle(p.id)}>{p.n}</h3>
                   <span>{[p.f, p.rev ? 'Precio en revisión' : fmt(pr(p))].filter(Boolean).join(' · ')}</span>
+                  {(tieneNotas(p) || p.ac.length > 0) && (
+                    <p className="card-notas">{(tieneNotas(p) ? todasLasNotas(p) : p.ac).slice(0, 6).join(' · ')}</p>
+                  )}
                 </div>
                 {noDisponible(p)
                   ? <button className="link up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>

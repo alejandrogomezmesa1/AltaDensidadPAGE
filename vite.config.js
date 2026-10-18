@@ -20,13 +20,39 @@ function encerrarEn(prefijo, archivo) {
   });
 }
 
+// En pantallas táctiles (iPhone, iPad) tocar un elemento activa su :hover y lo deja "pegado":
+// paneles y textos de hover quedaban encima del contenido. Toda regla con :hover se envuelve en
+// @media (hover: hover), así solo existe donde hay mouse o trackpad. Lo que en táctil deba verse
+// siempre se declara en @media (hover: none).
+function hoverSoloConPuntero() {
+  const MEDIA = '(hover: hover)';
+  return {
+    postcssPlugin: 'hover-solo-con-puntero',
+    Rule(rule, { AtRule }) {
+      if (rule.envuelta || !rule.selector.includes(':hover')) return;
+      for (let a = rule.parent; a; a = a.parent) if (a.type === 'atrule' && a.params && a.params.includes('hover: hover')) return;
+      const conHover = rule.selectors.filter((s) => s.includes(':hover'));
+      const sinHover = rule.selectors.filter((s) => !s.includes(':hover'));
+      const copia = rule.clone({ selectors: conHover });
+      copia.envuelta = true;
+      const media = new AtRule({ name: 'media', params: MEDIA });
+      media.append(copia);
+      rule.after(media);
+      if (sinHover.length) rule.selectors = sinHover;
+      else rule.remove();
+    }
+  };
+}
+hoverSoloConPuntero.postcss = true;
+
 export default defineConfig({
   plugins: [react()],
   css: {
     postcss: {
       plugins: [
         encerrarEn('.acc-body', /acceso\.css$/),
-        encerrarEn('.adm', /admin-hp\.css$/)
+        encerrarEn('.adm', /admin-hp\.css$/),
+        hoverSoloConPuntero()
       ]
     }
   },

@@ -79,8 +79,20 @@ export function Encabezado() {
   const cantidad = cart.reduce((s, l) => s + l.q, 0);
   const actual = (ruta) => (pathname === ruta ? 'page' : undefined);
 
+  // La altura real del encabezado (cambia con el ancho, la orientación y el tamaño de letra) se
+  // publica en --nav-h: de ella dependen las pestañas fijas, los anclajes y el alto del hero.
+  const cabeceraRef = useRef(null);
+  useEffect(() => {
+    const el = cabeceraRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return undefined;
+    const raiz = document.documentElement;
+    const ro = new ResizeObserver(() => raiz.style.setProperty('--nav-h', `${Math.round(el.getBoundingClientRect().height)}px`));
+    ro.observe(el);
+    return () => { ro.disconnect(); raiz.style.removeProperty('--nav-h'); };
+  }, []);
+
   return (
-    <header className="haute-header">
+    <header className="haute-header" ref={cabeceraRef}>
       <nav className="up nav-l">
         <Link to="/catalogo" aria-current={pathname === '/catalogo' && !enCrear ? 'page' : undefined}>Catálogo</Link>
         <Link to="/catalogo?ver=crear" aria-current={enCrear ? 'page' : undefined}>Crea tu perfume</Link>
