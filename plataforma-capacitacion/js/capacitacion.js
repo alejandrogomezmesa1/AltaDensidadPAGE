@@ -48,6 +48,9 @@
     };
 
     const app = document.getElementById('app');
+    // Atajos de teclado de la vista actual (los define cada vista; se limpian al cambiar de ruta)
+    let teclas = null;
+    document.addEventListener('keydown', (e) => { if (teclas) teclas(e); });
 
     // ── Portada: imagotipo y los tres submódulos ──
     function portada() {
@@ -231,25 +234,83 @@
             : (m.bloques || []).map(bloque).join('');
         const ultimo = !sig;
         const destinoFinal = p.examen ? '#/general/examen' : `#/${p.clave}`;
+        const a = avance(p);
+        const otras = ['general', 'especifica', 'vestimenta'].filter((k) => k !== p.clave).map((k) => PISTAS[k]);
         app.innerHTML = `
-            <div class="lector">
-                <aside class="lector-indice">
-                    <details ${window.matchMedia('(min-width: 1000px)').matches ? 'open' : ''}>
-                        <summary><a class="volver" href="#/${p.clave}"><i class="fas fa-arrow-left" aria-hidden="true"></i> ${esc(p.titulo)}</a><span class="mute">Índice</span></summary>
-                        <ol>${p.modulos.map((x, n) => `<li class="${x.id === id ? 'actual' : ''} ${l.includes(x.id) ? 'leido' : ''}"><a href="#/${p.clave}/${x.id}"><span>${String(n + 1).padStart(2, '0')}</span>${esc(x.titulo)}</a></li>`).join('')}</ol>
-                    </details>
-                </aside>
-                <article class="lector-articulo">
-                    <span class="eyebrow">${esc(p.titulo)} · ${i + 1} de ${p.modulos.length}</span>
-                    <h1 class="titular">${esc(m.titulo)}</h1>
-                    ${m.resumen ? `<p class="intro mute">${esc(m.resumen)}</p>` : ''}
-                    <div class="contenido">${cuerpo}</div>
-                    <div class="lector-pie">
-                        ${ant ? `<a class="btn btn-linea" href="#/${p.clave}/${ant.id}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Anterior</a>` : '<span></span>'}
-                        <button type="button" class="btn" id="leido">${ultimo ? (p.examen ? 'Leído · ir al examen' : 'Leído · terminar') : 'Leído · siguiente'} <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+            <div class="barra-lectura">
+                <button type="button" class="btn-indice" id="abrir-indice" aria-controls="cajon" aria-expanded="false" aria-label="Abrir el índice de ${esc(p.titulo)}">
+                    <span class="btn-indice-ico" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="btn-indice-t">Índice</span>
+                </button>
+                <span class="barra-lectura-t"><b>${esc(p.titulo)}</b><span class="mute">${i + 1} de ${p.modulos.length}</span></span>
+                <span class="barra-lectura-flechas">
+                    ${ant ? `<a href="#/${p.clave}/${ant.id}" aria-label="Módulo anterior" title="Anterior (←)"><i class="fas fa-chevron-left" aria-hidden="true"></i></a>` : '<span></span>'}
+                    ${sig ? `<a href="#/${p.clave}/${sig.id}" aria-label="Módulo siguiente" title="Siguiente (→)"><i class="fas fa-chevron-right" aria-hidden="true"></i></a>` : '<span></span>'}
+                </span>
+                <span class="barra-lectura-avance" aria-hidden="true"><i style="width:${((i + 1) / p.modulos.length) * 100}%"></i></span>
+            </div>
+
+            <div class="velo" id="velo" hidden></div>
+            <aside class="cajon" id="cajon" aria-label="Índice de ${esc(p.titulo)}" aria-hidden="true">
+                <div class="cajon-cab">
+                    <div>
+                        <span class="eyebrow">${p.n} · Índice</span>
+                        <h2>${esc(p.titulo)}</h2>
+                        <div class="avance"><span>${a.hechos} de ${a.total} leídos</span><span class="barra"><i style="width:${a.pct}%"></i></span></div>
                     </div>
-                </article>
-            </div>`;
+                    <button type="button" class="cajon-cerrar" id="cerrar-indice" aria-label="Cerrar el índice"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+                </div>
+                <ol class="cajon-lista">${p.modulos.map((x, n) => `
+                    <li class="${x.id === id ? 'actual' : ''} ${l.includes(x.id) ? 'leido' : ''}">
+                        <a href="#/${p.clave}/${x.id}" ${x.id === id ? 'aria-current="page"' : ''}>
+                            <span class="cajon-n">${String(n + 1).padStart(2, '0')}</span>
+                            <span class="cajon-t">${esc(x.titulo)}</span>
+                            <span class="cajon-estado" aria-label="${l.includes(x.id) ? 'leído' : 'pendiente'}">${l.includes(x.id) ? '<i class="fas fa-check" aria-hidden="true"></i>' : ''}</span>
+                        </a>
+                    </li>`).join('')}
+                </ol>
+                <div class="cajon-pie">
+                    <a class="cajon-volver" href="#/${p.clave}"><i class="fas fa-list" aria-hidden="true"></i> Resumen del submódulo</a>
+                    <span class="mute">Otros submódulos</span>
+                    <div class="cajon-otras">${otras.map((o) => `<a href="#/${o.clave}">${esc(o.titulo)}</a>`).join('')}</div>
+                </div>
+            </aside>
+
+            <article class="lector-articulo">
+                <span class="eyebrow">${esc(p.titulo)} · ${i + 1} de ${p.modulos.length}</span>
+                <h1 class="titular">${esc(m.titulo)}</h1>
+                ${m.resumen ? `<p class="intro mute">${esc(m.resumen)}</p>` : ''}
+                <div class="contenido">${cuerpo}</div>
+                <div class="lector-pie">
+                    ${ant ? `<a class="btn btn-linea" href="#/${p.clave}/${ant.id}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Anterior</a>` : '<span></span>'}
+                    <button type="button" class="btn" id="leido">${ultimo ? (p.examen ? 'Leído · ir al examen' : 'Leído · terminar') : 'Leído · siguiente'} <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+            </article>`;
+        // Cajón del índice: se abre con el botón, se cierra con ×, tocando fuera, con Esc o al elegir un módulo
+        const cajon = document.getElementById('cajon');
+        const velo = document.getElementById('velo');
+        const boton = document.getElementById('abrir-indice');
+        const abrir = (si) => {
+            cajon.classList.toggle('abierto', si);
+            cajon.setAttribute('aria-hidden', String(!si));
+            velo.hidden = !si;
+            boton.setAttribute('aria-expanded', String(si));
+            document.body.classList.toggle('con-cajon', si);
+            if (si) {
+                const actual = cajon.querySelector('.actual a');
+                (actual || cajon.querySelector('.cajon-cerrar')).focus({ preventScroll: true });
+                if (actual) actual.scrollIntoView({ block: 'center' });
+            } else boton.focus({ preventScroll: true });
+        };
+        boton.addEventListener('click', () => abrir(true));
+        document.getElementById('cerrar-indice').addEventListener('click', () => abrir(false));
+        velo.addEventListener('click', () => abrir(false));
+        teclas = (e) => {
+            if (e.key === 'Escape' && cajon.classList.contains('abierto')) { abrir(false); return; }
+            if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || cajon.classList.contains('abierto') || e.metaKey || e.ctrlKey || e.altKey) return;
+            if (e.key === 'ArrowRight' && sig) location.hash = `#/${p.clave}/${sig.id}`;
+            if (e.key === 'ArrowLeft' && ant) location.hash = `#/${p.clave}/${ant.id}`;
+        };
         document.getElementById('leido').addEventListener('click', () => {
             marcarLeido(p.clave, m.id);
             location.hash = sig ? `#/${p.clave}/${sig.id}` : destinoFinal;
@@ -367,6 +428,8 @@
         document.querySelectorAll('.cab-nav a').forEach((a) => a.toggleAttribute('aria-current', a.dataset.pista === clave));
     }
     function rutear() {
+        teclas = null;
+        document.body.classList.remove('con-cajon');
         const [, clave, id] = (location.hash || '#/').replace(/^#\/?/, '#/').split('/');
         const p = PISTAS[clave];
         marcarNav(p ? clave : null);
@@ -377,6 +440,11 @@
         if (!(location.hash === '' || location.hash === '#/')) window.scrollTo(0, 0);
         document.title = `${p ? p.titulo + ' · ' : ''}Inducción y capacitación | Fragancias de Alta Densidad`;
         app.focus({ preventScroll: true });
+    }
+    // La barra de lectura se pega justo debajo de la cabecera (su alto cambia en celular)
+    const cab = document.querySelector('.cab');
+    if (cab && window.ResizeObserver) {
+        new ResizeObserver(() => document.documentElement.style.setProperty('--cab-h', `${cab.offsetHeight}px`)).observe(cab);
     }
     window.addEventListener('hashchange', rutear);
     rutear();
