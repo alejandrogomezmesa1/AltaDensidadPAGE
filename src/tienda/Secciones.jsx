@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTienda } from './TiendaContext';
 import { Frasco, ImagenLogo, Paginacion } from './Frasco';
 import { fmt, pr, perfumes11, etiquetaColeccion, normalizar, normalizarImagen, paginasVisibles, todasLasNotas, tieneNotas, noDisponible, motivoNoDisponible } from '../lib/producto';
+import { acordePrincipalDe, notasDe } from '../lib/clasificacion';
 import { WA } from '../config';
 import { useColumnas } from '../lib/hooks';
 
@@ -27,15 +28,7 @@ function RellenoFila({ span, eyebrow, titulo, texto, children }) {
   );
 }
 const FILTROS_BASE = { search: '', accord: 'Todos', note: 'Todos', family: 'Todos', gender: 'Todos', category: 'Todos', brand: 'Todos' };
-const CLAVES_FILTRO = ['accord', 'note', 'family', 'gender', 'category', 'brand'];
-
-// Valores presentes en el catálogo, del más usado al menos usado
-function frecuentes(lista) {
-  const conteo = new Map();
-  lista.forEach((v) => { if (v) conteo.set(v, (conteo.get(v) || 0) + 1); });
-  return [...conteo.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([v]) => v);
-}
-const alfabetico = (lista) => [...new Set(lista.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+const CLAVES_FILTRO = ['gender', 'accord', 'family', 'category', 'brand', 'note'];
 
 import { desplazarA } from '../lib/gsap';
 
@@ -44,21 +37,53 @@ export const irA = (id, opciones = {}) => {
   return desplazarA(destino, { duration: 0.8, ease: 'power2.inOut', cabecera: true, ...opciones });
 };
 
+// Qué valores aporta cada perfume a cada filtro, ya en forma canónica: [{ clave, etiqueta }].
+// Acordes y notas escritos de dos maneras («limón» y «limón (lima ácida)») cuentan como uno.
+const ORDEN_GENERO = ['Femenino', 'Masculino', 'Unisex'];
+const FACETAS = {
+  gender: (p) => [{ clave: p.g, etiqueta: p.g }],
+  // Solo el acorde principal (el primero, el más intenso): así el filtro dice lo que promete
+  accord: (p) => { const a = acordePrincipalDe(p); return a ? [a] : []; },
+  family: (p) => [...new Set(p.fs)].map((f) => ({ clave: f, etiqueta: f })),
+  category: (p) => [{ clave: p.c, etiqueta: etiquetaColeccion(p.c) }],
+  brand: (p) => (p.b ? [{ clave: p.b, etiqueta: p.b }] : []),
+  note: (p) => notasDe(p)
+};
+
+function coincideBusqueda(p, term) {
+  return [p.n, p.b, p.orig, ...p.fs, p.desc, ...p.ac, ...todasLasNotas(p)].some((t) => t && normalizar(t).includes(term));
+}
+
+// ¿Cumple todos los filtros activos? (saltar: ignora uno, para contar las opciones de ese filtro)
+const cumple = (p, filters, saltar) => CLAVES_FILTRO.every((k) => k === saltar || filters[k] === 'Todos'
+  || FACETAS[k](p).some((v) => v.clave === filters[k]));
+
 function filtrarProductos(P, filters) {
   const term = normalizar(filters.search);
-  return P.filter((p) => {
-    if (term) {
-      const coincide = [p.n, p.b, p.orig, ...p.fs, p.desc, ...p.ac, ...todasLasNotas(p)].some((t) => t && normalizar(t).includes(term));
-      if (!coincide) return false;
-    }
-    if (filters.accord !== 'Todos' && !p.ac.includes(filters.accord)) return false;
-    if (filters.note !== 'Todos' && !todasLasNotas(p).includes(filters.note)) return false;
-    if (filters.family !== 'Todos' && !p.fs.includes(filters.family)) return false;
-    if (filters.gender !== 'Todos' && p.g !== filters.gender) return false;
-    if (filters.category !== 'Todos' && p.c !== filters.category) return false;
-    if (filters.brand !== 'Todos' && p.b !== filters.brand) return false;
-    return true;
+  return P.filter((p) => (!term || coincideBusqueda(p, term)) && cumple(p, filters));
+}
+
+// Opciones de un filtro con cuántos perfumes quedarían al elegirlas, contando los demás filtros
+// activos: las que dejarían la lista vacía se muestran apagadas. De la más a la menos frecuente.
+function opcionesDe(P, filters, clave) {
+  const term = normalizar(filters.search);
+  const mapa = new Map();
+  P.forEach((p) => {
+    if ((term && !coincideBusqueda(p, term)) || !cumple(p, filters, clave)) return;
+    FACETAS[clave](p).forEach((v) => {
+      const o = mapa.get(v.clave) || { ...v, n: 0 };
+      o.n += 1;
+      mapa.set(v.clave, o);
+    });
   });
+  // La opción elegida se conserva aunque ya no tenga perfumes, para poder quitarla
+  if (filters[clave] !== 'Todos' && !mapa.has(filters[clave])) {
+    const ref = P.flatMap(FACETAS[clave]).find((v) => v.clave === filters[clave]);
+    mapa.set(filters[clave], { clave: filters[clave], etiqueta: ref ? ref.etiqueta : filters[clave], n: 0 });
+  }
+  const lista = [...mapa.values()];
+  if (clave === 'gender') return lista.sort((x, y) => ORDEN_GENERO.indexOf(x.clave) - ORDEN_GENERO.indexOf(y.clave));
+  return lista.sort((x, y) => y.n - x.n || x.etiqueta.localeCompare(y.etiqueta, 'es'));
 }
 
 function ordenarProductos(lista, orden) {
@@ -74,48 +99,85 @@ function ordenarProductos(lista, orden) {
 
 const contarFiltros = (f) => CLAVES_FILTRO.filter((k) => f[k] !== 'Todos').length + (f.search ? 1 : 0);
 
-// ── Atelier de filtros (modal) ──
+const TITULOS_FILTRO = { gender: 'Para quién', accord: 'Acorde principal', family: 'Familia olfativa', category: 'Colección', brand: 'Marca', note: 'Nota' };
+
+// Un grupo de filtro: muestra las opciones más frecuentes y el resto tras «Ver más»
+function GrupoFiltro({ clave, ayuda, opciones, valor, onElegir, visibles = 8, children }) {
+  const [abierto, setAbierto] = useState(false);
+  let lista = abierto ? opciones : opciones.slice(0, visibles);
+  const elegida = opciones.find((o) => o.clave === valor);
+  if (elegida && !lista.includes(elegida)) lista = [elegida, ...lista];
+  return (
+    <fieldset className="filter-group">
+      <legend className="filter-legend">
+        <span className="up filter-label">{TITULOS_FILTRO[clave]}</span>
+        {valor !== 'Todos' && <button type="button" className="filter-quitar" onClick={() => onElegir('Todos')}>Quitar</button>}
+      </legend>
+      {ayuda && <p className="filter-ayuda mute">{ayuda}</p>}
+      {children}
+      {lista.length > 0 ? (
+        <div className="filter-pills">
+          {lista.map((o) => {
+            const on = o.clave === valor;
+            return (
+              <button type="button" key={o.clave} className={`chip ${on ? 'on' : ''}`} aria-pressed={on} disabled={!on && o.n === 0}
+                onClick={() => onElegir(on ? 'Todos' : o.clave)}>
+                {o.etiqueta}<span className="chip-n" aria-label={`${o.n} perfumes`}>{o.n}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : <p className="filter-ayuda mute">Sin coincidencias.</p>}
+      {opciones.length > visibles && (
+        <button type="button" className="filter-mas" onClick={() => setAbierto(!abierto)} aria-expanded={abierto}>
+          {abierto ? 'Ver menos' : `Ver ${opciones.length - visibles} más`}
+        </button>
+      )}
+    </fieldset>
+  );
+}
+
+// ── Atelier de filtros (modal): lo esencial arriba, lo específico (marca, notas) abajo ──
 function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
   const { capa, cerrarCapas } = useTienda();
-  // Solo se muestran los grupos que tienen datos cargados en las fichas
-  const grupos = [
-    ['Colección', 'category', alfabetico(P.map((x) => x.c)), etiquetaColeccion],
-    ['Familia olfativa', 'family', alfabetico(P.flatMap((x) => x.fs))],
-    ['Acorde principal', 'accord', frecuentes(P.flatMap((x) => x.ac))],
-    ['Nota', 'note', alfabetico(P.flatMap(todasLasNotas))],
-    ['Estilo / Género', 'gender', ['Unisex', 'Masculino', 'Femenino']],
-    ['Marca', 'brand', alfabetico(P.map((x) => x.b))]
-  ].filter(([, , valores]) => valores.length > 0).map(([t, k, v, e]) => [t, k, ['Todos', ...v], e && ((x) => (x === 'Todos' ? x : e(x)))]);
+  const [buscarNota, setBuscarNota] = useState('');
+  const elegir = (clave) => (v) => setFilters((f) => ({ ...f, [clave]: v }));
+  const op = (clave) => opcionesDe(P, filters, clave);
+  const notas = op('note');
+  const q = normalizar(buscarNota);
+  const notasVisibles = q ? notas.filter((o) => normalizar(o.etiqueta).includes(q)).slice(0, 30) : notas;
   return (
     <div
-      className={`modal filter-modal ${capa === 'filtros' ? 'on' : ''}`} role="dialog" aria-modal="true" aria-label="Filtros avanzados de fragancias"
+      className={`modal filter-modal ${capa === 'filtros' ? 'on' : ''}`} role="dialog" aria-modal="true" aria-label="Filtros de fragancias"
       onClick={(e) => { if (e.target === e.currentTarget) cerrarCapas(); }}
     >
       <div className="sheet">
         <div className="filter-sheet-h">
           <div>
-            <span className="up eyebrow">Atelier de Selección</span>
-            <h3 className="disp" style={{ fontSize: 'var(--fs-4)' }}>Filtrar Colección</h3>
+            <span className="up eyebrow">Atelier de selección</span>
+            <h3 className="disp" style={{ fontSize: 'var(--fs-4)' }}>Filtrar colección</h3>
           </div>
           <button className="x up" onClick={cerrarCapas} aria-label="Cerrar filtros">✕ Cerrar</button>
         </div>
         <div className="filter-sheet-body">
-          {grupos.map(([titulo, tipo, valores, etiqueta]) => (
-            <div className="filter-group" key={tipo}>
-              <label className="up filter-label">{titulo}</label>
-              <div className="filter-pills">
-                {valores.map((v) => (
-                  <button key={v} className={`chip up ${filters[tipo] === v ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, [tipo]: v }))}>
-                    {etiqueta ? etiqueta(v) : v}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
+          <div className="filter-nivel">
+            <GrupoFiltro clave="gender" opciones={op('gender')} valor={filters.gender} onElegir={elegir('gender')} />
+            <GrupoFiltro clave="accord" ayuda="El aroma que domina el perfume." opciones={op('accord')} valor={filters.accord} onElegir={elegir('accord')} visibles={8} />
+            <GrupoFiltro clave="family" opciones={op('family')} valor={filters.family} onElegir={elegir('family')} visibles={6} />
+          </div>
+          <div className="filter-nivel filter-nivel--fino">
+            <span className="up filter-nivel-t">Para afinar</span>
+            <GrupoFiltro clave="category" opciones={op('category')} valor={filters.category} onElegir={elegir('category')} />
+            <GrupoFiltro clave="brand" opciones={op('brand')} valor={filters.brand} onElegir={elegir('brand')} visibles={8} />
+            <GrupoFiltro clave="note" opciones={notasVisibles} valor={filters.note} onElegir={elegir('note')} visibles={q ? 30 : 12}>
+              <input type="search" className="filter-buscar" placeholder="Buscar una nota: vainilla, oud, bergamota…" aria-label="Buscar una nota"
+                value={buscarNota} onChange={(e) => setBuscarNota(e.target.value)} />
+            </GrupoFiltro>
+          </div>
         </div>
         <div className="filter-sheet-f">
-          <button className="link up" onClick={onReset}>Limpiar todo</button>
-          <button className="btn up" onClick={cerrarCapas}>Ver resultados ({coincidencias})</button>
+          <button className="link up" onClick={() => { onReset(); setBuscarNota(''); }}>Limpiar todo</button>
+          <button className="btn up" onClick={cerrarCapas}>Ver {coincidencias} {coincidencias === 1 ? 'resultado' : 'resultados'}</button>
         </div>
       </div>
     </div>
@@ -125,7 +187,8 @@ function FiltrosModal({ filters, setFilters, P, coincidencias, onReset }) {
 // ── Colección: búsqueda en vivo, chips de ocasión, atelier de filtros, orden y paginación ──
 // Búsqueda, filtros, orden y página de la colección se recuerdan durante la visita: al volver de la
 // página de un perfume la lista está como se dejó
-const CLAVE_COLECCION = 'ad_coleccion';
+// v2: los filtros guardan la forma canónica (acorde principal, nota sin paréntesis)
+const CLAVE_COLECCION = 'ad_coleccion_v2';
 function estadoGuardado() {
   try { return JSON.parse(sessionStorage.getItem(CLAVE_COLECCION) || 'null') || {}; } catch { return {}; }
 }
@@ -170,7 +233,13 @@ export function Coleccion({ titulo = 'La colección' }) {
   const visibles = filtrados.slice((actual - 1) * porPagina, actual * porPagina);
   const libres = celdasLibres(visibles.length, columnas);
   const activos = contarFiltros(filters);
-  const acordesPrincipales = useMemo(() => frecuentes(P.flatMap((x) => x.ac)).slice(0, 7), [P]);
+  // Atajo sobre la grilla: los acordes principales más frecuentes de la colección (lista fija)
+  const acordesPrincipales = useMemo(() => opcionesDe(P, FILTROS_BASE, 'accord').slice(0, 7), [P]);
+  // Filtros activos con su nombre visible, para quitarlos uno a uno
+  const activosLista = useMemo(() => CLAVES_FILTRO.filter((k) => filters[k] !== 'Todos').map((k) => {
+    const ref = P.flatMap(FACETAS[k]).find((v) => v.clave === filters[k]);
+    return { k, etiqueta: ref ? ref.etiqueta : filters[k] };
+  }), [P, filters]);
 
   const reset = () => { setFilters(FILTROS_BASE); setBusqueda(''); };
   const cambiarPagina = (p) => {
@@ -219,17 +288,33 @@ export function Coleccion({ titulo = 'La colección' }) {
         </div>
 
         {acordesPrincipales.length > 0 && (
-          <div className="chips up">
-            {['Todos', ...acordesPrincipales].map((x) => (
-              <button key={x} className={`chip up ${x === filters.accord ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, accord: x }))}>{x}</button>
+          <div className="chips up" role="group" aria-label="Acorde principal">
+            <button className={`chip up ${filters.accord === 'Todos' ? 'on' : ''}`} onClick={() => setFilters((f) => ({ ...f, accord: 'Todos' }))}>Todos</button>
+            {acordesPrincipales.map((a) => (
+              <button key={a.clave} className={`chip up ${a.clave === filters.accord ? 'on' : ''}`} aria-pressed={a.clave === filters.accord}
+                onClick={() => setFilters((f) => ({ ...f, accord: f.accord === a.clave ? 'Todos' : a.clave }))}>{a.etiqueta}</button>
             ))}
           </div>
         )}
 
-        <div className="filter-status mute" style={{ display: activos > 0 ? 'flex' : 'none' }}>
-          <span>Mostrando <b>{filtrados.length}</b> de {P.length} fragancias</span>
-          <button className="link up" style={{ fontSize: 'var(--fs-2)' }} onClick={reset}>Limpiar filtros</button>
-        </div>
+        {activos > 0 && (
+          <div className="filter-status mute">
+            <span>Mostrando <b>{filtrados.length}</b> de {P.length} fragancias</span>
+            <ul className="filtros-activos-t">
+              {filters.search && (
+                <li><button type="button" onClick={() => { setBusqueda(''); setFilters((f) => ({ ...f, search: '' })); }} aria-label={`Quitar búsqueda ${filters.search}`}>«{filters.search}» ✕</button></li>
+              )}
+              {activosLista.map((a) => (
+                <li key={a.k}>
+                  <button type="button" onClick={() => setFilters((f) => ({ ...f, [a.k]: 'Todos' }))} aria-label={`Quitar ${TITULOS_FILTRO[a.k]}: ${a.etiqueta}`}>
+                    <small>{TITULOS_FILTRO[a.k]}</small> {a.etiqueta} ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button className="link up" style={{ fontSize: 'var(--fs-2)' }} onClick={reset}>Limpiar filtros</button>
+          </div>
+        )}
 
         <div className="grid" ref={gridRef}>
           {filtrados.length === 0 ? (
@@ -275,7 +360,7 @@ export function Coleccion({ titulo = 'La colección' }) {
         <Paginacion actual={actual} total={filtrados.length ? totalPaginas : 0} paginas={paginasVisibles(actual, totalPaginas)} onCambiar={cambiarPagina} />
       </div>
 
-      <FiltrosModal filters={filters} setFilters={setFilters} P={P} coincidencias={filtrarProductos(P, filters).length} onReset={reset} />
+      <FiltrosModal filters={filters} setFilters={setFilters} P={P} coincidencias={filtrados.length} onReset={reset} />
     </section>
   );
 }

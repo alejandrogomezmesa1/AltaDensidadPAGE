@@ -465,6 +465,92 @@ h2, h3 {
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+/* Dos niveles: lo esencial arriba; marca y notas, más específicas, abajo y separadas */
+.filter-nivel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.filter-nivel--fino {
+  padding-top: var(--sp-4);
+  border-top: var(--bw) solid var(--c-line);
+}
+
+.filter-nivel-t {
+  color: var(--c-mute);
+  font-size: 10px;
+}
+
+.filter-legend {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  margin-bottom: var(--sp-1);
+}
+
+.filter-quitar,
+.filter-mas {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--c-mute);
+  font: 400 var(--fs-2) var(--f-ui);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.filter-mas {
+  align-self: flex-start;
+}
+
+.filter-quitar:hover,
+.filter-mas:hover {
+  color: var(--c-accent);
+}
+
+.filter-ayuda {
+  font-size: var(--fs-2);
+  margin: -2px 0 2px;
+}
+
+.filter-buscar {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--sp-3);
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-line);
+  color: var(--c-ink);
+  font: 300 var(--fs-2) var(--f-ui);
+}
+
+.filter-buscar:focus {
+  outline: none;
+  border-color: var(--c-accent);
+}
+
+.chip-n {
+  margin-left: 8px;
+  font-size: 10px;
+  opacity: 0.55;
+  font-variant-numeric: tabular-nums;
+}
+
+.filter-pills .chip:disabled {
+  opacity: 0.3;
+  cursor: default;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  border-color: var(--c-line);
 }
 
 .filter-label {
@@ -1026,8 +1112,40 @@ html.modo-claro .hero-img--clara {
   margin-top: var(--sp-3);
   margin-bottom: var(--sp-4);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.filtros-activos-t {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0 auto 0 0;
+  padding: 0;
+}
+
+.filtros-activos-t button {
+  background: none;
+  border: var(--bw) solid var(--c-line);
+  color: var(--c-ink);
+  padding: 4px 10px;
+  font: 300 var(--fs-2) var(--f-ui);
+  cursor: pointer;
+}
+
+.filtros-activos-t button:hover {
+  border-color: var(--c-accent);
+}
+
+.filtros-activos-t small {
+  color: var(--c-mute);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-right: 4px;
 }
 
 @media(max-width: 640px) {

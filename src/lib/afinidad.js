@@ -10,37 +10,18 @@
 // Afinidad (%) = 75 % prominencia + 25 % perfil, y se ordena por ella: un perfume con el mismo acorde
 // principal (≥ 75 %) siempre queda por encima de uno que lo tiene en segundo lugar (≤ 62,5 %).
 import { perfumes11, noDisponible } from './producto';
-
-const sinTildes = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-// Mismo acorde escrito distinto en la base
-const SINONIMOS = {
-  afrutados: 'afrutado', 'frutal gourmand: mandarina': 'afrutado', florales: 'floral', vainilla: 'avainillado',
-  almizcle: 'almizclado', 'con fondo de ambar gris': 'ambar', rosas: 'rosa'
-};
-// Cómo se muestra cada acorde canónico que no conserva su escritura original
-const ETIQUETA = { afrutado: 'afrutado', floral: 'floral', avainillado: 'avainillado', almizclado: 'almizclado', ambar: 'ámbar', rosa: 'rosa' };
-
-export function acordeCanonico(a) {
-  const t = sinTildes(String(a).toLowerCase()).replace(/\.+$/, '').trim();
-  return SINONIMOS[t] || t;
-}
+import { acordesDe, notasDe } from './clasificacion';
 
 const MAX_ACORDES = 10;
 const pesoPos = (i) => 1 / (i + 1);
 
 function perfil(p) {
-  const lista = [];
-  const etiquetas = new Map();
-  (p.ac || []).forEach((a) => {
-    const c = acordeCanonico(a);
-    if (!c || lista.includes(c)) return;
-    lista.push(c);
-    etiquetas.set(c, ETIQUETA[c] || String(a).toLowerCase().replace(/\.+$/, '').trim());
-  });
+  const acordes = acordesDe(p);
+  const lista = acordes.map((a) => a.clave);
+  const etiquetas = new Map(acordes.map((a) => [a.clave, a.etiqueta.toLowerCase()]));
   const vector = new Map(lista.slice(0, MAX_ACORDES).map((c, i) => [c, pesoPos(i)]));
   const norma = Math.sqrt([...vector.values()].reduce((s, v) => s + v * v, 0)) || 1;
-  const notas = new Set(['top', 'heart', 'base'].flatMap((k) => (p.no?.[k] || []).map((n) => sinTildes(n.toLowerCase()).replace(/\([^)]*\)/g, '').trim())));
+  const notas = new Set(notasDe(p).map((n) => n.clave));
   return { lista, etiquetas, vector, norma, notas };
 }
 
