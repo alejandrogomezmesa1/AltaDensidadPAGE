@@ -17,5 +17,7 @@ module.exports = {
     // 010: varias familias olfativas por perfume
     familias: () => aplicadas.has('010'),
     // 011: métricas del asistente AURA (monitoreo)
-    metricasChatbot: () => aplicadas.has('011')
+    metricasChatbot: () => aplicadas.has('011'),
+    // 013: decants (enlace fragancia ↔ esencia de DATA, precios, envases y sets)
+    decants: () => aplicadas.has('013')
 };

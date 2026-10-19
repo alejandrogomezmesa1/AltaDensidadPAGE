@@ -95,8 +95,25 @@ async function ventaSinStock(pool, items) {
 
 // Verificación antes de cobrar. Devuelve los títulos sin stock suficiente.
 // Si DATA no responde, se usa el último estado sincronizado (columna agotado).
+// Decants: DATA revisa si alcanzan la esencia, el envase y los insumos de su receta.
+// Devuelve los títulos de las líneas que no se pueden preparar.
+async function verificarRecetas(mpItems) {
+    const conReceta = mpItems.filter(it => Array.isArray(it.data_recetas) && it.data_recetas.length);
+    if (!conReceta.length || !bridge.habilitado()) return [];
+    const items = conReceta.flatMap(it => it.data_recetas.map(recipe => ({ recipe, quantity: it.quantity })));
+    const r = await bridge.verificarStock(items);
+    if (r.ok) return [];
+    const faltan = new Set((r.faltantes || []).map(f => Number(f.inventoryId)));
+    return conReceta.filter(it => it.data_recetas.some(rc => faltan.has(Number(rc.essenceId)) || faltan.has(Number(rc.containerId)))).map(it => it.title)
+        // Un insumo fijo (alcohol, fijador) faltante afecta a todos los decants
+        .concat((r.faltantes || []).some(f => !conReceta.some(it => it.data_recetas.some(rc => [rc.essenceId, rc.containerId].map(Number).includes(Number(f.inventoryId)))))
+            ? conReceta.map(it => it.title) : []);
+}
+
 async function verificarDisponibilidad(pool, mpItems) {
     if (!columnasListas) return [];
+    const sinReceta = [...new Set(await verificarRecetas(mpItems))];
+    if (sinReceta.length) return sinReceta;
     const mapa = await mapearInventario(pool, mpItems);
     const sinStock = await ventaSinStock(pool, mpItems);
     const vinculados = mpItems.filter(it => mapa.has(String(it.id)) && !sinStock.has(String(it.id)));
@@ -162,13 +179,21 @@ async function sincronizarOrden(ref) {
                     city: orden.envio_ciudad,
                     address: direccion
                 },
-                items: items.map(it => ({
-                    inventoryId: mapa.get(String(it.id)) || null,
-                    // Insumos por ml: DATA descuenta ml y cobra por ml
-                    quantity: it.data_cantidad || it.quantity,
-                    unitPrice: it.data_precio ?? it.unit_price,
-                    description: it.title
-                }))
+                items: items.flatMap(it => (Array.isArray(it.data_recetas) && it.data_recetas.length
+                    // Decant o set: una línea por decant con su receta; el precio del set se reparte entre ellos
+                    ? it.data_recetas.map((recipe, i, todas) => ({
+                        recipe,
+                        quantity: it.quantity,
+                        unitPrice: Math.round(it.unit_price / todas.length) + (i === 0 ? it.unit_price - Math.round(it.unit_price / todas.length) * todas.length : 0),
+                        description: todas.length > 1 ? `${it.title} (${i + 1}/${todas.length})` : it.title
+                    }))
+                    : [{
+                        inventoryId: mapa.get(String(it.id)) || null,
+                        // Insumos por ml: DATA descuenta ml y cobra por ml
+                        quantity: it.data_cantidad || it.quantity,
+                        unitPrice: it.data_precio ?? it.unit_price,
+                        description: it.title
+                    }]))
             });
             await marcar(pool, ref, 'synced', { ventaId: r.saleId });
             sincronizarCatalogo().catch(() => {});

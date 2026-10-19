@@ -91,7 +91,7 @@
       "destination": "/api/ficha?tipo=:tipo&ruta=:ruta*"
     },
     {
-      "source": "/:ruta(catalogo|top10|nosotros|login|reset|admin|success|failure|pending)",
+      "source": "/:ruta(catalogo|decants|top10|nosotros|login|reset|admin|success|failure|pending)",
       "destination": "/index.html"
     },
     {

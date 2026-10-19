@@ -95,6 +95,7 @@ export function Encabezado() {
     <header className="haute-header" ref={cabeceraRef}>
       <nav className="up nav-l">
         <Link to="/catalogo" aria-current={pathname === '/catalogo' && !enCrear ? 'page' : undefined}>Catálogo</Link>
+        <Link to="/decants" aria-current={actual('/decants')}>Decants</Link>
         <Link to="/catalogo?ver=crear" aria-current={enCrear ? 'page' : undefined}>Crea tu perfume</Link>
         {enInicio ? <a href="#top">Top 10</a> : <Link to="/top10" aria-current={actual('/top10')}>Top 10</Link>}
         {enInicio ? <a href="#nosotros">Nosotros</a> : <Link to="/nosotros" aria-current={actual('/nosotros')}>Nosotros</Link>}

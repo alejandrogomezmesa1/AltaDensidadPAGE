@@ -7,6 +7,7 @@ const PAGINAS = [
   ['/catalogo', 'weekly', '0.9'],
   ['/catalogo?ver=crear', 'monthly', '0.8'],
   ['/catalogo?ver=kits', 'weekly', '0.8'],
+  ['/decants', 'weekly', '0.9'],
   ['/top10', 'weekly', '0.9'],
   ['/nosotros', 'monthly', '0.6']
 ];

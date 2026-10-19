@@ -1,7 +1,7 @@
 // Catálogo unificado: perfumes 1.1, armador "Crea tu perfume", kits, esencias e insumos.
 // La pestaña activa vive en la URL (?ver=…) para poder enlazarla desde la portada, el menú o AURA.
 import { useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTienda } from '../tienda/TiendaContext';
 import { Coleccion, Kits } from '../tienda/Secciones';
 import Armador from '../tienda/Armador';
@@ -12,6 +12,8 @@ import { desplazarA } from '../lib/gsap';
 
 export const PESTANAS = [
   { clave: 'perfumes', titulo: 'Perfumes 1.1', lema: 'Réplicas 1.1 en alta concentración con feromonas, listas para llevar.' },
+  // Los decants tienen su propia página: la pestaña lleva allá
+  { clave: 'decants', titulo: 'Decants', lema: 'La colección en 10 ml: sets de descubrimiento y decants sueltos.', enlace: '/decants' },
   { clave: 'crear', titulo: 'Crea tu perfume', lema: 'Elige el envase, el tamaño, la esencia y si lleva feromonas. Lo preparamos para ti.' },
   { clave: 'kits', titulo: 'Kits', lema: 'Sets para regalar o coleccionar, con estuche y combinaciones selectas.' },
   { clave: 'esencias', titulo: 'Esencias', lema: 'Esencias puras por mililitro para preparar tus propias fragancias.' },
@@ -21,9 +23,10 @@ const TIPOS_INSUMO = ['base', 'feromona', 'envase', 'accesorio'];
 
 export default function Catalogo() {
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const { P, KITS } = useTienda();
   const pestanasRef = useRef(null);
-  const actual = PESTANAS.find((p) => p.clave === params.get('ver')) || PESTANAS[0];
+  const actual = PESTANAS.find((p) => p.clave === params.get('ver') && !p.enlace) || PESTANAS[0];
   const fraganciaInicial = Number(params.get('fragancia')) || null;
 
   usePagina({
@@ -34,6 +37,8 @@ export default function Catalogo() {
 
   const cambiar = (clave) => {
     if (clave === actual.clave) return;
+    const destino = PESTANAS.find((p) => p.clave === clave);
+    if (destino && destino.enlace) { navigate(destino.enlace); return; }
     setParams(clave === 'perfumes' ? {} : { ver: clave }, { replace: true });
     // Si la barra quedó arriba (fija), el contenido nuevo empieza desde su inicio
     const barra = pestanasRef.current;
@@ -57,7 +62,7 @@ export default function Catalogo() {
         <div className="wrap" role="tablist">
           {PESTANAS.map((p, i) => (
             <button key={p.clave} type="button" role="tab" aria-selected={p.clave === actual.clave} aria-controls="catalogo-contenido"
-              className={`cat-pestana up ${p.clave === actual.clave ? 'on' : ''} ${p.clave === 'crear' ? 'es-crear' : ''}`} onClick={() => cambiar(p.clave)}>
+              className={`cat-pestana up ${p.clave === actual.clave ? 'on' : ''} ${p.clave === 'crear' ? 'es-crear' : ''} ${p.enlace ? 'es-enlace' : ''}`} onClick={() => cambiar(p.clave)}>
               <span className="cat-pestana-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               {p.titulo}
               {cuenta[p.clave] ? <sup>{cuenta[p.clave]}</sup> : null}

@@ -10,6 +10,7 @@ import { Simbolo } from '../tienda/Marca';
 import { usePagina, JsonLd } from '../lib/hooks';
 import { etiquetaColeccion, pr, urlAbsoluta, fmt, normalizarImagen } from '../lib/producto';
 import { SITIO } from '../config';
+import { desdeDecant } from '../lib/catalogo';
 
 // La pirámide olfativa en tres actos (sistema gráfico B5.1)
 const ACTOS = [
@@ -60,6 +61,37 @@ function HeroFrasco({ heroRef }) {
         </div>
       </div>
     </div>
+  );
+}
+
+// Decants de 10 ml: la línea para probar la colección (página propia /decants)
+function DecantsPortada() {
+  const { DECANTS } = useTienda();
+  const sets = DECANTS ? DECANTS.sets : [];
+  const desde = DECANTS ? Math.min(...DECANTS.fragancias.map((f) => desdeDecant(DECANTS, f.productoId)).filter((x) => x != null)) : Infinity;
+  return (
+    <section className="sec sec--alt inicio-decants" aria-labelledby="decants-t">
+      <div className="wrap inicio-decants-in">
+        <div className="inicio-decants-foto">
+          <img src="/assets/decants/decants-set.jpg" alt="Atomizadores de bolsillo de Fragancias de Alta Densidad" width="1054" height="1200" loading="lazy" decoding="async" />
+        </div>
+        <div className="inicio-decants-t">
+          <span className="up eyebrow">Nuevo · Decants de 10 ml</span>
+          <h2 id="decants-t">Prueba la colección<br /><em>antes de elegir.</em></h2>
+          <p className="mute">Arma un set de descubrimiento con tus fragancias favoritas, o lleva la tuya en el bolsillo. Preparados con la misma esencia de alta concentración.</p>
+          <ul className="inicio-decants-op">
+            {sets.map((s) => (
+              <li key={s.id}><span>{s.nombre} · {s.cantidad} fragancias</span>{s.descuento > 0 && <small className="up">−{s.descuento}%</small>}</li>
+            ))}
+            <li><span>Decant suelto</span><small className="up">{Number.isFinite(desde) ? `Desde ${fmt(desde)}` : '10 ml'}</small></li>
+          </ul>
+          <div className="hero-actions">
+            <Link className="btn up" to="/decants">Arma tu set</Link>
+            <Link className="link up" to="/decants#armar">Ver fragancias en decant</Link>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -162,7 +194,9 @@ export default function Inicio() {
         </div>
       </section>
 
-      <section className="sec sec--alt" id="catalogo" aria-labelledby="catalogo-t">
+      <DecantsPortada />
+
+      <section className="sec" id="catalogo" aria-labelledby="catalogo-t">
         <div className="wrap">
           <div className="sec-h">
             <div>
@@ -175,7 +209,7 @@ export default function Inicio() {
         </div>
       </section>
 
-      <section className="sec" id="top" aria-labelledby="top-t">
+      <section className="sec sec--alt" id="top" aria-labelledby="top-t">
         <div className="wrap">
           <div className="sec-h">
             <div>
@@ -188,7 +222,7 @@ export default function Inicio() {
         </div>
       </section>
 
-      <section className="sec sec--alt" id="nosotros" aria-labelledby="casa-t">
+      <section className="sec" id="nosotros" aria-labelledby="casa-t">
         <div className="wrap">
           <div className="sec-h">
             <div>

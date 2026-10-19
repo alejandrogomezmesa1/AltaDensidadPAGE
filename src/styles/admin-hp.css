@@ -2303,3 +2303,46 @@ body.adm {
   color: var(--c-mute);
   font-variant-numeric: tabular-nums;
 }
+
+/* ============================================================
+   DECANTS (admin/DecantsAdmin.jsx)
+   ============================================================ */
+.dec-adm-estado ul { list-style: none; margin: 0 0 20px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 13px; color: var(--c-mute); }
+.dec-adm-estado b { font: 400 22px var(--f-display); color: var(--c-ink); margin-right: 4px; }
+.dec-adm-aviso { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 16px; padding: 12px 14px; border: var(--bw) solid var(--warn); font-size: 13px; }
+.dec-adm-aviso i { color: var(--warn); margin-top: 3px; }
+.dec-adm-bloque { padding: 22px 0; border-top: var(--bw) solid var(--c-line); }
+.dec-adm-bloque h3 { font: 500 11px var(--f-ui); letter-spacing: 0.18em; margin: 0 0 14px; }
+.dec-adm-cab { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+.dec-adm-cab h3 { margin: 0; }
+.dec-adm-precios { display: flex; flex-wrap: wrap; gap: 16px; }
+.dec-adm-bloque label { display: grid; gap: 6px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-mute); }
+.dec-adm-bloque label.check-item { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0; font-size: 13px; color: var(--c-ink); }
+.dec-adm-bloque input:not([type="checkbox"]):not([type="file"]), .dec-adm-bloque select {
+  height: 38px; padding: 0 10px; background: var(--c-surface); border: var(--bw) solid var(--c-line); color: var(--c-ink);
+  font: 400 13px var(--f-ui); text-transform: none; letter-spacing: 0; min-width: 0;
+}
+.dec-adm-bloque input:focus, .dec-adm-bloque select:focus { outline: none; border-color: var(--c-accent); }
+.dec-adm-precios input { width: 180px; }
+.dec-adm-envases, .dec-adm-sets { display: grid; gap: 14px; margin-bottom: 14px; }
+.dec-adm-envase { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; padding: 14px; border: var(--bw) solid var(--c-line); background: var(--c-surface); }
+.dec-adm-foto { position: relative; display: grid !important; place-items: center; aspect-ratio: 1; border: var(--bw) dashed var(--c-line); cursor: pointer; overflow: hidden; }
+.dec-adm-foto img { width: 100%; height: 100%; object-fit: cover; }
+.dec-adm-foto input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.dec-adm-foto span { position: absolute; bottom: 0; left: 0; right: 0; padding: 4px; background: var(--c-scrim); color: #fff; font-size: 10px; text-align: center; }
+.dec-adm-campos, .dec-adm-set { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: end; }
+.dec-adm-set { grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)); padding: 14px; border: var(--bw) solid var(--c-line); background: var(--c-surface); }
+.dec-adm-ancho { grid-column: 1 / -1; }
+.dec-adm-filtros { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0; }
+.dec-adm-seg { display: inline-flex; flex-wrap: wrap; border: var(--bw) solid var(--c-line); }
+.dec-adm-seg button { height: 36px; padding: 0 12px; background: transparent; border: 0; color: var(--c-mute); font: 400 12px var(--f-ui); cursor: pointer; }
+.dec-adm-seg button + button { border-left: var(--bw) solid var(--c-line); }
+.dec-adm-seg button.on { color: var(--c-ink); background: var(--c-surface); box-shadow: inset 0 -2px 0 var(--c-accent); }
+.dec-adm-bloque td select { width: 100%; max-width: 360px; height: 34px; }
+.dec-adm-sug { display: block; margin-top: 4px; color: var(--ok); font-size: 11px; }
+.dec-adm-inactivo td { opacity: 0.55; }
+@media (max-width: 640px) {
+  .dec-adm-envase { grid-template-columns: 1fr; }
+  .dec-adm-foto { max-width: 160px; }
+  .dec-adm-campos, .dec-adm-set { grid-template-columns: 1fr; }
+}

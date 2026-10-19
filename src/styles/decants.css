@@ -1,0 +1,736 @@
+/* ============================================================
+   DECANTS (paginas/Decants.jsx) · brand book v3: calma editorial,
+   marco ventana, oro solo como acento, números 01 · 02 · 03
+   ============================================================ */
+
+/* Portada: texto y foto en el marco ventana (sin parallax: el único es el del inicio) */
+.dec-hero {
+  padding-top: calc(var(--sp-6) + var(--sp-3));
+}
+
+.dec-hero-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--sp-6);
+  align-items: center;
+}
+
+.dec-hero-t h1 {
+  font-size: var(--fs-6);
+  line-height: 0.98;
+  margin: var(--sp-3) 0 var(--sp-4);
+}
+
+.dec-hero-t h1 em {
+  color: var(--c-accent);
+}
+
+.dec-hero-t > p {
+  max-width: 44ch;
+  margin-bottom: var(--sp-5);
+  font-size: var(--fs-3);
+}
+
+.dec-datos {
+  list-style: none;
+  margin: var(--sp-5) 0 0;
+  padding: var(--sp-4) 0 0;
+  border-top: var(--bw) solid var(--c-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-5);
+  color: var(--c-mute);
+}
+
+.dec-datos b {
+  display: block;
+  font: 400 26px/1.1 var(--f-display);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--c-ink);
+  margin-bottom: 2px;
+}
+
+.dec-hero-foto {
+  display: grid;
+  place-items: center;
+  padding: var(--sp-5) var(--sp-4);
+  background: radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--c-accent) 12%, transparent) 0%, transparent 62%), var(--c-surface);
+}
+
+.dec-ventana {
+  position: relative;
+  width: min(100%, 400px);
+  aspect-ratio: 4 / 5.2;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
+  border: var(--bw) solid var(--c-accent);
+}
+
+.dec-ventana::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px 999px 0 0;
+  border: var(--bw) solid color-mix(in srgb, var(--c-accent) 55%, transparent);
+  pointer-events: none;
+}
+
+.dec-ventana img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Cómo funciona */
+.dec-pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-5);
+}
+
+.dec-pasos li {
+  border-top: var(--bw) solid var(--c-line);
+  padding-top: var(--sp-4);
+}
+
+.dec-paso-n {
+  font: 300 44px/1 var(--f-display);
+  color: var(--c-accent);
+}
+
+.dec-pasos h3 {
+  font: 400 24px/1.2 var(--f-display);
+  margin: var(--sp-3) 0 var(--sp-2);
+}
+
+/* Envases */
+.dec-envases {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-5);
+}
+
+.dec-envase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  border: var(--bw) solid var(--c-line);
+  background: var(--c-surface);
+}
+
+.dec-envase-foto {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.dec-envase-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dec-envase-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+}
+
+.dec-envase-info h3 {
+  font: 400 28px/1.1 var(--f-display);
+}
+
+.dec-envase-desde {
+  margin-top: var(--sp-2);
+  color: var(--c-accent);
+}
+
+/* Armador */
+.dec-modos {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: var(--bw) solid var(--c-line);
+  margin-bottom: var(--sp-5);
+}
+
+.dec-modo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  background: none;
+  border: 0;
+  color: var(--c-mute);
+  cursor: pointer;
+}
+
+.dec-modo.on {
+  color: var(--c-ink);
+}
+
+.dec-modo.on::after {
+  content: "";
+  position: absolute;
+  left: var(--sp-4);
+  right: var(--sp-4);
+  bottom: -1px;
+  height: 1px;
+  background: var(--c-accent);
+}
+
+.dec-modo-desc {
+  color: var(--c-accent);
+  letter-spacing: 0.08em;
+}
+
+.dec-armador-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+.dec-filtros {
+  display: grid;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+
+.dec-buscar {
+  width: 100%;
+  max-width: 420px;
+  height: 44px;
+  padding: 0 var(--sp-3);
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-line);
+  color: var(--c-ink);
+  font: 300 var(--fs-3) var(--f-ui);
+}
+
+.dec-buscar:focus {
+  outline: none;
+  border-color: var(--c-accent);
+}
+
+.dec-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--sp-3);
+}
+
+.dec-frag {
+  position: relative;
+  display: grid;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-line);
+  color: inherit;
+  cursor: pointer;
+  transition: border-color var(--t-1);
+}
+
+.dec-frag:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--c-accent) 60%, var(--c-line));
+}
+
+.dec-frag.on {
+  border-color: var(--c-accent);
+  box-shadow: inset 0 0 0 1px var(--c-accent);
+}
+
+.dec-frag:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.dec-frag-foto {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.dec-frag-info {
+  display: grid;
+  gap: 3px;
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+}
+
+.dec-frag-info small {
+  color: var(--c-mute);
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dec-frag-nombre {
+  font: 400 19px/1.15 var(--f-display);
+}
+
+.dec-frag-precio {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+  font-size: var(--fs-2);
+}
+
+.dec-poco {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.dec-frag-check {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-line);
+  font-size: 14px;
+  color: var(--c-mute);
+}
+
+.dec-frag.on .dec-frag-check {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-bg);
+}
+
+.dec-vacio {
+  padding: var(--sp-5) 0;
+}
+
+/* Resumen fijo */
+.dec-resumen {
+  position: sticky;
+  top: calc(var(--nav-h, 64px) + var(--sp-3));
+  display: grid;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--c-bg);
+  border: var(--bw) solid var(--c-line);
+}
+
+.dec-resumen h3 {
+  font: 300 32px/1.05 var(--f-display);
+}
+
+.dec-resumen h3 em {
+  color: var(--c-accent);
+}
+
+.dec-resumen-desc {
+  font-size: var(--fs-2);
+}
+
+.dec-ranuras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: var(--bw) solid var(--c-line);
+}
+
+.dec-ranuras li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-height: 46px;
+  border-bottom: var(--bw) solid var(--c-line);
+  font-size: var(--fs-2);
+}
+
+.dec-ranura-n {
+  font: 300 20px var(--f-display);
+  color: var(--c-mute);
+  width: 26px;
+}
+
+.llena .dec-ranura-n {
+  color: var(--c-accent);
+}
+
+.dec-ranura-nombre {
+  flex: 1;
+  font: 400 18px/1.2 var(--f-display);
+}
+
+.dec-quitar {
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 0;
+  color: var(--c-mute);
+  cursor: pointer;
+}
+
+.dec-quitar:hover {
+  color: var(--c-accent);
+}
+
+.dec-envases-op {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dec-envases-op legend {
+  margin-bottom: var(--sp-2);
+  color: var(--c-mute);
+}
+
+.dec-envase-op {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2);
+  border: var(--bw) solid var(--c-line);
+  cursor: pointer;
+}
+
+.dec-envase-op.on {
+  border-color: var(--c-accent);
+}
+
+.dec-envase-op.agotado {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.dec-envase-op input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dec-envase-op:has(input:focus-visible) {
+  outline: 1px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.dec-envase-op img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+}
+
+.dec-envase-op span {
+  display: grid;
+  font-size: var(--fs-2);
+}
+
+.dec-envase-op b {
+  font-weight: 400;
+}
+
+.dec-total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2) var(--sp-3);
+  padding-top: var(--sp-2);
+}
+
+.dec-total-v {
+  font: 500 34px/1 var(--f-display);
+}
+
+.dec-ahorro {
+  width: 100%;
+  color: var(--c-accent);
+  font-size: var(--fs-2);
+}
+
+.dec-aviso {
+  font-size: var(--fs-2);
+  color: var(--c-mute);
+}
+
+.dec-agregar {
+  width: 100%;
+}
+
+.dec-agregar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dec-pronto {
+  display: grid;
+  justify-items: start;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  border: var(--bw) solid var(--c-line);
+  color: var(--c-accent);
+}
+
+.dec-pronto p {
+  color: var(--c-ink);
+  max-width: 48ch;
+}
+
+/* Barra fija del armador (solo pantallas angostas) */
+.dec-barra {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--gutter) calc(var(--sp-2) + env(safe-area-inset-bottom, 0px));
+  background: var(--c-bg);
+  border-top: var(--bw) solid var(--c-line);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.dec-barra-t {
+  display: grid;
+  font-size: var(--fs-2);
+}
+
+.dec-barra-t b {
+  font: 500 20px/1.1 var(--f-display);
+}
+
+.dec-barra .btn {
+  padding-inline: var(--sp-4);
+}
+
+/* Preguntas */
+.dec-faq {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--sp-6);
+}
+
+.dec-faq h2 {
+  font-size: var(--fs-5);
+  font-family: var(--f-display);
+  line-height: 1.05;
+  margin: var(--sp-2) 0 var(--sp-4);
+}
+
+.dec-faq h2 em {
+  font-style: italic;
+  color: var(--c-accent);
+}
+
+.dec-faq-lista details {
+  border-bottom: var(--bw) solid var(--c-line);
+}
+
+.dec-faq-lista summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-4) 0;
+  font: 400 22px/1.25 var(--f-display);
+  cursor: pointer;
+}
+
+.dec-faq-lista summary::-webkit-details-marker {
+  display: none;
+}
+
+.dec-faq-lista summary::after {
+  content: "+";
+  color: var(--c-accent);
+  font-family: var(--f-ui);
+  font-weight: 300;
+}
+
+.dec-faq-lista details[open] summary::after {
+  content: "−";
+}
+
+.dec-faq-lista details p {
+  padding-bottom: var(--sp-4);
+  max-width: 60ch;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+  .dec-armador-cuerpo {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+  .dec-envase {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 820px) {
+  .dec-hero-in,
+  .dec-faq {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+  .dec-pasos,
+  .dec-envases {
+    grid-template-columns: 1fr;
+  }
+  .dec-envase {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  /* El resumen sube antes del selector; abajo queda una barra fija con el avance y el precio */
+  .dec-armador-cuerpo {
+    grid-template-columns: 1fr;
+  }
+  .dec-resumen {
+    position: static;
+    order: -1;
+  }
+  .dec-resumen h3 {
+    font-size: 26px;
+  }
+  .dec-barra {
+    display: flex;
+  }
+  /* Los botones flotantes suben para no tapar la barra (como en Crea tu perfume) */
+  body:has(.dec-barra) .whatsapp-flotante-wrapper,
+  body:has(.dec-barra) .ia-chat-launcher {
+    translate: 0 -72px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dec-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dec-frag-nombre {
+    font-size: 17px;
+  }
+  .dec-envase {
+    grid-template-columns: 1fr;
+  }
+  .dec-buscar {
+    font-size: 16px;
+  }
+}
+
+/* Oferta de decant en la ficha del perfume */
+.d-decant {
+  display: grid;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  border: var(--bw) solid var(--c-line);
+  border-left: 2px solid var(--c-accent);
+}
+
+.d-decant-cab {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+.d-decant-cab b {
+  font: 400 24px var(--f-display);
+}
+
+.d-decant-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-4);
+}
+
+/* Decants en la portada */
+.inicio-decants-in {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--sp-6);
+  align-items: center;
+}
+
+.inicio-decants-foto {
+  aspect-ratio: 4 / 4.6;
+  overflow: hidden;
+  border: var(--bw) solid var(--c-line);
+}
+
+.inicio-decants-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.inicio-decants h2 {
+  font-size: var(--fs-5);
+  font-family: var(--f-display);
+  line-height: 1.05;
+  margin: var(--sp-2) 0 var(--sp-4);
+}
+
+.inicio-decants h2 em {
+  font-style: italic;
+  color: var(--c-accent);
+}
+
+.inicio-decants-t > p {
+  max-width: 46ch;
+  font-size: var(--fs-3);
+}
+
+.inicio-decants-op {
+  list-style: none;
+  margin: var(--sp-5) 0;
+  padding: 0;
+  border-top: var(--bw) solid var(--c-line);
+}
+
+.inicio-decants-op li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: var(--bw) solid var(--c-line);
+}
+
+.inicio-decants-op span {
+  font: 400 22px var(--f-display);
+}
+
+.inicio-decants-op small {
+  color: var(--c-accent);
+}
+
+@media (max-width: 820px) {
+  .inicio-decants-in {
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
+  }
+}

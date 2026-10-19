@@ -36,3 +36,50 @@ export function precioArmado(config, { categoria, ml, envaseId, feromonas }) {
 
 // Precio de un insumo: por unidad, o precio por ml × presentación
 export const precioInsumo = (insumo, ml) => Math.round(insumo.unit === 'ml' ? insumo.price * (ml || 0) : insumo.price);
+
+// ── Decants de 10 ml (services/decants.js) ──
+// dec_<productoId>_<envaseId> · dset_<setId>_<envaseId>_<p1>-<p2>-…
+export const codigoDecant = (productoId, envaseId) => `dec_${productoId}_${envaseId}`;
+export function leerDecant(id) {
+  const m = /^dec_(\d+)_(\d+)$/.exec(String(id));
+  return m ? { productoId: Number(m[1]), envaseId: Number(m[2]) } : null;
+}
+export const codigoSetDecants = (setId, envaseId, productoIds) => `dset_${setId}_${envaseId}_${productoIds.join('-')}`;
+export function leerSetDecants(id) {
+  const m = /^dset_(\d+)_(\d+)_(\d+(?:-\d+)+)$/.exec(String(id));
+  return m ? { setId: Number(m[1]), envaseId: Number(m[2]), productoIds: m[3].split('-').map(Number) } : null;
+}
+
+// Ficha de decant de una fragancia (o null si no se ofrece en decant)
+export const decantDe = (decants, productoId) => (decants ? decants.fragancias.find((f) => f.productoId === productoId) || null : null);
+
+// Precio de un decant: fragancia (por categoría) + envase; null si falta alguno
+export function precioDecant(decants, productoId, envaseId) {
+  const f = decantDe(decants, productoId);
+  const envase = decants && decants.envases.find((e) => e.id === envaseId);
+  if (!f || !envase || f.precio == null || envase.precio == null) return null;
+  return f.precio + envase.precio;
+}
+
+// Se puede pedir ya: hay esencia, el envase tiene stock, hay precio y cubre el costo
+export function decantVendible(decants, productoId, envaseId) {
+  const f = decantDe(decants, productoId);
+  const envase = decants && decants.envases.find((e) => e.id === envaseId);
+  return Boolean(decants && decants.disponible && f && f.disponible && envase && envase.disponible
+    && !f.bloqueados.includes(envaseId) && precioDecant(decants, productoId, envaseId) != null);
+}
+
+// Precio del set: suma de sus decants con el descuento, redondeado a $100 (igual que el backend)
+export function precioSetDecants(decants, set, envaseId, productoIds) {
+  const precios = productoIds.map((id) => precioDecant(decants, id, envaseId));
+  if (!set || precios.some((p) => p == null)) return null;
+  const suma = precios.reduce((s, p) => s + p, 0);
+  return { suma, total: Math.round((suma * (100 - set.descuento)) / 100 / 100) * 100 };
+}
+
+// Precio más bajo de un decant de esa fragancia (para "desde $…")
+export function desdeDecant(decants, productoId) {
+  if (!decants) return null;
+  const precios = decants.envases.filter((e) => decantVendible(decants, productoId, e.id)).map((e) => precioDecant(decants, productoId, e.id));
+  return precios.length ? Math.min(...precios) : null;
+}

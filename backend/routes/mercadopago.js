@@ -12,6 +12,7 @@ const crypto = require("crypto");
 const dataSync = require("../services/dataSync");
 const esquema = require("../services/esquema");
 const precios = require("../services/precios");
+const decants = require("../services/decants");
 
 // Refleja en DATA el nuevo estado de la orden (venta o anulación). Nunca bloquea la respuesta.
 function sincronizarConData(external_reference, preference_id) {
@@ -122,6 +123,34 @@ router.post("/create_preference", async (req, res) => {
           mpItems.push({
             id: itemIdStr, title: a.title, description: a.description, picture_url: a.picture_url,
             category_id: "fragancias", quantity: qty, currency_id: "COP", unit_price: a.unit_price,
+          });
+        } catch (e) {
+          if (e instanceof precios.ErrorPrecio) return res.status(e.status).json({ success: false, message: e.message });
+          throw e;
+        }
+        continue;
+      }
+
+      // 3b. Decant de 10 ml: dec_<productoId>_<envaseId>. Set: dset_<setId>_<envaseId>_<p1>-<p2>-…
+      // La receta (esencia y envase de DATA) viaja con la línea para que DATA la descuente.
+      if (itemIdStr.startsWith("dec_") || itemIdStr.startsWith("dset_")) {
+        if (!esquema.decants()) return res.status(503).json({ success: false, message: "Los decants aún no están disponibles. Escríbenos por WhatsApp." });
+        try {
+          let d;
+          if (itemIdStr.startsWith("dec_")) {
+            const [productoId, envaseId] = itemIdStr.slice(4).split("_").map((x) => parseInt(x, 10));
+            if (!(productoId > 0 && envaseId > 0)) return res.status(400).json({ success: false, message: "Decant inválido" });
+            d = await decants.precioDecant(pool, { productoId, envaseId });
+          } else {
+            const m = /^dset_(\d+)_(\d+)_(\d+(?:-\d+)+)$/.exec(itemIdStr);
+            if (!m) return res.status(400).json({ success: false, message: "Set de decants inválido" });
+            d = await decants.precioSet(pool, { setId: Number(m[1]), envaseId: Number(m[2]), productoIds: m[3].split("-").map(Number) });
+          }
+          mpItems.push({
+            id: itemIdStr, title: d.title, description: d.description, picture_url: d.picture_url,
+            category_id: "decants", quantity: qty, currency_id: "COP", unit_price: d.unit_price,
+            // Solo para DATA (no viajan a Mercado Pago): qué descontar por cada unidad
+            data_recetas: d.recetas,
           });
         } catch (e) {
           if (e instanceof precios.ErrorPrecio) return res.status(e.status).json({ success: false, message: e.message });
@@ -263,7 +292,7 @@ router.post("/create_preference", async (req, res) => {
 
     const preference = {
       // Los campos internos para DATA no viajan a Mercado Pago
-      items: mpItems.map(({ inventario_id, data_cantidad, data_precio, ...it }) => it),
+      items: mpItems.map(({ inventario_id, data_cantidad, data_precio, data_recetas, ...it }) => it),
       payer: mpPayer || undefined,
       external_reference,
       back_urls: {

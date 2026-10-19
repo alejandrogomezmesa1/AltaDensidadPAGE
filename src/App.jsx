@@ -7,6 +7,7 @@ import { DesplazarAlCambiar } from './tienda/Marco';
 import Inicio from './paginas/Inicio';
 import Top10 from './paginas/Top10';
 import Catalogo from './paginas/Catalogo';
+import Decants from './paginas/Decants';
 import FichaPagina from './paginas/FichaPagina';
 import NoEncontrado from './paginas/NoEncontrado';
 import Nosotros from './paginas/Nosotros';
@@ -46,6 +47,7 @@ function Rutas() {
         <Route index element={<Inicio />} />
         <Route path="top10" element={<Top10 />} />
         <Route path="catalogo" element={<Catalogo />} />
+        <Route path="decants" element={<Decants />} />
         {/* Los envases se eligen ahora en "Crea tu perfume" */}
         <Route path="envases" element={<Navigate to="/catalogo?ver=crear" replace />} />
         <Route path="nosotros" element={<Nosotros />} />

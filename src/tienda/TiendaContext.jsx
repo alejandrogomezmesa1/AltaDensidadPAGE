@@ -6,7 +6,7 @@ import { pausarScrollSuave } from '../lib/scrollSuave';
 import { DATOS_DUROS_PRODUCTOS, DATOS_DUROS_TOP10, DATOS_DUROS_ENVASES, DATOS_DUROS_KITS } from '../data/catalogo';
 import { fetchConFallback } from '../lib/api';
 import { adaptarProducto, normalizarImagen, pr, etiquetaTalla, noDisponible, LOGO, mapaSlugs, direccionPerfume, direccionKit, idDesdeRuta } from '../lib/producto';
-import { leerArmado, precioArmado, leerInsumo, precioInsumo, ETIQUETA_TIPO } from '../lib/catalogo';
+import { leerArmado, precioArmado, leerInsumo, precioInsumo, ETIQUETA_TIPO, leerDecant, leerSetDecants, precioDecant, precioSetDecants } from '../lib/catalogo';
 
 const CART_KEY = 'ad_cart_v2';
 const LEGACY_CART_KEY = 'altadensidad_carrito';
@@ -87,6 +87,8 @@ export function TiendaProvider({ children }) {
   // Armador (envases, precios de esencia y feromonas) e insumos de DATA; null = aún sin cargar
   const [ARMADOR, setArmador] = useState(null);
   const [INSUMOS, setInsumos] = useState(null);
+  // Decants de 10 ml: envases, sets y fragancias disponibles (null mientras carga)
+  const [DECANTS, setDecants] = useState(null);
   const [cart, setCart] = useState(cargarBolsa);
 
   // Capa abierta: 'bolsa' | 'detalle' | 'kit' | 'filtros' | null
@@ -173,6 +175,9 @@ export function TiendaProvider({ children }) {
     fetchConFallback('catalogo/insumos', 6000).then((data) => {
       if (vivo) setInsumos(Array.isArray(data) ? data : []);
     });
+    fetchConFallback('decants', 6000).then((data) => {
+      if (vivo) setDecants(data && Array.isArray(data.fragancias) ? data : { disponible: false, envases: [], sets: [], fragancias: [], ml: 10 });
+    });
     return () => { vivo = false; };
   }, []);
 
@@ -228,6 +233,32 @@ export function TiendaProvider({ children }) {
         sub: ['Preparado', envase && envase.name, `${armado.ml} ml`, armado.feromonas ? 'con feromonas' : 'sin feromonas'].filter(Boolean).join(' · ')
       };
     }
+    const decant = leerDecant(l.id);
+    if (decant) {
+      const p = buscarEn(P, TOP10, decant.productoId);
+      const envase = DECANTS && DECANTS.envases.find((e) => e.id === decant.envaseId);
+      return {
+        apiId: l.id,
+        nom: p ? p.n : 'Decant',
+        img: p ? p.img : (envase ? normalizarImagen(envase.imagen) : LOGO),
+        u: precioDecant(DECANTS, decant.productoId, decant.envaseId) || 0,
+        sub: ['Decant 10 ml', envase && envase.nombre].filter(Boolean).join(' · ')
+      };
+    }
+    const set = leerSetDecants(l.id);
+    if (set) {
+      const s = DECANTS && DECANTS.sets.find((x) => x.id === set.setId);
+      const envase = DECANTS && DECANTS.envases.find((e) => e.id === set.envaseId);
+      const nombres = set.productoIds.map((id) => (buscarEn(P, TOP10, id) || {}).n).filter(Boolean);
+      const precio = precioSetDecants(DECANTS, s, set.envaseId, set.productoIds);
+      return {
+        apiId: l.id,
+        nom: s ? s.nombre : 'Set de decants',
+        img: envase ? normalizarImagen(envase.imagen) : LOGO,
+        u: precio ? precio.total : 0,
+        sub: [`${set.productoIds.length} decants de 10 ml`, envase && envase.nombre, nombres.join(', ')].filter(Boolean).join(' · ')
+      };
+    }
     const insumo = leerInsumo(l.id);
     if (insumo) {
       const i = INSUMOS && INSUMOS.find((x) => x.id === insumo.id);
@@ -247,7 +278,7 @@ export function TiendaProvider({ children }) {
       u: p ? pr(p) : 75000,
       sub: [etiquetaTalla(l.ml), l.env].filter(Boolean).join(' · ') || 'Fragancia'
     };
-  }, [P, TOP10, KITS, ARMADOR, INSUMOS]);
+  }, [P, TOP10, KITS, ARMADOR, INSUMOS, DECANTS]);
 
   const abrirBolsa = useCallback(() => { setPaso('bag'); setCapa('bolsa'); }, []);
   // ── Enlaces directos de perfumes y kits ──
@@ -325,12 +356,12 @@ export function TiendaProvider({ children }) {
   const pedirAura = useCallback(() => { setCapa(null); setAuraAbierta(true); }, []);
 
   const valor = useMemo(() => ({
-    P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, cart, agregarPorCodigo,
+    P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, DECANTS, cart, agregarPorCodigo,
     capa, setCapa, paso, setPaso, detalle, setDetalle, kitAbierto, setKitAbierto, auraAbierta, setAuraAbierta,
     catalogoListo, kitsListos, rutaPerfume, rutaKit, idPorSlug,
     buscarProducto, resolverLinea, abrirBolsa, cerrarCapas, addToCart, agregarRapido, addKitToCart,
     cambiarCantidad, quitarLinea, vaciarBolsa, abrirDetalle, abrirKit, pedirAura
-  }), [P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, cart, agregarPorCodigo, capa, paso, detalle, kitAbierto, auraAbierta,
+  }), [P, TOP10, ENVASES, KITS, ARMADOR, INSUMOS, DECANTS, cart, agregarPorCodigo, capa, paso, detalle, kitAbierto, auraAbierta,
     catalogoListo, kitsListos, rutaPerfume, rutaKit, idPorSlug,
     buscarProducto, resolverLinea, abrirBolsa, cerrarCapas, addToCart, agregarRapido, addKitToCart,
     cambiarCantidad, quitarLinea, vaciarBolsa, abrirDetalle, abrirKit, pedirAura]);

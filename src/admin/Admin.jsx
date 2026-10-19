@@ -15,6 +15,7 @@ import ArmadorAdmin from './ArmadorAdmin';
 import InsumosAdmin from './InsumosAdmin';
 import ConfiguracionesAdmin from './ConfiguracionesAdmin';
 import MarcaAdmin from './marca/MarcaAdmin';
+import DecantsAdmin from './DecantsAdmin';
 import { PANEL_DATA } from '../config';
 
 const SECCIONES = {
@@ -22,6 +23,7 @@ const SECCIONES = {
   productos: { titulo: 'Productos', grupo: 'Catálogo', icono: 'fa-spray-can' },
   envases: { titulo: 'Envases', grupo: 'Catálogo', icono: 'fa-box' },
   kits: { titulo: 'Kits', grupo: 'Catálogo', icono: 'fa-gift' },
+  decants: { titulo: 'Decants', grupo: 'Catálogo', icono: 'fa-tint' },
   armador: { titulo: 'Crea tu perfume', grupo: 'Catálogo', icono: 'fa-flask' },
   insumos: { titulo: 'Esencias e insumos', grupo: 'Catálogo', icono: 'fa-vial' },
   top10: { titulo: 'Top 10', grupo: 'Catálogo', icono: 'fa-crown' },
@@ -216,6 +218,7 @@ function Panel({ usuario }) {
           <div className={seccion === 'productos' ? '' : 'hidden'}><ProductosAdmin alerta={mostrarAlerta} /></div>
           <div className={seccion === 'envases' ? '' : 'hidden'}><EnvasesAdmin alerta={mostrarAlerta} /></div>
           <div className={seccion === 'kits' ? '' : 'hidden'}><KitsAdmin alerta={mostrarAlerta} /></div>
+          <div className={seccion === 'decants' ? '' : 'hidden'}>{seccion === 'decants' && <DecantsAdmin alerta={mostrarAlerta} />}</div>
           <div className={seccion === 'armador' ? '' : 'hidden'}><ArmadorAdmin alerta={mostrarAlerta} /></div>
           <div className={seccion === 'insumos' ? '' : 'hidden'}>{seccion === 'insumos' && <InsumosAdmin alerta={mostrarAlerta} />}</div>
           <div className={seccion === 'top10' ? '' : 'hidden'}><Top10Admin alerta={mostrarAlerta} /></div>

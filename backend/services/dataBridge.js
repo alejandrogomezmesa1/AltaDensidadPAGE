@@ -14,6 +14,7 @@ const TIMEOUT_MS = parseInt(process.env.DATA_TIMEOUT_MS || '5000', 10);
 const INVENTARIO_TTL_MS = 30 * 1000;
 
 let cacheInventario = null;
+let cacheDecants = null;
 
 function habilitado() {
     return Boolean(BASE_URL && SECRET.length >= 32);
@@ -69,15 +70,25 @@ async function verificarStock(items) {
     return llamar('POST', '/inventory/check', { items }, 3000);
 }
 
+// Decants: receta resumida, esencias y envases de decant con stock y costo (misma caché corta)
+async function obtenerDecants({ fresco = false } = {}) {
+    if (!fresco && cacheDecants && cacheDecants.expira > Date.now()) return cacheDecants.data;
+    const data = await llamar('GET', '/decants');
+    cacheDecants = { data, expira: Date.now() + INVENTARIO_TTL_MS };
+    return data;
+}
+
 async function registrarVenta(venta) {
     const r = await llamar('POST', '/sales', venta);
     cacheInventario = null;
+    cacheDecants = null;
     return r;
 }
 
 async function anularVenta(externalReference) {
     const r = await llamar('POST', `/sales/${encodeURIComponent(externalReference)}/cancel`, {});
     cacheInventario = null;
+    cacheDecants = null;
     return r;
 }
 
@@ -90,4 +101,4 @@ async function guardarConfiguraciones(valores) {
     return llamar('PUT', '/settings', { valores });
 }
 
-module.exports = { habilitado, obtenerInventario, verificarStock, registrarVenta, anularVenta, obtenerConfiguraciones, guardarConfiguraciones };
+module.exports = { habilitado, obtenerInventario, obtenerDecants, verificarStock, registrarVenta, anularVenta, obtenerConfiguraciones, guardarConfiguraciones };

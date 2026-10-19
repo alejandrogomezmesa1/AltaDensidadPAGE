@@ -1,11 +1,13 @@
 // Capas compartidas por todas las páginas públicas (velo y bolsa) y la ficha de perfume o kit,
 // que se muestra en su página propia (FichaPagina).
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTienda } from './TiendaContext';
 import Bolsa, { Cantidad } from './Bolsa';
 import { Frasco, ImagenLogo } from './Frasco';
 import { fmt, pr, etiquetaColeccion, etiquetaTalla, descripcion, normalizarImagen, noDisponible, motivoNoDisponible } from '../lib/producto';
 import { WA } from '../config';
+import { codigoDecant, decantVendible, precioDecant } from '../lib/catalogo';
 
 function Specs({ style }) {
   return (
@@ -13,6 +15,35 @@ function Specs({ style }) {
       <div><b>Alta</b>concentración</div>
       <div><b>12h+</b>Fijación</div>
       <div><b>+</b>Feromonas</div>
+    </div>
+  );
+}
+
+// La fragancia en decant de 10 ml: envase, precio y añadir. Solo aparece si se puede pedir en línea.
+function OfertaDecant({ p }) {
+  const { DECANTS, agregarPorCodigo } = useTienda();
+  const envases = DECANTS ? DECANTS.envases.filter((e) => decantVendible(DECANTS, p.id, e.id)) : [];
+  const [envaseId, setEnvaseId] = useState(null);
+  if (!envases.length) return null;
+  const elegido = envases.find((e) => e.id === envaseId) || envases[0];
+  return (
+    <div className="d-decant">
+      <div className="d-decant-cab">
+        <span className="up eyebrow">También en decant · 10 ml</span>
+        <b>{fmt(precioDecant(DECANTS, p.id, elegido.id))}</b>
+      </div>
+      {envases.length > 1 && (
+        <div className="pick up" role="radiogroup" aria-label="Envase del decant">
+          {envases.map((e) => (
+            <button key={e.id} type="button" role="radio" aria-checked={e.id === elegido.id} className={`chip ${e.id === elegido.id ? 'on' : ''}`}
+              onClick={() => setEnvaseId(e.id)}>{e.nombre}</button>
+          ))}
+        </div>
+      )}
+      <div className="d-decant-acciones">
+        <button type="button" className="btn btn--line up" onClick={() => agregarPorCodigo(codigoDecant(p.id, elegido.id))}>Añadir decant</button>
+        <Link className="link up" to="/decants">O inclúyela en un set</Link>
+      </div>
     </div>
   );
 }
@@ -72,6 +103,7 @@ export function DetalleProducto({ enPagina = false }) {
               ? <button className="btn up" disabled aria-disabled="true">{motivoNoDisponible(p)}</button>
               : <button className="btn up" onClick={() => { addToCart(D.id, D.ml, D.env, D.q); abrirBolsa(); }}>Añadir a la bolsa</button>}
         </div>
+        <OfertaDecant p={p} />
         {p.sp && <p className="mute d-solo-prep">Esta fragancia la tenemos en esencia: se prepara en el envase y tamaño que elijas.</p>}
         {!p.sp && <Link className="link up d-crear" to={`/catalogo?ver=crear&fragancia=${p.id}`}>Prepararla en el envase y tamaño que quieras →</Link>}
         <a className="link up d-wa" href={`https://wa.me/${WA}?text=${msgWa}`} target="_blank" rel="noopener">Consultar con un asesor por WhatsApp</a>

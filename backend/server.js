@@ -17,6 +17,7 @@ const integracionRouter = require('./routes/integracion');
 const catalogoRouter = require('./routes/catalogo');
 const configuracionesRouter = require('./routes/configuraciones');
 const marcaRouter = require('./routes/marca');
+const decantsRouter = require('./routes/decants');
 const dataSync = require('./services/dataSync');
 const { ejecutarMigraciones } = require('./migrator');
 const esquema = require('./services/esquema');
@@ -127,6 +128,8 @@ app.use('/api/chatbot', chatbotRouter);
 app.use('/api/admin/integracion', integracionRouter);
 app.use('/api/admin/configuraciones', configuracionesRouter);
 app.use('/api/admin/marca', marcaRouter);
+app.use('/api/decants', decantsRouter.publico);
+app.use('/api/admin/decants', decantsRouter.admin);
 
 // Servir la plataforma independiente de capacitación como endpoint autónomo
 app.use('/capacitacion', express.static(path.join(__dirname, '../plataforma-capacitacion')));
