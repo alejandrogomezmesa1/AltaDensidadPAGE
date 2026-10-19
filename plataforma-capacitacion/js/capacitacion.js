@@ -169,10 +169,18 @@
             case 'enlace':
                 return `<p class="parrafo">${esc(b.texto)} <a class="enlace" href="${esc(b.destino)}">Abrir el manual <i class="fas fa-arrow-right" aria-hidden="true"></i></a></p>`;
             case 'uniforme':
-                return `<div class="uniforme">
-                    <figure>${figuraUniforme(b.rol)}<figcaption>${esc(b.titulo)}</figcaption></figure>
-                    <dl>${b.piezas.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join('')}</dl>
-                </div>`;
+                // Con fotos: galería de las prendas; sin fotos: la ilustración de respaldo
+                return `${b.fotos && b.fotos.length ? `
+                    <ul class="prendas">${b.fotos.map(([src, pie]) => `
+                        <li><a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="${esc(pie)}" loading="lazy"></a><span>${esc(pie)}</span></li>`).join('')}
+                    </ul>` : ''}
+                    <div class="uniforme ${b.fotos && b.fotos.length ? 'sin-figura' : ''}">
+                        ${b.fotos && b.fotos.length ? '' : `<figure>${figuraUniforme(b.rol)}<figcaption>${esc(b.titulo)}</figcaption></figure>`}
+                        <dl>${b.piezas.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join('')}</dl>
+                    </div>`;
+            case 'imagen':
+                return `<figure class="media media-guia"><a href="${esc(b.src)}" target="_blank" rel="noopener" title="Ver en tamaño completo"><img src="${esc(b.src)}" alt="${esc(b.alt)}" loading="lazy"></a>
+                    ${b.pie ? `<figcaption>${esc(b.pie)} · <span class="mute">toca para ampliar</span></figcaption>` : ''}</figure>`;
             case 'chequeo':
                 return `<ul class="chequeo">${b.items.map((i, n) => `<li><label><input type="checkbox" data-chequeo="${n}"> <span>${esc(i)}</span></label></li>`).join('')}</ul>
                     <p class="mute chequeo-total" aria-live="polite">0 de ${b.items.length}</p>`;

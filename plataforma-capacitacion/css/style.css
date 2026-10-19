@@ -320,6 +320,17 @@ td:first-child { color: var(--humo); font-weight: 400; }
 .chequeo input:checked + span { color: var(--mute); text-decoration: line-through; text-decoration-color: var(--oro); }
 .chequeo-total { font-size: 14px; }
 
+/* Fotos de prendas y guía */
+.prendas { list-style: none; margin: 0 0 24px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.prendas li { border: 1px solid var(--filete); background: var(--grafito); }
+.prendas a { display: block; aspect-ratio: 4 / 5; overflow: hidden; }
+.prendas img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.prendas a:hover img { transform: scale(1.03); }
+.prendas span { display: block; padding: 10px 12px; font-size: 13px; color: var(--mute); line-height: 1.4; }
+.uniforme.sin-figura { grid-template-columns: 1fr; }
+.media-guia { max-width: 620px; }
+.media-guia figcaption { padding: 10px 14px; font: 500 11px var(--f-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--oro); }
+
 /* Examen */
 .examen { display: grid; gap: 18px; margin-top: 20px; }
 .examen fieldset { margin: 0; padding: 20px; border: 1px solid var(--filete); background: var(--grafito); }
@@ -351,6 +362,7 @@ td:first-child { color: var(--humo); font-weight: 400; }
     .cab-marca small { display: none; }
     .cab-nav a { padding: 10px 6px; letter-spacing: 0.1em; }
     .comparar, .sistemas, .uniforme { grid-template-columns: 1fr; }
+    .prendas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .uniforme figure { max-width: 320px; }
     .indicadores dl div { grid-template-columns: 1fr; gap: 2px; }
     .pasos li { grid-template-columns: 40px minmax(0, 1fr); }

@@ -2,7 +2,8 @@
  * MANUAL DE CÓDIGO DE VESTIMENTA Y PRESENTACIÓN
  * Fragancias de Alta Densidad
  *
- * Bloques 'uniforme' dibujan el uniforme con la función figuraUniforme() de capacitacion.js.
+ * Fotos en assets/img/vestimenta. Bloques 'uniforme' muestran las prendas (fotos) y su descripción;
+ * 'imagen' muestra una foto que se puede abrir en tamaño completo.
  */
 window.MANUAL_VESTIMENTA = {
     clave: 'vestimenta',
@@ -14,6 +15,7 @@ window.MANUAL_VESTIMENTA = {
             titulo: 'Por qué un código de vestimenta',
             resumen: 'Somos parte de la experiencia de la marca.',
             bloques: [
+                { tipo: 'imagen', src: 'assets/img/vestimenta/guia-uniformes.jpg', alt: 'Guía oficial de uniformes y presentación personal: personal operativo y administrativo', pie: 'Guía oficial de uniformes y presentación personal' },
                 { tipo: 'texto', texto: 'En Fragancias de Alta Densidad la presentación personal comunica lo mismo que nuestros frascos: cuidado, sobriedad y calidad. El negro de la marca, el oro del logotipo y una imagen limpia hacen que el cliente confíe antes de que le hablemos.' },
                 { tipo: 'lista', titulo: 'Cuatro principios', items: [
                     'Sobriedad: negro, logotipo visible y nada que compita con él.',
@@ -28,9 +30,13 @@ window.MANUAL_VESTIMENTA = {
             titulo: 'Uniforme del personal operativo',
             resumen: 'Asesores, preparación, bodega y despachos.',
             bloques: [
-                { tipo: 'uniforme', rol: 'operativo', titulo: 'Personal operativo', piezas: [
-                    ['Camisa tipo polo', 'Negra, con el logotipo de la empresa, por dentro o por fuera según la indicación del punto.'],
-                    ['Delantal', 'De la empresa, limpio, bien atado y sin manchas de esencia. Obligatorio en preparación y bodega.'],
+                { tipo: 'uniforme', rol: 'operativo', titulo: 'Personal operativo', fotos: [
+                    ['assets/img/vestimenta/polo-negra-logotipo.jpg', 'Polo negra con el isotipo bordado en hilo dorado'],
+                    ['assets/img/vestimenta/delantal.jpg', 'Delantal negro de lona con el logotipo'],
+                    ['assets/img/vestimenta/pantalon-comodo.jpg', 'Pantalón negro cómodo de tela técnica']
+                ], piezas: [
+                    ['Camisa tipo polo', 'Negra, con el isotipo de la marca bordado en hilo dorado, por dentro o por fuera según la indicación del punto.'],
+                    ['Delantal', 'Negro, de lona, con el logotipo de la empresa. Limpio, bien atado y sin manchas de esencia. Obligatorio en preparación y bodega.'],
                     ['Pantalón negro cómodo', 'Liso, sin rotos, que permita agacharse y cargar.'],
                     ['Zapatos negros cómodos', 'Cerrados y antideslizantes. Nunca sandalias ni tenis de colores.']
                 ] },
@@ -42,9 +48,13 @@ window.MANUAL_VESTIMENTA = {
             titulo: 'Uniforme del personal administrativo',
             resumen: 'Líderes de punto, administración y oficina.',
             bloques: [
-                { tipo: 'uniforme', rol: 'administrativo', titulo: 'Personal administrativo', piezas: [
+                { tipo: 'uniforme', rol: 'administrativo', titulo: 'Personal administrativo', fotos: [
+                    ['assets/img/vestimenta/polo-negra-logotipo.jpg', 'Polo negra con el isotipo bordado en hilo dorado'],
+                    ['assets/img/vestimenta/jean-negro.jpg', 'Jean negro, corte recto o slim'],
+                    ['assets/img/vestimenta/zapatos-formales.jpg', 'Zapatos negros modernos y formales']
+                ], piezas: [
                     ['Camisa tipo polo negra con logotipo', 'Limpia y planchada, con el logotipo dorado visible.'],
-                    ['Jean negro', 'En excelente estado, sin rotos, desteñidos ni desgaste.'],
+                    ['Jean negro', 'Corte recto o slim, en excelente estado, sin rotos, desteñidos ni desgaste.'],
                     ['Zapatos modernos y formales', 'Negros, limpios y en buen estado.']
                 ] },
                 { tipo: 'texto', texto: 'El Líder de Punto de Venta usa el uniforme administrativo. Si apoya preparación o bodega, se pone el delantal y retira los accesorios.' }
