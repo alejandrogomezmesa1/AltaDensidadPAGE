@@ -89,7 +89,7 @@ export function descripcion(p) {
   return 'Alta concentración con base de feromonas.';
 }
 
-export const normalizar = (txt) => (txt || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+export const normalizar = (txt) => (txt || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
 export function paginasVisibles(actual, total) {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);

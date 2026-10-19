@@ -4081,9 +4081,13 @@ body.ad-layer-open .ia-chat-launcher {
   color: var(--c-mute);
 }
 
-.afin-notas em {
-  font-style: normal;
-  opacity: 0.7;
+.afin-acorde--comun {
+  color: var(--c-ink);
+}
+
+.afines-acorde {
+  font-weight: 400;
+  color: var(--c-accent);
 }
 
 .afin-precio {

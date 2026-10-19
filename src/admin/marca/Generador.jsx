@@ -362,7 +362,7 @@ export default function Generador({ alerta }) {
   async function descargar(tipo) {
     try {
       const blob = await lienzoABlob(lienzo.current, tipo === 'jpg' ? 'image/jpeg' : 'image/png', 0.92);
-      const slug = (producto?.name || 'pieza').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
+      const slug = (producto?.name || 'pieza').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
       descargarBlob(blob, `alta-densidad_${formato}_${slug}.${tipo}`);
     } catch (err) {
       alerta('No se pudo exportar: ' + err.message, 'error');

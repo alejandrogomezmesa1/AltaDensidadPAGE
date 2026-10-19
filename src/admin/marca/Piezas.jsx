@@ -326,7 +326,7 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
   const todas = useMemo(() => manifest.piezas.map((p) => ({ ...p, seccionTitulo: titulos[p.seccion] })), [manifest, titulos]);
 
   const filtradas = useMemo(() => {
-    const q = busqueda.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const q = busqueda.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     return todas.filter((p) => {
       const e = estadoDe(estados, p.id);
       if (seccion && p.seccion !== seccion) return false;
@@ -334,7 +334,7 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
       if (soloFav && !e.favorita) return false;
       if (soloPend && !e.pendientes) return false;
       if (!q) return true;
-      return `${p.titulo} ${p.descripcion} ${p.archivo} ${p.seccionTitulo}`.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').includes(q);
+      return `${p.titulo} ${p.descripcion} ${p.archivo} ${p.seccionTitulo}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q);
     });
   }, [todas, estados, busqueda, seccion, filtroEstado, soloFav, soloPend]);
 
