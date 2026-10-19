@@ -11,17 +11,17 @@
     <link rel="apple-touch-icon" href="/assets/marca/apple-touch-icon.png">
 
     <script>
-        // Con barra final las rutas relativas (css, js, assets) resuelven bien desde /capacitacion e /induccion
-        if (window.location.pathname === '/capacitacion' || window.location.pathname === '/induccion') {
-            window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
-        }
+        // Raíz de la plataforma según por dónde se entra (/capacitacion, /induccion o / en local).
+        // Vercel quita la barra final de las URL: las rutas a css, js y assets se arman con esta raíz
+        // (antes se agregaba la barra y Vercel la quitaba: recargaba en bucle).
+        window.RAIZ = location.pathname.replace(/\/[^/]*\.html$/, '').replace(/\/+$/, '') + '/';
+        document.write('<link rel="stylesheet" href="' + window.RAIZ + 'css/style.css">');
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="cab">
@@ -56,9 +56,10 @@
         </defs>
     </svg>
 
-    <script src="js/modulos-data.js"></script>
-    <script src="js/especifica-data.js"></script>
-    <script src="js/vestimenta-data.js"></script>
-    <script src="js/capacitacion.js"></script>
+    <script>
+        ['modulos-data', 'especifica-data', 'vestimenta-data', 'capacitacion'].forEach(function (f) {
+            document.write('<script src="' + window.RAIZ + 'js/' + f + '.js"><\/script>');
+        });
+    </script>
 </body>
 </html>

@@ -9,7 +9,10 @@
 (function () {
     'use strict';
 
-    const PDF = 'assets/CapacitacionFraganciasAltaDensidad.pdf';
+    // Rutas de archivos con la raíz de la plataforma (ver index.html): la URL no lleva barra final
+    const RAIZ = window.RAIZ || '/';
+    const url = (src) => (!src || /^(https?:|data:|\/)/.test(src) ? src : RAIZ + src);
+    const PDF = url('assets/CapacitacionFraganciasAltaDensidad.pdf');
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
     const leer = (k, def) => { try { const v = localStorage.getItem(k); return v == null ? def : JSON.parse(v); } catch (e) { return def; } };
     const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* sin almacenamiento */ } };
@@ -69,7 +72,7 @@
         }).join('');
         app.innerHTML = `
             <section class="portada">
-                <img class="portada-imagotipo" src="assets/img/imagotipo.svg" alt="Fragancias de Alta Densidad" width="560" height="560">
+                <img class="portada-imagotipo" src="${url('assets/img/imagotipo.svg')}" alt="Fragancias de Alta Densidad" width="560" height="560">
                 <p class="portada-eyebrow">Portal de inducción y capacitación</p>
                 <a class="portada-bajar" href="#submodulos" aria-label="Ver los submódulos"><span>Comienza aquí</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
             </section>
@@ -172,14 +175,14 @@
                 // Con fotos: galería de las prendas; sin fotos: la ilustración de respaldo
                 return `${b.fotos && b.fotos.length ? `
                     <ul class="prendas">${b.fotos.map(([src, pie]) => `
-                        <li><a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="${esc(pie)}" loading="lazy"></a><span>${esc(pie)}</span></li>`).join('')}
+                        <li><a href="${esc(url(src))}" target="_blank" rel="noopener"><img src="${esc(url(src))}" alt="${esc(pie)}" loading="lazy"></a><span>${esc(pie)}</span></li>`).join('')}
                     </ul>` : ''}
                     <div class="uniforme ${b.fotos && b.fotos.length ? 'sin-figura' : ''}">
                         ${b.fotos && b.fotos.length ? '' : `<figure>${figuraUniforme(b.rol)}<figcaption>${esc(b.titulo)}</figcaption></figure>`}
                         <dl>${b.piezas.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join('')}</dl>
                     </div>`;
             case 'imagen':
-                return `<figure class="media media-guia"><a href="${esc(b.src)}" target="_blank" rel="noopener" title="Ver en tamaño completo"><img src="${esc(b.src)}" alt="${esc(b.alt)}" loading="lazy"></a>
+                return `<figure class="media media-guia"><a href="${esc(url(b.src))}" target="_blank" rel="noopener" title="Ver en tamaño completo"><img src="${esc(url(b.src))}" alt="${esc(b.alt)}" loading="lazy"></a>
                     ${b.pie ? `<figcaption>${esc(b.pie)} · <span class="mute">toca para ampliar</span></figcaption>` : ''}</figure>`;
             case 'chequeo':
                 return `<ul class="chequeo">${b.items.map((i, n) => `<li><label><input type="checkbox" data-chequeo="${n}"> <span>${esc(i)}</span></label></li>`).join('')}</ul>
@@ -209,10 +212,10 @@
     function mediaLegado(m) {
         if (m.tipo === 'video' && m.video_url) {
             return /\.mp4$/i.test(m.video_url)
-                ? `<figure class="media"><video controls preload="metadata" src="${esc(m.video_url)}"></video></figure>`
+                ? `<figure class="media"><video controls preload="metadata" src="${esc(url(m.video_url))}"></video></figure>`
                 : `<figure class="media media-video"><iframe src="${esc(m.video_url)}" allowfullscreen title="${esc(m.titulo)}"></iframe></figure>`;
         }
-        return m.imagen_url ? `<figure class="media"><img src="${esc(m.imagen_url)}" alt="" loading="lazy" onerror="this.parentNode.remove()"></figure>` : '';
+        return m.imagen_url ? `<figure class="media"><img src="${esc(url(m.imagen_url))}" alt="" loading="lazy" onerror="this.parentNode.remove()"></figure>` : '';
     }
 
     // ── Vista de un módulo ──
