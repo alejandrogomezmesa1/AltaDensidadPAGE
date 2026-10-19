@@ -1,60 +1,20 @@
-# Plataforma Independiente de Inducción y Capacitación
-**Fragancias de Alta Densidad**
+# Portal de inducción y capacitación
+**Fragancias de Alta Densidad** · servido por la tienda en `/capacitacion` y `/induccion` (vercel.json → `plataforma-capacitacion/index.html`; `tools/copiar_capacitacion.js` la copia a `dist/` en el build).
 
-Esta carpeta contiene una aplicación web estática, 100% desacoplada e independiente del proyecto principal. No requiere Node.js, Express, MySQL ni backend para funcionar.
+Aplicación estática, sin backend. El progreso se guarda en el navegador (localStorage).
 
----
+## Estructura
+- `index.html`: portada con el imagotipo y los tres submódulos.
+- `js/modulos-data.js`: **Inducción general** (53 módulos). Las preguntas ya no se piden en cada módulo: forman el banco del **examen final** (10 al azar, se aprueba con el 100 %).
+- `js/especifica-data.js`: **Inducción específica · Líder de Punto de Venta** (13 módulos: servicio, ventas, caja paso a paso, aplicativos autorizados, inventario, cuidado de la mercancía, equipo, SG-SST, apertura y cierre, confidencialidad e indicadores con su medición).
+- `js/vestimenta-data.js`: **Manual de código de vestimenta y presentación** (uniforme operativo y administrativo ilustrados, uso correcto, cabello, uñas, accesorios, lista diaria).
+- `js/capacitacion.js`: rutas (`#/general`, `#/especifica`, `#/vestimenta`, `#/<submódulo>/<módulo>`, `#/general/examen`), progreso, bloques y figuras de los uniformes.
+- `css/style.css`: estilos con el brand book (tinta, hueso, oro; Cormorant Garamond y Jost).
 
-## 📁 Estructura de Archivos
+## Editar contenido
+Cada módulo de los submódulos nuevos es una lista de bloques: `texto`, `lista`, `pasos` (con `sistema` opcional), `aviso` (`prohibido` · `importante` · `consejo`), `tabla`, `comparar`, `sistemas`, `indicadores`, `uniforme`, `chequeo` y `enlace`. Los pasos de caja e inventario describen las pantallas reales de Alta Densidad DATA; si cambian, actualízalos aquí.
 
+## Probar en local
+```bash
+python3 -m http.server 8080 --directory plataforma-capacitacion
 ```
-plataforma-capacitacion/
-├── index.html                    # Página principal responsiva
-├── README.md                     # Documentación de uso y despliegue
-├── css/
-│   └── style.css                 # Estilos consolidados (dark & gold, responsive)
-├── js/
-│   ├── modulos-data.js           # Banco de datos con los 53 módulos, textos, videos, imágenes y preguntas con respuestas
-│   └── capacitacion.js           # Motor de lectura, validación interactiva, generación de examen y localStorage
-└── assets/
-    ├── CapacitacionFraganciasAltaDensidad.pdf  # Manual descargable oficial
-    └── img/
-        ├── Logo2026.png          # Logo de Fragancias Alta Densidad
-        ├── Crear_un_video_elegante_y_prof.mp4
-        ├── capacitacion/         # 53 imágenes de los módulos formativos
-        └── induccion/            # Fotografías y videos institucionales (SST, EPP, Brigada, etc.)
-```
-
----
-
-## 🚀 ¿Cómo Ejecutarla en Local?
-
-1. **Directamente en el navegador:**
-   Puedes hacer doble clic en el archivo `index.html` o abrirlo en cualquier navegador (Chrome, Edge, Safari, Firefox).
-2. **Con Live Server o cualquier servidor estático:**
-   ```bash
-   # Opción con npx serve:
-   npx serve plataforma-capacitacion
-
-   # O con Python:
-   python3 -m http.server 8080 --directory plataforma-capacitacion
-   ```
-
----
-
-## 🌐 ¿Cómo Desplegarla en Internet de Forma Gratuita?
-
-Puedes copiar o mover esta carpeta a su propio repositorio de GitHub o subirla directamente a:
-- **Vercel:** Importa la carpeta o crea un proyecto estático apuntando a `index.html`.
-- **Netlify:** Arrastra la carpeta `plataforma-capacitacion` en [app.netlify.com/drop](https://app.netlify.com/drop).
-- **GitHub Pages:** Sube los archivos a la rama `main` o `gh-pages` de un repositorio.
-- **Cloudflare Pages:** Conecta tu repositorio o sube la carpeta directamente.
-
----
-
-## 🌟 Características
-
-- **53 Módulos Formativos:** Misión, visión, reglamento interno, seguridad en el trabajo (SST), EPP, brigadas, COCOLA, portafolio de fragancias y facturación.
-- **Evaluación Interactiva:** 3 preguntas de validación por módulo y examen final aleatorio de 10 preguntas.
-- **Persistencia de Progreso:** Guarda automáticamente el progreso de lectura y aprobación en el `localStorage` del navegador.
-- **Descarga Directa de PDF:** Incluye botón directo para descargar el Manual de Capacitación Oficial.

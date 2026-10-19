@@ -1,658 +1,372 @@
 /**
- * Plataforma Independiente de Inducción y Capacitación
- * Fragancias de Alta Densidad
- * 
- * Funcionalidad 100% estática / cliente (Zero-Backend)
+ * Portal de inducción y capacitación · Fragancias de Alta Densidad
+ * Estático, sin backend. Tres submódulos:
+ *   #/general     Inducción general (53 módulos; sin preguntas filtro; examen final al terminar)
+ *   #/especifica  Inducción específica · Líder de Punto de Venta
+ *   #/vestimenta  Manual de código de vestimenta y presentación
+ * Rutas: #/<pista>, #/<pista>/<módulo>, #/general/examen. El progreso se guarda en este navegador.
  */
+(function () {
+    'use strict';
 
-let modulosItems = [];
-let modulosCompletados = [];
-let moduloActualIdx = 0;
-let estadoInduccion = 'pendiente_capacitacion';
-let preguntasExamenActual = [];
+    const PDF = 'assets/CapacitacionFraganciasAltaDensidad.pdf';
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
+    const leer = (k, def) => { try { const v = localStorage.getItem(k); return v == null ? def : JSON.parse(v); } catch (e) { return def; } };
+    const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* sin almacenamiento */ } };
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Cargar módulos del banco local
-    if (window.MODULOS_CAPACITACION && Array.isArray(window.MODULOS_CAPACITACION)) {
-        modulosItems = window.MODULOS_CAPACITACION;
-    } else {
-        console.error('No se encontró el banco de módulos en window.MODULOS_CAPACITACION');
-        return;
-    }
-
-    // 2. Cargar progreso previo guardado localmente en el navegador
-    try {
-        modulosCompletados = JSON.parse(localStorage.getItem('ad_capacitacion_completados') || '[]');
-        estadoInduccion = localStorage.getItem('ad_capacitacion_estado') || 'pendiente_capacitacion';
-    } catch (e) {
-        modulosCompletados = [];
-        estadoInduccion = 'pendiente_capacitacion';
-    }
-
-    actualizarBadgeEstado();
-    actualizarSelectorModulosDirecto();
-    actualizarBarraProgreso();
-    renderizarPasoCapacitacion();
-});
-
-function actualizarBadgeEstado() {
-    const badge = document.getElementById('badgeEstado');
-    if (!badge) return;
-
-    if (estadoInduccion === 'examen_aprobado') {
-        badge.innerHTML = `<span class="badge-status aprobado"><i class="fas fa-check-double"></i> Capacitación Aprobada</span>`;
-    } else if (modulosCompletados.length >= modulosItems.length) {
-        badge.innerHTML = `<span class="badge-status progreso"><i class="fas fa-clock"></i> Pendiente de Examen Final</span>`;
-    } else {
-        badge.innerHTML = `<span class="badge-status progreso"><i class="fas fa-spinner fa-pulse"></i> En Progreso (${modulosCompletados.length}/${modulosItems.length})</span>`;
-    }
-}
-
-function actualizarSelectorModulosDirecto() {
-    const select = document.getElementById('selectModuloDirecto');
-    if (!select) return;
-
-    select.innerHTML = '<option value="">-- Seleccionar Módulo Directo --</option>';
-
-    modulosItems.forEach((mod, idx) => {
-        const option = document.createElement('option');
-        option.value = idx;
-        const yaCompletado = modulosCompletados.includes(mod.orden || idx + 1);
-        option.textContent = `${mod.titulo || 'Módulo ' + (idx + 1)} ${yaCompletado ? '✓ (Completado)' : ''}`;
-        select.appendChild(option);
-    });
-
-    select.addEventListener('change', (e) => {
-        const idx = parseInt(e.target.value, 10);
-        if (!isNaN(idx) && idx >= 0 && idx < modulosItems.length) {
-            moduloActualIdx = idx;
-            renderModuloLectura(moduloActualIdx);
-        }
-    });
-}
-
-function actualizarBarraProgreso(idxActual) {
-    const barra = document.getElementById('barraProgreso');
-    const texto = document.getElementById('progresoTexto');
-    const contador = document.getElementById('modulosContador');
-
-    const total = modulosItems.length;
-    const completados = modulosCompletados.length;
-    const porcentaje = total > 0 ? Math.round((completados / total) * 100) : 0;
-
-    if (barra) {
-        if (window.anime) {
-            anime({
-                targets: barra,
-                width: `${porcentaje}%`,
-                duration: 600,
-                easing: 'easeOutCubic'
-            });
-        } else {
-            barra.style.width = `${porcentaje}%`;
-        }
-    }
-    if (texto) texto.textContent = `Progreso General: ${porcentaje}% (${completados} de ${total} módulos completados)`;
-
-    if (contador) {
-        if (typeof idxActual === 'number') {
-            contador.textContent = `Viendo Módulo ${idxActual + 1} de ${total}`;
-        } else {
-            contador.textContent = `${completados} de ${total} Módulos`;
-        }
-    }
-}
-
-function renderizarPasoCapacitacion() {
-    const contenedorMod = document.getElementById('contenedorModulo');
-    const contenedorExa = document.getElementById('contenedorExamen');
-    const contenedorFin = document.getElementById('contenedorFinal');
-
-    if (!contenedorMod || !contenedorExa || !contenedorFin) return;
-
-    contenedorMod.classList.add('hidden');
-    contenedorExa.classList.add('hidden');
-    contenedorFin.classList.add('hidden');
-
-    actualizarBadgeEstado();
-
-    if (estadoInduccion === 'examen_aprobado') {
-        contenedorFin.classList.remove('hidden');
-        renderVistaFinalExito();
-        return;
-    }
-
-    // Buscar el primer módulo pendiente
-    let idxSiguiente = -1;
-    for (let i = 0; i < modulosItems.length; i++) {
-        const idMod = modulosItems[i].orden || (i + 1);
-        if (!modulosCompletados.includes(idMod)) {
-            idxSiguiente = i;
-            break;
-        }
-    }
-
-    if (idxSiguiente !== -1) {
-        moduloActualIdx = idxSiguiente;
-        contenedorMod.classList.remove('hidden');
-        renderModuloLectura(moduloActualIdx);
-    } else {
-        contenedorExa.classList.remove('hidden');
-        renderPantallaExamenFinal();
-    }
-}
-
-function formatearContenidoEditorial(texto) {
-    if (!texto) return '';
-
-    const lineas = texto.split('\n');
-    let html = '';
-
-    lineas.forEach((rawLinea) => {
-        const linea = rawLinea.trim();
-        if (!linea) return;
-
-        // Elemento de lista / viñeta
-        if (linea.startsWith('•') || linea.startsWith('-') || linea.startsWith('*')) {
-            const contenidoLi = linea.replace(/^[•\-\*]\s*/, '');
-            html += `
-                <div class="module-list-item">
-                    <i class="fas fa-check-circle module-list-icon"></i>
-                    <span>${escHtml(contenidoLi)}</span>
-                </div>
-            `;
-            return;
-        }
-
-        // Saludo de apertura en mayúsculas
-        if (linea.startsWith('¡') && linea === linea.toUpperCase() && linea.length < 80) {
-            html += `<span class="module-highlight-greeting">${escHtml(linea)}</span>`;
-            return;
-        }
-
-        // Encabezados o subtítulos en mayúsculas (ej: "AGENDA DE INDUCCIÓN INSTITUCIONAL:")
-        const esEncabezado = /^[A-ZÁÉÍÓÚÑ0-9\s,:\(\)\-–—]{4,90}:?$/.test(linea) && linea.length < 90 && linea === linea.toUpperCase();
-        if (esEncabezado) {
-            html += `<h4 class="module-subtitle">${escHtml(linea)}</h4>`;
-            return;
-        }
-
-        // Párrafo estándar
-        html += `<p class="module-paragraph">${escHtml(linea)}</p>`;
-    });
-
-    return html;
-}
-
-function renderModuloLectura(idx) {
-    actualizarBarraProgreso(idx);
-    const mod = modulosItems[idx];
-    const contenedor = document.getElementById('contenedorModulo');
-    if (!contenedor || !mod) return;
-
-    contenedor.classList.remove('hidden');
-    document.getElementById('contenedorExamen')?.classList.add('hidden');
-    document.getElementById('contenedorFinal')?.classList.add('hidden');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    let mediaHtml = '';
-    if (mod.tipo === 'video' && mod.video_url) {
-        if (mod.video_url.endsWith('.mp4')) {
-            mediaHtml = `
-                <div class="media-frame-container">
-                    <video controls controlsList="nodownload" preload="metadata" style="max-width: 100%; max-height: 480px; border-radius: 10px; border: 1px solid var(--border-subtle); box-shadow: 0 8px 24px rgba(0,0,0,0.6);">
-                        <source src="${mod.video_url}" type="video/mp4">
-                        Tu navegador no soporta reproducción de video HTML5.
-                    </video>
-                </div>
-            `;
-        } else {
-            mediaHtml = `
-                <div class="media-frame-container">
-                    <div class="media-responsive-video">
-                        <iframe src="${mod.video_url}" allowfullscreen></iframe>
-                    </div>
-                </div>
-            `;
-        }
-    } else if (mod.imagen_url) {
-        mediaHtml = `
-            <div class="media-frame-container">
-                <img src="${mod.imagen_url}" alt="${escHtml(mod.titulo)}" class="media-responsive-img" onerror="this.style.display='none'">
-            </div>
-        `;
-    }
-
-    const preguntas = mod.preguntas || [];
-    let preguntasHtml = '';
-
-    if (preguntas.length > 0) {
-        preguntasHtml = `
-            <div class="quiz-validation-wrapper">
-                <div class="quiz-header">
-                    <h3 class="quiz-title">
-                        <i class="fas fa-check-circle"></i> Preguntas de Validación del Módulo
-                    </h3>
-                    <span style="color: var(--gold-primary); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.5px;">
-                        ${preguntas.length} ${preguntas.length === 1 ? 'Pregunta' : 'Preguntas'}
-                    </span>
-                </div>
-                <p class="quiz-description">Responde correctamente las preguntas formuladas a continuación para validar este módulo y continuar:</p>
-                <form id="formValidarModulo">
-                    <div class="options-group">
-                        ${preguntas.map((p, pIdx) => `
-                            <div class="question-item-card">
-                                <div class="question-text-title">
-                                    <span class="question-number-badge">${pIdx + 1}</span>
-                                    <span>${escHtml(p.pregunta)}</span>
-                                </div>
-                                <div class="options-group">
-                                    ${p.opciones.map((opt, oIdx) => `
-                                        <label class="option-card">
-                                            <input type="radio" name="pregunta_${pIdx}" value="${oIdx}" required>
-                                            <span>${escHtml(opt)}</span>
-                                        </label>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div style="display:flex; justify-content:flex-end; margin-top:22px;">
-                        <button type="submit" class="btn-gold">
-                            <i class="fas fa-check-double"></i> Validar Respuestas y Continuar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        `;
-    } else {
-        preguntasHtml = `
-            <div style="display:flex; justify-content:flex-end; margin-top: 32px;">
-                <button id="btnCompletarModuloLectura" class="btn-gold">
-                    <span>Módulo Leído — Continuar</span> <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        `;
-    }
-
-    // Barra de navegación de cabecera
-    let navBotones = `<div class="module-nav-bar">`;
-    if (idx > 0) {
-        navBotones += `<button onclick="renderModuloLectura(${idx - 1})" class="btn-nav-arrow"><i class="fas fa-arrow-left"></i> Anterior</button>`;
-    } else {
-        navBotones += `<div></div>`;
-    }
-
-    navBotones += `<span class="module-nav-pill"><i class="fas fa-book-open"></i> Módulo ${idx + 1} de ${modulosItems.length}</span>`;
-
-    if (idx < modulosItems.length - 1) {
-        navBotones += `<button onclick="renderModuloLectura(${idx + 1})" class="btn-nav-arrow primary">Siguiente <i class="fas fa-arrow-right"></i></button>`;
-    } else {
-        navBotones += `<button onclick="renderPantallaExamenFinal()" class="btn-gold" style="padding:8px 20px; font-size:0.88rem;">Ir al Examen <i class="fas fa-graduation-cap"></i></button>`;
-    }
-    navBotones += `</div>`;
-
-    contenedor.innerHTML = `
-        ${navBotones}
-        <div class="module-content-card">
-            <div class="module-card-header">
-                <h2 class="module-title">${escHtml(mod.titulo)}</h2>
-                <a href="assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" class="btn-pdf-pill" title="Descargar Manual Completo en PDF">
-                    <i class="fas fa-file-pdf"></i> <span>Manual en PDF</span>
-                </a>
-            </div>
-            ${mediaHtml}
-            <div class="module-editorial-body">
-                ${formatearContenidoEditorial(mod.contenido)}
-            </div>
-            ${preguntasHtml}
-        </div>
-    `;
-
-    if (window.anime) {
-        anime({
-            targets: '.module-content-card',
-            opacity: [0, 1],
-            translateY: [18, 0],
-            duration: 400,
-            easing: 'easeOutCubic'
-        });
-    }
-
-    // Event listener si no hay preguntas
-    const btnSoloLectura = document.getElementById('btnCompletarModuloLectura');
-    if (btnSoloLectura) {
-        btnSoloLectura.addEventListener('click', () => {
-            completarModuloActual(mod);
-        });
-    }
-
-    // Event listener si hay formulario de preguntas
-    const formValidar = document.getElementById('formValidarModulo');
-    if (formValidar) {
-        formValidar.addEventListener('submit', (e) => {
-            e.preventDefault();
-            validarRespuestasModulo(mod, preguntas);
-        });
-    }
-}
-
-function validarRespuestasModulo(mod, preguntas) {
-    let todasCorrectas = true;
-
-    for (let i = 0; i < preguntas.length; i++) {
-        const p = preguntas[i];
-        const sel = document.querySelector(`input[name="pregunta_${i}"]:checked`);
-        if (!sel || parseInt(sel.value, 10) !== p.respuesta_correcta) {
-            todasCorrectas = false;
-            break;
-        }
-    }
-
-    if (!todasCorrectas) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Respuestas Incorrectas',
-            text: 'Una o más respuestas no son correctas. Por favor repasa el contenido del módulo e inténtalo de nuevo.',
-            confirmButtonText: 'Revisar'
-        });
-        return;
-    }
-
-    // Módulo aprobado
-    completarModuloActual(mod, true);
-}
-
-function completarModuloActual(mod, conAlerta = false) {
-    const idMod = mod.orden || (moduloActualIdx + 1);
-
-    if (!modulosCompletados.includes(idMod)) {
-        modulosCompletados.push(idMod);
-        localStorage.setItem('ad_capacitacion_completados', JSON.stringify(modulosCompletados));
-    }
-
-    actualizarBadgeEstado();
-    actualizarBarraProgreso();
-    actualizarSelectorModulosDirecto();
-
-    const accionSiguiente = () => {
-        if (moduloActualIdx < modulosItems.length - 1) {
-            moduloActualIdx++;
-            renderModuloLectura(moduloActualIdx);
-        } else {
-            renderizarPasoCapacitacion();
-        }
+    // ── Submódulos ──
+    const general = (window.MODULOS_CAPACITACION || []).map((m) => ({
+        id: String(m.orden),
+        titulo: String(m.titulo || '').replace(/^\d+\.\s*/, ''),
+        legado: m
+    }));
+    const PISTAS = {
+        general: {
+            clave: 'general', n: '01', titulo: 'Inducción general',
+            descripcion: 'La empresa, su historia, el reglamento interno, seguridad y salud en el trabajo, el portafolio, la atención al cliente y la facturación.',
+            modulos: general, examen: true, icono: 'fa-building'
+        },
+        especifica: Object.assign({ n: '02', icono: 'fa-store' }, window.INDUCCION_ESPECIFICA),
+        vestimenta: Object.assign({ n: '03', icono: 'fa-shirt' }, window.MANUAL_VESTIMENTA)
     };
 
-    if (conAlerta) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Módulo Validado con Éxito!',
-            text: 'Has respondido correctamente las preguntas. Pasemos al siguiente módulo.',
-            timer: 2000,
-            showConfirmButton: false
-        }).then(accionSiguiente);
-    } else {
-        accionSiguiente();
+    // Progreso: la inducción general conserva las claves de la versión anterior
+    const CLAVES = { general: 'ad_capacitacion_completados', especifica: 'ad_cap_especifica', vestimenta: 'ad_cap_vestimenta' };
+    const leidos = (clave) => leer(CLAVES[clave], []).map(String);
+    const marcarLeido = (clave, id) => {
+        const ls = leidos(clave);
+        if (!ls.includes(String(id))) guardar(CLAVES[clave], clave === 'general' ? [...ls, String(id)].map(Number) : [...ls, String(id)]);
+    };
+    const examenAprobado = () => leer('ad_capacitacion_estado', null) === 'examen_aprobado' || localStorage.getItem('ad_capacitacion_estado') === 'examen_aprobado';
+    const avance = (p) => {
+        const l = leidos(p.clave);
+        const hechos = p.modulos.filter((m) => l.includes(m.id)).length;
+        return { hechos, total: p.modulos.length, pct: p.modulos.length ? Math.round((hechos / p.modulos.length) * 100) : 0 };
+    };
+
+    const app = document.getElementById('app');
+
+    // ── Portada: imagotipo y los tres submódulos ──
+    function portada() {
+        const tarjetas = ['general', 'especifica', 'vestimenta'].map((k) => {
+            const p = PISTAS[k];
+            const a = avance(p);
+            const accion = a.hechos === 0 ? 'Comenzar' : a.hechos >= a.total ? 'Repasar' : 'Continuar';
+            const estado = k === 'general' && examenAprobado() ? '<span class="sello-ok"><i class="fas fa-check"></i> Examen aprobado</span>' : '';
+            return `
+                <li>
+                    <a class="pista-tarjeta" href="#/${k}">
+                        <span class="pista-n">${p.n}</span>
+                        <span class="pista-icono"><i class="fas ${p.icono}" aria-hidden="true"></i></span>
+                        <h3>${esc(p.titulo)}</h3>
+                        ${p.cargo ? `<span class="pista-cargo">${esc(p.cargo)}</span>` : ''}
+                        <p>${esc(p.descripcion)}</p>
+                        <span class="pista-meta">${a.total} módulos · ${a.pct}% ${estado}</span>
+                        <span class="barra"><i style="width:${a.pct}%"></i></span>
+                        <span class="pista-ir">${accion} <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
+                </li>`;
+        }).join('');
+        app.innerHTML = `
+            <section class="portada">
+                <img class="portada-imagotipo" src="assets/img/imagotipo.svg" alt="Fragancias de Alta Densidad" width="560" height="560">
+                <p class="portada-eyebrow">Portal de inducción y capacitación</p>
+                <a class="portada-bajar" href="#submodulos" aria-label="Ver los submódulos"><span>Comienza aquí</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+            </section>
+            <section class="sec" id="submodulos">
+                <div class="envoltura">
+                    <span class="eyebrow">Tu formación</span>
+                    <h2 class="titular">Tres submódulos,<br><em>un mismo estándar.</em></h2>
+                    <p class="mute intro">Empieza por la inducción general, sigue con la inducción específica de tu cargo y termina con el manual de vestimenta. Puedes volver a cualquiera cuando quieras.</p>
+                    <ol class="pistas">${tarjetas}</ol>
+                    <a class="enlace-pdf" href="${PDF}" download><i class="fas fa-file-pdf" aria-hidden="true"></i> Descargar el manual institucional en PDF</a>
+                </div>
+            </section>`;
+        const bajar = app.querySelector('.portada-bajar');
+        bajar.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('submodulos').scrollIntoView({ behavior: 'smooth' }); });
     }
-}
 
-function renderPantallaExamenFinal() {
-    const contenedorMod = document.getElementById('contenedorModulo');
-    const contenedorExa = document.getElementById('contenedorExamen');
-    const contenedorFin = document.getElementById('contenedorFinal');
+    // ── Índice de un submódulo ──
+    function indicePista(p) {
+        const l = leidos(p.clave);
+        const a = avance(p);
+        const siguiente = p.modulos.find((m) => !l.includes(m.id)) || p.modulos[0];
+        const examen = p.examen ? `
+            <div class="examen-cta ${a.hechos >= a.total ? '' : 'bloqueado'}">
+                <div><b>Examen final</b><span class="mute">${examenAprobado() ? 'Aprobado. Puedes repasar cuando quieras.' : a.hechos >= a.total ? '10 preguntas al azar de todos los módulos. Se aprueba con el 100 %.' : `Se habilita al leer los ${a.total} módulos (llevas ${a.hechos}).`}</span></div>
+                ${a.hechos >= a.total ? '<a class="btn" href="#/general/examen">Presentar examen</a>' : ''}
+            </div>` : '';
+        app.innerHTML = `
+            <section class="sec cab-pista">
+                <div class="envoltura">
+                    <a class="volver" href="#/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Portal</a>
+                    <span class="eyebrow">${p.n} · ${esc(p.cargo || 'Submódulo')}</span>
+                    <h1 class="titular">${esc(p.titulo)}</h1>
+                    <p class="mute intro">${esc(p.descripcion)}</p>
+                    <div class="avance"><span>${a.hechos} de ${a.total} módulos leídos</span><span class="barra"><i style="width:${a.pct}%"></i></span></div>
+                    <a class="btn" href="#/${p.clave}/${siguiente.id}">${a.hechos === 0 ? 'Comenzar' : a.hechos >= a.total ? 'Repasar desde el inicio' : 'Continuar'}</a>
+                    ${examen}
+                    <ol class="indice">
+                        ${p.modulos.map((m, i) => `
+                            <li class="${l.includes(m.id) ? 'leido' : ''}">
+                                <a href="#/${p.clave}/${m.id}">
+                                    <span class="indice-n">${String(i + 1).padStart(2, '0')}</span>
+                                    <span class="indice-t"><b>${esc(m.titulo)}</b>${m.resumen ? `<small>${esc(m.resumen)}</small>` : ''}</span>
+                                    <i class="fas ${l.includes(m.id) ? 'fa-check' : 'fa-chevron-right'}" aria-hidden="true"></i>
+                                </a>
+                            </li>`).join('')}
+                    </ol>
+                </div>
+            </section>`;
+    }
 
-    if (contenedorMod) contenedorMod.classList.add('hidden');
-    if (contenedorFin) contenedorFin.classList.add('hidden');
-    if (contenedorExa) contenedorExa.classList.remove('hidden');
+    // ── Bloques de contenido ──
+    const NIVELES = { prohibido: ['fa-ban', 'Prohibido'], importante: ['fa-triangle-exclamation', 'Importante'], consejo: ['fa-lightbulb', 'Consejo'] };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    function bloque(b) {
+        switch (b.tipo) {
+            case 'texto':
+                return `<p class="parrafo">${esc(b.texto)}</p>`;
+            case 'lista':
+                return `${b.titulo ? `<h3 class="sub">${esc(b.titulo)}</h3>` : ''}<ul class="lista">${b.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+            case 'pasos':
+                return `${b.titulo ? `<h3 class="sub">${esc(b.titulo)}</h3>` : ''}
+                    <ol class="pasos">${b.pasos.map((s, i) => `
+                        <li><span class="paso-n">${String(i + 1).padStart(2, '0')}</span>
+                            <div><b>${esc(s.t)}</b>${s.sistema ? `<span class="etiqueta">${esc(s.sistema)}</span>` : ''}<p>${esc(s.d)}</p></div></li>`).join('')}
+                    </ol>`;
+            case 'aviso': {
+                const [icono, etiqueta] = NIVELES[b.nivel] || NIVELES.importante;
+                return `<div class="aviso aviso-${b.nivel}"><i class="fas ${icono}" aria-hidden="true"></i><p><b>${etiqueta}.</b> ${esc(b.texto)}</p></div>`;
+            }
+            case 'tabla':
+                return `${b.titulo ? `<h3 class="sub">${esc(b.titulo)}</h3>` : ''}
+                    <div class="tabla-caja"><table><thead><tr>${b.columnas.map((c) => `<th>${esc(c)}</th>`).join('')}</tr></thead>
+                    <tbody>${b.filas.map((f) => `<tr>${f.map((c, i) => `<td data-col="${esc(b.columnas[i])}">${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+            case 'comparar':
+                return `${b.titulo ? `<h3 class="sub">${esc(b.titulo)}</h3>` : ''}
+                    <div class="comparar">
+                        <div class="bien"><span class="comparar-t"><i class="fas fa-check" aria-hidden="true"></i> Así sí</span><ul>${b.bien.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
+                        <div class="mal"><span class="comparar-t"><i class="fas fa-xmark" aria-hidden="true"></i> Así no</span><ul>${b.mal.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>
+                    </div>`;
+            case 'sistemas':
+                return `${b.titulo ? `<h3 class="sub">${esc(b.titulo)}</h3>` : ''}
+                    <ul class="sistemas">${b.items.map((s) => `
+                        <li><i class="fas ${s.icono}" aria-hidden="true"></i><b>${esc(s.nombre)}</b>
+                            <p class="mute">${esc(s.para)}</p><p><span class="etiqueta">Tu función</span> ${esc(s.funcion)}</p></li>`).join('')}
+                    </ul>`;
+            case 'indicadores':
+                return `<ul class="indicadores">${b.items.map((x) => `
+                    <li>
+                        <div class="ind-cab"><span class="ind-n">${x.n}</span><h3>${esc(x.nombre)}</h3><span class="ind-meta">Meta ${esc(x.meta)}</span></div>
+                        <p class="mute">${esc(x.mide)}</p>
+                        <dl>
+                            <div><dt>Cómo se calcula</dt><dd class="formula">${esc(x.formula)}</dd></div>
+                            <div><dt>De dónde sale</dt><dd>${esc(x.fuente)}</dd></div>
+                            <div><dt>Frecuencia</dt><dd>${esc(x.frecuencia)}</dd></div>
+                        </dl>
+                    </li>`).join('')}</ul>`;
+            case 'enlace':
+                return `<p class="parrafo">${esc(b.texto)} <a class="enlace" href="${esc(b.destino)}">Abrir el manual <i class="fas fa-arrow-right" aria-hidden="true"></i></a></p>`;
+            case 'uniforme':
+                return `<div class="uniforme">
+                    <figure>${figuraUniforme(b.rol)}<figcaption>${esc(b.titulo)}</figcaption></figure>
+                    <dl>${b.piezas.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join('')}</dl>
+                </div>`;
+            case 'chequeo':
+                return `<ul class="chequeo">${b.items.map((i, n) => `<li><label><input type="checkbox" data-chequeo="${n}"> <span>${esc(i)}</span></label></li>`).join('')}</ul>
+                    <p class="mute chequeo-total" aria-live="polite">0 de ${b.items.length}</p>`;
+            default:
+                return '';
+        }
+    }
 
-    contenedorExa.innerHTML = `
-        <div class="exam-intro-box">
-            <div class="exam-badge-icon"><i class="fas fa-award"></i></div>
-            <h2 class="exam-intro-title">¡Has Culminado los 53 Módulos de Formación!</h2>
-            <p class="exam-intro-subtitle">
-                Estás listo(a) para presentar el <strong>Examen Final de Certificación</strong>. La prueba consta de <strong>10 preguntas aleatorias</strong> extraídas de todos los módulos temáticos.
-                Para aprobar y acceder a la certificación institucional deberás obtener una calificación del <strong>100% de aciertos</strong>.
-            </p>
-            <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
-                <button id="btnIniciarExamen" class="btn-gold" style="font-size:1.02rem; padding:14px 34px;">
-                    <i class="fas fa-play-circle"></i> Iniciar Examen Final Ahora
-                </button>
-                <button onclick="renderModuloLectura(0)" class="btn-outline-dark">
-                    <i class="fas fa-undo"></i> Repasar Módulos
-                </button>
-            </div>
-            <div id="examenPreguntasArea" class="hidden" style="text-align:left; margin-top:28px;"></div>
-        </div>
-    `;
+    // Texto de la inducción general (formato anterior: líneas, viñetas y encabezados en mayúsculas)
+    function textoLegado(texto) {
+        let html = '';
+        let lista = [];
+        const cerrarLista = () => { if (lista.length) { html += `<ul class="lista">${lista.join('')}</ul>`; lista = []; } };
+        String(texto || '').split('\n').forEach((raw) => {
+            const l = raw.trim();
+            if (!l) return;
+            if (/^[•\-*]\s*/.test(l)) { lista.push(`<li>${esc(l.replace(/^[•\-*]\s*/, ''))}</li>`); return; }
+            cerrarLista();
+            if (/^[A-ZÁÉÍÓÚÑ0-9¡!\s,:()\-–—]{4,90}:?$/.test(l) && l === l.toUpperCase()) { html += `<h3 class="sub">${esc(l.replace(/:$/, ''))}</h3>`; return; }
+            html += `<p class="parrafo">${esc(l)}</p>`;
+        });
+        cerrarLista();
+        return html;
+    }
 
-    document.getElementById('btnIniciarExamen').addEventListener('click', () => {
-        generarPreguntasExamenFinal();
-    });
-}
+    function mediaLegado(m) {
+        if (m.tipo === 'video' && m.video_url) {
+            return /\.mp4$/i.test(m.video_url)
+                ? `<figure class="media"><video controls preload="metadata" src="${esc(m.video_url)}"></video></figure>`
+                : `<figure class="media media-video"><iframe src="${esc(m.video_url)}" allowfullscreen title="${esc(m.titulo)}"></iframe></figure>`;
+        }
+        return m.imagen_url ? `<figure class="media"><img src="${esc(m.imagen_url)}" alt="" loading="lazy" onerror="this.parentNode.remove()"></figure>` : '';
+    }
 
-function generarPreguntasExamenFinal() {
-    // Recopilar todas las preguntas disponibles de los módulos
-    const todasLasPreguntas = [];
-    modulosItems.forEach((mod) => {
-        if (mod.preguntas && Array.isArray(mod.preguntas)) {
-            mod.preguntas.forEach((p, idx) => {
-                todasLasPreguntas.push({
-                    id: `${mod.orden || 1}_${idx}`,
-                    pregunta: p.pregunta,
-                    opciones: p.opciones,
-                    respuesta_correcta: p.respuesta_correcta,
-                    moduloTitulo: mod.titulo
+    // ── Vista de un módulo ──
+    function modulo(p, id) {
+        const i = p.modulos.findIndex((m) => m.id === id);
+        if (i < 0) { location.hash = `#/${p.clave}`; return; }
+        const m = p.modulos[i];
+        const l = leidos(p.clave);
+        const ant = p.modulos[i - 1];
+        const sig = p.modulos[i + 1];
+        const cuerpo = m.legado
+            ? mediaLegado(m.legado) + textoLegado(m.legado.contenido)
+            : (m.bloques || []).map(bloque).join('');
+        const ultimo = !sig;
+        const destinoFinal = p.examen ? '#/general/examen' : `#/${p.clave}`;
+        app.innerHTML = `
+            <div class="lector">
+                <aside class="lector-indice">
+                    <details ${window.matchMedia('(min-width: 1000px)').matches ? 'open' : ''}>
+                        <summary><a class="volver" href="#/${p.clave}"><i class="fas fa-arrow-left" aria-hidden="true"></i> ${esc(p.titulo)}</a><span class="mute">Índice</span></summary>
+                        <ol>${p.modulos.map((x, n) => `<li class="${x.id === id ? 'actual' : ''} ${l.includes(x.id) ? 'leido' : ''}"><a href="#/${p.clave}/${x.id}"><span>${String(n + 1).padStart(2, '0')}</span>${esc(x.titulo)}</a></li>`).join('')}</ol>
+                    </details>
+                </aside>
+                <article class="lector-articulo">
+                    <span class="eyebrow">${esc(p.titulo)} · ${i + 1} de ${p.modulos.length}</span>
+                    <h1 class="titular">${esc(m.titulo)}</h1>
+                    ${m.resumen ? `<p class="intro mute">${esc(m.resumen)}</p>` : ''}
+                    <div class="contenido">${cuerpo}</div>
+                    <div class="lector-pie">
+                        ${ant ? `<a class="btn btn-linea" href="#/${p.clave}/${ant.id}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Anterior</a>` : '<span></span>'}
+                        <button type="button" class="btn" id="leido">${ultimo ? (p.examen ? 'Leído · ir al examen' : 'Leído · terminar') : 'Leído · siguiente'} <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                </article>
+            </div>`;
+        document.getElementById('leido').addEventListener('click', () => {
+            marcarLeido(p.clave, m.id);
+            location.hash = sig ? `#/${p.clave}/${sig.id}` : destinoFinal;
+        });
+        app.querySelectorAll('[data-chequeo]').forEach((c) => c.addEventListener('change', () => {
+            const total = app.querySelectorAll('[data-chequeo]');
+            const hechos = [...total].filter((x) => x.checked).length;
+            app.querySelector('.chequeo-total').textContent = hechos === total.length ? '¡Listo para el turno!' : `${hechos} de ${total.length}`;
+        }));
+    }
+
+    // ── Examen final de la inducción general (10 preguntas al azar; 100 % para aprobar) ──
+    let preguntasExamen = [];
+    function examen() {
+        const p = PISTAS.general;
+        const a = avance(p);
+        if (a.hechos < a.total && !examenAprobado()) {
+            app.innerHTML = `<section class="sec"><div class="envoltura estrecha">
+                <a class="volver" href="#/general"><i class="fas fa-arrow-left" aria-hidden="true"></i> Inducción general</a>
+                <h1 class="titular">Examen final</h1>
+                <p class="mute intro">Se habilita al leer los ${a.total} módulos de la inducción general. Llevas ${a.hechos}.</p>
+                <a class="btn" href="#/general">Seguir leyendo</a></div></section>`;
+            return;
+        }
+        const banco = [];
+        (window.MODULOS_CAPACITACION || []).forEach((m) => (m.preguntas || []).forEach((q) => banco.push(q)));
+        preguntasExamen = banco.map((q) => ({ q, r: Math.random() })).sort((x, y) => x.r - y.r).slice(0, 10).map((x) => x.q);
+        app.innerHTML = `<section class="sec"><div class="envoltura estrecha">
+            <a class="volver" href="#/general"><i class="fas fa-arrow-left" aria-hidden="true"></i> Inducción general</a>
+            <span class="eyebrow">Inducción general</span>
+            <h1 class="titular">Examen final</h1>
+            <p class="mute intro">${examenAprobado() ? 'Ya lo aprobaste: puedes presentarlo de nuevo para repasar.' : '10 preguntas al azar de todos los módulos. Se aprueba con el 100 % de aciertos; puedes intentarlo las veces que necesites.'}</p>
+            <form id="examen" class="examen">
+                ${preguntasExamen.map((q, n) => `
+                    <fieldset>
+                        <legend><span class="paso-n">${String(n + 1).padStart(2, '0')}</span> ${esc(q.pregunta)}</legend>
+                        ${q.opciones.map((o, k) => `<label class="opcion"><input type="radio" name="p${n}" value="${k}" required> <span>${esc(o)}</span></label>`).join('')}
+                    </fieldset>`).join('')}
+                <button class="btn" type="submit">Calificar</button>
+            </form>
+            <div id="resultado" aria-live="polite"></div>
+        </div></section>`;
+        document.getElementById('examen').addEventListener('submit', (e) => {
+            e.preventDefault();
+            let aciertos = 0;
+            preguntasExamen.forEach((q, n) => {
+                const sel = app.querySelector(`input[name="p${n}"]:checked`);
+                const ok = sel && Number(sel.value) === q.respuesta_correcta;
+                if (ok) aciertos += 1;
+                app.querySelectorAll(`input[name="p${n}"]`).forEach((inp) => {
+                    const lab = inp.closest('.opcion');
+                    lab.classList.toggle('correcta', Number(inp.value) === q.respuesta_correcta && inp.checked);
+                    lab.classList.toggle('incorrecta', inp.checked && Number(inp.value) !== q.respuesta_correcta);
                 });
             });
-        }
-    });
-
-    if (todasLasPreguntas.length === 0) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error de Datos',
-            text: 'No se encontraron preguntas en el banco de datos.'
-        });
-        return;
-    }
-
-    // Mezclar y tomar 10 preguntas aleatorias
-    const barajadas = [...todasLasPreguntas].sort(() => 0.5 - Math.random());
-    preguntasExamenActual = barajadas.slice(0, 10);
-
-    const btnIniciar = document.getElementById('btnIniciarExamen');
-    if (btnIniciar) btnIniciar.style.display = 'none';
-
-    const area = document.getElementById('examenPreguntasArea');
-    if (!area) return;
-
-    area.classList.remove('hidden');
-    area.innerHTML = `
-        <form id="formExamenFinalSubmit" class="exam-form-card">
-            <div class="exam-form-header">
-                <div>
-                    <h3 style="color:var(--gold-primary); margin:0; font-family:'Outfit',sans-serif; font-size:1.25rem; font-weight:700;">
-                        <i class="fas fa-tasks"></i> Evaluación de Inducción y Capacitación
-                    </h3>
-                    <span style="color:var(--text-muted); font-size:0.85rem; display:block; margin-top:4px;">
-                        ${preguntasExamenActual.length} preguntas aleatorias — Criterio de Aprobación: 100% de aciertos
-                    </span>
-                </div>
-                <span class="module-nav-pill"><i class="fas fa-stopwatch"></i> Sin Límite de Tiempo</span>
-            </div>
-
-            <div class="options-group">
-                ${preguntasExamenActual.map((p, idx) => `
-                    <div class="question-item-card">
-                        <div class="question-text-title">
-                            <span class="question-number-badge">${idx + 1}</span>
-                            <span>${escHtml(p.pregunta)}</span>
-                        </div>
-                        <div class="options-group">
-                            ${p.opciones.map((opt, oIdx) => `
-                                <label class="option-card">
-                                    <input type="radio" name="examen_preg_${idx}" value="${oIdx}" required>
-                                    <span>${escHtml(opt)}</span>
-                                </label>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-
-            <div style="display:flex; justify-content:flex-end; gap:14px; margin-top:28px; flex-wrap:wrap;">
-                <button type="button" onclick="renderPantallaExamenFinal()" class="btn-outline-dark">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
-                <button type="submit" class="btn-gold">
-                    <i class="fas fa-paper-plane"></i> Enviar Examen para Calificación
-                </button>
-            </div>
-        </form>
-    `;
-
-    document.getElementById('formExamenFinalSubmit').addEventListener('submit', (e) => {
-        e.preventDefault();
-        evaluarExamenFinal();
-    });
-}
-
-function evaluarExamenFinal() {
-    let aciertos = 0;
-    const total = preguntasExamenActual.length;
-
-    preguntasExamenActual.forEach((p, idx) => {
-        const sel = document.querySelector(`input[name="examen_preg_${idx}"]:checked`);
-        if (sel && parseInt(sel.value, 10) === p.respuesta_correcta) {
-            aciertos++;
-        }
-    });
-
-    const porcentaje = total > 0 ? Math.round((aciertos / total) * 100) : 0;
-    const aprobado = aciertos === total;
-
-    if (aprobado) {
-        estadoInduccion = 'examen_aprobado';
-        localStorage.setItem('ad_capacitacion_estado', 'examen_aprobado');
-        actualizarBadgeEstado();
-
-        Swal.fire({
-            icon: 'success',
-            title: '¡Examen Aprobado al 100%!',
-            html: `
-                <p style="color:var(--text-secondary); font-size:1rem; margin-bottom:20px; line-height:1.6;">
-                    ¡Felicitaciones! Has obtenido una calificación perfecta de 10 sobre 10 (100%). Has completado y certificado oficialmente tu Inducción y Capacitación en Fragancias de Alta Densidad.
-                </p>
-                <div class="pdf-download-card" style="padding:20px; background:var(--bg-surface); margin-top:14px;">
-                    <p style="color:var(--gold-primary); font-weight:700; font-size:0.96rem; margin:0 0 6px 0;">
-                        <i class="fas fa-file-pdf"></i> Material Oficial de Consulta:
-                    </p>
-                    <p style="color:var(--text-muted); font-size:0.86rem; margin-bottom:16px;">
-                        Descarga tu Manual Institucional Completo en formato PDF.
-                    </p>
-                    <a href="assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" class="btn-gold" style="font-size:0.92rem; padding:11px 22px;">
-                        <i class="fas fa-download"></i> Descargar Manual en PDF
-                    </a>
-                </div>
-            `,
-            confirmButtonText: 'Ver Certificación Final'
-        }).then(() => {
-            renderizarPasoCapacitacion();
-        });
-    } else {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Examen No Aprobado',
-            html: `
-                <p style="font-size:1.02rem; color:var(--text-primary);">Obtuviste <strong>${aciertos} de ${total}</strong> aciertos (<strong>${porcentaje}%</strong>).</p>
-                <p style="font-size:0.9rem; color:var(--text-muted); margin-top:10px; line-height:1.6;">
-                    Para obtener la certificación oficial y habilitar la descarga del manual es requisito indispensable alcanzar el <strong>100% de respuestas correctas</strong>. ¡Puedes repasar los módulos y volver a intentarlo cuando lo desees!
-                </p>
-            `,
-            confirmButtonText: 'Volver a Intentar'
+            const total = preguntasExamen.length;
+            const res = document.getElementById('resultado');
+            if (aciertos === total) {
+                try { localStorage.setItem('ad_capacitacion_estado', 'examen_aprobado'); } catch (err) { /* sin almacenamiento */ }
+                res.innerHTML = `<div class="certificado">
+                    <svg class="gota" viewBox="0 0 100 100" aria-hidden="true"><use href="#gota-tallada"></use></svg>
+                    <span class="eyebrow">Inducción general aprobada</span>
+                    <h2 class="titular">${aciertos} de ${total}.<br><em>Bienvenido(a) al equipo.</em></h2>
+                    <p class="mute">Continúa con la inducción específica de tu cargo y el manual de vestimenta.</p>
+                    <div class="acciones"><a class="btn" href="#/especifica">Inducción específica</a><a class="btn btn-linea" href="${PDF}" download>Manual en PDF</a></div>
+                </div>`;
+            } else {
+                res.innerHTML = `<div class="aviso aviso-importante"><i class="fas fa-rotate" aria-hidden="true"></i><p><b>${aciertos} de ${total} aciertos.</b> Se necesita el 100 %. Revisa las respuestas marcadas, repasa los módulos y vuelve a intentarlo. <a class="enlace" href="#/general/examen" id="otra">Nuevas preguntas</a></p></div>`;
+                document.getElementById('otra').addEventListener('click', (ev) => { ev.preventDefault(); examen(); window.scrollTo(0, 0); });
+            }
+            res.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
-}
 
-function renderVistaFinalExito() {
-    const contenedor = document.getElementById('contenedorFinal');
-    if (!contenedor) return;
+    // ── Ilustración de los uniformes (prenda plana, colores de la marca) ──
+    function figuraUniforme(rol) {
+        const operativo = rol === 'operativo';
+        const tinta = '#151517';
+        const filete = '#3a3a3e';
+        const oro = '#C9A961';
+        const gota = (x, y, s) => `<g transform="translate(${x},${y}) scale(${s / 100})"><path d="M50,2 L63,27 L76,46 L81,63 L77,79 L65,92 L50,98 L35,92 L23,79 L19,63 L24,46 L37,27 Z" fill="${oro}"/></g>`;
+        const polo = `
+            <path d="M58,34 L84,24 Q100,38 116,24 L142,34 L172,62 L156,86 L142,74 L142,158 L58,158 L58,74 L44,86 L28,62 Z" fill="${tinta}" stroke="${filete}" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M84,24 L92,44 L100,36 L108,44 L116,24" fill="none" stroke="${filete}" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M100,36 L100,66" stroke="${filete}" stroke-width="1.5"/>
+            <circle cx="100" cy="50" r="1.6" fill="${filete}"/><circle cx="100" cy="60" r="1.6" fill="${filete}"/>
+            <path d="M44,86 L56,78 M156,86 L144,78" stroke="${filete}" stroke-width="1.2"/>
+            ${operativo ? gota(129, 66, 10) : gota(120, 54, 12)}`;
+        const delantal = operativo ? `
+            <path d="M76,60 L124,60 L130,250 L70,250 Z" fill="#1d1d20" stroke="${filete}" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M76,60 Q80,36 90,26 M124,60 Q120,36 110,26" fill="none" stroke="#1d1d20" stroke-width="3"/>
+            <path d="M72,112 L40,124 M128,112 L160,124" stroke="#1d1d20" stroke-width="3" stroke-linecap="round"/>
+            <rect x="84" y="168" width="32" height="28" fill="none" stroke="${filete}" stroke-width="1.2"/>
+            ${gota(94, 76, 12)}` : '';
+        const pantalon = `
+            <path d="M62,160 L138,160 L144,330 L110,330 L100,200 L90,330 L56,330 Z" fill="${operativo ? '#111113' : '#141418'}" stroke="${filete}" stroke-width="1.5" stroke-linejoin="round"/>
+            ${operativo ? '' : `
+            <path d="M64,176 Q78,180 84,166 M136,176 Q122,180 116,166 M100,160 L100,196" fill="none" stroke="${oro}" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.55"/>
+            <path d="M60,320 L88,320 M112,320 L142,320" stroke="${oro}" stroke-width="0.8" stroke-dasharray="2 2" opacity="0.45"/>`}`;
+        const zapatos = operativo ? `
+            <path d="M50,348 Q50,336 66,336 L92,336 Q98,336 98,346 L98,356 L50,356 Z" fill="${tinta}" stroke="${filete}" stroke-width="1.5"/>
+            <path d="M102,346 Q102,336 108,336 L134,336 Q150,336 150,348 L150,356 L102,356 Z" fill="${tinta}" stroke="${filete}" stroke-width="1.5"/>
+            <path d="M50,352 L98,352 M102,352 L150,352" stroke="#3f3f44" stroke-width="3"/>` : `
+            <path d="M46,354 Q48,340 70,340 L90,338 Q98,338 98,348 L98,356 L46,356 Z" fill="#0d0d0e" stroke="${filete}" stroke-width="1.5"/>
+            <path d="M102,348 Q102,338 110,338 L130,340 Q152,340 154,354 L154,356 L102,356 Z" fill="#0d0d0e" stroke="${filete}" stroke-width="1.5"/>
+            <path d="M74,344 L86,342 M114,342 L126,344" stroke="${filete}" stroke-width="1"/>`;
+        return `<svg class="figura" viewBox="0 0 200 372" role="img" aria-label="Uniforme ${operativo ? 'operativo: polo negra, delantal, pantalón y zapatos negros cómodos' : 'administrativo: polo negra con logotipo, jean negro y zapatos formales'}">
+            <rect x="0" y="0" width="200" height="372" fill="#F4F1EA"/>
+            ${polo}${pantalon}${delantal}${zapatos}
+        </svg>`;
+    }
 
-    contenedor.classList.remove('hidden');
-    document.getElementById('contenedorModulo')?.classList.add('hidden');
-    document.getElementById('contenedorExamen')?.classList.add('hidden');
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    contenedor.innerHTML = `
-        <div class="completion-card">
-            <div class="completion-icon-large"><i class="fas fa-check-circle"></i></div>
-            <h2 class="completion-title">¡Capacitación e Inducción Culminada con Éxito!</h2>
-            <p class="completion-subtitle">
-                Has completado satisfactoriamente los 53 módulos corporativos y aprobado con calificación perfecta el examen final de <strong>Fragancias de Alta Densidad</strong>.
-            </p>
-
-            <!-- CARD DE DESCARGA DEL MANUAL EN PDF -->
-            <div class="pdf-download-card">
-                <div class="pdf-card-title">
-                    <i class="fas fa-file-pdf"></i> Manual Institucional de Capacitación
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 22px;">
-                    Accede y descarga tu <strong>Manual Oficial de Capacitación en formato PDF</strong>. Conserva este documento como guía permanente de consulta técnica, portafolio de fragancias, seguridad y atención al cliente.
-                </p>
-                <a href="assets/CapacitacionFraganciasAltaDensidad.pdf" download="CapacitacionFraganciasAltaDensidad.pdf" target="_blank" class="btn-gold" style="font-size: 1.02rem; padding: 14px 32px;">
-                    <i class="fas fa-download"></i> Descargar Manual Oficial (PDF)
-                </a>
-            </div>
-
-            <div style="margin-top: 32px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-                <button onclick="renderModuloLectura(0)" class="btn-outline-dark">
-                    <i class="fas fa-book-open"></i> Repasar los Módulos
-                </button>
-                <button onclick="reiniciarProgreso()" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: inherit; font-size: 0.92rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
-                    <i class="fas fa-redo"></i> Reiniciar Progreso
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-function reiniciarProgreso() {
-    Swal.fire({
-        title: '¿Reiniciar todo el progreso?',
-        text: 'Se borrarán los módulos completados y el estado del examen en este navegador.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, reiniciar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.removeItem('ad_capacitacion_completados');
-            localStorage.removeItem('ad_capacitacion_estado');
-            modulosCompletados = [];
-            estadoInduccion = 'pendiente_capacitacion';
-            moduloActualIdx = 0;
-            actualizarBadgeEstado();
-            actualizarSelectorModulosDirecto();
-            actualizarBarraProgreso();
-            renderizarPasoCapacitacion();
-            Swal.fire('Reiniciado', 'El progreso ha sido reiniciado.', 'success');
-        }
-    });
-}
-
-function escHtml(str) {
-    if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
+    // ── Rutas ──
+    function marcarNav(clave) {
+        document.querySelectorAll('.cab-nav a').forEach((a) => a.toggleAttribute('aria-current', a.dataset.pista === clave));
+    }
+    function rutear() {
+        const [, clave, id] = (location.hash || '#/').replace(/^#\/?/, '#/').split('/');
+        const p = PISTAS[clave];
+        marcarNav(p ? clave : null);
+        if (!p) portada();
+        else if (clave === 'general' && id === 'examen') examen();
+        else if (id) modulo(p, id);
+        else indicePista(p);
+        if (!(location.hash === '' || location.hash === '#/')) window.scrollTo(0, 0);
+        document.title = `${p ? p.titulo + ' · ' : ''}Inducción y capacitación | Fragancias de Alta Densidad`;
+        app.focus({ preventScroll: true });
+    }
+    window.addEventListener('hashchange', rutear);
+    rutear();
+})();
