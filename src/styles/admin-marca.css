@@ -333,3 +333,80 @@
   .marca-estrella { width: 44px; height: 44px; right: 0; bottom: 2px; }
   .marca-nota-acciones button { min-height: 36px; }
 }
+
+/* ── Galería: selección y descarga directa en cada tarjeta ── */
+.marca-tarjeta-check {
+  position: absolute; top: 8px; left: 8px; z-index: 2; width: 28px; height: 28px; display: grid; place-items: center;
+  background: var(--c-bg); border: var(--bw) solid var(--c-line); cursor: pointer; opacity: 0; transition: opacity var(--t-1);
+}
+.marca-tarjeta-check input { width: 15px; height: 15px; margin: 0; accent-color: var(--c-accent); cursor: pointer; }
+.marca-tarjeta-rapido { position: absolute; top: 8px; right: 8px; z-index: 2; display: flex; opacity: 0; transition: opacity var(--t-1); }
+.marca-tarjeta-rapido button {
+  height: 28px; padding: 0 9px; font: 500 10px var(--f-ui); letter-spacing: 0.1em; color: var(--c-ink);
+  background: var(--c-bg); border: var(--bw) solid var(--c-line); cursor: pointer;
+}
+.marca-tarjeta-rapido button + button { border-left: 0; }
+.marca-tarjeta-rapido button:hover { color: var(--c-accent); border-color: var(--c-accent); }
+.marca-tarjeta:hover .marca-tarjeta-check, .marca-tarjeta:hover .marca-tarjeta-rapido,
+.marca-tarjeta:focus-within .marca-tarjeta-check, .marca-tarjeta:focus-within .marca-tarjeta-rapido,
+.marca-tarjeta--sel .marca-tarjeta-check { opacity: 1; }
+.marca-tarjeta--sel { border-color: var(--c-accent); box-shadow: 0 0 0 1px var(--c-accent); }
+/* En pantallas táctiles no hay "hover": los controles se ven siempre */
+@media (hover: none) { .marca-tarjeta-check, .marca-tarjeta-rapido { opacity: 1; } }
+
+.marca-seleccion {
+  position: sticky; bottom: 16px; z-index: 30; margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  padding: 12px 16px; background: var(--c-bg); border: var(--bw) solid var(--c-accent); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+.marca-seleccion > span { margin-right: auto; }
+
+/* ── Kit para proveedor ── */
+.marca-kit {
+  width: min(1320px, 100%); height: min(900px, calc(100vh - 32px)); display: grid; grid-template-columns: minmax(0, 1fr) 400px;
+  background: var(--c-bg); border: var(--bw) solid var(--c-line); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+}
+.marca-kit-piezas { overflow-y: auto; padding: 24px 28px; border-right: var(--bw) solid var(--c-line); }
+.marca-kit-cabeza h3 { font: 300 28px/1.1 var(--f-display); margin: 6px 0 16px; }
+.marca-kit-tipos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 26px; }
+.marca-kit-tipo--ancho { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; }
+.marca-kit-tipo--ancho i { margin: 0; }
+@media (max-width: 1180px) { .marca-kit-tipos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .marca-kit-tipos { grid-template-columns: minmax(0, 1fr); } }
+.marca-kit-tipo {
+  display: grid; gap: 4px; justify-items: start; text-align: left; padding: 14px; cursor: pointer;
+  background: var(--c-surface); border: var(--bw) solid var(--c-line); color: var(--c-ink);
+}
+.marca-kit-tipo i { color: var(--c-accent); font-size: 18px; margin-bottom: 4px; }
+.marca-kit-tipo b { font-weight: 500; font-size: 14px; }
+.marca-kit-tipo small { color: var(--c-mute); font-size: 12px; line-height: 1.35; }
+.marca-kit-tipo:hover { border-color: var(--c-accent); }
+.marca-kit-tipo.activo { border-color: var(--c-accent); box-shadow: inset 0 0 0 1px var(--c-accent); }
+.marca-kit-barra { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.marca-kit-barra h4 { margin: 0; font: 300 20px var(--f-display); }
+.marca-kit-grupo h5 { margin: 18px 0 8px; font-size: 10px; color: var(--c-mute); }
+.marca-kit-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.marca-kit-pieza {
+  position: relative; display: grid; gap: 6px; padding: 8px; cursor: pointer; height: 100%;
+  border: var(--bw) solid var(--c-line); background: var(--c-surface); opacity: 0.55; transition: opacity var(--t-1), border-color var(--t-1);
+}
+.marca-kit-pieza.activa { opacity: 1; border-color: var(--c-accent); }
+.marca-kit-pieza input { position: absolute; top: 8px; left: 8px; accent-color: var(--c-accent); }
+.marca-kit-mini { display: block; aspect-ratio: 4 / 3; padding: 6px; overflow: hidden; background: var(--cuadros); }
+.marca-kit-mini img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.marca-kit-grid > li { min-width: 0; }
+.marca-kit-nombre { font-size: 12px; line-height: 1.35; }
+.marca-kit-campo { display: grid; gap: 6px; margin-bottom: 14px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-mute); }
+.marca-kit-campo input, .marca-kit-campo textarea {
+  width: 100%; padding: 10px 12px; text-transform: none; letter-spacing: normal; font: 400 14px/1.5 var(--f-ui);
+  color: var(--c-ink); background: var(--c-surface); border: var(--bw) solid var(--c-line); border-radius: 0; resize: vertical;
+}
+.marca-kit-campo input:focus, .marca-kit-campo textarea:focus { outline: none; border-color: var(--c-accent); }
+.marca-kit-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.45; }
+.marca-kit-check input { margin-top: 3px; accent-color: var(--c-accent); }
+.marca-kit-avisos p { margin: 0 0 8px; font-size: 13px; line-height: 1.5; color: var(--warn); }
+.marca-kit-avisos i { margin-right: 4px; }
+.marca-kit-acciones { display: grid; gap: 10px; margin-bottom: 10px; }
+@media (max-width: 1000px) {
+  .marca-kit { grid-template-columns: minmax(0, 1fr); height: calc(100vh - 32px); overflow-y: auto; }
+  .marca-kit-piezas { overflow: visible; border-right: 0; border-bottom: var(--bw) solid var(--c-line); }
+}

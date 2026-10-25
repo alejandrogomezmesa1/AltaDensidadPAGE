@@ -1,10 +1,12 @@
 // Galería de las piezas del brand book, con filtros, progreso de revisión y el visor de cada pieza
-// (descargas SVG/PNG, estado, favorita y el hilo de notas).
+// (descargas SVG/PNG, estado, favorita y el hilo de notas). Cada tarjeta se descarga directo (SVG o
+// PNG) y se puede seleccionar: con la selección se baja un ZIP o se arma el kit para un proveedor.
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import { apiJson } from '../../lib/api';
 import { toastOk } from '../comunes';
 import { ESTADOS } from './datos';
+import KitProveedor from './KitProveedor';
 import {
   urlPieza, nombreArchivo, textoSvg, svgAPng, salidasPng, descargarBlob, crearZip, copiarTexto, fechaCorta
 } from './utilidades';
@@ -58,9 +60,27 @@ async function zipPiezas(piezas, conPng, onAvance) {
   return crearZip(archivos);
 }
 
-function Tarjeta({ p, est, onAbrir, onFavorita }) {
+// Descarga directa desde la tarjeta: SVG tal cual; PNG transparente a 300 ppp si es impresa, si no a 2×
+async function bajarDirecto(p, tipo, alerta) {
+  try {
+    const svg = await textoSvg(p);
+    if (tipo === 'svg') { descargarBlob(new Blob([svg], { type: 'image/svg+xml' }), nombreArchivo(p, 'svg')); return; }
+    const salidas = salidasPng(p);
+    const o = salidas.find((x) => x.clave === '300ppp') || salidas[1];
+    descargarBlob(await svgAPng(svg, o.ancho, o.alto), nombreArchivo(p, `${o.clave}.png`).replace(`.${o.clave}.png`, `@${o.clave}.png`));
+  } catch (err) { alerta(err.message, 'error'); }
+}
+
+function Tarjeta({ p, est, onAbrir, onFavorita, seleccionada, onSeleccionar, alerta }) {
   return (
-    <li className={`marca-tarjeta marca-tarjeta--${est.estado}`}>
+    <li className={`marca-tarjeta marca-tarjeta--${est.estado} ${seleccionada ? 'marca-tarjeta--sel' : ''}`}>
+      <label className="marca-tarjeta-check" title="Seleccionar">
+        <input type="checkbox" checked={seleccionada} onChange={() => onSeleccionar(p.id)} aria-label={`Seleccionar ${p.titulo}`} />
+      </label>
+      <div className="marca-tarjeta-rapido">
+        <button type="button" onClick={() => bajarDirecto(p, 'svg', alerta)} title="Descargar SVG (vectorial)">SVG</button>
+        <button type="button" onClick={() => bajarDirecto(p, 'png', alerta)} title={p.mm ? 'Descargar PNG a 300 ppp (imprenta)' : 'Descargar PNG 2× (fondo transparente)'}>PNG</button>
+      </div>
       <button type="button" className="marca-tarjeta-abrir" onClick={() => onAbrir(p.id)} aria-label={`Abrir ${p.titulo}`}>
         <span className="marca-miniatura"><img src={urlPieza(p)} alt="" loading="lazy" decoding="async" /></span>
         <span className="marca-tarjeta-info">
@@ -321,6 +341,9 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
   const [soloFav, setSoloFav] = useState(false);
   const [soloPend, setSoloPend] = useState(false);
   const [zip, setZip] = useState(null); // { hechas, total }
+  const [seleccion, setSeleccion] = useState(() => new Set());
+  const [kit, setKit] = useState(null); // null | { inicial: [ids] }
+  const seleccionar = useCallback((id) => setSeleccion((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; }), []);
 
   const titulos = useMemo(() => Object.fromEntries(manifest.secciones.map((s) => [s.id, s.titulo])), [manifest]);
   const todas = useMemo(() => manifest.piezas.map((p) => ({ ...p, seccionTitulo: titulos[p.seccion] })), [manifest, titulos]);
@@ -434,10 +457,15 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
         <span>{filtradas.length} de {todas.length} piezas{hayFiltros && (
           <button type="button" className="marca-limpiar" onClick={() => { setBusqueda(''); setSeccion(''); setFiltroEstado(''); setSoloFav(false); setSoloPend(false); }}>Limpiar filtros</button>
         )}</span>
-        <button type="button" className="btn-secondary" disabled={!filtradas.length || Boolean(zip)}
-          onClick={() => descargarZip(filtradas, hayFiltros ? 'alta-densidad-marca-seleccion' : 'alta-densidad-marca')}>
-          {zip ? <><i className="fas fa-spinner fa-spin" /> {zip.hechas}/{zip.total}</> : <><i className="fas fa-file-archive" /> Descargar {hayFiltros ? 'lo filtrado' : 'todo'} (.zip)</>}
-        </button>
+        <div className="marca-fila">
+          <button type="button" className="btn-secondary" disabled={!filtradas.length || Boolean(zip)}
+            onClick={() => descargarZip(filtradas, hayFiltros ? 'alta-densidad-marca-seleccion' : 'alta-densidad-marca')}>
+            {zip ? <><i className="fas fa-spinner fa-spin" /> {zip.hechas}/{zip.total}</> : <><i className="fas fa-file-archive" /> Descargar {hayFiltros ? 'lo filtrado' : 'todo'} (.zip)</>}
+          </button>
+          <button type="button" className="btn-primary" onClick={() => setKit({ inicial: [] })}>
+            <i className="fas fa-truck" /> Kit para proveedor
+          </button>
+        </div>
       </div>
 
       {!grupos.length && <p className="armador-ayuda">Ninguna pieza coincide con los filtros.</p>}
@@ -454,11 +482,30 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
           </header>
           <ul className="marca-grid">
             {g.piezas.map((p) => (
-              <Tarjeta key={p.id} p={p} est={estadoDe(estados, p.id)} onAbrir={setAbrirId} onFavorita={(id, fav) => cambiarPieza(id, { favorita: fav })} />
+              <Tarjeta key={p.id} p={p} est={estadoDe(estados, p.id)} onAbrir={setAbrirId} onFavorita={(id, fav) => cambiarPieza(id, { favorita: fav })}
+                seleccionada={seleccion.has(p.id)} onSeleccionar={seleccionar} alerta={alerta} />
             ))}
           </ul>
         </section>
       ))}
+
+      {/* Barra de la selección: aparece al marcar piezas */}
+      {seleccion.size > 0 && (
+        <div className="marca-seleccion" role="region" aria-label="Piezas seleccionadas">
+          <span><b>{seleccion.size}</b> seleccionada{seleccion.size === 1 ? '' : 's'}</span>
+          <button type="button" className="btn-secondary" disabled={Boolean(zip)}
+            onClick={() => descargarZip(todas.filter((p) => seleccion.has(p.id)), 'alta-densidad-marca-seleccion')}>
+            {zip ? <><i className="fas fa-spinner fa-spin" /> {zip.hechas}/{zip.total}</> : <><i className="fas fa-file-archive" /> Descargar (.zip)</>}
+          </button>
+          <button type="button" className="btn-primary" onClick={() => setKit({ inicial: [...seleccion] })}>
+            <i className="fas fa-truck" /> Armar kit con estas
+          </button>
+          <button type="button" className="marca-limpiar" onClick={() => setSeleccion(new Set())}>Quitar selección</button>
+        </div>
+      )}
+
+      <KitProveedor abierto={Boolean(kit)} onCerrar={() => setKit(null)} piezas={todas} estados={estados}
+        seleccionInicial={kit?.inicial} alerta={alerta} />
 
       {abierta && (
         <Visor p={abierta} est={estadoDe(estados, abierta.id)} indice={indice} total={lista.length}

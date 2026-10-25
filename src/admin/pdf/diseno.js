@@ -56,10 +56,12 @@ export async function crearDocumento() {
   return d;
 }
 
-// Fondo hueso y marca de agua: va primero, debajo de todo el contenido de la página
-export function decorarPagina({ doc, isotipo }) {
+// Fondo hueso y marca de agua: va primero, debajo de todo el contenido de la página.
+// Las láminas de arte final para proveedores van sin marca de agua (no debe confundirse con el diseño).
+export function decorarPagina({ doc, isotipo }, { marcaDeAgua = true } = {}) {
   doc.setFillColor(...COLOR.hueso);
   doc.rect(0, 0, AN, AL, 'F');
+  if (!marcaDeAgua) return;
   const alto = 96;
   const ancho = alto * (284 / 427);
   doc.saveGraphicsState();
@@ -68,9 +70,9 @@ export function decorarPagina({ doc, isotipo }) {
   doc.restoreGraphicsState();
 }
 
-export function nuevaPagina(d) {
+export function nuevaPagina(d, opciones) {
   d.doc.addPage();
-  decorarPagina(d);
+  decorarPagina(d, opciones);
 }
 
 export const fuente = (doc, nombre, tam, color = COLOR.tinta) => {
