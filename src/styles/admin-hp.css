@@ -2346,3 +2346,36 @@ body.adm {
   .dec-adm-foto { max-width: 160px; }
   .dec-adm-campos, .dec-adm-set { grid-template-columns: 1fr; }
 }
+
+/* Sección Mayoristas: los dos generadores de PDF juntos en un solo bloque */
+.mayoristas-grupo {
+  border: var(--bw) solid var(--c-line);
+  background: var(--c-surface);
+  padding: 28px;
+  margin-top: 8px;
+}
+.mayoristas-grupo-cabecera { margin-bottom: 22px; max-width: 760px; }
+.mayoristas-grupo-cabecera h3 { font-family: var(--f-display, inherit); font-weight: 400; font-size: 26px; margin: 0 0 6px; }
+.mayoristas-grupo-cabecera p { color: var(--c-muted, inherit); margin: 0; line-height: 1.6; }
+.mayoristas-aviso { margin-top: 10px !important; color: #c98a1b !important; }
+.mayoristas-tarjetas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.mayoristas-tarjeta {
+  display: flex; flex-direction: column; gap: 14px;
+  border: var(--bw) solid var(--c-line); background: var(--c-bg); padding: 24px;
+  border-top: 2px solid var(--c-accent);
+}
+.mayoristas-tarjeta header { display: flex; gap: 14px; align-items: center; }
+.mayoristas-tarjeta h3 { font-family: var(--f-display, inherit); font-weight: 400; font-size: 22px; margin: 0; }
+.mayoristas-tarjeta p { margin: 0; line-height: 1.6; }
+.mayoristas-icono {
+  width: 44px; height: 44px; display: grid; place-items: center; flex-shrink: 0;
+  border: var(--bw) solid var(--c-accent); color: var(--c-accent); font-size: 18px;
+}
+.mayoristas-para { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-accent); }
+.mayoristas-datos { margin: 0; padding-left: 18px; color: var(--c-muted, inherit); font-size: 13px; line-height: 1.8; }
+.mayoristas-acciones { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: auto; }
+.mayoristas-vacio { font-size: 12px; color: var(--c-muted, inherit); }
+@media (max-width: 860px) {
+  .mayoristas-tarjetas { grid-template-columns: minmax(0, 1fr); }
+  .mayoristas-grupo { padding: 18px; }
+}

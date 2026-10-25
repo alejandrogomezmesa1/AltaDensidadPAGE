@@ -16,6 +16,7 @@ import InsumosAdmin from './InsumosAdmin';
 import ConfiguracionesAdmin from './ConfiguracionesAdmin';
 import MarcaAdmin from './marca/MarcaAdmin';
 import DecantsAdmin from './DecantsAdmin';
+import MayoristasAdmin from './MayoristasAdmin';
 import { PANEL_DATA } from '../config';
 
 const SECCIONES = {
@@ -28,6 +29,7 @@ const SECCIONES = {
   insumos: { titulo: 'Esencias e insumos', grupo: 'Catálogo', icono: 'fa-vial' },
   top10: { titulo: 'Top 10', grupo: 'Catálogo', icono: 'fa-crown' },
   ordenes: { titulo: 'Órdenes', grupo: 'Ventas', icono: 'fa-receipt' },
+  mayoristas: { titulo: 'Mayoristas', grupo: 'Ventas', icono: 'fa-handshake' },
   marca: { titulo: 'Marca', grupo: 'Identidad', icono: 'fa-gem' },
   configuraciones: { titulo: 'Configuraciones', grupo: 'Sistema', icono: 'fa-sliders-h' }
 };
@@ -224,6 +226,7 @@ function Panel({ usuario }) {
           <div className={seccion === 'top10' ? '' : 'hidden'}><Top10Admin alerta={mostrarAlerta} /></div>
           <div className={seccion === 'configuraciones' ? '' : 'hidden'}>{seccion === 'configuraciones' && <ConfiguracionesAdmin alerta={mostrarAlerta} />}</div>
           <div className={seccion === 'marca' ? '' : 'hidden'}>{seccion === 'marca' && <MarcaAdmin alerta={mostrarAlerta} activo />}</div>
+          <div className={seccion === 'mayoristas' ? '' : 'hidden'}>{seccion === 'mayoristas' && <MayoristasAdmin alerta={mostrarAlerta} />}</div>
           <div className={seccion === 'ordenes' ? '' : 'hidden'}><OrdenesAdmin alerta={mostrarAlerta} sesionInvalida={sesionInvalida} /></div>
         </main>
       </div>

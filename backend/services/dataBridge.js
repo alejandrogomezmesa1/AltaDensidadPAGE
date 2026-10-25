@@ -101,4 +101,10 @@ async function guardarConfiguraciones(valores) {
     return llamar('PUT', '/settings', { valores });
 }
 
-module.exports = { habilitado, obtenerInventario, obtenerDecants, verificarStock, registrarVenta, anularVenta, obtenerConfiguraciones, guardarConfiguraciones };
+// Precio mayorista de cada ítem: { rule, items: [{ inventoryId, price, wholesalePrice, excluded, atFloor, noCost }] }.
+// DATA lo calcula con el costo (que nunca sale de DATA) y la regla de Configuraciones.
+async function obtenerPreciosMayoristas() {
+    return llamar('GET', '/wholesale-prices');
+}
+
+module.exports = { habilitado, obtenerInventario, obtenerDecants, verificarStock, registrarVenta, anularVenta, obtenerConfiguraciones, guardarConfiguraciones, obtenerPreciosMayoristas };

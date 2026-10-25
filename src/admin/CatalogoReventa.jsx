@@ -2,11 +2,15 @@
 // precio con la ganancia del revendedor), separados por sexo y con la marca del revendedor: logo,
 // redes sociales con enlace, colores por sección, portada con índice navegable y tarjetas que
 // abren WhatsApp con el perfume ya escrito. Al final, los kits que se escojan uno a uno.
+// El precio de venta es el de la tienda más la ganancia del revendedor (así el de la tienda se ve
+// bajo); la calculadora muestra además lo que le cuesta como mayorista y lo que gana de verdad.
+// Mismo diseño y marca de agua que la lista de precios mayoristas (./pdf/diseno.js).
 // La configuración se recuerda en este navegador; jsPDF se carga solo al generar.
 import { useEffect, useMemo, useState } from 'react';
 import { ModalAdmin } from './comunes';
-import { LOGO, normalizarImagen } from '../lib/producto';
+import { LOGO } from '../lib/producto';
 import { apiJson } from '../lib/api';
+import { AN, AL, COLOR, crearDocumento, nuevaPagina, fuente, espaciado, rgb, cargarFotos, fotoContenida } from './pdf/diseno';
 
 const CLAVE = 'ad_catalogo_reventa';
 const CLAVE_LOGO = 'ad_catalogo_reventa_logo';
@@ -17,8 +21,10 @@ const BASE = {
   disponibilidad: 'existencias', categoria: 'todas',
   generos: ['Masculino', 'Femenino', 'Unisex'], notas: true, columnas: 3, orden: 'marca',
   portada: true, enlaceTarjeta: 'whatsapp', kits: [],
-  colorMarca: '#b08d48',
-  colores: { Masculino: '#1f3b5c', Femenino: '#b4466e', Unisex: '#8a6d3b', Kits: '#3f5e45' }
+  // Paleta de la marca (24-10-2026): oro, tinta, vino y gris cálido
+  colorMarca: '#9A7B3F',
+  colores: { Masculino: '#0B0B0C', Femenino: '#5A1220', Unisex: '#6B675F', Kits: '#9A7B3F' },
+  version: 2
 };
 const SECCIONES = [['Masculino', 'Para él'], ['Femenino', 'Para ella'], ['Unisex', 'Unisex']];
 const REDONDEOS = [['ninguno', 'Sin redondear'], ['mil', 'Al millar (hacia arriba)'], ['cincomil', 'A 5.000 (hacia arriba)']];
@@ -40,13 +46,13 @@ const leer = () => {
   try {
     const { ocultos, contacto, ...c } = JSON.parse(localStorage.getItem(CLAVE) || 'null') || {};
     void ocultos; void contacto;
-    return { ...BASE, ...c, colores: { ...BASE.colores, ...(c.colores || {}) } };
+    // Configuraciones guardadas con los colores anteriores al diseño común pasan a la paleta de la marca
+    if (c.version !== BASE.version) { delete c.colores; delete c.colorMarca; }
+    return { ...BASE, ...c, colores: { ...BASE.colores, ...(c.colores || {}) }, version: BASE.version };
   } catch { return BASE; }
 };
 const leerLogo = () => { try { return localStorage.getItem(CLAVE_LOGO) || null; } catch { return null; } };
 const pesos = (v) => `$${Math.round(v).toLocaleString('es-CO')}`;
-const rgb = (hex) => { const h = String(hex || '#000000').replace('#', ''); return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) || 0); };
-const aclarar = (hex, f) => rgb(hex).map((c) => Math.round(c + (255 - c) * f));
 
 export function precioReventa(base, cfg) {
   const bruto = base * (1 + (Number(cfg.ganancia) || 0) / 100);
@@ -90,51 +96,6 @@ function seleccionarKits(kits, cfg) {
     .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
 }
 
-// ── Imágenes ──
-function urlMiniatura(src) {
-  const url = normalizarImagen(src);
-  return url.includes('res.cloudinary.com') && url.includes('/upload/')
-    ? url.replace('/upload/', '/upload/c_fill,g_auto,w_420,h_420,f_jpg,q_75/')
-    : url;
-}
-function cargarImagen(src) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const lado = 420;
-        const c = document.createElement('canvas');
-        c.width = lado; c.height = lado;
-        const ctx = c.getContext('2d');
-        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, lado, lado);
-        const r = Math.max(lado / img.width, lado / img.height);
-        const w = img.width * r; const h = img.height * r;
-        ctx.drawImage(img, (lado - w) / 2, (lado - h) / 2, w, h);
-        resolve(c.toDataURL('image/jpeg', 0.8));
-      } catch { resolve(null); }
-    };
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
-// entradas: [clave, url de la foto]; sin foto (o si falla) queda el logo de la tienda
-async function cargarTodas(entradas, alAvanzar) {
-  const fotos = new Map();
-  let hechas = 0;
-  const logo = await cargarImagen(LOGO);
-  const cola = [...entradas];
-  const trabajador = async () => {
-    while (cola.length) {
-      const [clave, src] = cola.shift();
-      fotos.set(clave, (src && await cargarImagen(urlMiniatura(src))) || logo);
-      alAvanzar(++hechas, entradas.length);
-    }
-  };
-  await Promise.all(Array.from({ length: 6 }, trabajador));
-  return fotos;
-}
-
 // Logo del revendedor: se reduce a PNG de 600 px como máximo (conserva la transparencia)
 function prepararLogo(archivo) {
   return new Promise((resolve, reject) => {
@@ -165,7 +126,8 @@ const medidas = (url) => new Promise((resolve) => {
 // Íconos de redes: círculo del color dado con el glifo de Font Awesome en blanco
 async function icono(glifo, familia, color) {
   const fuente = familia === 'brands' ? '400 64px "Font Awesome 6 Brands"' : '900 64px "Font Awesome 6 Free"';
-  try { await document.fonts.load(fuente, glifo); } catch { /* sin la fuente queda solo el círculo */ }
+  // Font Awesome viene de un CDN: si no carga en 2 s, queda solo el círculo (antes se quedaba esperando)
+  try { await Promise.race([document.fonts.load(fuente, glifo), new Promise((r) => setTimeout(r, 2000))]); } catch { /* sin la fuente queda solo el círculo */ }
   const c = document.createElement('canvas');
   c.width = 128; c.height = 128;
   const ctx = c.getContext('2d');
@@ -184,20 +146,21 @@ function textoNotas(p) {
 
 // ── PDF ──
 async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
-  const { jsPDF } = await import('jspdf');
-  const fotos = await cargarTodas([...lista.map((p) => [`p${p.id}`, p.image]), ...kits.map((k) => [`k${k.id}`, k.imagen])], alAvanzar);
+  const d = await crearDocumento();
+  const { doc } = d;
+  const respaldo = await fotoContenida(LOGO);
+  const fotos = await cargarFotos([...lista.map((p) => [`p${p.id}`, p.image]), ...kits.map((k) => [`k${k.id}`, k.imagen])], alAvanzar, respaldo);
   const redes = REDES.filter(([k]) => String(cfg[k] || '').trim())
     .map(([k, , , glifo, familia, , enlace, texto]) => ({ k, glifo, familia, url: enlace(cfg[k]), texto: texto(cfg[k]) }));
   for (const r of redes) r.img = await icono(r.glifo, r.familia, cfg.colorMarca);
   const logoMed = logoCliente ? await medidas(logoCliente) : null;
 
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const AN = 210; const AL = 297; const M = 12; const G = 5;
-  const MARCA = rgb(cfg.colorMarca); const TINTA = [28, 26, 24]; const GRIS = [110, 106, 100]; const LINEA = [226, 220, 208];
+  const M = 12; const G = 5;
+  const MARCA = rgb(cfg.colorMarca);
   const cols = Number(cfg.columnas) || 3;
   const W = (AN - 2 * M - (cols - 1) * G) / cols;
-  const H = 74;
-  const foto = cols === 3 ? 38 : 42;
+  const H = 76;
+  const foto = cols === 3 ? 40 : 46;
   const nombre = cfg.perfumeria.trim() || 'Catálogo de fragancias';
   const fecha = new Date().toLocaleDateString('es-CO', { month: 'long', year: 'numeric' });
   const wa = soloDigitos(cfg.whatsapp) ? numeroWa(cfg.whatsapp) : '';
@@ -210,11 +173,6 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
     if (cfg.enlaceTarjeta === 'web' && cfg.web.trim()) return urlWeb(cfg.web);
     return null;
   };
-  // jsPDF no cuenta el espaciado entre letras al centrar: se centra a mano
-  const centradoEspaciado = (texto, y, esp) => {
-    const ancho = doc.getTextWidth(texto) + esp * (texto.length - 1);
-    doc.text(texto, AN / 2 - ancho / 2, y, { charSpace: esp });
-  };
   // Logo encajado en una caja, sin deformar; devuelve el ancho usado
   const dibujarLogo = (x, y, altoMax, anchoMax, centrado = false) => {
     if (!logoCliente || !logoMed) return 0;
@@ -225,14 +183,14 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
   };
   // Fila de redes: con texto (ícono + usuario) en la portada, solo íconos en el pie
   const filaRedes = (x, y, tam, centrado, conTexto) => {
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...GRIS);
+    fuente(doc, 'Jost', 9, COLOR.gris);
     const sep = conTexto ? 7 : 2.5;
     const anchos = redes.map((r) => tam + (conTexto ? 2 + doc.getTextWidth(r.texto) : 0));
     const total = anchos.reduce((s, v) => s + v, 0) + (redes.length - 1) * sep;
     let cx = centrado ? x - total / 2 : x;
     redes.forEach((r, i) => {
       doc.addImage(r.img, 'PNG', cx, y, tam, tam);
-      if (conTexto) doc.text(r.texto, cx + tam + 2, y + tam * 0.68);
+      if (conTexto) doc.text(r.texto, cx + tam + 2, y + tam * 0.7);
       doc.link(cx, y, anchos[i], tam, { url: r.url });
       cx += anchos[i] + sep;
     });
@@ -241,14 +199,14 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
   // Cabecera y pie de cada página de productos
   const cabecera = () => {
     const anchoLogo = dibujarLogo(M, M - 1, 11, 34);
-    doc.setTextColor(...TINTA); doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
-    doc.text(nombre, M + (anchoLogo ? anchoLogo + 4 : 0), M + 6.5);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...GRIS);
-    doc.text(`Catálogo · ${fecha}`, AN - M, M + 6.5, { align: 'right' });
-    doc.setDrawColor(...MARCA); doc.setLineWidth(0.5); doc.line(M, M + 11, AN - M, M + 11);
-    doc.setDrawColor(...LINEA); doc.setLineWidth(0.2); doc.line(M, AL - 13, AN - M, AL - 13);
+    fuente(doc, 'CG', 17);
+    doc.text(nombre, M + (anchoLogo ? anchoLogo + 4 : 0), M + 7);
+    fuente(doc, 'Jost', 7.4, COLOR.gris);
+    espaciado(doc, `CATÁLOGO · ${fecha.toUpperCase()}`, AN - M, M + 6.5, 0.5, 'right');
+    doc.setDrawColor(...COLOR.tinta); doc.setLineWidth(0.35); doc.line(M, M + 11, AN - M, M + 11);
+    doc.setDrawColor(...COLOR.filete); doc.setLineWidth(0.15); doc.line(M, AL - 13, AN - M, AL - 13);
     if (redes.length) filaRedes(M, AL - 10.5, 4.5, false, false);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...GRIS);
+    fuente(doc, 'Jost-Light', 7, COLOR.gris);
     if (cfg.nota.trim()) doc.text(cfg.nota.trim(), AN / 2, AL - 7.5, { align: 'center', maxWidth: 100 });
     doc.text(`${doc.getNumberOfPages()}`, AN - M, AL - 7.5, { align: 'right' });
     if (cfg.portada) {
@@ -256,35 +214,34 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
       doc.text('Índice', AN - M - 7, AL - 7.5, { align: 'right' });
       doc.link(AN - M - 18, AL - 10.5, 11, 4.5, { pageNumber: 1 });
     }
-    return M + 17;
+    return M + 18;
   };
   const cuantos = (n, kit) => (kit ? `${n} kit${n === 1 ? '' : 's'}` : `${n} fragancia${n === 1 ? '' : 's'}`);
+  // Título de sección: Cormorant con un filete del color de la sección
   const banda = (y, titulo, n, color, kit) => {
-    doc.setFillColor(...rgb(color)); doc.roundedRect(M, y, AN - 2 * M, 10, 1.5, 1.5, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
-    doc.text(titulo.toUpperCase(), M + 5, y + 6.6, { charSpace: 1 });
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
-    doc.text(cuantos(n, kit), AN - M - 5, y + 6.6, { align: 'right' });
-    return y + 14;
+    fuente(doc, 'CG', 20); doc.text(titulo, M, y + 7);
+    fuente(doc, 'Jost-Light', 7.6, COLOR.gris); doc.text(cuantos(n, kit), AN - M, y + 7, { align: 'right' });
+    doc.setFillColor(...rgb(color)); doc.rect(M, y + 10, AN - 2 * M, 0.6, 'F');
+    return y + 15;
   };
   // t: { clave, eyebrow, nombre, detalle, base, url } — sirve igual para perfumes y kits
   const tarjeta = (t, x, y, color) => {
     const c = rgb(color);
     const { url } = t;
-    doc.setDrawColor(...LINEA); doc.setLineWidth(0.3); doc.roundedRect(x, y, W, H, 2, 2, 'S');
-    doc.setFillColor(...c); doc.rect(x + 6, y, W - 12, 1.2, 'F');
+    doc.setFillColor(...COLOR.blanco); doc.setDrawColor(...COLOR.filete); doc.setLineWidth(0.2); doc.rect(x, y, W, H, 'FD');
+    doc.setFillColor(...c); doc.rect(x, y, W, 0.9, 'F');
     const img = fotos.get(t.clave);
-    if (img) doc.addImage(img, 'JPEG', x + (W - foto) / 2, y + 4, foto, foto);
-    let ty = y + foto + 9;
-    doc.setTextColor(...c); doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
-    doc.text(t.eyebrow.toUpperCase(), x + W / 2, ty, { align: 'center', charSpace: 0.4, maxWidth: W - 6 });
-    ty += 4.5;
-    doc.setTextColor(...TINTA); doc.setFontSize(9.5);
+    if (img) doc.addImage(img, 'JPEG', x + (W - foto) / 2, y + 3.5, foto, foto);
+    let ty = y + foto + 8.5;
+    fuente(doc, 'Jost-Medium', 6.2, c);
+    espaciado(doc, t.eyebrow.toUpperCase(), x + W / 2, ty, 0.5, 'center');
+    ty += 4.6;
+    fuente(doc, 'CG', 11.5);
     const lineasNombre = doc.splitTextToSize(t.nombre, W - 6).slice(0, 2);
-    doc.text(lineasNombre, x + W / 2, ty, { align: 'center', lineHeightFactor: 1.1 });
-    ty += lineasNombre.length * 4;
+    doc.text(lineasNombre, x + W / 2, ty, { align: 'center', lineHeightFactor: 1.05 });
+    ty += lineasNombre.length * 4.2;
     if (t.detalle) {
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(6.2); doc.setTextColor(...GRIS);
+      fuente(doc, 'Jost-Light', 6.1, COLOR.gris);
       let lineas = doc.splitTextToSize(t.detalle, W - 6);
       // Cuantas líneas quepan sobre el precio (un nombre de 2 líneas deja menos espacio)
       const tope = y + H - (url ? 7.5 : 4.5) - (cfg.mostrarPrecios ? 5 : 0);
@@ -293,12 +250,12 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
       doc.text(lineas, x + W / 2, ty + 0.5, { align: 'center', lineHeightFactor: 1.25 });
     }
     if (cfg.mostrarPrecios) {
-      doc.setTextColor(...TINTA); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+      fuente(doc, 'Jost-Medium', 12);
       doc.text(pesos(precioReventa(t.base, cfg)), x + W / 2, y + H - (url ? 7.5 : 4.5), { align: 'center' });
     }
     if (url) {
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(6); doc.setTextColor(...c);
-      doc.text(cfg.enlaceTarjeta === 'whatsapp' ? 'PEDIR POR WHATSAPP  >' : 'VER MÁS  >', x + W / 2, y + H - 3, { align: 'center', charSpace: 0.3 });
+      fuente(doc, 'Jost-Medium', 5.8, c);
+      espaciado(doc, cfg.enlaceTarjeta === 'whatsapp' ? 'PEDIR POR WHATSAPP  >' : 'VER MÁS  >', x + W / 2, y + H - 3, 0.3, 'center');
       doc.link(x, y, W, H, { url });
     }
   };
@@ -326,46 +283,45 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
   ];
   for (const { titulo, color, kit, tarjetas } of secciones) {
     if (!tarjetas.length) continue;
-    if (inicios.length || cfg.portada) doc.addPage();
+    if (inicios.length || cfg.portada) nuevaPagina(d);
     inicios.push({ titulo, n: tarjetas.length, color, kit, pagina: doc.getNumberOfPages() });
     let y = banda(cabecera(), titulo, tarjetas.length, color, kit);
     tarjetas.forEach((t, i) => {
       const col = i % cols;
       if (i > 0 && col === 0) y += H + G;
-      if (y + H > AL - 15) { doc.addPage(); y = cabecera(); }
+      if (y + H > AL - 15) { nuevaPagina(d); y = cabecera(); }
       tarjeta(t, M + col * (W + G), y, color);
     });
   }
   if (cfg.portada) {
     doc.setPage(1);
-    doc.setFillColor(...aclarar(cfg.colorMarca, 0.92)); doc.rect(0, 0, AN, AL, 'F');
-    doc.setFillColor(...MARCA); doc.rect(0, 0, AN, 4, 'F'); doc.rect(0, AL - 4, AN, 4, 'F');
+    doc.setFillColor(...MARCA); doc.rect(0, 0, AN, 2.5, 'F'); doc.rect(0, AL - 2.5, AN, 2.5, 'F');
     let y = 40;
-    if (logoCliente) { dibujarLogo(AN / 2, y, 50, 120, true); y += 62; } else y += 20;
-    doc.setTextColor(...TINTA); doc.setFont('helvetica', 'bold'); doc.setFontSize(28);
-    doc.text(nombre, AN / 2, y, { align: 'center', maxWidth: AN - 40 }); y += 9;
+    if (logoCliente) { dibujarLogo(AN / 2, y, 50, 120, true); y += 64; } else y += 24;
+    fuente(doc, 'CG', 34);
+    doc.text(nombre, AN / 2, y, { align: 'center', maxWidth: AN - 40 }); y += 10;
     if (cfg.eslogan.trim()) {
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.setTextColor(...GRIS);
+      fuente(doc, 'CG-Italic', 15, COLOR.gris);
       doc.text(cfg.eslogan.trim(), AN / 2, y, { align: 'center', maxWidth: AN - 50 }); y += 8;
     }
-    doc.setDrawColor(...MARCA); doc.setLineWidth(0.6); doc.line(AN / 2 - 20, y, AN / 2 + 20, y); y += 9;
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(...MARCA);
-    centradoEspaciado(`CATÁLOGO DE FRAGANCIAS · ${fecha.toUpperCase()}`, y, 1); y += 18;
+    doc.setDrawColor(...MARCA); doc.setLineWidth(0.4); doc.line(AN / 2 - 18, y, AN / 2 + 18, y); y += 9;
+    fuente(doc, 'Jost', 8.6, MARCA);
+    espaciado(doc, `CATÁLOGO DE FRAGANCIAS · ${fecha.toUpperCase()}`, AN / 2, y, 1, 'center'); y += 18;
     // Índice: cada sección lleva a su página
-    doc.setTextColor(...GRIS); doc.setFontSize(8); centradoEspaciado('CONTENIDO', y, 1.5); y += 6;
+    fuente(doc, 'Jost-Medium', 7.4, COLOR.gris); espaciado(doc, 'CONTENIDO', AN / 2, y, 1.5, 'center'); y += 5;
     inicios.forEach((s) => {
-      const x = AN / 2 - 50;
-      doc.setFillColor(...rgb(s.color)); doc.roundedRect(x, y, 100, 13, 2, 2, 'F');
-      doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
-      doc.text(s.titulo.toUpperCase(), x + 6, y + 8.3, { charSpace: 0.8 });
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
-      doc.text(`${cuantos(s.n, s.kit)}  ·  pág. ${s.pagina}  >`, x + 94, y + 8.3, { align: 'right' });
-      doc.link(x, y, 100, 13, { pageNumber: s.pagina });
-      y += 16;
+      const x = AN / 2 - 52;
+      doc.setDrawColor(...COLOR.filete); doc.setLineWidth(0.2); doc.line(x, y + 12, x + 104, y + 12);
+      doc.setFillColor(...rgb(s.color)); doc.rect(x, y + 3.2, 0.8, 6.6, 'F');
+      fuente(doc, 'CG', 15); doc.text(s.titulo, x + 4, y + 8.6);
+      fuente(doc, 'Jost-Light', 8, COLOR.gris);
+      doc.text(`${cuantos(s.n, s.kit)}  ·  pág. ${s.pagina}  >`, x + 104, y + 8.6, { align: 'right' });
+      doc.link(x, y, 104, 12, { pageNumber: s.pagina });
+      y += 14;
     });
     if (redes.length) filaRedes(AN / 2, AL - 36, 7, true, true);
     if (wa && cfg.enlaceTarjeta === 'whatsapp') {
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...GRIS);
+      fuente(doc, 'Jost-Light', 8.4, COLOR.gris);
       doc.text(`Toca cualquier ${kits.length ? 'perfume o kit' : 'perfume'} para pedirlo por WhatsApp.`, AN / 2, AL - 20, { align: 'center' });
     }
   }
@@ -373,7 +329,7 @@ async function generarPdf(lista, kits, cfg, logoCliente, alAvanzar) {
   return { paginas: doc.getNumberOfPages(), url: URL.createObjectURL(doc.output('blob')), nombre: `${archivo}.pdf` };
 }
 
-export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }) {
+export default function CatalogoReventa({ abierto, onCerrar, productos, precios, alerta, onListo }) {
   const [cfg, setCfg] = useState(leer);
   const [logo, setLogo] = useState(leerLogo);
   const [progreso, setProgreso] = useState(null);
@@ -399,15 +355,21 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
   const kitActivo = (id) => cfg.kits.includes(id);
   const alternarKit = (id) => fijar('kits', kitActivo(id) ? cfg.kits.filter((x) => x !== id) : [...cfg.kits, id]);
   const porSexo = SECCIONES.map(([g, t]) => [t, lista.filter((p) => p.gender === g).length]).filter(([, n]) => n);
+  // Lo que le cuesta cada perfume al mayorista (DATA); sin ese dato se compara con el precio de la tienda
+  const costoMayorista = (p) => precios?.productos?.[p.id]?.mayorista || Number(p.price);
   const resumen = useMemo(() => {
     if (!lista.length) return null;
-    const precios = lista.map((p) => Number(p.price)).sort((a, b) => a - b);
-    const ventas = lista.map((p) => precioReventa(Number(p.price), cfg));
-    const promBase = precios.reduce((s, v) => s + v, 0) / precios.length;
-    const promVenta = ventas.reduce((s, v) => s + v, 0) / ventas.length;
-    const ejemplos = [...new Set([precios[0], precios[Math.floor(precios.length / 2)], precios[precios.length - 1]])];
-    return { promBase, promVenta, ejemplos };
-  }, [lista, cfg]);
+    const orden = [...lista].sort((a, b) => Number(a.price) - Number(b.price));
+    const ejemplos = [...new Map([orden[0], orden[Math.floor(orden.length / 2)], orden[orden.length - 1]].map((p) => [Number(p.price), p])).values()];
+    const prom = (f) => lista.reduce((s, p) => s + f(p), 0) / lista.length;
+    return {
+      ejemplos,
+      promBase: prom((p) => Number(p.price)),
+      promVenta: prom((p) => precioReventa(Number(p.price), cfg)),
+      promCosto: prom(costoMayorista)
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lista, cfg, precios]);
 
   // Un PDF ya generado solo se ofrece mientras la configuración sea la misma con la que se hizo
   const firma = useMemo(() => JSON.stringify([cfg, lista.map((p) => [p.id, p.price]), kitsLista.map((k) => [k.id, k.precio]), logo ? logo.length : 0]), [cfg, lista, kitsLista, logo]);
@@ -435,6 +397,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
       const pdf = await generarPdf(lista, kitsLista, cfg, logo, (hechas, total) => setProgreso({ hechas, total }));
       setListo({ ...pdf, firma });
       descargar(pdf);
+      onListo?.(pdf);
       const kitsTxt = kitsLista.length ? ` y ${kitsLista.length} kit${kitsLista.length === 1 ? '' : 's'}` : '';
       alerta(`Catálogo listo: ${lista.length} perfumes${kitsTxt} en ${pdf.paginas} páginas. Si no se descargó solo, usa «Descargar PDF».`, 'success');
     } catch (e) {
@@ -447,7 +410,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
 
   const generoActivo = (g) => cfg.generos.includes(g);
   return (
-    <ModalAdmin abierto={abierto} titulo="Catálogo para revendedores" onCerrar={progreso ? () => {} : onCerrar}>
+    <ModalAdmin abierto={abierto} titulo="Catálogo personalizado" onCerrar={progreso ? () => {} : onCerrar}>
       <div className="modal-form reventa">
         <div className="form-grid">
           <div className="form-seccion"><h4>Marca del revendedor</h4><small>Lo que dejes vacío no aparece en el PDF</small></div>
@@ -513,7 +476,7 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
             <label className="check-item"><input type="checkbox" checked={cfg.mostrarPrecios} onChange={(e) => fijar('mostrarPrecios', e.target.checked)} /> Mostrar precios</label>
           </div>
 
-          <div className="form-seccion"><h4>Precio para el revendedor</h4><small>Se aplica sobre el precio de la tienda</small></div>
+          <div className="form-seccion"><h4>Precio de venta en el catálogo</h4><small>Se suma sobre el precio de nuestra tienda: así el nuestro se ve más bajo. La tabla muestra lo que le cuesta al mayorista y lo que gana.</small></div>
           <div className="form-group full">
             <label htmlFor="revGanancia">Ganancia (aumento sobre el precio): <b>{cfg.ganancia}%</b></label>
             <div className="reventa-ganancia">
@@ -531,17 +494,20 @@ export default function CatalogoReventa({ abierto, onCerrar, productos, alerta }
           {resumen && (
             <div className="form-group full reventa-calculo" aria-live="polite">
               <table>
-                <thead><tr><th>Precio tienda</th><th>Precio revendedor</th><th>Ganancia</th><th>Margen sobre venta</th></tr></thead>
+                <thead><tr><th>Precio tienda</th><th>Le cuesta (mayorista)</th><th>Vende en el catálogo</th><th>Gana</th></tr></thead>
                 <tbody>
-                  {resumen.ejemplos.map((b) => {
+                  {resumen.ejemplos.map((p) => {
+                    const b = Number(p.price);
                     const v = precioReventa(b, cfg);
-                    return <tr key={b}><td>{pesos(b)}</td><td><b>{pesos(v)}</b></td><td>{pesos(v - b)}</td><td>{v > 0 ? `${Math.round(((v - b) / v) * 100)}%` : '—'}</td></tr>;
+                    const c = costoMayorista(p);
+                    return <tr key={b}><td>{pesos(b)}</td><td>{pesos(c)}</td><td><b>{pesos(v)}</b></td><td>{pesos(v - c)} ({v > 0 ? Math.round(((v - c) / v) * 100) : 0} %)</td></tr>;
                   })}
                 </tbody>
               </table>
               <small>
-                En promedio: {pesos(resumen.promBase)} → <b>{pesos(resumen.promVenta)}</b>, ganancia de {pesos(resumen.promVenta - resumen.promBase)} por perfume
-                ({Math.round(((resumen.promVenta - resumen.promBase) / resumen.promBase) * 100)}% real con el redondeo).
+                En promedio el cliente final paga <b>{pesos(resumen.promVenta)}</b> en el catálogo, frente a {pesos(resumen.promBase)} en nuestra tienda
+                ({Math.round(((resumen.promVenta - resumen.promBase) / resumen.promBase) * 100)} % más). Al mayorista le cuesta {pesos(resumen.promCosto)}:
+                gana {pesos(resumen.promVenta - resumen.promCosto)} por perfume.
               </small>
             </div>
           )}
