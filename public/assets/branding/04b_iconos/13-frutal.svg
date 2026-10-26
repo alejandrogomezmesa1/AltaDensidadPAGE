@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Frutal</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="7.5" cy="16.5" r="3.6"/>
+<circle cx="16.2" cy="17.4" r="3.6"/>
+<path d="M7.5,12.9 C9,8.5 11.4,5.4 14.2,3.4 M16.2,13.8 C15.5,9.5 14.8,6.4 14.2,3.4"/>
+<path d="M14.2,3.4 C16.8,2.2 19.6,3.4 20.4,6 C17.6,6.6 15.4,5.6 14.2,3.4 Z"/>
+</g>
+</svg>

@@ -27,6 +27,14 @@ export async function textoSvg(p) {
   return cache.get(url);
 }
 
+// Piezas de un solo color (íconos, medallones, elementos sueltos): se descargan en el color que se elija
+export const COLORES_MONO = [['#0B0B0C', 'Tinta'], ['#9A7B3F', 'Oro satinado'], ['#C9A961', 'Oro luminoso'], ['#5A1220', 'Vino'], ['#F4F1EA', 'Hueso'], ['#FFFFFF', 'Blanco']];
+export const recolorear = (texto, de, a) => (!de || !a || de.toLowerCase() === a.toLowerCase() ? texto : texto.replace(new RegExp(de, 'gi'), a));
+export async function textoSvgColor(p, color) {
+  const t = await textoSvg(p);
+  return p.monocromo ? recolorear(t, p.monocromo, color || p.monocromo) : t;
+}
+
 export async function copiarTexto(texto) {
   try {
     await navigator.clipboard.writeText(texto);

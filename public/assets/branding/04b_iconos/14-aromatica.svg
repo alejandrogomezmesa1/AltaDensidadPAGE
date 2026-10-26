@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Aromática</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12,21.5 V5"/>
+<ellipse cx="10.1" cy="5.5" rx="1.15" ry="2.1" transform="rotate(-28 10.1 5.5)"/>
+<ellipse cx="13.9" cy="5.5" rx="1.15" ry="2.1" transform="rotate(28 13.9 5.5)"/>
+<ellipse cx="10.1" cy="8.6" rx="1.15" ry="2.1" transform="rotate(-28 10.1 8.6)"/>
+<ellipse cx="13.9" cy="8.6" rx="1.15" ry="2.1" transform="rotate(28 13.9 8.6)"/>
+<ellipse cx="10.1" cy="11.7" rx="1.15" ry="2.1" transform="rotate(-28 10.1 11.7)"/>
+<ellipse cx="13.9" cy="11.7" rx="1.15" ry="2.1" transform="rotate(28 13.9 11.7)"/>
+<path d="M12,16 C9.5,15.5 8,14 7.5,12.5 M12,18.5 C14.5,18 16,16.5 16.5,15"/>
+</g>
+</svg>

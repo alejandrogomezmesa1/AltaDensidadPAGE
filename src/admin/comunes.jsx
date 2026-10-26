@@ -135,7 +135,7 @@ export function ZonaImagen({ imagen, archivo, onArchivo }) {
   const nombre = archivo ? archivo.name : (imagen ? imagen.split('/').pop() : 'Sin imagen seleccionada');
   return (
     <div className="img-upload-zone">
-      <img className="img-preview" src={src} alt="Vista previa" style={{ display: src ? 'block' : 'none' }} />
+      <img className="img-preview" src={src || undefined} alt="Vista previa" style={{ display: src ? 'block' : 'none' }} />
       <div className="img-upload-actions">
         <label className="btn-upload-img" onClick={() => inputRef.current?.click()}>
           <i className="fas fa-upload" /> Seleccionar imagen

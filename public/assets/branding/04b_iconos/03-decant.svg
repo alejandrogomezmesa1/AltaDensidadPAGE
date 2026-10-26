@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Decant 10 ml</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<rect x="9" y="8" width="6" height="13" rx="1.4"/>
+<rect x="10" y="4.5" width="4" height="3.5"/>
+<line x1="11" y1="2.5" x2="13" y2="2.5"/>
+<line x1="9" y1="13" x2="15" y2="13"/>
+<path d="M11,16.5 h2"/>
+</g>
+</svg>

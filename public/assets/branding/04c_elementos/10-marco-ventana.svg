@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 860" width="600" height="860">
+<title>Marco ventana (arco 2:3)</title>
+<path d="M30,840 V300 A270,270 0 0 1 570,300 V840 Z" fill="none" stroke="#C9A961" stroke-width="3"/>
+<path d="M50.25,819.75 V300 A249.75,249.75 0 0 1 549.75,300 V819.75 Z" fill="none" stroke="#C9A961" stroke-width="1.98"/>
+</svg>

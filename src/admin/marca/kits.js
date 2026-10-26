@@ -14,10 +14,12 @@ export const KITS = [
       '01_logo/04-imagotipo-horizontal-tinta-sobre-hueso.svg', ...LOGOS_UNA_TINTA, ...REGLAS_LOGO,
       '01_logo/12-versiones-de-acabado.svg', PALETA, '04_sistema_grafico/03-patron-simbolo-tinta.svg', '04_sistema_grafico/04-patron-simbolo-hueso.svg',
       '08_empaque/06-caja-individual.svg', '08_empaque/07-estuche-de-kit.svg', '08_empaque/08-bolsa-de-mano.svg', '08_empaque/09-caja-de-envio.svg',
-      '08_empaque/10-cinta-adhesiva.svg', '08_empaque/11-papel-seda.svg', '08_empaque/13-bolsa-de-tela.svg', '08_empaque/05-sello-de-garantia.svg'
+      '08_empaque/10-cinta-adhesiva.svg', '08_empaque/11-papel-seda.svg', '08_empaque/13-bolsa-de-tela.svg', '08_empaque/14-caja-bolsa.svg',
+      '08_empaque/05-sello-de-garantia.svg', '08b_fichas/01-estuche-kit-3x30.svg', '08b_fichas/02-bolsa-de-tela.svg', '08b_fichas/03-caja-bolsa.svg'
     ],
     indicaciones: 'Producir con los colores Pantone indicados (no por pantalla). El logo en oro va en foil 871 C cuando el acabado lo permita. '
-      + 'Enviar prueba física o digital de color y de troquel antes de la producción completa. Respetar el área de protección del logo.'
+      + 'Enviar prueba física o digital de color y de troquel antes de la producción completa. Respetar el área de protección del logo. '
+      + 'Las fichas técnicas (estuche de kit, bolsa de tela y caja-bolsa) traen medidas, materiales y la aprobación del dummy.'
   },
   {
     id: 'stickers', titulo: 'Stickers y etiquetas', icono: 'fa-tags',
@@ -43,7 +45,7 @@ export const KITS = [
     para: 'Tarjetas, membrete, sobres, fichas y tiras olfativas',
     piezas: ['01_logo/02-imagotipo-vertical-tinta-sobre-hueso.svg', '01_logo/04-imagotipo-horizontal-tinta-sobre-hueso.svg', ...REGLAS_LOGO,
       '02_tipografia/01-especimen.svg', PALETA, '10_papeleria/01-tarjeta-de-presentacion.svg', '10_papeleria/02-hoja-membrete.svg',
-      '10_papeleria/03-tarjeta-de-regalo.svg', '10_papeleria/05-sobre.svg', '09_unboxing/02-tarjeta-de-agradecimiento.svg',
+      '10_papeleria/03-tarjeta-de-regalo.svg', '10_papeleria/05-sobre.svg', '10_papeleria/06-sobre-frente.svg', '09_unboxing/02-tarjeta-de-agradecimiento.svg',
       '09_unboxing/03-ficha-olfativa.svg', '09_unboxing/04-tira-olfativa.svg', '09_unboxing/05-tarjeta-de-cuidado.svg'],
     indicaciones: 'Imprimir a tamaño real con sangrado de 3 mm. Papel de algodón o texturizado color hueso (no blanco brillante). '
       + 'Los detalles en oro, en foil 871 C. Enviar prueba de color antes de imprimir el tiraje.'
@@ -64,7 +66,7 @@ export const KITS = [
       '02_tipografia/02-jerarquia.svg', PALETA, '03_color/02-proporcion-y-combinaciones.svg', '04_sistema_grafico/01-elementos-de-marca.svg',
       '05_fotografia/01-escenario-noche.svg', '05_fotografia/02-escenario-dia.svg', '06_instagram/02-foto-de-perfil.svg',
       '06_instagram/04-post-lanzamiento.svg', '06_instagram/05-post-manifiesto.svg', '06_instagram/11-historia-con-zonas-seguras.svg',
-      '07_whatsapp/01-gracias.svg', '07_whatsapp/03-gota-tallada.svg'],
+      '07_whatsapp/01-gracias.svg', '07_whatsapp/03-gota-tallada.svg', '12_digital/04-qr-con-marca.svg', '12_digital/06-qr-instagram.svg'],
     indicaciones: 'Usar los colores en HEX. Tipografías: Cormorant Garamond para titulares y Jost para texto (Google Fonts, gratuitas). '
       + 'Respetar las zonas seguras de las historias y la proporción de color 70 · 20 · 10.'
   }

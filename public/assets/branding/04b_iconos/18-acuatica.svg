@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Acuática</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12,2.8 C13.6,5.9 15.6,7.4 15.6,10 A3.6,3.6 0 1 1 8.4,10 C8.4,7.4 10.4,5.9 12,2.8 Z"/>
+<path d="M3,17 C5,15 7,15 9,17 S13,19 15,17 S19,15 21,17"/>
+<path d="M3,20.6 C5,18.6 7,18.6 9,20.6 S13,22.6 15,20.6 S19,18.6 21,20.6"/>
+</g>
+</svg>

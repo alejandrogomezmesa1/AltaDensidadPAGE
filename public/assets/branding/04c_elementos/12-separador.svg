@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" width="1200" height="120">
+<title>Separador: doble filete con destello</title>
+<line x1="20" y1="55" x2="530.4" y2="55" stroke="#C9A961" stroke-width="1.5"/>
+<line x1="669.6" y1="55" x2="1180" y2="55" stroke="#C9A961" stroke-width="1.5"/>
+<line x1="20" y1="61" x2="530.4" y2="61" stroke="#C9A961" stroke-width="1.5"/>
+<line x1="669.6" y1="61" x2="1180" y2="61" stroke="#C9A961" stroke-width="1.5"/>
+<path d="M600,9.28 C605.85,52.15 605.85,52.15 648.72,58 C605.85,63.85 605.85,63.85 600,106.72 C594.15,63.85 594.15,63.85 551.28,58 C594.15,52.15 594.15,52.15 600,9.28 Z" fill="#C9A961"/>
+</svg>

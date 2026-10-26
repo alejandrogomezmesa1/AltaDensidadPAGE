@@ -24,9 +24,12 @@ const DISPLAY = '"Cormorant Garamond", Georgia, serif';
 const UI = 'Jost, "Segoe UI", sans-serif';
 
 // Color de la familia olfativa (B3.5): solo como punto o filete
+// (las 14 familias del catálogo, como en la lámina B3.5)
 const FAMILIA_COLOR = [
-  [/amader|madera|cuero|chipre/i, '#7A5A3A'], [/ambar|ámbar|oriental/i, '#B8862F'], [/floral|flor/i, '#C79A9A'],
-  [/fresc|citr|acuát|acuat|verde|aromát|aromat/i, '#8FA58A'], [/gourmand|dulce|vainill/i, '#A86B3C'], [/especi/i, '#8C2A3A']
+  [/floral|flor/i, '#C79A9A'], [/ambar|ámbar|oriental/i, '#B8862F'], [/amader|madera/i, '#7A5A3A'], [/frut/i, '#A8546A'],
+  [/aromát|aromat/i, '#8A7FA6'], [/gourmand|dulce|vainill/i, '#A86B3C'], [/especi/i, '#8C2A3A'], [/acuát|acuat|marin/i, '#6F8E9C'],
+  [/cítric|citric|fresc/i, '#C9AE4E'], [/almizcl|musk/i, '#B3A396'], [/cuero/i, '#5B3A29'], [/foug/i, '#4F6B4A'],
+  [/chipre/i, '#77703C'], [/verde/i, '#6F9A5B']
 ];
 const colorFamilia = (nombre) => (FAMILIA_COLOR.find(([re]) => re.test(nombre || '')) || [null, null])[1];
 

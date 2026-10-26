@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+<title>Destacado · Kits</title>
+<rect width="1080" height="1920" fill="#0B0B0C"/>
+<circle cx="540" cy="960" r="430" fill="none" stroke="#2A2A2D" stroke-width="4"/>
+<circle cx="540" cy="960" r="400" fill="#151517"/>
+<circle cx="540" cy="960" r="372" fill="none" stroke="#C9A961" stroke-width="2.5"/>
+<g transform="translate(350,770) scale(15.83)" fill="none" stroke="#C9A961" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<rect x="2.5" y="12" width="19" height="9" rx=".6"/>
+<path d="M5,12 V8 h3 V12 M10.5,12 V8 h3 V12 M16,12 V8 h3 V12"/>
+<path d="M5.8,8 V6.3 h1.4 V8 M11.3,8 V6.3 h1.4 V8 M16.8,8 V6.3 h1.4 V8"/>
+<line x1="2.5" y1="16" x2="21.5" y2="16"/>
+</g>
+</svg>

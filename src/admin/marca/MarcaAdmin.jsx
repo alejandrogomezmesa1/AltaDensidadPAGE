@@ -9,11 +9,13 @@ import Piezas from './Piezas';
 import Paleta from './Paleta';
 import Tipografia from './Tipografia';
 import Generador from './Generador';
+import Personalizar from './Personalizar';
 import Revision from './Revision';
 
 const VISTAS = [
   { clave: 'piezas', titulo: 'Piezas', icono: 'fa-th-large' },
   { clave: 'revision', titulo: 'Revisión', icono: 'fa-tasks' },
+  { clave: 'personalizar', titulo: 'Personalizar', icono: 'fa-pen-fancy' },
   { clave: 'generador', titulo: 'Generador', icono: 'fa-magic' },
   { clave: 'paleta', titulo: 'Color', icono: 'fa-palette' },
   { clave: 'tipografia', titulo: 'Tipografía', icono: 'fa-font' }
@@ -93,6 +95,7 @@ export default function MarcaAdmin({ alerta, activo }) {
               abrirId={vista === 'piezas' ? abrirId : null} setAbrirId={setAbrirId} />
           </div>
           {vista === 'revision' && <Revision manifest={manifest} activo={activo} onAbrir={abrirPieza} alerta={alerta} />}
+          {vista === 'personalizar' && <Personalizar alerta={alerta} />}
           {vista === 'generador' && <Generador alerta={alerta} />}
           {vista === 'paleta' && <Paleta />}
           {vista === 'tipografia' && <Tipografia />}

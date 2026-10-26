@@ -3,12 +3,11 @@
 <title>Favicon 32 px (isotipo simplificado)</title>
 <rect width="32" height="32" fill="#0B0B0C"/>
 <g transform="translate(4.04,4.04) scale(0.24)">
-<defs>
-<mask id="m266" maskUnits="userSpaceOnUse" x="-50" y="-50" width="200" height="200">
-<rect x="-50" y="-50" width="200" height="200" fill="#fff"/>
-<path d="M24,46 L76,46 M50,2 L38,46 M50,2 L62,46 M38,46 L50,98 M62,46 L50,98" fill="none" stroke="#000" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-</mask>
-</defs>
-<path d="M50,2 L63,27 L76,46 L81,63 L77,79 L65,92 L50,98 L35,92 L23,79 L19,63 L24,46 L37,27 Z" fill="#C9A961" mask="url(#m266)"/>
+<path d="M63,27 L53.49,8.71 L63.22,44.40 L74.91,44.40 Z
+M65,92 L77,79 L81,63 L76.44,47.51 L76,47.60 L63.27,47.60 L51.81,97.28 Z
+M19,63 L23,79 L35,92 L48.19,97.28 L36.73,47.60 L24,47.60 L23.56,47.51 Z
+M37,27 L25.09,44.40 L36.78,44.40 L46.51,8.71 Z
+M40.09,44.40 L59.91,44.40 L50,8.08 Z
+M59.99,47.60 L40.01,47.60 L50,90.88 Z" fill="#C9A961"/>
 </g>
 </svg>

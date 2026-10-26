@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Volver</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20,12 A8,8 0 1 1 17.6,6.3"/>
+<path d="M18,2.8 L17.8,6.6 L14,6.4"/>
+<path d="M12,15.6 C9,13.6 8.4,11.9 9.4,10.7 C10.3,9.7 11.5,10.1 12,11 C12.5,10.1 13.7,9.7 14.6,10.7 C15.6,11.9 15,13.6 12,15.6 Z"/>
+</g>
+</svg>

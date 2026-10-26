@@ -143,4 +143,89 @@ router.put('/piezas', requireAdmin, async (req, res) => {
     }
 });
 
+// ── Personalizables: plantillas guardadas (firma, etiquetas, tarjeta de agradecimiento, QR) ──
+const TIPOS_PLANTILLA = ['firma', 'etiqueta_posterior', 'etiqueta_decant', 'agradecimiento', 'qr'];
+const MAX_DATOS = 20000;
+
+function leerPlantilla(body) {
+    const { tipo, nombre, datos } = body || {};
+    if (!TIPOS_PLANTILLA.includes(tipo)) return { error: 'Tipo de plantilla no válido' };
+    const n = String(nombre || '').trim();
+    if (!n || n.length > 120) return { error: 'El nombre debe tener entre 1 y 120 caracteres' };
+    if (!datos || typeof datos !== 'object' || Array.isArray(datos)) return { error: 'Faltan los datos de la plantilla' };
+    const texto = JSON.stringify(datos);
+    if (texto.length > MAX_DATOS) return { error: 'La plantilla es demasiado grande' };
+    return { tipo, nombre: n, texto };
+}
+
+const filaPlantilla = (f) => {
+    let datos = {};
+    try { datos = JSON.parse(f.datos); } catch { /* datos dañados: se devuelven vacíos */ }
+    return { id: f.id, tipo: f.tipo, nombre: f.nombre, datos, creadoPor: f.creado_por, actualizadoPor: f.actualizado_por, creadoEn: f.creado_en, actualizadoEn: f.actualizado_en };
+};
+
+// GET /api/admin/marca/plantillas?tipo=firma
+router.get('/plantillas', requireStaff, async (req, res) => {
+    const { tipo } = req.query;
+    if (tipo && !TIPOS_PLANTILLA.includes(tipo)) return res.status(400).json({ success: false, message: 'Tipo de plantilla no válido' });
+    try {
+        const pool = await getConnection();
+        const [filas] = tipo
+            ? await pool.query('SELECT * FROM MarcaPlantillas WHERE tipo = ? ORDER BY nombre, id', [tipo])
+            : await pool.query('SELECT * FROM MarcaPlantillas ORDER BY tipo, nombre, id');
+        res.json({ success: true, data: filas.map(filaPlantilla) });
+    } catch (err) {
+        fallo(res, err, 'No se pudieron leer las plantillas');
+    }
+});
+
+// POST /api/admin/marca/plantillas — { tipo, nombre, datos }
+router.post('/plantillas', requireStaff, async (req, res) => {
+    const p = leerPlantilla(req.body);
+    if (p.error) return res.status(400).json({ success: false, message: p.error });
+    try {
+        const pool = await getConnection();
+        const quien = await autor(pool, req.user);
+        const [r] = await pool.query('INSERT INTO MarcaPlantillas (tipo, nombre, datos, creado_por, actualizado_por) VALUES (?, ?, ?, ?, ?)',
+            [p.tipo, p.nombre, p.texto, quien, quien]);
+        const [filas] = await pool.query('SELECT * FROM MarcaPlantillas WHERE id = ?', [r.insertId]);
+        res.status(201).json({ success: true, data: filaPlantilla(filas[0]) });
+    } catch (err) {
+        fallo(res, err, 'No se pudo guardar la plantilla');
+    }
+});
+
+// PUT /api/admin/marca/plantillas/:id — { tipo, nombre, datos } (el tipo no cambia)
+router.put('/plantillas/:id', requireStaff, async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ success: false, message: 'Plantilla no válida' });
+    const p = leerPlantilla(req.body);
+    if (p.error) return res.status(400).json({ success: false, message: p.error });
+    try {
+        const pool = await getConnection();
+        const quien = await autor(pool, req.user);
+        const [r] = await pool.query('UPDATE MarcaPlantillas SET nombre = ?, datos = ?, actualizado_por = ? WHERE id = ? AND tipo = ?',
+            [p.nombre, p.texto, quien, id, p.tipo]);
+        if (!r.affectedRows) return res.status(404).json({ success: false, message: 'Plantilla no encontrada' });
+        const [filas] = await pool.query('SELECT * FROM MarcaPlantillas WHERE id = ?', [id]);
+        res.json({ success: true, data: filaPlantilla(filas[0]) });
+    } catch (err) {
+        fallo(res, err, 'No se pudo actualizar la plantilla');
+    }
+});
+
+// DELETE /api/admin/marca/plantillas/:id
+router.delete('/plantillas/:id', requireStaff, async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    if (!id) return res.status(400).json({ success: false, message: 'Plantilla no válida' });
+    try {
+        const pool = await getConnection();
+        const [r] = await pool.query('DELETE FROM MarcaPlantillas WHERE id = ?', [id]);
+        if (!r.affectedRows) return res.status(404).json({ success: false, message: 'Plantilla no encontrada' });
+        res.json({ success: true });
+    } catch (err) {
+        fallo(res, err, 'No se pudo borrar la plantilla');
+    }
+});
+
 module.exports = router;

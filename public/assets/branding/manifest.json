@@ -1,5 +1,5 @@
 {
- "version": 3,
+ "version": 4,
  "secciones": [
   {
    "id": "00_exploracion",
@@ -18,8 +18,20 @@
    "titulo": "B3 · Color"
   },
   {
+   "id": "03b_familias",
+   "titulo": "B3.5 · Familias olfativas, una por una"
+  },
+  {
    "id": "04_sistema_grafico",
    "titulo": "B5 · Sistema gráfico"
+  },
+  {
+   "id": "04b_iconos",
+   "titulo": "B5.3 · Íconos sueltos"
+  },
+  {
+   "id": "04c_elementos",
+   "titulo": "B5.1–5.2 · Elementos y medallones sueltos"
   },
   {
    "id": "05_fotografia",
@@ -30,6 +42,10 @@
    "titulo": "B7 · Instagram y redes"
   },
   {
+   "id": "06b_destacados",
+   "titulo": "B7.3 · Portadas de destacados"
+  },
+  {
    "id": "07_whatsapp",
    "titulo": "B7.6 · Stickers de WhatsApp"
   },
@@ -38,8 +54,16 @@
    "titulo": "B8 · Empaque"
   },
   {
+   "id": "08b_fichas",
+   "titulo": "B8 · Fichas técnicas para proveedores"
+  },
+  {
    "id": "09_unboxing",
    "titulo": "B9 · Unboxing"
+  },
+  {
+   "id": "09b_unboxing",
+   "titulo": "B9.1 · Momentos del unboxing (íconos)"
   },
   {
    "id": "10_papeleria",
@@ -259,30 +283,665 @@
    "id": "03_color/03-familias-olfativas.svg",
    "seccion": "03_color",
    "archivo": "03-familias-olfativas.svg",
-   "titulo": "Colores por familia olfativa (solo filetes y detalles)",
+   "titulo": "Colores por familia olfativa: las 14 del catálogo (solo filetes y detalles)",
    "descripcion": "",
    "ancho": 1600,
-   "alto": 640,
+   "alto": 1260,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/01-floral.svg",
+   "seccion": "03b_familias",
+   "archivo": "01-floral.svg",
+   "titulo": "Familia Floral",
+   "descripcion": "Color #C79A9A · Rosa, jazmín, tuberosa, peonía.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/02-ambarada.svg",
+   "seccion": "03b_familias",
+   "archivo": "02-ambarada.svg",
+   "titulo": "Familia Ambarada / Oriental",
+   "descripcion": "Color #B8862F · Ámbar, resinas, incienso, vainilla.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/03-amaderada.svg",
+   "seccion": "03b_familias",
+   "archivo": "03-amaderada.svg",
+   "titulo": "Familia Amaderada",
+   "descripcion": "Color #7A5A3A · Sándalo, cedro, vetiver, oud.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/04-frutal.svg",
+   "seccion": "03b_familias",
+   "archivo": "04-frutal.svg",
+   "titulo": "Familia Frutal",
+   "descripcion": "Color #A8546A · Frutos rojos, durazno, pera, manzana.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/05-aromatica.svg",
+   "seccion": "03b_familias",
+   "archivo": "05-aromatica.svg",
+   "titulo": "Familia Aromática",
+   "descripcion": "Color #8A7FA6 · Lavanda, salvia, romero, menta.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/06-gourmand.svg",
+   "seccion": "03b_familias",
+   "archivo": "06-gourmand.svg",
+   "titulo": "Familia Gourmand",
+   "descripcion": "Color #A86B3C · Vainilla, caramelo, cacao, café.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/07-especiada.svg",
+   "seccion": "03b_familias",
+   "archivo": "07-especiada.svg",
+   "titulo": "Familia Especiada",
+   "descripcion": "Color #8C2A3A · Pimienta, canela, cardamomo, clavo.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/08-acuatica.svg",
+   "seccion": "03b_familias",
+   "archivo": "08-acuatica.svg",
+   "titulo": "Familia Acuática",
+   "descripcion": "Color #6F8E9C · Notas marinas, ozono, sal.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/09-citrica.svg",
+   "seccion": "03b_familias",
+   "archivo": "09-citrica.svg",
+   "titulo": "Familia Cítrica",
+   "descripcion": "Color #C9AE4E · Bergamota, limón, mandarina, pomelo.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/10-almizclada.svg",
+   "seccion": "03b_familias",
+   "archivo": "10-almizclada.svg",
+   "titulo": "Familia Almizclada",
+   "descripcion": "Color #B3A396 · Almizcle blanco, piel limpia, polvo.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/11-cuero.svg",
+   "seccion": "03b_familias",
+   "archivo": "11-cuero.svg",
+   "titulo": "Familia Cuero",
+   "descripcion": "Color #5B3A29 · Cuero, gamuza, tabaco, abedul.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/12-fougere.svg",
+   "seccion": "03b_familias",
+   "archivo": "12-fougere.svg",
+   "titulo": "Familia Fougère",
+   "descripcion": "Color #4F6B4A · Lavanda, haba tonka, musgo, geranio.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/13-chipre.svg",
+   "seccion": "03b_familias",
+   "archivo": "13-chipre.svg",
+   "titulo": "Familia Chipre",
+   "descripcion": "Color #77703C · Musgo de roble, pachulí, bergamota.",
+   "ancho": 1080,
+   "alto": 1350,
+   "mm": null
+  },
+  {
+   "id": "03b_familias/14-verde.svg",
+   "seccion": "03b_familias",
+   "archivo": "14-verde.svg",
+   "titulo": "Familia Verde",
+   "descripcion": "Color #6F9A5B · Hojas, hierba cortada, gálbano, té.",
+   "ancho": 1080,
+   "alto": 1350,
    "mm": null
   },
   {
    "id": "04_sistema_grafico/01-elementos-de-marca.svg",
    "seccion": "04_sistema_grafico",
    "archivo": "01-elementos-de-marca.svg",
-   "titulo": "Elementos de marca: filetes, marco ventana, pirámide, monograma, destello, numeración, medallón",
-   "descripcion": "",
+   "titulo": "Elementos de marca: doce piezas con su regla de uso",
+   "descripcion": "Símbolo, filetes, marco ventana, pirámide, destello, numeración, medallón, patrón, sello, partículas y filete de familia.",
    "ancho": 1600,
-   "alto": 1100,
+   "alto": 2160,
    "mm": null
+  },
+  {
+   "id": "04b_iconos/01-frasco.svg",
+   "seccion": "04b_iconos",
+   "archivo": "01-frasco.svg",
+   "titulo": "Ícono · Frasco",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/02-aplicar.svg",
+   "seccion": "04b_iconos",
+   "archivo": "02-aplicar.svg",
+   "titulo": "Ícono · Aplicar",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/03-decant.svg",
+   "seccion": "04b_iconos",
+   "archivo": "03-decant.svg",
+   "titulo": "Ícono · Decant 10 ml",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/04-kit.svg",
+   "seccion": "04b_iconos",
+   "archivo": "04-kit.svg",
+   "titulo": "Ícono · Kit",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/05-gota.svg",
+   "seccion": "04b_iconos",
+   "archivo": "05-gota.svg",
+   "titulo": "Ícono · Gota",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/06-piramide.svg",
+   "seccion": "04b_iconos",
+   "archivo": "06-piramide.svg",
+   "titulo": "Ícono · Pirámide olfativa",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/07-estela.svg",
+   "seccion": "04b_iconos",
+   "archivo": "07-estela.svg",
+   "titulo": "Ícono · Estela",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/08-reloj.svg",
+   "seccion": "04b_iconos",
+   "archivo": "08-reloj.svg",
+   "titulo": "Ícono · Duración",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/09-garantia.svg",
+   "seccion": "04b_iconos",
+   "archivo": "09-garantia.svg",
+   "titulo": "Ícono · Garantía",
+   "descripcion": "Producto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/10-floral.svg",
+   "seccion": "04b_iconos",
+   "archivo": "10-floral.svg",
+   "titulo": "Ícono · Floral",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/11-ambar.svg",
+   "seccion": "04b_iconos",
+   "archivo": "11-ambar.svg",
+   "titulo": "Ícono · Ambarada",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/12-madera.svg",
+   "seccion": "04b_iconos",
+   "archivo": "12-madera.svg",
+   "titulo": "Ícono · Amaderada",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/13-frutal.svg",
+   "seccion": "04b_iconos",
+   "archivo": "13-frutal.svg",
+   "titulo": "Ícono · Frutal",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/14-aromatica.svg",
+   "seccion": "04b_iconos",
+   "archivo": "14-aromatica.svg",
+   "titulo": "Ícono · Aromática",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/15-gourmand.svg",
+   "seccion": "04b_iconos",
+   "archivo": "15-gourmand.svg",
+   "titulo": "Ícono · Gourmand",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/16-especiada.svg",
+   "seccion": "04b_iconos",
+   "archivo": "16-especiada.svg",
+   "titulo": "Ícono · Especiada",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/17-citrica.svg",
+   "seccion": "04b_iconos",
+   "archivo": "17-citrica.svg",
+   "titulo": "Ícono · Cítrica",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/18-acuatica.svg",
+   "seccion": "04b_iconos",
+   "archivo": "18-acuatica.svg",
+   "titulo": "Ícono · Acuática",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/19-almizclada.svg",
+   "seccion": "04b_iconos",
+   "archivo": "19-almizclada.svg",
+   "titulo": "Ícono · Almizclada",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/20-cuero.svg",
+   "seccion": "04b_iconos",
+   "archivo": "20-cuero.svg",
+   "titulo": "Ícono · Cuero",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/21-fougere.svg",
+   "seccion": "04b_iconos",
+   "archivo": "21-fougere.svg",
+   "titulo": "Ícono · Fougère",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/22-chipre.svg",
+   "seccion": "04b_iconos",
+   "archivo": "22-chipre.svg",
+   "titulo": "Ícono · Chipre",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/23-verde.svg",
+   "seccion": "04b_iconos",
+   "archivo": "23-verde.svg",
+   "titulo": "Ícono · Verde",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/24-hoja.svg",
+   "seccion": "04b_iconos",
+   "archivo": "24-hoja.svg",
+   "titulo": "Ícono · Natural",
+   "descripcion": "Familias olfativas. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/25-regalo.svg",
+   "seccion": "04b_iconos",
+   "archivo": "25-regalo.svg",
+   "titulo": "Ícono · Regalo",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/26-tarjeta-regalo.svg",
+   "seccion": "04b_iconos",
+   "archivo": "26-tarjeta-regalo.svg",
+   "titulo": "Ícono · Tarjeta de regalo",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/27-envio.svg",
+   "seccion": "04b_iconos",
+   "archivo": "27-envio.svg",
+   "titulo": "Ícono · Envío",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/28-ubicacion.svg",
+   "seccion": "04b_iconos",
+   "archivo": "28-ubicacion.svg",
+   "titulo": "Ícono · Ubicación",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/29-tienda.svg",
+   "seccion": "04b_iconos",
+   "archivo": "29-tienda.svg",
+   "titulo": "Ícono · Tienda",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/30-pago.svg",
+   "seccion": "04b_iconos",
+   "archivo": "30-pago.svg",
+   "titulo": "Ícono · Pago",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/31-calendario.svg",
+   "seccion": "04b_iconos",
+   "archivo": "31-calendario.svg",
+   "titulo": "Ícono · Fecha",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/32-estrella.svg",
+   "seccion": "04b_iconos",
+   "archivo": "32-estrella.svg",
+   "titulo": "Ícono · Opiniones",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/33-top.svg",
+   "seccion": "04b_iconos",
+   "archivo": "33-top.svg",
+   "titulo": "Ícono · Top 10",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/34-pregunta.svg",
+   "seccion": "04b_iconos",
+   "archivo": "34-pregunta.svg",
+   "titulo": "Ícono · Preguntas",
+   "descripcion": "Tienda y servicio. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/35-whatsapp.svg",
+   "seccion": "04b_iconos",
+   "archivo": "35-whatsapp.svg",
+   "titulo": "Ícono · WhatsApp",
+   "descripcion": "Contacto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/36-instagram.svg",
+   "seccion": "04b_iconos",
+   "archivo": "36-instagram.svg",
+   "titulo": "Ícono · Instagram",
+   "descripcion": "Contacto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/37-web.svg",
+   "seccion": "04b_iconos",
+   "archivo": "37-web.svg",
+   "titulo": "Ícono · Página web",
+   "descripcion": "Contacto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/38-correo.svg",
+   "seccion": "04b_iconos",
+   "archivo": "38-correo.svg",
+   "titulo": "Ícono · Correo",
+   "descripcion": "Contacto. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/39-caja-cerrada.svg",
+   "seccion": "04b_iconos",
+   "archivo": "39-caja-cerrada.svg",
+   "titulo": "Ícono · Llegada",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/40-caja-abierta.svg",
+   "seccion": "04b_iconos",
+   "archivo": "40-caja-abierta.svg",
+   "titulo": "Ícono · Abre despacio",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/41-papel-seda.svg",
+   "seccion": "04b_iconos",
+   "archivo": "41-papel-seda.svg",
+   "titulo": "Ícono · Revelado",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/42-tarjeta-pluma.svg",
+   "seccion": "04b_iconos",
+   "archivo": "42-tarjeta-pluma.svg",
+   "titulo": "Ícono · Lo personal",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/43-caja-frasco.svg",
+   "seccion": "04b_iconos",
+   "archivo": "43-caja-frasco.svg",
+   "titulo": "Ícono · El producto",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/44-tira-olfativa.svg",
+   "seccion": "04b_iconos",
+   "archivo": "44-tira-olfativa.svg",
+   "titulo": "Ícono · La experiencia",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "04b_iconos/45-volver.svg",
+   "seccion": "04b_iconos",
+   "archivo": "45-volver.svg",
+   "titulo": "Ícono · Volver",
+   "descripcion": "Unboxing. Línea fina, un color: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
   },
   {
    "id": "04_sistema_grafico/02-iconografia.svg",
    "seccion": "04_sistema_grafico",
    "archivo": "02-iconografia.svg",
-   "titulo": "Iconografía de línea fina (21 íconos)",
+   "titulo": "Iconografía de línea fina (45 íconos, sin repetidos)",
    "descripcion": "Trazo uniforme, un solo color, sin rellenos.",
    "ancho": 1600,
-   "alto": 900,
+   "alto": 2090,
    "mm": null
   },
   {
@@ -309,11 +968,154 @@
    "id": "04_sistema_grafico/05-medallones.svg",
    "seccion": "04_sistema_grafico",
    "archivo": "05-medallones.svg",
-   "titulo": "Medallones (equivalente del sticker de promoción)",
-   "descripcion": "Uno por pieza, rotado −8°.",
+   "titulo": "Medallones de promoción (9)",
+   "descripcion": "Uno por pieza, rotado −8°. Cada uno está suelto en «Elementos y medallones sueltos».",
    "ancho": 1600,
-   "alto": 640,
+   "alto": 1020,
    "mm": null
+  },
+  {
+   "id": "04c_elementos/01-medallon-nuevo-alta-concentracion.svg",
+   "seccion": "04c_elementos",
+   "archivo": "01-medallon-nuevo-alta-concentracion.svg",
+   "titulo": "Medallón · Nuevo alta concentración",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/02-medallon-edicion-limitada.svg",
+   "seccion": "04c_elementos",
+   "archivo": "02-medallon-edicion-limitada.svg",
+   "titulo": "Medallón · Edición limitada",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/03-medallon-kit-de-regalo.svg",
+   "seccion": "04c_elementos",
+   "archivo": "03-medallon-kit-de-regalo.svg",
+   "titulo": "Medallón · Kit de regalo",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/04-medallon-top-1-del-mes.svg",
+   "seccion": "04c_elementos",
+   "archivo": "04-medallon-top-1-del-mes.svg",
+   "titulo": "Medallón · Top 1 del mes",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/05-medallon-mas-vendido.svg",
+   "seccion": "04c_elementos",
+   "archivo": "05-medallon-mas-vendido.svg",
+   "titulo": "Medallón · Más vendido",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/06-medallon-decant-10-ml.svg",
+   "seccion": "04c_elementos",
+   "archivo": "06-medallon-decant-10-ml.svg",
+   "titulo": "Medallón · Decant 10 ml",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/07-medallon-con-feromonas.svg",
+   "seccion": "04c_elementos",
+   "archivo": "07-medallon-con-feromonas.svg",
+   "titulo": "Medallón · Con feromonas",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/08-medallon-regalo-incluido.svg",
+   "seccion": "04c_elementos",
+   "archivo": "08-medallon-regalo-incluido.svg",
+   "titulo": "Medallón · Regalo incluido",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/09-medallon-ultimas-unidades.svg",
+   "seccion": "04c_elementos",
+   "archivo": "09-medallon-ultimas-unidades.svg",
+   "titulo": "Medallón · Últimas unidades",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/10-marco-ventana.svg",
+   "seccion": "04c_elementos",
+   "archivo": "10-marco-ventana.svg",
+   "titulo": "Marco ventana (arco 2:3)",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 600,
+   "alto": 860,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/11-destello.svg",
+   "seccion": "04c_elementos",
+   "archivo": "11-destello.svg",
+   "titulo": "Destello",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 400,
+   "alto": 400,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/12-separador.svg",
+   "seccion": "04c_elementos",
+   "archivo": "12-separador.svg",
+   "titulo": "Separador: doble filete con destello",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 1200,
+   "alto": 120,
+   "mm": null,
+   "monocromo": "#C9A961"
+  },
+  {
+   "id": "04c_elementos/13-piramide-tres-actos.svg",
+   "seccion": "04c_elementos",
+   "archivo": "13-piramide-tres-actos.svg",
+   "titulo": "Pirámide en tres actos",
+   "descripcion": "Fondo transparente, un color.",
+   "ancho": 900,
+   "alto": 420,
+   "mm": null,
+   "monocromo": "#C9A961"
   },
   {
    "id": "05_fotografia/01-escenario-noche.svg",
@@ -463,6 +1265,106 @@
    "descripcion": "",
    "ancho": 1080,
    "alto": 1640,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/01-catalogo.svg",
+   "seccion": "06b_destacados",
+   "archivo": "01-catalogo.svg",
+   "titulo": "Destacado · Catálogo",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/02-top-10.svg",
+   "seccion": "06b_destacados",
+   "archivo": "02-top-10.svg",
+   "titulo": "Destacado · Top 10",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/03-crea-tu-perfume.svg",
+   "seccion": "06b_destacados",
+   "archivo": "03-crea-tu-perfume.svg",
+   "titulo": "Destacado · Crea tu perfume",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/04-kits.svg",
+   "seccion": "06b_destacados",
+   "archivo": "04-kits.svg",
+   "titulo": "Destacado · Kits",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/05-opiniones.svg",
+   "seccion": "06b_destacados",
+   "archivo": "05-opiniones.svg",
+   "titulo": "Destacado · Opiniones",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/06-envios.svg",
+   "seccion": "06b_destacados",
+   "archivo": "06-envios.svg",
+   "titulo": "Destacado · Envíos",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/07-tienda.svg",
+   "seccion": "06b_destacados",
+   "archivo": "07-tienda.svg",
+   "titulo": "Destacado · Tienda",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/08-preguntas.svg",
+   "seccion": "06b_destacados",
+   "archivo": "08-preguntas.svg",
+   "titulo": "Destacado · Preguntas",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/09-decants.svg",
+   "seccion": "06b_destacados",
+   "archivo": "09-decants.svg",
+   "titulo": "Destacado · Decants",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06b_destacados/10-regalos.svg",
+   "seccion": "06b_destacados",
+   "archivo": "10-regalos.svg",
+   "titulo": "Destacado · Regalos",
+   "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
+   "ancho": 1080,
+   "alto": 1920,
    "mm": null
   },
   {
@@ -665,20 +1567,157 @@
    "seccion": "08_empaque",
    "archivo": "13-bolsa-de-tela.svg",
    "titulo": "Bolsa de tela reutilizable",
-   "descripcion": "",
+   "descripcion": "Ficha técnica en «Fichas técnicas para proveedores».",
    "ancho": 1000,
    "alto": 1100,
    "mm": null
+  },
+  {
+   "id": "08_empaque/14-caja-bolsa.svg",
+   "seccion": "08_empaque",
+   "archivo": "14-caja-bolsa.svg",
+   "titulo": "Caja-bolsa rígida con asas de cinta (lociones 1.1 y originales)",
+   "descripcion": "La caja que se lleva como bolsa: cartón rígido negro soft-touch, cinta gros grain vino y logo en foil. Ficha técnica en «Fichas técnicas».",
+   "ancho": 1400,
+   "alto": 1100,
+   "mm": null
+  },
+  {
+   "id": "08b_fichas/01-estuche-kit-3x30.svg",
+   "seccion": "08b_fichas",
+   "archivo": "01-estuche-kit-3x30.svg",
+   "titulo": "Ficha técnica · Estuche de kit 3 × 30 ml",
+   "descripcion": "Para el proveedor de empaques: medidas, materiales, acabados y aprobación del dummy.",
+   "ancho": 2100,
+   "alto": 2970,
+   "mm": [
+    210,
+    297
+   ]
+  },
+  {
+   "id": "08b_fichas/02-bolsa-de-tela.svg",
+   "seccion": "08b_fichas",
+   "archivo": "02-bolsa-de-tela.svg",
+   "titulo": "Ficha técnica · Bolsa de tela",
+   "descripcion": "Para el proveedor de bolsas personalizadas.",
+   "ancho": 2100,
+   "alto": 2970,
+   "mm": [
+    210,
+    297
+   ]
+  },
+  {
+   "id": "08b_fichas/03-caja-bolsa.svg",
+   "seccion": "08b_fichas",
+   "archivo": "03-caja-bolsa.svg",
+   "titulo": "Ficha técnica · Caja-bolsa con asas",
+   "descripcion": "Para el proveedor de empaques rígidos.",
+   "ancho": 2100,
+   "alto": 2970,
+   "mm": [
+    210,
+    297
+   ]
   },
   {
    "id": "09_unboxing/01-secuencia-de-apertura.svg",
    "seccion": "09_unboxing",
    "archivo": "01-secuencia-de-apertura.svg",
    "titulo": "Secuencia de unboxing en 8 capas",
-   "descripcion": "",
+   "descripcion": "Cada momento está suelto como ícono en «Momentos del unboxing».",
    "ancho": 1800,
    "alto": 900,
    "mm": null
+  },
+  {
+   "id": "09b_unboxing/01-llegada.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "01-llegada.svg",
+   "titulo": "Unboxing 01 · Llegada",
+   "descripcion": "Caja negra y cinta. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/02-primer-gesto.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "02-primer-gesto.svg",
+   "titulo": "Unboxing 02 · Primer gesto",
+   "descripcion": "«Abre despacio». Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/03-revelado.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "03-revelado.svg",
+   "titulo": "Unboxing 03 · Revelado",
+   "descripcion": "Papel seda + sticker. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/04-lo-personal.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "04-lo-personal.svg",
+   "titulo": "Unboxing 04 · Lo personal",
+   "descripcion": "Tarjeta a mano. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/05-el-producto.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "05-el-producto.svg",
+   "titulo": "Unboxing 05 · El producto",
+   "descripcion": "Caja con foil. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/06-la-experiencia.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "06-la-experiencia.svg",
+   "titulo": "Unboxing 06 · La experiencia",
+   "descripcion": "Ficha + tira olfativa. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/07-la-sorpresa.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "07-la-sorpresa.svg",
+   "titulo": "Unboxing 07 · La sorpresa",
+   "descripcion": "Un decant de 10 ml. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
+  },
+  {
+   "id": "09b_unboxing/08-volver.svg",
+   "seccion": "09b_unboxing",
+   "archivo": "08-volver.svg",
+   "titulo": "Unboxing 08 · Volver",
+   "descripcion": "Tarjeta de cuidado + QR. Ícono de línea: descárgalo en tinta, oro u hueso.",
+   "ancho": 240,
+   "alto": 240,
+   "mm": null,
+   "monocromo": "#0B0B0C"
   },
   {
    "id": "09_unboxing/02-tarjeta-de-agradecimiento.svg",
@@ -736,13 +1775,13 @@
    "id": "09_unboxing/06-etiqueta-de-muestra.svg",
    "seccion": "09_unboxing",
    "archivo": "06-etiqueta-de-muestra.svg",
-   "titulo": "Etiqueta de muestra 50×15 mm",
-   "descripcion": "",
+   "titulo": "Etiqueta de decant 10 ml · 50×20 mm",
+   "descripcion": "No hay muestras de 2 ml: la etiqueta es para los decants de 10 ml. El nombre y la línea de familia se cambian en Personalizar → Etiqueta de decant.",
    "ancho": 500,
-   "alto": 150,
+   "alto": 200,
    "mm": [
     50,
-    15
+    20
    ]
   },
   {
@@ -776,7 +1815,7 @@
    "seccion": "10_papeleria",
    "archivo": "03-tarjeta-de-regalo.svg",
    "titulo": "Tarjeta de regalo 85×55 mm (frente y reverso)",
-   "descripcion": "",
+   "descripcion": "Valor, código y fecha de vencimiento los imprime DATA al emitirla (Ventas → Tarjetas de regalo). Vence a los 6 meses.",
    "ancho": 1780,
    "alto": 550,
    "mm": [
@@ -788,17 +1827,30 @@
    "id": "10_papeleria/04-firma-de-correo.svg",
    "seccion": "10_papeleria",
    "archivo": "04-firma-de-correo.svg",
-   "titulo": "Firma de correo (exportar a PNG de 600 px)",
-   "descripcion": "",
+   "titulo": "Firma de correo con íconos de WhatsApp, Instagram y web",
+   "descripcion": "Modelo. La firma de cada persona se arma en Personalizar → Firma de correo (nombre, cargo, WhatsApp, Instagram y web).",
    "ancho": 1200,
-   "alto": 320,
+   "alto": 360,
    "mm": null
   },
   {
    "id": "10_papeleria/05-sobre.svg",
    "seccion": "10_papeleria",
    "archivo": "05-sobre.svg",
-   "titulo": "Sobre DL 220×110 mm con sello",
+   "titulo": "Sobre DL 220×110 mm · reverso: solapa con el símbolo repetido y logo al centro",
+   "descripcion": "Solapa recta de 35 mm con la gota repetida tono sobre tono; logo centrado con doble filete y destellos finos.",
+   "ancho": 2200,
+   "alto": 1100,
+   "mm": [
+    220,
+    110
+   ]
+  },
+  {
+   "id": "10_papeleria/06-sobre-frente.svg",
+   "seccion": "10_papeleria",
+   "archivo": "06-sobre-frente.svg",
+   "titulo": "Sobre DL 220×110 mm · frente (remitente y destinatario)",
    "descripcion": "",
    "ancho": 2200,
    "alto": 1100,
@@ -884,8 +1936,18 @@
    "id": "12_digital/04-qr-con-marca.svg",
    "seccion": "12_digital",
    "archivo": "04-qr-con-marca.svg",
-   "titulo": "Código QR con isotipo (maqueta, no escaneable)",
-   "descripcion": "",
+   "titulo": "QR de WhatsApp con isotipo (escaneable, ref. QR-MARCA)",
+   "descripcion": "Abre el chat de WhatsApp con un mensaje que trae la referencia QR-MARCA. Para crear QR con su propia referencia (vitrina, tarjeta, evento): Personalizar → QR.",
+   "ancho": 600,
+   "alto": 600,
+   "mm": null
+  },
+  {
+   "id": "12_digital/06-qr-instagram.svg",
+   "seccion": "12_digital",
+   "archivo": "06-qr-instagram.svg",
+   "titulo": "QR de Instagram con isotipo (escaneable)",
+   "descripcion": "Abre el perfil @fragancias_alta_densidad.",
    "ancho": 600,
    "alto": 600,
    "mm": null

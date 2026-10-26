@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Especiada</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="1.4"/>
+<ellipse cx="14.07" cy="7.01" rx="1.5" ry="3.5" transform="rotate(22.5 14.07 7.01)"/>
+<ellipse cx="16.99" cy="9.93" rx="1.5" ry="3.5" transform="rotate(67.5 16.99 9.93)"/>
+<ellipse cx="16.99" cy="14.07" rx="1.5" ry="3.5" transform="rotate(112.5 16.99 14.07)"/>
+<ellipse cx="14.07" cy="16.99" rx="1.5" ry="3.5" transform="rotate(157.5 14.07 16.99)"/>
+<ellipse cx="9.93" cy="16.99" rx="1.5" ry="3.5" transform="rotate(202.5 9.93 16.99)"/>
+<ellipse cx="7.01" cy="14.07" rx="1.5" ry="3.5" transform="rotate(247.5 7.01 14.07)"/>
+<ellipse cx="7.01" cy="9.93" rx="1.5" ry="3.5" transform="rotate(292.5 7.01 9.93)"/>
+<ellipse cx="9.93" cy="7.01" rx="1.5" ry="3.5" transform="rotate(337.5 9.93 7.01)"/>
+</g>
+</svg>

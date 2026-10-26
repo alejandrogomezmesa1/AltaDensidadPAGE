@@ -8,7 +8,7 @@ import { toastOk } from '../comunes';
 import { ESTADOS } from './datos';
 import KitProveedor from './KitProveedor';
 import {
-  urlPieza, nombreArchivo, textoSvg, svgAPng, salidasPng, descargarBlob, crearZip, copiarTexto, fechaCorta
+  urlPieza, nombreArchivo, textoSvgColor, svgAPng, salidasPng, descargarBlob, crearZip, copiarTexto, fechaCorta, COLORES_MONO
 } from './utilidades';
 
 const estadoDe = (estados, id) => estados[id] || { estado: 'propuesta', favorita: false, notas: 0, pendientes: 0 };
@@ -45,11 +45,11 @@ function Progreso({ piezas, estados, compacto }) {
 }
 
 // Arma un ZIP con las piezas (SVG y, si se pide, PNG 2×) dentro de carpetas por sección
-async function zipPiezas(piezas, conPng, onAvance) {
+async function zipPiezas(piezas, conPng, onAvance, color) {
   const archivos = [];
   for (let i = 0; i < piezas.length; i += 1) {
     const p = piezas[i];
-    const svg = await textoSvg(p);
+    const svg = await textoSvgColor(p, color);
     archivos.push({ nombre: `alta-densidad/${p.seccion}/${p.archivo}`, datos: svg });
     if (conPng) {
       const o = salidasPng(p)[1];
@@ -61,9 +61,9 @@ async function zipPiezas(piezas, conPng, onAvance) {
 }
 
 // Descarga directa desde la tarjeta: SVG tal cual; PNG transparente a 300 ppp si es impresa, si no a 2×
-async function bajarDirecto(p, tipo, alerta) {
+async function bajarDirecto(p, tipo, alerta, color) {
   try {
-    const svg = await textoSvg(p);
+    const svg = await textoSvgColor(p, color);
     if (tipo === 'svg') { descargarBlob(new Blob([svg], { type: 'image/svg+xml' }), nombreArchivo(p, 'svg')); return; }
     const salidas = salidasPng(p);
     const o = salidas.find((x) => x.clave === '300ppp') || salidas[1];
@@ -71,18 +71,31 @@ async function bajarDirecto(p, tipo, alerta) {
   } catch (err) { alerta(err.message, 'error'); }
 }
 
-function Tarjeta({ p, est, onAbrir, onFavorita, seleccionada, onSeleccionar, alerta }) {
+// Miniatura en el color elegido (solo las piezas de un color)
+function useUrlColor(p, color) {
+  const [url, setUrl] = useState(urlPieza(p));
+  useEffect(() => {
+    if (!p.monocromo || !color || color.toLowerCase() === p.monocromo.toLowerCase()) { setUrl(urlPieza(p)); return undefined; }
+    let vivo = true;
+    textoSvgColor(p, color).then((t) => { if (vivo) setUrl(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(t)}`); }).catch(() => {});
+    return () => { vivo = false; };
+  }, [p, color]);
+  return url;
+}
+
+function Tarjeta({ p, est, onAbrir, onFavorita, seleccionada, onSeleccionar, alerta, color }) {
+  const src = useUrlColor(p, color);
   return (
     <li className={`marca-tarjeta marca-tarjeta--${est.estado} ${seleccionada ? 'marca-tarjeta--sel' : ''}`}>
       <label className="marca-tarjeta-check" title="Seleccionar">
         <input type="checkbox" checked={seleccionada} onChange={() => onSeleccionar(p.id)} aria-label={`Seleccionar ${p.titulo}`} />
       </label>
       <div className="marca-tarjeta-rapido">
-        <button type="button" onClick={() => bajarDirecto(p, 'svg', alerta)} title="Descargar SVG (vectorial)">SVG</button>
-        <button type="button" onClick={() => bajarDirecto(p, 'png', alerta)} title={p.mm ? 'Descargar PNG a 300 ppp (imprenta)' : 'Descargar PNG 2× (fondo transparente)'}>PNG</button>
+        <button type="button" onClick={() => bajarDirecto(p, 'svg', alerta, color)} title="Descargar SVG (vectorial)">SVG</button>
+        <button type="button" onClick={() => bajarDirecto(p, 'png', alerta, color)} title={p.mm ? 'Descargar PNG a 300 ppp (imprenta)' : 'Descargar PNG 2× (fondo transparente)'}>PNG</button>
       </div>
       <button type="button" className="marca-tarjeta-abrir" onClick={() => onAbrir(p.id)} aria-label={`Abrir ${p.titulo}`}>
-        <span className="marca-miniatura"><img src={urlPieza(p)} alt="" loading="lazy" decoding="async" /></span>
+        <span className="marca-miniatura"><img src={src} alt="" loading="lazy" decoding="async" /></span>
         <span className="marca-tarjeta-info">
           <span className="marca-tarjeta-titulo">{p.titulo}</span>
           <span className="marca-tarjeta-meta">
@@ -100,8 +113,20 @@ function Tarjeta({ p, est, onAbrir, onFavorita, seleccionada, onSeleccionar, ale
   );
 }
 
+function SelectorColor({ color, setColor }) {
+  return (
+    <div className="marca-colores" role="radiogroup" aria-label="Color de la pieza">
+      {COLORES_MONO.map(([hex, nombre]) => (
+        <button key={hex} type="button" role="radio" aria-checked={color.toLowerCase() === hex.toLowerCase()} title={nombre} aria-label={nombre}
+          className={color.toLowerCase() === hex.toLowerCase() ? 'activo' : ''} style={{ '--muestra': hex }} onClick={() => setColor(hex)} />
+      ))}
+    </div>
+  );
+}
+
 // ── Visor de una pieza ──
-function Visor({ p, est, indice, total, onCerrar, onMover, onCambiarPieza, onNotasCambiaron, alerta }) {
+function Visor({ p, est, indice, total, onCerrar, onMover, onCambiarPieza, onNotasCambiaron, alerta, color, setColor }) {
+  const src = useUrlColor(p, color);
   const [fondo, setFondo] = useState('cuadros');
   const [zoom, setZoom] = useState('ajustar');
   const [ocupado, setOcupado] = useState('');
@@ -136,21 +161,21 @@ function Visor({ p, est, indice, total, onCerrar, onMover, onCambiarPieza, onNot
 
   async function bajarSvg() {
     try {
-      descargarBlob(new Blob([await textoSvg(p)], { type: 'image/svg+xml' }), nombreArchivo(p, 'svg'));
+      descargarBlob(new Blob([await textoSvgColor(p, color)], { type: 'image/svg+xml' }), nombreArchivo(p, 'svg'));
     } catch (err) { alerta(err.message, 'error'); }
   }
 
   async function bajarPng(o) {
     setOcupado(o.clave);
     try {
-      const blob = await svgAPng(await textoSvg(p), o.ancho, o.alto, fondo === 'tinta' ? '#0B0B0C' : fondo === 'hueso' ? '#F4F1EA' : null);
+      const blob = await svgAPng(await textoSvgColor(p, color), o.ancho, o.alto, fondo === 'tinta' ? '#0B0B0C' : fondo === 'hueso' ? '#F4F1EA' : null);
       descargarBlob(blob, nombreArchivo(p, `${o.clave}.png`).replace(`.${o.clave}.png`, `@${o.clave}.png`));
       if (o.recortado) alerta('La imagen se redujo al máximo que admite el navegador.', 'exito');
     } catch (err) { alerta(err.message, 'error'); } finally { setOcupado(''); }
   }
 
   async function copiarCodigo() {
-    try { await copiarTexto(await textoSvg(p)); toastOk('Código SVG copiado'); } catch (err) { alerta(err.message, 'error'); }
+    try { await copiarTexto(await textoSvgColor(p, color)); toastOk('Código SVG copiado'); } catch (err) { alerta(err.message, 'error'); }
   }
 
   async function enviarNota(e) {
@@ -204,6 +229,7 @@ function Visor({ p, est, indice, total, onCerrar, onMover, onCambiarPieza, onNot
                 </button>
               ))}
             </div>
+            {p.monocromo && <SelectorColor color={color || p.monocromo} setColor={setColor} />}
             <div className="marca-segmento" role="group" aria-label="Zoom">
               {[['ajustar', 'Ajustar'], [1, '100 %'], [2, '200 %']].map(([k, t]) => (
                 <button key={k} type="button" className={zoom === k ? 'activo' : ''} onClick={() => setZoom(k)} aria-pressed={zoom === k}>{t}</button>
@@ -211,7 +237,7 @@ function Visor({ p, est, indice, total, onCerrar, onMover, onCambiarPieza, onNot
             </div>
           </div>
           <div ref={cajaRef} className={`marca-lienzo marca-lienzo--${fondo} ${escala ? 'marca-lienzo--zoom' : ''}`}>
-            <img src={urlPieza(p)} alt={p.titulo} style={escala ? { width: p.ancho * escala, maxWidth: 'none', maxHeight: 'none' } : undefined} />
+            <img src={src} alt={p.titulo} style={escala ? { width: p.ancho * escala, maxWidth: 'none', maxHeight: 'none' } : undefined} />
           </div>
           <div className="marca-navegar">
             <button type="button" onClick={() => onMover(-1)} aria-label="Pieza anterior"><i className="fas fa-arrow-left" /></button>
@@ -343,6 +369,7 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
   const [zip, setZip] = useState(null); // { hechas, total }
   const [seleccion, setSeleccion] = useState(() => new Set());
   const [kit, setKit] = useState(null); // null | { inicial: [ids] }
+  const [colorMono, setColorMono] = useState(null); // color de descarga de las piezas de un color (null = el suyo)
   const seleccionar = useCallback((id) => setSeleccion((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; }), []);
 
   const titulos = useMemo(() => Object.fromEntries(manifest.secciones.map((s) => [s.id, s.titulo])), [manifest]);
@@ -415,7 +442,7 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
     const conPng = r.isDenied;
     setZip({ hechas: 0, total: piezas.length });
     try {
-      const blob = await zipPiezas(piezas, conPng, (hechas, total) => setZip({ hechas, total }));
+      const blob = await zipPiezas(piezas, conPng, (hechas, total) => setZip({ hechas, total }), colorMono);
       descargarBlob(blob, `${nombre}.zip`);
     } catch (err) {
       alerta('No se pudo armar el ZIP: ' + err.message, 'error');
@@ -451,6 +478,13 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
         <button type="button" className={`marca-toggle ${soloPend ? 'activo' : ''}`} onClick={() => setSoloPend(!soloPend)} aria-pressed={soloPend}>
           <i className="fas fa-wrench" /> Con cambios pendientes
         </button>
+        {filtradas.some((p) => p.monocromo) && (
+          <div className="marca-fila marca-colores-filtro">
+            <small className="marca-mute">Íconos y sueltos en</small>
+            <SelectorColor color={colorMono || '#0B0B0C'} setColor={setColorMono} />
+            {colorMono && <button type="button" className="marca-limpiar" onClick={() => setColorMono(null)}>Su color</button>}
+          </div>
+        )}
       </div>
 
       <div className="marca-resumen">
@@ -483,7 +517,7 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
           <ul className="marca-grid">
             {g.piezas.map((p) => (
               <Tarjeta key={p.id} p={p} est={estadoDe(estados, p.id)} onAbrir={setAbrirId} onFavorita={(id, fav) => cambiarPieza(id, { favorita: fav })}
-                seleccionada={seleccion.has(p.id)} onSeleccionar={seleccionar} alerta={alerta} />
+                seleccionada={seleccion.has(p.id)} onSeleccionar={seleccionar} alerta={alerta} color={colorMono} />
             ))}
           </ul>
         </section>
@@ -509,7 +543,8 @@ export default function Piezas({ manifest, estados, setEstados, sinServidor, ale
 
       {abierta && (
         <Visor p={abierta} est={estadoDe(estados, abierta.id)} indice={indice} total={lista.length}
-          onCerrar={cerrar} onMover={mover} onCambiarPieza={cambiarPieza} onNotasCambiaron={notasCambiaron} alerta={alerta} />
+          onCerrar={cerrar} onMover={mover} onCambiarPieza={cambiarPieza} onNotasCambiaron={notasCambiaron} alerta={alerta}
+          color={colorMono} setColor={setColorMono} />
       )}
     </>
   );

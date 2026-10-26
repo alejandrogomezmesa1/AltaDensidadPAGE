@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<title>Ícono · Fougère</title>
+<g transform="translate(20,20) scale(8.33)" fill="none" stroke="#0B0B0C" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M6,21.5 C9,16 12.5,10 17.5,3"/>
+<path d="M7.84,18.54 l-4.58,-1.6 M7.84,18.54 l2.06,4.12"/>
+<path d="M9.34,16.13 l-4.07,-1.42 M9.34,16.13 l1.83,3.66"/>
+<path d="M10.83,13.73 l-3.56,-1.25 M10.83,13.73 l1.6,3.21"/>
+<path d="M12.32,11.32 l-3.05,-1.07 M12.32,11.32 l1.37,2.75"/>
+<path d="M13.82,8.92 l-2.55,-0.89 M13.82,8.92 l1.15,2.29"/>
+<path d="M15.32,6.51 l-2.04,-0.71 M15.32,6.51 l0.92,1.84"/>
+</g>
+</svg>

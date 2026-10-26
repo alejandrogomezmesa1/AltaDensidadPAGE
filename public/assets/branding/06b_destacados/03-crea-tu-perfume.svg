@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+<title>Destacado · Crea tu perfume</title>
+<rect width="1080" height="1920" fill="#0B0B0C"/>
+<circle cx="540" cy="960" r="430" fill="none" stroke="#2A2A2D" stroke-width="4"/>
+<circle cx="540" cy="960" r="400" fill="#151517"/>
+<circle cx="540" cy="960" r="372" fill="none" stroke="#C9A961" stroke-width="2.5"/>
+<g transform="translate(350,770) scale(15.83)" fill="none" stroke="#C9A961" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12,3 C14,8 18,10.5 18,15 A6,6 0 1 1 6,15 C6,10.5 10,8 12,3 Z"/>
+</g>
+</svg>
