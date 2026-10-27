@@ -586,3 +586,4 @@ router.post('/probar', requireAdmin, async (req, res) => {
 
 module.exports = router;
 module.exports.verificarRespuesta = verificarRespuesta; // pruebas
+module.exports.obtenerConfig = obtenerConfig; // vigía de tendencias (resumen con AURA)

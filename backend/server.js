@@ -18,6 +18,8 @@ const catalogoRouter = require('./routes/catalogo');
 const configuracionesRouter = require('./routes/configuraciones');
 const marcaRouter = require('./routes/marca');
 const decantsRouter = require('./routes/decants');
+const marketplaceRouter = require('./routes/marketplace');
+const vigia = require('./services/vigia');
 const dataSync = require('./services/dataSync');
 const { ejecutarMigraciones } = require('./migrator');
 const esquema = require('./services/esquema');
@@ -128,6 +130,7 @@ app.use('/api/chatbot', chatbotRouter);
 app.use('/api/admin/integracion', integracionRouter);
 app.use('/api/admin/configuraciones', configuracionesRouter);
 app.use('/api/admin/marca', marcaRouter);
+app.use('/api/admin/marketplace', marketplaceRouter);
 app.use('/api/decants', decantsRouter.publico);
 app.use('/api/admin/decants', decantsRouter.admin);
 
@@ -162,6 +165,8 @@ if (process.env.VERCEL !== '1') {
             const migraciones = await ejecutarMigraciones(pool);
             esquema.fijar(migraciones.aplicadas);
             await dataSync.iniciar(pool, migraciones.aplicadas.has('004'));
+            // Vigía de tendencias: investiga el mercado cada día a las 06:00 (hora de Colombia)
+            if (migraciones.aplicadas.has('015')) vigia.iniciar(pool, { obtenerConfig: chatbotRouter.obtenerConfig });
 
             const server = app.listen(PORT, () => {
                 console.log(`Servidor corriendo en http://localhost:${PORT}`);

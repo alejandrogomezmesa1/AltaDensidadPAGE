@@ -67,7 +67,7 @@ export function salidasPng(p) {
 
 // Rasteriza el SVG al tamaño pedido. Se reescriben width/height del <svg> raíz para que el
 // navegador lo dibuje en vectorial a ese tamaño (no escale un mapa de bits).
-export async function svgAPng(texto, ancho, alto, fondo) {
+export async function svgAPng(texto, ancho, alto, fondo, tipo = 'image/png', calidad) {
   const ajustado = texto.replace(/<svg\b([^>]*)>/, (m, attrs) => {
     const limpio = attrs.replace(/\s(width|height)="[^"]*"/g, '');
     return `<svg${limpio} width="${ancho}" height="${alto}">`;
@@ -89,7 +89,7 @@ export async function svgAPng(texto, ancho, alto, fondo) {
       ctx.fillRect(0, 0, ancho, alto);
     }
     ctx.drawImage(img, 0, 0, ancho, alto);
-    return await lienzoABlob(c);
+    return await lienzoABlob(c, tipo, calidad);
   } finally {
     URL.revokeObjectURL(url);
   }

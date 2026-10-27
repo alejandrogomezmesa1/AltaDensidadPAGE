@@ -490,3 +490,128 @@
 .marca-mp-original span { font: 500 10px var(--f-ui); letter-spacing: 0.2em; color: var(--c-accent); display: flex; gap: 6px; align-items: center; }
 .marca-mp-original b { font: 500 18px/1.2 var(--f-ui); color: var(--c-ink); overflow-wrap: anywhere; }
 .marca-mp-original small { font-size: 12px; color: var(--c-mute); }
+
+/* Marketplace: plan del día, pestañas y asistente de publicación */
+.marca-mp-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; margin-bottom: 14px; background: var(--c-line); border: var(--bw) solid var(--c-line); }
+.marca-mp-kpis > div { position: relative; display: grid; gap: 2px; padding: 12px 14px; background: var(--c-surface); min-width: 0; }
+.marca-mp-kpis b { font: 400 28px/1 var(--f-display, serif); color: var(--c-ink); }
+.marca-mp-kpis b small { font-size: 16px; color: var(--c-mute); }
+.marca-mp-kpis span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-mute); }
+.marca-mp-kpis .aviso b { color: var(--warn); }
+.marca-mp-kpis .alerta b { color: var(--err); }
+.marca-mp-kpi-meta i { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--c-accent); transition: width var(--t-2, .3s) var(--ease, ease); }
+.marca-mp-pestanas { margin-bottom: 16px; }
+.marca-mp-hoy { display: grid; gap: 16px; }
+.marca-mp-bloque { display: grid; gap: 10px; padding: 16px; border: var(--bw) solid var(--c-line); background: var(--c-surface); min-width: 0; }
+.marca-mp-bloque h3 { margin: 0; display: flex; align-items: center; gap: 10px; font: 400 20px/1.2 var(--f-display, serif); color: var(--c-ink); }
+.marca-mp-bloque > p { margin: 0; font-size: 13px; }
+.marca-mp-brief pre, .marca-tend-resumen pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 14px/1.6 var(--f-ui); color: var(--c-ink); }
+.marca-mp-brief .marca-limpiar { justify-self: start; }
+.marca-mp-paso { display: inline-grid; place-items: center; width: 26px; height: 26px; flex: none; border: var(--bw) solid var(--c-accent); color: var(--c-accent); font: 500 13px var(--f-ui); }
+.marca-mp-filas { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--c-line); border: var(--bw) solid var(--c-line); }
+.marca-mp-fila { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; background: var(--c-bg); }
+.marca-mp-fila > div:first-child { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+.marca-mp-fila small { font-size: 12px; }
+.marca-mp-gancho { margin: 0; font: italic 400 17px/1.35 var(--f-display, serif); color: var(--c-ink); overflow-wrap: anywhere; }
+.marca-mp-pie-tarjeta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.marca-mp-fuego { display: inline-flex; align-items: center; gap: 4px; font: 500 12px var(--f-ui); color: #C2562B; }
+.marca-mp-acciones a.btn-secondary, .marca-mp-fila a.btn-secondary { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+.marca-mp-ajustes label { display: grid; gap: 6px; }
+.marca-mp-ajustes input[type="number"] { height: 38px; width: 120px; padding: 0 10px; background: var(--c-surface); border: var(--bw) solid var(--c-line); color: var(--c-ink); font: 400 13px var(--f-ui); }
+
+.marca-mpw { display: grid; gap: 14px; padding: 16px 24px 24px; }
+.marca-mpw .marca-mp-original { margin: 0 -24px; padding: 10px 24px; }
+.marca-mpw-cabeza { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.marca-mpw-cabeza h3 { margin: 0; font: 400 28px/1.1 var(--f-display, serif); color: var(--c-ink); overflow-wrap: anywhere; }
+.marca-mpw-cabeza p { margin: 4px 0 0; font-size: 12px; }
+.marca-mpw-cabeza > b { font: 500 20px var(--f-ui); color: var(--c-accent); flex: none; }
+.marca-mpw-aviso { margin: 0; padding: 10px 12px; font-size: 13px; border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); }
+.marca-mpw-pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.marca-mpw-pasos > li { display: grid; gap: 10px; padding: 14px; border: var(--bw) solid var(--c-line); background: var(--c-surface); min-width: 0; }
+.marca-mpw-pasos > li.hecho { border-color: var(--ok); }
+.marca-mpw-paso { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.marca-mpw-paso > span { display: inline-grid; place-items: center; width: 26px; height: 26px; border: var(--bw) solid var(--c-accent); color: var(--c-accent); font: 500 13px var(--f-ui); }
+.marca-mpw-pasos > li.hecho .marca-mpw-paso > span { background: var(--ok); border-color: var(--ok); color: #fff; }
+.marca-mpw-paso > b { font: 500 14px var(--f-ui); color: var(--c-ink); margin-right: auto; }
+.marca-mpw-nota { margin: 0; font-size: 12px; }
+.marca-mpw-fotos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.marca-mpw-fotos img, .marca-mpw-cargando { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border: var(--bw) solid var(--c-line); background: var(--cuadros, var(--c-bg)); }
+.marca-mpw-cargando { animation: marca-pulso 1.2s ease-in-out infinite alternate; }
+@keyframes marca-pulso { from { opacity: 0.4; } to { opacity: 1; } }
+.marca-mpw-copias { display: grid; gap: 8px; }
+.marca-mpw-copias button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; text-align: left; cursor: pointer;
+  background: var(--c-bg); border: var(--bw) solid var(--c-line); color: var(--c-ink); font: 400 13px/1.4 var(--f-ui); min-width: 0; }
+.marca-mpw-copias button:hover { border-color: var(--c-accent); }
+.marca-mpw-copias button > i { flex: none; width: 18px; color: var(--c-accent); }
+.marca-mpw-copias button.listo { border-color: var(--ok); }
+.marca-mpw-copias button.listo > i { color: var(--ok); }
+.marca-mpw-copias button span { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+.marca-mpw-copias small { font: 500 10px var(--f-ui); letter-spacing: 0.2em; color: var(--c-mute); }
+.marca-mpw-pasos .marca-limpiar { justify-self: start; }
+.marca-mpw-editar { display: grid; gap: 10px; }
+.marca-mpw-editar label { display: grid; gap: 4px; }
+.marca-mpw-editar input, .marca-mpw-enlace { width: 100%; }
+.marca-mpw-enlace { height: 38px; padding: 0 10px; background: var(--c-bg); border: var(--bw) solid var(--c-line); color: var(--c-ink); font: 400 13px var(--f-ui); }
+
+/* Vigía de tendencias */
+.marca-tend { display: grid; gap: 16px; }
+.marca-tend-barra p { margin: 4px 0 0; font-size: 12px; }
+.marca-tend-resumen { display: grid; gap: 12px; padding: 16px; border: var(--bw) solid var(--c-accent); background: color-mix(in srgb, var(--c-accent) 6%, var(--c-surface)); }
+.marca-tend-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.marca-tend-caja { display: grid; gap: 10px; align-content: start; padding: 16px; border: var(--bw) solid var(--c-line); background: var(--c-surface); min-width: 0; }
+.marca-tend-caja--ancha { grid-column: 1 / -1; }
+.marca-tend-caja h3 { margin: 0; font: 400 20px/1.2 var(--f-display, serif); color: var(--c-ink); }
+.marca-tend-caja > p { margin: 0; font-size: 12px; }
+.marca-tend-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--c-line); }
+.marca-tend-lista li { position: relative; display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: var(--c-bg); min-width: 0; }
+.marca-tend-barra-p { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; }
+.marca-tend-barra-p i { display: block; height: 100%; background: var(--c-accent); }
+.marca-tend-info { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 14px; }
+.marca-tend-info small { color: var(--c-mute); }
+.marca-tend-info p { margin: 2px 0 0; font-size: 12px; }
+.marca-tend-accion { display: flex; align-items: center; gap: 10px; flex: none; }
+.marca-tend-puntos { font: 400 22px var(--f-display, serif); color: var(--c-accent); min-width: 30px; text-align: right; }
+.marca-tend-cambio { font-size: 11px; margin-left: 4px; }
+.marca-tend-cambio.sube { color: var(--ok); }
+.marca-tend-cambio.baja { color: var(--err); }
+.marca-tend-top { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.marca-tend-top li { display: flex; align-items: center; gap: 10px; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+.marca-tend-top li > span { display: inline-grid; place-items: center; width: 24px; height: 24px; flex: none; border: var(--bw) solid var(--c-line); font-size: 12px; color: var(--c-mute); }
+.marca-tend-nuevo { font: 500 10px var(--f-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ok); }
+.marca-tend-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.marca-tend-chips span { padding: 4px 10px; border: var(--bw) solid var(--c-line); font-size: 13px; color: var(--c-ink); }
+.marca-tend-simple, .marca-tend-noticias { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; overflow-wrap: anywhere; }
+.marca-tend-noticias li { display: grid; gap: 2px; }
+.marca-tend-noticias a { color: var(--c-ink); }
+.marca-tend-noticias a:hover { color: var(--c-accent); }
+
+@media (max-width: 900px) {
+  .marca-mp-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .marca-tend-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .marca-mp-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .marca-mp-kpis > div:last-child { grid-column: 1 / -1; }
+  .marca-mpw { padding: 12px 16px 16px; }
+  .marca-mpw .marca-mp-original { margin: 0 -16px; padding: 10px 16px; }
+  .marca-mpw-fotos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .marca-tend-lista li { flex-wrap: wrap; }
+}
+
+/* Marketplace: filas por perfume (Hoy y Todas) */
+.marca-mpf-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.marca-mpf { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) auto; border: var(--bw) solid var(--c-line); background: var(--c-surface); min-width: 0; }
+.marca-mpf--agotado { opacity: 0.7; }
+.marca-mpf > .marca-mp-original { margin: 0; align-content: center; border-bottom: 0; border-right: var(--bw) solid var(--c-accent); }
+.marca-mpf-texto { display: grid; gap: 6px; padding: 12px 16px; min-width: 0; align-content: center; }
+.marca-mpf-nombre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.marca-mpf-nombre h3 { margin: 0; font: 400 22px/1.15 var(--f-display, serif); color: var(--c-ink); overflow-wrap: anywhere; }
+.marca-mpf-lado { display: grid; gap: 10px; align-content: center; justify-items: end; padding: 12px 16px; }
+.marca-mpf-lado .marca-mp-acciones { justify-content: flex-end; margin-top: 0; }
+@media (max-width: 760px) {
+  .marca-mpf { grid-template-columns: minmax(0, 1fr); }
+  .marca-mpf > .marca-mp-original { border-right: 0; border-bottom: var(--bw) solid var(--c-accent); }
+  .marca-mpf-lado { justify-items: stretch; padding-top: 0; }
+  .marca-mpf-lado .marca-mp-precio { justify-items: start; grid-auto-flow: column; justify-content: start; align-items: center; gap: 12px; }
+  .marca-mpf-lado .marca-mp-acciones { justify-content: flex-start; }
+}
