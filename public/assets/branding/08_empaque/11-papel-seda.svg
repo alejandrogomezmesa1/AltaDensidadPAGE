@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" width="1400" height="1000">
 <title>Papel seda hueso con patrón del símbolo</title>
 <defs>
-<pattern id="pat117" width="140" height="140" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+<pattern id="pat179" width="140" height="140" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
 <rect width="140" height="140" fill="#F4F1EA"/>
 <g transform="translate(47,47) scale(0.46)" opacity="0.14">
 <path d="M51.63,5.14 L58.88,31.70 L62.38,26.58 L62.59,26.37 L62.66,26.34 Z
@@ -22,5 +22,5 @@ M49.25,43.58 L49.25,7.60 L42.23,33.32 Z" fill="#9A7B3F"/>
 </g>
 </pattern>
 </defs>
-<rect width="1400" height="1000" fill="url(#pat117)"/>
+<rect width="1400" height="1000" fill="url(#pat179)"/>
 </svg>

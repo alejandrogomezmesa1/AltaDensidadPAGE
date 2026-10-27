@@ -66,7 +66,8 @@ export const KITS = [
       '02_tipografia/02-jerarquia.svg', PALETA, '03_color/02-proporcion-y-combinaciones.svg', '04_sistema_grafico/01-elementos-de-marca.svg',
       '05_fotografia/01-escenario-noche.svg', '05_fotografia/02-escenario-dia.svg', '06_instagram/02-foto-de-perfil.svg',
       '06_instagram/04-post-lanzamiento.svg', '06_instagram/05-post-manifiesto.svg', '06_instagram/11-historia-con-zonas-seguras.svg',
-      '07_whatsapp/01-gracias.svg', '07_whatsapp/03-gota-tallada.svg', '12_digital/04-qr-con-marca.svg', '12_digital/06-qr-instagram.svg'],
+      '07_whatsapp/01-gracias.svg', '07_whatsapp/03-gota-tallada.svg', '12_digital/04-qr-con-marca.svg', '12_digital/06-qr-instagram.svg',
+      '06c_marketplace/01-foto-portada.svg', '06c_marketplace/04-foto-como-comprar.svg', '06c_marketplace/07-portada-pagina-facebook.svg', '06c_marketplace/08-anatomia-de-una-publicacion.svg'],
     indicaciones: 'Usar los colores en HEX. Tipografías: Cormorant Garamond para titulares y Jost para texto (Google Fonts, gratuitas). '
       + 'Respetar las zonas seguras de las historias y la proporción de color 70 · 20 · 10.'
   }

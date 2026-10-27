@@ -46,6 +46,10 @@
    "titulo": "B7.3 · Portadas de destacados"
   },
   {
+   "id": "06c_marketplace",
+   "titulo": "B7.8 · Facebook Marketplace"
+  },
+  {
    "id": "07_whatsapp",
    "titulo": "B7.6 · Stickers de WhatsApp"
   },
@@ -1365,6 +1369,96 @@
    "descripcion": "Súbela como historia y elígela de portada: el ícono queda dentro del círculo.",
    "ancho": 1080,
    "alto": 1920,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/01-foto-portada.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "01-foto-portada.svg",
+   "titulo": "Marketplace · foto 1: portada del producto",
+   "descripcion": "1200 × 1200. El frasco protagonista y el nombre propio; la información dentro del margen de 90 px.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/02-foto-ficha-olfativa.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "02-foto-ficha-olfativa.svg",
+   "titulo": "Marketplace · foto 2: ficha olfativa",
+   "descripcion": "Familia (con su color), pirámide en tres actos, duración y estela.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/03-foto-lo-que-recibes.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "03-foto-lo-que-recibes.svg",
+   "titulo": "Marketplace · foto 3: lo que recibes",
+   "descripcion": "Frasco, caja, ficha y tira, garantía y envío.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/04-foto-como-comprar.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "04-foto-como-comprar.svg",
+   "titulo": "Marketplace · foto 4: cómo comprar",
+   "descripcion": "Escríbenos, paga, envío o recogida. La misma para todas las publicaciones.",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/05-portada-kit.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "05-portada-kit.svg",
+   "titulo": "Marketplace · portada de kit trío 3 × 30 ml",
+   "descripcion": "",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/06-portada-decants.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "06-portada-decants.svg",
+   "titulo": "Marketplace · portada de decants 10 ml",
+   "descripcion": "",
+   "ancho": 1200,
+   "alto": 1200,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/07-portada-pagina-facebook.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "07-portada-pagina-facebook.svg",
+   "titulo": "Portada de la página de Facebook (1640 × 624)",
+   "descripcion": "Todo lo importante va en la franja central de 820 px, que es lo único que se ve en el celular; los lados son ambiente.",
+   "ancho": 1640,
+   "alto": 624,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/08-anatomia-de-una-publicacion.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "08-anatomia-de-una-publicacion.svg",
+   "titulo": "Guía: anatomía de una publicación en Marketplace",
+   "descripcion": "Orden de fotos, título, precio, categoría, descripción y reglas para que la plataforma no baje la publicación.",
+   "ancho": 1600,
+   "alto": 2080,
+   "mm": null
+  },
+  {
+   "id": "06c_marketplace/09-revision-en-la-cuadricula.svg",
+   "seccion": "06c_marketplace",
+   "archivo": "09-revision-en-la-cuadricula.svg",
+   "titulo": "Revisión: así se ve en la cuadrícula de Marketplace (celular)",
+   "descripcion": "",
+   "ancho": 900,
+   "alto": 1340,
    "mm": null
   },
   {

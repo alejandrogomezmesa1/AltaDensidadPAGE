@@ -3,7 +3,7 @@
 <title>Tarjeta de presentación 85×55 mm (reverso con foil · frente)</title>
 <rect width="1780" height="550" fill="#EAE5DA"/>
 <defs>
-<linearGradient id="f121" x1="0" y1="0" x2="1" y2="1">
+<linearGradient id="f183" x1="0" y1="0" x2="1" y2="1">
 <stop offset="0" stop-color="#8C6A2E"/>
 <stop offset=".28" stop-color="#C9A961"/>
 <stop offset=".5" stop-color="#F1E2B8"/>
@@ -26,7 +26,7 @@ M50.75,46.75 L50.75,91.41 L61.06,46.75 Z
 M61.02,45.25 L58.28,35.22 L51.42,45.25 Z
 M50.75,43.58 L57.77,33.32 L50.75,7.60 Z
 M41.72,35.22 L38.98,45.25 L48.58,45.25 Z
-M49.25,43.58 L49.25,7.60 L42.23,33.32 Z" fill="url(#f121)"/>
+M49.25,43.58 L49.25,7.60 L42.23,33.32 Z" fill="url(#f183)"/>
 </g>
 <rect x="930" width="850" height="550" fill="#F4F1EA"/>
 <g transform="translate(992.4,82.4) scale(0.55)">

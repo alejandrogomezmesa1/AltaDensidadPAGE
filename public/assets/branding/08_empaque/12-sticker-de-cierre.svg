@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="40mm" height="40mm">
 <title>Sticker de cierre dorado 40 mm</title>
 <defs>
-<linearGradient id="f118" x1="0" y1="0" x2="1" y2="1">
+<linearGradient id="f180" x1="0" y1="0" x2="1" y2="1">
 <stop offset="0" stop-color="#8C6A2E"/>
 <stop offset=".28" stop-color="#C9A961"/>
 <stop offset=".5" stop-color="#F1E2B8"/>
@@ -10,7 +10,7 @@
 <stop offset="1" stop-color="#7E5F27"/>
 </linearGradient>
 </defs>
-<circle cx="200" cy="200" r="196" fill="url(#f118)"/>
+<circle cx="200" cy="200" r="196" fill="url(#f180)"/>
 <circle cx="200" cy="200" r="189.14" fill="none" stroke="#0B0B0C" stroke-width="2.35"/>
 <circle cx="200" cy="200" r="137.2" fill="none" stroke="#0B0B0C" stroke-width="2.35"/>
 <path d="M204.49 28.1 212.46 28.44 212.57 25.74 204.6 25.4Z
