@@ -1,0 +1,3053 @@
+[
+{
+"n": 1,
+"id": 133,
+"nombre": "Marea de Incienso",
+"gancho": "¿Te gusta oler a mar, pero con más carácter que todos?",
+"sensacion": "Fresco como la brisa, profundo como el incienso.",
+"ideal": "oficina · cenas al aire libre · noches templadas",
+"familia": "Acuática · Aromática",
+"notas": {
+"salida": [
+"elemí",
+"bergamota"
+],
+"corazon": [
+"geranio",
+"salvia",
+"romero"
+],
+"fondo": [
+"pachulí",
+"incienso"
+]
+}
+},
+{
+"n": 2,
+"id": 143,
+"nombre": "Cumbre Azul",
+"gancho": "El perfume que te hace sentir recién bañado todo el día.",
+"sensacion": "Cítrico, limpio y con fondo mineral.",
+"ideal": "día a día · gimnasio · viajes",
+"familia": "Acuática · Aromática",
+"notas": {
+"salida": [
+"artemisa",
+"naranja",
+"pomelo"
+],
+"corazon": [
+"lavanda",
+"menta"
+],
+"fondo": [
+"pachulí",
+"ambroxan",
+"ciprés"
+]
+}
+},
+{
+"n": 3,
+"id": 126,
+"nombre": "Velero",
+"gancho": "Frescura que nunca falla y que gusta a todo el mundo.",
+"sensacion": "Verde, manzana y viento de puerto.",
+"ideal": "trabajo · universidad · días de calor",
+"familia": "Acuática · Amaderada",
+"notas": {
+"salida": [
+"notas verdes",
+"manzana"
+],
+"corazon": [
+"flor de loto",
+"mimosa"
+],
+"fondo": [
+"almizcle",
+"cedro",
+"musgo de roble",
+"ámbar"
+]
+}
+},
+{
+"n": 4,
+"id": 49,
+"nombre": "Iris de Seda",
+"gancho": "Para la mujer que no necesita gritar para que la recuerden.",
+"sensacion": "Iris empolvado, suave como la seda.",
+"ideal": "reuniones · citas de día · oficina",
+"familia": "Almizclada · Floral",
+"notas": {
+"salida": [
+"iris",
+"almizcle"
+],
+"corazon": [
+"iris",
+"rosa de Damasco"
+],
+"fondo": [
+"resinas",
+"notas amaderadas"
+]
+}
+},
+{
+"n": 5,
+"id": 101,
+"nombre": "Loto Blanco",
+"gancho": "Huele a piel limpia… pero mucho más bonita.",
+"sensacion": "Transparente, cremosa y luminosa.",
+"ideal": "uso diario · oficina · siempre",
+"familia": "Almizclada · Floral",
+"notas": {
+"salida": [
+"flor de loto",
+"mandarina"
+],
+"corazon": [
+"heliotropo",
+"raíz de lirio"
+],
+"fondo": [
+"almizcle",
+"benjuí de Siam",
+"sándalo"
+]
+}
+},
+{
+"n": 6,
+"id": 119,
+"nombre": "Ciudad Verde",
+"gancho": "Fresco de día, elegante de noche: un solo perfume para todo.",
+"sensacion": "Verde, especiado y con fondo de maderas.",
+"ideal": "oficina · salidas casuales · noche",
+"familia": "Almizclada · Amaderada",
+"notas": {
+"salida": [
+"notas verdes",
+"toronja (pomelo)",
+"especias",
+"bergamota"
+],
+"corazon": [
+"jengibre",
+"violeta",
+"gardenia",
+"salvia"
+],
+"fondo": [
+"almizcle",
+"sándalo",
+"vetiver",
+"incienso"
+]
+}
+},
+{
+"n": 7,
+"id": 138,
+"nombre": "Pino Joven",
+"gancho": "Energía pura en un frasco.",
+"sensacion": "Manzana verde y bosque al amanecer.",
+"ideal": "deporte · planes de día · viajes",
+"familia": "Almizclada · Amaderada",
+"notas": {
+"salida": [
+"manzana verde",
+"hojas de tuya"
+],
+"corazon": [
+"pino",
+"jazmín",
+"cedro"
+],
+"fondo": [
+"almizcle blanco",
+"vetiver",
+"pachulí"
+]
+}
+},
+{
+"n": 8,
+"id": 38,
+"nombre": "Azul Absoluto",
+"gancho": "El perfume del hombre que siempre se ve impecable.",
+"sensacion": "Cítricos brillantes sobre incienso y maderas.",
+"ideal": "oficina · reuniones importantes · cenas",
+"familia": "Amaderada · Aromática",
+"notas": {
+"salida": [
+"toronja (pomelo)",
+"limón (lima ácida)",
+"menta",
+"pimienta rosa"
+],
+"corazon": [
+"jengibre",
+"nuez moscada",
+"jazmín"
+],
+"fondo": [
+"incienso",
+"cedro",
+"vetiver",
+"sándalo"
+]
+}
+},
+{
+"n": 9,
+"id": 59,
+"nombre": "Lavanda Oscura",
+"gancho": "No grita: se queda en la memoria de quien está cerca.",
+"sensacion": "Lavanda, violeta y maderas en tono oscuro.",
+"ideal": "citas · cenas · noche",
+"familia": "Amaderada · Aromática",
+"notas": {
+"salida": [
+"lavanda",
+"abedul"
+],
+"corazon": [
+"violeta"
+],
+"fondo": [
+"notas amaderadas",
+"almizcle"
+]
+}
+},
+{
+"n": 10,
+"id": 73,
+"nombre": "Abedul Real",
+"gancho": "Para el que entra a un lugar y todos voltean.",
+"sensacion": "Piña, cuero ahumado y ámbar gris.",
+"ideal": "eventos · fiestas · ocasiones especiales",
+"familia": "Amaderada · Especiada",
+"notas": {
+"salida": [
+"limón (lima ácida)",
+"piña",
+"bergamota",
+"grosellas negras"
+],
+"corazon": [
+"abedul",
+"jazmín",
+"rosa"
+],
+"fondo": [
+"almizcle",
+"ámbar gris",
+"pachulí",
+"vainilla"
+]
+}
+},
+{
+"n": 11,
+"id": 54,
+"nombre": "Cítrico Nocturno",
+"gancho": "Fresco al inicio, magnético al final.",
+"sensacion": "Mandarina, pimienta y vainilla cálida.",
+"ideal": "citas · salidas nocturnas · clima templado",
+"familia": "Amaderada · Especiada",
+"notas": {
+"salida": [
+"mandarina",
+"pimienta de Madagascar",
+"limón (lima ácida)",
+"Chinotto"
+],
+"corazon": [
+"geranio",
+"rosa",
+"madera de pimienta"
+],
+"fondo": [
+"vainilla",
+"haba tonka",
+"sándalo",
+"cedro de Texas"
+]
+}
+},
+{
+"n": 12,
+"id": 61,
+"nombre": "Laurel Marino",
+"gancho": "Frescura con fuerza que dura más de lo que esperas.",
+"sensacion": "Brisa marina, toronja y ámbar gris.",
+"ideal": "día · deporte · calor",
+"familia": "Amaderada · Acuática",
+"notas": {
+"salida": [
+"notas marinas",
+"toronja (pomelo)",
+"mandarina"
+],
+"corazon": [
+"hoja de laurel",
+"jazmín"
+],
+"fondo": [
+"ámbar gris",
+"madera de gaiac",
+"musgo de roble",
+"pachulí"
+]
+}
+},
+{
+"n": 13,
+"id": 64,
+"nombre": "Lino y Gamuza",
+"gancho": "Huele a camisa blanca recién planchada… con estilo.",
+"sensacion": "Pomelo, flores suaves y gamuza.",
+"ideal": "oficina · eventos de día · siempre",
+"familia": "Amaderada · Aromática",
+"notas": {
+"salida": [
+"toronja (pomelo)",
+"romero",
+"cardamomo"
+],
+"corazon": [
+"ylang-ylang",
+"nardos"
+],
+"fondo": [
+"cedro de Virginia",
+"gamuza",
+"vetiver",
+"cuero"
+]
+}
+},
+{
+"n": 14,
+"id": 67,
+"nombre": "Pimienta Marina",
+"gancho": "Verano en la piel, con un toque picante.",
+"sensacion": "Cítricos, pimienta y aguas cálidas.",
+"ideal": "vacaciones · planes al aire libre · calor",
+"familia": "Amaderada · Acuática",
+"notas": {
+"salida": [
+"pimienta rosa",
+"cítricos"
+],
+"corazon": [
+"notas acuáticas",
+"geranio"
+],
+"fondo": [
+"vetiver",
+"ámbar",
+"pachulí"
+]
+}
+},
+{
+"n": 15,
+"id": 77,
+"nombre": "Coctel Solar",
+"gancho": "El perfume más pedido para el día a día.",
+"sensacion": "Coctel cítrico con piña y maderas dulces.",
+"ideal": "oficina · tardes con amigos · calor",
+"familia": "Amaderada · Aromática",
+"notas": {
+"salida": [
+"limón (lima ácida)",
+"bergamota",
+"naranja",
+"jengibre"
+],
+"corazon": [
+"piña",
+"salvia",
+"enebro",
+"geranio"
+],
+"fondo": [
+"almizcle",
+"cedro",
+"haba tonka",
+"vetiver"
+]
+}
+},
+{
+"n": 16,
+"id": 65,
+"nombre": "Mango y Rooibos",
+"gancho": "¿Aburrido de oler igual que todos? Prueba esto.",
+"sensacion": "Mango, té rooibos y especias cálidas.",
+"ideal": "fiestas · viajes · planes de tarde",
+"familia": "Amaderada · Especiada",
+"notas": {
+"salida": [
+"mango",
+"té rooibos",
+"mandarina"
+],
+"corazon": [
+"cardamomo",
+"pimienta",
+"jengibre"
+],
+"fondo": [
+"acacia negra (robinia)",
+"notas amaderadas",
+"benjuí"
+]
+}
+},
+{
+"n": 17,
+"id": 21,
+"nombre": "Edelweiss",
+"gancho": "Aire puro de montaña, todo el día.",
+"sensacion": "Menta, lavanda y abeto balsámico.",
+"ideal": "uso diario · deporte · viajes",
+"familia": "Amaderada · Aromática",
+"notas": {
+"salida": [
+"menta",
+"notas verdes",
+"bergamota",
+"yuzu"
+],
+"corazon": [
+"lavanda",
+"romero",
+"flor de las nieves (flor de edelweiss)",
+"hojas de violeta"
+],
+"fondo": [
+"ciprés",
+"abeto balsámico",
+"cedro",
+"almizcle"
+]
+}
+},
+{
+"n": 18,
+"id": 127,
+"nombre": "Rosa de Hierro",
+"gancho": "La rosa también es para hombres seguros.",
+"sensacion": "Pera, rosa y especias sobre cachemira.",
+"ideal": "citas · eventos · noches templadas",
+"familia": "Amaderada · Especiada",
+"notas": {
+"salida": [
+"bergamota",
+"pimienta rosa",
+"nuez moscada",
+"pera"
+],
+"corazon": [
+"clavo",
+"rosa",
+"flor de lino",
+"magnolia"
+],
+"fondo": [
+"cachemira",
+"vetiver",
+"ámbar",
+"almizcle"
+]
+}
+},
+{
+"n": 19,
+"id": 41,
+"nombre": "Sal Mineral",
+"gancho": "Moderno, limpio y muy magnético.",
+"sensacion": "Notas minerales, sal y vetiver.",
+"ideal": "oficina · salidas casuales · verano",
+"familia": "Amaderada · Especiada",
+"notas": {
+"salida": [
+"notas minerales",
+"hojas de violeta",
+"sal"
+],
+"corazon": [
+"salvia",
+"jengibre"
+],
+"fondo": [
+"notas amaderadas",
+"vetiver"
+]
+}
+},
+{
+"n": 20,
+"id": 29,
+"nombre": "Azafrán Ambarino",
+"gancho": "Deja huella en cada lugar por donde pasas.",
+"sensacion": "Azafrán, jazmín y maderas ambarinas.",
+"ideal": "eventos · noches especiales · siempre",
+"familia": "Amaderada · Especiada",
+"notas": {
+"salida": [
+"azafrán",
+"jazmín"
+],
+"corazon": [
+"maderas ambarinas",
+"ámbar gris"
+],
+"fondo": [
+"cedro",
+"resina de abeto"
+]
+}
+},
+{
+"n": 21,
+"id": 120,
+"nombre": "Té de Olíbano",
+"gancho": "Elegancia tranquila que se nota sin esfuerzo.",
+"sensacion": "Té blanco, incienso y cachemira.",
+"ideal": "oficina · cenas · momentos tranquilos",
+"familia": "Amaderada",
+"notas": {
+"salida": [
+"limón (lima ácida)",
+"bergamota",
+"esclarea",
+"bayas de enebro"
+],
+"corazon": [
+"té blanco",
+"sándalo",
+"cardamomo",
+"incienso de olíbano"
+],
+"fondo": [
+"ámbar gris",
+"cedro",
+"cachemira",
+"pachulí"
+]
+}
+},
+{
+"n": 22,
+"id": 82,
+"nombre": "Sándalo Noble",
+"gancho": "El aroma de maderas que todos preguntan qué es.",
+"sensacion": "Sándalo, cuero suave y violeta.",
+"ideal": "oficina · salidas · día a día",
+"familia": "Amaderada · Aromática",
+"notas": {
+"salida": [
+"cardamomo",
+"violeta",
+"iris"
+],
+"corazon": [
+"papiro",
+"cuero",
+"cedro",
+"sándalo"
+],
+"fondo": [
+"ambroxan",
+"almizcle"
+]
+}
+},
+{
+"n": 23,
+"id": 17,
+"nombre": "Caramelo Rosa",
+"gancho": "Dulce, coqueta y absolutamente irresistible.",
+"sensacion": "Algodón de azúcar, gardenia y vainilla.",
+"ideal": "citas · salidas nocturnas · fiestas",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"pimienta rosa",
+"mandarina",
+"bergamota"
+],
+"corazon": [
+"algodón de azúcar",
+"gardenia",
+"flores",
+"pelargonio"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"sándalo",
+"caramelo"
+]
+}
+},
+{
+"n": 24,
+"id": 48,
+"nombre": "Dama de Pachulí",
+"gancho": "Para la mujer que entra y se queda en la memoria.",
+"sensacion": "Naranja, rosa turca y pachulí elegante.",
+"ideal": "oficina · eventos · cenas",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"naranja",
+"mandarina",
+"bergamota",
+"flor de azahar del naranjo"
+],
+"corazon": [
+"rosa turca",
+"jazmín",
+"mimosa",
+"ylang-ylang"
+],
+"fondo": [
+"pachulí",
+"almizcle blanco",
+"vainilla",
+"vetiver"
+]
+}
+},
+{
+"n": 25,
+"id": 56,
+"nombre": "Café Nocturno",
+"gancho": "Dulce y peligrosa: la combinación perfecta.",
+"sensacion": "Café, almendra, nardos y cacao.",
+"ideal": "noches · citas · eventos especiales",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"almendra",
+"café",
+"bergamota",
+"limón (lima ácida)"
+],
+"corazon": [
+"nardos",
+"jazmín sambac (sampaguita)",
+"flor de azahar del naranjo",
+"rosa de Bulgaria (rosa Damascena de Bulgaria)"
+],
+"fondo": [
+"haba tonka",
+"cacao",
+"vainilla",
+"praliné"
+]
+}
+},
+{
+"n": 26,
+"id": 70,
+"nombre": "Cereza Noir",
+"gancho": "Un postre en la piel que nadie olvida.",
+"sensacion": "Cereza oscura, fresa y cacao.",
+"ideal": "noches · citas · temporada fría",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"fresa",
+"bergamota"
+],
+"corazon": [
+"Mermelada de cereza",
+"cacao"
+],
+"fondo": [
+"vainilla",
+"ámbar",
+"pachulí"
+]
+}
+},
+{
+"n": 27,
+"id": 72,
+"nombre": "Jardín de Peonías",
+"gancho": "Romántica, femenina y llena de luz.",
+"sensacion": "Peonía, durazno y vainilla suave.",
+"ideal": "uso diario · citas · celebraciones",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"iris",
+"peonía",
+"lirio de los valles (muguete)"
+],
+"corazon": [
+"rosa",
+"chabacano",
+"durazno (melocotón)"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"haba tonka",
+"sándalo"
+]
+}
+},
+{
+"n": 28,
+"id": 43,
+"nombre": "Jazmín Bourbon",
+"gancho": "El jazmín más moderno que vas a probar.",
+"sensacion": "Grosellas, jazmín y vainilla bourbon.",
+"ideal": "salidas de tarde · citas · cenas",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"grosellas negras",
+"pimienta rosa",
+"bergamota"
+],
+"corazon": [
+"jazmín",
+"jazmín sambac (sampaguita)",
+"té de jazmín"
+],
+"fondo": [
+"vainilla Bourbon",
+"cachemira",
+"madera de gaiac"
+]
+}
+},
+{
+"n": 29,
+"id": 91,
+"nombre": "Orquídea Tropical",
+"gancho": "El perfume dulce que huele a felicidad.",
+"sensacion": "Orquídea, frutas tropicales y vainilla.",
+"ideal": "universidad · salidas con amigas · todos los días",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"orquídea",
+"heliotropo",
+"naranja tangerina"
+],
+"corazon": [
+"acorde goloso",
+"frutas tropicales"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"sándalo"
+]
+}
+},
+{
+"n": 30,
+"id": 97,
+"nombre": "Orquídea Golosa",
+"gancho": "Dulce, intensa y con muchísima estela.",
+"sensacion": "Fresa tostada, jazmín y caramelo.",
+"ideal": "noches · fiestas · temporada fría",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"fresa tostada",
+"grosellas negras"
+],
+"corazon": [
+"jazmín",
+"flor de azahar"
+],
+"fondo": [
+"vainilla",
+"caramelo",
+"ámbar",
+"almizcle"
+]
+}
+},
+{
+"n": 31,
+"id": 103,
+"nombre": "Maracuyá Helado",
+"gancho": "Huele a noche de fiesta.",
+"sensacion": "Maracuyá, menta y ámbar.",
+"ideal": "discotecas · celebraciones · salidas con amigos",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"maracuyá",
+"lima (limón verde)",
+"pimienta",
+"jengibre"
+],
+"corazon": [
+"vodka",
+"ginebra",
+"menta",
+"especias"
+],
+"fondo": [
+"ámbar",
+"cuero"
+]
+}
+},
+{
+"n": 32,
+"id": 19,
+"nombre": "Manzana Canela",
+"gancho": "El que provoca cumplidos. Así de simple.",
+"sensacion": "Manzana, canela y vainilla.",
+"ideal": "noches · citas · clima fresco",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"manzana",
+"canela",
+"lavanda silvestre",
+"bergamota"
+],
+"corazon": [
+"flor de azahar del naranjo",
+"lirio de los valles (muguete)"
+],
+"fondo": [
+"vainilla",
+"haba tonka",
+"ámbar",
+"pachulí"
+]
+}
+},
+{
+"n": 33,
+"id": 105,
+"nombre": "Coñac y Pitahaya",
+"gancho": "Lujo exótico para las noches largas.",
+"sensacion": "Pitahaya, coñac y toffee.",
+"ideal": "eventos · cenas especiales · temporada fría",
+"familia": "Ambarada / Oriental · Especiada",
+"notas": {
+"salida": [
+"pitahaya",
+"coñac",
+"lavanda",
+"manzana"
+],
+"corazon": [
+"tófe",
+"gamuza",
+"cardamomo",
+"cedro"
+],
+"fondo": [
+"haba tonka",
+"pachulí especiado",
+"pachulí",
+"ámbar"
+]
+}
+},
+{
+"n": 34,
+"id": 32,
+"nombre": "Tabaco y Piña",
+"gancho": "Intenso, masculino y de los que no pasan desapercibidos.",
+"sensacion": "Pimienta negra, tabaco y vainilla.",
+"ideal": "noches · eventos · frío",
+"familia": "Ambarada / Oriental",
+"notas": {
+"salida": [
+"pimienta negra",
+"tabaco",
+"piña"
+],
+"corazon": [
+"pachulí",
+"café",
+"iris"
+],
+"fondo": [
+"vainilla",
+"ámbar",
+"maderas secas",
+"benjuí"
+]
+}
+},
+{
+"n": 35,
+"id": 40,
+"nombre": "Moras y Gamuza",
+"gancho": "Para el que busca algo distinto y sofisticado.",
+"sensacion": "Bayas silvestres, gamuza y caramelo.",
+"ideal": "oficina creativa · tardes · noches",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"hojas de violeta",
+"moras azules",
+"casis (grosellero negro)",
+"tomillo"
+],
+"corazon": [
+"cedro",
+"jazmín",
+"canela"
+],
+"fondo": [
+"musgo de roble",
+"gamuza",
+"pachulí",
+"ámbar"
+]
+}
+},
+{
+"n": 36,
+"id": 110,
+"nombre": "Iris y Benjuí",
+"gancho": "Cálido, envolvente y muy elegante.",
+"sensacion": "Canela, iris y vainilla con incienso.",
+"ideal": "cenas · citas · eventos",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"canela",
+"lavanda",
+"mandarina"
+],
+"corazon": [
+"iris",
+"benjuí",
+"ciprés",
+"flor de mahonia"
+],
+"fondo": [
+"vainilla",
+"haba tonka",
+"ámbar",
+"incienso"
+]
+}
+},
+{
+"n": 37,
+"id": 111,
+"nombre": "Ruibarbo Metálico",
+"gancho": "Moderno, vibrante y diferente.",
+"sensacion": "Pomelo, ruibarbo y piña con ámbar.",
+"ideal": "salidas · fiestas · días para destacar",
+"familia": "Ambarada / Oriental · Especiada",
+"notas": {
+"salida": [
+"notas metálicas",
+"toronja (pomelo)",
+"pimienta rosa",
+"gálbano"
+],
+"corazon": [
+"ruibarbo",
+"notas metálicas",
+"piña",
+"cedro"
+],
+"fondo": [
+"ámbar",
+"haba tonka"
+]
+}
+},
+{
+"n": 38,
+"id": 139,
+"nombre": "Coco Dorado",
+"gancho": "Verano en la piel, con mucha seducción.",
+"sensacion": "Piña, coco y haba tonka.",
+"ideal": "vacaciones · noches de playa · citas",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"piña",
+"jengibre",
+"madera de coco"
+],
+"corazon": [
+"haba tonka"
+],
+"fondo": [
+"sándalo",
+"ámbar gris"
+]
+}
+},
+{
+"n": 39,
+"id": 140,
+"nombre": "Lavanda Ambarina",
+"gancho": "Huele a barbería fina… pero más sensual.",
+"sensacion": "Cardamomo, lavanda, iris y vainilla.",
+"ideal": "noches · citas · temporada fría",
+"familia": "Ambarada / Oriental · Aromática",
+"notas": {
+"salida": [
+"cardamomo"
+],
+"corazon": [
+"lavanda",
+"iris"
+],
+"fondo": [
+"vainilla",
+"notas amaderadas",
+"ámbar"
+]
+}
+},
+{
+"n": 40,
+"id": 78,
+"nombre": "Canela Ámbar",
+"gancho": "Especiado, acogedor y de larga duración.",
+"sensacion": "Manzana, canela y tabaco dulce.",
+"ideal": "noches · cenas · frío",
+"familia": "Ambarada / Oriental · Especiada",
+"notas": {
+"salida": [
+"canela",
+"manzana",
+"bergamota"
+],
+"corazon": [
+"lavanda",
+"canela",
+"flor de azahar del naranjo",
+"lirio de los valles"
+],
+"fondo": [
+"vainilla",
+"ámbar",
+"tabaco",
+"haba tonka"
+]
+}
+},
+{
+"n": 41,
+"id": 117,
+"nombre": "Palisandro",
+"gancho": "Lujo amaderado para impresionar.",
+"sensacion": "Lavanda, canela, oud y vainilla.",
+"ideal": "eventos · noches especiales · ocasiones únicas",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"palisandro",
+"lavanda",
+"canela",
+"manzana"
+],
+"corazon": [
+"rosa",
+"cedro",
+"lirio de los valles"
+],
+"fondo": [
+"madera de oud",
+"sándalo",
+"ámbar",
+"vainilla"
+]
+}
+},
+{
+"n": 42,
+"id": 28,
+"nombre": "Ámbar de Melón",
+"gancho": "Dulce y fresco a la vez: sí se puede.",
+"sensacion": "Melón, piña y ámbar sobre vainilla.",
+"ideal": "día · noche · clima cálido",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"bergamota",
+"notas verdes"
+],
+"corazon": [
+"melón",
+"piña",
+"ámbar",
+"acorde goloso"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"notas amaderadas"
+]
+}
+},
+{
+"n": 43,
+"id": 31,
+"nombre": "Tonka y Oud",
+"gancho": "Para los amantes de los perfumes árabes de verdad.",
+"sensacion": "Azafrán, oud y caña de azúcar.",
+"ideal": "noches · eventos · temporada fría",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"azafrán",
+"bergamota"
+],
+"corazon": [
+"madera de oud",
+"rosa de Bulgaria (rosa Damascena de Bulgaria)"
+],
+"fondo": [
+"haba tonka",
+"caña de azúcar",
+"ámbar",
+"almizcle blanco"
+]
+}
+},
+{
+"n": 44,
+"id": 109,
+"nombre": "Cristal de Azafrán",
+"gancho": "El perfume que la gente sigue por la calle.",
+"sensacion": "Azafrán, jazmín y maderas ambarinas.",
+"ideal": "eventos · noches · cualquier lugar",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"azafrán",
+"jazmín"
+],
+"corazon": [
+"maderas ambarinas",
+"ámbar gris",
+"jazmín aireado"
+],
+"fondo": [
+"resina de abeto",
+"cedro",
+"azúcar",
+"ambroxan"
+]
+}
+},
+{
+"n": 45,
+"id": 34,
+"nombre": "Rosa de Oud",
+"gancho": "Rosas con carácter, para quien quiere destacar.",
+"sensacion": "Rosas, oud y vainilla.",
+"ideal": "noches · celebraciones · frío",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"pimienta rosa",
+"bergamota"
+],
+"corazon": [
+"rosa turca",
+"rosa de Bulgaria (rosa Damascena de Bulgaria)",
+"jazmín"
+],
+"fondo": [
+"madera de oud",
+"ámbar",
+"vainilla"
+]
+}
+},
+{
+"n": 46,
+"id": 66,
+"nombre": "Oud Ahumado",
+"gancho": "Oud intenso, majestuoso y de mucha presencia.",
+"sensacion": "Azafrán, nuez moscada y oud.",
+"ideal": "noches · eventos · ocasiones especiales",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"azafrán",
+"nuez moscada",
+"lavanda"
+],
+"corazon": [
+"madera de oud",
+"pachulí"
+],
+"fondo": [
+"madera de oud",
+"pachulí",
+"almizcle"
+]
+}
+},
+{
+"n": 47,
+"id": 23,
+"nombre": "Lichi y Rosa",
+"gancho": "Fresco, frutal y elegante: perfecto todos los días.",
+"sensacion": "Manzana, lichi, rosa y vainilla.",
+"ideal": "oficina · salidas casuales · calor",
+"familia": "Ambarada / Oriental · Aromática",
+"notas": {
+"salida": [
+"manzana",
+"lichi",
+"rosa"
+],
+"corazon": [
+"ciruela",
+"jazmín"
+],
+"fondo": [
+"musgo",
+"vainilla",
+"pachulí"
+]
+}
+},
+{
+"n": 48,
+"id": 108,
+"nombre": "Rosa y Cuero",
+"gancho": "Exótico, sensual y muy duradero.",
+"sensacion": "Maracuyá, azafrán, rosa y cuero.",
+"ideal": "noches · eventos · frío",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"maracuyá (fruta de la pasión)",
+"azafrán",
+"rosa turca"
+],
+"corazon": [
+"pachulí"
+],
+"fondo": [
+"cuero",
+"ámbar",
+"ládano",
+"vainilla"
+]
+}
+},
+{
+"n": 49,
+"id": 52,
+"nombre": "Sicilia",
+"gancho": "Sol mediterráneo en un frasco.",
+"sensacion": "Naranja, limón y vainilla.",
+"ideal": "día · calor · oficina",
+"familia": "Ambarada / Oriental",
+"notas": {
+"salida": [
+"naranja siciliana",
+"bergamota",
+"limón siciliano"
+],
+"corazon": [
+"frutas confitadas"
+],
+"fondo": [
+"almizcle blanco",
+"vainilla de Madagascar",
+"ámbar"
+]
+}
+},
+{
+"n": 50,
+"id": 63,
+"nombre": "Dátil y Canela",
+"gancho": "Huele a postre árabe… y es adictivo.",
+"sensacion": "Canela, dátiles, praliné y mirra.",
+"ideal": "noches · temporada fría · citas",
+"familia": "Ambarada / Oriental · Especiada",
+"notas": {
+"salida": [
+"canela",
+"nuez moscada",
+"bergamota"
+],
+"corazon": [
+"dátiles",
+"praliné",
+"nardos",
+"flor de mahonia"
+],
+"fondo": [
+"vainilla",
+"haba tonka",
+"maderas ambarinas",
+"mirra"
+]
+}
+},
+{
+"n": 51,
+"id": 104,
+"nombre": "Café Árabe",
+"gancho": "Para los que aman el olor a café recién hecho.",
+"sensacion": "Cardamomo, café y praliné.",
+"ideal": "noches · frío · momentos acogedores",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"canela",
+"cardamomo",
+"jengibre"
+],
+"corazon": [
+"praliné",
+"frutas confitadas",
+"flores blancas"
+],
+"fondo": [
+"vainilla",
+"café",
+"haba tonka",
+"benjuí"
+]
+}
+},
+{
+"n": 52,
+"id": 129,
+"nombre": "Manzana Noble",
+"gancho": "Elegante y seductor: se nota cuando llegas.",
+"sensacion": "Manzana, lavanda y vainilla especiada.",
+"ideal": "cenas · eventos · citas",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"manzana",
+"lavanda",
+"bergamota",
+"mandarina"
+],
+"corazon": [
+"geranio",
+"violeta",
+"jazmín"
+],
+"fondo": [
+"vainilla",
+"cardamomo",
+"sándalo",
+"pimienta"
+]
+}
+},
+{
+"n": 53,
+"id": 76,
+"nombre": "Pistacho y Cacao",
+"gancho": "Un postre de lujo que se huele a metros.",
+"sensacion": "Pistacho, café, chocolate y caramelo.",
+"ideal": "noches · frío · ocasiones especiales",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"café",
+"pistacho (pistache)",
+"avellana",
+"praliné"
+],
+"corazon": [
+"chocolate",
+"vainilla",
+"cardamomo"
+],
+"fondo": [
+"caramelo",
+"haba tonka",
+"maderas ambarinas"
+]
+}
+},
+{
+"n": 54,
+"id": 58,
+"nombre": "Oud Nocturno",
+"gancho": "Misterio oriental para quien busca exclusividad.",
+"sensacion": "Geranio, rosa turca y oud.",
+"ideal": "noches · eventos · momentos para destacar",
+"familia": "Ambarada / Oriental · Amaderada",
+"notas": {
+"salida": [
+"geranio de Egipto",
+"lavanda"
+],
+"corazon": [
+"rosa turca",
+"oud de Bangladesh",
+"ámbar"
+],
+"fondo": [
+"benjuí de Laos",
+"madera de oud",
+"almizcle"
+]
+}
+},
+{
+"n": 55,
+"id": 30,
+"nombre": "Ámbar Frutal",
+"gancho": "Dulce, luminoso y fácil de amar.",
+"sensacion": "Melón, piña y ámbar.",
+"ideal": "día · noche · clima cálido",
+"familia": "Ambarada / Oriental · Gourmand",
+"notas": {
+"salida": [
+"bergamota",
+"notas verdes"
+],
+"corazon": [
+"notas dulces",
+"melón",
+"piña",
+"ámbar"
+],
+"fondo": [
+"almizcle",
+"notas amaderadas",
+"vainilla"
+]
+}
+},
+{
+"n": 56,
+"id": 123,
+"nombre": "Rosa y Almizcle",
+"gancho": "Suave, femenino y nada invasivo.",
+"sensacion": "Manzana, rosa y almizcle blanco.",
+"ideal": "oficina · día a día · tardes",
+"familia": "Ambarada / Oriental · Floral",
+"notas": {
+"salida": [
+"manzana",
+"bergamota",
+"limón"
+],
+"corazon": [
+"rosa",
+"pachulí",
+"jazmín"
+],
+"fondo": [
+"almizcle blanco",
+"notas atalcadas",
+"ámbar"
+]
+}
+},
+{
+"n": 57,
+"id": 130,
+"nombre": "Pimienta Negra",
+"gancho": "Fresco, juvenil y con carácter.",
+"sensacion": "Pimienta negra, jengibre y vainilla.",
+"ideal": "universidad · conciertos · salidas",
+"familia": "Aromática · Especiada",
+"notas": {
+"salida": [
+"pimienta negra",
+"cardamomo"
+],
+"corazon": [
+"jengibre",
+"geranio"
+],
+"fondo": [
+"vainilla",
+"vetiver"
+]
+}
+},
+{
+"n": 58,
+"id": 90,
+"nombre": "Anís y Absenta",
+"gancho": "Para el que sale de noche y quiere ser recordado.",
+"sensacion": "Absenta, anís y vainilla.",
+"ideal": "fiestas · discotecas · eventos",
+"familia": "Aromática · Fougère",
+"notas": {
+"salida": [
+"absenta",
+"anís",
+"hinojo"
+],
+"corazon": [
+"lavanda"
+],
+"fondo": [
+"vainilla",
+"almizcle"
+]
+}
+},
+{
+"n": 59,
+"id": 22,
+"nombre": "Mar Mediterráneo",
+"gancho": "El clásico fresco que nunca pasa de moda.",
+"sensacion": "Cítricos, mar y jazmín.",
+"ideal": "día · oficina · calor",
+"familia": "Aromática · Acuática",
+"notas": {
+"salida": [
+"lima (limón verde)",
+"limón (lima ácida)",
+"bergamota",
+"jazmín"
+],
+"corazon": [
+"notas marinas",
+"jazmín",
+"romero",
+"durazno (melocotón)"
+],
+"fondo": [
+"almizcle blanco",
+"cedro",
+"musgo de roble",
+"pachulí"
+]
+}
+},
+{
+"n": 60,
+"id": 53,
+"nombre": "Menta y Tonka",
+"gancho": "El perfume para conquistar.",
+"sensacion": "Menta, manzana verde y vainilla.",
+"ideal": "noches · citas · fiestas",
+"familia": "Aromática · Fougère",
+"notas": {
+"salida": [
+"menta",
+"manzana verde",
+"limón (lima ácida)"
+],
+"corazon": [
+"haba tonka",
+"ambroxan",
+"geranio"
+],
+"fondo": [
+"vainilla de Madagascar",
+"cedro de Virginia",
+"cedro del Atlas",
+"vetiver"
+]
+}
+},
+{
+"n": 61,
+"id": 114,
+"nombre": "Esclarea",
+"gancho": "Huele a piel después del mar… y dura muchísimo.",
+"sensacion": "Salvia, jazmín y ámbar gris.",
+"ideal": "calor · oficina · viajes",
+"familia": "Aromática · Acuática",
+"notas": {
+"salida": [
+"esclarea"
+],
+"corazon": [
+"jazmín egipcio"
+],
+"fondo": [
+"ámbar gris"
+]
+}
+},
+{
+"n": 62,
+"id": 115,
+"nombre": "Ciruela y Anís",
+"gancho": "Frescura que se nota desde lejos.",
+"sensacion": "Manzana, anís, ciruela y almizcle.",
+"ideal": "día a día · gimnasio · clima cálido",
+"familia": "Aromática",
+"notas": {
+"salida": [
+"manzana",
+"limón",
+"bergamota",
+"anís"
+],
+"corazon": [
+"ciruela",
+"flor de azahar",
+"cardamomo"
+],
+"fondo": [
+"almizcle",
+"ámbar",
+"trozos de madera",
+"musgo"
+]
+}
+},
+{
+"n": 63,
+"id": 35,
+"nombre": "Naranja y Vainilla",
+"gancho": "Huele a limpio con un toque dulce y elegante.",
+"sensacion": "Naranja, frutas y vainilla atalcada.",
+"ideal": "oficina · reuniones · cenas",
+"familia": "Aromática",
+"notas": {
+"salida": [
+"naranja",
+"bergamota",
+"limón (lima ácida)"
+],
+"corazon": [
+"notas afrutadas"
+],
+"fondo": [
+"vainilla",
+"almizcle blanco",
+"ámbar"
+]
+}
+},
+{
+"n": 64,
+"id": 51,
+"nombre": "Pimienta y Ambroxan",
+"gancho": "El fresco intenso que todos los hombres quieren.",
+"sensacion": "Bergamota, pimienta y ambroxan.",
+"ideal": "día a día · oficina · noches",
+"familia": "Aromática · Fougère",
+"notas": {
+"salida": [
+"bergamota",
+"pimienta"
+],
+"corazon": [
+"pimienta de Sichuan",
+"lavanda",
+"pimienta rosa",
+"vetiver"
+],
+"fondo": [
+"ambroxan",
+"cedro",
+"ládano"
+]
+}
+},
+{
+"n": 65,
+"id": 87,
+"nombre": "Piña y Menta",
+"gancho": "Una frescura amable que le gusta a todo el mundo.",
+"sensacion": "Menta, piña y sándalo.",
+"ideal": "uso diario · universidad · calor",
+"familia": "Aromática · Fougère",
+"notas": {
+"salida": [
+"menta",
+"toronja (pomelo)",
+"hojas de violeta"
+],
+"corazon": [
+"piña",
+"canela",
+"rosa"
+],
+"fondo": [
+"almizcle blanco",
+"sándalo",
+"ládano"
+]
+}
+},
+{
+"n": 66,
+"id": 131,
+"nombre": "Menta e Incienso",
+"gancho": "Limpio, verde y con personalidad.",
+"sensacion": "Limón, menta, grosellas e incienso.",
+"ideal": "día · deporte · calor",
+"familia": "Aromática · Acuática",
+"notas": {
+"salida": [
+"limón",
+"pimienta rosa",
+"menta",
+"grosellas negras"
+],
+"corazon": [
+"manzana",
+"incienso",
+"cedro"
+],
+"fondo": [
+"pachulí",
+"jazmín",
+"jengibre",
+"sándalo"
+]
+}
+},
+{
+"n": 67,
+"id": 132,
+"nombre": "Piña y Caramelo",
+"gancho": "Frutal, dulce y lleno de energía.",
+"sensacion": "Mandarina, piña y caramelo.",
+"ideal": "salidas · fiestas · noches",
+"familia": "Aromática · Frutal",
+"notas": {
+"salida": [
+"mandarina",
+"piña",
+"manzana verde"
+],
+"corazon": [
+"cedro",
+"vainilla",
+"musgo de roble"
+],
+"fondo": [
+"ámbar gris",
+"notas amaderadas",
+"caramelo",
+"almizcle"
+]
+}
+},
+{
+"n": 68,
+"id": 95,
+"nombre": "Té Verde",
+"gancho": "Pureza en la piel: fresco, limpio y distinguido.",
+"sensacion": "Bergamota, té verde y grosellas.",
+"ideal": "oficina · día a día · calor",
+"familia": "Aromática",
+"notas": {
+"salida": [
+"bergamota",
+"mandarina"
+],
+"corazon": [
+"té verde",
+"grosellas negras"
+],
+"fondo": [
+"almizcle",
+"petit grain",
+"sándalo",
+"gálbano"
+]
+}
+},
+{
+"n": 69,
+"id": 57,
+"nombre": "Peonía y Almendra",
+"gancho": "Tierna, fresca y muy femenina.",
+"sensacion": "Almendra, peonía y vainilla.",
+"ideal": "uso diario · citas de día · celebraciones",
+"familia": "Chipre · Floral",
+"notas": {
+"salida": [
+"bergamota",
+"almendra amarga"
+],
+"corazon": [
+"peonía",
+"ylang-ylang"
+],
+"fondo": [
+"vainilla",
+"cumarina"
+]
+}
+},
+{
+"n": 70,
+"id": 96,
+"nombre": "Abedul y Piña",
+"gancho": "El perfume del hombre que va a la cabeza.",
+"sensacion": "Piña, grosellas y abedul ahumado.",
+"ideal": "oficina · reuniones · eventos",
+"familia": "Chipre · Frutal",
+"notas": {
+"salida": [
+"bergamota",
+"grosellas negras",
+"manzana",
+"limón (lima ácida)"
+],
+"corazon": [
+"piña",
+"pachulí",
+"jazmín"
+],
+"fondo": [
+"abedul",
+"almizcle",
+"musgo de roble",
+"cedro"
+]
+}
+},
+{
+"n": 71,
+"id": 55,
+"nombre": "Seis Cítricos",
+"gancho": "Seis cítricos en un solo perfume. Pura energía.",
+"sensacion": "Limón, toronja, naranja y almizcle.",
+"ideal": "deporte · calor · día",
+"familia": "Cítrica · Aromática",
+"notas": {
+"salida": [
+"limón (lima ácida)",
+"lima (limón verde)",
+"toronja (pomelo)",
+"naranja sanguina"
+],
+"corazon": [
+"pimienta rosa",
+"ámbar blanco",
+"grosellas negras"
+],
+"fondo": [
+"almizcle",
+"musgo de roble",
+"pachulí"
+]
+}
+},
+{
+"n": 72,
+"id": 99,
+"nombre": "Pera y Jengibre",
+"gancho": "Fresco, frutal y para cualquier momento.",
+"sensacion": "Mandarina, jengibre, pera y almizcle.",
+"ideal": "oficina · viajes · día a día",
+"familia": "Cítrica · Aromática",
+"notas": {
+"salida": [
+"mandarina",
+"jengibre",
+"bergamota",
+"menta"
+],
+"corazon": [
+"pera",
+"flor de azahar"
+],
+"fondo": [
+"almizcle",
+"ámbar",
+"cedro"
+]
+}
+},
+{
+"n": 73,
+"id": 102,
+"nombre": "Neroli y Té Negro",
+"gancho": "Elegancia luminosa para quien valora los detalles.",
+"sensacion": "Neroli, jengibre y té negro.",
+"ideal": "oficina · eventos · cenas",
+"familia": "Cítrica · Aromática",
+"notas": {
+"salida": [
+"cidra",
+"bergamota",
+"naranja siciliana"
+],
+"corazon": [
+"neroli de Túnez",
+"jengibre",
+"canela"
+],
+"fondo": [
+"té negro",
+"ambroxan",
+"madera de gaiac",
+"incienso de olíbano"
+]
+}
+},
+{
+"n": 74,
+"id": 118,
+"nombre": "Avellana Cítrica",
+"gancho": "Dulce, cítrico y soleado: imposible no sonreír.",
+"sensacion": "Cítricos, frutas tropicales y chocolate.",
+"ideal": "salidas · vacaciones · tardes",
+"familia": "Cítrica · Gourmand",
+"notas": {
+"salida": [
+"naranja siciliana",
+"bergamota",
+"limón siciliano",
+"frutas rojas/amarillas"
+],
+"corazon": [
+"frutales tropicales",
+"jazmín",
+"sándalo",
+"ámbar gris"
+],
+"fondo": [
+"vainilla de Madagascar",
+"chocolate",
+"avellana",
+"benjuí de Siam"
+]
+}
+},
+{
+"n": 75,
+"id": 116,
+"nombre": "Limón de Amalfi",
+"gancho": "Frescura italiana que se siente cara.",
+"sensacion": "Limón de Amalfi, menta y almizcle.",
+"ideal": "calor · día a día · oficina",
+"familia": "Cítrica · Aromática",
+"notas": {
+"salida": [
+"limón de Amalfi",
+"naranja tangerina",
+"bergamota",
+"petit grain"
+],
+"corazon": [
+"menta",
+"lirio de los valles",
+"rosa"
+],
+"fondo": [
+"almizcle",
+"cedro de Virginia",
+"pachulí",
+"ámbar"
+]
+}
+},
+{
+"n": 76,
+"id": 81,
+"nombre": "Canela y Cuero",
+"gancho": "Para el que llega a la fiesta y todos lo notan.",
+"sensacion": "Mandarina roja, canela y cuero.",
+"ideal": "fiestas · discotecas · noches",
+"familia": "Cuero",
+"notas": {
+"salida": [
+"mandarina roja",
+"pomelo",
+"menta"
+],
+"corazon": [
+"canela amaderada",
+"notas especiadas",
+"rosa cálida"
+],
+"fondo": [
+"ámbar",
+"cuero",
+"notas amaderadas",
+"pachulí de la India"
+]
+}
+},
+{
+"n": 77,
+"id": 24,
+"nombre": "Miel y Cuero",
+"gancho": "Sensual, dulce y difícil de olvidar.",
+"sensacion": "Canela, miel, praliné y cuero.",
+"ideal": "citas · noches · temporada fría",
+"familia": "Cuero",
+"notas": {
+"salida": [
+"canela",
+"azafrán"
+],
+"corazon": [
+"miel",
+"flor de azahar del naranjo",
+"ciprés"
+],
+"fondo": [
+"praliné",
+"cuero",
+"almendra"
+]
+}
+},
+{
+"n": 78,
+"id": 148,
+"nombre": "Avellana y Cuero",
+"gancho": "El clásico elegante con un toque moderno.",
+"sensacion": "Avellana, chocolate, café y cuero.",
+"ideal": "cenas · citas · oficina en temporada fría",
+"familia": "Cuero",
+"notas": {
+"salida": [
+"bergamota",
+"mirto"
+],
+"corazon": [
+"avellana",
+"chocolate",
+"granos de café tostado"
+],
+"fondo": [
+"cuero",
+"cedro"
+]
+}
+},
+{
+"n": 79,
+"id": 107,
+"nombre": "Cuero y Papiro",
+"gancho": "Intenso, sofisticado y con mucho carácter.",
+"sensacion": "Azafrán, cuero, rosa y papiro.",
+"ideal": "noches · eventos · frío",
+"familia": "Cuero",
+"notas": {
+"salida": [
+"azafrán",
+"manzana",
+"canela"
+],
+"corazon": [
+"cuero",
+"rosa"
+],
+"fondo": [
+"pachulí",
+"musgo",
+"almizcle",
+"papiro de Egipto"
+]
+}
+},
+{
+"n": 80,
+"id": 124,
+"nombre": "Cardamomo y Cisto",
+"gancho": "Cálido, especiado y de gran duración.",
+"sensacion": "Cardamomo, cuero, lavanda y vainilla.",
+"ideal": "noches · temporada fría · eventos",
+"familia": "Especiada · Ambarada / Oriental",
+"notas": {
+"salida": [
+"cardamomo",
+"nuez moscada",
+"elemí"
+],
+"corazon": [
+"pimienta de Jamaica",
+"cuero",
+"lavanda"
+],
+"fondo": [
+"cisto",
+"ládano",
+"pachulí",
+"vainilla"
+]
+}
+},
+{
+"n": 81,
+"id": 33,
+"nombre": "Crème Brûlée",
+"gancho": "Un postre especiado que huele a lujo.",
+"sensacion": "Piña, crème brûlée, canela y vainilla.",
+"ideal": "noches · frío · ocasiones especiales",
+"familia": "Especiada · Gourmand",
+"notas": {
+"salida": [
+"piña",
+"crème brûlée"
+],
+"corazon": [
+"canela",
+"cúrcuma (azafrán de la India)",
+"pimienta negra",
+"benjuí"
+],
+"fondo": [
+"vainilla",
+"sándalo",
+"cachemira",
+"musgo"
+]
+}
+},
+{
+"n": 82,
+"id": 18,
+"nombre": "Burbujas de Rosa",
+"gancho": "Huele a celebración y a brindis.",
+"sensacion": "Burbujas de champaña, durazno y rosa.",
+"ideal": "fiestas · salidas con amigas · celebraciones",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"champaña rosé",
+"pimienta rosa"
+],
+"corazon": [
+"flor del duraznero (flor del melocotonero)",
+"rosa"
+],
+"fondo": [
+"almizcle blanco",
+"notas amaderadas"
+]
+}
+},
+{
+"n": 83,
+"id": 20,
+"nombre": "Melón y Lirio",
+"gancho": "Fresca, floral y llena de luz.",
+"sensacion": "Melón, flores acuáticas y sándalo.",
+"ideal": "uso diario · oficina · calor",
+"familia": "Floral",
+"notas": {
+"salida": [
+"melón",
+"azucena",
+"osmanto (olivo oloroso)",
+"naranja tangerina"
+],
+"corazon": [
+"nenúfar (lirio de agua)",
+"lirio de los valles (muguete)",
+"lavanda",
+"salvia"
+],
+"fondo": [
+"almizcle",
+"sándalo",
+"vetiver",
+"ámbar"
+]
+}
+},
+{
+"n": 84,
+"id": 47,
+"nombre": "Crema y Coco",
+"gancho": "Suave como un abrazo. Adictiva desde el primer momento.",
+"sensacion": "Pera, crema batida, coco y praliné.",
+"ideal": "uso diario · citas · noches tranquilas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"lavanda",
+"pera",
+"bergamota"
+],
+"corazon": [
+"crema batida",
+"coco",
+"praliné",
+"orquídea de vainilla"
+],
+"fondo": [
+"almizcle",
+"notas amaderadas"
+]
+}
+},
+{
+"n": 85,
+"id": 74,
+"nombre": "Rosa y Lichi",
+"gancho": "Elegante, sensual y de las que dejan huella.",
+"sensacion": "Durazno, rosa, lichi y pachulí.",
+"ideal": "noches · eventos · cenas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"naranja",
+"bergamota",
+"toronja (pomelo)",
+"durazno (melocotón)"
+],
+"corazon": [
+"rosa",
+"jazmín",
+"geranio",
+"lichi"
+],
+"fondo": [
+"pachulí",
+"almizcle",
+"vainilla",
+"vetiver"
+]
+}
+},
+{
+"n": 86,
+"id": 100,
+"nombre": "Leche y Miel",
+"gancho": "Huele a pastelería francesa… en tu piel.",
+"sensacion": "Caramelo, leche, miel y praliné.",
+"ideal": "noches · citas · temporada fría",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"caramelo",
+"leche",
+"azúcar"
+],
+"corazon": [
+"miel",
+"flores blancas"
+],
+"fondo": [
+"vainilla",
+"praliné",
+"almizcle"
+]
+}
+},
+{
+"n": 87,
+"id": 112,
+"nombre": "Nardo y Vainilla",
+"gancho": "Sensual y misteriosa: para las noches que importan.",
+"sensacion": "Canela, nardos, incienso y vainilla.",
+"ideal": "noches · citas · eventos",
+"familia": "Floral · Gourmand",
+"notas": {
+"salida": [
+"canela",
+"acorde ambarado"
+],
+"corazon": [
+"nardos",
+"jazmín",
+"incienso",
+"flor de mahonia"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"haba tonka"
+]
+}
+},
+{
+"n": 88,
+"id": 62,
+"nombre": "Coco y Azahar",
+"gancho": "Vacaciones permanentes en un frasco.",
+"sensacion": "Bayas, coco y flor de azahar.",
+"ideal": "playa · vacaciones · días de calor",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"bayas silvestres",
+"notas verdes"
+],
+"corazon": [
+"coco",
+"flor de azahar del naranjo",
+"notas lácteas",
+"nenúfar (lirio de agua)"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"haba tonka"
+]
+}
+},
+{
+"n": 89,
+"id": 98,
+"nombre": "Durazno y Rosa",
+"gancho": "Como piel recién bañada, pero más bonita.",
+"sensacion": "Durazno, bayas y rosa.",
+"ideal": "uso diario · universidad · oficina",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"durazno",
+"bayas"
+],
+"corazon": [
+"rosa"
+],
+"fondo": [
+"almizcle blanco"
+]
+}
+},
+{
+"n": 90,
+"id": 68,
+"nombre": "Limón y Bambú",
+"gancho": "El clásico fresco que siempre funciona.",
+"sensacion": "Limón, manzana, bambú y jazmín.",
+"ideal": "uso diario · playa · oficina",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"limón siciliano (lima siciliana)",
+"manzana",
+"cedro",
+"campanilla"
+],
+"corazon": [
+"bambú",
+"jazmín",
+"rosa blanca"
+],
+"fondo": [
+"cedro",
+"almizcle",
+"ámbar"
+]
+}
+},
+{
+"n": 91,
+"id": 69,
+"nombre": "Lichi y Frambuesa",
+"gancho": "Frutal, fresca y romántica.",
+"sensacion": "Lichi, frambuesa y rosa blanca.",
+"ideal": "uso diario · salidas con amigas · citas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"lichi",
+"frambuesa",
+"hojas de violeta"
+],
+"corazon": [
+"rosa blanca",
+"peonía",
+"jazmín"
+],
+"fondo": [
+"almizcle",
+"vainilla"
+]
+}
+},
+{
+"n": 92,
+"id": 71,
+"nombre": "Higo y Loto",
+"gancho": "La frescura perfecta para los días de más calor.",
+"sensacion": "Higo, melón, agua de coco y flor de loto.",
+"ideal": "playa · oficina · calor",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"mandarina verde",
+"higo",
+"melón",
+"agua de coco"
+],
+"corazon": [
+"flor de loto",
+"nenúfar (lirio de agua)",
+"jazmín"
+],
+"fondo": [
+"almizcle",
+"ambroxan",
+"sándalo",
+"vainilla"
+]
+}
+},
+{
+"n": 93,
+"id": 39,
+"nombre": "Merengue",
+"gancho": "Dulce como un postre recién horneado.",
+"sensacion": "Leche de rosas, merengue y almendra.",
+"ideal": "uso diario · citas · noches tranquilas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"leche de rosas"
+],
+"corazon": [
+"merengue",
+"almendra"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"sándalo"
+]
+}
+},
+{
+"n": 94,
+"id": 80,
+"nombre": "Granada y Goji",
+"gancho": "Ligera, colorida y fácil de llevar.",
+"sensacion": "Goji, granada e hibisco.",
+"ideal": "oficina · tardes · clima cálido",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"bergamota",
+"bayas de goji"
+],
+"corazon": [
+"granada",
+"nenúfar (lirio de agua)",
+"hibisco"
+],
+"fondo": [
+"almizcle",
+"cedro de Virginia"
+]
+}
+},
+{
+"n": 95,
+"id": 122,
+"nombre": "Magnolia y Fresia",
+"gancho": "Fresca, floral y sofisticada.",
+"sensacion": "Hojas de manzano, fresia y magnolia.",
+"ideal": "oficina · reuniones de día · calor",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"hojas del manzano",
+"mandarina",
+"osmanto japones"
+],
+"corazon": [
+"fresia amarilla",
+"magnolia",
+"boronia parda"
+],
+"fondo": [
+"almizcle",
+"iris blanco"
+]
+}
+},
+{
+"n": 96,
+"id": 37,
+"nombre": "Rosa y Azafrán",
+"gancho": "Rosas de lujo con un toque oriental.",
+"sensacion": "Rosa, azafrán, jazmín y oud.",
+"ideal": "noches · eventos · celebraciones",
+"familia": "Floral",
+"notas": {
+"salida": [
+"rosa",
+"azafrán"
+],
+"corazon": [
+"jazmín",
+"violeta"
+],
+"fondo": [
+"ámbar",
+"madera de oud"
+]
+}
+},
+{
+"n": 97,
+"id": 121,
+"nombre": "Algodón de Azúcar",
+"gancho": "Dulce, divertida y juvenil.",
+"sensacion": "Manzana roja, algodón de azúcar y macarrones.",
+"ideal": "salidas · fiestas · universidad",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"manzana roja",
+"especias",
+"zarzamora",
+"mandarina"
+],
+"corazon": [
+"algodón de azúcar",
+"lirio de los valles",
+"macarrones dulces"
+],
+"fondo": [
+"almizcle",
+"vetiver",
+"madera de cachemira",
+"pachulí"
+]
+}
+},
+{
+"n": 98,
+"id": 113,
+"nombre": "Bombón de Fresa",
+"gancho": "Coqueta, dulce y frutal.",
+"sensacion": "Fresa salvaje, granada y malvavisco.",
+"ideal": "universidad · salidas con amigas · citas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"manzana",
+"granada",
+"fresa salvaje"
+],
+"corazon": [
+"jazmín",
+"orquídea blanca"
+],
+"fondo": [
+"malvavisco (bombón)",
+"almizcle",
+"sándalo"
+]
+}
+},
+{
+"n": 99,
+"id": 83,
+"nombre": "Frambuesa y Coco",
+"gancho": "Huele a postre sin perder frescura.",
+"sensacion": "Frambuesa, pera, coco y macarrones.",
+"ideal": "salidas · fiestas · citas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"frambuesa",
+"pera"
+],
+"corazon": [
+"coco",
+"rosa rosada"
+],
+"fondo": [
+"macarrones dulces",
+"almizcle"
+]
+}
+},
+{
+"n": 100,
+"id": 86,
+"nombre": "Magnolia y Grosella",
+"gancho": "Fresca, limpia y muy femenina.",
+"sensacion": "Manzana, magnolia y grosella blanca.",
+"ideal": "uso diario · oficina · universidad",
+"familia": "Floral · Amaderada",
+"notas": {
+"salida": [
+"manzana",
+"mandarina",
+"magnolia"
+],
+"corazon": [
+"grosella blanca",
+"peonía",
+"jazmín"
+],
+"fondo": [
+"almizcle",
+"sándalo",
+"maderas ambarinas"
+]
+}
+},
+{
+"n": 101,
+"id": 84,
+"nombre": "Durazno Confitado",
+"gancho": "Divertida, dulce y muy reconocible.",
+"sensacion": "Frutas confitadas, durazno y un toque de chicle.",
+"ideal": "salidas · fiestas · días soleados",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"frutas confitadas",
+"naranja",
+"limón (lima ácida)"
+],
+"corazon": [
+"chicle",
+"rosa",
+"durazno (melocotón)",
+"moras azules"
+],
+"fondo": [
+"almizcle",
+"ambroxan",
+"cedro"
+]
+}
+},
+{
+"n": 102,
+"id": 85,
+"nombre": "Sorbete de Limón",
+"gancho": "Una frescura que sorprende.",
+"sensacion": "Limón, sorbete, orégano y fresia.",
+"ideal": "uso diario · playa · oficina",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"limón (lima ácida)",
+"sorbete",
+"orégano"
+],
+"corazon": [
+"arena",
+"fresia",
+"jazmín"
+],
+"fondo": [
+"almizcle",
+"ciprés",
+"vetiver"
+]
+}
+},
+{
+"n": 103,
+"id": 88,
+"nombre": "Lichi y Grosella",
+"gancho": "Dulce sin ser pesada. Coqueta y moderna.",
+"sensacion": "Lichi, grosella roja, rosa y vainilla.",
+"ideal": "citas · salidas · celebraciones",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"lichi",
+"grosella roja"
+],
+"corazon": [
+"rosa"
+],
+"fondo": [
+"vainilla",
+"vetiver"
+]
+}
+},
+{
+"n": 104,
+"id": 46,
+"nombre": "Fresa Efervescente",
+"gancho": "Dulce y burbujeante como un caramelo.",
+"sensacion": "Grosellas, caramelo de fresa y gardenia.",
+"ideal": "salidas · fiestas · universidad",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"grosellas negras",
+"mandarina verde"
+],
+"corazon": [
+"caramelo de fresa",
+"gardenia"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"ámbar",
+"sándalo"
+]
+}
+},
+{
+"n": 105,
+"id": 92,
+"nombre": "Cereza y Bayas",
+"gancho": "Huele deliciosa todo el día.",
+"sensacion": "Cereza, bayas silvestres y rosa.",
+"ideal": "salidas · citas · fiestas",
+"familia": "Floral · Frutal",
+"notas": {
+"salida": [
+"bayas silvestres",
+"cereza",
+"naranja",
+"bergamota"
+],
+"corazon": [
+"rosa",
+"vainilla",
+"flores blancas"
+],
+"fondo": [
+"notas atalcadas",
+"almizcle",
+"ámbar"
+]
+}
+},
+{
+"n": 106,
+"id": 36,
+"nombre": "Jazmín y Chocolate",
+"gancho": "Original, elegante y distinta a todo.",
+"sensacion": "Jazmín, chocolate y abeto.",
+"ideal": "noches · eventos · temporada fresca",
+"familia": "Floral",
+"notas": {
+"salida": [
+"cítricos",
+"enebro"
+],
+"corazon": [
+"jazmín",
+"chocolate",
+"abeto balsámico"
+],
+"fondo": [
+"maderas ambarinas",
+"musgo"
+]
+}
+},
+{
+"n": 107,
+"id": 89,
+"nombre": "Violeta y Caramelo",
+"gancho": "Suave, dulce y muy sensual.",
+"sensacion": "Caramelo, violeta y vainilla atalcada.",
+"ideal": "noches · citas · frío",
+"familia": "Floral",
+"notas": {
+"salida": [
+"caramelo",
+"violeta",
+"pimienta rosa",
+"bergamota"
+],
+"corazon": [
+"notas atalcadas",
+"rosa",
+"pachulí"
+],
+"fondo": [
+"vainilla",
+"almizcle",
+"notas animálicas"
+]
+}
+},
+{
+"n": 108,
+"id": 106,
+"nombre": "Mango y Jengibre",
+"gancho": "Tropical, picante y lleno de vida.",
+"sensacion": "Mango, jengibre, ruibarbo y praliné.",
+"ideal": "fiestas · vacaciones · calor",
+"familia": "Floral",
+"notas": {
+"salida": [
+"mango",
+"limón (lima ácida)",
+"jengibre",
+"ruibarbo"
+],
+"corazon": [
+"pimienta rosa",
+"jazmín",
+"violeta",
+"praliné"
+],
+"fondo": [
+"haba tonka",
+"cedro",
+"ámbar gris",
+"musgo"
+]
+}
+},
+{
+"n": 109,
+"id": 125,
+"nombre": "Mandarina y Frambuesa",
+"gancho": "Frescura dulce que acompaña todo el día.",
+"sensacion": "Mandarina, frambuesa y almizcle.",
+"ideal": "uso diario · oficina · universidad",
+"familia": "Frutal · Cítrica",
+"notas": {
+"salida": [
+"mandarina",
+"bergamota",
+"pomelo"
+],
+"corazon": [
+"grosellas negras",
+"frambuesa"
+],
+"fondo": [
+"almizcle",
+"naranja",
+"ámbar"
+]
+}
+},
+{
+"n": 110,
+"id": 128,
+"nombre": "Bayas Silvestres",
+"gancho": "Juvenil, espontánea y libre.",
+"sensacion": "Grosellas, moras azules y frambuesa.",
+"ideal": "uso diario · tardes · universidad",
+"familia": "Frutal · Gourmand",
+"notas": {
+"salida": [
+"grosellas negras",
+"moras azules",
+"frambuesa"
+],
+"corazon": [
+"jazmín",
+"violeta"
+],
+"fondo": [
+"maderas blancas",
+"almizcle",
+"ámbar"
+]
+}
+},
+{
+"n": 111,
+"id": 137,
+"nombre": "Pitahaya y Frangipani",
+"gancho": "Una fiesta tropical en tu piel.",
+"sensacion": "Pitahaya, piña, frangipani y vainilla.",
+"ideal": "fiestas · vacaciones · noches",
+"familia": "Frutal · Ambarada / Oriental",
+"notas": {
+"salida": [
+"pitahaya",
+"piña",
+"mandarina amarilla"
+],
+"corazon": [
+"frangipani (plumeria",
+"plumaria",
+"atapaima)",
+"peonía roja"
+],
+"fondo": [
+"vainilla",
+"pachulí",
+"ámbar",
+"haba tonka"
+]
+}
+},
+{
+"n": 112,
+"id": 75,
+"nombre": "Fresa y Caramelo",
+"gancho": "Para las que aman lo dulce sin miedo.",
+"sensacion": "Fresa, caramelo y maracuyá.",
+"ideal": "salidas · fiestas · citas",
+"familia": "Frutal · Gourmand",
+"notas": {
+"salida": [
+"fresa",
+"frambuesa",
+"geranio",
+"durazno (melocotón)"
+],
+"corazon": [
+"caramelo",
+"jazmín",
+"maracuyá (fruta de la pasión)"
+],
+"fondo": [
+"pachulí",
+"almizcle",
+"ámbar"
+]
+}
+},
+{
+"n": 113,
+"id": 142,
+"nombre": "Durazno y Sal",
+"gancho": "Frutal, fresco y con un toque salado.",
+"sensacion": "Durazno, melón, sal marina y ámbar.",
+"ideal": "salidas · día a día · calor",
+"familia": "Frutal · Amaderada",
+"notas": {
+"salida": [
+"manzana",
+"durazno",
+"melón",
+"bergamota"
+],
+"corazon": [
+"ámbar",
+"sal marina",
+"cedro",
+"lirio de los valles"
+],
+"fondo": [
+"ámbar",
+"pachulí",
+"sándalo",
+"musgo"
+]
+}
+},
+{
+"n": 114,
+"id": 79,
+"nombre": "Mandarina y Cempasúchil",
+"gancho": "Cálido, luminoso y diferente.",
+"sensacion": "Mandarina, azafrán, caramelo y vetiver.",
+"ideal": "oficina · salidas · citas",
+"familia": "Frutal · Cítrica",
+"notas": {
+"salida": [
+"mandarina",
+"naranja",
+"azafrán",
+"salvia"
+],
+"corazon": [
+"caramelo",
+"haba tonka",
+"cempasúchil"
+],
+"fondo": [
+"ambroxan",
+"cedro",
+"vetiver"
+]
+}
+},
+{
+"n": 115,
+"id": 144,
+"nombre": "Mango y Nueces",
+"gancho": "Tropical, goloso y de larga estela.",
+"sensacion": "Jengibre, mango, haba tonka y vainilla.",
+"ideal": "vacaciones · salidas · calor",
+"familia": "Frutal · Gourmand",
+"notas": {
+"salida": [
+"jengibre",
+"limón",
+"pimienta rosa",
+"flores blancas"
+],
+"corazon": [
+"mango",
+"haba tonka",
+"notas amaderadas"
+],
+"fondo": [
+"ámbar",
+"madera de gaiac",
+"almizcle",
+"nueces"
+]
+}
+},
+{
+"n": 116,
+"id": 141,
+"nombre": "Fresa y Crema",
+"gancho": "Dulzura suave que no vas a dejar de oler.",
+"sensacion": "Fresa, crema batida y malvavisco.",
+"ideal": "uso diario · citas · momentos acogedores",
+"familia": "Gourmand · Frutal",
+"notas": {
+"salida": [
+"fresa",
+"frambuesa",
+"limón"
+],
+"corazon": [
+"ambroxan",
+"flor de azahar",
+"crema batida"
+],
+"fondo": [
+"malvavisco (bombón)",
+"almizcle",
+"vainilla"
+]
+}
+},
+{
+"n": 117,
+"id": 147,
+"nombre": "Higo y Verbena",
+"gancho": "Verde, natural y muy elegante.",
+"sensacion": "Pomelo, verbena, higo y maderas.",
+"ideal": "oficina · día a día · calor",
+"familia": "Verde · Aromática",
+"notas": {
+"salida": [
+"pomelo",
+"bergamota",
+"verbena",
+"melón"
+],
+"corazon": [
+"higo",
+"iris",
+"hojas de violeta",
+"cardamomo"
+],
+"fondo": [
+"ciprés",
+"madera de gaiac",
+"sándalo",
+"cedro"
+]
+}
+}
+]
