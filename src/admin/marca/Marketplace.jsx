@@ -57,6 +57,13 @@ function Publicacion({ pub, prod, pie }) {
 
   return (
     <li className={`marca-mp ${agotado ? 'marca-mp--agotado' : ''}`}>
+      {prod && (
+        <div className="marca-mp-original" title="Solo para ti: así sabes cuál es. No lo escribas en la publicación de Marketplace.">
+          <span><i className="fas fa-lock" aria-hidden="true" /> ES EL 1.1 DE</span>
+          <b>{prod.name}</b>
+          {prod.brand?.name && <small>{prod.brand.name}</small>}
+        </div>
+      )}
       <header className="marca-mp-cabeza">
         <div>
           <span className="marca-mute marca-mp-num">Nº {String(pub.n).padStart(3, '0')}</span>
@@ -84,11 +91,6 @@ function Publicacion({ pub, prod, pie }) {
         <button type="button" className="btn-secondary" disabled={!prod} onClick={() => copiar(String(Math.round(Number(prod.price))), 'Precio copiado')}><i className="far fa-copy" /> Precio</button>
         <button type="button" className="btn-primary" onClick={() => copiar(texto, 'Descripción copiada')}><i className="far fa-copy" /> Descripción</button>
       </div>
-      {prod && (
-        <p className="marca-mp-ref" title="Solo para saber qué esencia preparar. Nunca lo escribas en Marketplace: es marca de otra casa.">
-          <i className="fas fa-lock" aria-hidden="true" /> Ref. interna (no publicar): {prod.name}
-        </p>
-      )}
     </li>
   );
 }
@@ -100,6 +102,7 @@ export default function Marketplace({ alerta }) {
   const [busqueda, setBusqueda] = useState('');
   const [genero, setGenero] = useState('');
   const [soloDisponibles, setSoloDisponibles] = useState(false);
+  const [orden, setOrden] = useState('original'); // original (A–Z) | numero
 
   useEffect(() => {
     apiJson('productos')
@@ -120,15 +123,17 @@ export default function Marketplace({ alerta }) {
       if (genero && prod?.gender !== genero) return false;
       if (soloDisponibles && Number(prod?.agotado) === 1) return false;
       if (!q) return true;
-      return normalizar(`${pub.nombre} ${pub.familia} ${pub.sensacion} ${Object.values(pub.notas).flat().join(' ')} ${prod?.name || ''}`).includes(q);
-    });
-  }, [productos, busqueda, genero, soloDisponibles]);
+      return normalizar(`${prod?.name || ''} ${prod?.brand?.name || ''} ${prod?.originalName || ''} ${pub.nombre} ${pub.familia} ${Object.values(pub.notas).flat().join(' ')}`).includes(q);
+    }).sort((a, b) => (orden === 'numero' || !productos ? a.n - b.n
+      : String(productos.get(a.id)?.name || '').localeCompare(String(productos.get(b.id)?.name || ''), 'es', { sensitivity: 'base' })));
+  }, [productos, busqueda, genero, soloDisponibles, orden]);
 
   return (
     <div className="marca-mpv">
       <p className="marca-mute marca-pers-ayuda">
         Una publicación por perfume, con su nombre propio de Alta Densidad. La primera línea es el gancho: es lo que la gente lee en la lista de Marketplace.
-        Copia título, precio y descripción; las fotos están en Piezas → «Facebook Marketplace». Nunca escribas en la publicación la referencia interna.
+        Arriba de cada tarjeta ves de cuál 1.1 se trata (solo en el panel); busca por el nombre del original para encontrarlo al instante.
+        Copia título, precio y descripción tal cual: no llevan el nombre del original para que Marketplace no tumbe la publicación.
       </p>
 
       <section className="marca-mp-pie">
@@ -149,7 +154,7 @@ export default function Marketplace({ alerta }) {
       <div className="marca-filtros">
         <div className="search-box">
           <i className="fas fa-search" />
-          <input type="search" className="admin-search-input" placeholder="Nombre, nota o familia…" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+          <input type="search" className="admin-search-input" placeholder="Busca el original (ej. Sauvage) o el tuyo…" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
         </div>
         <div className="marca-segmento" role="group" aria-label="Género">
           {[['', 'Todos'], ['Masculino', 'Hombre'], ['Femenino', 'Mujer'], ['Unisex', 'Unisex']].map(([k, t]) => (
@@ -159,6 +164,10 @@ export default function Marketplace({ alerta }) {
         <button type="button" className={`marca-toggle ${soloDisponibles ? 'activo' : ''}`} onClick={() => setSoloDisponibles(!soloDisponibles)} aria-pressed={soloDisponibles}>
           <i className="fas fa-check" /> Solo disponibles
         </button>
+        <div className="marca-segmento" role="group" aria-label="Orden">
+          <button type="button" className={orden === 'original' ? 'activo' : ''} onClick={() => setOrden('original')}>Original A–Z</button>
+          <button type="button" className={orden === 'numero' ? 'activo' : ''} onClick={() => setOrden('numero')}>Por Nº</button>
+        </div>
       </div>
       <p className="marca-mute marca-mp-cuenta">{productos ? `${lista.length} publicaciones` : 'Cargando precios del catálogo…'}</p>
 

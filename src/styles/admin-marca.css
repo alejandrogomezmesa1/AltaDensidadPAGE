@@ -485,3 +485,8 @@
 .marca-mp-ref { margin: 0; font-size: 11px; color: var(--c-mute); display: flex; gap: 6px; align-items: baseline; overflow-wrap: anywhere; }
 /* El buscador conserva el espacio de la lupa (la regla general de inputs de Marca lo quitaba) */
 .marca .search-box input[type="search"] { padding-left: 34px; }
+/* De cuál 1.1 se trata: arriba y visible (solo en el panel) */
+.marca-mp-original { display: grid; gap: 2px; margin: -16px -16px 0; padding: 12px 16px; background: color-mix(in srgb, var(--c-accent) 12%, transparent); border-bottom: var(--bw) solid var(--c-accent); }
+.marca-mp-original span { font: 500 10px var(--f-ui); letter-spacing: 0.2em; color: var(--c-accent); display: flex; gap: 6px; align-items: center; }
+.marca-mp-original b { font: 500 18px/1.2 var(--f-ui); color: var(--c-ink); overflow-wrap: anywhere; }
+.marca-mp-original small { font-size: 12px; color: var(--c-mute); }
