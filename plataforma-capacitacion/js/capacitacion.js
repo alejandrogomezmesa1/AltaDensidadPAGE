@@ -1,9 +1,10 @@
 /**
  * Portal de inducción y capacitación · Fragancias de Alta Densidad
- * Estático, sin backend. Tres submódulos:
+ * Estático, sin backend. Cuatro submódulos:
  *   #/general     Inducción general (53 módulos; sin preguntas filtro; examen final al terminar)
  *   #/especifica  Inducción específica · Líder de Punto de Venta
  *   #/vestimenta  Manual de código de vestimenta y presentación
+ *   #/bienestar   Plan de bienestar · Fragancias Alta Densidad le apuesta a tu bienestar
  * Rutas: #/<pista>, #/<pista>/<módulo>, #/general/examen. El progreso se guarda en este navegador.
  */
 (function () {
@@ -30,11 +31,13 @@
             modulos: general, examen: true, icono: 'fa-building'
         },
         especifica: Object.assign({ n: '02', icono: 'fa-store' }, window.INDUCCION_ESPECIFICA),
-        vestimenta: Object.assign({ n: '03', icono: 'fa-shirt' }, window.MANUAL_VESTIMENTA)
+        vestimenta: Object.assign({ n: '03', icono: 'fa-shirt' }, window.MANUAL_VESTIMENTA),
+        bienestar: Object.assign({ n: '04', icono: 'fa-spa' }, window.PLAN_BIENESTAR)
     };
+    const ORDEN = ['general', 'especifica', 'vestimenta', 'bienestar'];
 
     // Progreso: la inducción general conserva las claves de la versión anterior
-    const CLAVES = { general: 'ad_capacitacion_completados', especifica: 'ad_cap_especifica', vestimenta: 'ad_cap_vestimenta' };
+    const CLAVES = { general: 'ad_capacitacion_completados', especifica: 'ad_cap_especifica', vestimenta: 'ad_cap_vestimenta', bienestar: 'ad_cap_bienestar' };
     const leidos = (clave) => leer(CLAVES[clave], []).map(String);
     const marcarLeido = (clave, id) => {
         const ls = leidos(clave);
@@ -52,9 +55,9 @@
     let teclas = null;
     document.addEventListener('keydown', (e) => { if (teclas) teclas(e); });
 
-    // ── Portada: imagotipo y los tres submódulos ──
+    // ── Portada: imagotipo y los cuatro submódulos ──
     function portada() {
-        const tarjetas = ['general', 'especifica', 'vestimenta'].map((k) => {
+        const tarjetas = ORDEN.map((k) => {
             const p = PISTAS[k];
             const a = avance(p);
             const accion = a.hechos === 0 ? 'Comenzar' : a.hechos >= a.total ? 'Repasar' : 'Continuar';
@@ -82,8 +85,8 @@
             <section class="sec" id="submodulos">
                 <div class="envoltura">
                     <span class="eyebrow">Tu formación</span>
-                    <h2 class="titular">Tres submódulos,<br><em>un mismo estándar.</em></h2>
-                    <p class="mute intro">Empieza por la inducción general, sigue con la inducción específica de tu cargo y termina con el manual de vestimenta. Puedes volver a cualquiera cuando quieras.</p>
+                    <h2 class="titular">Cuatro submódulos,<br><em>un mismo estándar.</em></h2>
+                    <p class="mute intro">Empieza por la inducción general, sigue con la inducción específica de tu cargo y el manual de vestimenta, y conoce el plan de bienestar que preparamos para ti. Puedes volver a cualquiera cuando quieras.</p>
                     <ol class="pistas">${tarjetas}</ol>
                     <a class="enlace-pdf" href="${PDF}" download><i class="fas fa-file-pdf" aria-hidden="true"></i> Descargar el manual institucional en PDF</a>
                 </div>
@@ -187,6 +190,23 @@
             case 'imagen':
                 return `<figure class="media media-guia"><a href="${esc(url(b.src))}" target="_blank" rel="noopener" title="Ver en tamaño completo"><img src="${esc(url(b.src))}" alt="${esc(b.alt)}" loading="lazy"></a>
                     ${b.pie ? `<figcaption>${esc(b.pie)} · <span class="mute">toca para ampliar</span></figcaption>` : ''}</figure>`;
+            case 'actividades':
+                // Tarjetas de actividades del plan de bienestar: ilustración (o ícono), frecuencia y duración
+                return `${b.titulo ? `<h3 class="sub">${esc(b.titulo)}</h3>` : ''}
+                    <ul class="actividades">${b.items.map((x) => `
+                        <li>
+                            ${x.img
+                                ? `<a class="act-img" href="${esc(url(x.img))}" target="_blank" rel="noopener" title="Ver en tamaño completo"><img src="${esc(url(x.img))}" alt="${esc(x.nombre)}" loading="lazy"></a>`
+                                : `<span class="act-img act-icono"><i class="fas ${esc(x.icono || 'fa-star')}" aria-hidden="true"></i></span>`}
+                            <div class="act-cuerpo">
+                                <b>${esc(x.nombre)}</b>
+                                <p>${esc(x.descripcion)}</p>
+                                <span class="act-meta"><span><i class="fas fa-calendar-days" aria-hidden="true"></i> ${esc(x.frecuencia)}</span><span><i class="fas fa-clock" aria-hidden="true"></i> ${esc(x.duracion)}</span></span>
+                            </div>
+                        </li>`).join('')}
+                    </ul>`;
+            case 'cita':
+                return `<blockquote class="cita">«${esc(b.texto)}»</blockquote>`;
             case 'chequeo':
                 return `<ul class="chequeo">${b.items.map((i, n) => `<li><label><input type="checkbox" data-chequeo="${n}"> <span>${esc(i)}</span></label></li>`).join('')}</ul>
                     <p class="mute chequeo-total" aria-live="polite">0 de ${b.items.length}</p>`;
@@ -235,14 +255,14 @@
         const ultimo = !sig;
         const destinoFinal = p.examen ? '#/general/examen' : `#/${p.clave}`;
         const a = avance(p);
-        const otras = ['general', 'especifica', 'vestimenta'].filter((k) => k !== p.clave).map((k) => PISTAS[k]);
+        const otras = ORDEN.filter((k) => k !== p.clave).map((k) => PISTAS[k]);
         app.innerHTML = `
             <div class="barra-lectura">
                 <button type="button" class="btn-indice" id="abrir-indice" aria-controls="cajon" aria-expanded="false" aria-label="Abrir el índice de ${esc(p.titulo)}">
                     <span class="btn-indice-ico" aria-hidden="true"><i></i><i></i><i></i></span>
                     <span class="btn-indice-t">Índice</span>
                 </button>
-                <span class="barra-lectura-t"><b>${esc(p.titulo)}</b><span class="mute">${i + 1} de ${p.modulos.length}</span></span>
+                <span class="barra-lectura-t"><b>${esc(p.corto || p.titulo)}</b><span class="mute">${i + 1} de ${p.modulos.length}</span></span>
                 <span class="barra-lectura-flechas">
                     ${ant ? `<a href="#/${p.clave}/${ant.id}" aria-label="Módulo anterior" title="Anterior (←)"><i class="fas fa-chevron-left" aria-hidden="true"></i></a>` : '<span></span>'}
                     ${sig ? `<a href="#/${p.clave}/${sig.id}" aria-label="Módulo siguiente" title="Siguiente (→)"><i class="fas fa-chevron-right" aria-hidden="true"></i></a>` : '<span></span>'}
@@ -277,7 +297,7 @@
             </aside>
 
             <article class="lector-articulo">
-                <span class="eyebrow">${esc(p.titulo)} · ${i + 1} de ${p.modulos.length}</span>
+                <span class="eyebrow">${esc(p.corto || p.titulo)} · ${i + 1} de ${p.modulos.length}</span>
                 <h1 class="titular">${esc(m.titulo)}</h1>
                 ${m.resumen ? `<p class="intro mute">${esc(m.resumen)}</p>` : ''}
                 <div class="contenido">${cuerpo}</div>
@@ -374,7 +394,7 @@
                     <svg class="gota" viewBox="0 0 100 100" aria-hidden="true"><use href="#gota-tallada"></use></svg>
                     <span class="eyebrow">Inducción general aprobada</span>
                     <h2 class="titular">${aciertos} de ${total}.<br><em>Bienvenido(a) al equipo.</em></h2>
-                    <p class="mute">Continúa con la inducción específica de tu cargo y el manual de vestimenta.</p>
+                    <p class="mute">Continúa con la inducción específica de tu cargo, el manual de vestimenta y el plan de bienestar.</p>
                     <div class="acciones"><a class="btn" href="#/especifica">Inducción específica</a><a class="btn btn-linea" href="${PDF}" download>Manual en PDF</a></div>
                 </div>`;
             } else {

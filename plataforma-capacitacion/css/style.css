@@ -161,7 +161,7 @@ main:focus { outline: none; }
 .estrecha { max-width: 780px; }
 
 /* Tarjetas de submódulos */
-.pistas { list-style: none; margin: 40px 0 28px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--filete); border: 1px solid var(--filete); }
+.pistas { list-style: none; margin: 40px 0 28px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--filete); border: 1px solid var(--filete); }
 .pista-tarjeta {
     position: relative;
     display: flex;
@@ -428,6 +428,7 @@ td:first-child { color: var(--humo); font-weight: 400; }
 .prendas span { display: block; padding: 10px 12px; font-size: 13px; color: var(--mute); line-height: 1.4; }
 .uniforme.sin-figura { grid-template-columns: 1fr; }
 .media-guia { max-width: 620px; }
+.media-guia img { max-height: 82vh; object-fit: contain; }
 .media-guia figcaption { padding: 10px 14px; font: 500 11px var(--f-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--oro); }
 
 /* Examen */
@@ -444,6 +445,20 @@ td:first-child { color: var(--humo); font-weight: 400; }
 .certificado .gota { width: 54px; height: 54px; margin-bottom: 10px; }
 .certificado .acciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 12px; }
 
+/* Plan de bienestar: actividades y citas */
+.actividades { list-style: none; margin: 0 0 24px; padding: 0; display: grid; gap: 1px; background: var(--filete); border: 1px solid var(--filete); }
+.actividades li { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); background: var(--tinta); }
+.act-img { position: relative; display: block; min-height: 170px; overflow: hidden; background: var(--grafito); }
+.act-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+a.act-img:hover img { transform: scale(1.03); }
+.act-icono { display: grid; place-items: center; color: var(--oro); font-size: 34px; }
+.act-cuerpo { display: grid; gap: 8px; align-content: start; padding: 18px 20px; }
+.act-cuerpo b { font: 400 23px/1.2 var(--f-display); }
+.act-cuerpo p { margin: 0; font-size: 15px; color: var(--mute); }
+.act-meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 11px var(--f-ui); letter-spacing: 0.12em; text-transform: uppercase; color: var(--oro); }
+.act-meta i { margin-right: 4px; }
+.cita { margin: 8px 0 28px; padding: 6px 0 6px 22px; border-left: 2px solid var(--oro); font: italic 400 clamp(22px, 2.6vw, 28px)/1.35 var(--f-display); color: var(--humo); max-width: 60ch; }
+
 /* Pie */
 .pie { padding: 32px var(--gutter); border-top: 1px solid var(--filete); text-align: center; font-size: 13px; }
 .pie p { margin: 0; }
@@ -458,6 +473,8 @@ td:first-child { color: var(--humo); font-weight: 400; }
     .cab-nav a { padding: 10px 6px; letter-spacing: 0.1em; }
     .comparar, .sistemas, .uniforme { grid-template-columns: 1fr; }
     .prendas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .actividades li { grid-template-columns: 1fr; }
+    .act-img { min-height: 0; aspect-ratio: 16 / 10; }
     .uniforme figure { max-width: 320px; }
     .indicadores dl div { grid-template-columns: 1fr; gap: 2px; }
     .pasos li { grid-template-columns: 40px minmax(0, 1fr); }
@@ -471,6 +488,9 @@ td:first-child { color: var(--humo); font-weight: 400; }
     td::before { content: attr(data-col); display: block; font: 500 10px var(--f-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
 }
 @media (max-width: 560px) {
+    /* Cuatro submódulos: la navegación baja a su propia fila */
+    .cab { flex-wrap: wrap; row-gap: 4px; padding-bottom: 6px; }
+    .cab-nav { width: 100%; justify-content: space-between; gap: 0; margin: 0 -6px; }
     .btn-indice { padding: 0 12px; width: 44px; justify-content: center; }
     .btn-indice-t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .barra-lectura { gap: 10px; }
